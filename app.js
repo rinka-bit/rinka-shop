@@ -236,24 +236,27 @@ function openCart() {
 
         <div>
 
-          <button
-            onclick="decreaseQty('${item.product_id}')">
-            -
-          </button>
+         <div class="cart-controls">
 
-          ${item.qty}
+  <button
+    onclick="decreaseQty('${item.product_id}')">
+    -
+  </button>
 
-          <button
-            onclick="increaseQty('${item.product_id}')">
-            +
-          </button>
+  <span>${item.qty}</span>
 
-          <button
-            onclick="removeItem('${item.product_id}')">
-            ลบ
-          </button>
+  <button
+    onclick="increaseQty('${item.product_id}')">
+    +
+  </button>
 
-        </div>
+  <button
+    class="remove-btn"
+    onclick="removeItem('${item.product_id}')">
+    ลบ
+  </button>
+
+</div>
 
       </div>
     `;
