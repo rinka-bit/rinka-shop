@@ -2,376 +2,394 @@ const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
 
 let cart = JSON.parse(
-  localStorage.getItem("cart") || "[]"
+localStorage.getItem("cart") || "[]"
 );
 
 window.productsData = [];
 
 async function loadProducts() {
 
-  try {
+try {
 
-    const response = await fetch(API);
-    const products = await response.json();
+```
+const response = await fetch(API);
+const products = await response.json();
 
-    window.productsData = products;
+window.productsData = products;
 
-    const container =
-      document.getElementById("products");
+const container =
+  document.getElementById("products");
 
-    container.innerHTML = "";
+container.innerHTML = "";
 
-    products.forEach((product, index) => {
+products.forEach((product, index) => {
 
-      container.innerHTML += `
-        <div class="card">
+  container.innerHTML += `
+    <div class="card">
 
-          <img src="${product.image}" alt="${product.name}">
+      <img src="${product.image}" alt="${product.name}">
 
-          <div class="card-body">
+      <div class="card-body">
 
-            <h3>${product.name}</h3>
+        <h3>${product.name}</h3>
 
-            <p>${product.fandom}</p>
+        <p>${product.fandom}</p>
 
-            <p class="price">
-              ฿${product.price}
-            </p>
+        <p class="price">
+          ฿${product.price}
+        </p>
 
-            <div class="actions">
+        <div class="actions">
 
-              <button onclick="viewProduct(${index})">
-                ดูรายละเอียด
-              </button>
+          <button onclick="viewProduct(${index})">
+            ดูรายละเอียด
+          </button>
 
-              <button onclick="addToCartByIndex(${index})">
-                เพิ่มลงตะกร้า
-              </button>
-              
-              <button onclick="checkout()">
-                สรุปคำสั่งซื้อ
-              </button>
-              
-            </div>
-
-          </div>
+          <button onclick="addToCartByIndex(${index})">
+            เพิ่มลงตะกร้า
+          </button>
 
         </div>
-      `;
 
-    });
+      </div>
 
-  } catch (error) {
+    </div>
+  `;
 
-    console.error(error);
+});
+```
 
-  }
+} catch (error) {
 
-}
-
-function addToCartByIndex(index) {
-
-  const product =
-    window.productsData[index];
-
-  addToCart(product);
+```
+console.error(error);
+```
 
 }
 
-function addToCart(product) {
+}
 
-  const found = cart.find(
-    p => p.product_id === product.product_id
-  );
+function addToCartByIndex(index){
 
-  if (found) {
+const product =
+window.productsData[index];
 
-    found.qty++;
+addToCart(product);
 
-  } else {
+}
 
-    cart.push({
-      ...product,
-      qty: 1
-    });
+function addToCart(product){
 
-  }
+const found =
+cart.find(
+p => p.product_id === product.product_id
+);
 
-  saveCart();
+if(found){
+
+```
+found.qty++;
+```
+
+}else{
+
+```
+cart.push({
+  ...product,
+  qty:1
+});
+```
+
+}
+
+saveCart();
 
 }
 
 function increaseQty(productId){
 
-  const item =
-    cart.find(
-      p => p.product_id === productId
-    );
+const item =
+cart.find(
+p => p.product_id === productId
+);
 
-  if(item){
+if(item){
 
-    item.qty++;
+```
+item.qty++;
 
-    saveCart();
+saveCart();
 
-    openCart();
+openCart();
+```
 
-  }
+}
 
 }
 
 function decreaseQty(productId){
 
-  const item =
-    cart.find(
-      p => p.product_id === productId
-    );
+const item =
+cart.find(
+p => p.product_id === productId
+);
 
-  if(item){
+if(item){
 
-    item.qty--;
+```
+item.qty--;
 
-    if(item.qty <= 0){
-
-      cart =
-        cart.filter(
-          p => p.product_id !== productId
-        );
-
-    }
-
-    saveCart();
-
-    openCart();
-
-  }
-
-}
-
-function removeItem(productId){
+if(item.qty <= 0){
 
   cart =
     cart.filter(
       p => p.product_id !== productId
     );
 
-  saveCart();
+}
 
-  openCart();
+saveCart();
+
+openCart();
+```
 
 }
 
-function saveCart() {
+}
 
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
+function removeItem(productId){
 
-  updateCartCount();
+cart =
+cart.filter(
+p => p.product_id !== productId
+);
+
+saveCart();
+
+openCart();
 
 }
 
-function updateCartCount() {
+function saveCart(){
 
-  let total = 0;
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
 
-  cart.forEach(item => {
-
-    total += item.qty;
-
-  });
-
-  const cartCount =
-    document.getElementById("cartCount");
-
-  if (cartCount) {
-
-    cartCount.textContent = total;
-
-  }
+updateCartCount();
 
 }
 
-function openCart() {
+function updateCartCount(){
 
-  const modal =
-    document.getElementById("cartModal");
+let total = 0;
 
-  const items =
-    document.getElementById("cartItems");
+cart.forEach(item => {
 
-  const totalBox =
-    document.getElementById("cartTotal");
+```
+total += item.qty;
+```
 
-  let total = 0;
+});
 
-  items.innerHTML = "";
+const cartCount =
+document.getElementById("cartCount");
 
-  cart.forEach(item => {
+if(cartCount){
 
-    const lineTotal =
-      Number(item.price) * item.qty;
+```
+cartCount.textContent = total;
+```
 
-    total += lineTotal;
+}
 
-    items.innerHTML += `
-      <div class="cart-item">
+}
 
-        <div>
+function openCart(){
 
-          <strong>
-            ${item.name}
-          </strong>
+const modal =
+document.getElementById("cartModal");
 
-          <br>
+const items =
+document.getElementById("cartItems");
 
-          ฿${item.price}
+const totalBox =
+document.getElementById("cartTotal");
 
-          <br>
+let total = 0;
 
-          รวม ${lineTotal} บาท
+items.innerHTML = "";
 
-        </div>
+cart.forEach(item => {
 
-        <div>
+```
+const lineTotal =
+  Number(item.price) * item.qty;
 
-         <div class="cart-controls">
+total += lineTotal;
 
-  <button
-    onclick="decreaseQty('${item.product_id}')">
-    -
-  </button>
+items.innerHTML += `
+  <div class="cart-item">
 
-  <span>${item.qty}</span>
+    <div>
 
-  <button
-    onclick="increaseQty('${item.product_id}')">
-    +
-  </button>
+      <strong>
+        ${item.name}
+      </strong>
 
-  <button
-    class="remove-btn"
-    onclick="removeItem('${item.product_id}')">
-    ลบ
-  </button>
+      <br>
 
-</div>
+      ฿${item.price}
+
+      <br>
+
+      รวม ${lineTotal} บาท
+
+    </div>
+
+    <div class="cart-controls">
+
+      <button onclick="decreaseQty('${item.product_id}')">
+        -
+      </button>
+
+      <span>${item.qty}</span>
+
+      <button onclick="increaseQty('${item.product_id}')">
+        +
+      </button>
+
+      <button
+        class="remove-btn"
+        onclick="removeItem('${item.product_id}')">
+        ลบ
+      </button>
+
+    </div>
+
+  </div>
+`;
+```
+
+});
+
+totalBox.textContent =
+`รวมทั้งหมด ${total} บาท`;
+
+modal.style.display = "block";
+
+}
+
+function closeCart(){
+
+document.getElementById(
+"cartModal"
+).style.display = "none";
+
+}
+
 function checkout(){
 
-  const summaryItems =
-    document.getElementById(
-      "summaryItems"
-    );
+const summaryItems =
+document.getElementById(
+"summaryItems"
+);
 
-  const summaryTotal =
-    document.getElementById(
-      "summaryTotal"
-    );
+const summaryTotal =
+document.getElementById(
+"summaryTotal"
+);
 
-  let total = 0;
+let total = 0;
 
-  summaryItems.innerHTML = "";
+summaryItems.innerHTML = "";
 
-  cart.forEach(item=>{
+cart.forEach(item => {
 
-    const lineTotal =
-      Number(item.price) * item.qty;
+```
+const lineTotal =
+  Number(item.price) * item.qty;
 
-    total += lineTotal;
+total += lineTotal;
 
-    summaryItems.innerHTML += `
-      <p>
-        ${item.name}
-        x ${item.qty}
-        = ${lineTotal}
-      </p>
-    `;
+summaryItems.innerHTML += `
+  <p>
+    ${item.name}
+    x ${item.qty}
+    = ${lineTotal} บาท
+  </p>
+`;
+```
 
-  });
+});
 
-  summaryTotal.innerHTML =
-    `รวม ${total} บาท`;
+summaryTotal.innerHTML =
+`รวม ${total} บาท`;
 
-  document
-    .getElementById(
-      "checkoutPage"
-    )
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-}
-      </div>
-    `;
-
-  });
-
-  totalBox.textContent =
-    `รวมทั้งหมด ${total} บาท`;
-
-  modal.style.display =
-    "block";
-
-}
-
-function closeCart() {
-
-  document.getElementById(
-    "cartModal"
-  ).style.display = "none";
+document
+.getElementById(
+"checkoutPage"
+)
+.scrollIntoView({
+behavior:"smooth"
+});
 
 }
 
 function viewProduct(index){
 
-  const product =
-    window.productsData[index];
+const product =
+window.productsData[index];
 
-  document.getElementById(
-    "productDetail"
-  ).innerHTML = `
+document.getElementById(
+"productDetail"
+).innerHTML = `
 
-    <img
-      src="${product.image}"
-      style="
-      width:100%;
-      max-width:400px;
-      ">
+```
+<img
+  src="${product.image}"
+  style="
+  width:100%;
+  max-width:400px;
+  ">
 
-    <h2>
-      ${product.name}
-    </h2>
+<h2>${product.name}</h2>
 
-    <p>
-      ${product.description || ""}
-    </p>
+<p>${product.description || ""}</p>
 
-    <p>
-      ราคา ${product.price} บาท
-    </p>
+<p>ราคา ${product.price} บาท</p>
 
-    <p>
-      รอบพรี ${product.round || "-"}
-    </p>
+<p>รอบพรี ${product.round || "-"}</p>
 
-    <p>
-      กำหนดส่ง ${product.estimated_arrival || "-"}
-    </p>
+<p>กำหนดส่ง ${product.estimated_arrival || "-"}</p>
 
-  `;
+<button onclick="addToCartByIndex(${index})">
+  เพิ่มลงตะกร้า
+</button>
+```
 
-  document.getElementById(
-    "productModal"
-  ).style.display = "block";
+`;
+
+document.getElementById(
+"productModal"
+).style.display = "block";
 
 }
 
 function closeProduct(){
 
-  document.getElementById(
-    "productModal"
-  ).style.display = "none";
+document.getElementById(
+"productModal"
+).style.display = "none";
+
+}
+
+function submitOrder(){
+
+alert(
+"ระบบบันทึกออเดอร์จะทำในขั้นถัดไป"
+);
 
 }
 
