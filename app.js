@@ -11,7 +11,6 @@ async function loadProducts() {
 
 try {
 
-```
 const response = await fetch(API);
 const products = await response.json();
 
@@ -33,7 +32,7 @@ products.forEach((product, index) => {
 
         <h3>${product.name}</h3>
 
-        <p>${product.fandom}</p>
+        <p>${product.fandom || ""}</p>
 
         <p class="price">
           ฿${product.price}
@@ -57,13 +56,10 @@ products.forEach((product, index) => {
   `;
 
 });
-```
 
 } catch (error) {
 
-```
-console.error(error);
-```
+console.error("โหลดสินค้าไม่สำเร็จ", error);
 
 }
 
@@ -87,18 +83,14 @@ p => p.product_id === product.product_id
 
 if(found){
 
-```
 found.qty++;
-```
 
 }else{
 
-```
 cart.push({
   ...product,
   qty:1
 });
-```
 
 }
 
@@ -115,13 +107,11 @@ p => p.product_id === productId
 
 if(item){
 
-```
 item.qty++;
 
 saveCart();
 
 openCart();
-```
 
 }
 
@@ -136,7 +126,6 @@ p => p.product_id === productId
 
 if(item){
 
-```
 item.qty--;
 
 if(item.qty <= 0){
@@ -151,7 +140,6 @@ if(item.qty <= 0){
 saveCart();
 
 openCart();
-```
 
 }
 
@@ -187,9 +175,7 @@ let total = 0;
 
 cart.forEach(item => {
 
-```
 total += item.qty;
-```
 
 });
 
@@ -198,9 +184,7 @@ document.getElementById("cartCount");
 
 if(cartCount){
 
-```
 cartCount.textContent = total;
-```
 
 }
 
@@ -223,7 +207,6 @@ items.innerHTML = "";
 
 cart.forEach(item => {
 
-```
 const lineTotal =
   Number(item.price) * item.qty;
 
@@ -270,7 +253,6 @@ items.innerHTML += `
 
   </div>
 `;
-```
 
 });
 
@@ -307,7 +289,6 @@ summaryItems.innerHTML = "";
 
 cart.forEach(item => {
 
-```
 const lineTotal =
   Number(item.price) * item.qty;
 
@@ -316,11 +297,10 @@ total += lineTotal;
 summaryItems.innerHTML += `
   <p>
     ${item.name}
-    x ${item.qty}
+    × ${item.qty}
     = ${lineTotal} บาท
   </p>
 `;
-```
 
 });
 
@@ -346,13 +326,9 @@ document.getElementById(
 "productDetail"
 ).innerHTML = `
 
-```
 <img
   src="${product.image}"
-  style="
-  width:100%;
-  max-width:400px;
-  ">
+  style="width:100%;max-width:400px;">
 
 <h2>${product.name}</h2>
 
@@ -367,7 +343,6 @@ document.getElementById(
 <button onclick="addToCartByIndex(${index})">
   เพิ่มลงตะกร้า
 </button>
-```
 
 `;
 
@@ -386,6 +361,8 @@ document.getElementById(
 }
 
 function submitOrder(){
+
+checkout();
 
 alert(
 "ระบบบันทึกออเดอร์จะทำในขั้นถัดไป"
