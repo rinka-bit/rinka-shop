@@ -119,32 +119,6 @@ function increaseQty(productId){
   }
 
 }
-<div class="qty-box">
-
-  <button
-    class="qty-btn"
-    onclick="decreaseQty('${item.product_id}')">
-    -
-  </button>
-
-  <span>${item.qty}</span>
-
-  <button
-    class="qty-btn"
-    onclick="increaseQty('${item.product_id}')">
-    +
-  </button>
-
-  <button
-    class="remove-btn"
-    onclick="removeItem('${item.product_id}')">
-    ลบ
-  </button>
-
-</div>
-  }
-
-}
 
 function decreaseQty(productId){
 
