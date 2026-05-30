@@ -115,6 +115,10 @@ function increaseQty(productId){
     saveCart();
 
     openCart();
+
+  }
+
+}
 <div class="qty-box">
 
   <button
