@@ -177,3 +177,54 @@ function closeCart() {
 
 updateCartCount();
 loadProducts();
+function viewProduct(index){
+
+  const product =
+    window.productsData[index];
+
+  document.getElementById(
+    "productDetail"
+  ).innerHTML = `
+
+    <img
+      src="${product.image}"
+      style="
+      width:100%;
+      max-width:400px;
+      ">
+
+    <h2>
+      ${product.name}
+    </h2>
+
+    <p>
+      ${product.description || ""}
+    </p>
+
+    <p>
+      ราคา ${product.price} บาท
+    </p>
+
+    <p>
+      รอบพรี ${product.round}
+    </p>
+
+    <p>
+      กำหนดส่ง ${product.estimated_arrival}
+    </p>
+
+  `;
+
+  document.getElementById(
+    "productModal"
+  ).style.display = "block";
+
+}
+
+function closeProduct(){
+
+  document.getElementById(
+    "productModal"
+  ).style.display = "none";
+
+}
