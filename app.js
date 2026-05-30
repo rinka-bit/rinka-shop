@@ -257,7 +257,51 @@ function openCart() {
   </button>
 
 </div>
+function checkout(){
 
+  const summaryItems =
+    document.getElementById(
+      "summaryItems"
+    );
+
+  const summaryTotal =
+    document.getElementById(
+      "summaryTotal"
+    );
+
+  let total = 0;
+
+  summaryItems.innerHTML = "";
+
+  cart.forEach(item=>{
+
+    const lineTotal =
+      Number(item.price) * item.qty;
+
+    total += lineTotal;
+
+    summaryItems.innerHTML += `
+      <p>
+        ${item.name}
+        x ${item.qty}
+        = ${lineTotal}
+      </p>
+    `;
+
+  });
+
+  summaryTotal.innerHTML =
+    `รวม ${total} บาท`;
+
+  document
+    .getElementById(
+      "checkoutPage"
+    )
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+}
       </div>
     `;
 
