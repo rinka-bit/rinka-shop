@@ -40,13 +40,15 @@ async function loadProducts() {
 
             <div class="actions">
 
-            <button onclick="viewProduct(${index})">
-            ดูรายละเอียด
-          </button>
+              <button onclick="viewProduct(${index})">
+                ดูรายละเอียด
+              </button>
 
-            <button onclick="addToCartByIndex(${index})">
-            เพิ่มลงตะกร้า
-          </button>
+              <button onclick="addToCartByIndex(${index})">
+                เพิ่มลงตะกร้า
+              </button>
+
+            </div>
 
           </div>
 
@@ -95,6 +97,66 @@ function addToCart(product) {
 
 }
 
+function increaseQty(productId){
+
+  const item =
+    cart.find(
+      p => p.product_id === productId
+    );
+
+  if(item){
+
+    item.qty++;
+
+    saveCart();
+
+    openCart();
+
+  }
+
+}
+
+function decreaseQty(productId){
+
+  const item =
+    cart.find(
+      p => p.product_id === productId
+    );
+
+  if(item){
+
+    item.qty--;
+
+    if(item.qty <= 0){
+
+      cart =
+        cart.filter(
+          p => p.product_id !== productId
+        );
+
+    }
+
+    saveCart();
+
+    openCart();
+
+  }
+
+}
+
+function removeItem(productId){
+
+  cart =
+    cart.filter(
+      p => p.product_id !== productId
+    );
+
+  saveCart();
+
+  openCart();
+
+}
+
 function saveCart() {
 
   localStorage.setItem(
@@ -120,7 +182,9 @@ function updateCartCount() {
     document.getElementById("cartCount");
 
   if (cartCount) {
+
     cartCount.textContent = total;
+
   }
 
 }
@@ -142,18 +206,50 @@ function openCart() {
 
   cart.forEach(item => {
 
-    total += Number(item.price) * item.qty;
+    const lineTotal =
+      Number(item.price) * item.qty;
+
+    total += lineTotal;
 
     items.innerHTML += `
       <div class="cart-item">
 
-        <span>
-          ${item.name} x ${item.qty}
-        </span>
+        <div>
 
-        <span>
-          ฿${Number(item.price) * item.qty}
-        </span>
+          <strong>
+            ${item.name}
+          </strong>
+
+          <br>
+
+          ฿${item.price}
+
+          <br>
+
+          รวม ${lineTotal} บาท
+
+        </div>
+
+        <div>
+
+          <button
+            onclick="decreaseQty('${item.product_id}')">
+            -
+          </button>
+
+          ${item.qty}
+
+          <button
+            onclick="increaseQty('${item.product_id}')">
+            +
+          </button>
+
+          <button
+            onclick="removeItem('${item.product_id}')">
+            ลบ
+          </button>
+
+        </div>
 
       </div>
     `;
@@ -161,9 +257,10 @@ function openCart() {
   });
 
   totalBox.textContent =
-    `รวม ${total} บาท`;
+    `รวมทั้งหมด ${total} บาท`;
 
-  modal.style.display = "block";
+  modal.style.display =
+    "block";
 
 }
 
@@ -175,8 +272,6 @@ function closeCart() {
 
 }
 
-updateCartCount();
-loadProducts();
 function viewProduct(index){
 
   const product =
@@ -206,11 +301,11 @@ function viewProduct(index){
     </p>
 
     <p>
-      รอบพรี ${product.round}
+      รอบพรี ${product.round || "-"}
     </p>
 
     <p>
-      กำหนดส่ง ${product.estimated_arrival}
+      กำหนดส่ง ${product.estimated_arrival || "-"}
     </p>
 
   `;
@@ -228,3 +323,6 @@ function closeProduct(){
   ).style.display = "none";
 
 }
+
+updateCartCount();
+loadProducts();
