@@ -39,7 +39,7 @@ async function loadProducts(){
           </p>
 
           <button
-            onclick='addToCart(${JSON.stringify(product)})'>
+            onclick="alert('เพิ่มสินค้า')">
             เพิ่มลงตะกร้า
           </button>
 
