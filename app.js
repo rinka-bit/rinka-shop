@@ -47,7 +47,11 @@ async function loadProducts() {
               <button onclick="addToCartByIndex(${index})">
                 เพิ่มลงตะกร้า
               </button>
-
+              
+              <button onclick="checkout()">
+                สรุปคำสั่งซื้อ
+              </button>
+              
             </div>
 
           </div>
