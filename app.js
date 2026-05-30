@@ -160,12 +160,14 @@ openCart();
 
 function saveCart(){
 
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
 
-updateCartCount();
+  updateCartCount();
+
+  checkout();
 
 }
 
@@ -360,15 +362,118 @@ document.getElementById(
 
 }
 
-function submitOrder(){
+async function submitOrder(){
 
-checkout();
+  if(cart.length === 0){
 
-alert(
-"ระบบบันทึกออเดอร์จะทำในขั้นถัดไป"
-);
+    alert("ไม่มีสินค้าในตะกร้า");
+    return;
+
+  }
+
+  let subtotal = 0;
+
+  cart.forEach(item=>{
+
+    subtotal +=
+      Number(item.price) * item.qty;
+
+  });
+
+  const data = {
+
+    customer_name:
+      document.getElementById(
+        "customerName"
+      ).value,
+
+    email:
+      document.getElementById(
+        "customerEmail"
+      ).value,
+
+    phone:
+      document.getElementById(
+        "customerPhone"
+      ).value,
+
+    social:
+      document.getElementById(
+        "customerSocial"
+      ).value,
+
+    receiver_name:
+      document.getElementById(
+        "receiverName"
+      ).value,
+
+    address:
+      document.getElementById(
+        "address"
+      ).value,
+
+    province:
+      document.getElementById(
+        "province"
+      ).value,
+
+    postcode:
+      document.getElementById(
+        "postcode"
+      ).value,
+
+    subtotal: subtotal,
+
+    total: subtotal,
+
+    items: cart
+
+  };
+
+  try{
+
+    const response =
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":
+          "application/json"
+        },
+        body:
+          JSON.stringify(data)
+      });
+
+    const result =
+      await response.json();
+
+    alert(
+      "สั่งซื้อสำเร็จ\nเลขออเดอร์: "
+      + result.order_id
+    );
+
+    cart = [];
+
+    saveCart();
+
+    checkout();
+
+    document
+      .getElementById(
+        "summaryItems"
+      )
+      .innerHTML = "";
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาดในการส่งออเดอร์"
+    );
+
+  }
 
 }
-
-updateCartCount();
-loadProducts();
