@@ -81,7 +81,22 @@ button{
   padding-bottom:10px;
   border-bottom:1px solid #ddd;
 }
+.cart-controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
 
+.cart-controls button{
+  width:35px;
+  height:35px;
+  padding:0;
+}
+
+.remove-btn{
+  width:auto !important;
+  padding:6px 12px !important;
+}
 .qty-box{
   display:flex;
   align-items:center;
