@@ -103,3 +103,22 @@ button{
   border-radius:6px;
   cursor:pointer;
 }
+input,
+textarea{
+  width:100%;
+  max-width:400px;
+  padding:10px;
+  margin:5px 0;
+  box-sizing:border-box;
+}
+
+textarea{
+  min-height:100px;
+}
+
+#checkoutPage{
+  margin-top:40px;
+  padding:20px;
+  background:white;
+  border-radius:12px;
+}
