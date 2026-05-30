@@ -38,9 +38,15 @@ async function loadProducts() {
               ฿${product.price}
             </p>
 
+            <div class="actions">
+
+            <button onclick="viewProduct(${index})">
+            ดูรายละเอียด
+          </button>
+
             <button onclick="addToCartByIndex(${index})">
-              เพิ่มลงตะกร้า
-            </button>
+            เพิ่มลงตะกร้า
+          </button>
 
           </div>
 
