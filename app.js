@@ -10,18 +10,63 @@ updateCartCount();
 
 async function loadProducts(){
 
-  const response =
-    await fetch(API);
+  try{
 
-  const products =
-    await response.json();
+    const response =
+      await fetch(API);
 
-  const container =
+    const products =
+      await response.json();
+
+    const container =
+      document.getElementById("products");
+
+    container.innerHTML = "";
+
+    products.forEach((product,index)=>{
+
+      container.innerHTML += `
+        <div class="card">
+
+          <img src="${product.image}">
+
+          <div class="card-body">
+
+            <h3>${product.name}</h3>
+
+            <p>${product.fandom}</p>
+
+            <p class="price">
+              ฿${product.price}
+            </p>
+
+            <button
+              onclick="addToCartByIndex(${index})">
+              เพิ่มลงตะกร้า
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    });
+
+    window.productsData = products;
+
+  }
+  catch(error){
+
+    console.error(error);
+
+  }
+
+}
     document.getElementById("products");
 
   container.innerHTML = "";
 
-  products.forEach(product => {
+  products.forEach((product,index) => {
 
     container.innerHTML += `
       <div class="card">
@@ -39,7 +84,7 @@ async function loadProducts(){
           </p>
 
           <button
-            onclick="alert('เพิ่มสินค้า')">
+            onclick="addToCartByIndex(${index})">
             เพิ่มลงตะกร้า
           </button>
 
@@ -50,10 +95,24 @@ async function loadProducts(){
 
   });
 
+  window.productsData = products;
+ }
+  catch(error){
+
+    console.error(error);
+
+  }
+
 }
+}
+function addToCartByIndex(index){
 
-function addToCart(product){
+  const product =
+    window.productsData[index];
 
+  addToCart(product);
+
+}
   const found =
     cart.find(
       p => p.product_id === product.product_id
