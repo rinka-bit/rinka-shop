@@ -94,7 +94,9 @@ cart.push({
 
 }
 
-saveCart();
+  saveCart();
+
+  checkout();
 
 }
 
@@ -111,8 +113,10 @@ item.qty++;
 
 saveCart();
 
-openCart();
+checkout();
 
+openCart();
+  
 }
 
 }
@@ -139,6 +143,8 @@ if(item.qty <= 0){
 
 saveCart();
 
+checkout();
+
 openCart();
 
 }
@@ -154,6 +160,8 @@ p => p.product_id !== productId
 
 saveCart();
 
+checkout();
+
 openCart();
 
 }
@@ -165,9 +173,9 @@ function saveCart(){
     JSON.stringify(cart)
   );
 
-  updateCartCount();
-
-  checkout();
+updateCartCount();
+loadProducts();
+checkout();
 
 }
 
