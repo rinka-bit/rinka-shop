@@ -613,5 +613,3 @@ function closePayment(){
 updateCartCount();
 loadProducts();
 checkout();
-
-}
