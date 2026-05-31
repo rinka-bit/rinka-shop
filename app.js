@@ -633,6 +633,7 @@ async function uploadSlip(
     document.getElementById(
       "paymentSlip"
     ).files[0];
+  console.log(file);
 
   if(!file){
 
