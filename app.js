@@ -609,3 +609,9 @@ function closePayment(){
     "none";
 
 }
+
+updateCartCount();
+loadProducts();
+checkout();
+
+}
