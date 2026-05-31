@@ -555,3 +555,57 @@ console.log(result);
   }
 
 }
+function showPaymentPopup(
+  orderId,
+  amount
+){
+
+  document.getElementById(
+    "paymentContent"
+  ).innerHTML = `
+
+    <p>
+    เลขออเดอร์
+    </p>
+
+    <h3>
+    ${orderId}
+    </h3>
+
+    <hr>
+
+    <p>
+    ธนาคารกสิกรไทย
+    </p>
+
+    <p>
+    123-4-56789-0
+    </p>
+
+    <p>
+    Rinka Store
+    </p>
+
+    <h3>
+    ยอดโอน
+    ${amount}
+    บาท
+    </h3>
+
+  `;
+
+  document.getElementById(
+    "paymentModal"
+  ).style.display =
+    "block";
+
+}
+
+function closePayment(){
+
+  document.getElementById(
+    "paymentModal"
+  ).style.display =
+    "none";
+
+}
