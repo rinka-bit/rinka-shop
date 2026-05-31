@@ -173,9 +173,7 @@ function saveCart(){
     JSON.stringify(cart)
   );
 
-updateCartCount();
-loadProducts();
-checkout();
+  updateCartCount();
 
 }
 
@@ -612,4 +610,3 @@ function closePayment(){
 
 updateCartCount();
 loadProducts();
-checkout();
