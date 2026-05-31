@@ -644,9 +644,49 @@ async function uploadSlip(
 
   }
 
-  alert(
-    "แนบสลิปเรียบร้อย"
+  const amount =
+    document.getElementById(
+      "summaryTotal"
+    ).innerText
+      .replace("รวม ","")
+      .replace(" บาท","");
+
+  const payload = {
+
+    order_id: orderId,
+
+    amount: amount,
+
+    slip_url:
+      file.name
+
+  };
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "payload",
+    JSON.stringify(payload)
   );
+
+  const response =
+    await fetch(
+      "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=payment",
+      {
+        method:"POST",
+        body:formData
+      }
+    );
+
+  const result =
+    await response.json();
+
+  alert(
+    "แจ้งชำระเงินเรียบร้อย"
+  );
+
+  closePayment();
 
 }
 
