@@ -283,47 +283,106 @@ document.getElementById(
 
 function checkout(){
 
-const summaryItems =
-document.getElementById(
-"summaryItems"
-);
+  closeCart();
 
-const summaryTotal =
-document.getElementById(
-"summaryTotal"
-);
+  document.getElementById(
+    "checkoutPage"
+  ).style.display = "block";
 
-let total = 0;
+  document.getElementById(
+    "checkoutPage"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
 
-summaryItems.innerHTML = "";
+}
 
-cart.forEach(item => {
+function nextToReview(){
 
-const lineTotal =
-  Number(item.price) * item.qty;
+  let total = 0;
 
-total += lineTotal;
+  let html = "";
 
-summaryItems.innerHTML += `
-  <p>
-    ${item.name}
-    × ${item.qty}
-    = ${lineTotal} บาท
-  </p>
-`;
+  cart.forEach(item=>{
 
-});
+    const lineTotal =
+      Number(item.price) * item.qty;
 
-summaryTotal.innerHTML =
-`รวม ${total} บาท`;
+    total += lineTotal;
 
-document
-.getElementById(
-"checkoutPage"
-)
-.scrollIntoView({
-behavior:"smooth"
-});
+    html += `
+      <p>
+      ${item.name}
+      x ${item.qty}
+      =
+      ${lineTotal}
+      บาท
+      </p>
+    `;
+
+  });
+
+  html += `
+    <hr>
+
+    <p>
+    ชื่อ:
+    ${document.getElementById("customerName").value}
+    </p>
+
+    <p>
+    Email:
+    ${document.getElementById("customerEmail").value}
+    </p>
+
+    <p>
+    โทร:
+    ${document.getElementById("customerPhone").value}
+    </p>
+
+    <p>
+    Social:
+    ${document.getElementById("customerSocial").value}
+    </p>
+
+    <p>
+    ผู้รับ:
+    ${document.getElementById("receiverName").value}
+    </p>
+
+    <p>
+    ที่อยู่:
+    ${document.getElementById("address").value}
+    </p>
+
+    <p>
+    จังหวัด:
+    ${document.getElementById("province").value}
+    </p>
+
+    <p>
+    รหัสไปรษณีย์:
+    ${document.getElementById("postcode").value}
+    </p>
+
+    <h3>
+    รวม ${total} บาท
+    </h3>
+  `;
+
+  document.getElementById(
+    "reviewContent"
+  ).innerHTML = html;
+
+  document.getElementById(
+    "reviewPage"
+  ).style.display = "block";
+
+  document.getElementById(
+    "reviewPage"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
 
 }
 
