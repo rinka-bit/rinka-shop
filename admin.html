@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Rinka Admin</title>
+</head>
+
+<body>
+
+<h1>อัปเดตเลขพัสดุ</h1>
+
+<input
+id="orderId"
+placeholder="Order ID">
+
+<br><br>
+
+<input
+id="courier"
+placeholder="Flash / Kerry">
+
+<br><br>
+
+<input
+id="tracking"
+placeholder="Tracking Number">
+
+<br><br>
+
+<button onclick="saveTracking()">
+บันทึก
+</button>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+async function saveTracking(){
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "payload",
+    JSON.stringify({
+
+      order_id:
+        document.getElementById(
+          "orderId"
+        ).value,
+
+      courier:
+        document.getElementById(
+          "courier"
+        ).value,
+
+      tracking_no:
+        document.getElementById(
+          "tracking"
+        ).value
+
+    })
+  );
+
+  const response =
+    await fetch(
+      API +
+      "?action=tracking",
+      {
+        method:"POST",
+        body:formData
+      }
+    );
+
+  const result =
+    await response.json();
+
+  alert(
+    result.success
+    ? "บันทึกสำเร็จ"
+    : "ไม่พบออเดอร์"
+  );
+
+}
+
+</script>
+
+</body>
+</html>
