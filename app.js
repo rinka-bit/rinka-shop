@@ -440,12 +440,20 @@ async function submitOrder(){
 
   try{
 
-    const response =
+    const formData =
+  new FormData();
+
+formData.append(
+  "payload",
+  JSON.stringify(data)
+);
+
+const response =
   await fetch(
     "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec",
     {
       method:"POST",
-      body: JSON.stringify(data)
+      body: formData
     }
   );
 
