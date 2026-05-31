@@ -429,6 +429,11 @@ document.getElementById(
 
 }
 
+function confirmOrder(){
+
+  submitOrder();
+
+}
 async function submitOrder(){
 
   if(cart.length === 0){
@@ -521,10 +526,10 @@ const response =
     
 console.log(result);
     
-    alert(
-      "สั่งซื้อสำเร็จ\nเลขออเดอร์: "
-      + result.order_id
-    );
+    showPaymentPopup(
+  result.order_id,
+  subtotal
+);
 
     cart = [];
 
