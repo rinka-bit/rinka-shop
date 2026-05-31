@@ -1,5 +1,5 @@
-const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+const orderUrl =
+  "https://rinka-bit.github.io/rinka-shop/";
 
 let cart = JSON.parse(
 localStorage.getItem("cart") || "[]"
