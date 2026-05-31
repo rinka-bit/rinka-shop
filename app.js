@@ -40,8 +40,12 @@ products.forEach((product, index) => {
 
         <div class="actions">
 
-          <button onclick="viewProduct(${index})">
-            ดูรายละเอียด
+          <button
+          onclick="
+          window.location.href=
+          'product.html?id=${product.product_id}'
+          ">
+          ดูรายละเอียด
           </button>
 
           <button onclick="addToCartByIndex(${index})">
