@@ -116,6 +116,16 @@ async function loadOrder(){
     ${order.payment_status}
     </p>
 
+    <p>
+    ขนส่ง:
+    ${order.courier || "-"}
+    </p>
+
+    <p>
+    เลขพัสดุ:
+    ${order.tracking_no || "-"}
+    </p>
+
     <table>
 
       <tr>
