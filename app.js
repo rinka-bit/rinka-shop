@@ -1,8 +1,8 @@
-const orderUrl =
-  "https://rinka-bit.github.io/rinka-shop/";
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
 
 let cart = JSON.parse(
-localStorage.getItem("cart") || "[]"
+  localStorage.getItem("cart") || "[]"
 );
 
 window.productsData = [];
