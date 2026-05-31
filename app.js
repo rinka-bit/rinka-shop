@@ -441,17 +441,13 @@ async function submitOrder(){
   try{
 
     const response =
-      await fetch(
-        "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec",
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":
-          "application/json"
-        },
-        body:
-          JSON.stringify(data)
-      });
+  await fetch(
+    "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec",
+    {
+      method:"POST",
+      body: JSON.stringify(data)
+    }
+  );
 
     const result =
       await response.json();
