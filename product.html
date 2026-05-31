@@ -224,9 +224,47 @@ ${product.sub_category || "-"}
 
 function addToCart(){
 
-alert(
-"Phase ถัดไปจะเชื่อม Cart เดิม"
-);
+  let cart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
+
+  const found =
+    cart.find(
+      p =>
+      p.product_id ===
+      window.currentProduct.product_id
+    );
+
+  if(found){
+
+    found.qty++;
+
+  }else{
+
+    cart.push({
+
+      ...window.currentProduct,
+
+      qty:1
+
+    });
+
+  }
+
+  localStorage.setItem(
+
+    "cart",
+
+    JSON.stringify(cart)
+
+  );
+
+  alert(
+    "เพิ่มลงตะกร้าแล้ว"
+  );
 
 }
 
