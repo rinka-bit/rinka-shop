@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>
+ตรวจสอบคำสั่งซื้อ
+</title>
+
+<style>
+
+body{
+  font-family:Arial,sans-serif;
+  max-width:800px;
+  margin:auto;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,
+td{
+  border:1px solid #ddd;
+  padding:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+ตรวจสอบคำสั่งซื้อ
+</h1>
+
+<div
+id="orderBox"
+class="card">
+
+กำลังโหลด...
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const orderId =
+params.get("id");
+
+async function loadOrder(){
+
+  const response =
+    await fetch(
+      API +
+      "?action=order&id=" +
+      orderId
+    );
+
+  const result =
+    await response.json();
+
+  if(!result.success){
+
+    document
+      .getElementById(
+        "orderBox"
+      )
+      .innerHTML =
+      "ไม่พบออเดอร์";
+
+    return;
+
+  }
+
+  const order =
+    result.order;
+
+  let html = `
+    <p>
+    เลขออเดอร์:
+    <b>
+    ${order.order_id}
+    </b>
+    </p>
+
+    <p>
+    สถานะ:
+    ${order.status}
+    </p>
+
+    <p>
+    การชำระเงิน:
+    ${order.payment_status}
+    </p>
+
+    <table>
+
+      <tr>
+
+        <th>
+        สินค้า
+        </th>
+
+        <th>
+        จำนวน
+        </th>
+
+        <th>
+        ราคา
+        </th>
+
+      </tr>
+  `;
+
+  order.items.forEach(item=>{
+
+    html += `
+      <tr>
+
+        <td>
+        ${item.name}
+        </td>
+
+        <td>
+        ${item.qty}
+        </td>
+
+        <td>
+        ${item.price}
+        </td>
+
+      </tr>
+    `;
+
+  });
+
+  html += `
+    </table>
+
+    <h3>
+    รวม
+    ${order.total}
+    บาท
+    </h3>
+  `;
+
+  document
+    .getElementById(
+      "orderBox"
+    )
+    .innerHTML =
+      html;
+
+}
+
+loadOrder();
+
+</script>
+
+</body>
+
+</html>
