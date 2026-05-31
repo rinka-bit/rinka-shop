@@ -562,33 +562,47 @@ function showPaymentPopup(
     "paymentContent"
   ).innerHTML = `
 
-    <p>
-    เลขออเดอร์
-    </p>
-
     <h3>
-    ${orderId}
+      เลขออเดอร์
     </h3>
+
+    <p>
+      ${orderId}
+    </p>
 
     <hr>
 
     <p>
-    ธนาคารกสิกรไทย
+      ธนาคารกสิกรไทย
+    </p>
+
+    <p id="bankNumber">
+      123-4-56789-0
     </p>
 
     <p>
-    123-4-56789-0
-    </p>
-
-    <p>
-    Rinka Store
+      Rinka Store
     </p>
 
     <h3>
-    ยอดโอน
-    ${amount}
-    บาท
+      ยอดโอน ${amount} บาท
     </h3>
+
+    <button
+      onclick="copyBankNumber()">
+      คัดลอกเลขบัญชี
+    </button>
+
+    <hr>
+
+    <input
+      type="file"
+      id="paymentSlip">
+
+    <button
+      onclick="uploadSlip('${orderId}')">
+      ยืนยันการชำระเงิน
+    </button>
 
   `;
 
@@ -596,6 +610,43 @@ function showPaymentPopup(
     "paymentModal"
   ).style.display =
     "block";
+
+}
+
+function copyBankNumber(){
+
+  navigator.clipboard.writeText(
+    "1234567890"
+  );
+
+  alert(
+    "คัดลอกเลขบัญชีแล้ว"
+  );
+
+}
+
+async function uploadSlip(
+  orderId
+){
+
+  const file =
+    document.getElementById(
+      "paymentSlip"
+    ).files[0];
+
+  if(!file){
+
+    alert(
+      "กรุณาแนบสลิป"
+    );
+
+    return;
+
+  }
+
+  alert(
+    "แนบสลิปเรียบร้อย"
+  );
 
 }
 
