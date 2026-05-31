@@ -459,7 +459,9 @@ const response =
 
     const result =
       await response.json();
-
+    
+console.log(result);
+    
     alert(
       "สั่งซื้อสำเร็จ\nเลขออเดอร์: "
       + result.order_id
