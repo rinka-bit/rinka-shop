@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>สินค้า</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.product-page{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+}
+
+.product-image img{
+  width:100%;
+  border-radius:12px;
+}
+
+.thumb-list{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.thumb-list img{
+  width:80px;
+  height:80px;
+  object-fit:cover;
+  cursor:pointer;
+  border-radius:8px;
+}
+
+.old-price{
+  text-decoration:line-through;
+  color:#888;
+}
+
+.sale-price{
+  color:red;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.actions{
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+}
+
+button{
+  padding:12px 20px;
+  cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="product-page">
+
+<div id="product"></div>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const productId =
+params.get("id");
+
+loadProduct();
+
+async function loadProduct(){
+
+const response =
+await fetch(
+`${API}?action=product&id=${productId}`
+);
+
+const product =
+await response.json();
+
+renderProduct(product);
+
+}
+
+function renderProduct(product){
+
+document.getElementById(
+"product"
+).innerHTML = `
+
+<div class="product-grid">
+
+<div class="product-image">
+
+<img
+id="mainImage"
+src="${product.image}">
+
+<div class="thumb-list">
+
+${product.image2 ?
+`
+<img
+src="${product.image2}"
+onclick="
+document.getElementById('mainImage').src='${product.image2}'
+">
+`
+:""}
+
+${product.image3 ?
+`
+<img
+src="${product.image3}"
+onclick="
+document.getElementById('mainImage').src='${product.image3}'
+">
+`
+:""}
+
+</div>
+
+</div>
+
+<div>
+
+<h1>
+${product.name}
+</h1>
+
+<p>
+${product.description || ""}
+</p>
+
+${
+product.on_sale
+?
+`
+<div class="old-price">
+฿${product.old_price}
+</div>
+
+<div class="sale-price">
+฿${product.price}
+</div>
+`
+:
+`
+<div class="sale-price">
+฿${product.price}
+</div>
+`
+}
+
+<hr>
+
+<p>
+รอบพรี :
+${product.round || "-"}
+</p>
+
+<p>
+กำหนดเข้า :
+${product.estimated_arrival || "-"}
+</p>
+
+<p>
+แฟนด้อม :
+${product.fandom || "-"}
+</p>
+
+<p>
+หมวด :
+${product.sub_category || "-"}
+</p>
+
+<div class="actions">
+
+<button onclick="buyNow()">
+ซื้อเลย
+</button>
+
+<button onclick="addToCart()">
+เพิ่มลงตะกร้า
+</button>
+
+<button onclick="history.back()">
+กลับ
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function addToCart(){
+
+alert(
+"Phase ถัดไปจะเชื่อม Cart เดิม"
+);
+
+}
+
+function buyNow(){
+
+alert(
+"Phase ถัดไปจะเชื่อม Checkout"
+);
+
+}
+
+</script>
+
+</body>
+</html>
