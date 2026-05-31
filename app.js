@@ -701,3 +701,27 @@ function closePayment(){
 
 updateCartCount();
 loadProducts();
+
+MailApp.sendEmail({
+
+  to:
+  "YOUR_EMAIL@gmail.com",
+
+  subject:
+  "มีออเดอร์ใหม่ " +
+  orderId,
+
+  htmlBody: `
+    มีคำสั่งซื้อใหม่
+
+    <br><br>
+
+    ลูกค้า:
+    ${data.customer_name}
+
+    <br>
+
+    ยอด:
+    ${data.total}
+  `
+});
