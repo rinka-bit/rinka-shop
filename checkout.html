@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Checkout</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+input,
+textarea{
+width:100%;
+padding:10px;
+margin:5px 0;
+}
+
+button{
+padding:10px 20px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>ยืนยันคำสั่งซื้อ</h1>
+
+<div class="card">
+
+<h2>ข้อมูลจัดส่ง</h2>
+
+<input id="receiver" placeholder="ชื่อผู้รับ">
+
+<input id="phone" placeholder="เบอร์โทร">
+
+<input id="social" placeholder="Twitter / Discord">
+
+<textarea
+id="address"
+placeholder="ที่อยู่">
+</textarea>
+
+</div>
+
+<div class="card">
+
+<h2>รายการสินค้า</h2>
+
+<div id="items"></div>
+
+<h3 id="total">
+รวม 0 บาท
+</h3>
+
+</div>
+
+<button onclick="goPayment()">
+ไปชำระเงิน
+</button>
+
+</div>
+
+<script>
+
+let cart = [];
+
+loadCheckout();
+
+function loadCheckout(){
+
+cart =
+JSON.parse(
+localStorage.getItem(
+"buyNowCart"
+) || "[]"
+);
+
+renderItems();
+
+}
+
+function renderItems(){
+
+let html = "";
+let total = 0;
+
+cart.forEach(item=>{
+
+const price =
+Number(item.price);
+
+const qty =
+Number(item.qty);
+
+total +=
+price * qty;
+
+html += `
+<p>
+
+${item.name}
+
+x ${qty}
+
+= ${price*qty}
+
+บาท
+
+</p>
+`;
+
+});
+
+document
+.getElementById(
+"items"
+)
+.innerHTML =
+html;
+
+document
+.getElementById(
+"total"
+)
+.innerHTML =
+`รวม ${total} บาท`;
+
+}
+
+function goPayment(){
+
+alert(
+"Phase ถัดไปจะเชื่อม Address Book + Payment"
+);
+
+}
+
+</script>
+
+</body>
+</html>
