@@ -53,18 +53,8 @@ cursor:pointer;
 บัญชีสำหรับโอน
 </h2>
 
-<p>
-ธนาคารกสิกรไทย
-</p>
-
-<p>
-123-4-56789-0
-</p>
-
-<p>
-Rinka Shop
-</p>
-
+<div id="bankInfo">
+กำลังโหลด...
 </div>
 
 <div class="card">
@@ -92,7 +82,41 @@ onclick="submitOrder()">
 
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+loadBankInfo();
 
+async function loadBankInfo(){
+
+  const response =
+    await fetch(
+      API +
+      "?action=bank"
+    );
+
+  const bank =
+    await response.json();
+
+  document
+    .getElementById(
+      "bankInfo"
+    )
+    .innerHTML = `
+
+      <p>
+      ${bank.bank_name}
+      </p>
+
+      <p>
+      ${bank.account_number}
+      </p>
+
+      <p>
+      ${bank.account_name}
+      </p>
+
+    `;
+
+}
+  
 async function submitOrder(){
 
 const cart =
