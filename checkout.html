@@ -51,37 +51,58 @@ cursor:pointer;
 
 <h2>ข้อมูลจัดส่ง</h2>
 
-<input id="receiver" placeholder="ชื่อผู้รับ">
+<input
+id="email"
+placeholder="อีเมล">
 
-<input id="phone" placeholder="เบอร์โทร">
+<button
+onclick="loadAddress()">
+โหลดที่อยู่
+</button>
 
-<input id="social" placeholder="Twitter / Discord">
+<hr>
+
+<input
+id="receiver"
+placeholder="ชื่อผู้รับ">
+
+<input
+id="phone"
+placeholder="เบอร์โทร">
+
+<input
+id="social"
+placeholder="Twitter / Discord">
 
 <textarea
 id="address"
 placeholder="ที่อยู่">
 </textarea>
 
-</div>
+<input
+id="subdistrict"
+placeholder="แขวง / ตำบล">
 
-<div class="card">
+<input
+id="district"
+placeholder="เขต / อำเภอ">
 
-<h2>รายการสินค้า</h2>
+<input
+id="province"
+placeholder="จังหวัด">
 
-<div id="items"></div>
+<input
+id="postcode"
+placeholder="รหัสไปรษณีย์">
 
-<h3 id="total">
-รวม 0 บาท
-</h3>
-
-</div>
-
-<button onclick="goPayment()">
-ไปชำระเงิน
+<button
+onclick="saveAddress()">
+บันทึกที่อยู่
 </button>
 
-</div>
-
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+  
 <script>
 
 let cart = [];
@@ -149,6 +170,180 @@ document
 
 }
 
+async function loadAddress(){
+
+  const email =
+    document
+      .getElementById(
+        "email"
+      )
+      .value;
+
+  if(!email){
+
+    alert(
+      "กรุณากรอกอีเมล"
+    );
+
+    return;
+
+  }
+
+  const response =
+    await fetch(
+      API +
+      "?action=address&email=" +
+      encodeURIComponent(
+        email
+      )
+    );
+
+  const data =
+    await response.json();
+
+  if(!data){
+
+    alert(
+      "ไม่พบข้อมูลที่อยู่"
+    );
+
+    return;
+
+  }
+
+  document.getElementById(
+    "receiver"
+  ).value =
+    data.receiver || "";
+
+  document.getElementById(
+    "phone"
+  ).value =
+    data.phone || "";
+
+  document.getElementById(
+    "social"
+  ).value =
+    data.twitter || "";
+
+  document.getElementById(
+    "address"
+  ).value =
+    data.address || "";
+
+  document.getElementById(
+    "subdistrict"
+  ).value =
+    data.subdistrict || "";
+
+  document.getElementById(
+    "district"
+  ).value =
+    data.district || "";
+
+  document.getElementById(
+    "province"
+  ).value =
+    data.province || "";
+
+  document.getElementById(
+    "postcode"
+  ).value =
+    data.postcode || "";
+
+  alert(
+    "โหลดที่อยู่เรียบร้อย"
+  );
+
+}
+
+async function saveAddress(){
+
+  const payload = {
+
+    email:
+      document.getElementById(
+        "email"
+      ).value,
+
+    twitter:
+      document.getElementById(
+        "social"
+      ).value,
+
+    contact:"",
+
+    receiver:
+      document.getElementById(
+        "receiver"
+      ).value,
+
+    phone:
+      document.getElementById(
+        "phone"
+      ).value,
+
+    address:
+      document.getElementById(
+        "address"
+      ).value,
+
+    subdistrict:
+      document.getElementById(
+        "subdistrict"
+      ).value,
+
+    district:
+      document.getElementById(
+        "district"
+      ).value,
+
+    province:
+      document.getElementById(
+        "province"
+      ).value,
+
+    postcode:
+      document.getElementById(
+        "postcode"
+      ).value
+
+  };
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "payload",
+    JSON.stringify(
+      payload
+    )
+  );
+
+  const response =
+    await fetch(
+
+      API +
+      "?action=saveAddress",
+
+      {
+
+        method:"POST",
+
+        body:formData
+
+      }
+
+    );
+
+  await response.json();
+
+  alert(
+    "บันทึกที่อยู่เรียบร้อย"
+  );
+
+}
+  
 function goPayment(){
 
 alert(
