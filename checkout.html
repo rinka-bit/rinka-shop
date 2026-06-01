@@ -344,14 +344,46 @@ async function saveAddress(){
 
 }
   
-function goPayment(){
+function getAddress(email){
 
-alert(
-"Phase ถัดไปจะเชื่อม Address Book + Payment"
-);
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(
+        "CustomerAddresses"
+      );
+
+  const rows =
+    sheet.getDataRange()
+      .getValues();
+
+  for(let i=1;i<rows.length;i++){
+
+    if(rows[i][0] == email){
+
+      return {
+
+        email: rows[i][0],
+        twitter: rows[i][1],
+        contact: rows[i][2],
+        receiver: rows[i][3],
+        phone: rows[i][4],
+        address: rows[i][5],
+        subdistrict: rows[i][6],
+        district: rows[i][7],
+        province: rows[i][8],
+        postcode: rows[i][9]
+
+      };
+
+    }
+
+  }
+
+  return null;
 
 }
-
+  
 </script>
 
 </body>
