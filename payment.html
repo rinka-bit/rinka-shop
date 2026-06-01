@@ -120,17 +120,25 @@ const banks =
     border-radius:10px;
     ">
 
-      <label>
+    <label
+style="
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+">
 
-        <input
-        type="radio"
-        name="bank"
-        value="${bank.account_id}"
-        onclick="showBankById('${bank.account_id}')"
+<input
+type="radio"
+name="bank"
+value="${bank.account_id}"
+onclick="showBankById('${bank.account_id}')">
 
-        ${bank.bank_name}
+<span>
+${bank.bank_name}
+</span>
 
-      </label>
+</label>  
 
     </div>
 
