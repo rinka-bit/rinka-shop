@@ -88,74 +88,58 @@ onclick="submitOrder()">
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-  let bankData = [];
-  
+let bankData = [];
+
 loadBanks();
 
 async function loadBanks(){
 
   const response =
     await fetch(
-      API +
-      "?action=banks"
+      API + "?action=banks"
     );
 
   bankData =
-  await response.json();
-
-const banks =
-  bankData;
+    await response.json();
 
   let html = "";
 
-  banks.forEach(bank=>{
+  bankData.forEach(bank=>{
 
     html += `
+      <div style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+      ">
 
-    <div
-    style="
-    border:1px solid #ddd;
-    padding:15px;
-    margin-bottom:10px;
-    border-radius:10px;
-    ">
+        <label style="
+          display:flex;
+          align-items:center;
+          gap:10px;
+          cursor:pointer;
+        ">
 
-    <label
-style="
-display:flex;
-align-items:center;
-gap:10px;
-font-weight:bold;
-">
+          <input
+            type="radio"
+            name="bank"
+            onclick="showBankById('${bank.account_id}')">
 
-<input
-type="radio"
-name="bank"
-value="${bank.account_id}"
-onclick="showBankById('${bank.account_id}')">
+          <span>
+            ${bank.bank_name}
+          </span>
 
-<span>
-style="
-font-size:14px;
-word-break:break-word;
-">
-${bank.bank_name}
-</span>
+        </label>
 
-</label>  
-
-    </div>
-
+      </div>
     `;
 
   });
 
-  document
-    .getElementById(
-      "bankList"
-    )
-    .innerHTML =
-      html;
+  document.getElementById(
+    "bankList"
+  ).innerHTML = html;
 
 }
 
@@ -183,45 +167,27 @@ function showBank(bank){
     html = `
 
       <h3>
-      ${bank.bank_name}
+        ${bank.bank_name}
       </h3>
 
       <img
-      src="${bank.qr_image}"
-      style="
-      max-width:300px;
-      width:100%;
-      ">
-
-      <img
-      src="${bank.qr_image}"
-      style="
-      max-width:300px;
-      width:100%;
-      cursor:pointer;
-      "
-      onclick="
-      downloadQR(
-      '${bank.qr_image}'
-      )
-      ">
+        src="${bank.qr_image}"
+        style="
+          max-width:300px;
+          width:100%;
+          border-radius:10px;
+        ">
 
       <br><br>
 
-      <a
-href="${bank.qr_image}"
-download="Rinka-QR">
-
-<button
-onclick="
-downloadQR(
-'${bank.qr_image}'
-)
-">
-Save QR
-</button>
-
-</a>
+      <button
+        onclick="
+          downloadQR(
+            '${bank.qr_image}'
+          )
+        ">
+        บันทึกรูป QR
+      </button>
 
     `;
 
@@ -230,176 +196,150 @@ Save QR
     html = `
 
       <h3>
-      ${bank.bank_name}
+        ${bank.bank_name}
       </h3>
 
       <p>
-      ชื่อบัญชี :
-      ${bank.account_name}
+        ชื่อบัญชี :
+        ${bank.account_name}
       </p>
 
       <p>
-      เลขบัญชี :
-      ${bank.account_number}
+        เลขบัญชี :
+        ${bank.account_number}
       </p>
 
       <button
-      onclick="
-      copyAccount(
-      '${bank.account_number}'
-      )
-      ">
-
-      copy
-
+        onclick="
+          copyAccount(
+            '${bank.account_number}'
+          )
+        ">
+        คัดลอกเลขบัญชี
       </button>
 
     `;
 
   }
 
-  document
-    .getElementById(
-      "bankDetail"
-    )
-    .innerHTML =
-      html;
+  document.getElementById(
+    "bankDetail"
+  ).innerHTML = html;
 
 }
 
 function copyAccount(number){
 
-  navigator
-    .clipboard
-    .writeText(number);
+  navigator.clipboard.writeText(
+    number
+  );
 
   alert(
-    "Copy Successful"
+    "คัดลอกเลขบัญชีแล้ว"
   );
 
 }
 
-async function downloadQR(url){
+function downloadQR(url){
 
-  try{
+  const a =
+    document.createElement("a");
 
-    const response =
-      await fetch(url);
+  a.href = url;
 
-    const blob =
-      await response.blob();
+  a.target = "_blank";
 
-    const blobUrl =
-      URL.createObjectURL(blob);
-
-    const a =
-      document.createElement("a");
-
-    a.href = blobUrl;
-
-    a.download =
-      "Rinka-QR.jpg";
-
-    a.click();
-
-    URL.revokeObjectURL(
-      blobUrl
-    );
-
-  }catch(error){
-
-    window.open(url);
-
-  }
+  a.click();
 
 }
-  
+
 async function submitOrder(){
 
-const cart =
-JSON.parse(
-localStorage.getItem(
-"buyNowCart"
-) || "[]"
-);
+  const cart =
+    JSON.parse(
+      localStorage.getItem(
+        "buyNowCart"
+      ) || "[]"
+    );
 
-const address =
-JSON.parse(
-localStorage.getItem(
-"checkoutAddress"
-) || "{}"
-);
+  const address =
+    JSON.parse(
+      localStorage.getItem(
+        "checkoutAddress"
+      ) || "{}"
+    );
 
-const total =
-cart.reduce(
-(a,b)=>
-a + (
-Number(b.price)
-*
-Number(b.qty)
-),
-0
-);
+  const total =
+    cart.reduce(
+      (a,b)=>
+      a +
+      (
+        Number(b.price)
+        *
+        Number(b.qty)
+      ),
+      0
+    );
 
-const payload = {
+  const payload = {
 
-customer_name:
-address.receiver,
+    customer_name:
+      address.receiver,
 
-email:
-address.email,
+    email:
+      address.email,
 
-phone:
-address.phone,
+    phone:
+      address.phone,
 
-social:
-address.social,
+    social:
+      address.social,
 
-subtotal:
-total,
+    subtotal:
+      total,
 
-total:
-total,
+    total:
+      total,
 
-items:
-cart
+    items:
+      cart
 
-};
+  };
 
-const formData =
-new FormData();
+  const formData =
+    new FormData();
 
-formData.append(
-"payload",
-JSON.stringify(
-payload
-)
-);
+  formData.append(
+    "payload",
+    JSON.stringify(
+      payload
+    )
+  );
 
-const response =
-await fetch(
-API,
-{
-method:"POST",
-body:formData
-}
-);
+  const response =
+    await fetch(
+      API,
+      {
+        method:"POST",
+        body:formData
+      }
+    );
 
-const result =
-await response.json();
+  const result =
+    await response.json();
 
-if(result.success){
+  if(result.success){
 
-alert(
-"สร้างคำสั่งซื้อเรียบร้อย"
-);
+    alert(
+      "สร้างคำสั่งซื้อเรียบร้อย"
+    );
 
-window.location =
-"order.html?id="
-+
-result.order_id;
+    window.location =
+      "order.html?id="
+      +
+      result.order_id;
 
-}
+  }
 
 }
 
