@@ -265,8 +265,22 @@ function copyAccount(number){
     .writeText(number);
 
   alert(
-    "คัดลอกเลขบัญชีแล้ว"
+    "Copy Successful"
   );
+
+}
+
+function downloadQR(url){
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "Rinka-QR";
+
+  a.click();
 
 }
 
