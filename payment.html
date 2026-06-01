@@ -212,7 +212,12 @@ function showBank(bank){
 href="${bank.qr_image}"
 download="Rinka-QR">
 
-<button>
+<button
+onclick="
+downloadQR(
+'${bank.qr_image}'
+)
+">
 Save QR
 </button>
 
