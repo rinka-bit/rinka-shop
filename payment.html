@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>ชำระเงิน</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+img{
+max-width:250px;
+}
+
+button{
+padding:12px 20px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>
+ชำระเงิน
+</h1>
+
+<div class="card">
+
+<h2>
+บัญชีสำหรับโอน
+</h2>
+
+<p>
+ธนาคารกสิกรไทย
+</p>
+
+<p>
+123-4-56789-0
+</p>
+
+<p>
+Rinka Shop
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>
+แนบสลิป
+</h2>
+
+<input
+type="file"
+id="slip">
+
+</div>
+
+<button
+onclick="submitOrder()">
+
+ยืนยันการชำระเงิน
+
+</button>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+async function submitOrder(){
+
+const cart =
+JSON.parse(
+localStorage.getItem(
+"buyNowCart"
+) || "[]"
+);
+
+const address =
+JSON.parse(
+localStorage.getItem(
+"checkoutAddress"
+) || "{}"
+);
+
+const total =
+cart.reduce(
+(a,b)=>
+a + (
+Number(b.price)
+*
+Number(b.qty)
+),
+0
+);
+
+const payload = {
+
+customer_name:
+address.receiver,
+
+email:
+address.email,
+
+phone:
+address.phone,
+
+social:
+address.social,
+
+subtotal:
+total,
+
+total:
+total,
+
+items:
+cart
+
+};
+
+const formData =
+new FormData();
+
+formData.append(
+"payload",
+JSON.stringify(
+payload
+)
+);
+
+const response =
+await fetch(
+API,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+if(result.success){
+
+alert(
+"สร้างคำสั่งซื้อเรียบร้อย"
+);
+
+window.location =
+"order.html?id="
++
+result.order_id;
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
