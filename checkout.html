@@ -4,11 +4,13 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
 
 <title>Checkout</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet"
+href="style.css">
 
 <style>
 
@@ -30,11 +32,13 @@ textarea{
 width:100%;
 padding:10px;
 margin:5px 0;
+box-sizing:border-box;
 }
 
 button{
 padding:10px 20px;
 cursor:pointer;
+margin-top:10px;
 }
 
 </style>
@@ -45,11 +49,15 @@ cursor:pointer;
 
 <div class="container">
 
-<h1>ยืนยันคำสั่งซื้อ</h1>
+<h1>
+ยืนยันคำสั่งซื้อ
+</h1>
 
 <div class="card">
 
-<h2>ข้อมูลจัดส่ง</h2>
+<h2>
+ข้อมูลจัดส่ง
+</h2>
 
 <input
 id="email"
@@ -76,8 +84,7 @@ placeholder="Twitter / Discord">
 
 <textarea
 id="address"
-placeholder="ที่อยู่">
-</textarea>
+placeholder="ที่อยู่"></textarea>
 
 <input
 id="subdistrict"
@@ -100,11 +107,34 @@ onclick="saveAddress()">
 บันทึกที่อยู่
 </button>
 
+</div>
+
+<div class="card">
+
+<h2>
+รายการสินค้า
+</h2>
+
+<div id="items"></div>
+
+<h3 id="total">
+รวม 0 บาท
+</h3>
+
+</div>
+
+<button
+onclick="goPayment()">
+ไปชำระเงิน
+</button>
+
+</div>
+
 <script>
 
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
-  
+
 let cart = [];
 
 loadCheckout();
@@ -140,15 +170,11 @@ price * qty;
 
 html += `
 <p>
-
 ${item.name}
-
 x ${qty}
-
-= ${price*qty}
-
+=
+${price*qty}
 บาท
-
 </p>
 `;
 
@@ -172,241 +198,229 @@ document
 
 async function loadAddress(){
 
-  const email =
-    document
-      .getElementById(
-        "email"
-      )
-      .value;
+const email =
+document.getElementById(
+"email"
+).value;
 
-  if(!email){
+if(!email){
 
-    alert(
-      "กรุณากรอกอีเมล"
-    );
+alert(
+"กรุณากรอกอีเมล"
+);
 
-    return;
+return;
 
-  }
+}
 
-  const response =
-    await fetch(
-      API +
-      "?action=address&email=" +
-      encodeURIComponent(
-        email
-      )
-    );
+const response =
+await fetch(
+API +
+"?action=address&email=" +
+encodeURIComponent(
+email
+)
+);
 
-  const data =
-    await response.json();
+const data =
+await response.json();
 
-  if(!data){
+if(!data){
 
-    alert(
-      "ไม่พบข้อมูลที่อยู่"
-    );
+alert(
+"ไม่พบข้อมูลที่อยู่"
+);
 
-    return;
+return;
 
-  }
+}
 
-  document.getElementById(
-    "receiver"
-  ).value =
-    data.receiver || "";
+document.getElementById(
+"receiver"
+).value =
+data.receiver || "";
 
-  document.getElementById(
-    "phone"
-  ).value =
-    data.phone || "";
+document.getElementById(
+"phone"
+).value =
+data.phone || "";
 
-  document.getElementById(
-    "social"
-  ).value =
-    data.twitter || "";
+document.getElementById(
+"social"
+).value =
+data.twitter || "";
 
-  document.getElementById(
-    "address"
-  ).value =
-    data.address || "";
+document.getElementById(
+"address"
+).value =
+data.address || "";
 
-  document.getElementById(
-    "subdistrict"
-  ).value =
-    data.subdistrict || "";
+document.getElementById(
+"subdistrict"
+).value =
+data.subdistrict || "";
 
-  document.getElementById(
-    "district"
-  ).value =
-    data.district || "";
+document.getElementById(
+"district"
+).value =
+data.district || "";
 
-  document.getElementById(
-    "province"
-  ).value =
-    data.province || "";
+document.getElementById(
+"province"
+).value =
+data.province || "";
 
-  document.getElementById(
-    "postcode"
-  ).value =
-    data.postcode || "";
-
-  alert(
-    "โหลดที่อยู่เรียบร้อย"
-  );
+document.getElementById(
+"postcode"
+).value =
+data.postcode || "";
 
 }
 
 async function saveAddress(){
 
-  const payload = {
+const payload = {
 
-    email:
-      document.getElementById(
-        "email"
-      ).value,
+email:
+document.getElementById(
+"email"
+).value,
 
-    twitter:
-      document.getElementById(
-        "social"
-      ).value,
+twitter:
+document.getElementById(
+"social"
+).value,
 
-    contact:"",
+contact:"",
 
-    receiver:
-      document.getElementById(
-        "receiver"
-      ).value,
+receiver:
+document.getElementById(
+"receiver"
+).value,
 
-    phone:
-      document.getElementById(
-        "phone"
-      ).value,
+phone:
+document.getElementById(
+"phone"
+).value,
 
-    address:
-      document.getElementById(
-        "address"
-      ).value,
+address:
+document.getElementById(
+"address"
+).value,
 
-    subdistrict:
-      document.getElementById(
-        "subdistrict"
-      ).value,
+subdistrict:
+document.getElementById(
+"subdistrict"
+).value,
 
-    district:
-      document.getElementById(
-        "district"
-      ).value,
+district:
+document.getElementById(
+"district"
+).value,
 
-    province:
-      document.getElementById(
-        "province"
-      ).value,
+province:
+document.getElementById(
+"province"
+).value,
 
-    postcode:
-      document.getElementById(
-        "postcode"
-      ).value
+postcode:
+document.getElementById(
+"postcode"
+).value
 
-  };
+};
 
-  const formData =
-    new FormData();
+const formData =
+new FormData();
 
-  formData.append(
-    "payload",
-    JSON.stringify(
-      payload
-    )
-  );
+formData.append(
+"payload",
+JSON.stringify(
+payload
+)
+);
 
-  const response =
-    await fetch(
+const response =
+await fetch(
+API +
+"?action=saveAddress",
+{
+method:"POST",
+body:formData
+}
+);
 
-      API +
-      "?action=saveAddress",
+await response.json();
 
-      {
-
-        method:"POST",
-
-        body:formData
-
-      }
-
-    );
-
-  await response.json();
-
-  alert(
-    "บันทึกที่อยู่เรียบร้อย"
-  );
+alert(
+"บันทึกที่อยู่เรียบร้อย"
+);
 
 }
-  
-</div>
-
-<div class="card">
-
-<h2>รายการสินค้า</h2>
-
-<div id="items"></div>
-
-<h3 id="total">
-รวม 0 บาท
-</h3>
-
-</div>
-
-<button onclick="goPayment()">
-ไปชำระเงิน
-</button>
-
-</div>
 
 function goPayment(){
 
-  const addressData = {
+const addressData = {
 
-    email:
-      document.getElementById("email").value,
+email:
+document.getElementById(
+"email"
+).value,
 
-    receiver:
-      document.getElementById("receiver").value,
+receiver:
+document.getElementById(
+"receiver"
+).value,
 
-    phone:
-      document.getElementById("phone").value,
+phone:
+document.getElementById(
+"phone"
+).value,
 
-    social:
-      document.getElementById("social").value,
+social:
+document.getElementById(
+"social"
+).value,
 
-    address:
-      document.getElementById("address").value,
+address:
+document.getElementById(
+"address"
+).value,
 
-    subdistrict:
-      document.getElementById("subdistrict").value,
+subdistrict:
+document.getElementById(
+"subdistrict"
+).value,
 
-    district:
-      document.getElementById("district").value,
+district:
+document.getElementById(
+"district"
+).value,
 
-    province:
-      document.getElementById("province").value,
+province:
+document.getElementById(
+"province"
+).value,
 
-    postcode:
-      document.getElementById("postcode").value
+postcode:
+document.getElementById(
+"postcode"
+).value
 
-  };
+};
 
-  localStorage.setItem(
-    "checkoutAddress",
-    JSON.stringify(addressData)
-  );
+localStorage.setItem(
+"checkoutAddress",
+JSON.stringify(
+addressData
+)
+);
 
-  window.location =
-    "payment.html";
+window.location =
+"payment.html";
 
 }
-  
+
 </script>
 
 </body>
