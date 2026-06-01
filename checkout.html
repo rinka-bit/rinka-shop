@@ -344,43 +344,66 @@ async function saveAddress(){
 
 }
   
-function getAddress(email){
+</div>
 
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(
-        "CustomerAddresses"
-      );
+<div class="card">
 
-  const rows =
-    sheet.getDataRange()
-      .getValues();
+<h2>รายการสินค้า</h2>
 
-  for(let i=1;i<rows.length;i++){
+<div id="items"></div>
 
-    if(rows[i][0] == email){
+<h3 id="total">
+รวม 0 บาท
+</h3>
 
-      return {
+</div>
 
-        email: rows[i][0],
-        twitter: rows[i][1],
-        contact: rows[i][2],
-        receiver: rows[i][3],
-        phone: rows[i][4],
-        address: rows[i][5],
-        subdistrict: rows[i][6],
-        district: rows[i][7],
-        province: rows[i][8],
-        postcode: rows[i][9]
+<button onclick="goPayment()">
+ไปชำระเงิน
+</button>
 
-      };
+</div>
 
-    }
+function goPayment(){
 
-  }
+  const addressData = {
 
-  return null;
+    email:
+      document.getElementById("email").value,
+
+    receiver:
+      document.getElementById("receiver").value,
+
+    phone:
+      document.getElementById("phone").value,
+
+    social:
+      document.getElementById("social").value,
+
+    address:
+      document.getElementById("address").value,
+
+    subdistrict:
+      document.getElementById("subdistrict").value,
+
+    district:
+      document.getElementById("district").value,
+
+    province:
+      document.getElementById("province").value,
+
+    postcode:
+      document.getElementById("postcode").value
+
+  };
+
+  localStorage.setItem(
+    "checkoutAddress",
+    JSON.stringify(addressData)
+  );
+
+  window.location =
+    "payment.html";
 
 }
   
