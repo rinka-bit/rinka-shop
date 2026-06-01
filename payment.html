@@ -88,6 +88,8 @@ onclick="submitOrder()">
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
+  let bankData = [];
+  
 loadBanks();
 
 async function loadBanks(){
@@ -98,8 +100,11 @@ async function loadBanks(){
       "?action=banks"
     );
 
-  const banks =
-    await response.json();
+  bankData =
+  await response.json();
+
+const banks =
+  bankData;
 
   let html = "";
 
@@ -121,7 +126,7 @@ async function loadBanks(){
         type="radio"
         name="bank"
         value="${bank.account_id}"
-        onchange='showBank(${JSON.stringify(bank)})'>
+        onclick="showBankById('${bank.account_id}')"
 
         ${bank.bank_name}
 
@@ -139,6 +144,21 @@ async function loadBanks(){
     )
     .innerHTML =
       html;
+
+}
+
+function showBankById(id){
+
+  const bank =
+    bankData.find(
+      b => b.account_id === id
+    );
+
+  if(bank){
+
+    showBank(bank);
+
+  }
 
 }
 
