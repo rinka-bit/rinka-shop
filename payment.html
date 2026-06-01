@@ -142,9 +142,50 @@ async function loadBanks(){
 
 }
 
-      <p>
-      ธนาคาร :
+function showBank(bank){
+
+  let html = "";
+
+  if(bank.qr_image){
+
+    html = `
+
+      <h3>
       ${bank.bank_name}
+      </h3>
+
+      <img
+      src="${bank.qr_image}"
+      style="
+      max-width:300px;
+      width:100%;
+      ">
+
+      <br><br>
+
+      <a
+      href="${bank.qr_image}"
+      target="_blank">
+
+      <button>
+      เปิด QR
+      </button>
+
+      </a>
+
+    `;
+
+  }else{
+
+    html = `
+
+      <h3>
+      ${bank.bank_name}
+      </h3>
+
+      <p>
+      ชื่อบัญชี :
+      ${bank.account_name}
       </p>
 
       <p>
@@ -152,30 +193,42 @@ async function loadBanks(){
       ${bank.account_number}
       </p>
 
-      <p>
-      ชื่อบัญชี :
-      ${bank.account_name}
-      </p>
+      <button
+      onclick="
+      copyAccount(
+      '${bank.account_number}'
+      )
+      ">
 
-      ${
-        bank.qr_image
-        ?
-        `
-        <img
-        src="${bank.qr_image}"
-        style="
-        max-width:250px;
-        margin-top:20px;
-        ">
-        `
-        :
-        ""
-      }
+      คัดลอกเลขบัญชี
+
+      </button>
 
     `;
 
+  }
+
+  document
+    .getElementById(
+      "bankDetail"
+    )
+    .innerHTML =
+      html;
+
 }
-  
+
+function copyAccount(number){
+
+  navigator
+    .clipboard
+    .writeText(number);
+
+  alert(
+    "คัดลอกเลขบัญชีแล้ว"
+  );
+
+}
+
 async function submitOrder(){
 
 const cart =
