@@ -50,12 +50,15 @@ cursor:pointer;
 <div class="card">
 
 <h2>
-บัญชีสำหรับโอน
+เลือกช่องทางชำระเงิน
 </h2>
 
-<div id="bankInfo">
+<div id="bankList"></div>
 
-กำลังโหลดข้อมูลบัญชี...
+<div
+id="bankDetail"
+style="margin-top:20px;">
+</div>
 
 </div>
 
@@ -85,24 +88,59 @@ onclick="submitOrder()">
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-loadBankInfo();
+loadBanks();
 
-async function loadBankInfo(){
+async function loadBanks(){
 
   const response =
     await fetch(
       API +
-      "?action=bank"
+      "?action=banks"
     );
 
-  const bank =
+  const banks =
     await response.json();
+
+  let html = "";
+
+  banks.forEach(bank=>{
+
+    html += `
+
+    <div
+    style="
+    border:1px solid #ddd;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:10px;
+    ">
+
+      <label>
+
+        <input
+        type="radio"
+        name="bank"
+        value="${bank.account_id}"
+        onchange='showBank(${JSON.stringify(bank)})'>
+
+        ${bank.bank_name}
+
+      </label>
+
+    </div>
+
+    `;
+
+  });
 
   document
     .getElementById(
-      "bankInfo"
+      "bankList"
     )
-    .innerHTML = `
+    .innerHTML =
+      html;
+
+}
 
       <p>
       ธนาคาร :
