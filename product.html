@@ -273,9 +273,27 @@ function addToCart(){
 
 function buyNow(){
 
-alert(
-"Phase ถัดไปจะเชื่อม Checkout"
+localStorage.setItem(
+
+"buyNowCart",
+
+JSON.stringify([
+
+{
+
+...window.currentProduct,
+
+qty:1
+
+}
+
+])
+
 );
+
+window.location.href =
+
+"checkout.html";
 
 }
 
