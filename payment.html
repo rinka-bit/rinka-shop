@@ -119,6 +119,21 @@ async function loadBankInfo(){
       ${bank.account_name}
       </p>
 
+      ${
+        bank.qr_image
+        ?
+        `
+        <img
+        src="${bank.qr_image}"
+        style="
+        max-width:250px;
+        margin-top:20px;
+        ">
+        `
+        :
+        ""
+      }
+
     `;
 
 }
