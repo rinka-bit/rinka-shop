@@ -55,11 +55,43 @@ align-items:flex-start;
 gap:12px;
 cursor:pointer;
 width:100%;
+box-sizing:border-box;
+}
+
+.bank-info{
+flex:1;
+min-width:0;
+width:100%;
+}
+
+.bank-name{
+font-size:16px;
+font-weight:700;
+word-break:break-word;
+}
+
+.bank-owner{
+font-size:13px;
+color:#666;
+margin-top:4px;
+word-break:break-word;
+overflow-wrap:break-word;
+}
+
+.bank-option input[type="radio"]{
+flex-shrink:0;
+margin-top:4px;
 }
 
 .bank-option input[type="radio"]{
 margin-top:3px;
 flex-shrink:0;
+}
+
+  .bank-option{
+display:flex;
+width:100%;
+overflow:hidden;
 }
   
 .bank-info{
