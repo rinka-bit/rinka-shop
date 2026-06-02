@@ -1,139 +1,104 @@
-body{
-  margin:0;
-  padding:20px;
-  font-family:Arial,sans-serif;
-  background:#f5f5f5;
-}
+<style>
 
-header{
-  text-align:center;
-  margin-bottom:30px;
-}
-
-.products{
-  display:grid;
-  grid-template-columns:
-  repeat(auto-fill,minmax(250px,1fr));
-  gap:20px;
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
 }
 
 .card{
-  background:white;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);
-}
-
-.card img{
-  width:100%;
-  height:280px;
-  object-fit:cover;
-}
-
-.card-body{
-  padding:15px;
-}
-
-.price{
-  color:#e53935;
-  font-size:20px;
-  font-weight:bold;
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
 
 button{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
-.topbar{
-  text-align:right;
-  margin-bottom:20px;
+padding:12px 20px;
+cursor:pointer;
+border:none;
+border-radius:8px;
+background:#4f46e5;
+color:white;
+font-size:15px;
 }
 
-.topbar button{
-  width:auto;
-  padding:10px 15px;
+button:hover{
+opacity:.9;
 }
 
-.cart-modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
+.bank-card{
+border:1px solid #ddd;
+border-radius:12px;
+padding:14px;
+margin-bottom:12px;
+background:#fff;
 }
 
-.cart-box{
-  background:white;
-  width:500px;
-  max-width:90%;
-  margin:50px auto;
-  padding:20px;
-  border-radius:12px;
+.bank-option{
+display:flex;
+align-items:flex-start;
+gap:12px;
+cursor:pointer;
+width:100%;
 }
 
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px;
-  padding-bottom:10px;
-  border-bottom:1px solid #ddd;
-}
-.cart-controls{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.bank-info{
+flex:1;
+min-width:0;
 }
 
-.cart-controls button{
-  width:35px;
-  height:35px;
-  padding:0;
+.bank-name{
+font-size:16px;
+font-weight:700;
 }
 
-.remove-btn{
-  width:auto !important;
-  padding:6px 12px !important;
-}
-.qty-box{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.bank-owner{
+font-size:13px;
+color:#666;
+margin-top:4px;
+word-break:break-word;
+overflow-wrap:break-word;
 }
 
-.qty-btn{
-  width:30px;
-  height:30px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+.qr-image{
+display:block;
+width:100%;
+max-width:320px;
+margin:auto;
+border-radius:12px;
 }
 
-.remove-btn{
-  margin-left:10px;
-  border:none;
-  padding:6px 10px;
-  border-radius:6px;
-  cursor:pointer;
-}
-input,
-textarea{
-  width:100%;
-  max-width:400px;
-  padding:10px;
-  margin:5px 0;
-  box-sizing:border-box;
+.bank-detail{
+margin-top:20px;
+text-align:center;
 }
 
-textarea{
-  min-height:100px;
+.save-tip{
+font-size:13px;
+color:#666;
+margin-top:10px;
 }
 
-#checkoutPage{
-  margin-top:40px;
-  padding:20px;
-  background:white;
-  border-radius:12px;
+.copy-btn{
+margin-top:10px;
 }
+
+@media(max-width:600px){
+
+.container{
+padding:15px;
+}
+
+.card{
+padding:15px;
+}
+
+button{
+width:100%;
+}
+
+}
+
+</style>
