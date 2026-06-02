@@ -24,19 +24,98 @@ background:white;
 padding:20px;
 border-radius:12px;
 margin-bottom:20px;
-}
-
-img{
-max-width:250px;
+box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
 
 button{
 padding:12px 20px;
 cursor:pointer;
+border:none;
+border-radius:8px;
+background:#4f46e5;
+color:white;
+font-size:15px;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.bank-card{
+border:1px solid #ddd;
+border-radius:12px;
+padding:14px;
+margin-bottom:12px;
+background:#fff;
+}
+
+.bank-option{
+display:flex;
+align-items:flex-start;
+gap:12px;
+cursor:pointer;
+width:100%;
+}
+
+.bank-info{
+flex:1;
+min-width:0;
+}
+
+.bank-name{
+font-size:16px;
+font-weight:700;
+}
+
+.bank-owner{
+font-size:13px;
+color:#666;
+margin-top:4px;
+word-break:break-word;
+overflow-wrap:break-word;
+}
+
+.qr-image{
+display:block;
+width:100%;
+max-width:320px;
+margin:auto;
+border-radius:12px;
+}
+
+.bank-detail{
+margin-top:20px;
+text-align:center;
+}
+
+.save-tip{
+font-size:13px;
+color:#666;
+margin-top:10px;
+}
+
+.copy-btn{
+margin-top:10px;
+}
+
+@media(max-width:600px){
+
+.container{
+padding:15px;
+}
+
+.card{
+padding:15px;
+}
+
+button{
+width:100%;
+}
+
 }
 
 </style>
-
+  
 </head>
 
 <body>
@@ -94,52 +173,52 @@ loadBanks();
 
 async function loadBanks(){
 
-  const response =
-    await fetch(
-      API + "?action=banks"
-    );
+const response =
+await fetch(
+API + "?action=banks"
+);
 
-  bankData =
-    await response.json();
+bankData =
+await response.json();
 
-  let html = "";
+let html = "";
 
-  bankData.forEach(bank=>{
+bankData.forEach(bank=>{
 
-    html += `
-      <div style="
-        border:1px solid #ddd;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-      ">
+html += `
 
-        <label style="
-          display:flex;
-          align-items:center;
-          gap:10px;
-          cursor:pointer;
-        ">
+<div class="bank-card">
 
-          <input
-            type="radio"
-            name="bank"
-            onclick="showBankById('${bank.account_id}')">
+<label class="bank-option">
 
-          <span>
-            ${bank.bank_name}
-          </span>
+<input
+type="radio"
+name="bank"
+onclick="showBankById('${bank.account_id}')">
 
-        </label>
+<div class="bank-info">
 
-      </div>
-    `;
+<div class="bank-name">
+${bank.bank_name}
+</div>
 
-  });
+<div class="bank-owner">
+${bank.account_name || ""}
+</div>
 
-  document.getElementById(
-    "bankList"
-  ).innerHTML = html;
+</div>
+
+</label>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"bankList"
+).innerHTML = html;
 
 }
 
@@ -160,71 +239,100 @@ function showBankById(id){
 
 function showBank(bank){
 
-  let html = "";
+let html = "";
 
-  if(bank.qr_image){
+if(bank.qr_image){
 
-    html = `
+html = `
 
-      <h3>
-        ${bank.bank_name}
-      </h3>
+<div class="bank-detail">
 
-      <img
-        src="${bank.qr_image}"
-        style="
-          max-width:300px;
-          width:100%;
-          border-radius:10px;
-        ">
+<h3>
+${bank.bank_name}
+</h3>
 
-      <br><br>
+<img
+src="${bank.qr_image}"
+class="qr-image">
 
-      <button
-        onclick="
-          downloadQR(
-            '${bank.qr_image}'
-          )
-        ">
-        บันทึกรูป QR
-      </button>
+<br>
 
-    `;
+<button
+onclick="downloadQR('${bank.qr_image}')">
 
-  }else{
+เปิด QR เต็มจอ
 
-    html = `
+</button>
 
-      <h3>
-        ${bank.bank_name}
-      </h3>
+<p class="save-tip">
 
-      <p>
-        ชื่อบัญชี :
-        ${bank.account_name}
-      </p>
+iPhone:
+แตะรูปค้างไว้แล้วเลือก
+"บันทึกรูปภาพ"
 
-      <p>
-        เลขบัญชี :
-        ${bank.account_number}
-      </p>
+<br>
 
-      <button
-        onclick="
-          copyAccount(
-            '${bank.account_number}'
-          )
-        ">
-        คัดลอกเลขบัญชี
-      </button>
+Android:
+เปิดรูปแล้วกดดาวน์โหลดได้
 
-    `;
+</p>
 
-  }
+</div>
 
-  document.getElementById(
-    "bankDetail"
-  ).innerHTML = html;
+`;
+
+}else{
+
+html = `
+
+<div class="bank-detail">
+
+<h3>
+${bank.bank_name}
+</h3>
+
+<p>
+
+ชื่อบัญชี :
+<br>
+
+<strong>
+${bank.account_name}
+</strong>
+
+</p>
+
+<p>
+
+เลขบัญชี :
+<br>
+
+<strong>
+${bank.account_number}
+</strong>
+
+</p>
+
+<button
+class="copy-btn"
+onclick="
+copyAccount(
+'${bank.account_number}'
+)">
+
+คัดลอกเลขบัญชี
+
+</button>
+
+</div>
+
+`;
+
+}
+
+document.getElementById(
+"bankDetail"
+).innerHTML = html;
 
 }
 
@@ -242,18 +350,23 @@ function copyAccount(number){
 
 function downloadQR(url){
 
-  const a =
-    document.createElement("a");
-
-  a.href = url;
-
-  a.target = "_blank";
-
-  a.click();
+window.open(
+url,
+"_blank"
+);
 
 }
 
 async function submitOrder(){
+
+  function downloadQR(url){
+
+window.open(
+url,
+"_blank"
+);
+
+}
 
   const cart =
     JSON.parse(
@@ -280,6 +393,21 @@ async function submitOrder(){
       ),
       0
     );
+
+  const slip =
+document.getElementById(
+"slip"
+);
+
+if(!slip.files.length){
+
+alert(
+"กรุณาแนบสลิป"
+);
+
+return;
+
+}
 
   const payload = {
 
