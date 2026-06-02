@@ -458,8 +458,50 @@ return;
 
   if(result.success){
 
+  const paymentPayload = {
+
+    order_id:
+      result.order_id,
+
+    amount:
+      total,
+
+    slip_url:
+      slip.files[0].name
+
+  };
+
+  const paymentForm =
+    new FormData();
+
+  paymentForm.append(
+    "action",
+    "payment"
+  );
+
+  paymentForm.append(
+    "payload",
+    JSON.stringify(
+      paymentPayload
+    )
+  );
+
+  const paymentResponse =
+    await fetch(
+      API,
+      {
+        method:"POST",
+        body:paymentForm
+      }
+    );
+
+  const paymentResult =
+    await paymentResponse.json();
+
+  if(paymentResult.success){
+
     alert(
-      "สร้างคำสั่งซื้อเรียบร้อย"
+      "แจ้งชำระเงินเรียบร้อย"
     );
 
     window.location =
@@ -467,7 +509,15 @@ return;
       +
       result.order_id;
 
+  }else{
+
+    alert(
+      "บันทึกการชำระเงินไม่สำเร็จ"
+    );
+
   }
+
+}
 
 }
 
