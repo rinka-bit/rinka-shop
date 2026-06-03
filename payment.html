@@ -51,11 +51,8 @@ background:#fff;
 
 .bank-option{
 display:flex;
-align-items:flex-start;
+align-items:center;
 gap:12px;
-cursor:pointer;
-width:100%;
-box-sizing:border-box;
 }
 
 .bank-option input[type="radio"]{
@@ -65,7 +62,8 @@ margin-top:3px;
 
 .bank-info{
 flex:1;
-min-width:0;
+display:block;
+width:auto;
 }
 
 .bank-name{
@@ -196,7 +194,7 @@ html += `
 
 <div class="bank-card">
 
-<label class="bank-option">
+<div class="bank-option">
 
 <input
 type="radio"
@@ -215,7 +213,7 @@ ${bank.account_name || ""}
 
 </div>
 
-</label>
+</div>
 
 </div>
 
