@@ -89,9 +89,21 @@ opacity:.8;
 📦 ค้นหาออเดอร์
 </h1>
 
+<h3>
+📧 ค้นหาด้วยอีเมล
+</h3>
+
 <input
 id="email"
 placeholder="กรอกอีเมลที่ใช้สั่งซื้อ">
+
+<h3>
+🐦 ค้นหาด้วย Twitter/X
+</h3>
+
+<input
+id="social"
+placeholder="@username">
 
 <button
 onclick="searchOrders()">
@@ -117,26 +129,52 @@ document
 .value
 .trim();
 
-if(!email){
+const social =
+document
+.getElementById("social")
+.value
+.trim();
+
+if(
+!email &&
+!social
+){
 
 alert(
-"กรุณากรอกอีเมล"
+"กรุณากรอกอีเมลหรือ Twitter/X"
 );
 
 return;
 
 }
+  
+let url = "";
 
-const response =
-await fetch(
+if(email){
+
+url =
 
 API +
 
 "?action=ordersByEmail&email=" +
 
-encodeURIComponent(email)
+encodeURIComponent(email);
 
-);
+}
+else{
+
+url =
+
+API +
+
+"?action=ordersBySocial&social=" +
+
+encodeURIComponent(social);
+
+}
+
+const response =
+await fetch(url);
 
 const result =
 await response.json();
