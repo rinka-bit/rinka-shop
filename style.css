@@ -118,7 +118,10 @@ button{
   border-radius:6px;
   cursor:pointer;
 }
-input,
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
 textarea{
   width:100%;
   max-width:400px;
