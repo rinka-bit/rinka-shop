@@ -67,6 +67,16 @@ background:#dcfce7;
 color:#166534;
 }
 
+.copy-btn{
+background:#4f46e5;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+}
+  
 </style>
 
 </head>
@@ -159,19 +169,18 @@ async function loadOrder(){
     </h3>
 
     <p>
-
     <b>ขนส่ง:</b>
-
     ${order.courier || "-"}
-
     </p>
 
     <p>
-
+    <b>สถานะจัดส่ง:</b>
+    ${order.shipping_status || "-"}
+    </p>
+    
+    <p>
     <b>เลขพัสดุ:</b>
-
     ${order.tracking_no || "-"}
-
     </p>
 
     ${
