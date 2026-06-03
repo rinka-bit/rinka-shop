@@ -146,15 +146,61 @@ async function loadOrder(){
     : '<span class="badge badge-pending">รอชำระเงิน</span>'}
     </p>
 
+    <div
+    style="
+    margin:20px 0;
+    padding:15px;
+    background:#f8fafc;
+    border-radius:12px;
+    ">
+
+    <h3>
+    🚚 ข้อมูลการจัดส่ง
+    </h3>
+
     <p>
-    ขนส่ง:
+
+    <b>ขนส่ง:</b>
+
     ${order.courier || "-"}
+
     </p>
 
     <p>
-    เลขพัสดุ:
+
+    <b>เลขพัสดุ:</b>
+
     ${order.tracking_no || "-"}
+
     </p>
+
+    ${
+    order.tracking_no
+    
+    ?
+    
+    `
+
+    <button
+    onclick="
+    copyTracking(
+    '${order.tracking_no}'
+    )
+    ">
+
+    copy tracking number
+
+    </button>
+
+    `
+
+    :
+
+    ""
+
+    }
+
+    </div>
 
     <table>
 
