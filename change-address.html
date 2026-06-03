@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>
+แจ้งเปลี่ยนที่อยู่
+</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+max-width:800px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+input,
+textarea{
+width:100%;
+padding:12px;
+box-sizing:border-box;
+margin-bottom:12px;
+}
+
+textarea{
+min-height:120px;
+}
+
+button{
+padding:12px 20px;
+border:none;
+border-radius:8px;
+background:#4f46e5;
+color:white;
+cursor:pointer;
+}
+
+.navbar{
+display:flex;
+gap:20px;
+padding:15px 0;
+margin-bottom:20px;
+border-bottom:1px solid #ddd;
+}
+
+.navbar a{
+text-decoration:none;
+font-weight:bold;
+color:#4f46e5;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<a href="home.html">
+🏠 หน้าแรก
+</a>
+
+<a href="lookup.html">
+📦 เช็กออเดอร์
+</a>
+
+<a href="change-address.html">
+📍 เปลี่ยนที่อยู่
+</a>
+
+</div>
+
+<div class="card">
+
+<h1>
+📍 แจ้งเปลี่ยนที่อยู่
+</h1>
+
+<input
+id="order_id"
+placeholder="เลขออเดอร์">
+
+<input
+id="receiver"
+placeholder="ชื่อผู้รับใหม่">
+
+<input
+id="phone"
+placeholder="เบอร์โทรใหม่">
+
+<input
+id="social"
+placeholder="Twitter/X">
+
+<textarea
+id="address"
+placeholder="ที่อยู่ใหม่">
+</textarea>
+
+<input
+id="subdistrict"
+placeholder="ตำบล">
+
+<input
+id="district"
+placeholder="อำเภอ">
+
+<input
+id="province"
+placeholder="จังหวัด">
+
+<input
+id="postcode"
+placeholder="รหัสไปรษณีย์">
+
+<textarea
+id="note"
+placeholder="หมายเหตุ">
+</textarea>
+
+<button
+onclick="submitRequest()">
+
+ส่งคำขอ
+
+</button>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+async function submitRequest(){
+
+const payload = {
+
+order_id:
+document.getElementById("order_id").value,
+
+receiver:
+document.getElementById("receiver").value,
+
+phone:
+document.getElementById("phone").value,
+
+social:
+document.getElementById("social").value,
+
+address:
+document.getElementById("address").value,
+
+subdistrict:
+document.getElementById("subdistrict").value,
+
+district:
+document.getElementById("district").value,
+
+province:
+document.getElementById("province").value,
+
+postcode:
+document.getElementById("postcode").value,
+
+note:
+document.getElementById("note").value
+
+};
+
+const formData =
+new FormData();
+
+formData.append(
+"action",
+"changeAddress"
+);
+
+formData.append(
+"payload",
+JSON.stringify(payload)
+);
+
+const response =
+await fetch(
+API,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+if(result.success){
+
+alert(
+"ส่งคำขอเรียบร้อย"
+);
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
