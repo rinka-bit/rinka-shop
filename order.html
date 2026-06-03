@@ -39,6 +39,34 @@ td{
   padding:10px;
 }
 
+.badge{
+display:inline-block;
+padding:6px 12px;
+border-radius:999px;
+font-size:14px;
+font-weight:bold;
+}
+
+.badge-paid{
+background:#dcfce7;
+color:#166534;
+}
+
+.badge-pending{
+background:#fef3c7;
+color:#92400e;
+}
+
+.badge-processing{
+background:#dbeafe;
+color:#1d4ed8;
+}
+
+.badge-completed{
+background:#dcfce7;
+color:#166534;
+}
+
 </style>
 
 </head>
@@ -187,6 +215,56 @@ async function loadOrder(){
 }
 
 loadOrder();
+
+function getStatusBadge(status){
+
+switch(status){
+
+case "pending":
+return `
+<span class="badge badge-pending">
+รอจัดการ
+</span>
+`;
+
+case "processing":
+return `
+<span class="badge badge-processing">
+กำลังดำเนินการ
+</span>
+`;
+
+case "completed":
+return `
+<span class="badge badge-completed">
+จัดส่งแล้ว
+</span>
+`;
+
+default:
+return status;
+
+}
+
+}
+
+<button
+onclick="
+copyTracking(
+'${order.tracking_no}'
+)">
+คัดลอกเลขพัสดุ
+</button>
+
+function copyTracking(no){
+
+navigator.clipboard.writeText(no);
+
+alert(
+"คัดลอกเลขพัสดุแล้ว"
+);
+
+}
 
 </script>
 
