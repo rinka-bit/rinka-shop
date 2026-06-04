@@ -43,7 +43,27 @@ body{
   border-radius:10px;
 
   cursor:pointer;
+}
 
+  .card img{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:8px;
+}
+
+.card h3{
+font-size:16px;
+margin:10px 0 5px;
+}
+
+.card p{
+margin:5px 0;
+}
+
+.card:hover{
+transform:translateY(-2px);
+transition:.2s;
 }
 
 .navbar{
@@ -151,6 +171,13 @@ await fetch(API);
 const products =
 await response.json();
 
+products.sort(
+(a,b)=>
+Number(b.sort_order||0)
+-
+Number(a.sort_order||0)
+);
+
 loadFeatured(products);
 
 loadNewArrivals(products);
@@ -162,7 +189,8 @@ loadFandoms(products);
 function createCard(product){
 
 return `
-<div class="card"
+<div
+class="card"
 onclick="
 window.location.href=
 'product.html?id=${product.product_id}'
@@ -170,12 +198,7 @@ window.location.href=
 
 <img
 src="${product.image}"
-style="
-width:100%;
-height:200px;
-object-fit:cover;
-border-radius:8px;
-">
+alt="${product.name}">
 
 <h3>
 ${product.name}
@@ -199,8 +222,10 @@ function loadFeatured(products){
 const featured =
 products.filter(
 p =>
-String(p.featured)
-.toUpperCase() === "TRUE"
+String(
+p.featured
+).toUpperCase() ===
+"TRUE"
 );
 
 document
@@ -219,8 +244,10 @@ function loadNewArrivals(products){
 const arrivals =
 products.filter(
 p =>
-String(p.new_arrival)
-.toUpperCase() === "TRUE"
+String(
+p.new_arrival
+).toUpperCase() ===
+"TRUE"
 );
 
 document
@@ -239,9 +266,11 @@ function loadFandoms(products){
 const fandoms =
 [
 ...new Set(
-products.map(
+products
+.map(
 p=>p.fandom
 )
+.filter(Boolean)
 )
 ];
 
@@ -249,23 +278,19 @@ let html = "";
 
 fandoms.forEach(fandom=>{
 
-if(!fandom){
-return;
-}
-
 html += `
 <button
-onclick="
-document
-.getElementById('search')
-.value='${fandom}';
-
-searchProducts();
+style="
+margin:5px;
+padding:8px 12px;
+cursor:pointer;
 "
->
-
+onclick="
+filterByFandom(
+'${fandom}'
+)
+">
 ${fandom}
-
 </button>
 `;
 
@@ -280,6 +305,19 @@ html;
 
 }
 
+function filterByFandom(fandom){
+
+document
+.getElementById(
+"search"
+)
+.value =
+fandom;
+
+searchProducts();
+
+}
+
 function searchProducts(){
 
 const keyword =
@@ -288,7 +326,8 @@ document
 "search"
 )
 .value
-.toLowerCase();
+.toLowerCase()
+.trim();
 
 const cards =
 document.querySelectorAll(
