@@ -123,9 +123,19 @@ margin-bottom:20px;
 Rinka Shop
 </h1>
 
+<input
+id="search"
+placeholder="🔍 ค้นหาสินค้า, แฟนด้อม..."
+oninput="searchProducts()">
+
 <div
-  id="featuredSection"
-  class="section">
+id="searchResults"
+class="section">
+</div>
+
+<div
+id="featuredSection"
+class="section">
 
 <h2>
 🔥 เปิดพรีอยู่ตอนนี้
@@ -139,11 +149,6 @@ Rinka Shop
 <div
   id="newSection"
   class="section">
-
-<input
-id="search"
-placeholder="ค้นหาสินค้า"
-oninput="searchProducts()">
 
 <h2>
 ⭐ สินค้าใหม่ล่าสุด
