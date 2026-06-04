@@ -55,6 +55,74 @@ style="display:none;">
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
+async function loadStats(){
+
+const response =
+await fetch(
+API + "?action=stats"
+);
+
+const stats =
+await response.json();
+
+document
+.getElementById("stats")
+.innerHTML = `
+
+<div style="
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:20px;
+">
+
+<div style="
+padding:15px;
+border:1px solid #ddd;
+border-radius:12px;
+">
+📦<br>
+${stats.totalOrders}
+ออเดอร์
+</div>
+
+<div style="
+padding:15px;
+border:1px solid #ddd;
+border-radius:12px;
+">
+💰<br>
+${stats.totalSales}
+บาท
+</div>
+
+<div style="
+padding:15px;
+border:1px solid #ddd;
+border-radius:12px;
+">
+🚚<br>
+${stats.pendingShipping}
+รอส่ง
+</div>
+
+<div style="
+padding:15px;
+border:1px solid #ddd;
+border-radius:12px;
+">
+📍<br>
+${stats.pendingAddress}
+คำขอ
+</div>
+
+</div>
+
+`;
+
+}
+ 
 async function loadOrders(){
 
 const response =
@@ -272,6 +340,8 @@ document
 html;
 
 }
+
+loadStats();
 
 loadOrders();
 
