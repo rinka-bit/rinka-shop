@@ -50,6 +50,8 @@ onclick="logout()">
 
 <div id="stats"></div>
 <div id="topProducts"></div>
+<div id="topFandoms"></div>
+
 <hr>
 
 <h1>อัปเดตเลขพัสดุ</h1>
@@ -204,6 +206,59 @@ html += "</div>";
 document
 .getElementById(
 "topProducts"
+)
+.innerHTML =
+html;
+
+}
+
+async function loadTopFandoms(){
+
+const response =
+await fetch(
+API +
+"?action=topFandoms"
+);
+
+const result =
+await response.json();
+
+let html = `
+<h2>
+🎮 แฟนด้อมขายดีที่สุด
+</h2>
+
+<div
+style="
+border:1px solid #ddd;
+padding:15px;
+border-radius:12px;
+margin-bottom:20px;
+">
+`;
+
+result.fandoms.forEach(
+(fandom,index)=>{
+
+html += `
+<p>
+
+${index+1}.
+
+${fandom.fandom}
+
+(${fandom.qty} ชิ้น)
+
+</p>
+`;
+
+});
+
+html += "</div>";
+
+document
+.getElementById(
+"topFandoms"
 )
 .innerHTML =
 html;
@@ -431,6 +486,8 @@ html;
 loadStats();
 
 loadTopProducts();
+
+loadTopFandoms();
 
 loadOrders();
 
