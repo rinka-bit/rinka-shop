@@ -84,6 +84,15 @@ color:#4f46e5;
 opacity:.8;
 }
 
+#search{
+width:100%;
+max-width:500px;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+margin-bottom:20px;
+}
+
 </style>
 
 </head>
@@ -143,6 +152,11 @@ oninput="searchProducts()">
 <div id="newProducts">
 </div>
 
+<div
+id="searchResults"
+class="section">
+</div>
+
 </div>
 
 <div
@@ -170,6 +184,9 @@ await fetch(API);
 
 const products =
 await response.json();
+
+window.allProducts =
+products;
 
 products.sort(
 (a,b)=>
@@ -329,23 +346,55 @@ document
 .toLowerCase()
 .trim();
 
-const cards =
-document.querySelectorAll(
-"#newProducts .card"
+const container =
+document.getElementById(
+"searchResults"
 );
 
-cards.forEach(card=>{
+if(!keyword){
 
-const text =
-card.innerText
-.toLowerCase();
+container.innerHTML = "";
 
-card.style.display =
-text.includes(keyword)
-? "inline-block"
-: "none";
+return;
 
-});
+}
+
+const results =
+window.allProducts.filter(
+
+product =>
+
+(product.name || "")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(product.fandom || "")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(product.sub_category || "")
+.toLowerCase()
+.includes(keyword)
+
+);
+
+container.innerHTML =
+
+`
+<h2>
+🔍 ผลการค้นหา
+</h2>
+`
+
++
+
+results
+.map(createCard)
+.join("");
 
 }
 
