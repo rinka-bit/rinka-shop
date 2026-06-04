@@ -30,6 +30,7 @@ body{
 .card{
 
   display:inline-block;
+  vertical-align:top;
 
   width:220px;
 
@@ -139,8 +140,177 @@ oninput="searchProducts()">
 
 <script>
 
-const API_URL =
-"https://script.google.com/macros/s/xxxxxxxxxxxxxxxx/exec";
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+
+async function loadHome(){
+
+const response =
+await fetch(API);
+
+const products =
+await response.json();
+
+loadFeatured(products);
+
+loadNewArrivals(products);
+
+loadFandoms(products);
+
+}
+
+function createCard(product){
+
+return `
+<div class="card"
+onclick="
+window.location.href=
+'product.html?id=${product.product_id}'
+">
+
+<img
+src="${product.image}"
+style="
+width:100%;
+height:200px;
+object-fit:cover;
+border-radius:8px;
+">
+
+<h3>
+${product.name}
+</h3>
+
+<p>
+${product.fandom || ""}
+</p>
+
+<p>
+฿${product.price}
+</p>
+
+</div>
+`;
+
+}
+
+function loadFeatured(products){
+
+const featured =
+products.filter(
+p =>
+String(p.featured)
+.toUpperCase() === "TRUE"
+);
+
+document
+.getElementById(
+"featuredProducts"
+)
+.innerHTML =
+featured
+.map(createCard)
+.join("");
+
+}
+
+function loadNewArrivals(products){
+
+const arrivals =
+products.filter(
+p =>
+String(p.new_arrival)
+.toUpperCase() === "TRUE"
+);
+
+document
+.getElementById(
+"newProducts"
+)
+.innerHTML =
+arrivals
+.map(createCard)
+.join("");
+
+}
+
+function loadFandoms(products){
+
+const fandoms =
+[
+...new Set(
+products.map(
+p=>p.fandom
+)
+)
+];
+
+let html = "";
+
+fandoms.forEach(fandom=>{
+
+if(!fandom){
+return;
+}
+
+html += `
+<button
+onclick="
+document
+.getElementById('search')
+.value='${fandom}';
+
+searchProducts();
+"
+>
+
+${fandom}
+
+</button>
+`;
+
+});
+
+document
+.getElementById(
+"fandomList"
+)
+.innerHTML =
+html;
+
+}
+
+function searchProducts(){
+
+const keyword =
+document
+.getElementById(
+"search"
+)
+.value
+.toLowerCase();
+
+const cards =
+document.querySelectorAll(
+"#newProducts .card"
+);
+
+cards.forEach(card=>{
+
+const text =
+card.innerText
+.toLowerCase();
+
+card.style.display =
+text.includes(keyword)
+? "inline-block"
+: "none";
+
+});
+
+}
+
+loadHome();
 
 </script>
 
