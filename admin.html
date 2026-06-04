@@ -9,6 +9,8 @@
 
 <h1>อัปเดตเลขพัสดุ</h1>
 
+<div id="orders"></div>
+  
 <input
 id="orderId"
 placeholder="Order ID">
@@ -36,53 +38,129 @@ placeholder="Tracking Number">
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-async function saveTracking(){
+async function loadOrders(){
 
-  const formData =
-    new FormData();
+const response =
+await fetch(
+API + "?action=orders"
+);
 
-  formData.append(
-    "payload",
-    JSON.stringify({
+const result =
+await response.json();
 
-      order_id:
-        document.getElementById(
-          "orderId"
-        ).value,
+let html = "";
 
-      courier:
-        document.getElementById(
-          "courier"
-        ).value,
+result.orders.forEach(order=>{
 
-      tracking_no:
-        document.getElementById(
-          "tracking"
-        ).value
+if(order.payment_status !== "paid"){
+return;
+}
 
-    })
-  );
+html += `
+<div style="
+border:1px solid #ddd;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
+">
 
-  const response =
-    await fetch(
-      API +
-      "?action=tracking",
-      {
-        method:"POST",
-        body:formData
-      }
-    );
+<h3>
+${order.order_id}
+</h3>
 
-  const result =
-    await response.json();
+<p>
+ลูกค้า:
+${order.customer_name}
+</p>
 
-  alert(
-    result.success
-    ? "บันทึกสำเร็จ"
-    : "ไม่พบออเดอร์"
-  );
+<p>
+สถานะ:
+${order.status}
+</p>
+
+<p>
+ยอดรวม:
+${order.total}
+ บาท
+</p>
+
+<input
+id="courier_${order.order_id}"
+placeholder="ขนส่ง">
+
+<br><br>
+
+<input
+id="tracking_${order.order_id}"
+placeholder="เลขพัสดุ">
+
+<br><br>
+
+<button
+onclick="saveTrackingById('${order.order_id}')">
+บันทึก Tracking
+</button>
+
+</div>
+`;
+
+});
+
+document
+.getElementById("orders")
+.innerHTML =
+html;
 
 }
+
+async function saveTrackingById(orderId){
+
+const formData =
+new FormData();
+
+formData.append(
+"payload",
+JSON.stringify({
+
+order_id:
+orderId,
+
+courier:
+document.getElementById(
+"courier_" + orderId
+).value,
+
+tracking_no:
+document.getElementById(
+"tracking_" + orderId
+).value
+
+})
+);
+
+const response =
+await fetch(
+API + "?action=tracking",
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+alert(
+result.success
+? "บันทึกสำเร็จ"
+: "ผิดพลาด"
+);
+
+loadOrders();
+
+}
+
+loadOrders();
 
 </script>
 
