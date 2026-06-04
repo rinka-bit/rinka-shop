@@ -10,6 +10,14 @@
 <h1>อัปเดตเลขพัสดุ</h1>
 
 <div id="orders"></div>
+
+<hr>
+
+<h2>
+📍 คำขอเปลี่ยนที่อยู่
+</h2>
+
+<div id="addressRequests"></div>
   
 <input
 id="orderId"
@@ -167,7 +175,84 @@ loadOrders();
 
 }
 
+async function loadAddressRequests(){
+
+const response =
+await fetch(
+API +
+"?action=addressChanges"
+);
+
+const result =
+await response.json();
+
+let html = "";
+
+result.requests.reverse();
+
+result.requests.forEach(req=>{
+
+html += `
+<div
+style="
+border:1px solid #f59e0b;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
+background:#fffbeb;
+">
+
+<h3>
+${req.request_id}
+</h3>
+
+<p>
+Order:
+${req.order_id}
+</p>
+
+<p>
+ชื่อ:
+${req.customer_name}
+</p>
+
+<p>
+โทร:
+${req.phone}
+</p>
+
+<p>
+Social:
+${req.social}
+</p>
+
+<p>
+ที่อยู่ใหม่:
+${req.address}
+</p>
+
+<p>
+สถานะ:
+${req.status}
+</p>
+
+</div>
+`;
+
+});
+
+document
+.getElementById(
+"addressRequests"
+)
+.innerHTML =
+html;
+
+}
+
 loadOrders();
+
+loadAddressRequests();
 
 </script>
 
