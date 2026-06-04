@@ -212,6 +212,16 @@ ${req.address}
 <p>
 สถานะ:
 ${req.status}
+<br><br>
+
+<button
+onclick="
+completeAddressRequest(
+'${req.request_id}'
+)
+">
+✅ ดำเนินการแล้ว
+</button>
 </p>
 
 </div>
@@ -231,6 +241,49 @@ html;
 loadOrders();
 
 loadAddressRequests();
+
+async function completeAddressRequest(
+requestId
+){
+
+const formData =
+new FormData();
+
+formData.append(
+"payload",
+JSON.stringify({
+
+request_id:
+requestId
+
+})
+);
+
+const response =
+await fetch(
+
+API +
+"?action=completeAddressRequest",
+
+{
+method:"POST",
+body:formData
+}
+
+);
+
+const result =
+await response.json();
+
+alert(
+result.success
+? "อัปเดตแล้ว"
+: "ผิดพลาด"
+);
+
+loadAddressRequests();
+
+}
 
 </script>
 
