@@ -7,6 +7,29 @@
 
 <body>
 
+<div id="loginBox">
+
+<h2>
+🔒 Admin Login
+</h2>
+
+<input
+type="password"
+id="adminPassword"
+placeholder="รหัสผ่าน">
+
+<br><br>
+
+<button onclick="login()">
+เข้าสู่ระบบ
+</button>
+
+</div>
+
+<div
+id="adminContent"
+style="display:none;">
+
 <h1>อัปเดตเลขพัสดุ</h1>
 
 <div id="orders"></div>
@@ -168,6 +191,10 @@ let html = "";
 
 result.requests.reverse();
 
+if(req.status === "completed"){
+return;
+}
+
 result.requests.forEach(req=>{
 
 html += `
@@ -285,7 +312,73 @@ loadAddressRequests();
 
 }
 
-</script>
+function login(){
 
+const password =
+document
+.getElementById(
+"adminPassword"
+)
+.value;
+
+if(
+password ===
+"Rin@Saeh13579"
+){
+
+document
+.getElementById(
+"loginBox"
+)
+.style.display =
+"none";
+
+document
+.getElementById(
+"adminContent"
+)
+.style.display =
+"block";
+
+sessionStorage.setItem(
+"adminLoggedIn",
+"true"
+);
+
+}
+else{
+
+alert(
+"รหัสผ่านไม่ถูกต้อง"
+);
+
+}
+
+}
+
+if(
+sessionStorage.getItem(
+"adminLoggedIn"
+) === "true"
+){
+
+document
+.getElementById(
+"loginBox"
+)
+.style.display =
+"none";
+
+document
+.getElementById(
+"adminContent"
+)
+.style.display =
+"block";
+
+}
+
+</script>
+</div>
 </body>
 </html>
