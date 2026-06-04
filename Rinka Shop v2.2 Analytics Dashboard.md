@@ -1,0 +1,11 @@
+admin.html : b0a202eb91a5ffe260fe35cffaf3e29f81ae0d87
+app.js : 425e87ce9978edb6fcfeb0e80b30db6dcab72d4a
+change-address.html : 05abecf2009766a1c0bce273f0deb23ea61751c9
+checkout.html : e33a3919d70cf95c323f4586ca5f1d32f9a5d56f
+home.html : 3f243608cbf9ba1749c190316f4e692dbd5bc9f4
+index.html : 9e92db4092747bc63c35ad956b8b0c735cd43abc
+lookup.html : dcfb07c024efa3841d4aa5378f0d5304c6ea164e
+order.html : 7d7a7b10fa7fca5e19fde14d9d985df1b4e4959a
+payment.html : c8963c1f4f2e14ca26c021ba448264bcead7ccaa
+product.html : 4ed7e39b86a5d29c83d2b672badbd3a5d904df31
+style.css : ab7f9742dee033d56a9e2f0f7f6c4f27775068f7
