@@ -30,9 +30,23 @@ placeholder="รหัสผ่าน">
 id="adminContent"
 style="display:none;">
 
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
 <h1>
 📊 Dashboard
 </h1>
+
+<button
+onclick="logout()">
+🚪 ออกจากระบบ
+</button>
+
+</div>
 
 <div id="stats"></div>
 
@@ -456,6 +470,16 @@ document
 
 }
 
+function logout(){
+
+sessionStorage.removeItem(
+"adminLoggedIn"
+);
+
+location.reload();
+
+}
+ 
 </script>
 </div>
 </body>
