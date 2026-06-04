@@ -49,10 +49,13 @@ const result =
 await response.json();
 
 let html = "";
-
+result.orders.reverse();
 result.orders.forEach(order=>{
 
-if(order.payment_status !== "paid"){
+if(
+order.payment_status !== "paid" ||
+order.status === "completed"
+){
 return;
 }
 
@@ -71,6 +74,10 @@ ${order.order_id}
 <p>
 ลูกค้า:
 ${order.customer_name}
+</p>
+
+<p>
+${order.email}
 </p>
 
 <p>
