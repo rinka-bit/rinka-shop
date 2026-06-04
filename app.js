@@ -706,3 +706,93 @@ function closePayment(){
 
 updateCartCount();
 loadProducts();
+
+function searchProducts(){
+
+const keyword =
+document
+.getElementById("search")
+.value
+.toLowerCase()
+.trim();
+
+const container =
+document.getElementById("products");
+
+container.innerHTML = "";
+
+const filtered =
+window.productsData.filter(product =>
+
+(product.name || "")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(product.fandom || "")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(product.sub_category || "")
+.toLowerCase()
+.includes(keyword)
+
+);
+
+filtered.forEach((product,index)=>{
+
+container.innerHTML += `
+<div class="card">
+
+<img
+src="${product.image}"
+alt="${product.name}">
+
+<div class="card-body">
+
+<h3>
+${product.name}
+</h3>
+
+<p>
+${product.fandom || ""}
+</p>
+
+<p class="price">
+฿${product.price}
+</p>
+
+<div class="actions">
+
+<button
+onclick="
+window.location.href=
+'product.html?id=${product.product_id}'
+">
+ดูรายละเอียด
+</button>
+
+<button
+onclick="
+addToCartByIndex(
+window.productsData.findIndex(
+p=>p.product_id==='${product.product_id}'
+)
+)
+">
+เพิ่มลงตะกร้า
+</button>
+
+</div>
+
+</div>
+
+</div>
+`;
+
+});
+
+}
