@@ -19,64 +19,46 @@
 }
 
 .product-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:30px;
-}
-
-.product-image img{
-
-width:100%;
-
-max-width:500px;
-
-height:auto;
-
-border-radius:12px;
-
-display:block;
-
-margin:auto;
-
-}
-
-.thumb-list{
-
-display:flex;
-
-flex-wrap:wrap;
-
-gap:10px;
-
-margin-top:10px;
-
-}
-
-.thumb-list img{
-
-width:60px;
-height:60px;
-
-object-fit:cover;
-
-border-radius:8px;
-
-cursor:pointer;
-
-border:1px solid #ddd;
-
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
 }
 
 #mainImage{
-
 width:100%;
-
-max-width:500px;
-
+max-width:600px;
 height:auto;
-
+border-radius:12px;
 }
 
+.thumb-list{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:10px;
+}
+
+.thumb-list img{
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:8px;
+cursor:pointer;
+border:1px solid #ddd;
+}
+
+@media (max-width:768px){
+
+.product-grid{
+display:block;
+}
+
+.product-image{
+margin-bottom:20px;
+}
+
+}
+  
 .old-price{
   text-decoration:line-through;
   color:#888;
@@ -97,22 +79,6 @@ height:auto;
 button{
   padding:12px 20px;
   cursor:pointer;
-}
-
-@media (max-width:768px){
-
-.product-grid{
-
-display:block;
-
-}
-
-.product-image{
-
-margin-bottom:20px;
-
-}
-
 }
   
 </style>
@@ -158,20 +124,21 @@ renderProduct(product);
 
 function renderProduct(product){
 
-  window.currentProduct =
-  product;
+window.currentProduct =
+product;
+
+const images =
+
+product.images &&
+product.images.length
+
+? product.images
+
+: [product.image];
 
 const mainImage =
+images[0];
 
-product.image ||
-
-(product.images && product.images.length
-? product.images[0]
-: "");
-
-console.log("mainImage =", mainImage);
-console.log("images =", product.images);
-  
 document.getElementById(
 "product"
 ).innerHTML = `
@@ -182,20 +149,17 @@ document.getElementById(
 
 <img
 id="mainImage"
-src="https://drive.google.com/uc?export=view&id=1OWSjlGBhpXdWbu1Iq1QF-gLZ3L6tH4AF">
+src="${mainImage}">
 
 <div class="thumb-list">
 
-${(product.images || []).map(image => `
-
+${images.map(image => `
 <img
-src="https://drive.google.com/uc?export=view&id=1OWSjlGBhpXdWbu1Iq1QF-gLZ3L6tH4AF">
+src="${image}"
 onclick="
 document.getElementById('mainImage').src='${image}'
 ">
 `).join("")}
-
-</div>
 
 </div>
 
