@@ -19,7 +19,9 @@ rel="preconnect"
 href="https://fonts.gstatic.com"
 crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
   
 <style>
 
@@ -40,7 +42,7 @@ crossorigin>
 body{
 
 font-family:
-'M PLUS Rounded 1c',
+'Kodchasan',
 sans-serif;
 
 }
@@ -125,6 +127,23 @@ rgba(
 255,
 0.25
 );
+
+}
+
+.product-grid-home{
+
+display:grid;
+
+grid-template-columns:
+repeat(
+auto-fill,
+minmax(
+220px,
+1fr
+)
+);
+
+gap:20px;
 
 }
 
@@ -218,6 +237,91 @@ font-size:14px;
 margin-bottom:25px;
 
 }
+
+.badge-new{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:#b8e8ff;
+
+color:#1d4ed8;
+
+font-size:12px;
+
+font-weight:700;
+
+border-radius:999px;
+
+margin-top:10px;
+
+}
+
+.badge-preorder{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:#dbeafe;
+
+color:#2563eb;
+
+font-size:12px;
+
+font-weight:700;
+
+border-radius:999px;
+
+margin-left:5px;
+
+}
+
+.fandom-btn{
+
+background:white;
+
+border:none;
+
+padding:10px 16px;
+
+border-radius:999px;
+
+cursor:pointer;
+
+box-shadow:
+0 3px 10px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+color:#4a6fa5;
+
+font-weight:600;
+
+}
+
+body::before{
+
+content:"❄ ☁️ ❅ ☁️ ❄ ☁️ ❅ ☁️ ❄";
+
+position:fixed;
+
+top:20px;
+
+right:20px;
+
+font-size:24px;
+
+opacity:.08;
+
+pointer-events:none;
+
+}
   
 </style>
 
@@ -252,7 +356,7 @@ margin-bottom:10px;
 ">
 
 <h1 class="shop-title">
-❄️ Rinka Shop ❄️
+❄️☁️ Rinka Shop ☁️❄️
 </h1>
 
 <p class="shop-subtitle">
@@ -287,7 +391,9 @@ class="section">
 🔥 เปิดพรีอยู่ตอนนี้
 </h2>
 
-<div id="featuredProducts">
+<div
+id="featuredProducts"
+class="product-grid-home">
 </div>
 
 </div>
@@ -300,7 +406,9 @@ class="section">
 ⭐ สินค้าใหม่ล่าสุด
 </h2>
 
-<div id="newProducts">
+<div
+id="newProducts"
+class="product-grid-home">
 </div>
 
 </div>
