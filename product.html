@@ -121,29 +121,19 @@ document.getElementById(
 
 <img
 id="mainImage"
-src="${product.image}">
+src="${product.images[0]}">
 
 <div class="thumb-list">
 
-${product.image2 ?
-`
+${product.images.map(image => `
 <img
-src="${product.image2}"
+src="${image}"
 onclick="
-document.getElementById('mainImage').src='${product.image2}'
+document.getElementById(
+'mainImage'
+).src='${image}'
 ">
-`
-:""}
-
-${product.image3 ?
-`
-<img
-src="${product.image3}"
-onclick="
-document.getElementById('mainImage').src='${product.image3}'
-">
-`
-:""}
+`).join("")}
 
 </div>
 
