@@ -161,11 +161,6 @@ class="section">
 <div id="newProducts">
 </div>
 
-<div
-id="searchResults"
-class="section">
-</div>
-
 </div>
 
 <div
@@ -223,7 +218,7 @@ window.location.href=
 ">
 
 <img
-src="${product.image}"
+src="${product.image || (product.images ? product.images[0] : '')}"
 alt="${product.name}">
 
 <h3>
