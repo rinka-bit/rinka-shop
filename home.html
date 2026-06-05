@@ -20,7 +20,7 @@ href="https://fonts.gstatic.com"
 crossorigin>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;700&display=swap"
+href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap"
 rel="stylesheet">
   
 <style>
@@ -28,14 +28,20 @@ rel="stylesheet">
 body{
 
 font-family:
-'Noto Sans Thai',
+'M PLUS Rounded 1c',
 sans-serif;
 
+background:
+
+linear-gradient(
+180deg,
+#f8fcff 0%,
+#eef8ff 100%
+);
+
+color:#3f4b5a;
+
 padding:20px;
-
-background:#faf8ff;
-
-color:#333;
 
 }
 
@@ -47,29 +53,20 @@ color:#333;
 
 .card{
 
-display:inline-block;
-
-width:250px;
-
-padding:15px;
-
-margin:10px;
-
 background:white;
 
 border:none;
 
-border-radius:18px;
-
-cursor:pointer;
-
-vertical-align:top;
+border-radius:22px;
 
 box-shadow:
-0 3px 12px
-rgba(0,0,0,.06);
-
-transition:.2s;
+0 4px 20px
+rgba(
+125,
+207,
+255,
+0.12
+);
 
 }
 
@@ -78,7 +75,7 @@ transition:.2s;
 width:100%;
 height:250px;
 object-fit:cover;
-border-radius:8px;
+border-radius:16px;
 
 }
 
@@ -94,11 +91,16 @@ margin:5px 0;
 .card:hover{
 
 transform:
-translateY(-4px);
+translateY(-6px);
 
 box-shadow:
-0 10px 25px
-rgba(79,70,229,.15);
+0 10px 30px
+rgba(
+125,
+207,
+255,
+0.25
+);
 
 }
 
@@ -106,24 +108,40 @@ rgba(79,70,229,.15);
 
 display:flex;
 gap:20px;
+
 padding:15px 20px;
 
-margin-bottom:30px;
+background:
 
-background:white;
+rgba(
+255,
+255,
+255,
+0.9
+);
 
-border-radius:16px;
+backdrop-filter:
+blur(8px);
+
+border-radius:20px;
 
 box-shadow:
-0 2px 12px
-rgba(0,0,0,.05);
+0 4px 15px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+margin-bottom:30px;
 
 }
 
 .navbar a{
 text-decoration:none;
 font-weight:bold;
-color:#4f46e5;
+color:#7dcfff;
 }
 
 .navbar a:hover{
@@ -131,12 +149,24 @@ opacity:.8;
 }
 
 #search{
-width:100%;
-max-width:500px;
-padding:12px;
-border:1px solid #ddd;
-border-radius:10px;
-margin-bottom:20px;
+
+background:white;
+
+border:none;
+
+border-radius:18px;
+
+padding:14px 18px;
+
+box-shadow:
+0 3px 12px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
 }
 
 </style>
@@ -171,7 +201,7 @@ font-size:36px;
 margin-bottom:10px;
 ">
 
-🌸 Rinka Shop
+❄️Rinka Shop❄️
 
 </h1>
 
