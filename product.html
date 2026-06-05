@@ -171,13 +171,19 @@ document.getElementById(
 
 <img
 id="mainImage"
-src="${product.images[0]}">
+
+const mainImage =
+
+product.image ||
+
+product.images[0];
 
 <div class="thumb-list">
 
 ${product.images.map(image => `
 <img
-src="${image}"
+id="mainImage"
+src="${mainImage}">
 onclick="
 document.getElementById(
 'mainImage'
