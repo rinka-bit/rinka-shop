@@ -161,6 +161,14 @@ function renderProduct(product){
   window.currentProduct =
   product;
 
+const mainImage =
+
+product.image ||
+
+(product.images && product.images.length
+? product.images[0]
+: "");
+
 document.getElementById(
 "product"
 ).innerHTML = `
@@ -169,27 +177,23 @@ document.getElementById(
 
 <div class="product-image">
 
-<img
-id="mainImage"
+<div class="product-image">
 
-const mainImage =
-
-product.image ||
-
-product.images[0];
-
-<div class="thumb-list">
-
-${product.images.map(image => `
 <img
 id="mainImage"
 src="${mainImage}">
+
+<div class="thumb-list">
+
+${(product.images || []).map(image => `
+<img
+src="${image}"
 onclick="
-document.getElementById(
-'mainImage'
-).src='${image}'
+document.getElementById('mainImage').src='${image}'
 ">
 `).join("")}
+
+</div>
 
 </div>
 
