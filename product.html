@@ -37,8 +37,8 @@
 
 .thumb-list img{
 
-width:70px;
-height:70px;
+width:60px;
+height:60px;
 
 object-fit:cover;
 
@@ -46,9 +46,17 @@ border-radius:8px;
 
 cursor:pointer;
 
-margin:4px;
-
 border:1px solid #ddd;
+
+}
+
+#mainImage{
+
+width:100%;
+
+max-width:500px;
+
+height:auto;
 
 }
 
@@ -74,6 +82,22 @@ button{
   cursor:pointer;
 }
 
+@media (max-width:768px){
+
+.product-grid{
+
+display:block;
+
+}
+
+.product-image{
+
+margin-bottom:20px;
+
+}
+
+}
+  
 </style>
 
 </head>
