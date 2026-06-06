@@ -190,21 +190,48 @@ await fetch(API);
 const products =
 await response.json();
 
-const categories =
-
-[
-...new Set(
-
-products
-.map(
-p=>p.main_category
+document
+.getElementById(
+"categories"
 )
-.filter(Boolean)
+.innerHTML =
 
-)
+categories.map(category => {
 
-];
+const count =
 
+products.filter(
+p=>p.main_category === category
+).length;
+
+return `
+
+<div
+class="category-card"
+onclick="
+window.location.href=
+'category.html?name=${encodeURIComponent(category)}'
+">
+
+<h2>
+
+${category}
+
+</h2>
+
+<p>
+
+${count}
+รายการ
+
+</p>
+
+</div>
+
+`;
+
+}).join("");
+  
 document
 .getElementById(
 "categories"
