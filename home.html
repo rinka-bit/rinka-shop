@@ -563,20 +563,41 @@ featured
 
 function loadNewArrivals(products){
 
+const today =
+new Date();
+
 const arrivals =
-products.filter(
-p =>
-String(
-p.new_arrival
-).toUpperCase() ===
-"TRUE"
+products.filter(product=>{
+
+if(
+!product.created_at
+){
+return false;
+}
+
+const created =
+new Date(
+product.created_at
 );
+
+const diffDays =
+
+(today - created)
+
+/
+
+(1000*60*60*24);
+
+return diffDays <= 30;
+
+});
 
 document
 .getElementById(
 "newProducts"
 )
 .innerHTML =
+
 arrivals
 .map(createCard)
 .join("");
