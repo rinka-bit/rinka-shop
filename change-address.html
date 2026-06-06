@@ -128,8 +128,12 @@ cursor:pointer;
 📍 เปลี่ยนที่อยู่
 </a>
 
-<a href="cart.html">
-🛒 ตะกร้า
+<a
+href="cart.html"
+id="cartLink">
+
+🛒 ตะกร้า (0)
+
 </a>
 
 <a href="https://x.com/prewithrinka">
@@ -244,6 +248,49 @@ location.reload();
 alert(
 "เกิดข้อผิดพลาด"
 );
+
+}
+
+}
+
+<script>
+
+updateCartCount();
+
+function updateCartCount(){
+
+const cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+const count =
+
+cart.reduce(
+
+(sum,item)=>
+
+sum +
+Number(item.qty || 0),
+
+0
+
+);
+
+const cartLink =
+
+document.getElementById(
+"cartLink"
+);
+
+if(cartLink){
+
+cartLink.textContent =
+
+`🛒 ตะกร้า (${count})`;
 
 }
 
