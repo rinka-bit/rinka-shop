@@ -214,6 +214,72 @@ product.images.length
 const mainImage =
 images[0];
 
+const optionGroups = {};
+
+(product.options || []).forEach(option=>{
+
+if(
+!optionGroups[
+option.option_name
+]
+){
+
+optionGroups[
+option.option_name
+] = [];
+
+}
+
+optionGroups[
+option.option_name
+].push(option);
+
+});
+
+let optionsHtml = "";
+
+Object.keys(
+optionGroups
+).forEach(group=>{
+
+optionsHtml += `
+
+<h3>
+
+${group}
+
+</h3>
+
+`;
+
+optionGroups[group]
+.forEach(option=>{
+
+optionsHtml += `
+
+<label
+style="
+display:block;
+margin-bottom:8px;
+"
+>
+
+<input
+type="radio"
+name="${group}"
+value="${option.option_value}"
+>
+
+${option.option_value}
+
+</label>
+
+`;
+
+});
+
+});
+
 document.getElementById(
 "product"
 ).innerHTML = `
@@ -292,6 +358,8 @@ ${product.fandom || "-"}
 ${product.sub_category || "-"}
 </p>
 
+${optionsHtml}
+
 <div class="actions">
 
 <button onclick="buyNow()">
@@ -318,50 +386,98 @@ ${product.sub_category || "-"}
 
 function addToCart(){
 
-  let cart =
-    JSON.parse(
-      localStorage.getItem(
-        "cart"
-      ) || "[]"
-    );
+const selectedOptions = {};
 
-  const found =
-    cart.find(
-      p =>
-      p.product_id ===
-      window.currentProduct.product_id
-    );
+const requiredGroups =
 
-  if(found){
+[
+...new Set(
 
-    found.qty++;
+(window.currentProduct.options || [])
 
-  }else{
+.map(
+option =>
+option.option_name
+)
 
-    cart.push({
+)
+];
 
-      ...window.currentProduct,
+document
+.querySelectorAll(
+'input[type="radio"]:checked'
+)
+.forEach(input=>{
 
-      qty:1
+selectedOptions[
+input.name
+] = input.value;
 
-    });
+});
 
-  }
+if(
 
-  localStorage.setItem(
+requiredGroups.length >
 
-    "cart",
+Object.keys(
+selectedOptions
+).length
 
-    JSON.stringify(cart)
+){
 
-  );
+alert(
+"กรุณาเลือกตัวเลือกสินค้าให้ครบ"
+);
 
-  alert(
-    "เพิ่มลงตะกร้าแล้ว"
-  );
+return;
 
 }
 
+document
+.querySelectorAll(
+'input[type="radio"]:checked'
+)
+.forEach(input=>{
+
+selectedOptions[
+input.name
+] = input.value;
+
+});
+
+let cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+cart.push({
+
+...window.currentProduct,
+
+selected_options:
+selectedOptions,
+
+qty:1
+
+});
+
+localStorage.setItem(
+
+"cart",
+
+JSON.stringify(cart)
+
+);
+
+alert(
+"เพิ่มลงตะกร้าแล้ว"
+);
+
+}
+  
 function buyNow(){
 
 localStorage.setItem(
@@ -428,8 +544,6 @@ cartLink.textContent =
 }
 
 }
-
-loadHome();
   
 </script>
 
