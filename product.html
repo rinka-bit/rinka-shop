@@ -255,6 +255,19 @@ ${group}
 optionGroups[group]
 .forEach(option=>{
 
+const inputType =
+
+option.selection_type ===
+"multiple"
+
+?
+
+"checkbox"
+
+:
+
+"radio";
+
 optionsHtml += `
 
 <label
@@ -265,7 +278,7 @@ margin-bottom:8px;
 >
 
 <input
-type="radio"
+type="${inputType}"
 name="${group}"
 value="${option.option_value}"
 >
@@ -388,21 +401,6 @@ function addToCart(){
 
 const selectedOptions = {};
 
-const requiredGroups =
-
-[
-...new Set(
-
-(window.currentProduct.options || [])
-
-.map(
-option =>
-option.option_name
-)
-
-)
-];
-
 document
 .querySelectorAll(
 'input[type="radio"]:checked'
@@ -412,6 +410,32 @@ document
 selectedOptions[
 input.name
 ] = input.value;
+
+});
+
+document
+.querySelectorAll(
+'input[type="checkbox"]:checked'
+)
+.forEach(input=>{
+
+if(
+!selectedOptions[
+input.name
+]
+){
+
+selectedOptions[
+input.name
+] = [];
+
+}
+
+selectedOptions[
+input.name
+].push(
+input.value
+);
 
 });
 
