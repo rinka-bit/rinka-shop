@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>
+Fandom
+</title>
+
+<style>
+
+body{
+
+font-family:
+'Kodchasan',
+sans-serif;
+
+background:#f6fbff;
+
+padding:20px;
+
+}
+
+h1{
+
+color:#4a6fa5;
+
+}
+
+#productCount{
+
+color:#6b7280;
+
+margin-bottom:20px;
+
+}
+
+.product-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(
+auto-fill,
+minmax(
+220px,
+1fr
+)
+);
+
+gap:20px;
+
+}
+
+.card{
+
+background:white;
+
+border-radius:20px;
+
+overflow:hidden;
+
+cursor:pointer;
+
+box-shadow:
+0 3px 12px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+transition:.2s;
+
+}
+
+.card:hover{
+
+transform:
+translateY(-4px);
+
+}
+
+.card img{
+
+width:100%;
+
+height:220px;
+
+object-fit:cover;
+
+}
+
+.card-body{
+
+padding:15px;
+
+}
+
+.badge-new{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:#d9f2ff;
+
+color:#2563eb;
+
+font-size:12px;
+
+font-weight:700;
+
+border-radius:999px;
+
+margin-bottom:5px;
+
+}
+
+.badge-preorder{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:#e0f2fe;
+
+color:#0284c7;
+
+font-size:12px;
+
+font-weight:700;
+
+border-radius:999px;
+
+margin-left:5px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1 id="fandomTitle">
+Loading...
+</h1>
+
+<p id="productCount">
+</p>
+
+<div
+id="products"
+class="product-grid">
+</div>
+
+<script>
+
+const API =
+
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+
+const fandom =
+
+new URLSearchParams(
+window.location.search
+).get("name");
+
+loadProducts();
+
+async function loadProducts(){
+
+const response =
+await fetch(API);
+
+const products =
+await response.json();
+
+const filtered =
+
+products.filter(
+
+p =>
+
+p.fandom === fandom
+
+);
+
+document
+.getElementById(
+"fandomTitle"
+)
+textContent =
+
+`🎮 ${fandom}`;
+
+document
+.getElementById(
+"productCount"
+)
+textContent =
+
+`${filtered.length} รายการ`;
+
+document
+.getElementById(
+"products"
+)
+.innerHTML =
+
+filtered
+.map(createCard)
+.join("");
+
+}
+
+function createCard(product){
+
+return `
+
+<div
+class="card"
+onclick="
+window.location.href=
+'product.html?id=${product.product_id}'
+">
+
+<img
+src="${product.image}"
+alt="${product.name}">
+
+<div class="card-body">
+
+${
+product.new_arrival
+?
+`
+<div class="badge-new">
+NEW
+</div>
+`
+:
+""
+}
+
+${
+product.product_type ===
+"preorder"
+?
+`
+<div class="badge-preorder">
+PREORDER
+</div>
+`
+:
+""
+}
+
+<h3>
+${product.name}
+</h3>
+
+<p>
+${product.fandom}
+</p>
+
+<p>
+฿${product.price}
+</p>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>
