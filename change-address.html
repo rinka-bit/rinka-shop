@@ -9,52 +9,23 @@
 content="width=device-width,initial-scale=1">
 
 <title>
-แจ้งเปลี่ยนที่อยู่
+เปลี่ยนที่อยู่จัดส่ง
 </title>
 
 <style>
 
 body{
-font-family:Arial,sans-serif;
+font-family:'Kodchasan',sans-serif;
+background:#f6fbff;
 max-width:800px;
 margin:auto;
 padding:20px;
 }
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-input,
-textarea{
-width:100%;
-padding:12px;
-box-sizing:border-box;
-margin-bottom:12px;
-}
-
-textarea{
-min-height:120px;
-}
-
-button{
-padding:12px 20px;
-border:none;
-border-radius:8px;
-background:#4f46e5;
-color:white;
-cursor:pointer;
-}
-
 .navbar{
 
 display:flex;
-
 flex-wrap:wrap;
-
 gap:12px;
 
 padding:15px 20px;
@@ -92,35 +63,52 @@ color:#2563eb;
 
 }
 
-.back-btn{
-
-display:inline-block;
-
-margin-bottom:20px;
-
-text-decoration:none;
-
-font-weight:700;
+h1{
 
 color:#4a6fa5;
 
 }
-  
+
+input,
+textarea{
+
+width:100%;
+
+padding:12px;
+
+box-sizing:border-box;
+
+margin-bottom:12px;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+}
+
+button{
+
+padding:12px 20px;
+
+border:none;
+
+border-radius:10px;
+
+background:#7dcfff;
+
+color:white;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
 </style>
 
 </head>
 
 <body>
-
-<a
-href="home.html"
-class="back-btn">
-
-🏠 กลับหน้าแรก
-
-</a>
-
-<div class="navbar">
 
 <div class="navbar">
 
@@ -143,84 +131,41 @@ class="back-btn">
 <a href="https://x.com/prewithrinka">
 📞 ติดต่อร้าน
 </a>
-  
-</div>
 
 </div>
-
-<div class="card">
 
 <h1>
-📍 แจ้งเปลี่ยนที่อยู่
+📍 ขอเปลี่ยนที่อยู่จัดส่ง
 </h1>
 
 <input
-type="radio"
-name="change_type"
-value="all"
-checked>
-
-เปลี่ยนทุกออเดอร์
-
-<br><br>
-
-<input
-type="radio"
-name="change_type"
-value="selected">
-
-เปลี่ยนเฉพาะออเดอร์ (กรุณากรอกเลขออเดอร์ที่ต้องการเปลี่ยนที่อยู่)
-  
-<input
-id="order_id"
+id="orderId"
 placeholder="เลขออเดอร์">
 
 <input
-id="receiver"
-placeholder="ชื่อผู้รับใหม่">
+id="customerName"
+placeholder="ชื่อผู้สั่ง">
 
 <input
 id="phone"
-placeholder="เบอร์โทรใหม่">
+placeholder="เบอร์โทรศัพท์">
 
 <input
 id="social"
-placeholder="Twitter/X">
+placeholder="@Twitter / X">
 
 <textarea
 id="address"
-placeholder="ที่อยู่ใหม่">
-</textarea>
-
-<input
-id="subdistrict"
-placeholder="ตำบล">
-
-<input
-id="district"
-placeholder="อำเภอ">
-
-<input
-id="province"
-placeholder="จังหวัด">
-
-<input
-id="postcode"
-placeholder="รหัสไปรษณีย์">
-
-<textarea
-id="note"
-placeholder="หมายเหตุ">
+rows="5"
+placeholder="กรอกที่อยู่ใหม่">
 </textarea>
 
 <button
 onclick="submitRequest()">
 
-ส่งคำขอ
+ส่งคำขอเปลี่ยนที่อยู่
 
 </button>
-
-</div>
 
 <script>
 
@@ -232,44 +177,34 @@ async function submitRequest(){
 const payload = {
 
 order_id:
-document.getElementById("order_id").value,
+document.getElementById(
+"orderId"
+).value,
 
-receiver:
-document.getElementById("receiver").value,
+customer_name:
+document.getElementById(
+"customerName"
+).value,
 
 phone:
-document.getElementById("phone").value,
+document.getElementById(
+"phone"
+).value,
 
 social:
-document.getElementById("social").value,
+document.getElementById(
+"social"
+).value,
 
 address:
-document.getElementById("address").value,
-
-subdistrict:
-document.getElementById("subdistrict").value,
-
-district:
-document.getElementById("district").value,
-
-province:
-document.getElementById("province").value,
-
-postcode:
-document.getElementById("postcode").value,
-
-note:
-document.getElementById("note").value
+document.getElementById(
+"address"
+).value
 
 };
 
 const formData =
 new FormData();
-
-formData.append(
-"action",
-"changeAddress"
-);
 
 formData.append(
 "payload",
@@ -278,11 +213,15 @@ JSON.stringify(payload)
 
 const response =
 await fetch(
-API,
+
+API +
+"?action=changeAddress",
+
 {
 method:"POST",
 body:formData
 }
+
 );
 
 const result =
@@ -292,6 +231,14 @@ if(result.success){
 
 alert(
 "ส่งคำขอเรียบร้อย"
+);
+
+location.reload();
+
+}else{
+
+alert(
+"เกิดข้อผิดพลาด"
 );
 
 }
