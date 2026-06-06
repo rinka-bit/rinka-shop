@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>
+ตะกร้าสินค้า
+</title>
+
+<style>
+
+body{
+
+font-family:
+'Kodchasan',
+sans-serif;
+
+background:#f6fbff;
+
+padding:20px;
+
+}
+
+.navbar{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:12px;
+
+padding:15px 20px;
+
+margin-bottom:25px;
+
+background:white;
+
+border-radius:20px;
+
+box-shadow:
+0 3px 15px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+}
+
+.navbar a{
+
+text-decoration:none;
+
+font-weight:700;
+
+color:#4a6fa5;
+
+}
+
+.cart-item{
+
+background:white;
+
+padding:15px;
+
+margin-bottom:15px;
+
+border-radius:20px;
+
+display:flex;
+
+gap:15px;
+
+align-items:center;
+
+box-shadow:
+0 3px 15px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+}
+
+.cart-item img{
+
+width:100px;
+
+height:100px;
+
+object-fit:cover;
+
+border-radius:12px;
+
+}
+
+.total{
+
+font-size:24px;
+
+font-weight:700;
+
+color:#2563eb;
+
+margin-top:20px;
+
+}
+
+.checkout-btn{
+
+margin-top:20px;
+
+padding:15px 25px;
+
+background:#7dcfff;
+
+border:none;
+
+border-radius:999px;
+
+cursor:pointer;
+
+font-size:16px;
+
+font-weight:700;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<a href="home.html">
+🏠 หน้าแรก
+</a>
+
+<a href="categories.html">
+🏷️ หมวดสินค้า
+</a>
+
+<a href="lookup.html">
+📦 เช็กออเดอร์
+</a>
+
+<a href="change-address.html">
+📍 เปลี่ยนที่อยู่
+</a>
+
+</div>
+
+<h1>
+🛒 ตะกร้าสินค้า
+</h1>
+
+<div id="cartItems">
+</div>
+
+<div
+id="total"
+class="total">
+</div>
+
+<button
+class="checkout-btn"
+onclick="
+goCheckout()
+">
+
+สั่งซื้อสินค้า
+
+</button>
+
+<script>
+
+loadCart();
+
+function loadCart(){
+
+const cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+let total = 0;
+
+document
+.getElementById(
+"cartItems"
+)
+.innerHTML =
+
+cart.map(item=>{
+
+total +=
+
+Number(item.price)
+*
+Number(item.qty);
+
+return `
+
+<div class="cart-item">
+
+<img
+src="${item.image}">
+
+<div>
+
+<h3>
+
+${item.name}
+
+</h3>
+
+<p>
+
+จำนวน :
+${item.qty}
+
+</p>
+
+<p>
+
+฿${item.price}
+
+</p>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+document
+.getElementById(
+"total"
+)
+.textContent =
+
+`ยอดรวม ฿${total}`;
+
+}
+
+function goCheckout(){
+
+window.location.href =
+"checkout.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
