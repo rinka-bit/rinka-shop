@@ -301,11 +301,46 @@ src="${item.image}">
 <div>
 
 <h3>
-
 ${item.name}
-
 </h3>
+${
+item.selected_options
 
+?
+
+Object.entries(
+item.selected_options
+)
+
+.map(
+
+([key,value]) =>
+
+`
+
+<p
+style="
+margin:4px 0;
+color:#4a6fa5;
+font-size:14px;
+"
+>
+
+${key} :
+${value}
+
+</p>
+
+`
+
+)
+
+.join("")
+
+:
+
+""
+}
 <div>
 
 <button
