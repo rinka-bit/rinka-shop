@@ -391,6 +391,19 @@ placeholder="🔍 ค้นหาสินค้า, แฟนด้อม..."
 oninput="searchProducts()">
 
 <div
+  id="fandomSection"
+  class="section">
+
+<h2>
+🎮 Fandom
+</h2>
+
+<div id="fandomList">
+</div>
+
+</div>
+
+<div
 id="searchResults"
 class="section">
 </div>
@@ -400,7 +413,7 @@ id="featuredSection"
 class="section">
 
 <h2>
-🔥 เปิดพรีอยู่ตอนนี้
+⏰ พรีออเดอร์จำกัดเวลา
 </h2>
 
 <div
@@ -421,19 +434,6 @@ class="product-grid-home">
 <div
 id="newProducts"
 class="product-grid-home">
-</div>
-
-</div>
-
-<div
-  id="fandomSection"
-  class="section">
-
-<h2>
-🎮 แฟนด้อม
-</h2>
-
-<div id="fandomList">
 </div>
 
 </div>
@@ -541,11 +541,13 @@ function loadFeatured(products){
 
 const featured =
 products.filter(
+
 p =>
-String(
-p.featured
-).toUpperCase() ===
-"TRUE"
+
+p.preorder_deadline &&
+
+p.preorder_deadline !== "N/A"
+
 );
 
 document
