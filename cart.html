@@ -295,6 +295,13 @@ return `
 
 <div class="cart-item">
 
+<input
+type="checkbox"
+class="checkout-item"
+data-index="${index}"
+checked
+>
+
 <img
 src="${item.image}">
 
@@ -410,7 +417,60 @@ document
 
 function goCheckout(){
 
+const cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+const checked =
+
+document.querySelectorAll(
+".checkout-item:checked"
+);
+
+if(
+checked.length === 0
+){
+
+alert(
+"กรุณาเลือกสินค้า"
+);
+
+return;
+
+}
+
+const selectedItems = [];
+
+checked.forEach(box=>{
+
+selectedItems.push(
+
+cart[
+Number(
+box.dataset.index
+)
+]
+
+);
+
+});
+
+localStorage.setItem(
+
+"checkoutCart",
+
+JSON.stringify(
+selectedItems
+)
+
+);
+
 window.location.href =
+
 "checkout.html";
 
 }
