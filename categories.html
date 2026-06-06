@@ -200,6 +200,18 @@ await fetch(API);
 const products =
 await response.json();
 
+const categories =
+
+[
+...new Set(
+products
+.map(
+p => p.main_category
+)
+.filter(Boolean)
+)
+];
+
 document
 .getElementById(
 "categories"
@@ -241,31 +253,6 @@ ${count}
 `;
 
 }).join("");
-  
-document
-.getElementById(
-"categories"
-)
-.innerHTML =
-
-categories.map(category => `
-
-<div
-class="category-card"
-onclick="
-window.location.href=
-'category.html?name=${encodeURIComponent(category)}'
-">
-
-<h2>
-
-${category}
-
-</h2>
-
-</div>
-
-`).join("");
 
 }
 
