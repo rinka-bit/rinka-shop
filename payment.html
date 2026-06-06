@@ -366,11 +366,11 @@ url,
   
 async function submitOrder(){
 
- let cart =
+let cart =
 
 JSON.parse(
 localStorage.getItem(
-"cart"
+"checkoutCart"
 ) || "[]"
 );
 
@@ -382,7 +382,7 @@ cart =
 
 JSON.parse(
 localStorage.getItem(
-"buyNowCart"
+"cart"
 ) || "[]"
 );
 
@@ -521,8 +521,50 @@ formData.append(
     alert(
       "แจ้งชำระเงินเรียบร้อย"
     );
-localStorage.removeItem(
+const fullCart =
+
+JSON.parse(
+localStorage.getItem(
 "cart"
+) || "[]"
+);
+
+const checkoutCart =
+
+JSON.parse(
+localStorage.getItem(
+"checkoutCart"
+) || "[]"
+);
+
+const remainCart =
+
+fullCart.filter(item =>
+
+!checkoutCart.some(checkoutItem =>
+
+JSON.stringify(item)
+
+===
+
+JSON.stringify(checkoutItem)
+
+)
+
+);
+
+localStorage.setItem(
+
+"cart",
+
+JSON.stringify(
+remainCart
+)
+
+);
+
+localStorage.removeItem(
+"checkoutCart"
 );
 
 localStorage.removeItem(
