@@ -135,6 +135,36 @@ font-weight:700;
 
 }
 
+.qty-btn{
+
+width:32px;
+
+height:32px;
+
+border:none;
+
+border-radius:999px;
+
+background:#d9f2ff;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+.qty-control{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+margin:10px 0;
+
+}
+
 </style>
 
 </head>
@@ -259,18 +289,20 @@ ${item.name}
 <div>
 
 <button
+class="qty-btn"
 onclick="
 changeQty(
 ${index},
 -1
 )
 ">
--
+−
 </button>
 
 ${item.qty}
 
 <button
+class="qty-btn"
 onclick="
 changeQty(
 ${index},
