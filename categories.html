@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>
+หมวดสินค้า
+</title>
+
+<style>
+
+body{
+
+font-family:
+'Kodchasan',
+sans-serif;
+
+background:#f6fbff;
+
+padding:20px;
+
+}
+
+h1{
+
+color:#4a6fa5;
+
+margin-bottom:20px;
+
+}
+
+.category-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(
+auto-fill,
+minmax(
+220px,
+1fr
+)
+);
+
+gap:20px;
+
+}
+
+.category-card{
+
+background:white;
+
+padding:25px;
+
+border-radius:20px;
+
+cursor:pointer;
+
+text-align:center;
+
+box-shadow:
+0 3px 15px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+transition:.2s;
+
+}
+
+.category-card:hover{
+
+transform:
+translateY(-4px);
+
+}
+
+.category-card h2{
+
+margin:0;
+
+color:#4a6fa5;
+
+}
+
+.back-btn{
+
+display:inline-block;
+
+margin-bottom:20px;
+
+text-decoration:none;
+
+color:#4a6fa5;
+
+font-weight:700;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a
+href="home.html"
+class="back-btn">
+
+🏠 กลับหน้าแรก
+
+</a>
+
+<h1>
+🏷️ หมวดสินค้า
+</h1>
+
+<div
+id="categories"
+class="category-grid">
+</div>
+
+<script>
+
+const API =
+
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+
+loadCategories();
+
+async function loadCategories(){
+
+const response =
+await fetch(API);
+
+const products =
+await response.json();
+
+const categories =
+
+[
+...new Set(
+
+products
+.map(
+p=>p.main_category
+)
+.filter(Boolean)
+
+)
+
+];
+
+document
+.getElementById(
+"categories"
+)
+.innerHTML =
+
+categories.map(category => `
+
+<div
+class="category-card"
+onclick="
+window.location.href=
+'category.html?name=${encodeURIComponent(category)}'
+">
+
+<h2>
+
+${category}
+
+</h2>
+
+</div>
+
+`).join("");
+
+}
+
+</script>
+
+</body>
+
+</html>
