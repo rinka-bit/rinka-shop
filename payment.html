@@ -355,9 +355,7 @@ function copyAccount(number){
 
 }
 
-async function submitOrder(){
-
-  function downloadQR(url){
+function downloadQR(url){
 
 window.open(
 url,
@@ -365,13 +363,30 @@ url,
 );
 
 }
+  
+async function submitOrder(){
 
-  const cart =
-    JSON.parse(
-      localStorage.getItem(
-        "buyNowCart"
-      ) || "[]"
-    );
+ let cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+if(
+cart.length === 0
+){
+
+cart =
+
+JSON.parse(
+localStorage.getItem(
+"buyNowCart"
+) || "[]"
+);
+
+}
 
   const address =
     JSON.parse(
@@ -433,14 +448,19 @@ return;
   };
 
   const formData =
-    new FormData();
+  new FormData();
 
-  formData.append(
-    "payload",
-    JSON.stringify(
-      payload
-    )
-  );
+formData.append(
+  "action",
+  "createOrder"
+);
+
+formData.append(
+  "payload",
+  JSON.stringify(
+    payload
+  )
+);
 
   const response =
     await fetch(
@@ -501,7 +521,13 @@ return;
     alert(
       "แจ้งชำระเงินเรียบร้อย"
     );
+localStorage.removeItem(
+"cart"
+);
 
+localStorage.removeItem(
+"buyNowCart"
+);
     window.location =
       "order.html?id="
       +
