@@ -165,6 +165,26 @@ margin:10px 0;
 
 }
 
+.delete-btn{
+
+background:#ffe4e6;
+
+color:#dc2626;
+
+border:none;
+
+padding:8px 14px;
+
+border-radius:999px;
+
+cursor:pointer;
+
+font-weight:700;
+
+margin-top:10px;
+
+}
+
 </style>
 
 </head>
@@ -326,14 +346,13 @@ ${item.qty}
 </p>
 
 <button
+class="delete-btn"
 onclick="
 removeItem(
 ${index}
 )
 ">
-
 🗑️ ลบ
-
 </button>
 
 </div>
