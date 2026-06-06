@@ -199,12 +199,6 @@ localStorage.getItem(
 
 let total = 0;
 
-document
-.getElementById(
-"cartItems"
-)
-.innerHTML =
-
 if(
 cart.length === 0
 ){
@@ -232,6 +226,12 @@ document
 return;
 
 }
+
+document
+.getElementById(
+"cartItems"
+)
+.innerHTML =
 
 cart.map((item,index)=>{
 
