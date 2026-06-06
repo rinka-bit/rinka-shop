@@ -877,6 +877,7 @@ arrivals
 function loadFandoms(products){
 
 const fandoms =
+
 [
 ...new Set(
 products
@@ -891,14 +892,24 @@ let html = "";
 
 fandoms.forEach(fandom=>{
 
+const count =
+
+products.filter(
+p=>p.fandom === fandom
+).length;
+
 html += `
 <button
 class="fandom-btn"
 onclick="
-window.location.href=
-'fandom.html?name=${encodeURIComponent(fandom)}'
+filterByFandom(
+'${fandom}'
+)
 ">
+
 ${fandom}
+(${count})
+
 </button>
 `;
 
@@ -908,8 +919,7 @@ document
 .getElementById(
 "fandomList"
 )
-.innerHTML =
-html;
+.innerHTML = html;
 
 }
 
