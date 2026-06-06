@@ -399,157 +399,127 @@ ${optionsHtml}
 
 function addToCart(){
 
-const selectedOptions = {};
+  const selectedOptions = {};
 
-document
-.querySelectorAll(
-'input[type="radio"]:checked'
-)
-.forEach(input=>{
+  document
+  .querySelectorAll(
+    'input[type="radio"]:checked'
+  )
+  .forEach(input=>{
 
-selectedOptions[
-input.name
-] = input.value;
+    selectedOptions[
+      input.name
+    ] = input.value;
 
-});
+  });
 
-document
-.querySelectorAll(
-'input[type="checkbox"]:checked'
-)
-.forEach(input=>{
+  document
+  .querySelectorAll(
+    'input[type="checkbox"]:checked'
+  )
+  .forEach(input=>{
 
-if(
-!selectedOptions[
-input.name
-]
-){
+    if(
+      !selectedOptions[
+        input.name
+      ]
+    ){
 
-selectedOptions[
-input.name
-] = [];
+      selectedOptions[
+        input.name
+      ] = [];
 
-}
+    }
 
-selectedOptions[
-input.name
-].push(
-input.value
-);
+    selectedOptions[
+      input.name
+    ].push(
+      input.value
+    );
 
-});
+  });
 
-if(
+  let cart =
 
-requiredGroups.length >
+  JSON.parse(
+    localStorage.getItem(
+      "cart"
+    ) || "[]"
+  );
 
-Object.keys(
-selectedOptions
-).length
+  const found =
 
-){
+  cart.find(item =>
 
-alert(
-"กรุณาเลือกตัวเลือกสินค้าให้ครบ"
-);
+    item.product_id ===
+    window.currentProduct.product_id
 
-return;
+    &&
 
-}
+    JSON.stringify(
+      item.selected_options || {}
+    )
 
-document
-.querySelectorAll(
-'input[type="radio"]:checked'
-)
-.forEach(input=>{
+    ===
 
-selectedOptions[
-input.name
-] = input.value;
+    JSON.stringify(
+      selectedOptions
+    )
 
-});
+  );
 
-let cart =
+  if(found){
 
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
+    found.qty++;
 
-const found =
+  }
+  else{
 
-cart.find(item =>
+    cart.push({
 
-item.product_id ===
-window.currentProduct.product_id
+      ...window.currentProduct,
 
-&&
+      selected_options:
+      selectedOptions,
 
-JSON.stringify(
-item.selected_options || {}
-)
+      qty:1
 
-===
+    });
 
-JSON.stringify(
-selectedOptions
-)
+  }
 
-);
+  localStorage.setItem(
 
-if(found){
+    "cart",
 
-found.qty++;
+    JSON.stringify(cart)
 
-}
-else{
+  );
 
-cart.push({
+  updateCartCount();
 
-...window.currentProduct,
+  alert(
 
-selected_options:
-selectedOptions,
+    "เพิ่มลงตะกร้าแล้ว\n\n"
 
-qty:1
+    +
 
-});
+    Object.entries(
+      selectedOptions
+    )
 
-}
+    .map(
+      ([k,v])=>
+      `${k}: ${
+        Array.isArray(v)
+        ? v.join(", ")
+        : v
+      }`
+    )
 
-localStorage.setItem(
+    .join("\n")
 
-"cart",
-
-JSON.stringify(cart)
-
-);
-
-"cart",
-
-JSON.stringify(cart)
-
-);
-
-alert(
-
-"เพิ่มลงตะกร้าแล้ว\n\n"
-
-+
-
-Object.entries(
-selectedOptions
-)
-
-.map(
-([k,v])=>
-`${k}: ${v}`
-)
-
-.join("\n")
-
-);
+  );
 
 }
   
