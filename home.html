@@ -334,6 +334,26 @@ opacity:.08;
 pointer-events:none;
 
 }
+
+.deadline-badge{
+
+display:inline-block;
+
+margin-top:8px;
+
+padding:5px 10px;
+
+border-radius:999px;
+
+background:#fff7ed;
+
+color:#ea580c;
+
+font-size:12px;
+
+font-weight:700;
+
+}
   
 </style>
 
@@ -469,6 +489,55 @@ loadFandoms(products);
 
 }
 
+function getDeadlineText(deadline){
+
+if(
+!deadline ||
+deadline === "N/A"
+){
+return "";
+}
+
+const today =
+new Date();
+
+const end =
+new Date(deadline);
+
+const diffDays =
+
+Math.ceil(
+
+(end - today)
+
+/
+
+(1000*60*60*24)
+
+);
+
+if(diffDays < 0){
+
+return "";
+
+}
+
+if(diffDays === 0){
+
+return "🔥 ปิดรับวันนี้";
+
+}
+
+if(diffDays === 1){
+
+return "⏰ เหลือ 1 วัน";
+
+}
+
+return `⏰ เหลือ ${diffDays} วัน`;
+
+}
+
 function createCard(product){
 
 return `
@@ -520,6 +589,28 @@ PREORDER
 
 }
 
+${
+getDeadlineText(
+product.preorder_deadline
+)
+
+?
+
+`
+<div class="deadline-badge">
+
+${getDeadlineText(
+product.preorder_deadline
+)}
+
+</div>
+`
+
+:
+
+""
+}
+
 <h3>
 ${product.name}
 </h3>
@@ -549,7 +640,21 @@ p.preorder_deadline &&
 p.preorder_deadline !== "N/A"
 
 );
+  
+featured.sort((a,b)=>{
 
+return new Date(
+a.preorder_deadline
+)
+
+-
+
+new Date(
+b.preorder_deadline
+);
+
+});
+  
 document
 .getElementById(
 "featuredProducts"
