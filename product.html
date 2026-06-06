@@ -453,6 +453,34 @@ localStorage.getItem(
 ) || "[]"
 );
 
+const found =
+
+cart.find(item =>
+
+item.product_id ===
+window.currentProduct.product_id
+
+&&
+
+JSON.stringify(
+item.selected_options || {}
+)
+
+===
+
+JSON.stringify(
+selectedOptions
+)
+
+);
+
+if(found){
+
+found.qty++;
+
+}
+else{
+
 cart.push({
 
 ...window.currentProduct,
@@ -464,6 +492,8 @@ qty:1
 
 });
 
+}
+
 localStorage.setItem(
 
 "cart",
@@ -472,8 +502,29 @@ JSON.stringify(cart)
 
 );
 
+"cart",
+
+JSON.stringify(cart)
+
+);
+
 alert(
-"เพิ่มลงตะกร้าแล้ว"
+
+"เพิ่มลงตะกร้าแล้ว\n\n"
+
++
+
+Object.entries(
+selectedOptions
+)
+
+.map(
+([k,v])=>
+`${k}: ${v}`
+)
+
+.join("\n")
+
 );
 
 }
