@@ -142,16 +142,31 @@ loadCheckout();
 function loadCheckout(){
 
 cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+if(
+cart.length === 0
+){
+
+cart =
+
 JSON.parse(
 localStorage.getItem(
 "buyNowCart"
 ) || "[]"
 );
 
+}
+
 renderItems();
 
 }
-
+  
 function renderItems(){
 
 let html = "";
@@ -168,14 +183,61 @@ Number(item.qty);
 total +=
 price * qty;
 
+const optionText =
+
+item.selected_options
+
+?
+
+Object.entries(
+item.selected_options
+)
+
+.map(
+([k,v])=>
+
+`${k}: ${
+Array.isArray(v)
+? v.join(", ")
+: v
+}`
+
+)
+
+.join("<br>")
+
+:
+
+"";
+
 html += `
-<p>
+
+<div style="
+margin-bottom:15px;
+">
+
+<b>
+
 ${item.name}
-x ${qty}
+
+</b>
+
+<br>
+
+${optionText}
+
+<br>
+
+${qty}
+ชิ้น
+
 =
+
 ${price*qty}
 บาท
-</p>
+
+</div>
+
 `;
 
 });
