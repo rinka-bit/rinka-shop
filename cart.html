@@ -205,7 +205,35 @@ document
 )
 .innerHTML =
 
-cart.map(item=>{
+if(
+cart.length === 0
+){
+
+document
+.getElementById(
+"cartItems"
+)
+.innerHTML =
+
+`
+<h3>
+
+🛒 ยังไม่มีสินค้าในตะกร้า
+
+</h3>
+`;
+
+document
+.getElementById(
+"total"
+)
+.textContent = "";
+
+return;
+
+}
+
+cart.map((item,index)=>{
 
 total +=
 
@@ -228,18 +256,53 @@ ${item.name}
 
 </h3>
 
-<p>
+<div>
 
-จำนวน :
+<button
+onclick="
+changeQty(
+${index},
+-1
+)
+">
+-
+</button>
+
 ${item.qty}
 
-</p>
+<button
+onclick="
+changeQty(
+${index},
+1
+)
+">
++
+</button>
+
+</div>
 
 <p>
 
 ฿${item.price}
+x
+${item.qty}
+
+=
+฿${item.price * item.qty}
 
 </p>
+
+<button
+onclick="
+removeItem(
+${index}
+)
+">
+
+🗑️ ลบ
+
+</button>
 
 </div>
 
@@ -266,6 +329,73 @@ window.location.href =
 
 }
 
+function changeQty(
+index,
+change
+){
+
+let cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+cart[index].qty += change;
+
+if(
+cart[index].qty <= 0
+){
+
+cart.splice(
+index,
+1
+);
+
+}
+
+localStorage.setItem(
+
+"cart",
+
+JSON.stringify(cart)
+
+);
+
+loadCart();
+
+}
+
+function removeItem(
+index
+){
+
+let cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+cart.splice(
+index,
+1
+);
+
+localStorage.setItem(
+
+"cart",
+
+JSON.stringify(cart)
+
+);
+
+loadCart();
+
+}
+  
 </script>
 
 </body>
