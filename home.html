@@ -354,6 +354,91 @@ font-size:12px;
 font-weight:700;
 
 }
+
+.hero-banner{
+
+background:
+
+linear-gradient(
+135deg,
+#dff4ff,
+#f5fbff
+);
+
+border-radius:24px;
+
+padding:40px;
+
+margin-bottom:30px;
+
+box-shadow:
+0 5px 20px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.hero-banner::after{
+
+content:"❄️ ❄️ ❄️";
+
+position:absolute;
+
+right:20px;
+
+top:20px;
+
+font-size:40px;
+
+opacity:.15;
+
+}
+
+.hero-content h1{
+
+font-size:42px;
+
+margin-bottom:10px;
+
+color:#4a6fa5;
+
+}
+
+.hero-content p{
+
+color:#6b7280;
+
+margin-bottom:20px;
+
+font-size:16px;
+
+}
+
+.hero-content button{
+
+background:#7dcfff;
+
+color:white;
+
+border:none;
+
+padding:12px 20px;
+
+border-radius:999px;
+
+cursor:pointer;
+
+font-weight:700;
+
+}
   
 </style>
 
@@ -405,6 +490,36 @@ margin-bottom:25px;
 ">
 </p>
 
+<div class="hero-banner">
+
+<div class="hero-content">
+
+<h1>
+☁️ Rinka Shop
+</h1>
+
+<p>
+
+Pre-order Anime &
+Game Merchandise
+
+</p>
+
+<button
+onclick="
+document
+.getElementById('search')
+.focus()
+">
+
+ค้นหาสินค้า
+
+</button>
+
+</div>
+
+</div>
+  
 <input
 id="search"
 placeholder="🔍 ค้นหาสินค้า, แฟนด้อม..."
