@@ -476,18 +476,24 @@ formData.append(
 
   if(result.success){
 
-  const paymentPayload = {
+  const file =
+  slip.files[0];
 
-    order_id:
-      result.order_id,
+const base64 =
+  await fileToBase64(file);
 
-    amount:
-      total,
+const paymentPayload = {
 
-    slip_url:
-      slip.files[0].name
+  order_id:
+    result.order_id,
 
-  };
+  amount:
+    total,
+
+  slip_base64:
+    base64
+
+};
 
   const paymentForm =
     new FormData();
@@ -587,6 +593,31 @@ localStorage.removeItem(
 
 }
 
+function fileToBase64(file){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () => resolve(
+          reader.result
+        );
+
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+  
 </script>
 
 </body>
