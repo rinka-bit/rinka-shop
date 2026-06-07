@@ -16,18 +16,35 @@ content="width=device-width,initial-scale=1">
 .container{
 max-width:1200px;
 margin:auto;
-padding:20px;
+padding:15px;
 }
 
 .banner{
 background:white;
-padding:20px;
+padding:16px;
 border-radius:16px;
 margin-bottom:20px;
 box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
 
-.banner img{
+.banner h1{
+font-size:32px;
+margin:0 0 10px;
+}
+
+.collection-desc{
+font-size:14px;
+color:#666;
+margin-bottom:10px;
+}
+
+.deadline{
+color:#ef4444;
+font-weight:700;
+font-size:14px;
+}
+
+.collection-banner{
 width:100%;
 border-radius:12px;
 margin-bottom:15px;
@@ -37,23 +54,6 @@ margin-bottom:15px;
 display:grid;
 grid-template-columns:
 repeat(2,1fr);
-gap:15px;
-}
-
-@media(min-width:768px){
-
-.grid{
-display:grid;
-
-grid-template-columns:
-repeat(
-2,
-minmax(
-0,
-1fr
-)
-);
-
 gap:12px;
 }
 
@@ -72,7 +72,7 @@ transform:translateY(-3px);
 
 .card img{
 width:100%;
-height:160px;
+height:170px;
 object-fit:cover;
 }
 
@@ -81,52 +81,27 @@ padding:10px;
 }
 
 .card h3{
-
-font-size:14px;
+font-size:15px;
 line-height:1.4;
-
-margin:8px 0;
-
+margin:0 0 8px;
 }
 
 .price{
-
-font-size:14px;
-
-}
-
-.deadline{
-margin-top:10px;
-color:#ef4444;
+font-size:15px;
 font-weight:bold;
-}
-
-.collection-banner{
-
-width:100%;
-border-radius:16px;
-margin-bottom:20px;
-
-}
-
-.collection-desc{
-
-color:#666;
-margin:10px 0 20px;
-
+color:#4f46e5;
 }
 
 .topbar{
 
-position:sticky;
-top:10px;
-
 display:flex;
-justify-content:space-between;
+
+justify-content:
+space-between;
+
+align-items:center;
 
 margin-bottom:15px;
-
-z-index:100;
 
 }
 
@@ -213,48 +188,47 @@ async function loadCollection(){
 
 const collectionResponse =
 await fetch(
-
 API +
 "?action=collection&id="
 +
 collectionId
-
 );
 
 const collection =
 await collectionResponse.json();
 
-renderCollection(
-collection
-);
-
 const productResponse =
 await fetch(
-
 API +
 "?action=collectionProducts&id="
 +
 collectionId
-
 );
 
 const products =
 await productResponse.json();
 
-window.collectionProducts =
-products;
-  
+renderCollection(
+collection,
+products.length
+);
+
 renderProducts(
 products
 );
 
 }
 
-function renderCollection(data){
+function renderCollection(
+data,
+productCount
+){
 
 let daysLeft = "";
 
-if(data.preorder_deadline){
+if(
+data.preorder_deadline
+){
 
 const deadline =
 new Date(
@@ -271,8 +245,12 @@ Math.ceil(
 (1000*60*60*24)
 );
 
+if(diff > 0){
+
 daysLeft =
 `เหลืออีก ${diff} วัน`;
+
+}
 
 }
 
@@ -294,9 +272,11 @@ ${data.name}
 ${data.description || ""}
 </p>
 
+${daysLeft ? `
 <div class="deadline">
 ${daysLeft}
 </div>
+` : ""}
 
 <p
 style="
@@ -305,13 +285,12 @@ font-weight:600;
 color:#666;
 ">
 
-${window.collectionProducts?.length || 0}
+${productCount}
 รายการ
 
 </p>
 
 `;
-
 
 }
 
