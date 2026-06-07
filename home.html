@@ -602,6 +602,21 @@ class="section">
 </div>
 
 <div
+id="collectionSection"
+class="section">
+
+<h2>
+🔥 รอบพรีออเดอร์
+</h2>
+
+<div
+id="collectionCards"
+class="product-grid-home">
+</div>
+
+</div>
+  
+<div
 id="featuredSection"
 class="section">
 
@@ -633,9 +648,12 @@ class="product-grid-home">
 
 <script>
 
-const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+const BASE_API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
+const API =
+BASE_API + "?action=products";
+  
 async function loadHome(){
 
 const response =
@@ -654,6 +672,8 @@ Number(b.sort_order||0)
 Number(a.sort_order||0)
 );
 
+loadCollections();
+
 loadFeatured(products);
 
 loadNewArrivals(products);
@@ -662,6 +682,118 @@ loadFandoms(products);
 
 }
 
+async function loadCollections(){
+
+const response =
+await fetch(
+BASE_API +
+"?action=collections"
+);
+
+const collections =
+await response.json();
+
+const featuredCollections =
+
+collections.filter(c =>
+
+String(c.featured)
+.toUpperCase()
+=== "TRUE"
+
+);
+
+let html = "";
+
+featuredCollections.forEach(c=>{
+
+let deadlineText = "";
+
+if(c.preorder_deadline){
+
+const deadline =
+new Date(
+c.preorder_deadline
+);
+
+const today =
+new Date();
+
+const diffDays =
+
+Math.ceil(
+
+(deadline - today)
+
+/
+
+(1000*60*60*24)
+
+);
+
+if(diffDays > 0){
+
+deadlineText =
+`⏰ เหลือ ${diffDays} วัน`;
+
+}
+
+}
+
+html += `
+
+<div
+class="card"
+onclick="
+window.location.href=
+'collection.html?id=
+${c.collection_id}'
+">
+
+<img
+src="${c.image}"
+alt="${c.name}">
+
+<div class="badge-preorder">
+PREORDER
+</div>
+
+<h3>
+${c.name}
+</h3>
+
+<p>
+${c.fandom}
+</p>
+
+${
+deadlineText
+?
+`
+<div class="deadline-badge">
+
+${deadlineText}
+
+</div>
+`
+:
+""
+}
+
+</div>
+
+`;
+
+});
+
+document
+.getElementById(
+"collectionCards"
+)
+.innerHTML = html;
+
+}
+  
 function getDeadlineText(deadline){
 
 if(
