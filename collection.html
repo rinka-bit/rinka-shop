@@ -177,11 +177,23 @@ document.getElementById(
 "collectionInfo"
 ).innerHTML = `
 
-${data.image
-? `
-<img src="${data.image}">
+${
+data.banner_image
+?
 `
-: ""}
+<img
+src="${data.banner_image}">
+`
+:
+data.image
+?
+`
+<img
+src="${data.image}">
+`
+:
+""
+}
 
 <h1>
 ${data.name}
