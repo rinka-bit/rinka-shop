@@ -74,6 +74,21 @@ color:#ef4444;
 font-weight:bold;
 }
 
+.collection-banner{
+
+width:100%;
+border-radius:16px;
+margin-bottom:20px;
+
+}
+
+.collection-desc{
+
+color:#666;
+margin:10px 0 20px;
+
+}
+
 </style>
 
 </head>
@@ -177,33 +192,17 @@ document.getElementById(
 "collectionInfo"
 ).innerHTML = `
 
-${
-data.banner_image
-?
-`
+${data.banner_image ? `
 <img
-src="${data.banner_image}">
-`
-:
-data.image
-?
-`
-<img
-src="${data.image}">
-`
-:
-""
-}
+src="${data.banner_image}"
+class="collection-banner">
+` : ""}
 
 <h1>
 ${data.name}
 </h1>
 
-<p>
-${data.fandom}
-</p>
-
-<p>
+<p class="collection-desc">
 ${data.description || ""}
 </p>
 
@@ -212,6 +211,7 @@ ${daysLeft}
 </div>
 
 `;
+
 
 }
 
