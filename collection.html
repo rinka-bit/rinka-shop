@@ -210,9 +210,8 @@ html += `
 <div
 class="card"
 onclick="
-location.href=
-'product.html?id=
-${product.product_id}'
+window.location.href=
+'product.html?id=${product.product_id}'
 ">
 
 <img
@@ -228,7 +227,8 @@ ${product.name}
 
 ${Number(
 product.price
-).toLocaleString()}
+).toLocaleString()
+}
 
 บาท
 
