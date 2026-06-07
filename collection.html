@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>Collection</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.banner{
+background:white;
+padding:20px;
+border-radius:16px;
+margin-bottom:20px;
+box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.banner img{
+width:100%;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+cursor:pointer;
+box-shadow:0 2px 8px rgba(0,0,0,.05);
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-3px);
+}
+
+.card img{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+}
+
+.card-body{
+padding:12px;
+}
+
+.price{
+font-weight:bold;
+color:#4f46e5;
+}
+
+.deadline{
+margin-top:10px;
+color:#ef4444;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div
+id="collectionInfo"
+class="banner">
+</div>
+
+<div
+id="productGrid"
+class="grid">
+</div>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const collectionId =
+params.get("id");
+
+loadCollection();
+
+async function loadCollection(){
+
+const collectionResponse =
+await fetch(
+
+API +
+"?action=collection&id="
++
+collectionId
+
+);
+
+const collection =
+await collectionResponse.json();
+
+renderCollection(
+collection
+);
+
+const productResponse =
+await fetch(
+
+API +
+"?action=collectionProducts&id="
++
+collectionId
+
+);
+
+const products =
+await productResponse.json();
+
+renderProducts(
+products
+);
+
+}
+
+function renderCollection(data){
+
+let daysLeft = "";
+
+if(data.preorder_deadline){
+
+const deadline =
+new Date(
+data.preorder_deadline
+);
+
+const today =
+new Date();
+
+const diff =
+Math.ceil(
+(deadline - today)
+/
+(1000*60*60*24)
+);
+
+daysLeft =
+`เหลืออีก ${diff} วัน`;
+
+}
+
+document.getElementById(
+"collectionInfo"
+).innerHTML = `
+
+${data.image
+? `
+<img src="${data.image}">
+`
+: ""}
+
+<h1>
+${data.name}
+</h1>
+
+<p>
+${data.fandom}
+</p>
+
+<div class="deadline">
+${daysLeft}
+</div>
+
+`;
+
+}
+
+function renderProducts(products){
+
+let html = "";
+
+products.forEach(product=>{
+
+html += `
+
+<div
+class="card"
+onclick="
+location.href=
+'product.html?id=
+${product.product_id}'
+">
+
+<img
+src="${product.image}">
+
+<div class="card-body">
+
+<h3>
+${product.name}
+</h3>
+
+<div class="price">
+
+${Number(
+product.price
+).toLocaleString()}
+
+บาท
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"productGrid"
+).innerHTML = html;
+
+}
+
+</script>
+
+</body>
+
+</html>
