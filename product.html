@@ -76,52 +76,68 @@ margin-bottom:20px;
   gap:10px;
 }
 
-.navbar{
+.actions button{
 
-display:flex;
+flex:1;
 
-flex-wrap:wrap;
+padding:14px;
 
-gap:12px;
+border:none;
 
-padding:15px 20px;
-
-margin-bottom:25px;
-
-background:white;
-
-border-radius:20px;
-
-box-shadow:
-0 3px 15px
-rgba(
-125,
-207,
-255,
-0.15
-);
-
-}
-
-.navbar a{
-
-text-decoration:none;
+border-radius:12px;
 
 font-weight:700;
 
-color:#4a6fa5;
+cursor:pointer;
 
 }
 
-.navbar a:hover{
+.product-topbar{
 
-color:#2563eb;
+position:fixed;
+
+top:15px;
+left:15px;
+right:15px;
+
+display:flex;
+justify-content:space-between;
+
+z-index:999;
 
 }
 
-button{
-  padding:12px 20px;
-  cursor:pointer;
+.product-topbar button,
+.product-topbar a{
+
+width:46px;
+height:46px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+text-decoration:none;
+
+font-size:22px;
+
+box-shadow:
+0 3px 12px
+rgba(
+0,
+0,
+0,
+0.15
+);
+
+cursor:pointer;
+
 }
   
 </style>
@@ -130,36 +146,18 @@ button{
 
 <body>
 
-<div class="navbar">
+<div class="product-topbar">
 
-<a href="home.html">
-🏠 หน้าแรก
-</a>
 
-<a href="categories.html">
-🏷️ หมวดสินค้า
-</a>
-
-<a href="lookup.html">
-📦 เช็กออเดอร์
-</a>
-
-<a href="change-address.html">
-📍 เปลี่ยนที่อยู่
-</a>
 
 <a
 href="cart.html"
-id="cartLink">
+id="floatingCart">
 
-🛒 ตะกร้า (0)
+🛒
 
 </a>
 
-<a href="https://x.com/prewithrinka">
-📞 ติดต่อร้าน
-</a>
-  
 </div>
   
 <div class="product-page">
@@ -575,16 +573,15 @@ Number(item.qty || 0),
 );
 
 const cartLink =
-
 document.getElementById(
-"cartLink"
+"floatingCart"
 );
 
 if(cartLink){
 
 cartLink.textContent =
 
-`🛒 ตะกร้า (${count})`;
+`🛒 ${count}`;
 
 }
 
