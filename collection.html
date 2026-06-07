@@ -35,9 +35,17 @@ margin-bottom:15px;
 
 .grid{
 display:grid;
+
 grid-template-columns:
-repeat(auto-fill,minmax(220px,1fr));
-gap:20px;
+repeat(
+auto-fill,
+minmax(
+170px,
+1fr
+)
+);
+
+gap:15px;
 }
 
 .card{
@@ -89,12 +97,70 @@ margin:10px 0 20px;
 
 }
 
+.topbar{
+
+position:sticky;
+top:10px;
+
+display:flex;
+justify-content:space-between;
+
+margin-bottom:15px;
+
+z-index:100;
+
+}
+
+.topbar button,
+.topbar a{
+
+width:44px;
+height:44px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+text-decoration:none;
+
+font-size:20px;
+
+box-shadow:
+0 2px 8px rgba(0,0,0,.08);
+
+cursor:pointer;
+
+}
+
 </style>
 
 </head>
 
 <body>
 
+<div class="topbar">
+
+<button
+onclick="history.back()">
+
+←
+
+</button>
+
+<a href="cart.html">
+
+🛒
+
+</a>
+
+</div>
+  
 <div class="container">
 
 <div
@@ -156,6 +222,9 @@ collectionId
 const products =
 await productResponse.json();
 
+window.collectionProducts =
+products;
+  
 renderProducts(
 products
 );
@@ -209,6 +278,18 @@ ${data.description || ""}
 <div class="deadline">
 ${daysLeft}
 </div>
+
+<p
+style="
+margin-top:10px;
+font-weight:600;
+color:#666;
+">
+
+${window.collectionProducts?.length || 0}
+รายการ
+
+</p>
 
 `;
 
