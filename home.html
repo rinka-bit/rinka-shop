@@ -515,11 +515,37 @@ height:220px;
 
 object-fit:cover;
 
+display:block;
+
 }
 
 .collection-content{
 
 padding:15px;
+
+}
+
+.collection-description{
+
+font-size:13px;
+
+color:#666;
+
+margin:8px 0;
+
+line-height:1.5;
+
+}
+
+.collection-count{
+
+font-size:13px;
+
+font-weight:700;
+
+color:#4a6fa5;
+
+margin-top:8px;
 
 }
   
@@ -729,111 +755,121 @@ loadFandoms(products);
 
 async function loadCollections(){
 
-const response =
-await fetch(
-BASE_API +
-"?action=collections"
-);
+  const response =
+    await fetch(
+      BASE_API +
+      "?action=collections"
+    );
 
-const collections =
-await response.json();
+  const collections =
+    await response.json();
 
-let html = "";
+  let html = "";
 
-collections.forEach(c=>{
+  collections.forEach(c=>{
 
-let countdown = "";
+    let countdown = "";
 
-if(c.preorder_deadline){
+    if(c.preorder_deadline){
 
-const deadline =
-new Date(
-c.preorder_deadline
-);
+      const deadline =
+        new Date(
+          c.preorder_deadline
+        );
 
-const today =
-new Date();
+      const today =
+        new Date();
 
-const diffDays =
+      const diffDays =
 
-Math.ceil(
+        Math.ceil(
 
-(deadline - today)
+          (deadline - today)
 
-/
+          /
 
-(1000*60*60*24)
+          (1000 * 60 * 60 * 24)
 
-);
+        );
 
-if(diffDays > 0){
+      if(diffDays > 0){
 
-countdown =
-`⏰ เหลือ ${diffDays} วัน`;
+        countdown =
+          `⏰ เหลือ ${diffDays} วัน`;
 
-}
+      }
 
-}
+    }
 
-html += `
+    html += `
 
-<div
-class="collection-card"
-onclick="window.location.href='collection.html?id=${c.collection_id}'">
+    <div
+    class="collection-card"
+    onclick="window.location.href='collection.html?id=${c.collection_id}'">
 
-<img
-src="${c.image}"
-loading="lazy">
+      <img
+      src="${c.image}"
+      loading="lazy"
+      alt="${c.name}">
 
-<div
-class="collection-content">
+      <div class="collection-content">
 
-<div
-class="badge-preorder">
+        <div class="badge-preorder">
+          PREORDER
+        </div>
 
-PREORDER
+        <h3>
+          ${c.name}
+        </h3>
 
-</div>
+        <p>
+          ${c.fandom || ""}
+        </p>
 
-<h3>
+        ${
+          c.description
+          ?
+          `
+          <p class="collection-description">
+            ${c.description}
+          </p>
+          `
+          :
+          ""
+        }
 
-${c.name}
+        <p class="collection-count">
 
-</h3>
+          ${c.product_count || 0}
+          รายการ
 
-<p>
+        </p>
 
-${c.fandom}
+        ${
+          countdown
+          ?
+          `
+          <div class="deadline-badge">
+            ${countdown}
+          </div>
+          `
+          :
+          ""
+        }
 
-</p>
+      </div>
 
-${
-countdown
-?
-`
-<div class="deadline-badge">
+    </div>
 
-${countdown}
+    `;
 
-</div>
-`
-:
-""
-}
+  });
 
-</div>
-
-</div>
-
-`;
-
-});
-
-document
-.getElementById(
-"collectionCards"
-)
-.innerHTML = html;
+  document
+    .getElementById(
+      "collectionCards"
+    )
+    .innerHTML = html;
 
 }
   
@@ -965,10 +1001,6 @@ ${product.name}
 
 <p>
 ${product.fandom || ""}
-</p>
-
-<p>
-${c.product_count} รายการ
 </p>
 
 <p>
