@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>
+รายการออเดอร์
+</title>
+
+<style>
+
+body{
+
+font-family:sans-serif;
+
+background:#f8fbff;
+
+padding:20px;
+
+}
+
+.container{
+
+max-width:800px;
+margin:auto;
+
+}
+
+.topbar{
+
+display:flex;
+
+align-items:center;
+
+margin-bottom:20px;
+
+}
+
+.back-btn{
+
+width:44px;
+height:44px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+cursor:pointer;
+
+box-shadow:
+0 2px 8px rgba(0,0,0,.08);
+
+}
+
+.order-card{
+
+background:white;
+
+padding:16px;
+
+border-radius:16px;
+
+margin-bottom:12px;
+
+cursor:pointer;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+.order-id{
+
+font-weight:700;
+
+font-size:16px;
+
+}
+
+.order-status{
+
+margin-top:6px;
+
+font-size:14px;
+
+color:#2563eb;
+
+}
+
+.order-total{
+
+margin-top:6px;
+
+font-weight:700;
+
+}
+
+.order-date{
+
+font-size:12px;
+
+color:#666;
+
+margin-top:6px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+
+<button
+class="back-btn"
+onclick="history.back()">
+
+←
+
+</button>
+
+</div>
+
+<h2 id="pageTitle">
+
+รายการออเดอร์
+
+</h2>
+
+<div id="orderList">
+
+กำลังโหลด...
+
+</div>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const customer =
+
+JSON.parse(
+localStorage.getItem(
+"customer"
+) || "{}"
+);
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const statusFilter =
+params.get("status");
+
+loadOrders();
+
+function getStatusText(status){
+
+switch(status){
+
+case "pending":
+return "📦 ออเดอร์ของฉัน";
+
+case "china_arrived":
+return "🏭 ถึงโกดังจีนแล้ว";
+
+case "shipping_to_th":
+return "🚚 กำลังมาไทย";
+
+case "ready_to_ship":
+return "📬 เตรียมจัดส่ง";
+
+default:
+return status;
+
+}
+
+}
+
+async function loadOrders(){
+
+document.getElementById(
+"pageTitle"
+).textContent =
+
+getStatusText(
+statusFilter
+);
+
+const response =
+await fetch(
+
+API +
+
+"?action=customerOrders&email=" +
+
+encodeURIComponent(
+customer.email
+)
+
+);
+
+const orders =
+await response.json();
+
+const filtered =
+
+orders.filter(
+o => o.status === statusFilter
+);
+
+let html = "";
+
+if(
+filtered.length === 0
+){
+
+html =
+
+`
+<div
+style="
+background:white;
+padding:20px;
+border-radius:16px;
+">
+
+ยังไม่มีออเดอร์
+
+</div>
+`;
+
+}
+
+filtered.forEach(order=>{
+
+html += `
+
+<div
+class="order-card"
+onclick="
+window.location.href=
+'order.html?id=${order.order_id}'
+">
+
+<div
+class="order-id">
+
+${order.order_id}
+
+</div>
+
+<div
+class="order-status">
+
+${getStatusText(
+order.status
+)}
+
+</div>
+
+<div
+class="order-total">
+
+฿${Number(
+order.total
+).toLocaleString()}
+
+</div>
+
+<div
+class="order-date">
+
+${new Date(
+order.created_at
+).toLocaleDateString(
+"th-TH"
+)}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"orderList"
+).innerHTML =
+html;
+
+}
+
+</script>
+
+</body>
+
+</html>
