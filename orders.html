@@ -259,9 +259,56 @@ window.location.href=
 ">
 
 <div
+style="
+display:flex;
+gap:12px;
+align-items:center;
+">
+
+<img
+src="${
+order.preview_image ||
+'https://placehold.co/100x100'
+}"
+style="
+width:72px;
+height:72px;
+object-fit:cover;
+border-radius:12px;
+flex-shrink:0;
+">
+
+<div
+style="
+flex:1;
+">
+
+<div
 class="order-id">
 
 ${order.order_id}
+
+</div>
+
+<div
+style="
+font-weight:600;
+margin-top:4px;
+">
+
+${order.preview_name || "-"}
+
+</div>
+
+<div
+style="
+font-size:13px;
+color:#666;
+margin-top:4px;
+">
+
+${order.item_count}
+รายการ
 
 </div>
 
@@ -279,7 +326,8 @@ class="order-total">
 
 ฿${Number(
 order.total
-).toLocaleString()}
+).toLocaleString()
+}
 
 </div>
 
@@ -291,6 +339,10 @@ order.created_at
 ).toLocaleDateString(
 "th-TH"
 )}
+
+</div>
+
+</div>
 
 </div>
 
