@@ -184,6 +184,10 @@ onclick="saveAddress()">
 
 <div id="items"></div>
 
+<div
+id="giftSection">
+</div>
+
 <h3 id="total">
 รวม 0 บาท
 </h3>
@@ -564,6 +568,86 @@ addressData
 
 window.location =
 "payment.html";
+
+}
+
+async function loadGifts(){
+
+  const collectionMap = {};
+
+  cart.forEach(item=>{
+
+    if(item.collection_id){
+
+      collectionMap[
+        item.collection_id
+      ] = true;
+
+    }
+
+  });
+
+  let html = "";
+
+  for(
+    const collectionId
+    in
+    collectionMap
+  ){
+
+    const response =
+      await fetch(
+
+        API +
+
+        "?action=gifts&collection_id=" +
+
+        collectionId
+
+      );
+
+    const gifts =
+      await response.json();
+
+    gifts.forEach(gift=>{
+
+      html += `
+
+<label
+style="
+display:block;
+margin-bottom:10px;
+">
+
+<input
+type="checkbox"
+name="gift"
+value="${gift.gift_name}"
+>
+
+${gift.gift_name}
+
+</label>
+
+`;
+
+    });
+
+  }
+
+  document
+    .getElementById(
+      "giftSection"
+    )
+    .innerHTML =
+
+`
+<h3>
+🎁 ของแถม
+</h3>
+
+${html}
+`;
 
 }
 
