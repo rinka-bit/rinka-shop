@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>
+จัดการที่อยู่
+</title>
+
+<style>
+
+body{
+
+font-family:sans-serif;
+
+background:#f8fbff;
+
+padding:20px;
+
+}
+
+.container{
+
+max-width:700px;
+
+margin:auto;
+
+}
+
+.topbar{
+
+display:flex;
+
+align-items:center;
+
+margin-bottom:20px;
+
+}
+
+.back-btn{
+
+width:44px;
+height:44px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+cursor:pointer;
+
+box-shadow:
+0 2px 8px rgba(0,0,0,.08);
+
+}
+
+.address-card{
+
+background:white;
+
+padding:16px;
+
+border-radius:16px;
+
+margin-bottom:12px;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+.label{
+
+display:inline-block;
+
+background:#eff6ff;
+
+padding:4px 10px;
+
+border-radius:999px;
+
+font-size:12px;
+
+margin-bottom:8px;
+
+}
+
+.default{
+
+background:#dbeafe;
+
+color:#2563eb;
+
+}
+
+.add-btn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:12px;
+
+background:#60a5fa;
+
+color:white;
+
+font-size:15px;
+
+cursor:pointer;
+
+margin-top:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+
+<button
+class="back-btn"
+onclick="history.back()">
+
+←
+
+</button>
+
+</div>
+
+<h2>
+
+📍 จัดการที่อยู่
+
+</h2>
+
+<div id="addressList">
+
+กำลังโหลด...
+
+</div>
+
+<button
+class="add-btn"
+onclick="
+window.location.href=
+'address.html'
+">
+
++ เพิ่มที่อยู่ใหม่
+
+</button>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const customer =
+
+JSON.parse(
+localStorage.getItem(
+"customer"
+) || "{}"
+);
+
+loadAddresses();
+
+async function loadAddresses(){
+
+const response =
+await fetch(
+
+API +
+
+"?action=customerAddresses&email=" +
+
+encodeURIComponent(
+customer.email
+)
+
+);
+
+const addresses =
+await response.json();
+
+let html = "";
+
+addresses.forEach(address=>{
+
+html += `
+
+<div class="address-card">
+
+<div
+class="
+label
+${address.is_default ? 'default' : ''}
+">
+
+${address.label || 'ที่อยู่'}
+
+${
+address.is_default
+?
+' (ค่าเริ่มต้น)'
+:
+''
+}
+
+</div>
+
+<div>
+
+<b>
+
+${address.receiver}
+
+</b>
+
+</div>
+
+<div>
+
+${address.phone}
+
+</div>
+
+<div>
+
+${address.address}
+
+</div>
+
+<div>
+
+${address.subdistrict}
+${address.district}
+
+</div>
+
+<div>
+
+${address.province}
+${address.postcode}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"addressList"
+).innerHTML =
+html;
+
+}
+
+</script>
+
+</body>
+
+</html>
