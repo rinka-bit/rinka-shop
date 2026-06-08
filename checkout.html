@@ -236,6 +236,8 @@ localStorage.getItem(
 
 renderItems();
 
+loadGifts();
+
 }
   
 function renderItems(){
@@ -510,6 +512,20 @@ alert(
 
 function goPayment(){
 
+const gifts = [];
+
+document
+.querySelectorAll(
+'input[name="gift"]:checked'
+)
+.forEach(el=>{
+
+  gifts.push(
+    el.value
+  );
+
+});
+
 const addressData = {
 
 email:
@@ -555,7 +571,9 @@ document.getElementById(
 postcode:
 document.getElementById(
 "postcode"
-).value
+).value,
+
+gifts:gifts
 
 };
 
