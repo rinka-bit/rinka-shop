@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>เพิ่มที่อยู่</title>
+
+<style>
+
+body{
+
+font-family:sans-serif;
+
+background:#f8fbff;
+
+padding:20px;
+
+}
+
+.container{
+
+max-width:600px;
+
+margin:auto;
+
+}
+
+.card{
+
+background:white;
+
+padding:20px;
+
+border-radius:16px;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+input,
+textarea{
+
+width:100%;
+
+padding:12px;
+
+margin-bottom:12px;
+
+box-sizing:border-box;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+}
+
+button{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:12px;
+
+background:#7dcfff;
+
+color:white;
+
+font-size:16px;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+h1{
+
+text-align:center;
+
+margin-bottom:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>
+
+📍 เพิ่มที่อยู่จัดส่ง
+
+</h1>
+
+<div class="card">
+
+<input
+id="receiver"
+placeholder="ชื่อผู้รับ">
+
+<input
+id="phone"
+placeholder="เบอร์โทร">
+
+<textarea
+id="address"
+placeholder="ที่อยู่"></textarea>
+
+<input
+id="subdistrict"
+placeholder="แขวง / ตำบล">
+
+<input
+id="district"
+placeholder="เขต / อำเภอ">
+
+<input
+id="province"
+placeholder="จังหวัด">
+
+<input
+id="postcode"
+placeholder="รหัสไปรษณีย์">
+
+<button
+onclick="saveAddress()">
+
+บันทึกที่อยู่
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const customer =
+
+JSON.parse(
+localStorage.getItem(
+"customer"
+) || "{}"
+);
+
+if(!customer.email){
+
+window.location =
+"login.html";
+
+}
+
+async function saveAddress(){
+
+const payload = {
+
+email:
+customer.email,
+
+receiver:
+document.getElementById(
+"receiver"
+).value,
+
+phone:
+document.getElementById(
+"phone"
+).value,
+
+address:
+document.getElementById(
+"address"
+).value,
+
+subdistrict:
+document.getElementById(
+"subdistrict"
+).value,
+
+district:
+document.getElementById(
+"district"
+).value,
+
+province:
+document.getElementById(
+"province"
+).value,
+
+postcode:
+document.getElementById(
+"postcode"
+).value,
+
+label:
+"บ้าน",
+
+is_default:
+true
+
+};
+
+if(
+!payload.receiver ||
+!payload.phone ||
+!payload.address
+){
+
+alert(
+"กรุณากรอกข้อมูลให้ครบ"
+);
+
+return;
+
+}
+
+const formData =
+new FormData();
+
+formData.append(
+"action",
+"saveCustomerAddress"
+);
+
+formData.append(
+"payload",
+JSON.stringify(
+payload
+)
+);
+
+const response =
+await fetch(
+API,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+if(result.success){
+
+alert(
+"บันทึกที่อยู่เรียบร้อย"
+);
+
+window.location =
+"home.html";
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
