@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>ฉัน</title>
+
+<style>
+
+body{
+
+font-family:sans-serif;
+
+background:#f8fbff;
+
+padding:20px;
+
+}
+
+.container{
+
+max-width:700px;
+margin:auto;
+
+}
+
+.profile-card{
+
+background:white;
+
+padding:20px;
+
+border-radius:16px;
+
+margin-bottom:20px;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+.profile-name{
+
+font-size:22px;
+
+font-weight:700;
+
+}
+
+.profile-email{
+
+color:#666;
+
+margin-top:5px;
+
+}
+
+.menu-card{
+
+background:white;
+
+padding:18px;
+
+border-radius:16px;
+
+margin-bottom:12px;
+
+cursor:pointer;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+.menu-card:hover{
+
+transform:translateY(-2px);
+
+}
+
+.count{
+
+font-weight:700;
+
+color:#2563eb;
+
+}
+
+.logout-btn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:12px;
+
+background:#ef4444;
+
+color:white;
+
+font-size:15px;
+
+cursor:pointer;
+
+margin-top:20px;
+
+}
+
+.topbar{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+margin-bottom:20px;
+
+}
+
+.topbar button{
+
+width:44px;
+height:44px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+box-shadow:
+0 2px 8px rgba(0,0,0,.08);
+
+font-size:20px;
+
+cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+
+<button
+onclick="history.back()">
+
+←
+
+</button>
+
+<div></div>
+
+</div>
+
+<div
+class="profile-card">
+
+<div
+id="username"
+class="profile-name">
+
+-
+
+</div>
+
+<div
+id="email"
+class="profile-email">
+
+-
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'pending'
+)
+">
+
+<div>
+
+📦 ออเดอร์ของฉัน
+
+</div>
+
+<div
+id="pendingCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'china_arrived'
+)
+">
+
+<div>
+
+🏭 ถึงโกดังจีนแล้ว
+
+</div>
+
+<div
+id="chinaCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'shipping_to_th'
+)
+">
+
+<div>
+
+🚚 กำลังมาไทย
+
+</div>
+
+<div
+id="shippingCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'ready_to_ship'
+)
+">
+
+<div>
+
+📬 เตรียมจัดส่ง
+
+</div>
+
+<div
+id="readyCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+window.location.href=
+'address-book.html'
+">
+
+<div>
+
+📍 จัดการที่อยู่
+
+</div>
+
+<div>
+
+>
+
+</div>
+
+</div>
+
+<button
+class="logout-btn"
+onclick="logout()">
+
+ออกจากระบบ
+
+</button>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const customer =
+
+JSON.parse(
+localStorage.getItem(
+"customer"
+) || "{}"
+);
+
+if(!customer.email){
+
+window.location =
+"login.html";
+
+}
+
+document.getElementById(
+"username"
+).textContent =
+
+customer.username;
+
+document.getElementById(
+"email"
+).textContent =
+
+customer.email;
+
+loadOrders();
+
+async function loadOrders(){
+
+const response =
+await fetch(
+
+API +
+"?action=customerOrders&email="
++
+encodeURIComponent(
+customer.email
+)
+
+);
+
+const orders =
+await response.json();
+
+const pending =
+
+orders.filter(
+o => o.status === "pending"
+).length;
+
+const china =
+
+orders.filter(
+o => o.status === "china_arrived"
+).length;
+
+const shipping =
+
+orders.filter(
+o => o.status === "shipping_to_th"
+).length;
+
+const ready =
+
+orders.filter(
+o => o.status === "ready_to_ship"
+).length;
+
+document.getElementById(
+"pendingCount"
+).textContent =
+pending;
+
+document.getElementById(
+"chinaCount"
+).textContent =
+china;
+
+document.getElementById(
+"shippingCount"
+).textContent =
+shipping;
+
+document.getElementById(
+"readyCount"
+).textContent =
+ready;
+
+}
+
+function openStatus(status){
+
+window.location.href =
+
+"orders.html?status=" +
+status;
+
+}
+
+function logout(){
+
+localStorage.removeItem(
+"customer"
+);
+
+window.location =
+"login.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
