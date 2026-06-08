@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>เข้าสู่ระบบ</title>
+
+<style>
+
+body{
+
+font-family:sans-serif;
+
+background:#f8fbff;
+
+padding:20px;
+
+}
+
+.container{
+
+max-width:500px;
+
+margin:auto;
+
+}
+
+.card{
+
+background:white;
+
+padding:20px;
+
+border-radius:16px;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+input{
+
+width:100%;
+
+padding:12px;
+
+margin-bottom:12px;
+
+box-sizing:border-box;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+}
+
+button{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:12px;
+
+background:#7dcfff;
+
+color:white;
+
+font-size:16px;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+h1{
+
+text-align:center;
+
+margin-bottom:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>
+
+☁️ Rinka Shop
+
+</h1>
+
+<div class="card">
+
+<input
+id="username"
+placeholder="ชื่อที่ใช้แสดง">
+
+<input
+id="email"
+placeholder="Email">
+
+<input
+id="twitter"
+placeholder="Twitter / X">
+
+<button
+onclick="register()">
+
+เริ่มใช้งาน
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+async function register(){
+
+const payload = {
+
+username:
+document.getElementById(
+"username"
+).value,
+
+email:
+document.getElementById(
+"email"
+).value,
+
+twitter:
+document.getElementById(
+"twitter"
+).value
+
+};
+
+if(
+!payload.username ||
+!payload.email
+){
+
+alert(
+"กรุณากรอกข้อมูลให้ครบ"
+);
+
+return;
+
+}
+
+const formData =
+new FormData();
+
+formData.append(
+"action",
+"saveCustomer"
+);
+
+formData.append(
+"payload",
+JSON.stringify(
+payload
+)
+);
+
+const response =
+await fetch(
+API,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+localStorage.setItem(
+
+"customer",
+
+JSON.stringify({
+
+customer_id:
+result.customer_id,
+
+...payload
+
+})
+
+);
+
+checkAddress(
+payload.email
+);
+
+}
+
+async function checkAddress(email){
+
+const response =
+await fetch(
+
+API +
+"?action=customerAddresses&email=" +
+encodeURIComponent(
+email
+)
+
+);
+
+const addresses =
+await response.json();
+
+if(
+addresses.length
+=== 0
+){
+
+window.location =
+"address.html";
+
+}
+else{
+
+window.location =
+"home.html";
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
