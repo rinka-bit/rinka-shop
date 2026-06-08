@@ -22,10 +22,16 @@ body{
 }
 
 .card{
-  background:white;
-  border-radius:12px;
-  padding:20px;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);
+
+background:white;
+
+border-radius:16px;
+
+padding:20px;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
 }
 
 table{
@@ -77,22 +83,38 @@ cursor:pointer;
 margin-top:10px;
 }
 
-.navbar{
+.topbar{
+
 display:flex;
-gap:20px;
-padding:15px 0;
+justify-content:space-between;
+
 margin-bottom:20px;
-border-bottom:1px solid #ddd;
+
 }
 
-.navbar a{
+.topbar button,
+.topbar a{
+
+width:44px;
+height:44px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
 text-decoration:none;
-font-weight:bold;
-color:#4f46e5;
-}
 
-.navbar a:hover{
-opacity:.8;
+font-size:20px;
+
+box-shadow:
+0 2px 8px rgba(0,0,0,.08);
+
 }
   
 </style>
@@ -101,30 +123,20 @@ opacity:.8;
 
 <body>
 
-<div class="navbar">
+<div class="topbar">
 
-<a href="home.html">
-🏠 หน้าแรก
-</a>
+<button
+onclick="history.back()">
 
-<a href="lookup.html">
-📦 เช็กออเดอร์
-</a>
+←
 
-<a href="change-address.html">
-📍 เปลี่ยนที่อยู่
-</a>
+</button>
 
 <a
-href="cart.html"
-id="cartLink">
+href="cart.html">
 
-🛒 ตะกร้า (0)
+🛒
 
-</a>
-
-<a href="https://x.com/prewithrinka">
-📞 ติดต่อร้าน
 </a>
 
 </div>
@@ -378,27 +390,47 @@ function getStatusBadge(status){
 switch(status){
 
 case "pending":
+
 return `
 <span class="badge badge-pending">
-รอจัดการ
+📦 รอจัดการ
 </span>
 `;
 
-case "processing":
+case "china_arrived":
+
 return `
 <span class="badge badge-processing">
-กำลังดำเนินการ
+🏭 ถึงโกดังจีนแล้ว
 </span>
 `;
 
-case "completed":
+case "shipping_to_th":
+
+return `
+<span class="badge badge-processing">
+🚚 กำลังมาไทย
+</span>
+`;
+
+case "ready_to_ship":
+
+return `
+<span class="badge badge-processing">
+📬 เตรียมจัดส่ง
+</span>
+`;
+
+case "shipped":
+
 return `
 <span class="badge badge-completed">
-จัดส่งแล้ว
+✅ จัดส่งแล้ว
 </span>
 `;
 
 default:
+
 return status;
 
 }
