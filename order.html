@@ -335,17 +335,39 @@ async function loadOrder(){
   }
 
   html += `
-    <tr>
+<tr>
 
-      <td>
+<td>
 
-      <b>
-      ${item.name}
-      </b>
+<div
+style="
+display:flex;
+gap:10px;
+align-items:flex-start;
+">
 
-      ${optionHtml}
+<img
+src="${item.image}"
+style="
+width:60px;
+height:60px;
+object-fit:cover;
+border-radius:10px;
+">
 
-      </td>
+<div>
+
+<b>
+${item.name}
+</b>
+
+${optionHtml}
+
+</div>
+
+</div>
+
+</td>
 
       <td>
       ${item.qty}
