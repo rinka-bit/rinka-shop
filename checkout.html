@@ -813,6 +813,53 @@ value="${gift.gift_id}"
   }
 
 }
+
+  document.addEventListener(
+"change",
+e=>{
+
+  if(
+    !e.target.classList.contains(
+      "gift-checkbox"
+    )
+  ){
+    return;
+  }
+
+  const collectionId =
+
+  e.target.dataset.collection;
+
+  const max =
+
+  Number(
+    e.target.dataset.max
+  );
+
+  const checked =
+
+  document.querySelectorAll(
+
+    `.gift-checkbox[data-collection="${collectionId}"]:checked`
+
+  );
+
+  if(
+    checked.length > max
+  ){
+
+    e.target.checked =
+    false;
+
+    alert(
+
+      `เลือกได้สูงสุด ${max} ชิ้น`
+
+    );
+
+  }
+
+});
   
 </script>
 
