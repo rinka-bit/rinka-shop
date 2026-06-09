@@ -590,6 +590,7 @@ window.location =
 async function loadGifts(){
 
   const collectionMap = {};
+  const collectionTotals = {};
 
   cart.forEach(item=>{
 
@@ -598,6 +599,26 @@ async function loadGifts(){
       collectionMap[
         item.collection_id
       ] = true;
+
+      if(
+        !collectionTotals[
+          item.collection_id
+        ]
+      ){
+
+        collectionTotals[
+          item.collection_id
+        ] = 0;
+
+      }
+
+      collectionTotals[
+        item.collection_id
+      ] +=
+
+      Number(item.price)
+      *
+      Number(item.qty);
 
     }
 
@@ -627,7 +648,22 @@ async function loadGifts(){
 
     gifts.forEach(gift=>{
 
-html += `
+      const total =
+
+      collectionTotals[
+        collectionId
+      ] || 0;
+
+      if(
+        total <
+        Number(
+          gift.min_amount
+        )
+      ){
+        return;
+      }
+
+      html += `
 
 <label
 style="
@@ -687,7 +723,7 @@ value="${gift.gift_id}"
 
 `;
 
-});
+    });
 
   }
 
