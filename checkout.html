@@ -727,19 +727,32 @@ value="${gift.gift_id}"
 
   }
 
+  if(html){
+
   document
     .getElementById(
       "giftSection"
     )
     .innerHTML =
 
-`
-<h3>
-🎁 ของแถม
-</h3>
+  `
+  <h3>
+  🎁 ของแถม
+  </h3>
 
-${html}
-`;
+  ${html}
+  `;
+
+}
+else{
+
+  document
+    .getElementById(
+      "giftSection"
+    )
+    .innerHTML = "";
+
+}
 
 }
 
