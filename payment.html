@@ -439,31 +439,31 @@ return;
 
   const payload = {
 
-    customer_name:
-      address.receiver,
+  customer_name:
+    address.receiver,
 
-    email:
-      address.email,
+  email:
+    address.email,
 
-    phone:
-  String(address.phone || ""),
+  phone:
+    String(address.phone || ""),
 
-    social:
-      address.social,
+  social:
+    address.social,
 
-    subtotal:
-      total,
+  subtotal:
+    total,
 
-    total:
-      total,
+  total:
+    total,
 
-    items:
-      cart,
+  items:
+    cart,
 
-    gifts:
-address.gifts || []
+  gifts:
+    address.gifts || []
 
-  };
+};
 
   const formData =
   new FormData();
