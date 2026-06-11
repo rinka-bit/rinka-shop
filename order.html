@@ -386,15 +386,60 @@ Number(item.qty)
 
 });
 
-  html += `
-    </table>
+ let giftHtml = "";
 
-    <h3>
-    รวม
-    ${order.total}
-    บาท
-    </h3>
-  `;
+if(
+  order.gifts &&
+  order.gifts.length
+){
+
+  giftHtml += `
+
+<h3>
+
+🎁 ของแถม
+
+</h3>
+
+<ul>
+
+`;
+
+  order.gifts.forEach(gift=>{
+
+    giftHtml += `
+
+<li>
+
+${gift.gift_name}
+
+</li>
+
+`;
+
+  });
+
+  giftHtml +=
+
+  "</ul>";
+
+}
+
+html += `
+
+</table>
+
+${giftHtml}
+
+<h3>
+
+รวม
+${order.total}
+บาท
+
+</h3>
+
+`;
 
   document
     .getElementById(
