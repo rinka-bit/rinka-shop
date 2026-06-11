@@ -589,38 +589,31 @@ window.location =
 
 async function loadGifts(){
 
-  const collectionMap = {};
   const collectionTotals = {};
 
   cart.forEach(item=>{
 
-    if(item.collection_id){
+    if(!item.collection_id){
+      return;
+    }
 
-      collectionMap[
+    if(
+      !collectionTotals[
         item.collection_id
-      ] = true;
-
-      if(
-        !collectionTotals[
-          item.collection_id
-        ]
-      ){
-
-        collectionTotals[
-          item.collection_id
-        ] = 0;
-
-      }
-
+      ]
+    ){
       collectionTotals[
         item.collection_id
-      ] +=
-
-      Number(item.price)
-      *
-      Number(item.qty);
-
+      ] = 0;
     }
+
+    collectionTotals[
+      item.collection_id
+    ] +=
+
+    Number(item.price)
+    *
+    Number(item.qty);
 
   });
 
@@ -629,21 +622,21 @@ async function loadGifts(){
   for(
     const collectionId
     in
-    collectionMap
+    collectionTotals
   ){
 
     const total =
 
     collectionTotals[
       collectionId
-    ] || 0;
+    ];
 
     const ruleResponse =
     await fetch(
 
       API +
 
-      "?action=giftRule"
+      "?action=giftRules"
 
       +
 
@@ -663,48 +656,72 @@ async function loadGifts(){
 
     );
 
-    const rule =
+    const rules =
     await ruleResponse.json();
 
-    if(!rule){
-
+    if(
+      !rules.length
+    ){
       continue;
-
     }
 
-    const response =
+    const giftResponse =
     await fetch(
 
       API +
 
-      "?action=gifts&collection_id=" +
+      "?action=gifts"
+
+      +
+
+      "&collection_id="
+
+      +
 
       collectionId
 
     );
 
     const gifts =
-    await response.json();
+    await giftResponse.json();
 
-    html += `
+    rules.forEach(rule=>{
+
+      const tierGifts =
+
+      gifts.filter(
+
+        gift =>
+
+        gift.tier_name
+        ===
+        rule.tier_name
+
+      );
+
+      if(
+        !tierGifts.length
+      ){
+        return;
+      }
+
+      html += `
 
 <div
 style="
-margin-bottom:15px;
-padding:12px;
-background:#fafafa;
+margin-bottom:20px;
+padding:15px;
+border:1px solid #eee;
 border-radius:12px;
 ">
 
-<div
-style="
-font-weight:700;
-margin-bottom:8px;
-">
+<h3>
 
-🎁 ของแถม
+🎁
 
-</div>
+${rule.tier_name}
+
+</h3>
 
 <div
 style="
@@ -729,9 +746,9 @@ ${rule.max_select}
 
 `;
 
-    gifts.forEach(gift=>{
+      tierGifts.forEach(gift=>{
 
-      html += `
+        html += `
 
 <label
 style="
@@ -743,7 +760,6 @@ margin-bottom:10px;
 border:1px solid #eee;
 border-radius:12px;
 cursor:pointer;
-background:white;
 ">
 
 <img
@@ -760,36 +776,40 @@ style="
 flex:1;
 ">
 
-<div
-style="
-font-weight:600;
-">
-
+<div>
 ${gift.gift_name}
-
 </div>
 
 </div>
 
 <input
 type="checkbox"
+
+name="gift"
+
 class="gift-checkbox"
-data-collection="${collectionId}"
+
+data-tier="${rule.tier_name}"
+
 data-max="${rule.max_select}"
+
 value="${gift.gift_id}"
+
 >
 
 </label>
 
 `;
 
-    });
+      });
 
-    html += `
+      html += `
 
 </div>
 
 `;
+
+    });
 
   }
 
@@ -799,7 +819,8 @@ value="${gift.gift_id}"
       .getElementById(
         "giftSection"
       )
-      .innerHTML = html;
+      .innerHTML =
+      html;
 
   }
   else{
@@ -808,13 +829,14 @@ value="${gift.gift_id}"
       .getElementById(
         "giftSection"
       )
-      .innerHTML = "";
+      .innerHTML =
+      "";
 
   }
 
 }
 
-  document.addEventListener(
+document.addEventListener(
 "change",
 e=>{
 
@@ -826,9 +848,9 @@ e=>{
     return;
   }
 
-  const collectionId =
+  const tier =
 
-  e.target.dataset.collection;
+  e.target.dataset.tier;
 
   const max =
 
@@ -840,7 +862,7 @@ e=>{
 
   document.querySelectorAll(
 
-    `.gift-checkbox[data-collection="${collectionId}"]:checked`
+    `.gift-checkbox[data-tier="${tier}"]:checked`
 
   );
 
