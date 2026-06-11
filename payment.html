@@ -192,7 +192,7 @@ console.log(bankData);
 
 let html = "";
 
-bankData.forEach(bank=>{
+bankData.forEach((bank,index)=>{
 
 html += `
 
@@ -203,6 +203,9 @@ html += `
 <input
 type="radio"
 name="bank"
+
+${index === 0 ? "checked" : ""}
+
 onclick="showBankById('${bank.account_id}')">
 
 <div class="bank-info">
@@ -228,6 +231,14 @@ ${bank.account_name || ""}
 document.getElementById(
 "bankList"
 ).innerHTML = html;
+
+if(
+  bankData.length
+){
+
+  showBank(
+    bankData[0]
+  );
 
 }
 
