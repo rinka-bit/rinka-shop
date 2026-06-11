@@ -386,45 +386,6 @@ Number(item.qty)
 
 });
 
- let giftHtml = "";
-
-if(
-  order.gifts &&
-  order.gifts.length
-){
-
-  giftHtml += `
-
-<h3>
-
-🎁 ของแถม
-
-</h3>
-
-<ul>
-
-`;
-
-  order.gifts.forEach(gift=>{
-
-    giftHtml += `
-
-<li>
-
-${gift.gift_name}
-
-</li>
-
-`;
-
-  });
-
-  giftHtml +=
-
-  "</ul>";
-
-}
-
 let giftHtml = "";
 
 if(
