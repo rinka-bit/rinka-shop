@@ -631,6 +631,12 @@ async function loadGifts(){
       collectionId
     ];
 
+    console.log(
+  "COLLECTION",
+  collectionId,
+  total
+);
+
     const ruleResponse =
     await fetch(
 
@@ -659,6 +665,11 @@ async function loadGifts(){
     const rules =
     await ruleResponse.json();
 
+    console.log(
+  "RULES",
+  rules
+);
+
     if(
       !rules.length
     ){
@@ -684,6 +695,11 @@ async function loadGifts(){
 
     const gifts =
     await giftResponse.json();
+
+    console.log(
+  "GIFTS",
+  gifts
+);
 
     rules.forEach(rule=>{
 
