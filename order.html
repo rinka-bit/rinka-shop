@@ -425,6 +425,38 @@ ${gift.gift_name}
 
 }
 
+let giftHtml = "";
+
+if(
+  order.gifts &&
+  order.gifts.length
+){
+
+  giftHtml += `
+
+<h3>
+🎁 ของแถม
+</h3>
+
+<ul>
+`;
+
+  order.gifts.forEach(gift=>{
+
+    giftHtml += `
+<li>
+${gift.gift_name}
+</li>
+`;
+
+  });
+
+  giftHtml += `
+</ul>
+`;
+
+}
+
 html += `
 
 </table>
@@ -432,11 +464,9 @@ html += `
 ${giftHtml}
 
 <h3>
-
 รวม
 ${order.total}
 บาท
-
 </h3>
 
 `;
