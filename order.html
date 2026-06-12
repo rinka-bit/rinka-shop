@@ -399,22 +399,43 @@ if(
 🎁 ของแถม
 </h3>
 
-<ul>
 `;
 
   order.gifts.forEach(gift=>{
 
-    giftHtml += `
-<li>
+  giftHtml += `
+
+<div
+style="
+display:flex;
+gap:12px;
+align-items:center;
+margin-bottom:10px;
+padding:10px;
+border:1px solid #eee;
+border-radius:10px;
+">
+
+<img
+src="${gift.gift_image}"
+style="
+width:60px;
+height:60px;
+object-fit:cover;
+border-radius:8px;
+">
+
+<div>
+
 ${gift.gift_name}
-</li>
-`;
+
+</div>
+
+</div>
+
+`;  
 
   });
-
-  giftHtml += `
-</ul>
-`;
 
 }
 
