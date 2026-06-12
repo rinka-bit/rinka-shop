@@ -132,6 +132,47 @@ transform:rotate(360deg);
 }
 
 }
+
+.cat-track{
+
+width:220px;
+height:70px;
+
+margin:auto;
+margin-bottom:15px;
+
+overflow:hidden;
+
+position:relative;
+
+}
+
+.cat-loader{
+
+position:absolute;
+
+font-size:48px;
+
+animation:
+catRun 3s linear infinite;
+
+}
+
+@keyframes catRun{
+
+0%{
+
+left:-80px;
+
+}
+
+100%{
+
+left:240px;
+
+}
+
+}
   
 </style>
   
@@ -694,24 +735,28 @@ text-align:center;
 max-width:300px;
 ">
 
-<div
-style="
-font-size:40px;
-margin-bottom:10px;
-animation:spin 1s linear infinite;
-">
+<div class="cat-track">
 
-⏳
+<div class="cat-loader">
+
+🐈📦
+
+</div>
 
 </div>
 
 <h3>
-กำลังส่งข้อมูล
+กำลังสร้างคำสั่งซื้อ
 </h3>
 
 <p>
-โปรดรอสักครู่<br>
-อย่าปิดหน้านี้
+
+เจ้าเหมียวกำลังส่งออเดอร์เข้าระบบ 🐈📦
+
+<br><br>
+
+โปรดอย่าปิดหน้านี้
+
 </p>
 
 </div>
