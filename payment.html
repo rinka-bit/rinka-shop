@@ -405,10 +405,13 @@ localStorage.getItem(
 }
 
   const btn =
-
 document.getElementById(
-"submitBtn"
+  "submitBtn"
 );
+
+if(btn.disabled){
+  return;
+}
 
 btn.disabled = true;
 
