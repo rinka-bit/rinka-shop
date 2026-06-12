@@ -161,12 +161,13 @@ id="slip">
 </div>
 
 <button
+id="submitBtn"
 onclick="submitOrder()">
 
 ยืนยันการชำระเงิน
 
 </button>
-
+  
 </div>
 
 <script>
@@ -402,6 +403,17 @@ localStorage.getItem(
 );
 
 }
+
+  const btn =
+
+document.getElementById(
+"submitBtn"
+);
+
+btn.disabled = true;
+
+btn.textContent =
+"กำลังส่งข้อมูล...";
 
   const address =
     JSON.parse(
