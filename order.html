@@ -429,6 +429,29 @@ border-radius:8px;
 
 ${gift.gift_name}
 
+${
+gift.character_name
+
+?
+
+`<div
+style="
+font-size:13px;
+color:#666;
+margin-top:4px;
+">
+
+ตัวละคร:
+${gift.character_name}
+
+</div>`
+
+:
+
+""
+
+}
+
 </div>
 
 </div>
