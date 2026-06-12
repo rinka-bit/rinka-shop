@@ -121,6 +121,18 @@ width:100%;
 
 }
 
+@keyframes spin{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+  
 </style>
   
 </head>
@@ -418,6 +430,11 @@ btn.disabled = true;
 btn.textContent =
 "กำลังส่งข้อมูล...";
 
+  document.getElementById(
+  "loadingOverlay"
+).style.display =
+"flex";
+  
   const address =
     JSON.parse(
       localStorage.getItem(
@@ -452,8 +469,12 @@ return;
 
 }
 
-  const payload = {
+document.getElementById(
+  "loadingOverlay"
+).style.display =
+"flex";
 
+const payload = {
   customer_name:
     address.receiver,
 
@@ -652,6 +673,51 @@ function fileToBase64(file){
   
 </script>
 
+<div
+id="loadingOverlay"
+style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+z-index:9999;
+justify-content:center;
+align-items:center;
+">
+
+<div
+style="
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+max-width:300px;
+">
+
+<div
+style="
+font-size:40px;
+margin-bottom:10px;
+animation:spin 1s linear infinite;
+">
+
+⏳
+
+</div>
+
+<h3>
+กำลังส่งข้อมูล
+</h3>
+
+<p>
+โปรดรอสักครู่<br>
+อย่าปิดหน้านี้
+</p>
+
+</div>
+
+</div>
+  
 </body>
 
 </html>
