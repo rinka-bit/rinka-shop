@@ -92,6 +92,48 @@ cursor:pointer;
 
 }
 
+.qty-selector{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+margin:20px 0;
+
+}
+
+.qty-selector button{
+
+width:42px;
+height:42px;
+
+border:none;
+border-radius:10px;
+
+background:#f3f3f3;
+
+font-size:20px;
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+.qty-selector input{
+
+width:70px;
+
+text-align:center;
+
+padding:10px;
+
+border:1px solid #ddd;
+border-radius:10px;
+
+font-size:16px;
+
+}
+  
 .product-topbar{
 
 position:fixed;
@@ -376,6 +418,32 @@ ${product.sub_category || "-"}
 
 ${optionsHtml}
 
+<div class="qty-selector">
+
+<button
+type="button"
+onclick="changeProductQty(-1)"
+>
+-
+</button>
+
+<input
+id="productQty"
+type="number"
+value="1"
+min="1"
+readonly
+>
+
+<button
+type="button"
+onclick="changeProductQty(1)"
+>
++
+</button>
+
+</div>
+
 <div class="actions">
 
 <button onclick="buyNow()">
@@ -397,6 +465,36 @@ ${optionsHtml}
 </div>
 
 `;
+
+}
+
+function changeProductQty(
+change
+){
+
+const input =
+
+document.getElementById(
+"productQty"
+);
+
+if(!input){
+return;
+}
+
+let qty =
+
+Number(
+input.value
+);
+
+qty += change;
+
+if(qty < 1){
+qty = 1;
+}
+
+input.value = qty;
 
 }
 
@@ -471,23 +569,15 @@ function addToCart(){
 
   );
 
- let qty = 1;
+const qty =
 
-Object.values(
-  selectedOptions
-)
-.forEach(value=>{
+Number(
 
-  if(
-    Array.isArray(value)
-  ){
+document.getElementById(
+"productQty"
+)?.value
 
-    qty +=
-    value.length - 1;
-
-  }
-
-});
+) || 1;
 
 if(found){
 
@@ -546,6 +636,46 @@ else{
   
 function buyNow(){
 
+const selectedOptions = {};
+
+document
+.querySelectorAll(
+'input[type="radio"]:checked'
+)
+.forEach(input=>{
+
+  selectedOptions[
+    input.name
+  ] = input.value;
+
+});
+
+document
+.querySelectorAll(
+'input[type="checkbox"]:checked'
+)
+.forEach(input=>{
+
+  if(
+    !selectedOptions[
+      input.name
+    ]
+  ){
+
+    selectedOptions[
+      input.name
+    ] = [];
+
+  }
+
+  selectedOptions[
+    input.name
+  ].push(
+    input.value
+  );
+
+});
+
 localStorage.setItem(
 
 "buyNowCart",
@@ -556,7 +686,18 @@ JSON.stringify([
 
 ...window.currentProduct,
 
-qty:1
+selected_options:
+selectedOptions,
+
+qty:
+
+Number(
+
+document.getElementById(
+"productQty"
+)?.value
+
+) || 1
 
 }
 
