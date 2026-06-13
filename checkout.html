@@ -892,7 +892,7 @@ value="${gift.gift_id}"
 
   }
 
-  if(html){
+ if(html){
 
   document
     .getElementById(
@@ -901,41 +901,26 @@ value="${gift.gift_id}"
     .innerHTML =
     html;
 
-  for(
-    const collectionId
-    in
-    collectionTotals
-  ){
+  const giftBoxes =
 
-    const response =
-    await fetch(
+  document.querySelectorAll(
+    "[id^='gift-char-']"
+  );
 
-      API +
+  giftBoxes.forEach(box=>{
 
-      "?action=gifts"
+    const giftId =
 
-      +
-
-      "&collection_id="
-
-      +
-
-      collectionId
-
+    box.id.replace(
+      "gift-char-",
+      ""
     );
 
-    const gifts =
-    await response.json();
+    loadGiftCharacters(
+      giftId
+    );
 
-    gifts.forEach(gift=>{
-
-      loadGiftCharacters(
-        gift.gift_id
-      );
-
-    });
-
-  }
+  });
 
 }
 else{
@@ -998,84 +983,107 @@ e=>{
 
 });
 
-  async function loadGiftCharacters(
+ async function loadGiftCharacters(
   giftId
 ){
 
-  const response =
-  await fetch(
+  try{
 
-    API +
+    const response =
+    await fetch(
 
-    "?action=giftCharacters"
+      API +
 
-    +
+      "?action=giftCharacters"
 
-    "&gift_id="
+      +
 
-    +
+      "&gift_id="
 
-    giftId
+      +
 
-  );
+      encodeURIComponent(
+        giftId
+      )
 
-  const chars =
-  await response.json();
+    );
 
-  if(
-    !chars.length
-  ){
-    return;
-  }
+    const chars =
+    await response.json();
 
-  let html = "";
+    console.log(
+      "CHARS",
+      giftId,
+      chars
+    );
 
-  chars.forEach(char=>{
-
-    html += `
-
-<label
-style="
-display:inline-block;
-margin-right:10px;
-margin-top:6px;
-font-size:13px;
-">
-
-<input
-type="radio"
-
-name="gift-char-${giftId}"
-
-value="${char.character_name}"
-
->
-
-${char.character_name}
-
-</label>
-
-`;
-
-  });
-
-  setTimeout(()=>{
+    if(
+      !Array.isArray(chars)
+      ||
+      !chars.length
+    ){
+      return;
+    }
 
     const box =
     document.getElementById(
       `gift-char-${giftId}`
     );
 
-    if(box){
+    console.log(
+      "BOX",
+      giftId,
+      box
+    );
 
-      box.innerHTML =
-      html;
-
+    if(!box){
+      return;
     }
 
-  },100);
+    let html = "";
 
-}
+    chars.forEach(char=>{
+
+     html += `
+
+<span
+style="
+display:inline-block;
+margin-right:10px;
+margin-top:6px;
+font-size:13px;
+"
+>
+
+<input
+type="radio"
+name="gift-char-${giftId}"
+value="${char.character_name}"
+>
+
+${char.character_name}
+
+</span>
+
+`;
+
+    });
+
+    box.innerHTML =
+    html;
+
+  }
+  catch(error){
+
+    console.error(
+      "loadGiftCharacters error",
+      giftId,
+      error
+    );
+
+  }
+
+} 
   
 </script>
 
