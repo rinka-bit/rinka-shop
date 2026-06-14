@@ -1113,7 +1113,6 @@ html += `
 <button
 class="fandom-btn"
 onclick="
-onclick="
 window.location.href=
 'search.html?q=${encodeURIComponent(fandom)}'
 ">
@@ -1133,29 +1132,6 @@ document
 .innerHTML = html;
 
 }
-
-const results =
-window.allProducts.filter(
-
-product =>
-
-(product.name || "")
-.toLowerCase()
-.includes(keyword)
-
-||
-
-(product.fandom || "")
-.toLowerCase()
-.includes(keyword)
-
-||
-
-(product.sub_category || "")
-.toLowerCase()
-.includes(keyword)
-
-);
   
 updateCartCount();
 
