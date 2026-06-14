@@ -622,23 +622,16 @@ PAPERPRESENTED, Ita Bag and more
 
 <button
 onclick="
-document
-.getElementById('search')
-.focus()
-">
-
-ค้นหาสินค้า
-
+window.location.href=
+'search.html'
+"
+>
+🔍 ค้นหาสินค้า
 </button>
 
 </div>
 
 </div>
-  
-<input
-id="search"
-placeholder="🔍 ค้นหาสินค้า, แฟนด้อม..."
-oninput="searchProducts()">
 
 <div
   id="fandomSection"
@@ -672,11 +665,6 @@ window.location.href=
 
 </div>
   
-<div
-id="searchResults"
-class="section">
-</div>
-
 <div
 id="collectionSection"
 class="section">
@@ -1125,9 +1113,9 @@ html += `
 <button
 class="fandom-btn"
 onclick="
-filterByFandom(
-'${fandom}'
-)
+onclick="
+window.location.href=
+'search.html?q=${encodeURIComponent(fandom)}'
 ">
 
 ${fandom}
@@ -1143,43 +1131,6 @@ document
 "fandomList"
 )
 .innerHTML = html;
-
-}
-
-function filterByFandom(fandom){
-
-document
-.getElementById(
-"search"
-)
-.value =
-fandom;
-
-searchProducts();
-
-}
-
-function searchProducts(){
-
-const keyword =
-document
-.getElementById(
-"search"
-)
-.value
-.toLowerCase()
-.trim();
-
-const container =
-document.getElementById(
-"searchResults"
-);
-
-if(!keyword){
-
-container.innerHTML = "";
-
-return;
 
 }
 
