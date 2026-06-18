@@ -162,6 +162,20 @@ id="collectionInfo"
 class="banner">
 </div>
 
+<input
+id="collectionSearch"
+type="text"
+placeholder="🔍 ค้นหาสินค้าใน Collection..."
+style="
+width:100%;
+padding:12px;
+margin:20px 0;
+border:1px solid #ddd;
+border-radius:12px;
+box-sizing:border-box;
+font-size:15px;
+">
+
 <div
 id="productGrid"
 class="grid">
@@ -182,6 +196,8 @@ window.location.search
 const collectionId =
 params.get("id");
 
+let allProducts = [];
+  
 loadCollection();
 
 async function loadCollection(){
@@ -213,8 +229,11 @@ collection,
 products.length
 );
 
+allProducts =
+products;
+
 renderProducts(
-products
+allProducts
 );
 
 }
@@ -343,6 +362,68 @@ document.getElementById(
 
 }
 
+document.addEventListener(
+"input",
+e=>{
+
+if(
+e.target.id !==
+"collectionSearch"
+){
+return;
+}
+
+const keyword =
+
+e.target.value
+.toLowerCase()
+.trim();
+
+if(!keyword){
+
+renderProducts(
+allProducts
+);
+
+return;
+
+}
+
+const filtered =
+
+allProducts.filter(
+product =>
+
+(product.name || "")
+.toLowerCase()
+.includes(
+keyword
+)
+
+||
+
+(product.fandom || "")
+.toLowerCase()
+.includes(
+keyword
+)
+
+||
+
+(product.sub_category || "")
+.toLowerCase()
+.includes(
+keyword
+)
+
+);
+
+renderProducts(
+filtered
+);
+
+});
+  
 </script>
 
 </body>
