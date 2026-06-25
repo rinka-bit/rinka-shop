@@ -84,38 +84,7 @@ async function initBrowse(){
 
 }
 
-function handleSearch(e){
-
-    const text =
-    e.target.value.trim();
-
-    const url =
-    new URL(window.location);
-
-    if(text){
-
-        url.searchParams.set(
-            "type",
-            "search"
-        );
-
-        url.searchParams.set(
-            "q",
-            text
-        );
-
-    }else{
-
-        url.searchParams.delete("type");
-        url.searchParams.delete("q");
-
-    }
-
-    history.replaceState(
-        {},
-        "",
-        url
-    );
+function handleSearch(){
 
     initBrowse();
 
@@ -223,6 +192,18 @@ function filterProducts(products){
         id
     } = getBrowseParams();
 
+    const keyword =
+document
+.getElementById("searchInput")
+.value
+.trim();
+
+if(keyword){
+
+    return searchProducts(products);
+
+}
+
     switch(type){
 
         case "new":
@@ -267,9 +248,6 @@ function filterProducts(products){
                 p => p.sub_category === value
             );
 
-        case "search":
-
-            return searchProducts(products);
 
         default:
 
@@ -281,20 +259,18 @@ function filterProducts(products){
 
 function searchProducts(products){
 
-    const {
-        keyword
-    } = getBrowseParams();
+    const q =
+    document
+    .getElementById("searchInput")
+    .value
+    .toLowerCase()
+    .trim();
 
-    if(!keyword){
+    if(!q){
 
         return products;
 
     }
-
-    const q =
-    keyword
-    .toLowerCase()
-    .trim();
 
     return products.filter(product=>{
 
@@ -313,12 +289,18 @@ function searchProducts(products){
             ||
 
             (product.description || "")
-            .toLowerCase()
-            .includes(q)
+.toLowerCase()
+.includes(q)
 
-            ||
+||
 
-            (product.main_category || "")
+(product.search_keywords || "")
+.toLowerCase()
+.includes(q)
+
+||
+
+(product.main_category || "")
             .toLowerCase()
             .includes(q)
 
