@@ -1,1 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>สินค้า | Rinka Shop</title>
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<link
+rel="stylesheet"
+href="browse.css">
+
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
+
+</head>
+
+<body>
+
+<header class="page-header">
+
+<button
+id="menuButton"
+class="icon-btn">
+
+☰
+
+</button>
+
+<h1 id="pageTitle">
+
+สินค้า
+
+</h1>
+
+<a
+href="cart.html"
+class="cart-btn">
+
+🛒
+
+<span id="cartCount">
+
+0
+
+</span>
+
+</a>
+
+</header>
+
+
+<div class="browse-container">
+
+<nav
+id="breadcrumb"
+class="breadcrumb">
+
+หน้าแรก >
+สินค้า
+
+</nav>
+
+
+<div class="browse-top">
+
+<div>
+
+<h2 id="browseTitle">
+
+สินค้า
+
+</h2>
+
+<p id="browseDescription">
+
+กำลังโหลด...
+
+</p>
+
+</div>
+
+</div>
+
+
+<div class="browse-toolbar">
+
+<input
+
+type="search"
+
+id="searchInput"
+
+placeholder="ค้นหาสินค้า...">
+
+<select id="sortSelect">
+
+<option value="newest">
+
+ใหม่ล่าสุด
+
+</option>
+
+<option value="price_low">
+
+ราคา ต่ำ → สูง
+
+</option>
+
+<option value="price_high">
+
+ราคา สูง → ต่ำ
+
+</option>
+
+<option value="name">
+
+ชื่อสินค้า
+
+</option>
+
+</select>
+
+</div>
+
+
+<div
+
+id="loading"
+
+class="loading">
+
+กำลังโหลดสินค้า...
+
+</div>
+
+
+<div
+
+id="productGrid"
+
+class="product-grid">
+
+</div>
+
+
+<div
+
+id="emptyState"
+
+class="empty-state hidden">
+
+<div class="cat">
+
+(=^･ω･^=)
+
+</div>
+
+<h3>
+
+ไม่พบสินค้า
+
+</h3>
+
+<p>
+
+ลองเปลี่ยนคำค้นดูนะ
+
+</p>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
+<script src="browse.js"></script>
+
+</body>
+
+</html>
