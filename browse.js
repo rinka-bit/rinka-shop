@@ -387,3 +387,25 @@ return "⏰ เหลือ 1 วัน";
 return `⏰ เหลือ ${diffDays} วัน`;
 
 }
+
+function updateCartCount(){
+
+    const cart = JSON.parse(
+        localStorage.getItem("cart") || "[]"
+    );
+
+    const total = cart.reduce(
+        (sum,item)=>sum+Number(item.qty||0),
+        0
+    );
+
+    const cartCount =
+        document.getElementById("cartCount");
+
+    if(cartCount){
+
+        cartCount.textContent = total;
+
+    }
+
+}
