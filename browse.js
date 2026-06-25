@@ -249,3 +249,140 @@ function renderProducts(products){
         .join("");
 
 }
+
+function createProductCard(product){
+
+return `
+<div
+class="card"
+onclick="
+window.location.href=
+'product.html?id=${product.product_id}'
+">
+
+<img
+src="${product.image}"
+alt="${product.name}"
+loading="lazy">
+
+${
+
+product.new_arrival
+
+?
+
+`
+<div class="badge-new">
+NEW
+</div>
+`
+
+:
+
+""
+
+}
+
+${
+
+product.product_type==="preorder"
+
+?
+
+`
+<div class="badge-preorder">
+PREORDER
+</div>
+`
+
+:
+
+""
+
+}
+
+${
+getDeadlineText(
+product.preorder_deadline
+)
+
+?
+
+`
+<div class="deadline-badge">
+
+${getDeadlineText(
+product.preorder_deadline
+)}
+
+</div>
+`
+
+:
+
+""
+}
+
+<h3>
+${product.name}
+</h3>
+
+<p>
+${product.fandom || ""}
+</p>
+
+<p>
+
+฿${product.sale_price || product.price}
+
+</p>
+
+</div>
+`;
+
+}
+
+function getDeadlineText(deadline){
+
+if(
+!deadline ||
+deadline==="N/A"
+){
+
+return "";
+
+}
+
+const today=new Date();
+
+const end=new Date(deadline);
+
+const diffDays=Math.ceil(
+
+(end-today)
+
+/(1000*60*60*24)
+
+);
+
+if(diffDays<0){
+
+return "";
+
+}
+
+if(diffDays===0){
+
+return "🔥 ปิดรับวันนี้";
+
+}
+
+if(diffDays===1){
+
+return "⏰ เหลือ 1 วัน";
+
+}
+
+return `⏰ เหลือ ${diffDays} วัน`;
+
+}
