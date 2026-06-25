@@ -656,7 +656,7 @@ class="section">
 class="browse-category-btn"
 onclick="
 window.location.href=
-'categories.html'
+"browse.html"
 ">
 
 เลือกหมวดสินค้า
@@ -1114,7 +1114,7 @@ html += `
 class="fandom-btn"
 onclick="
 window.location.href=
-'search.html?q=${encodeURIComponent(fandom)}'
+`browse.html?type=fandom&value=${encodeURIComponent(fandom)}`
 ">
 
 ${fandom}
