@@ -1,3 +1,6 @@
+const BASE_API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
 const params = new URLSearchParams(window.location.search);
 
 const type = params.get("type");
@@ -10,24 +13,28 @@ const keyword = params.get("q");
 
 async function initBrowse(){
 
-    showLoading();
+    try{
 
-    const response =
-        await fetch(
-            BASE_API +
-            "?action=products"
+        const response = await fetch(
+            BASE_API + "?action=products"
         );
 
-    let products =
-        await response.json();
+        let products = await response.json();
 
-    products =
-        filterProducts(products);
+        products = filterProducts(products);
 
-    products =
-        sortProducts(products);
+        products = sortProducts(products);
 
-    renderProducts(products);
+        renderProducts(products);
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("loading").innerHTML =
+        "โหลดสินค้าไม่สำเร็จ";
+
+    }
 
 }
 
@@ -215,33 +222,27 @@ function sortProducts(products){
 
 function renderProducts(products){
 
-    hideLoading();
+    document
+    .getElementById("loading")
+    .style.display="none";
 
     const grid =
-        document.getElementById(
-            "productGrid"
-        );
+        document.getElementById("productGrid");
 
     const empty =
-        document.getElementById(
-            "emptyState"
-        );
+        document.getElementById("emptyState");
 
     if(products.length===0){
 
         grid.innerHTML="";
 
-        empty.classList.remove(
-            "hidden"
-        );
+        empty.classList.remove("hidden");
 
         return;
 
     }
 
-    empty.classList.add(
-        "hidden"
-    );
+    empty.classList.add("hidden");
 
     grid.innerHTML =
         products
