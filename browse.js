@@ -1,17 +1,34 @@
-document.addEventListener(
+const params = new URLSearchParams(window.location.search);
 
-"DOMContentLoaded",
+const type = params.get("type");
 
-initBrowse
+const value = params.get("value");
 
-);
+const id = params.get("id");
 
-function initBrowse(){
+const keyword = params.get("q");
 
-console.log(
+async function initBrowse(){
 
-"Browse Ready"
+    showLoading();
 
-);
+    const response =
+        await fetch(
+            BASE_API +
+            "?action=products"
+        );
+
+    let products =
+        await response.json();
+
+    products =
+        filterProducts(products);
+
+    products =
+        sortProducts(products);
+
+    renderProducts(products);
 
 }
+
+initBrowse();
