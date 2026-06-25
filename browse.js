@@ -1,20 +1,34 @@
 const BASE_API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-const params = new URLSearchParams(window.location.search);
+function getBrowseParams(){
 
-const type = params.get("type");
-const value = params.get("value");
-const id = params.get("id");
-const keyword = params.get("q");
+    const params =
+        new URLSearchParams(window.location.search);
+
+    return{
+
+        type:
+            params.get("type"),
+
+        value:
+            params.get("value"),
+
+        id:
+            params.get("id"),
+
+        keyword:
+            params.get("q")
+
+    };
+
+}
 
 document.addEventListener(
 "DOMContentLoaded",
 ()=>{
 
     updateCartCount();
-
-    initBrowse();
 
     document
     .getElementById("sortSelect")
@@ -29,6 +43,8 @@ document.addEventListener(
         "input",
         handleSearch
     );
+
+    initBrowse();
 
 });
 
@@ -70,13 +86,13 @@ async function initBrowse(){
 
 function handleSearch(e){
 
-    const keyword =
+    const text =
     e.target.value.trim();
 
     const url =
     new URL(window.location);
 
-    if(keyword){
+    if(text){
 
         url.searchParams.set(
             "type",
@@ -85,7 +101,7 @@ function handleSearch(e){
 
         url.searchParams.set(
             "q",
-            keyword
+            text
         );
 
     }else{
@@ -107,6 +123,14 @@ function handleSearch(e){
 
 function updateTitle(){
 
+    const{
+
+        type,
+        value,
+        keyword
+
+    }=getBrowseParams();
+
     const title =
     document.getElementById(
         "browseTitle"
@@ -125,7 +149,7 @@ function updateTitle(){
             "⭐ สินค้าใหม่";
 
             description.textContent =
-            "สินค้าใหม่ล่าสุดของร้าน";
+            "สินค้าใหม่ล่าสุด";
 
             break;
 
@@ -135,7 +159,7 @@ function updateTitle(){
             "🔥 ลดราคา";
 
             description.textContent =
-            "สินค้าลดราคาทั้งหมด";
+            "สินค้าลดราคา";
 
             break;
 
@@ -145,7 +169,7 @@ function updateTitle(){
             "✨ สินค้าแนะนำ";
 
             description.textContent =
-            "สินค้าแนะนำของร้าน";
+            "สินค้าแนะนำ";
 
             break;
 
@@ -193,62 +217,59 @@ function updateTitle(){
 
 function filterProducts(products){
 
+    const {
+        type,
+        value,
+        id
+    } = getBrowseParams();
+
     switch(type){
 
         case "new":
 
             return products.filter(
-                p=>p.new_arrival
+                p => p.new_arrival
             );
 
         case "sale":
 
             return products.filter(
-                p=>
-                Number(
-                    p.sale_price
-                )>0
+                p => Number(p.sale_price) > 0
             );
 
         case "featured":
 
             return products.filter(
-                p=>p.featured
+                p => p.featured
             );
 
         case "fandom":
 
             return products.filter(
-                p=>
-                p.fandom===value
+                p => p.fandom === value
             );
 
         case "collection":
 
             return products.filter(
-                p=>
-                p.collection_id===id
+                p => p.collection_id === id
             );
 
         case "main_category":
 
             return products.filter(
-                p=>
-                p.main_category===value
+                p => p.main_category === value
             );
 
         case "sub_category":
 
             return products.filter(
-                p=>
-                p.sub_category===value
+                p => p.sub_category === value
             );
 
         case "search":
 
-            return searchProducts(
-                products
-            );
+            return searchProducts(products);
 
         default:
 
@@ -259,6 +280,10 @@ function filterProducts(products){
 }
 
 function searchProducts(products){
+
+    const {
+        keyword
+    } = getBrowseParams();
 
     if(!keyword){
 
@@ -271,37 +296,41 @@ function searchProducts(products){
     .toLowerCase()
     .trim();
 
-    return products.filter(product=>
+    return products.filter(product=>{
 
-        (product.name||"")
-        .toLowerCase()
-        .includes(q)
+        return (
 
-        ||
+            (product.name || "")
+            .toLowerCase()
+            .includes(q)
 
-        (product.fandom||"")
-        .toLowerCase()
-        .includes(q)
+            ||
 
-        ||
+            (product.fandom || "")
+            .toLowerCase()
+            .includes(q)
 
-        (product.description||"")
-        .toLowerCase()
-        .includes(q)
+            ||
 
-        ||
+            (product.description || "")
+            .toLowerCase()
+            .includes(q)
 
-        (product.main_category||"")
-        .toLowerCase()
-        .includes(q)
+            ||
 
-        ||
+            (product.main_category || "")
+            .toLowerCase()
+            .includes(q)
 
-        (product.sub_category||"")
-        .toLowerCase()
-        .includes(q)
+            ||
 
-    );
+            (product.sub_category || "")
+            .toLowerCase()
+            .includes(q)
+
+        );
+
+    });
 
 }
 
@@ -317,25 +346,29 @@ function sortProducts(products){
 
         case "price_low":
 
-            return products.sort(
+            products.sort(
                 (a,b)=>
                 Number(a.price)
                 -
                 Number(b.price)
             );
+
+            break;
 
         case "price_high":
 
-            return products.sort(
+            products.sort(
                 (a,b)=>
                 Number(b.price)
                 -
                 Number(a.price)
             );
 
+            break;
+
         case "name":
 
-            return products.sort(
+            products.sort(
                 (a,b)=>
                 a.name.localeCompare(
                     b.name,
@@ -343,11 +376,24 @@ function sortProducts(products){
                 )
             );
 
+            break;
+
         default:
 
-            return products;
+            products.sort(
+                (a,b)=>
+
+                Number(b.sort_order || 0)
+
+                -
+
+                Number(a.sort_order || 0)
+
+            );
 
     }
+
+    return products;
 
 }
 
