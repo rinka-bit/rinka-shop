@@ -548,6 +548,10 @@ color:#4a6fa5;
 margin-top:8px;
 
 }
+
+<link
+rel="stylesheet"
+href="browse.css">
   
 </style>
 
@@ -555,41 +559,106 @@ margin-top:8px;
 
 <body>
 
-<div class="navbar">
+<header class="page-header">
 
-<a href="home.html">
-🏠 หน้าแรก
-</a>
+<button
+id="menuButton"
+class="icon-btn">
 
-<a href="categories.html">
-🏷️ หมวดสินค้า
-</a>
+☰
 
-<a href="lookup.html">
-📦 เช็กออเดอร์
-</a>
+</button>
 
-<a href="change-address.html">
-📍 เปลี่ยนที่อยู่
-</a>
+<h1>
+
+Rinka Shop
+
+</h1>
 
 <a
 href="cart.html"
-id="cartLink">
+class="cart-btn">
 
-🛒 ตะกร้า (0)
+🛒
+
+<span id="cartCount">
+
+0
+
+</span>
+
+</a>
+
+</header>
+
+<div
+id="overlay"
+class="overlay hidden">
+</div>
+
+<aside
+id="sideMenu"
+class="side-menu">
+
+<div class="menu-header">
+
+<h2>
+
+Rinka Shop
+
+</h2>
+
+</div>
+
+<a href="home.html">
+
+🏠 หน้าแรก
+
+</a>
+
+<a href="browse.html">
+
+🛍️ สินค้าทั้งหมด
+
+</a>
+
+<a href="categories.html">
+
+📦 หมวดสินค้า
+
+</a>
+
+<a href="lookup.html">
+
+📄 เช็กออเดอร์
+
+</a>
+
+<a href="change-address.html">
+
+📍 เปลี่ยนที่อยู่
+
+</a>
+
+<a href="account.html">
+
+👤 บัญชีของฉัน
+
+</a>
+
+<a href="cart.html">
+
+🛒 ตะกร้า
 
 </a>
 
 <a href="https://x.com/prewithrinka">
+
 📞 ติดต่อร้าน
+
 </a>
 
-<a href="account.html">
-👤 ฉัน
-</a>
-
-</div>
+</aside>
   
 <h1
 style="
@@ -655,8 +724,7 @@ class="section">
 <button
 class="browse-category-btn"
 onclick="
-window.location.href=
-"browse.html"
+window.location.href='browse.html'
 ">
 
 เลือกหมวดสินค้า
@@ -1178,6 +1246,8 @@ loadHome();
 
 </script>
 
+<script src="menu.js"></script>
+  
 </body>
 
 </html>
