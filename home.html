@@ -75,7 +75,7 @@ font-weight:700;
 
 }
   
-.card{
+.home-card{
 
 width:100%;
 
@@ -91,7 +91,7 @@ vertical-align:top;
 
 }
 
-.card img{
+.home-card img{
 
 width:100%;
 
@@ -1025,8 +1025,8 @@ return `⏰ เหลือ ${diffDays} วัน`;
 function createProductCard(product){
 
 return `
-<div
-class="card"
+
+<div class="home-card"
 onclick="
 window.location.href=
 'product.html?id=${product.product_id}'
