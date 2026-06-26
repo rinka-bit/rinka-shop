@@ -487,3 +487,39 @@ transition:.2s;
 background:#f7f9ff;
 
 }
+
+.page-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+#pageTitle{
+
+font-size:24px !important;
+
+margin:0 !important;
+
+line-height:1;
+
+}
+
+.icon-btn{
+
+font-size:24px !important;
+
+flex-shrink:0;
+
+}
+
+.cart-btn{
+
+font-size:24px !important;
+
+flex-shrink:0;
+
+}
