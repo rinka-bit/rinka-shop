@@ -9,6 +9,13 @@ window.productsData = [];
 
 async function loadProducts() {
 
+const container =
+document.getElementById("products");
+
+if(!container){
+return;
+}
+
 try {
 
 const response = await fetch(API);
