@@ -359,9 +359,14 @@ pointer-events:none;
 .product-grid-home{
 
 grid-template-columns:
-repeat(3,1fr);
+repeat(
+auto-fit,
+minmax(150px,1fr)
+);
 
-gap:10px;
+gap:12px;
+
+}
 
 }
 
