@@ -408,4 +408,14 @@ body{
 padding:12px;
 }
 
+.collection-badge-preorder{
+  display:inline-block;
+  padding:5px 10px;
+  background:#e0f2fe;
+  color:#0284c7;
+  font-size:12px;
+  font-weight:700;
+  border-radius:999px;
+  margin-bottom:8px;
+}
 }
