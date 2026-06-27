@@ -84,10 +84,27 @@ font-weight:700;
   box-shadow:0 2px 8px rgba(0,0,0,.1);
 }
 
-.home-card img{
-  height:220px;
+.image-box{
+
+  position:relative;
+
+  aspect-ratio:3/4;
+
+  overflow:hidden;
+
 }
 
+  
+.home-card img{
+
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+}
+  
 .card h3{
 font-size:16px;
 margin:10px 0 5px;
@@ -114,10 +131,17 @@ rgba(
 }
 
 .product-grid-home{
+
   display:grid;
+
   grid-template-columns:
-  repeat(2,minmax(0,1fr));
-  gap:12px;
+  repeat(
+    auto-fill,
+    minmax(120px,1fr)
+  );
+
+  gap:10px;
+
 }
 
 .icon-btn{
@@ -588,12 +612,10 @@ font-size:24px;
 text-decoration:none;
 
 }
+
+
   
 </style>
-
-<link
-rel="stylesheet"
-href="browse.css">
   
 </head>
 
