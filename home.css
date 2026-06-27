@@ -80,6 +80,19 @@ aspect-ratio:3/4;
 
 }
 
+.home-card .card-body h3{
+font-size:15px;
+}
+
+.home-card .fandom{
+font-size:14px;
+}
+
+.home-card .normal-price,
+.home-card .sale-price{
+font-size:20px;
+}
+
 .fandom-btn{
 
 background:white;
