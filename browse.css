@@ -531,3 +531,20 @@ line-height:1;
   align-items:center;
   justify-content:center;
 }
+
+#menuButton{
+  width:auto !important;
+  padding:0 !important;
+  margin:0 !important;
+  flex:0 0 auto;
+}
+
+.cart-btn{
+  width:auto !important;
+  flex:0 0 auto;
+}
+
+#pageTitle{
+  flex:1;
+  text-align:center;
+}
