@@ -367,19 +367,17 @@ pointer-events:none;
 
 }
 
-@media(max-width:768px){
-
 .product-grid-home{
+
+display:grid;
 
 grid-template-columns:
 repeat(
 auto-fit,
-minmax(150px,1fr)
+minmax(160px,1fr)
 );
 
-gap:12px;
-
-}
+gap:14px;
 
 }
 
