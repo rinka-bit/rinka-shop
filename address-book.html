@@ -179,6 +179,13 @@ localStorage.getItem(
 ) || "{}"
 );
 
+if(!customer.email){
+
+window.location.href =
+"login.html";
+
+}
+
 loadAddresses();
 
 async function loadAddresses(){
@@ -200,6 +207,24 @@ const addresses =
 await response.json();
 
 let html = "";
+
+if(addresses.length === 0){
+
+document.getElementById(
+"addressList"
+).innerHTML =
+
+`
+<div class="address-card">
+
+ยังไม่มีที่อยู่ที่บันทึกไว้
+
+</div>
+`;
+
+return;
+
+}
 
 addresses.forEach(address=>{
 
@@ -261,6 +286,19 @@ ${address.postcode}
 
 </div>
 
+<br>
+
+<button
+onclick="
+editAddress(
+'${address.address_id}'
+)
+">
+
+✏️ แก้ไข
+
+</button>
+
 </div>
 
 `;
@@ -271,6 +309,21 @@ document.getElementById(
 "addressList"
 ).innerHTML =
 html;
+
+}
+
+function editAddress(id){
+
+window.location.href =
+
+"address.html?id=" + id;
+
+}
+
+function editAddress(id){
+
+window.location.href =
+"address.html?id=" + id;
 
 }
 
