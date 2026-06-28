@@ -249,15 +249,16 @@ async function loadOrder(){
     `
 
     <button
-    onclick="
-    copyTracking(
-    '${order.tracking_no}'
-    )
-    ">
+class="copy-btn"
+onclick="
+copyTracking(
+'${order.tracking_no}'
+)
+">
 
-    copy tracking number
+Copy Tracking Number
 
-    </button>
+</button>
 
     `
 
@@ -546,47 +547,6 @@ navigator.clipboard.writeText(no);
 alert(
 "คัดลอกเลขพัสดุแล้ว"
 );
-
-}
-
-updateCartCount();
-
-function updateCartCount(){
-
-const cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const count =
-
-cart.reduce(
-
-(sum,item)=>
-
-sum +
-Number(item.qty || 0),
-
-0
-
-);
-
-const cartLink =
-
-document.getElementById(
-"cartLink"
-);
-
-if(cartLink){
-
-cartLink.textContent =
-
-`🛒 ตะกร้า (${count})`;
-
-}
 
 }
   
