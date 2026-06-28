@@ -451,7 +451,19 @@ cart.length === 0
 ){
 
 cart =
+JSON.parse(
+localStorage.getItem(
+"buyNowCart"
+) || "[]"
+);
 
+}
+
+if(
+cart.length === 0
+){
+
+cart =
 JSON.parse(
 localStorage.getItem(
 "cart"
@@ -459,7 +471,7 @@ localStorage.getItem(
 );
 
 }
-
+  
   const btn =
 document.getElementById(
   "submitBtn"
@@ -508,6 +520,16 @@ if(!slip.files.length){
 alert(
 "กรุณาแนบสลิป"
 );
+
+btn.disabled = false;
+
+btn.textContent =
+"ยืนยันการชำระเงิน";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
 
 return;
 
