@@ -20,47 +20,7 @@ background:#f6fbff;
 max-width:800px;
 margin:auto;
 padding:20px;
-}
-
-.navbar{
-
-display:flex;
-flex-wrap:wrap;
-gap:12px;
-
-padding:15px 20px;
-
-margin-bottom:25px;
-
-background:white;
-
-border-radius:20px;
-
-box-shadow:
-0 3px 15px
-rgba(
-125,
-207,
-255,
-0.15
-);
-
-}
-
-.navbar a{
-
-text-decoration:none;
-
-font-weight:700;
-
-color:#4a6fa5;
-
-}
-
-.navbar a:hover{
-
-color:#2563eb;
-
+padding-top:90px;
 }
 
 h1{
@@ -104,44 +64,229 @@ cursor:pointer;
 
 }
 
+.page-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:16px 24px;
+
+background:#fff;
+
+position:sticky;
+
+top:0;
+
+z-index:100;
+
+box-shadow:
+0 3px 10px
+rgba(0,0,0,.05);
+
+}
+
+.icon-btn{
+
+width:auto !important;
+
+border:none;
+background:none;
+
+font-size:32px;
+
+padding:0;
+
+cursor:pointer;
+
+}
+
+.cart-btn{
+
+position:relative;
+
+font-size:28px;
+
+text-decoration:none;
+
+width:auto !important;
+
+}
+
+#cartCount{
+
+position:absolute;
+
+top:-8px;
+
+right:-8px;
+
+background:#ff5c7a;
+
+color:white;
+
+font-size:12px;
+
+padding:2px 6px;
+
+border-radius:20px;
+
+}
+
+.overlay{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.35);
+
+z-index:999;
+
+opacity:1;
+
+transition:.25s;
+
+}
+
+.overlay.hidden{
+
+opacity:0;
+
+pointer-events:none;
+
+}
+
+.side-menu{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:280px;
+
+max-width:80%;
+
+height:100vh;
+
+background:#fff;
+
+z-index:1000;
+
+box-shadow:0 0 30px rgba(0,0,0,.15);
+
+transform:translateX(-100%);
+
+transition:.3s ease;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.side-menu.open{
+
+transform:translateX(0);
+
+}
+
+.menu-header{
+
+padding:24px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.side-menu a{
+
+padding:18px 24px;
+
+font-size:16px;
+
+font-weight:600;
+
+text-decoration:none;
+
+color:#333;
+
+}
+
+.side-menu a:hover{
+
+background:#f7f9ff;
+
+}
+  
 </style>
 
 </head>
 
 <body>
 
-<div class="navbar">
+<header class="page-header">
 
-<a href="home.html">
-🏠 หน้าแรก
-</a>
+<button
+id="menuButton"
+class="icon-btn">
 
-<a href="categories.html">
-🏷️ หมวดสินค้า
-</a>
+☰
 
-<a href="lookup.html">
-📦 เช็กออเดอร์
-</a>
+</button>
 
-<a href="change-address.html">
-📍 เปลี่ยนที่อยู่
-</a>
+<h1 id="pageTitle">
+
+เปลี่ยนที่อยู่
+
+</h1>
 
 <a
 href="cart.html"
-id="cartLink">
+class="cart-btn">
 
-🛒 ตะกร้า (0)
+🛒
+
+<span id="cartCount">
+
+0
+
+</span>
 
 </a>
 
-<a href="https://x.com/prewithrinka">
-📞 ติดต่อร้าน
-</a>
+</header>
+
+<div
+id="overlay"
+class="overlay hidden">
+</div>
+
+<aside
+id="sideMenu"
+class="side-menu">
+
+<div class="menu-header">
+
+<h2>
+Rinka Shop
+</h2>
 
 </div>
 
+<a href="home.html">🏠 หน้าแรก</a>
+<a href="browse.html">🛍️ สินค้าทั้งหมด</a>
+<a href="categories.html">🏷️ หมวดสินค้า</a>
+<a href="lookup.html">📦 เช็กออเดอร์</a>
+<a href="change-address.html">📍 เปลี่ยนที่อยู่</a>
+<a href="account.html">👤 บัญชีของฉัน</a>
+<a href="cart.html">🛒 ตะกร้า</a>
+<a href="https://x.com/prewithrinka">📞 ติดต่อร้าน</a>
+
+</aside>
+  
 <h1>
 📍 ขอเปลี่ยนที่อยู่จัดส่ง
 </h1>
@@ -278,24 +423,24 @@ Number(item.qty || 0),
 
 );
 
-const cartLink =
-
+const cartCount =
 document.getElementById(
-"cartLink"
+"cartCount"
 );
 
-if(cartLink){
+if(cartCount){
 
-cartLink.textContent =
+cartCount.textContent =
+count;
 
-`🛒 ตะกร้า (${count})`;
+}
 
 }
 
-}
-loadHome();
 </script>
 
+<script src="menu.js"></script>
+  
 </body>
 
 </html>
