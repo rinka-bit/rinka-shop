@@ -159,6 +159,15 @@ localStorage.getItem(
 ) || "{}"
 );
 
+if(
+!customer.email
+){
+
+window.location.href =
+"login.html";
+
+}
+
 const params =
 new URLSearchParams(
 window.location.search
@@ -185,6 +194,9 @@ return "🚚 กำลังมาไทย";
 case "ready_to_ship":
 return "📬 เตรียมจัดส่ง";
 
+case "shipped":
+return "✅ จัดส่งแล้ว";
+
 default:
 return status;
 
@@ -198,9 +210,11 @@ document.getElementById(
 "pageTitle"
 ).textContent =
 
-getStatusText(
 statusFilter
-);
+?
+getStatusText(statusFilter)
+:
+"รายการออเดอร์ทั้งหมด";
 
 const response =
 await fetch(
@@ -220,9 +234,17 @@ await response.json();
 
 const filtered =
 
+statusFilter
+
+?
+
 orders.filter(
 o => o.status === statusFilter
-);
+)
+
+:
+
+orders;
 
 let html = "";
 
