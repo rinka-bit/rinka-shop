@@ -312,6 +312,41 @@ ${order.email}
 ${order.status}
 </p>
 
+<select
+id="status_${order.order_id}"
+>
+
+<option value="pending">
+รอจัดการ
+</option>
+
+<option value="china_arrived">
+ถึงโกดังจีนแล้ว
+</option>
+
+<option value="shipping_to_th">
+กำลังมาไทย
+</option>
+
+<option value="ready_to_ship">
+เตรียมจัดส่ง
+</option>
+
+<option value="shipped">
+จัดส่งแล้ว
+</option>
+
+</select>
+
+<br><br>
+
+<button
+onclick="updateOrderStatus('${order.order_id}')">
+อัปเดตสถานะ
+</button>
+
+<br><br>
+
 <p>
 ยอดรวม:
 ${order.total}
@@ -344,6 +379,19 @@ document
 .getElementById("orders")
 .innerHTML =
 html;
+
+result.orders.forEach(order=>{
+
+const select =
+document.getElementById(
+"status_" + order.order_id
+);
+
+if(select){
+select.value = order.status;
+}
+
+});
 
 }
 
@@ -609,6 +657,46 @@ document
 }
 
 loadAdminData();
+
+async function updateOrderStatus(orderId){
+
+const status =
+document.getElementById(
+"status_" + orderId
+).value;
+
+const formData =
+new FormData();
+
+formData.append(
+"payload",
+JSON.stringify({
+order_id:orderId,
+status:status
+})
+);
+
+const response =
+await fetch(
+API + "?action=updateOrderStatus",
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+alert(
+result.success
+? "อัปเดตสถานะแล้ว"
+: "อัปเดตไม่สำเร็จ"
+);
+
+loadOrders();
+
+}
  
 function logout(){
 
