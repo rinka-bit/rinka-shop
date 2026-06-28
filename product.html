@@ -181,6 +181,91 @@ rgba(
 cursor:pointer;
 
 }
+
+.option-section{
+  margin-top:20px;
+}
+
+.option-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.option-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.option-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:10px;
+
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+
+  background:white;
+}
+
+.option-row.selected{
+  border-color:#ff7a00;
+  background:#fff7ed;
+}
+
+.option-row.soldout{
+  opacity:.45;
+  background:#f3f4f6;
+}
+
+.option-row img{
+  width:46px;
+  height:46px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.option-info{
+  flex:1;
+}
+
+.option-name{
+  font-weight:700;
+}
+
+.option-price{
+  font-size:13px;
+  color:#666;
+}
+
+.option-qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.option-qty button{
+  width:30px;
+  height:30px;
+  border:none;
+  border-radius:8px;
+  background:#eef2ff;
+  font-weight:700;
+}
+
+.option-qty span{
+  min-width:20px;
+  text-align:center;
+}
+
+.soldout-text{
+  color:#999;
+  font-size:13px;
+  font-weight:700;
+}
   
 </style>
 
@@ -225,6 +310,7 @@ window.location.search
 
 const productId =
 params.get("id");
+window.optionQty = {};
 
 loadProduct();
 
@@ -283,58 +369,110 @@ option.option_name
 
 let optionsHtml = "";
 
-Object.keys(
-optionGroups
-).forEach(group=>{
+Object.keys(optionGroups).forEach(group=>{
 
 optionsHtml += `
 
-<h3>
+<div class="option-section">
 
+<div class="option-title">
 ${group}
+</div>
 
-</h3>
+<div class="option-list">
 
 `;
 
-optionGroups[group]
-.forEach(option=>{
+optionGroups[group].forEach(option=>{
 
-const inputType =
+const optionId =
+option.option_id ||
+`${group}_${option.option_value}`;
 
-option.selection_type ===
-"multiple"
+const stock =
+Number(option.stock || 0);
 
-?
+const soldOut =
+stock <= 0;
 
-"checkbox"
+const image =
+option.character_image ||
+option.image ||
+window.currentProduct.image;
 
-:
-
-"radio";
+const addPrice =
+Number(option.additional_price || 0);
 
 optionsHtml += `
 
-<label
-style="
-display:block;
-margin-bottom:8px;
-"
+<div
+class="option-row ${soldOut ? "soldout" : ""}"
+id="optionRow_${optionId}"
 >
 
-<input
-type="${inputType}"
-name="${group}"
-value="${option.option_value}"
->
+<img
+src="${image}"
+alt="${option.option_value}">
 
+<div class="option-info">
+
+<div class="option-name">
 ${option.option_value}
+</div>
 
-</label>
+<div class="option-price">
++฿${addPrice}
+</div>
+
+</div>
+
+${
+soldOut
+?
+`
+<div class="soldout-text">
+สินค้าหมด
+</div>
+`
+:
+`
+<div class="option-qty">
+
+<button
+type="button"
+onclick="changeOptionQty('${optionId}','${group}','${option.option_value}',${addPrice},-1)"
+>
+-
+</button>
+
+<span id="optionQty_${optionId}">
+0
+</span>
+
+<button
+type="button"
+onclick="changeOptionQty('${optionId}','${group}','${option.option_value}',${addPrice},1)"
+>
++
+</button>
+
+</div>
+`
+}
+
+</div>
 
 `;
 
 });
+
+optionsHtml += `
+
+</div>
+
+</div>
+
+`;
 
 });
 
@@ -418,7 +556,10 @@ ${product.sub_category || "-"}
 
 ${optionsHtml}
 
-<div class="qty-selector">
+<div
+class="qty-selector"
+style="${(product.options || []).length > 0 ? 'display:none;' : ''}"
+>
 
 <button
 type="button"
@@ -468,6 +609,58 @@ onclick="changeProductQty(1)"
 
 }
 
+function changeOptionQty(
+optionId,
+group,
+value,
+addPrice,
+change
+){
+
+if(
+!window.optionQty[optionId]
+){
+
+window.optionQty[optionId] = {
+group:group,
+value:value,
+additional_price:Number(addPrice || 0),
+qty:0
+};
+
+}
+
+window.optionQty[optionId].qty += change;
+
+if(window.optionQty[optionId].qty < 0){
+window.optionQty[optionId].qty = 0;
+}
+
+const qty =
+window.optionQty[optionId].qty;
+
+document
+.getElementById(
+`optionQty_${optionId}`
+)
+.textContent = qty;
+
+const row =
+document.getElementById(
+`optionRow_${optionId}`
+);
+
+if(row){
+
+row.classList.toggle(
+"selected",
+qty > 0
+);
+
+}
+
+}
+
 function changeProductQty(
 change
 ){
@@ -500,219 +693,209 @@ input.value = qty;
 
 function addToCart(){
 
-  const selectedOptions = {};
+const selectedOptionItems =
+Object.values(window.optionQty || {})
+.filter(item=>item.qty > 0);
 
-  document
-  .querySelectorAll(
-    'input[type="radio"]:checked'
-  )
-  .forEach(input=>{
+if(
+(window.currentProduct.options || []).length > 0 &&
+selectedOptionItems.length === 0
+){
 
-    selectedOptions[
-      input.name
-    ] = input.value;
+alert("กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ");
+return;
 
-  });
+}
 
-  document
-  .querySelectorAll(
-    'input[type="checkbox"]:checked'
-  )
-  .forEach(input=>{
-
-    if(
-      !selectedOptions[
-        input.name
-      ]
-    ){
-
-      selectedOptions[
-        input.name
-      ] = [];
-
-    }
-
-    selectedOptions[
-      input.name
-    ].push(
-      input.value
-    );
-
-  });
-
-  let cart =
-
-  JSON.parse(
-    localStorage.getItem(
-      "cart"
-    ) || "[]"
-  );
-
-  const found =
-
-  cart.find(item =>
-
-    item.product_id ===
-    window.currentProduct.product_id
-
-    &&
-
-    JSON.stringify(
-      item.selected_options || {}
-    )
-
-    ===
-
-    JSON.stringify(
-      selectedOptions
-    )
-
-  );
+if(
+(window.currentProduct.options || []).length === 0
+){
 
 const qty =
-
 Number(
-
-document.getElementById(
-"productQty"
-)?.value
-
+document.getElementById("productQty")?.value
 ) || 1;
+
+let cart =
+JSON.parse(
+localStorage.getItem("cart") || "[]"
+);
+
+const found =
+cart.find(item =>
+item.product_id === window.currentProduct.product_id
+);
+
+if(found){
+found.qty += qty;
+}else{
+cart.push({
+...window.currentProduct,
+selected_options:{},
+qty:qty
+});
+}
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
+
+updateCartCount();
+
+alert("เพิ่มลงตะกร้าแล้ว");
+
+return;
+
+}
+  
+let cart =
+JSON.parse(
+localStorage.getItem("cart") || "[]"
+);
+
+selectedOptionItems.forEach(option=>{
+
+const finalPrice =
+Number(window.currentProduct.price || 0)
++
+Number(option.additional_price || 0);
+
+const found =
+cart.find(item=>
+
+item.product_id === window.currentProduct.product_id
+
+&&
+
+item.option_value === option.value
+
+&&
+
+item.option_group === option.group
+
+);
 
 if(found){
 
-  found.qty += qty;
+found.qty += option.qty;
+
+}else{
+
+cart.push({
+
+...window.currentProduct,
+
+price:finalPrice,
+
+option_group:option.group,
+
+option_value:option.value,
+
+selected_options:{
+[option.group]:option.value
+},
+
+qty:option.qty
+
+});
 
 }
-else{
 
-  cart.push({
+});
 
-    ...window.currentProduct,
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
 
-    selected_options:
-    selectedOptions,
+updateCartCount();
 
-    qty:qty
-
-  });
-
-} 
-
-  localStorage.setItem(
-
-    "cart",
-
-    JSON.stringify(cart)
-
-  );
-
-  updateCartCount();
-
-  alert(
-
-    "เพิ่มลงตะกร้าแล้ว\n\n"
-
-    +
-
-    Object.entries(
-      selectedOptions
-    )
-
-    .map(
-      ([k,v])=>
-      `${k}: ${
-        Array.isArray(v)
-        ? v.join(", ")
-        : v
-      }`
-    )
-
-    .join("\n")
-
-  );
+alert("เพิ่มลงตะกร้าแล้ว");
 
 }
   
 function buyNow(){
 
-const selectedOptions = {};
+const selectedOptionItems =
+Object.values(window.optionQty || {})
+.filter(item=>item.qty > 0);
 
-document
-.querySelectorAll(
-'input[type="radio"]:checked'
-)
-.forEach(input=>{
+if(
+(window.currentProduct.options || []).length > 0 &&
+selectedOptionItems.length === 0
+){
 
-  selectedOptions[
-    input.name
-  ] = input.value;
+alert("กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ");
+return;
 
-});
+}
 
-document
-.querySelectorAll(
-'input[type="checkbox"]:checked'
-)
-.forEach(input=>{
+if(
+(window.currentProduct.options || []).length === 0
+){
 
-  if(
-    !selectedOptions[
-      input.name
-    ]
-  ){
+const qty =
+Number(
+document.getElementById("productQty")?.value
+) || 1;
 
-    selectedOptions[
-      input.name
-    ] = [];
+localStorage.setItem(
+"buyNowCart",
+JSON.stringify([
+{
+...window.currentProduct,
+selected_options:{},
+qty:qty
+}
+])
+);
 
-  }
+window.location.href =
+"checkout.html";
 
-  selectedOptions[
-    input.name
-  ].push(
-    input.value
-  );
+return;
+
+}
+
+const checkoutItems =
+selectedOptionItems.map(option=>{
+
+const finalPrice =
+Number(window.currentProduct.price || 0)
++
+Number(option.additional_price || 0);
+
+return {
+
+...window.currentProduct,
+
+price:finalPrice,
+
+option_group:option.group,
+
+option_value:option.value,
+
+selected_options:{
+[option.group]:option.value
+},
+
+qty:option.qty
+
+};
 
 });
 
 localStorage.setItem(
-
 "buyNowCart",
-
-JSON.stringify([
-
-{
-
-...window.currentProduct,
-
-selected_options:
-selectedOptions,
-
-qty:
-
-Number(
-
-document.getElementById(
-"productQty"
-)?.value
-
-) || 1
-
-}
-
-])
-
+JSON.stringify(checkoutItems)
 );
 
 window.location.href =
-
 "checkout.html";
 
 }
-
-updateCartCount();
-
+  
 function updateCartCount(){
 
 const cart =
