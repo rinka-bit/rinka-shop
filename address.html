@@ -164,9 +164,78 @@ window.location =
 
 }
 
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const addressId =
+params.get("id");
+
+if(addressId){
+
+document.querySelector(
+"h1"
+).textContent =
+"📍 แก้ไขที่อยู่จัดส่ง";
+
+loadAddress();
+
+}
+
+async function loadAddress(){
+
+const response =
+await fetch(
+API +
+"?action=customerAddress&id=" +
+encodeURIComponent(
+addressId
+)
+);
+
+const data =
+await response.json();
+
+if(!data){
+
+alert(
+"ไม่พบที่อยู่"
+);
+
+return;
+
+}
+
+document.getElementById("receiver").value =
+data.receiver || "";
+
+document.getElementById("phone").value =
+data.phone || "";
+
+document.getElementById("address").value =
+data.address || "";
+
+document.getElementById("subdistrict").value =
+data.subdistrict || "";
+
+document.getElementById("district").value =
+data.district || "";
+
+document.getElementById("province").value =
+data.province || "";
+
+document.getElementById("postcode").value =
+data.postcode || "";
+
+}
+
 async function saveAddress(){
 
 const payload = {
+
+address_id:
+addressId || "",
 
 email:
 customer.email,
@@ -262,7 +331,7 @@ alert(
 );
 
 window.location =
-"home.html";
+"address-book.html";
 
 }
 
