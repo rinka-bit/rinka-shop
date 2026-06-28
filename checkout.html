@@ -97,15 +97,20 @@ font-size:20px;
 
 <body>
 
-<div class="topbar">
+<div class="product-topbar">
 
 <button
 onclick="history.back()">
-
 ←
-
 </button>
 
+<a
+href="cart.html"
+id="floatingCart">
+🛒
+</a>
+
+</div>
 <h2>
 ทำการสั่งซื้อ
 </h2>
@@ -213,19 +218,26 @@ loadCheckout();
 function loadCheckout(){
 
 cart =
-
 JSON.parse(
 localStorage.getItem(
 "checkoutCart"
 ) || "[]"
 );
 
-if(
-cart.length === 0
-){
+if(cart.length===0){
 
 cart =
+JSON.parse(
+localStorage.getItem(
+"buyNowCart"
+) || "[]"
+);
 
+}
+
+if(cart.length===0){
+
+cart =
 JSON.parse(
 localStorage.getItem(
 "cart"
@@ -233,7 +245,6 @@ localStorage.getItem(
 );
 
 }
-
 renderItems();
 
 loadGifts();
@@ -624,6 +635,21 @@ document.getElementById(
 gifts:gifts
 
 };
+
+if(
+!addressData.email ||
+!addressData.receiver ||
+!addressData.phone ||
+!addressData.address
+){
+
+alert(
+"กรุณากรอกข้อมูลจัดส่งให้ครบ"
+);
+
+return;
+
+}
 
 localStorage.setItem(
 "checkoutAddress",
