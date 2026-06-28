@@ -478,24 +478,35 @@ item.selected_options
 
 .map(
 
-([key,value]) =>
+([key,value]) => {
 
-`
+const text =
+Array.isArray(value)
+? value.join(", ")
+: value;
+
+return `
 
 <p
 style="
 margin:4px 0;
 color:#4a6fa5;
 font-size:14px;
+background:#eef8ff;
+padding:5px 10px;
+border-radius:999px;
+display:inline-block;
 "
 >
 
 ${key} :
-${value}
+${text}
 
 </p>
 
-`
+`;
+
+}
 
 )
 
