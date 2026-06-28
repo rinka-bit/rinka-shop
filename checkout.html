@@ -540,14 +540,15 @@ document
 
   );
 
-  if(
+ const charBox =
+document.querySelector(
+`#gift-char-${giftId}`
+);
 
-  document.querySelector(
-    `#gift-char-${giftId}`
-  )
+if(
 
-  &&
-
+  charBox &&
+  charBox.querySelector("input") &&
   !selectedChar
 
 ){
@@ -876,7 +877,9 @@ ${gift.gift_name}
 
 <div
 id="gift-char-${gift.gift_id}"
+class="gift-char-box"
 style="
+display:none;
 margin-top:8px;
 "
 >
@@ -1006,6 +1009,37 @@ e=>{
     );
 
   }
+
+  const giftId =
+e.target.value;
+
+const charBox =
+document.getElementById(
+`gift-char-${giftId}`
+);
+
+if(charBox){
+
+charBox.style.display =
+e.target.checked
+? "block"
+: "none";
+
+if(!e.target.checked){
+
+charBox
+.querySelectorAll(
+"input"
+)
+.forEach(input=>{
+
+input.checked = false;
+
+});
+
+}
+
+}
 
 });
 
