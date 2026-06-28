@@ -642,13 +642,13 @@ const paymentPayload = {
   const paymentResult =
     await paymentResponse.json();
 
-  if(paymentResult.success){
+ if(paymentResult.success){
 
-    alert(
-      "แจ้งชำระเงินเรียบร้อย"
-    );
+alert(
+"แจ้งชำระเงินเรียบร้อย"
+);
+
 const fullCart =
-
 JSON.parse(
 localStorage.getItem(
 "cart"
@@ -656,7 +656,6 @@ localStorage.getItem(
 );
 
 const checkoutCart =
-
 JSON.parse(
 localStorage.getItem(
 "checkoutCart"
@@ -664,15 +663,12 @@ localStorage.getItem(
 );
 
 const remainCart =
-
 fullCart.filter(item =>
 
 !checkoutCart.some(checkoutItem =>
 
 JSON.stringify(item)
-
 ===
-
 JSON.stringify(checkoutItem)
 
 )
@@ -680,13 +676,10 @@ JSON.stringify(checkoutItem)
 );
 
 localStorage.setItem(
-
 "cart",
-
 JSON.stringify(
 remainCart
 )
-
 );
 
 localStorage.removeItem(
@@ -696,17 +689,47 @@ localStorage.removeItem(
 localStorage.removeItem(
 "buyNowCart"
 );
-    window.location =
-      "order.html?id="
-      +
-      result.order_id;
 
-  }else{
+window.location =
+"order.html?id="
++
+result.order_id;
 
-    console.log(paymentResult);
-alert(paymentResult.error);
+}else{
 
-  }
+console.log(paymentResult);
+
+alert(
+paymentResult.error || "แจ้งชำระเงินไม่สำเร็จ"
+);
+
+btn.disabled = false;
+
+btn.textContent =
+"ยืนยันการชำระเงิน";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
+
+}
+
+}else{
+
+alert(
+result.error || "สร้างออเดอร์ไม่สำเร็จ"
+);
+
+btn.disabled = false;
+
+btn.textContent =
+"ยืนยันการชำระเงิน";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
 
 }
 
