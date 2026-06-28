@@ -409,11 +409,11 @@ let html = "";
 
 result.requests.reverse();
 
+result.requests.forEach(req=>{
+
 if(req.status === "completed"){
 return;
 }
-
-result.requests.forEach(req=>{
 
 html += `
 <div
@@ -483,6 +483,8 @@ html;
 
 }
 
+function loadAdminData(){
+
 loadStats();
 
 loadTopProducts();
@@ -492,6 +494,8 @@ loadTopFandoms();
 loadOrders();
 
 loadAddressRequests();
+
+}
 
 async function completeAddressRequest(
 requestId
@@ -569,6 +573,8 @@ sessionStorage.setItem(
 "true"
 );
 
+loadAdminData();
+ 
 }
 else{
 
@@ -602,6 +608,8 @@ document
 
 }
 
+loadAdminData();
+ 
 function logout(){
 
 sessionStorage.removeItem(
