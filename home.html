@@ -715,43 +715,27 @@ updateCartCount();
 function updateCartCount(){
 
 const cart =
-
 JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
+localStorage.getItem("cart") || "[]"
 );
 
 const count =
-
 cart.reduce(
-
-(sum,item)=>
-
-sum +
-Number(item.qty || 0),
-
+(sum,item)=>sum + Number(item.qty || 0),
 0
-
 );
 
-const cartLink =
+const cartCount =
+document.getElementById("cartCount");
 
-document.getElementById(
-"cartLink"
-);
-
-if(cartLink){
-
-cartLink.textContent =
-
-`🛒 ตะกร้า (${count})`;
-
+if(cartCount){
+cartCount.textContent = count;
 }
 
 }
 
 loadHome();
+updateCartCount();
 
 </script>
 
