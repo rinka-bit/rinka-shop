@@ -206,6 +206,9 @@ customer.email
 const addresses =
 await response.json();
 
+window.addressesData =
+addresses;
+
 let html = "";
 
 if(addresses.length === 0){
