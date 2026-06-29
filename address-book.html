@@ -327,6 +327,18 @@ window.location.href =
 
 }
 
+function useAddress(address){
+
+localStorage.setItem(
+"selectedCheckoutAddress",
+JSON.stringify(address)
+);
+
+window.location.href =
+"checkout.html";
+
+}
+
 </script>
 
 </body>
