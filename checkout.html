@@ -334,41 +334,90 @@ async function loadDefaultAddress(){
     return;
   }
 
-  document.getElementById(
-    "receiver"
-  ).value =
-  address.receiver || "";
+ async function loadDefaultAddress(){
 
-  document.getElementById(
-    "phone"
-  ).value =
-  address.phone || "";
+let selectedAddress =
+JSON.parse(
+localStorage.getItem(
+"selectedCheckoutAddress"
+) || "null"
+);
 
-  document.getElementById(
-    "address"
-  ).value =
-  address.address || "";
+if(!selectedAddress){
 
-  document.getElementById(
-    "subdistrict"
-  ).value =
-  address.subdistrict || "";
+const response =
+await fetch(
+API +
+"?action=customerAddresses&email=" +
+encodeURIComponent(
+customer.email
+)
+);
 
-  document.getElementById(
-    "district"
-  ).value =
-  address.district || "";
+const addresses =
+await response.json();
 
-  document.getElementById(
-    "province"
-  ).value =
-  address.province || "";
+selectedAddress =
+addresses.find(
+a => a.is_default
+) || addresses[0];
 
-  document.getElementById(
-    "postcode"
-  ).value =
-  address.postcode || "";
 }
+
+if(!selectedAddress){
+
+document.getElementById(
+"selectedAddress"
+).innerHTML =
+"ยังไม่มีที่อยู่จัดส่ง กรุณาเพิ่มที่อยู่ก่อน";
+
+return;
+
+}
+
+window.checkoutAddress =
+selectedAddress;
+
+document.getElementById(
+"selectedAddress"
+).innerHTML = `
+
+<div
+style="
+padding:12px;
+border:1px solid #eee;
+border-radius:12px;
+background:#f8fbff;
+line-height:1.7;
+">
+
+<b>
+${selectedAddress.receiver}
+</b>
+
+<br>
+
+${selectedAddress.phone}
+
+<br>
+
+${selectedAddress.address}
+
+<br>
+
+${selectedAddress.subdistrict}
+${selectedAddress.district}
+
+<br>
+
+${selectedAddress.province}
+${selectedAddress.postcode}
+
+</div>
+
+`;
+
+} 
   
 function renderItems(){
 
@@ -476,169 +525,9 @@ document
 
 }
 
-async function loadAddress(){
-
-const email =
-document.getElementById(
-"email"
-).value;
-
-if(!email){
-
-alert(
-"กรุณากรอกอีเมล"
-);
-
-return;
-
-}
-
-const response =
-await fetch(
-API +
-"?action=address&email=" +
-encodeURIComponent(
-email
-)
-);
-
-const data =
-await response.json();
-
-if(!data){
-
-alert(
-"ไม่พบข้อมูลที่อยู่"
-);
-
-return;
-
-}
-
-document.getElementById(
-"receiver"
-).value =
-data.receiver || "";
-
-document.getElementById(
-"phone"
-).value =
-data.phone || "";
-
-document.getElementById(
-"social"
-).value =
-data.twitter || "";
-
-document.getElementById(
-"address"
-).value =
-data.address || "";
-
-document.getElementById(
-"subdistrict"
-).value =
-data.subdistrict || "";
-
-document.getElementById(
-"district"
-).value =
-data.district || "";
-
-document.getElementById(
-"province"
-).value =
-data.province || "";
-
-document.getElementById(
-"postcode"
-).value =
-data.postcode || "";
-
-}
-
-async function saveAddress(){
-
-const payload = {
-
-email:
-document.getElementById(
-"email"
-).value,
-
-twitter:
-document.getElementById(
-"social"
-).value,
-
-contact:"",
-
-receiver:
-document.getElementById(
-"receiver"
-).value,
-
-phone:
-document.getElementById(
-"phone"
-).value,
-
-address:
-document.getElementById(
-"address"
-).value,
-
-subdistrict:
-document.getElementById(
-"subdistrict"
-).value,
-
-district:
-document.getElementById(
-"district"
-).value,
-
-province:
-document.getElementById(
-"province"
-).value,
-
-postcode:
-document.getElementById(
-"postcode"
-).value
-
-};
-
-const formData =
-new FormData();
-
-formData.append(
-"payload",
-JSON.stringify(
-payload
-)
-);
-
-const response =
-await fetch(
-API +
-"?action=saveAddress",
-{
-method:"POST",
-body:formData
-}
-);
-
-await response.json();
-
-alert(
-"บันทึกที่อยู่เรียบร้อย"
-);
-
-}
-
 function goPayment(){
+
+let hasError = false;
 
 const gifts = [];
 
@@ -648,148 +537,107 @@ document
 )
 .forEach(el=>{
 
-  const giftId =
-    el.value;
+const giftId =
+el.value;
 
-  const selectedChar =
+const selectedChar =
+document.querySelector(
+`input[name="gift-char-${giftId}"]:checked`
+);
 
-  document.querySelector(
-
-    `input[name="gift-char-${giftId}"]:checked`
-
-  );
-
- const charBox =
+const charBox =
 document.querySelector(
 `#gift-char-${giftId}`
 );
 
 if(
-
-  charBox &&
-  charBox.querySelector("input") &&
-  !selectedChar
-
-){
-
-  alert(
-
-    "กรุณาเลือกตัวละครของของแถม"
-
-  );
-
-  let hasError = false;
-
-...
-
-if(
-  charBox &&
-  charBox.querySelector("input") &&
-  !selectedChar
-){
-
-  alert(
-    "กรุณาเลือกตัวละครของของแถม"
-  );
-
-  hasError = true;
-
-}
-
-}
-  
-  gifts.push({
-
-    gift_id:
-      giftId,
-
-    character_name:
-
-      selectedChar
-
-      ?
-
-      selectedChar.value
-
-      :
-
-      ""
-
-  });
-
-});
-
-const addressData = {
-
-email:
-document.getElementById(
-"email"
-).value,
-
-receiver:
-document.getElementById(
-"receiver"
-).value,
-
-phone:
-document.getElementById(
-"phone"
-).value,
-
-social:
-document.getElementById(
-"social"
-).value,
-
-address:
-document.getElementById(
-"address"
-).value,
-
-subdistrict:
-document.getElementById(
-"subdistrict"
-).value,
-
-district:
-document.getElementById(
-"district"
-).value,
-
-province:
-document.getElementById(
-"province"
-).value,
-
-postcode:
-document.getElementById(
-"postcode"
-).value,
-
-gifts:gifts
-
-};
-
-if(
-!addressData.email ||
-!addressData.receiver ||
-!addressData.phone ||
-!addressData.address
+charBox &&
+charBox.querySelector("input") &&
+!selectedChar
 ){
 
 alert(
-"กรุณากรอกข้อมูลจัดส่งให้ครบ"
+"กรุณาเลือกตัวละครของของแถม"
+);
+
+hasError = true;
+
+return;
+
+}
+
+gifts.push({
+
+gift_id:
+giftId,
+
+character_name:
+selectedChar
+?
+selectedChar.value
+:
+""
+
+});
+
+});
+
+if(hasError){
+return;
+}
+
+if(!window.checkoutAddress){
+
+alert(
+"กรุณาเลือกที่อยู่จัดส่ง"
 );
 
 return;
 
 }
 
+const addressData = {
+
+email:
+customer.email,
+
+receiver:
+window.checkoutAddress.receiver,
+
+phone:
+window.checkoutAddress.phone,
+
+social:
+customer.social || "",
+
+address:
+window.checkoutAddress.address,
+
+subdistrict:
+window.checkoutAddress.subdistrict,
+
+district:
+window.checkoutAddress.district,
+
+province:
+window.checkoutAddress.province,
+
+postcode:
+window.checkoutAddress.postcode,
+
+gifts:gifts
+
+};
+
 localStorage.setItem(
 "checkoutAddress",
 JSON.stringify(
 addressData
 )
+);
+
+localStorage.removeItem(
+"selectedCheckoutAddress"
 );
 
 window.location =
