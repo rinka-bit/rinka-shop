@@ -299,6 +299,21 @@ editAddress(
 
 </button>
 
+${
+new URLSearchParams(window.location.search).get("select") === "checkout"
+?
+`
+<button
+onclick="useAddressById('${address.address_id}')">
+
+ใช้ที่อยู่นี้
+
+</button>
+`
+:
+""
+}
+
 </div>
 
 `;
@@ -315,19 +330,28 @@ html;
 function editAddress(id){
 
 window.location.href =
-
-"address.html?id=" + id;
-
-}
-
-function editAddress(id){
-
-window.location.href =
 "address.html?id=" + id;
 
 }
 
 function useAddress(address){
+
+localStorage.setItem(
+"selectedCheckoutAddress",
+JSON.stringify(address)
+);
+
+window.location.href =
+"checkout.html";
+
+}
+
+function useAddressById(id){
+
+const address =
+window.addressesData.find(
+item => item.address_id === id
+);
 
 localStorage.setItem(
 "selectedCheckoutAddress",
