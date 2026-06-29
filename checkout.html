@@ -89,8 +89,74 @@ font-size:20px;
 
 }
 
+.product-topbar{
 
+position:fixed;
 
+top:15px;
+left:15px;
+right:15px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+z-index:999;
+
+}
+
+.product-topbar button,
+.product-topbar a{
+
+width:46px;
+height:46px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+text-decoration:none;
+
+font-size:22px;
+
+box-shadow:
+0 3px 12px rgba(0,0,0,.15);
+
+cursor:pointer;
+
+}
+
+.gift-char-item{
+
+display:inline-flex;
+align-items:center;
+gap:8px;
+
+padding:8px 12px;
+
+border:1px solid #ddd;
+border-radius:999px;
+
+margin-right:8px;
+margin-top:8px;
+
+cursor:pointer;
+
+}
+
+.gift-char-item:has(input:checked){
+
+border-color:#7dcfff;
+background:#eef8ff;
+
+}
+  
 </style>
 
 </head>
@@ -109,13 +175,6 @@ href="cart.html"
 id="floatingCart">
 🛒
 </a>
-
-</div>
-<h2>
-ทำการสั่งซื้อ
-</h2>
-
-<div></div>
 
 </div>
 
@@ -143,42 +202,16 @@ window.location.href=
 
 <hr>
 
-<input
-id="receiver"
-placeholder="ชื่อผู้รับ">
-
-<input
-id="phone"
-placeholder="เบอร์โทร">
-
-<input
-id="social"
-placeholder="Twitter / Discord">
-
-<textarea
-id="address"
-placeholder="ที่อยู่"></textarea>
-
-<input
-id="subdistrict"
-placeholder="แขวง / ตำบล">
-
-<input
-id="district"
-placeholder="เขต / อำเภอ">
-
-<input
-id="province"
-placeholder="จังหวัด">
-
-<input
-id="postcode"
-placeholder="รหัสไปรษณีย์">
+<div id="selectedAddress"></div>
 
 <button
-onclick="saveAddress()">
-บันทึกที่อยู่
+onclick="
+window.location.href=
+'address-book.html?select=checkout'
+">
+เปลี่ยนที่อยู่
 </button>
+  
 
 </div>
 
@@ -645,9 +678,23 @@ if(
 
   );
 
-  throw new Error(
-    "character required"
+  let hasError = false;
+
+...
+
+if(
+  charBox &&
+  charBox.querySelector("input") &&
+  !selectedChar
+){
+
+  alert(
+    "กรุณาเลือกตัวละครของของแถม"
   );
+
+  hasError = true;
+
+}
 
 }
   
@@ -1192,14 +1239,7 @@ input.checked = false;
 
      html += `
 
-<span
-style="
-display:inline-block;
-margin-right:10px;
-margin-top:6px;
-font-size:13px;
-"
->
+<label class="gift-char-item">
 
 <input
 type="radio"
@@ -1207,9 +1247,11 @@ name="gift-char-${giftId}"
 value="${char.character_name}"
 >
 
+<div class="gift-char-name">
 ${char.character_name}
+</div>
 
-</span>
+</label>
 
 `;
 
