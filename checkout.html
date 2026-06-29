@@ -131,13 +131,14 @@ id="floatingCart">
 📍 ที่อยู่จัดส่ง
 </h2>
 
-<input
-id="email"
-placeholder="อีเมล">
-
 <button
-onclick="loadAddress()">
-โหลดที่อยู่
+onclick="
+window.location.href=
+'address-book.html'
+">
+
+เลือกหรือเปลี่ยนที่อยู่
+
 </button>
 
 <hr>
@@ -211,6 +212,20 @@ onclick="goPayment()">
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
+const customer =
+JSON.parse(
+  localStorage.getItem(
+    "customer"
+  ) || "{}"
+);
+
+if(!customer.email){
+
+  window.location =
+  "login.html";
+
+}
+  
 let cart = [];
 
 loadCheckout();
@@ -245,10 +260,81 @@ localStorage.getItem(
 );
 
 }
+  
 renderItems();
+
+loadDefaultAddress();
 
 loadGifts();
 
+}
+
+async function loadDefaultAddress(){
+
+  const response =
+  await fetch(
+
+    API +
+
+    "?action=customerAddresses&email=" +
+
+    encodeURIComponent(
+      customer.email
+    )
+
+  );
+
+  const addresses =
+  await response.json();
+
+  const address =
+
+    addresses.find(
+      a => a.is_default
+    )
+
+    ||
+
+    addresses[0];
+
+  if(!address){
+    return;
+  }
+
+  document.getElementById(
+    "receiver"
+  ).value =
+  address.receiver || "";
+
+  document.getElementById(
+    "phone"
+  ).value =
+  address.phone || "";
+
+  document.getElementById(
+    "address"
+  ).value =
+  address.address || "";
+
+  document.getElementById(
+    "subdistrict"
+  ).value =
+  address.subdistrict || "";
+
+  document.getElementById(
+    "district"
+  ).value =
+  address.district || "";
+
+  document.getElementById(
+    "province"
+  ).value =
+  address.province || "";
+
+  document.getElementById(
+    "postcode"
+  ).value =
+  address.postcode || "";
 }
   
 function renderItems(){
