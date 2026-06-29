@@ -304,38 +304,6 @@ loadGifts();
 
 async function loadDefaultAddress(){
 
-  const response =
-  await fetch(
-
-    API +
-
-    "?action=customerAddresses&email=" +
-
-    encodeURIComponent(
-      customer.email
-    )
-
-  );
-
-  const addresses =
-  await response.json();
-
-  const address =
-
-    addresses.find(
-      a => a.is_default
-    )
-
-    ||
-
-    addresses[0];
-
-  if(!address){
-    return;
-  }
-
- async function loadDefaultAddress(){
-
 let selectedAddress =
 JSON.parse(
 localStorage.getItem(
@@ -417,7 +385,7 @@ ${selectedAddress.postcode}
 
 `;
 
-} 
+}
   
 function renderItems(){
 
