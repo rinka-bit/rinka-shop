@@ -353,6 +353,31 @@ ${order.total}
  บาท
 </p>
 
+<p>
+ค่านำเข้า / ค่าส่งในไทย
+</p>
+
+<input
+id="import_${order.order_id}"
+type="number"
+placeholder="ค่านำเข้า">
+
+<br><br>
+
+<input
+id="domestic_${order.order_id}"
+type="number"
+placeholder="ค่าส่งในไทย">
+
+<br><br>
+
+<button
+onclick="saveShippingFees('${order.order_id}')">
+บันทึกค่าส่ง
+</button>
+
+<br><br>
+
 <input
 id="courier_${order.order_id}"
 placeholder="ขนส่ง">
@@ -692,6 +717,56 @@ alert(
 result.success
 ? "อัปเดตสถานะแล้ว"
 : "อัปเดตไม่สำเร็จ"
+);
+
+loadOrders();
+
+}
+
+async function saveShippingFees(orderId){
+
+const importFee =
+Number(
+document.getElementById(
+"import_" + orderId
+).value || 0
+);
+
+const domesticFee =
+Number(
+document.getElementById(
+"domestic_" + orderId
+).value || 0
+);
+
+const formData =
+new FormData();
+
+formData.append(
+"payload",
+JSON.stringify({
+order_id:orderId,
+import_fee:importFee,
+domestic_shipping_fee:domesticFee
+})
+);
+
+const response =
+await fetch(
+API + "?action=saveShippingFees",
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+alert(
+result.success
+? "บันทึกค่านำเข้า/ค่าส่งแล้ว"
+: "บันทึกไม่สำเร็จ"
 );
 
 loadOrders();
