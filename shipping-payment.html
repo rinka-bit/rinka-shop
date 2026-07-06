@@ -140,6 +140,7 @@ onclick="history.back()">
 type="radio"
 name="shippingMethod"
 value="ship_now"
+checked
 onchange="toggleMethod()">
 
 จัดส่งเลย
@@ -250,11 +251,13 @@ loadPage();
 
 async function loadPage(){
 
-await loadShippingInfo();
+  await loadShippingInfo();
 
-await loadDefaultAddress();
+  await loadDefaultAddress();
 
-await loadBanks();
+  await loadBanks();
+
+  toggleMethod();
 
 }
 
@@ -526,169 +529,132 @@ encodeURIComponent(orderId);
 
 async function submitShippingPayment(){
 
-const btn =
-document.getElementById(
-"submitShippingBtn"
-);
+  const btn =
+    document.getElementById("submitShippingBtn");
 
-if(btn.disabled){
-return;
-}
+  if(btn.disabled){
+    return;
+  }
 
-btn.disabled = true;
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
 
-btn.textContent =
-"กำลังบันทึก...";
+  document.getElementById("loadingOverlay").style.display =
+    "flex";
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"flex";
+  try{
 
-const method =
-document.querySelector(
-'input[name="shippingMethod"]:checked'
-)?.value;
+    const method =
+      document.querySelector(
+        'input[name="shippingMethod"]:checked'
+      )?.value;
 
-if(!method){
+    if(!method){
+      alert("กรุณาเลือกวิธีจัดส่ง");
+      resetSubmitButton();
+      return;
+    }
 
-alert("กรุณาเลือกวิธีจัดส่ง");
+    const importFee =
+      Number(shippingInfo.import_fee || 0);
 
-resetSubmitButton();
+    const domesticFee =
+      Number(shippingInfo.domestic_shipping_fee || 0);
 
-return;
+    const total =
+      importFee + domesticFee;
 
-}
+    let slipBase64 = "";
 
-const importFee =
-Number(shippingInfo.import_fee || 0);
+    if(method === "ship_now"){
 
-const domesticFee =
-Number(shippingInfo.domestic_shipping_fee || 0);
+      if(!selectedAddress){
+        alert("กรุณาเลือกที่อยู่จัดส่ง");
+        resetSubmitButton();
+        return;
+      }
 
-const total =
-importFee + domesticFee;
+      const slip =
+        document.getElementById("slip");
 
-let slipBase64 = "";
+      if(total > 0 && !slip.files.length){
+        alert("กรุณาแนบสลิป");
+        resetSubmitButton();
+        return;
+      }
 
-if(method === "ship_now"){
+      if(slip.files.length){
+        slipBase64 =
+          await fileToBase64(slip.files[0]);
+      }
 
-if(!selectedAddress){
+    }
 
-alert("กรุณาเลือกที่อยู่จัดส่ง");
+    const payload = {
+      order_id: orderId,
+      customer_email: customer.email || shippingInfo.email,
+      shipping_method: method,
+      import_fee: importFee,
+      domestic_shipping_fee: domesticFee,
+      total: method === "ship_now" ? total : 0,
+      confirmed_address:
+        method === "ship_now"
+          ? JSON.stringify(selectedAddress)
+          : "",
+      slip_base64: slipBase64
+    };
 
-resetSubmitButton();
+    const formData =
+      new FormData();
 
-return;
+    formData.append(
+      "action",
+      "saveShippingPayment"
+    );
 
-}
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
 
-const slip =
-document.getElementById("slip");
+    const response =
+      await fetch(API,{
+        method:"POST",
+        body:formData
+      });
 
-if(total > 0 && !slip.files.length){
+    const result =
+      await response.json();
 
-alert("กรุณาแนบสลิป");
+    if(!result.success){
+      alert(
+        result.error ||
+        "ไม่สามารถบันทึกข้อมูลได้"
+      );
+      resetSubmitButton();
+      return;
+    }
 
-resetSubmitButton();
+    localStorage.removeItem(
+      "selectedShippingAddress"
+    );
 
-return;
+    alert("ยืนยันเรียบร้อยแล้ว");
 
-}
+    window.location.href =
+      "order.html?id=" + orderId;
 
-if(slip.files.length){
+  }catch(error){
 
-slipBase64 =
-await fileToBase64(
-slip.files[0]
-);
+    console.error(error);
 
-}
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
+    );
 
-}
+    resetSubmitButton();
 
-const payload = {
-
-order_id:
-orderId,
-
-customer_email:
-customer.email || shippingInfo.email,
-
-shipping_method:
-method,
-
-import_fee:
-importFee,
-
-domestic_shipping_fee:
-domesticFee,
-
-total:
-method === "ship_now" ? total : 0,
-
-confirmed_address:
-method === "ship_now"
-?
-JSON.stringify(selectedAddress)
-:
-"",
-
-slip_base64:
-slipBase64
-
-};
-
-const formData =
-new FormData();
-
-formData.append(
-"action",
-"saveShippingPayment"
-);
-
-formData.append(
-"payload",
-JSON.stringify(payload)
-);
-
-const response =
-await fetch(
-API,
-{
-method:"POST",
-body:formData
-}
-);
-
-const result =
-await response.json();
-
-if(result.success){
-
-localStorage.removeItem(
-"selectedShippingAddress"
-);
-
-alert(
-"ยืนยันเรียบร้อยแล้ว"
-);
-
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
-
-window.location.href =
-"order.html?id=" + orderId;
-
-}else{
-
-alert(
-result.error || "เกิดข้อผิดพลาด"
-);
-
-}
+  }
 
 }
 
