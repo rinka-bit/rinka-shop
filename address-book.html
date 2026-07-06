@@ -303,13 +303,21 @@ editAddress(
 </button>
 
 ${
-new URLSearchParams(window.location.search).get("select") === "checkout"
+new URLSearchParams(
+window.location.search
+).get("select")
 ?
 `
-<button
-onclick="useAddressById('${address.address_id}')">
+<br><br>
 
-ใช้ที่อยู่นี้
+<button
+onclick="
+useAddressById(
+'${address.address_id}'
+)
+">
+
+✅ ใช้ที่อยู่นี้
 
 </button>
 `
@@ -337,7 +345,42 @@ window.location.href =
 
 }
 
-function useAddress(address){
+function useAddressById(addressId){
+
+const address =
+window.addressesData.find(
+a => a.address_id === addressId
+);
+
+if(!address){
+return;
+}
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const selectType =
+params.get("select");
+
+if(selectType === "shipping"){
+
+localStorage.setItem(
+"selectedShippingAddress",
+JSON.stringify(address)
+);
+
+const orderId =
+params.get("order_id");
+
+window.location.href =
+"shipping-payment.html?id=" +
+orderId;
+
+return;
+
+}
 
 localStorage.setItem(
 "selectedCheckoutAddress",
