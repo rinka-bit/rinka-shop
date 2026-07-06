@@ -73,6 +73,21 @@ background:#dcfce7;
 color:#166534;
 }
 
+.badge-shipping-unpaid{
+background:#fef3c7;
+color:#92400e;
+}
+
+.badge-shipping-paid{
+background:#dcfce7;
+color:#166534;
+}
+
+.badge-shipping-combine{
+background:#dbeafe;
+color:#1d4ed8;
+}
+  
 .copy-btn{
 background:#4f46e5;
 color:white;
@@ -235,7 +250,12 @@ async function loadOrder(){
     <b>สถานะจัดส่ง:</b>
     ${order.shipping_status || "-"}
     </p>
-    
+
+    <p>
+<b>สถานะค่าส่ง:</b>
+${getShippingPaymentBadge(order.shipping_payment_status)}
+</p>
+
     <p>
     <b>เลขพัสดุ:</b>
     ${order.tracking_no || "-"}
@@ -537,6 +557,35 @@ default:
 return status;
 
 }
+
+}
+
+function getShippingPaymentBadge(status){
+
+  switch(status){
+
+    case "paid":
+      return `
+      <span class="badge badge-shipping-paid">
+      ชำระค่าส่งแล้ว
+      </span>
+      `;
+
+    case "combine_later":
+      return `
+      <span class="badge badge-shipping-combine">
+      รอส่งรวม
+      </span>
+      `;
+
+    default:
+      return `
+      <span class="badge badge-shipping-unpaid">
+      รอชำระค่าส่ง
+      </span>
+      `;
+
+  }
 
 }
 
