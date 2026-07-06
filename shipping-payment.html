@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>ยืนยันจัดส่ง / ชำระค่าส่ง</title>
+
+<style>
+
+body{
+font-family:sans-serif;
+background:#f8fbff;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:16px;
+margin-bottom:16px;
+box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+
+.option-card{
+border:1px solid #ddd;
+border-radius:14px;
+padding:14px;
+margin-bottom:12px;
+cursor:pointer;
+}
+
+.option-card input{
+margin-right:8px;
+}
+
+.hidden{
+display:none;
+}
+
+button{
+padding:12px 18px;
+border:none;
+border-radius:12px;
+background:#7dcfff;
+color:white;
+font-weight:700;
+cursor:pointer;
+}
+
+.bank-card{
+border:1px solid #ddd;
+border-radius:12px;
+padding:12px;
+margin-bottom:10px;
+}
+
+.qr-image{
+width:100%;
+max-width:280px;
+display:block;
+margin:15px auto;
+border-radius:12px;
+}
+
+.total{
+font-size:22px;
+font-weight:700;
+color:#2563eb;
+}
+
+.back-btn{
+width:44px;
+height:44px;
+border:none;
+border-radius:999px;
+background:white;
+color:#4a6fa5;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+font-size:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<button
+class="back-btn"
+onclick="history.back()">
+←
+</button>
+
+<h1>
+📦 ยืนยันการจัดส่ง
+</h1>
+
+<div class="card">
+
+<h2>
+ข้อมูลออเดอร์
+</h2>
+
+<div id="orderInfo">
+กำลังโหลด...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+เลือกวิธีจัดส่ง
+</h2>
+
+<label class="option-card">
+<input
+type="radio"
+name="shippingMethod"
+value="ship_now"
+onchange="toggleMethod()">
+
+จัดส่งเลย
+</label>
+
+<label class="option-card">
+<input
+type="radio"
+name="shippingMethod"
+value="combine_later"
+onchange="toggleMethod()">
+
+รอส่งรวม
+</label>
+
+</div>
+
+<div
+id="shipNowBox"
+class="card hidden">
+
+<h2>
+📍 ที่อยู่จัดส่ง
+</h2>
+
+<div id="selectedAddress">
+กำลังโหลดที่อยู่...
+</div>
+
+<br>
+
+<button
+onclick="goAddressBook()">
+เปลี่ยนที่อยู่
+</button>
+
+<hr>
+
+<h2>
+ยอดที่ต้องชำระ
+</h2>
+
+<div id="feeDetail"></div>
+
+<hr>
+
+<h2>
+เลือกบัญชีโอนเงิน
+</h2>
+
+<div id="bankList"></div>
+
+<div id="bankDetail"></div>
+
+<hr>
+
+<h2>
+แนบสลิปค่าส่ง
+</h2>
+
+<input
+type="file"
+id="slip">
+
+</div>
+
+<div
+id="combineBox"
+class="card hidden">
+
+<p>
+ระบบจะบันทึกว่าออเดอร์นี้ต้องการรอส่งรวมกับออเดอร์อื่น
+</p>
+
+</div>
+
+<button onclick="submitShippingPayment()">
+ยืนยัน
+</button>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const orderId =
+params.get("id");
+
+const customer =
+JSON.parse(
+localStorage.getItem("customer") || "{}"
+);
+
+let shippingInfo = null;
+let selectedAddress = null;
+let banks = [];
+
+loadPage();
+
+async function loadPage(){
+
+await loadShippingInfo();
+
+await loadDefaultAddress();
+
+await loadBanks();
+
+}
+
+async function loadShippingInfo(){
+
+const response =
+await fetch(
+API +
+"?action=shippingInfo&order_id=" +
+encodeURIComponent(orderId)
+);
+
+const result =
+await response.json();
+
+if(!result.success){
+
+document.getElementById("orderInfo").innerHTML =
+"ไม่พบข้อมูลออเดอร์";
+
+return;
+
+}
+
+shippingInfo = result;
+
+document.getElementById("orderInfo").innerHTML = `
+
+<p>
+เลขออเดอร์:
+<b>${result.order_id}</b>
+</p>
+
+<p>
+ชื่อ:
+${result.customer_name || "-"}
+</p>
+
+<p>
+อีเมล:
+${result.email || "-"}
+</p>
+
+`;
+
+renderFee();
+
+}
+
+function renderFee(){
+
+const importFee =
+Number(shippingInfo.import_fee || 0);
+
+const domesticFee =
+Number(shippingInfo.domestic_shipping_fee || 0);
+
+const total =
+importFee + domesticFee;
+
+document.getElementById("feeDetail").innerHTML = `
+
+<p>
+ค่านำเข้า:
+฿${importFee}
+</p>
+
+<p>
+ค่าส่งในไทย:
+฿${domesticFee}
+</p>
+
+<p class="total">
+รวม ฿${total}
+</p>
+
+`;
+
+}
+
+async function loadDefaultAddress(){
+
+let saved =
+JSON.parse(
+localStorage.getItem(
+"selectedShippingAddress"
+) || "null"
+);
+
+if(saved){
+
+selectedAddress = saved;
+
+}else{
+
+const email =
+customer.email || shippingInfo.email;
+
+const response =
+await fetch(
+API +
+"?action=customerAddresses&email=" +
+encodeURIComponent(email)
+);
+
+const addresses =
+await response.json();
+
+selectedAddress =
+addresses.find(a=>a.is_default) || addresses[0];
+
+}
+
+if(!selectedAddress){
+
+document.getElementById("selectedAddress").innerHTML =
+"ยังไม่มีที่อยู่ กรุณาเพิ่มที่อยู่ก่อน";
+
+return;
+
+}
+
+document.getElementById("selectedAddress").innerHTML = `
+
+<div
+style="
+padding:12px;
+border:1px solid #eee;
+border-radius:12px;
+background:#f8fbff;
+line-height:1.7;
+">
+
+<b>${selectedAddress.receiver}</b><br>
+${selectedAddress.phone}<br>
+${selectedAddress.address}<br>
+${selectedAddress.subdistrict} ${selectedAddress.district}<br>
+${selectedAddress.province} ${selectedAddress.postcode}
+
+</div>
+
+`;
+
+}
+
+async function loadBanks(){
+
+const response =
+await fetch(
+API + "?action=banks"
+);
+
+banks =
+await response.json();
+
+let html = "";
+
+banks.forEach((bank,index)=>{
+
+html += `
+
+<div class="bank-card">
+
+<label>
+<input
+type="radio"
+name="bank"
+value="${bank.account_id}"
+${index === 0 ? "checked" : ""}
+onchange="showBank('${bank.account_id}')">
+
+${bank.bank_name}
+<br>
+<small>${bank.account_name || ""}</small>
+
+</label>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("bankList").innerHTML = html;
+
+if(banks.length){
+showBank(banks[0].account_id);
+}
+
+}
+
+function showBank(id){
+
+const bank =
+banks.find(b=>b.account_id === id);
+
+if(!bank){
+return;
+}
+
+let html = `
+<h3>${bank.bank_name}</h3>
+<p>${bank.account_name || ""}</p>
+`;
+
+if(bank.account_number){
+
+html += `
+<p>
+เลขบัญชี:
+<b>${bank.account_number}</b>
+</p>
+`;
+
+}
+
+if(bank.qr_image){
+
+html += `
+<img
+src="${bank.qr_image}"
+class="qr-image">
+`;
+
+}
+
+document.getElementById("bankDetail").innerHTML = html;
+
+}
+
+function toggleMethod(){
+
+const method =
+document.querySelector(
+'input[name="shippingMethod"]:checked'
+)?.value;
+
+document
+.getElementById("shipNowBox")
+.classList.toggle(
+"hidden",
+method !== "ship_now"
+);
+
+document
+.getElementById("combineBox")
+.classList.toggle(
+"hidden",
+method !== "combine_later"
+);
+
+}
+
+function goAddressBook(){
+
+window.location.href =
+"address-book.html?select=shipping&order_id=" +
+encodeURIComponent(orderId);
+
+}
+
+async function submitShippingPayment(){
+
+const method =
+document.querySelector(
+'input[name="shippingMethod"]:checked'
+)?.value;
+
+if(!method){
+
+alert("กรุณาเลือกวิธีจัดส่ง");
+return;
+
+}
+
+const importFee =
+Number(shippingInfo.import_fee || 0);
+
+const domesticFee =
+Number(shippingInfo.domestic_shipping_fee || 0);
+
+const total =
+importFee + domesticFee;
+
+let slipBase64 = "";
+
+if(method === "ship_now"){
+
+if(!selectedAddress){
+
+alert("กรุณาเลือกที่อยู่จัดส่ง");
+return;
+
+}
+
+const slip =
+document.getElementById("slip");
+
+if(total > 0 && !slip.files.length){
+
+alert("กรุณาแนบสลิป");
+return;
+
+}
+
+if(slip.files.length){
+
+slipBase64 =
+await fileToBase64(
+slip.files[0]
+);
+
+}
+
+}
+
+const payload = {
+
+order_id:
+orderId,
+
+customer_email:
+customer.email || shippingInfo.email,
+
+shipping_method:
+method,
+
+import_fee:
+importFee,
+
+domestic_shipping_fee:
+domesticFee,
+
+total:
+method === "ship_now" ? total : 0,
+
+confirmed_address:
+method === "ship_now"
+?
+JSON.stringify(selectedAddress)
+:
+"",
+
+slip_base64:
+slipBase64
+
+};
+
+const formData =
+new FormData();
+
+formData.append(
+"action",
+"saveShippingPayment"
+);
+
+formData.append(
+"payload",
+JSON.stringify(payload)
+);
+
+const response =
+await fetch(
+API,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+if(result.success){
+
+localStorage.removeItem(
+"selectedShippingAddress"
+);
+
+alert("ยืนยันเรียบร้อยแล้ว");
+
+window.location.href =
+"order.html?id=" + orderId;
+
+}else{
+
+alert(
+result.error || "เกิดข้อผิดพลาด"
+);
+
+}
+
+}
+
+function fileToBase64(file){
+
+return new Promise((resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
+</script>
+
+</body>
+
+</html>
