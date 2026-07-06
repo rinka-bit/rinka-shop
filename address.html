@@ -89,6 +89,18 @@ margin-bottom:20px;
 
 }
 
+@keyframes spin{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
 </style>
 
 </head>
@@ -134,6 +146,7 @@ id="postcode"
 placeholder="รหัสไปรษณีย์">
 
 <button
+id="saveAddressBtn"
 onclick="saveAddress()">
 
 บันทึกที่อยู่
@@ -232,6 +245,25 @@ data.postcode || "";
 
 async function saveAddress(){
 
+const btn =
+document.getElementById(
+"saveAddressBtn"
+);
+
+if(btn.disabled){
+return;
+}
+
+btn.disabled = true;
+
+btn.textContent =
+"กำลังบันทึก...";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"flex";
+
 const payload = {
 
 address_id:
@@ -293,6 +325,16 @@ alert(
 "กรุณากรอกข้อมูลให้ครบ"
 );
 
+btn.disabled = false;
+
+btn.textContent =
+"บันทึกที่อยู่";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
+
 return;
 
 }
@@ -347,10 +389,66 @@ window.location =
 
 }
 
+else{
+
+alert(
+result.error || "บันทึกที่อยู่ไม่สำเร็จ"
+);
+
+btn.disabled = false;
+
+btn.textContent =
+"บันทึกที่อยู่";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
+
+}
+
 }
 
 </script>
 
+<div
+id="loadingOverlay"
+style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+z-index:9999;
+justify-content:center;
+align-items:center;
+">
+
+<div
+style="
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+">
+
+<div
+style="
+font-size:50px;
+animation:spin 1s linear infinite;
+">
+
+📍
+
+</div>
+
+<p>
+กำลังบันทึกที่อยู่...
+</p>
+
+</div>
+
+</div>
+  
 </body>
 
 </html>
