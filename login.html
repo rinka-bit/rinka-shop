@@ -88,6 +88,18 @@ margin-bottom:20px;
 
 }
 
+@keyframes spin{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
 </style>
 
 </head>
@@ -117,6 +129,7 @@ id="twitter"
 placeholder="Twitter / X">
 
 <button
+id="registerBtn"
 onclick="register()">
 
 เริ่มใช้งาน
@@ -133,6 +146,25 @@ const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
 async function register(){
+
+const btn =
+document.getElementById(
+"registerBtn"
+);
+
+if(btn.disabled){
+return;
+}
+
+btn.disabled = true;
+
+btn.textContent =
+"กำลังเข้าสู่ระบบ...";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"flex";
 
 const payload = {
 
@@ -161,6 +193,16 @@ if(
 alert(
 "กรุณากรอกข้อมูลให้ครบ"
 );
+
+btn.disabled = false;
+
+btn.textContent =
+"เริ่มใช้งาน";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
 
 return;
 
@@ -192,6 +234,26 @@ body:formData
 
 const result =
 await response.json();
+
+if(!result.success){
+
+alert(
+"เกิดข้อผิดพลาด"
+);
+
+btn.disabled = false;
+
+btn.textContent =
+"เริ่มใช้งาน";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
+
+return;
+
+}
 
 localStorage.setItem(
 
@@ -236,7 +298,7 @@ addresses.length
 ){
 
 window.location =
-"address.html";
+"address.html?from=register";
 
 }
 else{
@@ -250,6 +312,46 @@ window.location =
 
 </script>
 
+<div
+id="loadingOverlay"
+style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+z-index:9999;
+justify-content:center;
+align-items:center;
+">
+
+<div
+style="
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+">
+
+<div
+style="
+font-size:50px;
+animation:spin 1s linear infinite;
+">
+
+☁️
+
+</div>
+
+<p>
+
+กำลังเข้าสู่ระบบ...
+
+</p>
+
+</div>
+
+</div>
+  
 </body>
 
 </html>
