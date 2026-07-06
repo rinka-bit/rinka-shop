@@ -284,6 +284,14 @@ ${result.customer_name || "-"}
 ${result.email || "-"}
 </p>
 
+<button
+onclick="
+window.location.href=
+'order.html?id=${result.order_id}'
+">
+ดูรายการสินค้าในออเดอร์
+</button>
+
 `;
 
 renderFee();
