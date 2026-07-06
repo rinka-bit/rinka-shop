@@ -87,6 +87,18 @@ box-shadow:0 2px 8px rgba(0,0,0,.08);
 font-size:20px;
 }
 
+@keyframes spin{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+  
 </style>
 
 </head>
@@ -204,7 +216,9 @@ class="card hidden">
 
 </div>
 
-<button onclick="submitShippingPayment()">
+<button
+id="submitShippingBtn"
+onclick="submitShippingPayment()">
 ยืนยัน
 </button>
 
@@ -512,6 +526,25 @@ encodeURIComponent(orderId);
 
 async function submitShippingPayment(){
 
+const btn =
+document.getElementById(
+"submitShippingBtn"
+);
+
+if(btn.disabled){
+return;
+}
+
+btn.disabled = true;
+
+btn.textContent =
+"กำลังบันทึก...";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"flex";
+
 const method =
 document.querySelector(
 'input[name="shippingMethod"]:checked'
@@ -520,6 +553,9 @@ document.querySelector(
 if(!method){
 
 alert("กรุณาเลือกวิธีจัดส่ง");
+
+resetSubmitButton();
+
 return;
 
 }
@@ -540,6 +576,9 @@ if(method === "ship_now"){
 if(!selectedAddress){
 
 alert("กรุณาเลือกที่อยู่จัดส่ง");
+
+resetSubmitButton();
+
 return;
 
 }
@@ -550,6 +589,9 @@ document.getElementById("slip");
 if(total > 0 && !slip.files.length){
 
 alert("กรุณาแนบสลิป");
+
+resetSubmitButton();
+
 return;
 
 }
@@ -628,7 +670,14 @@ localStorage.removeItem(
 "selectedShippingAddress"
 );
 
-alert("ยืนยันเรียบร้อยแล้ว");
+alert(
+"ยืนยันเรียบร้อยแล้ว"
+);
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
 
 window.location.href =
 "order.html?id=" + orderId;
@@ -643,6 +692,25 @@ result.error || "เกิดข้อผิดพลาด"
 
 }
 
+function resetSubmitButton(){
+
+const btn =
+document.getElementById(
+"submitShippingBtn"
+);
+
+btn.disabled = false;
+
+btn.textContent =
+"ยืนยัน";
+
+document.getElementById(
+"loadingOverlay"
+).style.display =
+"none";
+
+}
+  
 function fileToBase64(file){
 
 return new Promise((resolve,reject)=>{
@@ -664,6 +732,43 @@ reader.readAsDataURL(file);
 
 </script>
 
+<div
+id="loadingOverlay"
+style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+z-index:9999;
+justify-content:center;
+align-items:center;
+">
+
+<div
+style="
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+max-width:300px;
+">
+
+<div
+style="
+font-size:50px;
+animation:spin 1s linear infinite;
+">
+🚚
+</div>
+
+<p>
+กำลังบันทึกข้อมูลจัดส่ง...
+</p>
+
+</div>
+
+</div>
+  
 </body>
 
 </html>
