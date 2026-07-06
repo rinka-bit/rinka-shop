@@ -330,8 +330,20 @@ alert(
 "บันทึกที่อยู่เรียบร้อย"
 );
 
+const from =
+new URLSearchParams(window.location.search).get("from");
+
+if(from === "register"){
+
+window.location =
+"home.html";
+
+}else{
+
 window.location =
 "address-book.html";
+
+}
 
 }
 
