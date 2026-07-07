@@ -256,10 +256,35 @@ async function loadOrder(){
 ${getShippingPaymentBadge(order.shipping_payment_status)}
 </p>
 
-    <p>
-    <b>เลขพัสดุ:</b>
-    ${order.tracking_no || "-"}
-    </p>
+${
+  order.status === "ready_to_ship" &&
+  order.shipping_payment_status === "unpaid"
+
+  ?
+
+  `
+
+  <button
+  class="copy-btn"
+  onclick="
+  window.location.href=
+  'shipping-payment.html?id=${order.order_id}'
+  ">
+  💳 ยืนยันที่อยู่ / ชำระค่าส่ง
+  </button>
+
+  `
+
+  :
+
+  ""
+
+}
+
+<p>
+<b>เลขพัสดุ:</b>
+${order.tracking_no || "-"}
+</p>
 
     ${
     order.tracking_no
