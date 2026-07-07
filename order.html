@@ -619,45 +619,109 @@ function getShippingPaymentBadge(status){
 function getOrderTimeline(currentStatus){
 
   const steps = [
-    ["pending","รอจัดการ"],
-    ["china_arrived","ถึงโกดังจีนแล้ว"],
-    ["shipping_to_th","กำลังมาไทย"],
-    ["ready_to_ship","เตรียมจัดส่ง"],
-    ["shipped","จัดส่งแล้ว"]
+
+    ["pending","📦","รอจัดการ"],
+
+    ["china_arrived","🏭","ถึงโกดังจีนแล้ว"],
+
+    ["shipping_to_th","🚚","กำลังมาไทย"],
+
+    ["ready_to_ship","📬","เตรียมจัดส่ง"],
+
+    ["shipped","✅","จัดส่งแล้ว"]
+
   ];
 
   const currentIndex =
-    steps.findIndex(step=>step[0] === currentStatus);
+    steps.findIndex(
+      step => step[0] === currentStatus
+    );
 
-  return `
-    <div style="
-    margin:20px 0;
-    padding:15px;
-    background:#f8fafc;
-    border-radius:12px;
-    ">
+  let html = `
 
-    <h3>📍 Timeline ออเดอร์</h3>
+<div style="
+margin:20px 0;
+padding:18px;
+background:#f8fbff;
+border-radius:16px;
+border:1px solid #e5eefc;
+">
 
-    ${steps.map((step,index)=>{
+<h3 style="margin-top:0;">
+📍 ติดตามสถานะออเดอร์
+</h3>
 
-      const done =
-        index <= currentIndex;
+`;
 
-      return `
-        <div style="
-        padding:8px 0;
-        font-weight:${done ? "700" : "400"};
-        color:${done ? "#166534" : "#94a3b8"};
-        ">
-        ${done ? "🟢" : "⚪"} ${step[1]}
-        </div>
-      `;
+  steps.forEach((step,index)=>{
 
-    }).join("")}
+    const done =
+      index <= currentIndex;
 
-    </div>
-  `;
+    html += `
+
+<div style="
+display:flex;
+align-items:flex-start;
+">
+
+<div
+style="
+width:28px;
+text-align:center;
+font-size:18px;
+">
+
+${done ? "🟢" : "⚪"}
+
+</div>
+
+<div
+style="
+flex:1;
+padding-left:12px;
+padding-bottom:${
+index !== steps.length-1
+? "18px"
+: "0"
+};
+border-left:${
+index !== steps.length-1
+? "2px solid #cbd5e1"
+: "none"
+};
+margin-left:-15px;
+">
+
+<div style="
+font-weight:${
+done
+? "700"
+: "400"
+};
+color:${
+done
+? "#166534"
+: "#64748b"
+};
+">
+
+${step[1]}
+${step[2]}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+  });
+
+  html += "</div>";
+
+  return html;
 
 }
 
