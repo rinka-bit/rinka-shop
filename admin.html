@@ -54,7 +54,7 @@ onclick="logout()">
 
 <hr>
 
-<h1>อัปเดตเลขพัสดุ</h1>
+<h1>จัดการคำสั่งซื้อ</h1>
 
 <div id="orders"></div>
 
@@ -314,6 +314,7 @@ ${order.status}
 
 <select
 id="status_${order.order_id}"
+onchange="toggleOrderFields('${order.order_id}')"
 >
 
 <option value="pending">
@@ -340,18 +341,9 @@ id="status_${order.order_id}"
 
 <br><br>
 
-<button
-onclick="updateOrderStatus('${order.order_id}')">
-อัปเดตสถานะ
-</button>
-
-<br><br>
-
-<p>
-ยอดรวม:
-${order.total}
- บาท
-</p>
+<div
+id="feeBox_${order.order_id}"
+style="display:none;">
 
 <p>
 ค่านำเข้า / ค่าส่งในไทย
@@ -371,12 +363,11 @@ placeholder="ค่าส่งในไทย">
 
 <br><br>
 
-<button
-onclick="saveShippingFees('${order.order_id}')">
-บันทึกค่าส่ง
-</button>
+</div>
 
-<br><br>
+<div
+id="trackingBox_${order.order_id}"
+style="display:none;">
 
 <input
 id="courier_${order.order_id}"
@@ -390,14 +381,17 @@ placeholder="เลขพัสดุ">
 
 <br><br>
 
+</div>
+
 <button
-onclick="saveTrackingById('${order.order_id}')">
-บันทึก Tracking
+onclick="updateOrderStatus('${order.order_id}')">
+อัปเดตสถานะ
 </button>
 
 </div>
-`;
 
+`;
+ 
 });
 
 document
@@ -413,57 +407,16 @@ document.getElementById(
 );
 
 if(select){
-select.value = order.status;
+
+  select.value = order.status;
+
+  toggleOrderFields(
+    order.order_id
+  );
+
 }
 
 });
-
-}
-
-async function saveTrackingById(orderId){
-
-const formData =
-new FormData();
-
-formData.append(
-"payload",
-JSON.stringify({
-
-order_id:
-orderId,
-
-courier:
-document.getElementById(
-"courier_" + orderId
-).value,
-
-tracking_no:
-document.getElementById(
-"tracking_" + orderId
-).value
-
-})
-);
-
-const response =
-await fetch(
-API + "?action=tracking",
-{
-method:"POST",
-body:formData
-}
-);
-
-const result =
-await response.json();
-
-alert(
-result.success
-? "บันทึกสำเร็จ"
-: "ผิดพลาด"
-);
-
-loadOrders();
 
 }
 
@@ -685,94 +638,78 @@ loadAdminData();
 
 async function updateOrderStatus(orderId){
 
-const status =
-document.getElementById(
-"status_" + orderId
-).value;
+  const status =
+    document.getElementById(
+      "status_" + orderId
+    ).value;
 
-const formData =
-new FormData();
+  const payload = {
+    order_id: orderId,
+    status: status
+  };
 
-formData.append(
-"payload",
-JSON.stringify({
-order_id:orderId,
-status:status
-})
-);
+  if(status === "ready_to_ship"){
 
-const response =
-await fetch(
-API + "?action=updateOrderStatus",
-{
-method:"POST",
-body:formData
-}
-);
+    payload.import_fee_round2 =
+      Number(
+        document.getElementById(
+          "import_" + orderId
+        ).value || 0
+      );
 
-const result =
-await response.json();
+    payload.domestic_shipping_fee =
+      Number(
+        document.getElementById(
+          "domestic_" + orderId
+        ).value || 0
+      );
 
-alert(
-result.success
-? "อัปเดตสถานะแล้ว"
-: "อัปเดตไม่สำเร็จ"
-);
+  }
 
-loadOrders();
+  if(status === "shipped"){
 
-}
+    payload.courier =
+      document.getElementById(
+        "courier_" + orderId
+      ).value;
 
-async function saveShippingFees(orderId){
+    payload.tracking_no =
+      document.getElementById(
+        "tracking_" + orderId
+      ).value;
 
-const importFee =
-Number(
-document.getElementById(
-"import_" + orderId
-).value || 0
-);
+  }
 
-const domesticFee =
-Number(
-document.getElementById(
-"domestic_" + orderId
-).value || 0
-);
+  const formData =
+    new FormData();
 
-const formData =
-new FormData();
+  formData.append(
+    "payload",
+    JSON.stringify(payload)
+  );
 
-formData.append(
-"payload",
-JSON.stringify({
-order_id:orderId,
-import_fee:importFee,
-domestic_shipping_fee:domesticFee
-})
-);
+  const response =
+    await fetch(
+      API + "?action=updateOrderStatus",
+      {
+        method:"POST",
+        body:formData
+      }
+    );
 
-const response =
-await fetch(
-API + "?action=saveShippingFees",
-{
-method:"POST",
-body:formData
-}
-);
+  const result =
+    await response.json();
 
-const result =
-await response.json();
+  alert(
+    result.success
+    ? "อัปเดตสถานะแล้ว"
+    : result.error || "อัปเดตไม่สำเร็จ"
+  );
 
-alert(
-result.success
-? "บันทึกค่านำเข้า/ค่าส่งแล้ว"
-: "บันทึกไม่สำเร็จ"
-);
-
-loadOrders();
+  loadOrders();
 
 }
- 
+
 function logout(){
 
 sessionStorage.removeItem(
