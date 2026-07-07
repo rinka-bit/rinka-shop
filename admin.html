@@ -636,6 +636,35 @@ loadAdminData();
 
 }
 
+function toggleOrderFields(orderId){
+
+  const status =
+    document.getElementById(
+      "status_" + orderId
+    ).value;
+
+  const feeBox =
+    document.getElementById(
+      "feeBox_" + orderId
+    );
+
+  const trackingBox =
+    document.getElementById(
+      "trackingBox_" + orderId
+    );
+
+  feeBox.style.display =
+    status === "ready_to_ship"
+      ? "block"
+      : "none";
+
+  trackingBox.style.display =
+    status === "shipped"
+      ? "block"
+      : "none";
+
+}
+
 async function updateOrderStatus(orderId){
 
   const status =
