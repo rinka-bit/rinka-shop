@@ -8,10 +8,7 @@
 <body>
 
 <div id="loginBox">
-
-<h2>
-🔒 Admin Login
-</h2>
+<h2>🔒 Admin Login</h2>
 
 <input
 type="password"
@@ -23,29 +20,16 @@ placeholder="รหัสผ่าน">
 <button onclick="login()">
 เข้าสู่ระบบ
 </button>
-
 </div>
 
-<div
-id="adminContent"
-style="display:none;">
+<div id="adminContent" style="display:none;">
 
-<div
-style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-">
+<div style="display:flex;justify-content:space-between;align-items:center;">
+<h1>📊 Dashboard</h1>
 
-<h1>
-📊 Dashboard
-</h1>
-
-<button
-onclick="logout()">
+<button onclick="logout()">
 🚪 ออกจากระบบ
 </button>
-
 </div>
 
 <div id="stats"></div>
@@ -55,603 +39,291 @@ onclick="logout()">
 <hr>
 
 <h1>จัดการคำสั่งซื้อ</h1>
-
 <div id="orders"></div>
 
 <hr>
 
-<h2>
-📍 คำขอเปลี่ยนที่อยู่
-</h2>
-
+<h2>📍 คำขอเปลี่ยนที่อยู่</h2>
 <div id="addressRequests"></div>
+
+</div>
 
 <script>
 
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
+function login(){
+
+  const password =
+    document.getElementById("adminPassword").value;
+
+  if(password === "Rin@Saeh13579"){
+
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminContent").style.display = "block";
+
+    sessionStorage.setItem("adminLoggedIn","true");
+
+    loadAdminData();
+
+  }else{
+    alert("รหัสผ่านไม่ถูกต้อง");
+  }
+
+}
+
+function logout(){
+  sessionStorage.removeItem("adminLoggedIn");
+  location.reload();
+}
+
+if(sessionStorage.getItem("adminLoggedIn") === "true"){
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("adminContent").style.display = "block";
+  loadAdminData();
+}
+
+function loadAdminData(){
+  loadStats();
+  loadTopProducts();
+  loadTopFandoms();
+  loadOrders();
+  loadAddressRequests();
+}
+
 async function loadStats(){
 
-const response =
-await fetch(
-API + "?action=stats"
-);
+  const response =
+    await fetch(API + "?action=stats");
 
-const stats =
-await response.json();
+  const stats =
+    await response.json();
 
-document
-.getElementById("stats")
-.innerHTML = `
+  document.getElementById("stats").innerHTML = `
+    <div style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+    ">
 
-<div style="
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-margin-bottom:20px;
-">
+      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      📦<br>${stats.totalOrders} ออเดอร์
+      </div>
 
-<div style="
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-">
-📦<br>
-${stats.totalOrders}
-ออเดอร์
-</div>
+      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      💰<br>${stats.totalSales} บาท
+      </div>
 
-<div style="
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-">
-💰<br>
-${stats.totalSales}
-บาท
-</div>
+      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      🚚<br>${stats.pendingShipping} รอส่ง
+      </div>
 
-<div style="
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-">
-🚚<br>
-${stats.pendingShipping}
-รอส่ง
-</div>
+      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      📍<br>${stats.pendingAddress} คำขอ
+      </div>
 
-<div style="
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-">
-📍<br>
-${stats.pendingAddress}
-คำขอ
-</div>
+      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      💸<br>${stats.todaySales} บาท<br>วันนี้
+      </div>
 
-<div style="
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-">
-💸<br>
-${stats.todaySales}
-บาท
-<br>
-วันนี้
-</div>
+      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      📅<br>${stats.monthSales} บาท<br>เดือนนี้
+      </div>
 
-<div style="
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-">
-📅<br>
-${stats.monthSales}
-บาท
-<br>
-เดือนนี้
-</div>
-
-</div>
-
-`;
+    </div>
+  `;
 
 }
 
 async function loadTopProducts(){
 
-const response =
-await fetch(
-API +
-"?action=topProducts"
-);
+  const response =
+    await fetch(API + "?action=topProducts");
 
-const result =
-await response.json();
+  const result =
+    await response.json();
 
-let html = `
-<h2>
-🏆 สินค้าขายดีที่สุด
-</h2>
+  let html = `
+    <h2>🏆 สินค้าขายดีที่สุด</h2>
+    <div style="border:1px solid #ddd;padding:15px;border-radius:12px;margin-bottom:20px;">
+  `;
 
-<div
-style="
-border:1px solid #ddd;
-padding:15px;
-border-radius:12px;
-margin-bottom:20px;
-">
-`;
+  result.products.forEach((product,index)=>{
+    html += `
+      <p>
+      ${index + 1}. ${product.name}
+      (${product.qty} ชิ้น)
+      </p>
+    `;
+  });
 
-result.products.forEach(
-(product,index)=>{
-html += `
-<p>
-${index+1}.
-${product.name}
+  html += "</div>";
 
-(${product.qty} ชิ้น)
-</p>
-`;
-}
-);
-
-html += "</div>";
-
-document
-.getElementById(
-"topProducts"
-)
-.innerHTML =
-html;
+  document.getElementById("topProducts").innerHTML = html;
 
 }
 
 async function loadTopFandoms(){
 
-const response =
-await fetch(
-API +
-"?action=topFandoms"
-);
+  const response =
+    await fetch(API + "?action=topFandoms");
 
-const result =
-await response.json();
+  const result =
+    await response.json();
 
-let html = `
-<h2>
-🎮 แฟนด้อมขายดีที่สุด
-</h2>
+  let html = `
+    <h2>🎮 แฟนด้อมขายดีที่สุด</h2>
+    <div style="border:1px solid #ddd;padding:15px;border-radius:12px;margin-bottom:20px;">
+  `;
 
-<div
-style="
-border:1px solid #ddd;
-padding:15px;
-border-radius:12px;
-margin-bottom:20px;
-">
-`;
+  result.fandoms.forEach((fandom,index)=>{
+    html += `
+      <p>
+      ${index + 1}. ${fandom.fandom}
+      (${fandom.qty} ชิ้น)
+      </p>
+    `;
+  });
 
-result.fandoms.forEach(
-(fandom,index)=>{
+  html += "</div>";
 
-html += `
-<p>
-
-${index+1}.
-
-${fandom.fandom}
-
-(${fandom.qty} ชิ้น)
-
-</p>
-`;
-
-});
-
-html += "</div>";
-
-document
-.getElementById(
-"topFandoms"
-)
-.innerHTML =
-html;
+  document.getElementById("topFandoms").innerHTML = html;
 
 }
- 
+
 async function loadOrders(){
 
-const response =
-await fetch(
-API + "?action=orders"
-);
+  const response =
+    await fetch(API + "?action=orders");
 
-const result =
-await response.json();
+  const result =
+    await response.json();
 
-let html = "";
-result.orders.reverse();
-result.orders.forEach(order=>{
+  let html = "";
 
-if(
-order.payment_status !== "paid" ||
-order.status === "completed"
-){
-return;
-}
+  result.orders.reverse();
 
-html += `
-<div style="
-border:1px solid #ddd;
-padding:15px;
-margin-bottom:10px;
-border-radius:10px;
-">
+  result.orders.forEach(order=>{
 
-<h3>
-${order.order_id}
-</h3>
+    if(
+      order.payment_status !== "paid" ||
+      order.status === "completed"
+    ){
+      return;
+    }
 
-<p>
-ลูกค้า:
-${order.customer_name}
-</p>
+    html += renderOrderCard(order);
 
-<p>
-${order.email}
-</p>
+  });
 
-<p>
-สถานะ:
-${order.status}
-</p>
+  document.getElementById("orders").innerHTML = html;
 
-<select
-id="status_${order.order_id}"
-onchange="toggleOrderFields('${order.order_id}')"
->
+  result.orders.forEach(order=>{
 
-<option value="pending">
-รอจัดการ
-</option>
+    const select =
+      document.getElementById("status_" + order.order_id);
 
-<option value="china_arrived">
-ถึงโกดังจีนแล้ว
-</option>
+    if(select){
+      select.value = order.status;
+      toggleOrderFields(order.order_id);
+    }
 
-<option value="shipping_to_th">
-กำลังมาไทย
-</option>
-
-<option value="ready_to_ship">
-เตรียมจัดส่ง
-</option>
-
-<option value="shipped">
-จัดส่งแล้ว
-</option>
-
-</select>
-
-<br><br>
-
-<div
-id="feeBox_${order.order_id}"
-style="display:none;">
-
-<p>
-ค่านำเข้า / ค่าส่งในไทย
-</p>
-
-<input
-id="import_${order.order_id}"
-type="number"
-placeholder="ค่านำเข้า">
-
-<br><br>
-
-<input
-id="domestic_${order.order_id}"
-type="number"
-placeholder="ค่าส่งในไทย">
-
-<br><br>
-
-</div>
-
-<div
-id="trackingBox_${order.order_id}"
-style="display:none;">
-
-<input
-id="courier_${order.order_id}"
-placeholder="ขนส่ง">
-
-<br><br>
-
-<input
-id="tracking_${order.order_id}"
-placeholder="เลขพัสดุ">
-
-<br><br>
-
-</div>
-
-<button
-onclick="updateOrderStatus('${order.order_id}')">
-อัปเดตสถานะ
-</button>
-
-</div>
-
-`;
- 
-});
-
-document
-.getElementById("orders")
-.innerHTML =
-html;
-
-result.orders.forEach(order=>{
-
-const select =
-document.getElementById(
-"status_" + order.order_id
-);
-
-if(select){
-
-  select.value = order.status;
-
-  toggleOrderFields(
-    order.order_id
-  );
+  });
 
 }
 
-});
+function renderOrderCard(order){
 
-}
+  return `
+    <div style="
+    border:1px solid #ddd;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:10px;
+    ">
 
-async function loadAddressRequests(){
+      <h3>${order.order_id}</h3>
 
-const response =
-await fetch(
-API +
-"?action=addressChanges"
-);
+      <p>ลูกค้า: ${order.customer_name}</p>
+      <p>${order.email}</p>
+      <p>สถานะปัจจุบัน: ${order.status}</p>
 
-const result =
-await response.json();
+      <select
+      id="status_${order.order_id}"
+      onchange="toggleOrderFields('${order.order_id}')"
+      >
+        <option value="pending">รอจัดการ</option>
+        <option value="china_arrived">ถึงโกดังจีนแล้ว</option>
+        <option value="shipping_to_th">กำลังมาไทย</option>
+        <option value="ready_to_ship">เตรียมจัดส่ง</option>
+        <option value="shipped">จัดส่งแล้ว</option>
+      </select>
 
-let html = "";
+      <br><br>
 
-result.requests.reverse();
+      <div
+      id="feeBox_${order.order_id}"
+      style="display:none;"
+      >
+        <p>ค่านำเข้า / ค่าส่งในไทย</p>
 
-result.requests.forEach(req=>{
+        <input
+        id="import_${order.order_id}"
+        type="number"
+        placeholder="ค่านำเข้า">
 
-if(req.status === "completed"){
-return;
-}
+        <br><br>
 
-html += `
-<div
-style="
-border:1px solid #f59e0b;
-padding:15px;
-margin-bottom:10px;
-border-radius:10px;
-background:#fffbeb;
-">
+        <input
+        id="domestic_${order.order_id}"
+        type="number"
+        placeholder="ค่าส่งในไทย">
 
-<h3>
-${req.request_id}
-</h3>
+        <br><br>
+      </div>
 
-<p>
-Order:
-${req.order_id}
-</p>
+      <div
+      id="trackingBox_${order.order_id}"
+      style="display:none;"
+      >
+        <input
+        id="courier_${order.order_id}"
+        placeholder="ขนส่ง">
 
-<p>
-ชื่อ:
-${req.customer_name}
-</p>
+        <br><br>
 
-<p>
-โทร:
-${req.phone}
-</p>
+        <input
+        id="tracking_${order.order_id}"
+        placeholder="เลขพัสดุ">
 
-<p>
-Social:
-${req.social}
-</p>
+        <br><br>
+      </div>
 
-<p>
-ที่อยู่ใหม่:
-${req.address}
-</p>
+      <button onclick="updateOrderStatus('${order.order_id}')">
+      อัปเดตสถานะ
+      </button>
 
-<p>
-สถานะ:
-${req.status}
-<br><br>
-
-<button
-onclick="
-completeAddressRequest(
-'${req.request_id}'
-)
-">
-✅ ดำเนินการแล้ว
-</button>
-</p>
-
-</div>
-`;
-
-});
-
-document
-.getElementById(
-"addressRequests"
-)
-.innerHTML =
-html;
-
-}
-
-function loadAdminData(){
-
-loadStats();
-
-loadTopProducts();
-
-loadTopFandoms();
-
-loadOrders();
-
-loadAddressRequests();
-
-}
-
-async function completeAddressRequest(
-requestId
-){
-
-const formData =
-new FormData();
-
-formData.append(
-"payload",
-JSON.stringify({
-
-request_id:
-requestId
-
-})
-);
-
-const response =
-await fetch(
-
-API +
-"?action=completeAddressRequest",
-
-{
-method:"POST",
-body:formData
-}
-
-);
-
-const result =
-await response.json();
-
-alert(
-result.success
-? "อัปเดตแล้ว"
-: "ผิดพลาด"
-);
-
-loadAddressRequests();
-
-}
-
-function login(){
-
-const password =
-document
-.getElementById(
-"adminPassword"
-)
-.value;
-
-if(
-password ===
-"Rin@Saeh13579"
-){
-
-document
-.getElementById(
-"loginBox"
-)
-.style.display =
-"none";
-
-document
-.getElementById(
-"adminContent"
-)
-.style.display =
-"block";
-
-sessionStorage.setItem(
-"adminLoggedIn",
-"true"
-);
-
-loadAdminData();
- 
-}
-else{
-
-alert(
-"รหัสผ่านไม่ถูกต้อง"
-);
-
-}
-
-}
-
-if(
-sessionStorage.getItem(
-"adminLoggedIn"
-) === "true"
-){
-
-document
-.getElementById(
-"loginBox"
-)
-.style.display =
-"none";
-
-document
-.getElementById(
-"adminContent"
-)
-.style.display =
-"block";
-
-loadAdminData();
+    </div>
+  `;
 
 }
 
 function toggleOrderFields(orderId){
 
   const status =
-    document.getElementById(
-      "status_" + orderId
-    ).value;
+    document.getElementById("status_" + orderId).value;
 
   const feeBox =
-    document.getElementById(
-      "feeBox_" + orderId
-    );
+    document.getElementById("feeBox_" + orderId);
 
   const trackingBox =
-    document.getElementById(
-      "trackingBox_" + orderId
-    );
+    document.getElementById("trackingBox_" + orderId);
+
+  if(!feeBox || !trackingBox){
+    return;
+  }
 
   feeBox.style.display =
     status === "ready_to_ship"
@@ -668,9 +340,7 @@ function toggleOrderFields(orderId){
 async function updateOrderStatus(orderId){
 
   const status =
-    document.getElementById(
-      "status_" + orderId
-    ).value;
+    document.getElementById("status_" + orderId).value;
 
   const payload = {
     order_id: orderId,
@@ -681,16 +351,12 @@ async function updateOrderStatus(orderId){
 
     payload.import_fee_round2 =
       Number(
-        document.getElementById(
-          "import_" + orderId
-        ).value || 0
+        document.getElementById("import_" + orderId).value || 0
       );
 
     payload.domestic_shipping_fee =
       Number(
-        document.getElementById(
-          "domestic_" + orderId
-        ).value || 0
+        document.getElementById("domestic_" + orderId).value || 0
       );
 
   }
@@ -698,14 +364,10 @@ async function updateOrderStatus(orderId){
   if(status === "shipped"){
 
     payload.courier =
-      document.getElementById(
-        "courier_" + orderId
-      ).value;
+      document.getElementById("courier_" + orderId).value;
 
     payload.tracking_no =
-      document.getElementById(
-        "tracking_" + orderId
-      ).value;
+      document.getElementById("tracking_" + orderId).value;
 
   }
 
@@ -731,25 +393,102 @@ async function updateOrderStatus(orderId){
 
   alert(
     result.success
-    ? "อัปเดตสถานะแล้ว"
-    : result.error || "อัปเดตไม่สำเร็จ"
+      ? "อัปเดตสถานะแล้ว"
+      : result.error || "อัปเดตไม่สำเร็จ"
   );
 
   loadOrders();
 
 }
 
-function logout(){
+async function loadAddressRequests(){
 
-sessionStorage.removeItem(
-"adminLoggedIn"
-);
+  const response =
+    await fetch(API + "?action=addressChanges");
 
-location.reload();
+  const result =
+    await response.json();
+
+  let html = "";
+
+  result.requests.reverse();
+
+  result.requests.forEach(req=>{
+
+    if(req.status === "completed"){
+      return;
+    }
+
+    html += `
+      <div style="
+      border:1px solid #f59e0b;
+      padding:15px;
+      margin-bottom:10px;
+      border-radius:10px;
+      background:#fffbeb;
+      ">
+
+        <h3>${req.request_id}</h3>
+
+        <p>Order: ${req.order_id}</p>
+        <p>ชื่อ: ${req.customer_name}</p>
+        <p>โทร: ${req.phone}</p>
+        <p>Social: ${req.social}</p>
+        <p>ที่อยู่ใหม่: ${req.address}</p>
+
+        <p>
+        สถานะ: ${req.status}
+        <br><br>
+
+        <button onclick="completeAddressRequest('${req.request_id}')">
+        ✅ ดำเนินการแล้ว
+        </button>
+        </p>
+
+      </div>
+    `;
+
+  });
+
+  document.getElementById("addressRequests").innerHTML = html;
 
 }
- 
+
+async function completeAddressRequest(requestId){
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "payload",
+    JSON.stringify({
+      request_id: requestId
+    })
+  );
+
+  const response =
+    await fetch(
+      API + "?action=completeAddressRequest",
+      {
+        method:"POST",
+        body:formData
+      }
+    );
+
+  const result =
+    await response.json();
+
+  alert(
+    result.success
+      ? "อัปเดตแล้ว"
+      : "ผิดพลาด"
+  );
+
+  loadAddressRequests();
+
+}
+
 </script>
-</div>
+
 </body>
 </html>
