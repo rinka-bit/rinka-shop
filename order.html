@@ -209,18 +209,9 @@ async function loadOrder(){
   const order =
     result.order;
 
-  let html = `
-    <p>
-    เลขออเดอร์:
-    <b>
-    ${order.order_id}
-    </b>
-    </p>
+ let html = `
 
-    <p>
-สถานะ:
-${getStatusBadge(order.status)}
-</p>
+${getOrderSummaryCard(order)}
 
 ${getOrderTimeline(order.status)}
 
@@ -534,6 +525,70 @@ ${order.total}
 }
 
 loadOrder();
+
+function getOrderSummaryCard(order){
+
+  const giftCount =
+    order.gifts && order.gifts.length
+      ? order.gifts.length
+      : 0;
+
+  return `
+
+<div style="
+padding:18px;
+border-radius:18px;
+background:linear-gradient(135deg,#f8fbff,#eef6ff);
+border:1px solid #dbeafe;
+margin-bottom:18px;
+">
+
+<h2 style="
+margin:0 0 10px;
+font-size:22px;
+">
+📦 ${order.order_id}
+</h2>
+
+<div style="
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-bottom:12px;
+">
+
+${getStatusBadge(order.status)}
+
+${
+  order.payment_status === "paid"
+  ? '<span class="badge badge-paid">💰 ชำระเงินแล้ว</span>'
+  : '<span class="badge badge-pending">💰 รอชำระเงิน</span>'
+}
+
+${getShippingPaymentBadge(order.shipping_payment_status)}
+
+${
+  giftCount > 0
+  ? `<span class="badge badge-processing">🎁 ของแถม ${giftCount} ชิ้น</span>`
+  : ""
+}
+
+</div>
+
+<p style="
+margin:6px 0;
+color:#475569;
+">
+ยอดรวม:
+<b>${order.total}</b>
+บาท
+</p>
+
+</div>
+
+`;
+
+}
 
 function getStatusBadge(status){
 
