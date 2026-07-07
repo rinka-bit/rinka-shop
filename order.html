@@ -218,9 +218,11 @@ async function loadOrder(){
     </p>
 
     <p>
-    สถานะ:
-    ${getStatusBadge(order.status)}
-    </p>
+สถานะ:
+${getStatusBadge(order.status)}
+</p>
+
+${getOrderTimeline(order.status)}
 
     <p>
     การชำระเงิน:
@@ -611,6 +613,51 @@ function getShippingPaymentBadge(status){
       `;
 
   }
+
+}
+
+function getOrderTimeline(currentStatus){
+
+  const steps = [
+    ["pending","รอจัดการ"],
+    ["china_arrived","ถึงโกดังจีนแล้ว"],
+    ["shipping_to_th","กำลังมาไทย"],
+    ["ready_to_ship","เตรียมจัดส่ง"],
+    ["shipped","จัดส่งแล้ว"]
+  ];
+
+  const currentIndex =
+    steps.findIndex(step=>step[0] === currentStatus);
+
+  return `
+    <div style="
+    margin:20px 0;
+    padding:15px;
+    background:#f8fafc;
+    border-radius:12px;
+    ">
+
+    <h3>📍 Timeline ออเดอร์</h3>
+
+    ${steps.map((step,index)=>{
+
+      const done =
+        index <= currentIndex;
+
+      return `
+        <div style="
+        padding:8px 0;
+        font-weight:${done ? "700" : "400"};
+        color:${done ? "#166534" : "#94a3b8"};
+        ">
+        ${done ? "🟢" : "⚪"} ${step[1]}
+        </div>
+      `;
+
+    }).join("")}
+
+    </div>
+  `;
 
 }
 
