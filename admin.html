@@ -1,8 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rinka Admin</title>
+
+<style>
+body{
+margin:0;
+font-family:sans-serif;
+background:#f8fbff;
+color:#334155;
+}
+
+button{
+cursor:pointer;
+border:none;
+border-radius:12px;
+padding:10px 14px;
+background:#7dcfff;
+color:white;
+font-weight:700;
+}
+
+input,
+textarea,
+select{
+width:100%;
+box-sizing:border-box;
+padding:10px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+#loginBox{
+max-width:360px;
+margin:80px auto;
+background:white;
+padding:24px;
+border-radius:18px;
+box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+
+.admin-layout{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:240px;
+background:white;
+border-right:1px solid #e5e7eb;
+padding:20px;
+box-sizing:border-box;
+position:sticky;
+top:0;
+height:100vh;
+}
+
+.sidebar h2{
+margin-top:0;
+}
+
+.nav-btn{
+width:100%;
+margin-bottom:10px;
+background:#f1f5f9;
+color:#334155;
+text-align:left;
+}
+
+.nav-btn.active{
+background:#7dcfff;
+color:white;
+}
+
+.main{
+flex:1;
+padding:24px;
+box-sizing:border-box;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:16px;
+box-shadow:0 2px 10px rgba(0,0,0,.05);
+border:1px solid #e5eefc;
+margin-bottom:16px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+}
+
+.hidden{
+display:none;
+}
+
+.section-title{
+margin-top:0;
+}
+
+.product-form{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:14px;
+}
+
+.full{
+grid-column:1/-1;
+}
+
+.order-card{
+border:1px solid #ddd;
+padding:15px;
+margin-bottom:10px;
+border-radius:12px;
+background:white;
+}
+
+.warning-card{
+border:1px solid #f59e0b;
+background:#fffbeb;
+padding:15px;
+margin-bottom:10px;
+border-radius:12px;
+}
+
+.logout-btn{
+background:#ef4444;
+}
+
+.loading-text{
+margin-top:10px;
+color:#2563eb;
+font-weight:700;
+}
+</style>
 </head>
 
 <body>
@@ -22,38 +166,110 @@ placeholder="รหัสผ่าน">
 </button>
 </div>
 
-<div id="adminContent" style="display:none;">
+<div
+id="adminContent"
+style="display:none;">
 
-<div style="display:flex;justify-content:space-between;align-items:center;">
-<h1>📊 Dashboard</h1>
+<div class="admin-layout">
 
-<button onclick="logout()">
+<aside class="sidebar">
+
+<h2>☁️ Rinka Admin</h2>
+
+<button
+class="nav-btn active"
+id="nav_dashboard"
+onclick="showAdminTab('dashboard')">
+📊 Dashboard
+</button>
+
+<button
+class="nav-btn"
+id="nav_products"
+onclick="showAdminTab('products')">
+🛍️ เพิ่มสินค้า
+</button>
+
+<button
+class="nav-btn"
+id="nav_orders"
+onclick="showAdminTab('orders')">
+📦 จัดการคำสั่งซื้อ
+</button>
+
+<button
+class="nav-btn"
+id="nav_address"
+onclick="showAdminTab('address')">
+📍 คำขอเปลี่ยนที่อยู่
+</button>
+
+<hr>
+
+<button
+class="logout-btn"
+onclick="logout()">
 🚪 ออกจากระบบ
 </button>
+
+</aside>
+
+<main class="main">
+
+<section id="tab_dashboard">
+
+<div class="topbar">
+<h1>📊 Dashboard</h1>
 </div>
 
 <div id="stats"></div>
 <div id="topProducts"></div>
 <div id="topFandoms"></div>
 
-<hr>
+</section>
 
-<h1>🛍️ เพิ่มสินค้า</h1>
+<section
+id="tab_products"
+class="hidden">
+
+<h1 class="section-title">
+🛍️ เพิ่มสินค้า
+</h1>
 
 <div id="productManager"></div>
 
-<h1>จัดการคำสั่งซื้อ</h1>
+</section>
+
+<section
+id="tab_orders"
+class="hidden">
+
+<h1 class="section-title">
+📦 จัดการคำสั่งซื้อ
+</h1>
+
 <div id="orders"></div>
 
-<hr>
+</section>
 
-<h2>📍 คำขอเปลี่ยนที่อยู่</h2>
+<section
+id="tab_address"
+class="hidden">
+
+<h1 class="section-title">
+📍 คำขอเปลี่ยนที่อยู่
+</h1>
+
 <div id="addressRequests"></div>
 
+</section>
+
+</main>
+
+</div>
 </div>
 
 <script>
-
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
@@ -88,111 +304,35 @@ if(sessionStorage.getItem("adminLoggedIn") === "true"){
   loadAdminData();
 }
 
-function renderProductManager(){
+function showAdminTab(tab){
 
-  document
-    .getElementById("productManager")
-    .innerHTML = `
+  const tabs = [
+    "dashboard",
+    "products",
+    "orders",
+    "address"
+  ];
 
-<div style="
-border:1px solid #ddd;
-padding:15px;
-border-radius:12px;
-margin-bottom:20px;
-">
+  tabs.forEach(name=>{
 
-<input id="p_name" placeholder="ชื่อสินค้า">
-<br><br>
+    document
+      .getElementById("tab_" + name)
+      .classList.toggle(
+        "hidden",
+        name !== tab
+      );
 
-<input id="p_price" type="number" placeholder="ราคา">
-<br><br>
+    document
+      .getElementById("nav_" + name)
+      .classList.toggle(
+        "active",
+        name === tab
+      );
 
-<input id="p_sale_price" type="number" placeholder="ราคาลด">
-<br><br>
-
-<input id="p_main_category" placeholder="หมวดหลัก">
-<br><br>
-
-<input id="p_fandom" placeholder="Fandom">
-<br><br>
-
-<input id="p_sub_category" placeholder="หมวดย่อย">
-<br><br>
-
-<input id="p_round" placeholder="รอบพรี">
-<br><br>
-
-<textarea
-id="p_description"
-placeholder="รายละเอียดสินค้า"
-style="width:100%;height:100px;">
-</textarea>
-
-<br><br>
-
-<input id="p_image" placeholder="ลิงก์รูปหลัก">
-<br><br>
-
-<input id="p_image2" placeholder="ลิงก์รูป 2">
-<br><br>
-
-<input id="p_image3" placeholder="ลิงก์รูป 3">
-<br><br>
-
-<input id="p_image4" placeholder="ลิงก์รูป 4">
-<br><br>
-
-<select id="p_product_type">
-<option value="preorder">Preorder</option>
-<option value="instock">พร้อมส่ง</option>
-</select>
-
-<br><br>
-
-<input
-id="p_stock"
-type="number"
-placeholder="จำนวนสต็อก">
-
-<br><br>
-
-<input
-id="p_preorder_deadline"
-type="date"
-placeholder="วันปิดพรี">
-
-<br><br>
-
-<input
-id="p_estimated_arrival"
-placeholder="กำหนดถึงโดยประมาณ">
-
-<br><br>
-
-<label>
-<input id="p_featured" type="checkbox">
-แสดงในสินค้าแนะนำ
-</label>
-
-<br><br>
-
-<label>
-<input id="p_new_arrival" type="checkbox">
-สินค้าใหม่
-</label>
-
-<br><br>
-
-<button onclick="saveProductFromAdmin()">
-บันทึกสินค้า
-</button>
-
-</div>
-
-`;
+  });
 
 }
-  
+
 function loadAdminData(){
   loadStats();
   loadTopProducts();
@@ -200,6 +340,247 @@ function loadAdminData(){
   renderProductManager();
   loadOrders();
   loadAddressRequests();
+}
+
+function renderProductManager(){
+
+  document
+    .getElementById("productManager")
+    .innerHTML = `
+
+<div class="card">
+
+<div class="product-form">
+
+<div>
+<label>ชื่อสินค้า</label>
+<input id="p_name" placeholder="ชื่อสินค้า">
+</div>
+
+<div>
+<label>ราคา</label>
+<input id="p_price" type="number" placeholder="ราคา">
+</div>
+
+<div>
+<label>ราคาลด</label>
+<input id="p_sale_price" type="number" placeholder="ราคาลด">
+</div>
+
+<div>
+<label>หมวดหลัก</label>
+<input id="p_main_category" placeholder="เช่น Doll / Acrylic / Badge">
+</div>
+
+<div>
+<label>Fandom</label>
+<input id="p_fandom" placeholder="เช่น Honkai: Star Rail">
+</div>
+
+<div>
+<label>หมวดย่อย</label>
+<input id="p_sub_category" placeholder="หมวดย่อย">
+</div>
+
+<div>
+<label>รอบพรี</label>
+<input id="p_round" placeholder="รอบพรี">
+</div>
+
+<div>
+<label>ประเภทสินค้า</label>
+<select id="p_product_type">
+<option value="preorder">Preorder</option>
+<option value="instock">พร้อมส่ง</option>
+</select>
+</div>
+
+<div>
+<label>จำนวนสต็อก</label>
+<input id="p_stock" type="number" placeholder="จำนวนสต็อก">
+</div>
+
+<div>
+<label>วันปิดพรี</label>
+<input id="p_preorder_deadline" type="date">
+</div>
+
+<div>
+<label>กำหนดถึงโดยประมาณ</label>
+<input id="p_estimated_arrival" placeholder="เช่น ปลายเดือน ก.ค.">
+</div>
+
+<div>
+<label>ลิงก์รูปหลัก</label>
+<input id="p_image" placeholder="ลิงก์รูปหลัก">
+</div>
+
+<div>
+<label>ลิงก์รูป 2</label>
+<input id="p_image2" placeholder="ลิงก์รูป 2">
+</div>
+
+<div>
+<label>ลิงก์รูป 3</label>
+<input id="p_image3" placeholder="ลิงก์รูป 3">
+</div>
+
+<div>
+<label>ลิงก์รูป 4</label>
+<input id="p_image4" placeholder="ลิงก์รูป 4">
+</div>
+
+<div class="full">
+<label>รายละเอียดสินค้า</label>
+<textarea
+id="p_description"
+placeholder="รายละเอียดสินค้า"
+style="height:110px;">
+</textarea>
+</div>
+
+<div>
+<label>
+<input id="p_featured" type="checkbox" style="width:auto;">
+แสดงในสินค้าแนะนำ
+</label>
+</div>
+
+<div>
+<label>
+<input id="p_new_arrival" type="checkbox" style="width:auto;">
+สินค้าใหม่
+</label>
+</div>
+
+</div>
+
+<br>
+
+<button
+id="saveProductBtn"
+onclick="saveProductFromAdmin()">
+บันทึกสินค้า
+</button>
+
+<div
+id="saveProductLoading"
+class="loading-text"
+style="display:none;">
+⏳ กำลังบันทึกสินค้า...
+</div>
+
+</div>
+
+`;
+
+}
+
+async function saveProductFromAdmin(){
+
+  const btn =
+    document.getElementById("saveProductBtn");
+
+  const loading =
+    document.getElementById("saveProductLoading");
+
+  const payload = {
+    name: document.getElementById("p_name").value,
+    price: Number(document.getElementById("p_price").value || 0),
+    sale_price: Number(document.getElementById("p_sale_price").value || 0),
+    main_category: document.getElementById("p_main_category").value,
+    fandom: document.getElementById("p_fandom").value,
+    sub_category: document.getElementById("p_sub_category").value,
+    round: document.getElementById("p_round").value,
+    description: document.getElementById("p_description").value,
+    image: document.getElementById("p_image").value,
+    image2: document.getElementById("p_image2").value,
+    image3: document.getElementById("p_image3").value,
+    image4: document.getElementById("p_image4").value,
+    product_type: document.getElementById("p_product_type").value,
+    stock: Number(document.getElementById("p_stock").value || 0),
+    preorder_deadline: document.getElementById("p_preorder_deadline").value,
+    estimated_arrival: document.getElementById("p_estimated_arrival").value,
+    featured: document.getElementById("p_featured").checked ? "yes" : "",
+    new_arrival: document.getElementById("p_new_arrival").checked ? "yes" : "",
+    status: "active"
+  };
+
+  if(!payload.name){
+    alert("กรุณากรอกชื่อสินค้า");
+    return;
+  }
+
+  if(!payload.price){
+    alert("กรุณากรอกราคา");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
+  loading.style.display = "block";
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveProduct"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    alert(
+      result.success
+        ? "เพิ่มสินค้าแล้ว: " + result.product_id
+        : result.error || "เพิ่มสินค้าไม่สำเร็จ"
+    );
+
+    if(result.success){
+      renderProductManager();
+    }
+
+  }catch(error){
+
+    console.error(error);
+    alert("เกิดข้อผิดพลาด กรุณาลองใหม่");
+
+  }finally{
+
+    const newBtn =
+      document.getElementById("saveProductBtn");
+
+    const newLoading =
+      document.getElementById("saveProductLoading");
+
+    if(newBtn){
+      newBtn.disabled = false;
+      newBtn.textContent = "บันทึกสินค้า";
+    }
+
+    if(newLoading){
+      newLoading.style.display = "none";
+    }
+
+  }
+
 }
 
 async function loadStats(){
@@ -211,34 +592,29 @@ async function loadStats(){
     await response.json();
 
   document.getElementById("stats").innerHTML = `
-    <div style="
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:15px;
-    margin-bottom:20px;
-    ">
+    <div class="grid">
 
-      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      <div class="card">
       📦<br>${stats.totalOrders} ออเดอร์
       </div>
 
-      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      <div class="card">
       💰<br>${stats.totalSales} บาท
       </div>
 
-      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      <div class="card">
       🚚<br>${stats.pendingShipping} รอส่ง
       </div>
 
-      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      <div class="card">
       📍<br>${stats.pendingAddress} คำขอ
       </div>
 
-      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      <div class="card">
       💸<br>${stats.todaySales} บาท<br>วันนี้
       </div>
 
-      <div style="padding:15px;border:1px solid #ddd;border-radius:12px;">
+      <div class="card">
       📅<br>${stats.monthSales} บาท<br>เดือนนี้
       </div>
 
@@ -256,8 +632,8 @@ async function loadTopProducts(){
     await response.json();
 
   let html = `
+    <div class="card">
     <h2>🏆 สินค้าขายดีที่สุด</h2>
-    <div style="border:1px solid #ddd;padding:15px;border-radius:12px;margin-bottom:20px;">
   `;
 
   result.products.forEach((product,index)=>{
@@ -284,8 +660,8 @@ async function loadTopFandoms(){
     await response.json();
 
   let html = `
+    <div class="card">
     <h2>🎮 แฟนด้อมขายดีที่สุด</h2>
-    <div style="border:1px solid #ddd;padding:15px;border-radius:12px;margin-bottom:20px;">
   `;
 
   result.fandoms.forEach((fandom,index)=>{
@@ -347,12 +723,7 @@ async function loadOrders(){
 function renderOrderCard(order){
 
   return `
-    <div style="
-    border:1px solid #ddd;
-    padding:15px;
-    margin-bottom:10px;
-    border-radius:10px;
-    ">
+    <div class="order-card">
 
       <h3>${order.order_id}</h3>
 
@@ -530,13 +901,7 @@ async function loadAddressRequests(){
     }
 
     html += `
-      <div style="
-      border:1px solid #f59e0b;
-      padding:15px;
-      margin-bottom:10px;
-      border-radius:10px;
-      background:#fffbeb;
-      ">
+      <div class="warning-card">
 
         <h3>${req.request_id}</h3>
 
@@ -597,78 +962,6 @@ async function completeAddressRequest(requestId){
   loadAddressRequests();
 
 }
-
-async function saveProductFromAdmin(){
-
-  const payload = {
-    name: document.getElementById("p_name").value,
-    price: Number(document.getElementById("p_price").value || 0),
-    sale_price: Number(document.getElementById("p_sale_price").value || 0),
-    main_category: document.getElementById("p_main_category").value,
-    fandom: document.getElementById("p_fandom").value,
-    sub_category: document.getElementById("p_sub_category").value,
-    round: document.getElementById("p_round").value,
-    description: document.getElementById("p_description").value,
-    image: document.getElementById("p_image").value,
-    image2: document.getElementById("p_image2").value,
-    image3: document.getElementById("p_image3").value,
-    image4: document.getElementById("p_image4").value,
-    product_type: document.getElementById("p_product_type").value,
-    stock: Number(document.getElementById("p_stock").value || 0),
-    preorder_deadline: document.getElementById("p_preorder_deadline").value,
-    estimated_arrival: document.getElementById("p_estimated_arrival").value,
-    featured: document.getElementById("p_featured").checked ? "yes" : "",
-    new_arrival: document.getElementById("p_new_arrival").checked ? "yes" : "",
-    status: "active"
-  };
-
-  if(!payload.name){
-    alert("กรุณากรอกชื่อสินค้า");
-    return;
-  }
-
-  if(!payload.price){
-    alert("กรุณากรอกราคา");
-    return;
-  }
-
-  const formData =
-    new FormData();
-
-  formData.append(
-    "action",
-    "saveProduct"
-  );
-
-  formData.append(
-    "payload",
-    JSON.stringify(payload)
-  );
-
-  const response =
-    await fetch(
-      API,
-      {
-        method:"POST",
-        body:formData
-      }
-    );
-
-  const result =
-    await response.json();
-
-  alert(
-    result.success
-    ? "เพิ่มสินค้าแล้ว: " + result.product_id
-    : result.error || "เพิ่มสินค้าไม่สำเร็จ"
-  );
-
-  if(result.success){
-    renderProductManager();
-  }
-
-}
-  
 </script>
 
 </body>
