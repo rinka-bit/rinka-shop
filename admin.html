@@ -88,10 +88,116 @@ if(sessionStorage.getItem("adminLoggedIn") === "true"){
   loadAdminData();
 }
 
+function renderProductManager(){
+
+  document
+    .getElementById("productManager")
+    .innerHTML = `
+
+<div style="
+border:1px solid #ddd;
+padding:15px;
+border-radius:12px;
+margin-bottom:20px;
+">
+
+<input id="p_name" placeholder="ชื่อสินค้า">
+<br><br>
+
+<input id="p_price" type="number" placeholder="ราคา">
+<br><br>
+
+<input id="p_sale_price" type="number" placeholder="ราคาลด">
+<br><br>
+
+<input id="p_main_category" placeholder="หมวดหลัก">
+<br><br>
+
+<input id="p_fandom" placeholder="Fandom">
+<br><br>
+
+<input id="p_sub_category" placeholder="หมวดย่อย">
+<br><br>
+
+<input id="p_round" placeholder="รอบพรี">
+<br><br>
+
+<textarea
+id="p_description"
+placeholder="รายละเอียดสินค้า"
+style="width:100%;height:100px;">
+</textarea>
+
+<br><br>
+
+<input id="p_image" placeholder="ลิงก์รูปหลัก">
+<br><br>
+
+<input id="p_image2" placeholder="ลิงก์รูป 2">
+<br><br>
+
+<input id="p_image3" placeholder="ลิงก์รูป 3">
+<br><br>
+
+<input id="p_image4" placeholder="ลิงก์รูป 4">
+<br><br>
+
+<select id="p_product_type">
+<option value="preorder">Preorder</option>
+<option value="instock">พร้อมส่ง</option>
+</select>
+
+<br><br>
+
+<input
+id="p_stock"
+type="number"
+placeholder="จำนวนสต็อก">
+
+<br><br>
+
+<input
+id="p_preorder_deadline"
+type="date"
+placeholder="วันปิดพรี">
+
+<br><br>
+
+<input
+id="p_estimated_arrival"
+placeholder="กำหนดถึงโดยประมาณ">
+
+<br><br>
+
+<label>
+<input id="p_featured" type="checkbox">
+แสดงในสินค้าแนะนำ
+</label>
+
+<br><br>
+
+<label>
+<input id="p_new_arrival" type="checkbox">
+สินค้าใหม่
+</label>
+
+<br><br>
+
+<button onclick="saveProductFromAdmin()">
+บันทึกสินค้า
+</button>
+
+</div>
+
+`;
+
+}
+  
 function loadAdminData(){
   loadStats();
   loadTopProducts();
   loadTopFandoms();
+  renderProductManager();
   loadOrders();
   loadAddressRequests();
 }
@@ -492,6 +598,77 @@ async function completeAddressRequest(requestId){
 
 }
 
+async function saveProductFromAdmin(){
+
+  const payload = {
+    name: document.getElementById("p_name").value,
+    price: Number(document.getElementById("p_price").value || 0),
+    sale_price: Number(document.getElementById("p_sale_price").value || 0),
+    main_category: document.getElementById("p_main_category").value,
+    fandom: document.getElementById("p_fandom").value,
+    sub_category: document.getElementById("p_sub_category").value,
+    round: document.getElementById("p_round").value,
+    description: document.getElementById("p_description").value,
+    image: document.getElementById("p_image").value,
+    image2: document.getElementById("p_image2").value,
+    image3: document.getElementById("p_image3").value,
+    image4: document.getElementById("p_image4").value,
+    product_type: document.getElementById("p_product_type").value,
+    stock: Number(document.getElementById("p_stock").value || 0),
+    preorder_deadline: document.getElementById("p_preorder_deadline").value,
+    estimated_arrival: document.getElementById("p_estimated_arrival").value,
+    featured: document.getElementById("p_featured").checked ? "yes" : "",
+    new_arrival: document.getElementById("p_new_arrival").checked ? "yes" : "",
+    status: "active"
+  };
+
+  if(!payload.name){
+    alert("กรุณากรอกชื่อสินค้า");
+    return;
+  }
+
+  if(!payload.price){
+    alert("กรุณากรอกราคา");
+    return;
+  }
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "action",
+    "saveProduct"
+  );
+
+  formData.append(
+    "payload",
+    JSON.stringify(payload)
+  );
+
+  const response =
+    await fetch(
+      API,
+      {
+        method:"POST",
+        body:formData
+      }
+    );
+
+  const result =
+    await response.json();
+
+  alert(
+    result.success
+    ? "เพิ่มสินค้าแล้ว: " + result.product_id
+    : result.error || "เพิ่มสินค้าไม่สำเร็จ"
+  );
+
+  if(result.success){
+    renderProductManager();
+  }
+
+}
+  
 </script>
 
 </body>
