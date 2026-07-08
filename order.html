@@ -209,9 +209,11 @@ async function loadOrder(){
   const order =
     result.order;
 
- let html = `
+let html = `
 
 ${getOrderSummaryCard(order)}
+
+${getOrderMessage(order)}
 
 ${getOrderTimeline(order.status)}
 
@@ -318,14 +320,14 @@ ${getOrderTimeline(order.status)}
 ${order.tracking_no || "-"}
 </p>
 
-    ${
-    order.tracking_no
-    
-    ?
-    
-    `
+   ${
+order.tracking_no
 
-    <button
+?
+
+`
+
+<button
 class="copy-btn"
 onclick="
 copyTracking(
@@ -333,17 +335,31 @@ copyTracking(
 )
 ">
 
-Copy Tracking Number
+📋 คัดลอกเลขพัสดุ
 
 </button>
 
-    `
+<button
+class="copy-btn"
+style="margin-left:10px;"
+onclick="
+openTracking(
+'${order.courier}',
+'${order.tracking_no}'
+)
+">
 
-    :
+🔍 ตรวจสอบพัสดุ
 
-    ""
+</button>
 
-    }
+`
+
+:
+
+""
+
+}
 
     </div>
 
@@ -826,6 +842,143 @@ navigator.clipboard.writeText(no);
 alert(
 "คัดลอกเลขพัสดุแล้ว"
 );
+
+}
+
+function openTracking(courier,tracking){
+
+  if(!tracking){
+    return;
+  }
+
+  const c =
+    String(courier || "")
+      .toLowerCase();
+
+  let url = "";
+
+  if(
+    c.includes("flash")
+  ){
+    url =
+      "https://www.flashexpress.co.th/tracking/?se="
+      + encodeURIComponent(tracking);
+  }
+  else if(
+    c.includes("kerry") ||
+    c.includes("kex")
+  ){
+    url =
+      "https://th.kex-express.com/th/track/?track="
+      + encodeURIComponent(tracking);
+  }
+  else if(
+    c.includes("j&t") ||
+    c.includes("jnt") ||
+    c.includes("jt")
+  ){
+    url =
+      "https://www.jtexpress.co.th/index/query/gzquery.html?bills="
+      + encodeURIComponent(tracking);
+  }
+  else if(
+    c.includes("ไปรษณีย์") ||
+    c.includes("thaipost") ||
+    c.includes("ems")
+  ){
+    url =
+      "https://track.thailandpost.co.th/"
+      + "?trackNumber="
+      + encodeURIComponent(tracking);
+  }
+  else{
+    url =
+      "https://parcelsapp.com/en/tracking/"
+      + encodeURIComponent(tracking);
+  }
+
+  window.open(
+    url,
+    "_blank"
+  );
+
+}
+
+function getOrderMessage(order){
+
+  switch(order.status){
+
+    case "pending":
+
+      return `
+      <div class="card" style="
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      margin-bottom:18px;
+      ">
+      📦 ร้านได้รับคำสั่งซื้อแล้ว
+      <br><br>
+      ตอนนี้กำลังเตรียมกดสั่งสินค้าจากร้านค้าจีน
+      </div>
+      `;
+
+    case "china_arrived":
+
+      return `
+      <div class="card" style="
+      background:#eff6ff;
+      border:1px solid #bfdbfe;
+      margin-bottom:18px;
+      ">
+      🏭 สินค้าของคุณถึงโกดังจีนแล้ว
+      <br><br>
+      กำลังรอจัดส่งมายังประเทศไทย
+      </div>
+      `;
+
+    case "shipping_to_th":
+
+      return `
+      <div class="card" style="
+      background:#ecfeff;
+      border:1px solid #a5f3fc;
+      margin-bottom:18px;
+      ">
+      🚚 สินค้ากำลังเดินทางมายังประเทศไทย
+      </div>
+      `;
+
+    case "ready_to_ship":
+
+      return `
+      <div class="card" style="
+      background:#fefce8;
+      border:1px solid #fde68a;
+      margin-bottom:18px;
+      ">
+      📬 สินค้าถึงประเทศไทยแล้ว
+      <br><br>
+      กรุณายืนยันที่อยู่และชำระค่าส่ง
+      </div>
+      `;
+
+    case "shipped":
+
+      return `
+      <div class="card" style="
+      background:#ecfdf5;
+      border:1px solid #86efac;
+      margin-bottom:18px;
+      ">
+      🎉 ร้านได้จัดส่งสินค้าเรียบร้อยแล้ว
+      </div>
+      `;
+
+    default:
+
+      return "";
+
+  }
 
 }
   
