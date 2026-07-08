@@ -142,17 +142,31 @@ box-shadow:
 
 <button
 onclick="history.back()">
-
 ←
-
 </button>
 
+<div>
+
 <a
-href="cart.html">
-
-🛒
-
+href="help.html"
+style="
+margin-right:12px;
+text-decoration:none;
+font-size:20px;
+">
+🛟
 </a>
+
+<a
+href="cart.html"
+style="
+text-decoration:none;
+font-size:20px;
+">
+🛒
+</a>
+
+</div>
 
 </div>
   
@@ -638,6 +652,10 @@ color:#475569;
 <b>${order.total}</b>
 บาท
 </p>
+<p style="margin:6px 0;">
+ลูกค้า:
+<b>${order.customer_name}</b>
+</p>
 
 </div>
 
@@ -797,8 +815,14 @@ index !== steps.length-1
 };
 border-left:${
 index !== steps.length-1
-? "2px solid #cbd5e1"
-: "none"
+?
+done
+?
+"2px solid #22c55e"
+:
+"2px solid #cbd5e1"
+:
+"none"
 };
 margin-left:-15px;
 ">
