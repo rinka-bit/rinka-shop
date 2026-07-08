@@ -245,17 +245,56 @@ ${getOrderTimeline(order.status)}
     </p>
 
     <p>
-<b>สถานะค่าส่ง:</b>
-${getShippingPaymentBadge(order.shipping_payment_status)}
-</p>
+    <b>สถานะค่าส่ง:</b>
+    ${getShippingPaymentBadge(order.shipping_payment_status)}
+    </p>
 
-${
-  order.status === "ready_to_ship" &&
-  order.shipping_payment_status === "unpaid"
-
+    ${
+  order.import_fee_round2 || order.domestic_shipping_fee
   ?
-
   `
+  <div style="
+  margin:12px 0;
+  padding:12px;
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  ">
+
+  <p>
+  ค่านำเข้า:
+  <b>${order.import_fee_round2 || 0}</b>
+  บาท
+  </p>
+
+  <p>
+  ค่าส่งในไทย:
+  <b>${order.domestic_shipping_fee || 0}</b>
+  บาท
+  </p>
+
+  <p>
+  รวมค่าส่ง:
+  <b>${
+    Number(order.import_fee_round2 || 0) +
+    Number(order.domestic_shipping_fee || 0)
+  }</b>
+  บาท
+  </p>
+
+  </div>
+  `
+  :
+  ""
+}
+
+    ${
+    order.status === "ready_to_ship" &&
+    order.shipping_payment_status === "unpaid"
+
+   ?
+
+   `
 
   <button
   class="copy-btn"
