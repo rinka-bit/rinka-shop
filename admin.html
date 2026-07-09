@@ -272,6 +272,7 @@ class="hidden">
 <script>
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+  let adminProducts = [];
 
 function login(){
 
@@ -338,6 +339,7 @@ function loadAdminData(){
   loadTopProducts();
   loadTopFandoms();
   renderProductManager();
+  loadAdminProducts();
   loadOrders();
   loadAddressRequests();
 }
@@ -470,6 +472,21 @@ style="display:none;">
 ⏳ กำลังบันทึกสินค้า...
 </div>
 
+<hr>
+
+<h2>📦 รายการสินค้า</h2>
+
+<input
+id="productSearch"
+placeholder="ค้นหาสินค้า..."
+oninput="renderAdminProductList()">
+
+<br><br>
+
+<div id="adminProductList">
+กำลังโหลดสินค้า...
+</div>
+
 </div>
 
 `;
@@ -580,10 +597,10 @@ if(image4File){
         ? "เพิ่มสินค้าแล้ว: " + result.product_id
         : result.error || "เพิ่มสินค้าไม่สำเร็จ"
     );
-
-    if(result.success){
-      renderProductManager();
-    }
+if(result.success){
+  renderProductManager();
+  loadAdminProducts();
+}
 
   }catch(error){
 
@@ -1007,6 +1024,122 @@ function fileToBase64(file){
     reader.readAsDataURL(file);
 
   });
+
+}
+
+async function loadAdminProducts(){
+
+  const response =
+    await fetch(
+      API + "?action=adminProducts"
+    );
+
+  const result =
+    await response.json();
+
+  if(!result.success){
+    document.getElementById("adminProductList").innerHTML =
+      "โหลดสินค้าไม่สำเร็จ";
+    return;
+  }
+
+  adminProducts =
+    result.products || [];
+
+  renderAdminProductList();
+
+}
+
+function renderAdminProductList(){
+
+  const box =
+    document.getElementById("adminProductList");
+
+  if(!box){
+    return;
+  }
+
+  const keyword =
+    document.getElementById("productSearch")
+      ?.value
+      .toLowerCase() || "";
+
+  const filtered =
+    adminProducts.filter(product=>{
+
+      return (
+        String(product.name || "").toLowerCase().includes(keyword) ||
+        String(product.fandom || "").toLowerCase().includes(keyword) ||
+        String(product.product_id || "").toLowerCase().includes(keyword)
+      );
+
+    });
+
+  let html = "";
+
+  filtered.forEach(product=>{
+
+    html += `
+      <div class="card" style="
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      ">
+
+        <img
+        src="${product.image || ""}"
+        style="
+        width:80px;
+        height:80px;
+        object-fit:cover;
+        border-radius:12px;
+        background:#f1f5f9;
+        ">
+
+        <div style="flex:1;">
+
+          <h3 style="margin-top:0;">
+          ${product.name}
+          </h3>
+
+          <p>
+          ${product.fandom || "-"}
+          /
+          ${product.main_category || "-"}
+          </p>
+
+          <p>
+          ราคา:
+          <b>${product.price}</b>
+          บาท
+          </p>
+
+          <p>
+          สถานะ:
+          <b>${product.status || "-"}</b>
+          </p>
+
+          <button onclick="alert('เดี๋ยวทำระบบแก้ไขต่อ')">
+          ✏️ แก้ไข
+          </button>
+
+          <button onclick="alert('เดี๋ยวทำระบบคัดลอกต่อ')">
+          📋 คัดลอก
+          </button>
+
+          <button onclick="alert('เดี๋ยวทำระบบปิดขายต่อ')">
+          🚫 ปิดขาย
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  });
+
+  box.innerHTML =
+    html || "ไม่พบสินค้า";
 
 }
   
