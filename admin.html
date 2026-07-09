@@ -1094,9 +1094,12 @@ function renderAdminProductList(){
     adminProducts.filter(product=>{
 
       const matchKeyword =
-        String(product.name || "").toLowerCase().includes(keyword) ||
-        String(product.fandom || "").toLowerCase().includes(keyword) ||
-        String(product.product_id || "").toLowerCase().includes(keyword);
+  String(product.name || "").toLowerCase().includes(keyword) ||
+  String(product.fandom || "").toLowerCase().includes(keyword) ||
+  String(product.product_id || "").toLowerCase().includes(keyword) ||
+  String(product.main_category || "").toLowerCase().includes(keyword) ||
+  String(product.sub_category || "").toLowerCase().includes(keyword) ||
+  String(product.options_text || "").toLowerCase().includes(keyword);
 
       const matchStatus =
         !statusFilter ||
@@ -1146,6 +1149,24 @@ ${product.name || "-"}
 <p>
 🏷️ ${product.main_category || "-"}
 </p>
+
+${
+  product.options && product.options.length
+  ?
+  `
+  <p>
+  🎭 ตัวเลือก:
+  ${product.options.slice(0,5).join(", ")}
+  ${
+    product.options.length > 5
+    ? `+${product.options.length - 5} เพิ่มเติม`
+    : ""
+  }
+  </p>
+  `
+  :
+  ""
+}
 
 <p>
 💰 <b>${product.price || 0}</b> บาท
