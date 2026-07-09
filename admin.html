@@ -411,23 +411,23 @@ function renderProductManager(){
 </div>
 
 <div>
-<label>ลิงก์รูปหลัก</label>
+<label>รูปหลัก</label>
 <input id="p_image_file" type="file" accept="image/*">
 </div>
 
 <div>
-<label>ลิงก์รูป 2</label>
-<input id="p_image2" placeholder="ลิงก์รูป 2">
+<label>รูป 2</label>
+<input id="p_image2_file" type="file" accept="image/*">
 </div>
 
 <div>
-<label>ลิงก์รูป 3</label>
-<input id="p_image3" placeholder="ลิงก์รูป 3">
+<label>รูป 3</label>
+<input id="p_image3_file" type="file" accept="image/*">
 </div>
 
 <div>
-<label>ลิงก์รูป 4</label>
-<input id="p_image4" placeholder="ลิงก์รูป 4">
+<label>รูป 4</label>
+<input id="p_image4_file" type="file" accept="image/*">
 </div>
 
 <div class="full">
@@ -493,10 +493,6 @@ async function saveProductFromAdmin(){
     sub_category: document.getElementById("p_sub_category").value,
     round: document.getElementById("p_round").value,
     description: document.getElementById("p_description").value,
-    image: document.getElementById("p_image").value,
-    image2: document.getElementById("p_image2").value,
-    image3: document.getElementById("p_image3").value,
-    image4: document.getElementById("p_image4").value,
     product_type: document.getElementById("p_product_type").value,
     stock: Number(document.getElementById("p_stock").value || 0),
     preorder_deadline: document.getElementById("p_preorder_deadline").value,
@@ -515,6 +511,38 @@ async function saveProductFromAdmin(){
     alert("กรุณากรอกราคา");
     return;
   }
+
+  const imageFile =
+  document.getElementById("p_image_file").files[0];
+
+const image2File =
+  document.getElementById("p_image2_file").files[0];
+
+const image3File =
+  document.getElementById("p_image3_file").files[0];
+
+const image4File =
+  document.getElementById("p_image4_file").files[0];
+
+if(imageFile){
+  payload.image_base64 =
+    await fileToBase64(imageFile);
+}
+
+if(image2File){
+  payload.image2_base64 =
+    await fileToBase64(image2File);
+}
+
+if(image3File){
+  payload.image3_base64 =
+    await fileToBase64(image3File);
+}
+
+if(image4File){
+  payload.image4_base64 =
+    await fileToBase64(image4File);
+}
 
   btn.disabled = true;
   btn.textContent = "กำลังบันทึก...";
@@ -962,6 +990,26 @@ async function completeAddressRequest(requestId){
   loadAddressRequests();
 
 }
+
+function fileToBase64(file){
+
+  return new Promise((resolve,reject)=>{
+
+    const reader =
+      new FileReader();
+
+    reader.onload =
+      () => resolve(reader.result);
+
+    reader.onerror =
+      reject;
+
+    reader.readAsDataURL(file);
+
+  });
+
+}
+  
 </script>
 
 </body>
