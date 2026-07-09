@@ -476,11 +476,30 @@ style="display:none;">
 
 <h2>📦 รายการสินค้า</h2>
 
+<div class="product-form">
+
 <input
 id="productSearch"
 placeholder="ค้นหาสินค้า..."
 oninput="renderAdminProductList()">
 
+<select
+id="productStatusFilter"
+onchange="renderAdminProductList()">
+<option value="">ทุกสถานะ</option>
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+
+<select
+id="productTypeFilter"
+onchange="renderAdminProductList()">
+<option value="">ทุกประเภท</option>
+<option value="preorder">Preorder</option>
+<option value="instock">พร้อมส่ง</option>
+</select>
+
+</div>
 <br><br>
 
 <div id="adminProductList">
@@ -1063,82 +1082,131 @@ function renderAdminProductList(){
       ?.value
       .toLowerCase() || "";
 
+  const statusFilter =
+    document.getElementById("productStatusFilter")
+      ?.value || "";
+
+  const typeFilter =
+    document.getElementById("productTypeFilter")
+      ?.value || "";
+
   const filtered =
     adminProducts.filter(product=>{
 
-      return (
+      const matchKeyword =
         String(product.name || "").toLowerCase().includes(keyword) ||
         String(product.fandom || "").toLowerCase().includes(keyword) ||
-        String(product.product_id || "").toLowerCase().includes(keyword)
-      );
+        String(product.product_id || "").toLowerCase().includes(keyword);
+
+      const matchStatus =
+        !statusFilter ||
+        product.status === statusFilter;
+
+      const matchType =
+        !typeFilter ||
+        product.product_type === typeFilter;
+
+      return matchKeyword && matchStatus && matchType;
 
     });
 
-  let html = "";
+  let html = `
+  <div class="grid">
+  `;
 
   filtered.forEach(product=>{
 
     html += `
-      <div class="card" style="
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-      ">
 
-        <img
-        src="${product.image || ""}"
-        style="
-        width:80px;
-        height:80px;
-        object-fit:cover;
-        border-radius:12px;
-        background:#f1f5f9;
-        ">
+<div class="card">
 
-        <div style="flex:1;">
+<img
+src="${product.image || ""}"
+style="
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:14px;
+background:#f1f5f9;
+margin-bottom:12px;
+">
 
-          <h3 style="margin-top:0;">
-          ${product.name}
-          </h3>
+<h3 style="margin:0 0 8px;">
+${product.name || "-"}
+</h3>
 
-          <p>
-          ${product.fandom || "-"}
-          /
-          ${product.main_category || "-"}
-          </p>
+<p>
+🆔 ${product.product_id}
+</p>
 
-          <p>
-          ราคา:
-          <b>${product.price}</b>
-          บาท
-          </p>
+<p>
+🎮 ${product.fandom || "-"}
+</p>
 
-          <p>
-          สถานะ:
-          <b>${product.status || "-"}</b>
-          </p>
+<p>
+🏷️ ${product.main_category || "-"}
+</p>
 
-          <button onclick="alert('เดี๋ยวทำระบบแก้ไขต่อ')">
-          ✏️ แก้ไข
-          </button>
+<p>
+💰 <b>${product.price || 0}</b> บาท
+</p>
 
-          <button onclick="alert('เดี๋ยวทำระบบคัดลอกต่อ')">
-          📋 คัดลอก
-          </button>
+<p>
+📦 ${product.product_type || "-"}
+</p>
 
-          <button onclick="alert('เดี๋ยวทำระบบปิดขายต่อ')">
-          🚫 ปิดขาย
-          </button>
+<p>
+สถานะ:
+<b>
+${product.status || "-"}
+</b>
+</p>
 
-        </div>
+${
+product.preorder_deadline
+?
+`
+<p>
+📅 ปิดพรี: ${product.preorder_deadline}
+</p>
+`
+:
+""
+}
 
-      </div>
-    `;
+<div style="
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:12px;
+">
+
+<button onclick="alert('เดี๋ยวทำระบบแก้ไขต่อ')">
+✏️ แก้ไข
+</button>
+
+<button onclick="alert('เดี๋ยวทำระบบคัดลอกต่อ')">
+📋 คัดลอก
+</button>
+
+<button onclick="alert('เดี๋ยวทำระบบปิดขายต่อ')">
+🚫 ปิดขาย
+</button>
+
+</div>
+
+</div>
+
+`;
 
   });
 
+  html += "</div>";
+
   box.innerHTML =
-    html || "ไม่พบสินค้า";
+    filtered.length
+      ? html
+      : "ไม่พบสินค้า";
 
 }
   
