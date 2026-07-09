@@ -1208,8 +1208,8 @@ margin-top:12px;
 📋 คัดลอก
 </button>
 
-<button onclick="alert('เดี๋ยวทำระบบปิดขายต่อ')">
-🚫 ปิดขาย
+<button onclick="toggleProductStatus('${product.product_id}')">
+${product.status === "active" ? "🚫 ปิดขาย" : "✅ เปิดขาย"}
 </button>
 
 </div>
@@ -1226,6 +1226,52 @@ margin-top:12px;
     filtered.length
       ? html
       : "ไม่พบสินค้า";
+
+}
+
+async function toggleProductStatus(productId){
+
+  const ok =
+    confirm("ต้องการเปลี่ยนสถานะสินค้านี้ใช่ไหม?");
+
+  if(!ok){
+    return;
+  }
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "action",
+    "toggleProductStatus"
+  );
+
+  formData.append(
+    "payload",
+    JSON.stringify({
+      product_id: productId
+    })
+  );
+
+  const response =
+    await fetch(
+      API,
+      {
+        method:"POST",
+        body:formData
+      }
+    );
+
+  const result =
+    await response.json();
+
+  alert(
+    result.success
+      ? "อัปเดตสถานะเป็น " + result.status
+      : result.error || "อัปเดตไม่สำเร็จ"
+  );
+
+  loadAdminProducts();
 
 }
   
