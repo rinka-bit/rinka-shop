@@ -92,6 +92,31 @@ font-weight:bold;
 color:#4f46e5;
 }
 
+.price-box{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.sale-price{
+font-size:16px;
+font-weight:700;
+color:#ef4444;
+}
+
+.old-price{
+font-size:13px;
+color:#94a3b8;
+text-decoration:line-through;
+}
+
+.normal-price{
+font-size:15px;
+font-weight:700;
+color:#4f46e5;
+}
+
 .topbar{
 
 display:flex;
@@ -337,14 +362,48 @@ src="${product.image}">
 ${product.name}
 </h3>
 
-<div class="price">
+<div class="price-box">
 
-${Number(
-product.price
-).toLocaleString()
+${
+  product.on_sale
+
+  ?
+
+  `
+
+  <div class="sale-price">
+
+  ฿${Number(
+    product.price || 0
+  ).toLocaleString()}
+
+  </div>
+
+  <div class="old-price">
+
+  ฿${Number(
+    product.old_price || 0
+  ).toLocaleString()}
+
+  </div>
+
+  `
+
+  :
+
+  `
+
+  <div class="normal-price">
+
+  ฿${Number(
+    product.price || 0
+  ).toLocaleString()}
+
+  </div>
+
+  `
+
 }
-
-บาท
 
 </div>
 
