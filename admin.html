@@ -204,6 +204,13 @@ onclick="showAdminTab('address')">
 📍 คำขอเปลี่ยนที่อยู่
 </button>
 
+<button
+class="nav-btn"
+id="nav_collections"
+onclick="showAdminTab('collections')">
+🖼️ Collections
+</button>
+
 <hr>
 
 <button
@@ -264,6 +271,20 @@ class="hidden">
 
 </section>
 
+<section
+id="tab_collections"
+class="hidden">
+
+<h1 class="section-title">
+🖼️ Collections Manager
+</h1>
+
+<div id="collectionManager">
+กำลังโหลด...
+</div>
+
+</section>
+
 </main>
 
 </div>
@@ -273,6 +294,7 @@ class="hidden">
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
   let adminProducts = [];
+  let adminCollections = [];
 
 function login(){
 
@@ -307,13 +329,14 @@ if(sessionStorage.getItem("adminLoggedIn") === "true"){
 
 function showAdminTab(tab){
 
-  const tabs = [
-    "dashboard",
-    "products",
-    "orders",
-    "address"
-  ];
-
+const tabs = [
+  "dashboard",
+  "products",
+  "orders",
+  "address",
+  "collections"
+];
+  
   tabs.forEach(name=>{
 
     document
@@ -335,13 +358,20 @@ function showAdminTab(tab){
 }
 
 function loadAdminData(){
+
   loadStats();
   loadTopProducts();
   loadTopFandoms();
+
   renderProductManager();
   loadAdminProducts();
+
+  renderCollectionManager();
+  loadAdminCollections();
+
   loadOrders();
   loadAddressRequests();
+
 }
 
 function renderProductManager(){
@@ -1724,6 +1754,521 @@ async function submitProductEdit(){
       "none";
 
   }
+
+}
+
+function renderCollectionManager(){
+
+  const box =
+    document.getElementById(
+      "collectionManager"
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.innerHTML = `
+
+<div class="card">
+
+<h2>
+➕ เพิ่ม Collection
+</h2>
+
+<div class="product-form">
+
+<div>
+<label>ชื่อ Collection</label>
+<input
+id="c_name"
+placeholder="ชื่อ Collection">
+</div>
+
+<div>
+<label>Fandom</label>
+<input
+id="c_fandom"
+placeholder="เช่น Honkai: Star Rail">
+</div>
+
+<div>
+<label>ประเภท Collection</label>
+<input
+id="c_type"
+placeholder="เช่น preorder">
+</div>
+
+<div>
+<label>วันปิดพรี</label>
+<input
+id="c_deadline"
+type="date">
+</div>
+
+<div>
+<label>รูปการ์ด Collection</label>
+<input
+id="c_image_file"
+type="file"
+accept="image/*">
+</div>
+
+<div>
+<label>รูป Banner</label>
+<input
+id="c_banner_file"
+type="file"
+accept="image/*">
+</div>
+
+<div class="full">
+<label>คำอธิบาย</label>
+
+<textarea
+id="c_description"
+style="height:110px;"
+placeholder="รายละเอียด Collection">
+</textarea>
+</div>
+
+<div>
+<label>
+<input
+id="c_featured"
+type="checkbox"
+style="width:auto;">
+แสดงเป็น Collection แนะนำ
+</label>
+</div>
+
+</div>
+
+<br>
+
+<button
+id="saveCollectionBtn"
+onclick="saveCollectionFromAdmin()">
+บันทึก Collection
+</button>
+
+<div
+id="saveCollectionLoading"
+class="loading-text"
+style="display:none;">
+⏳ กำลังบันทึก Collection...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+📂 รายการ Collections
+</h2>
+
+<input
+id="collectionSearch"
+placeholder="ค้นหา Collection..."
+oninput="renderAdminCollectionList()">
+
+<br><br>
+
+<div id="adminCollectionList">
+กำลังโหลด Collections...
+</div>
+
+</div>
+
+`;
+
+}
+
+async function saveCollectionFromAdmin(){
+
+  const btn =
+    document.getElementById(
+      "saveCollectionBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "saveCollectionLoading"
+    );
+
+  const payload = {
+
+    name:
+      document
+        .getElementById("c_name")
+        .value
+        .trim(),
+
+    fandom:
+      document
+        .getElementById("c_fandom")
+        .value
+        .trim(),
+
+    collection_type:
+      document
+        .getElementById("c_type")
+        .value
+        .trim(),
+
+    preorder_deadline:
+      document
+        .getElementById("c_deadline")
+        .value,
+
+    description:
+      document
+        .getElementById(
+          "c_description"
+        )
+        .value,
+
+    featured:
+      document
+        .getElementById("c_featured")
+        .checked
+        ? "yes"
+        : "",
+
+    status:"active"
+
+  };
+
+  if(!payload.name){
+    alert(
+      "กรุณากรอกชื่อ Collection"
+    );
+    return;
+  }
+
+  const imageFile =
+    document
+      .getElementById(
+        "c_image_file"
+      )
+      .files[0];
+
+  const bannerFile =
+    document
+      .getElementById(
+        "c_banner_file"
+      )
+      .files[0];
+
+  btn.disabled = true;
+  btn.textContent =
+    "กำลังบันทึก...";
+
+  loading.style.display =
+    "block";
+
+  try{
+
+    if(imageFile){
+
+      payload.image_base64 =
+        await fileToBase64(
+          imageFile
+        );
+
+    }
+
+    if(bannerFile){
+
+      payload.banner_base64 =
+        await fileToBase64(
+          bannerFile
+        );
+
+    }
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveCollection"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "เพิ่ม Collection ไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert(
+      "เพิ่ม Collection แล้ว: " +
+      result.collection_id
+    );
+
+    renderCollectionManager();
+
+    await loadAdminCollections();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    const newBtn =
+      document.getElementById(
+        "saveCollectionBtn"
+      );
+
+    const newLoading =
+      document.getElementById(
+        "saveCollectionLoading"
+      );
+
+    if(newBtn){
+
+      newBtn.disabled = false;
+
+      newBtn.textContent =
+        "บันทึก Collection";
+
+    }
+
+    if(newLoading){
+
+      newLoading.style.display =
+        "none";
+
+    }
+
+  }
+
+}
+
+async function loadAdminCollections(){
+
+  const box =
+    document.getElementById(
+      "adminCollectionList"
+    );
+
+  if(!box){
+    return;
+  }
+
+  try{
+
+    const response =
+      await fetch(
+        API +
+        "?action=adminCollections"
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      box.textContent =
+        result.error ||
+        "โหลด Collections ไม่สำเร็จ";
+
+      return;
+
+    }
+
+    adminCollections =
+      result.collections || [];
+
+    renderAdminCollectionList();
+
+  }catch(error){
+
+    console.error(error);
+
+    box.textContent =
+      "โหลด Collections ไม่สำเร็จ";
+
+  }
+
+}
+
+
+function renderAdminCollectionList(){
+
+  const box =
+    document.getElementById(
+      "adminCollectionList"
+    );
+
+  if(!box){
+    return;
+  }
+
+  const keyword =
+    document
+      .getElementById(
+        "collectionSearch"
+      )
+      ?.value
+      .trim()
+      .toLowerCase() || "";
+
+  const filtered =
+    adminCollections.filter(
+      collection => {
+
+        return (
+
+          String(
+            collection.name || ""
+          )
+            .toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          String(
+            collection.fandom || ""
+          )
+            .toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          String(
+            collection.collection_id || ""
+          )
+            .toLowerCase()
+            .includes(keyword)
+
+        );
+
+      }
+    );
+
+  let html =
+    '<div class="grid">';
+
+  filtered.forEach(
+    collection => {
+
+      html += `
+
+<div class="card">
+
+<img
+src="${collection.image || ""}"
+alt="${escapeHtml(
+  collection.name || ""
+)}"
+style="
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:14px;
+background:#f1f5f9;
+margin-bottom:12px;
+">
+
+<h3 style="margin:0 0 8px;">
+${escapeHtml(
+  collection.name || "-"
+)}
+</h3>
+
+<p>
+🆔
+${escapeHtml(
+  collection.collection_id || "-"
+)}
+</p>
+
+<p>
+🎮
+${escapeHtml(
+  collection.fandom || "-"
+)}
+</p>
+
+<p>
+📦
+${escapeHtml(
+  collection.collection_type || "-"
+)}
+</p>
+
+<p>
+สถานะ:
+<b>
+${escapeHtml(
+  collection.status || "-"
+)}
+</b>
+</p>
+
+${
+  collection.preorder_deadline
+  ?
+  `
+  <p>
+  📅 ปิดพรี:
+  ${formatDateInput(
+    collection.preorder_deadline
+  )}
+  </p>
+  `
+  :
+  ""
+}
+
+<button
+onclick="
+alert('เดี๋ยวทำแก้ไข Collection ต่อ')
+">
+✏️ แก้ไข
+</button>
+
+</div>
+
+`;
+
+    }
+  );
+
+  html += "</div>";
+
+  box.innerHTML =
+    filtered.length
+      ? html
+      : "ไม่พบ Collection";
 
 }
   
