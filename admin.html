@@ -1200,7 +1200,8 @@ flex-wrap:wrap;
 margin-top:12px;
 ">
 
-<button onclick="alert('เดี๋ยวทำระบบแก้ไขต่อ')">
+<button
+onclick="openEditProduct('${product.product_id}')">
 ✏️ แก้ไข
 </button>
 
@@ -1274,8 +1275,521 @@ async function toggleProductStatus(productId){
   loadAdminProducts();
 
 }
+
+function openEditProduct(productId){
+
+  const product =
+    adminProducts.find(
+      item =>
+        item.product_id === productId
+    );
+
+  if(!product){
+    alert("ไม่พบข้อมูลสินค้า");
+    return;
+  }
+
+  document
+    .getElementById("editProductForm")
+    .innerHTML = `
+
+<input
+type="hidden"
+id="e_product_id"
+value="${product.product_id}">
+
+<div>
+<label>ชื่อสินค้า</label>
+<input
+id="e_name"
+value="${escapeHtml(product.name || "")}">
+</div>
+
+<div>
+<label>ราคา</label>
+<input
+id="e_price"
+type="number"
+value="${product.price || 0}">
+</div>
+
+<div>
+<label>ราคาลด</label>
+<input
+id="e_sale_price"
+type="number"
+value="${product.sale_price || 0}">
+</div>
+
+<div>
+<label>หมวดหลัก</label>
+<input
+id="e_main_category"
+value="${escapeHtml(product.main_category || "")}">
+</div>
+
+<div>
+<label>Fandom</label>
+<input
+id="e_fandom"
+value="${escapeHtml(product.fandom || "")}">
+</div>
+
+<div>
+<label>หมวดย่อย</label>
+<input
+id="e_sub_category"
+value="${escapeHtml(product.sub_category || "")}">
+</div>
+
+<div>
+<label>รอบพรี</label>
+<input
+id="e_round"
+value="${escapeHtml(product.round || "")}">
+</div>
+
+<div>
+<label>ประเภทสินค้า</label>
+<select id="e_product_type">
+<option
+value="preorder"
+${product.product_type === "preorder" ? "selected" : ""}>
+Preorder
+</option>
+
+<option
+value="instock"
+${product.product_type === "instock" ? "selected" : ""}>
+พร้อมส่ง
+</option>
+</select>
+</div>
+
+<div>
+<label>จำนวนสต็อก</label>
+<input
+id="e_stock"
+type="number"
+value="${product.stock || 0}">
+</div>
+
+<div>
+<label>วันปิดพรี</label>
+<input
+id="e_preorder_deadline"
+type="date"
+value="${formatDateInput(product.preorder_deadline)}">
+</div>
+
+<div>
+<label>กำหนดถึงโดยประมาณ</label>
+<input
+id="e_estimated_arrival"
+value="${escapeHtml(product.estimated_arrival || "")}">
+</div>
+
+<div class="full">
+<label>รายละเอียดสินค้า</label>
+<textarea
+id="e_description"
+style="height:110px;">${escapeHtml(product.description || "")}</textarea>
+</div>
+
+<div>
+<label>เปลี่ยนรูปหลัก</label>
+<input
+id="e_image_file"
+type="file"
+accept="image/*">
+</div>
+
+<div>
+<label>เปลี่ยนรูป 2</label>
+<input
+id="e_image2_file"
+type="file"
+accept="image/*">
+</div>
+
+<div>
+<label>เปลี่ยนรูป 3</label>
+<input
+id="e_image3_file"
+type="file"
+accept="image/*">
+</div>
+
+<div>
+<label>เปลี่ยนรูป 4</label>
+<input
+id="e_image4_file"
+type="file"
+accept="image/*">
+</div>
+
+<div>
+<label>
+<input
+id="e_featured"
+type="checkbox"
+style="width:auto;"
+${isCheckedValue(product.featured) ? "checked" : ""}>
+สินค้าแนะนำ
+</label>
+</div>
+
+<div>
+<label>
+<input
+id="e_new_arrival"
+type="checkbox"
+style="width:auto;"
+${isCheckedValue(product.new_arrival) ? "checked" : ""}>
+สินค้าใหม่
+</label>
+</div>
+
+`;
+
+  document
+    .getElementById("editProductModal")
+    .classList.remove("hidden");
+
+}
+
+function closeEditProductModal(){
+
+  document
+    .getElementById("editProductModal")
+    .classList.add("hidden");
+
+}
+
+function escapeHtml(value){
+
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+function formatDateInput(value){
+
+  if(!value){
+    return "";
+  }
+
+  const date =
+    new Date(value);
+
+  if(isNaN(date.getTime())){
+    return "";
+  }
+
+  return date
+    .toISOString()
+    .split("T")[0];
+
+}
+
+function isCheckedValue(value){
+
+  const normalized =
+    String(value || "")
+      .trim()
+      .toLowerCase();
+
+  return (
+    normalized === "yes" ||
+    normalized === "true" ||
+    normalized === "1"
+  );
+
+}
+
+async function submitProductEdit(){
+
+  const btn =
+    document.getElementById(
+      "updateProductBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "updateProductLoading"
+    );
+
+  const payload = {
+
+    product_id:
+      document.getElementById(
+        "e_product_id"
+      ).value,
+
+    name:
+      document.getElementById(
+        "e_name"
+      ).value.trim(),
+
+    price:
+      Number(
+        document.getElementById(
+          "e_price"
+        ).value || 0
+      ),
+
+    sale_price:
+      Number(
+        document.getElementById(
+          "e_sale_price"
+        ).value || 0
+      ),
+
+    main_category:
+      document.getElementById(
+        "e_main_category"
+      ).value.trim(),
+
+    fandom:
+      document.getElementById(
+        "e_fandom"
+      ).value.trim(),
+
+    sub_category:
+      document.getElementById(
+        "e_sub_category"
+      ).value.trim(),
+
+    round:
+      document.getElementById(
+        "e_round"
+      ).value.trim(),
+
+    description:
+      document.getElementById(
+        "e_description"
+      ).value,
+
+    product_type:
+      document.getElementById(
+        "e_product_type"
+      ).value,
+
+    stock:
+      Number(
+        document.getElementById(
+          "e_stock"
+        ).value || 0
+      ),
+
+    preorder_deadline:
+      document.getElementById(
+        "e_preorder_deadline"
+      ).value,
+
+    estimated_arrival:
+      document.getElementById(
+        "e_estimated_arrival"
+      ).value.trim(),
+
+    featured:
+      document.getElementById(
+        "e_featured"
+      ).checked
+        ? "yes"
+        : "",
+
+    new_arrival:
+      document.getElementById(
+        "e_new_arrival"
+      ).checked
+        ? "yes"
+        : ""
+
+  };
+
+  if(!payload.name){
+    alert("กรุณากรอกชื่อสินค้า");
+    return;
+  }
+
+  if(!payload.price){
+    alert("กรุณากรอกราคา");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
+  loading.style.display = "block";
+
+  try{
+
+    const imageFiles = [
+      [
+        "image_base64",
+        document.getElementById(
+          "e_image_file"
+        ).files[0]
+      ],
+      [
+        "image2_base64",
+        document.getElementById(
+          "e_image2_file"
+        ).files[0]
+      ],
+      [
+        "image3_base64",
+        document.getElementById(
+          "e_image3_file"
+        ).files[0]
+      ],
+      [
+        "image4_base64",
+        document.getElementById(
+          "e_image4_file"
+        ).files[0]
+      ]
+    ];
+
+    for(const [field,file] of imageFiles){
+
+      if(file){
+        payload[field] =
+          await fileToBase64(file);
+      }
+
+    }
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "updateProduct"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "บันทึกไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert("แก้ไขสินค้าเรียบร้อยแล้ว");
+
+    closeEditProductModal();
+
+    await loadAdminProducts();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    btn.disabled = false;
+    btn.textContent =
+      "💾 บันทึกการแก้ไข";
+
+    loading.style.display =
+      "none";
+
+  }
+
+}
   
 </script>
 
+<div
+id="editProductModal"
+class="hidden"
+style="
+position:fixed;
+inset:0;
+background:rgba(15,23,42,.55);
+z-index:9999;
+padding:20px;
+overflow:auto;
+">
+
+<div
+class="card"
+style="
+max-width:850px;
+margin:30px auto;
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
+<h2>
+✏️ แก้ไขสินค้า
+</h2>
+
+<button
+type="button"
+onclick="closeEditProductModal()"
+style="background:#64748b;">
+✕
+</button>
+
+</div>
+
+<div
+id="editProductForm"
+class="product-form">
+</div>
+
+<br>
+
+<button
+id="updateProductBtn"
+onclick="submitProductEdit()">
+💾 บันทึกการแก้ไข
+</button>
+
+<div
+id="updateProductLoading"
+class="loading-text"
+style="display:none;">
+⏳ กำลังบันทึก...
+</div>
+
+</div>
+
+</div>
+  
 </body>
 </html>
