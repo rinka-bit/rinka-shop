@@ -600,6 +600,31 @@ sale_end:
     return;
   }
 
+  if(
+  payload.sale_price > 0 &&
+  (
+    !payload.sale_start ||
+    !payload.sale_end
+  )
+){
+  alert(
+    "กรุณากรอกวันเริ่มและวันสิ้นสุดลดราคา"
+  );
+  return;
+}
+
+if(
+  payload.sale_start &&
+  payload.sale_end &&
+  payload.sale_start >
+  payload.sale_end
+){
+  alert(
+    "วันเริ่มลดราคาต้องไม่เกินวันสิ้นสุด"
+  );
+  return;
+}
+
   const imageFile =
   document.getElementById("p_image_file").files[0];
 
@@ -1375,6 +1400,26 @@ value="${product.sale_price || 0}">
 </div>
 
 <div>
+<label>วันเริ่มลดราคา</label>
+<input
+id="e_sale_start"
+type="date"
+value="${formatDateInput(
+  product.sale_start
+)}">
+</div>
+
+<div>
+<label>วันสิ้นสุดลดราคา</label>
+<input
+id="e_sale_end"
+type="date"
+value="${formatDateInput(
+  product.sale_end
+)}">
+</div>
+
+<div>
 <label>หมวดหลัก</label>
 <input
 id="e_main_category"
@@ -1602,6 +1647,20 @@ async function submitProductEdit(){
         ).value || 0
       ),
 
+    sale_start:
+  document
+    .getElementById(
+      "e_sale_start"
+    )
+    .value,
+
+sale_end:
+  document
+    .getElementById(
+      "e_sale_end"
+    )
+    .value,
+
     main_category:
       document.getElementById(
         "e_main_category"
@@ -1674,6 +1733,31 @@ async function submitProductEdit(){
     alert("กรุณากรอกราคา");
     return;
   }
+
+  if(
+  payload.sale_price > 0 &&
+  (
+    !payload.sale_start ||
+    !payload.sale_end
+  )
+){
+  alert(
+    "กรุณากรอกวันเริ่มและวันสิ้นสุดลดราคา"
+  );
+  return;
+}
+
+if(
+  payload.sale_start &&
+  payload.sale_end &&
+  payload.sale_start >
+  payload.sale_end
+){
+  alert(
+    "วันเริ่มลดราคาต้องไม่เกินวันสิ้นสุด"
+  );
+  return;
+}
 
   btn.disabled = true;
   btn.textContent = "กำลังบันทึก...";
