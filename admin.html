@@ -400,6 +400,20 @@ function renderProductManager(){
 </div>
 
 <div>
+<label>วันเริ่มลดราคา</label>
+<input
+id="p_sale_start"
+type="date">
+</div>
+
+<div>
+<label>วันสิ้นสุดลดราคา</label>
+<input
+id="p_sale_end"
+type="date">
+</div>
+
+<div>
 <label>หมวดหลัก</label>
 <input id="p_main_category" placeholder="เช่น Doll / Acrylic / Badge">
 </div>
@@ -553,6 +567,15 @@ async function saveProductFromAdmin(){
     name: document.getElementById("p_name").value,
     price: Number(document.getElementById("p_price").value || 0),
     sale_price: Number(document.getElementById("p_sale_price").value || 0),
+    sale_start:
+  document.getElementById(
+    "p_sale_start"
+  ).value,
+
+sale_end:
+  document.getElementById(
+    "p_sale_end"
+  ).value,
     main_category: document.getElementById("p_main_category").value,
     fandom: document.getElementById("p_fandom").value,
     sub_category: document.getElementById("p_sub_category").value,
