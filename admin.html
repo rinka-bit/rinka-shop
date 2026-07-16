@@ -1200,10 +1200,13 @@ async function loadAdminProducts(){
   }
 
   adminProducts =
-    result.products || [];
+  result.products || [];
 
-  renderAdminProductList();
-  refreshOptionProductSelect();
+renderAdminProductList();
+
+refreshOptionProductSelect();
+
+refreshProductCollectionSelects();
 
 }
 
@@ -3101,7 +3104,7 @@ openEditCollection(
 
 <button
 onclick="
-toggleCollectionStatus(
+toggleCollectionStatusAdmin(
   '${escapeJsString(
     collection.collection_id
   )}'
@@ -3981,7 +3984,7 @@ function closeEditCollectionModal(){
 
 }
 
-  async function toggleCollectionStatus(
+async function toggleCollectionStatusAdmin(
   collectionId
 ){
 
