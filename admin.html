@@ -1482,27 +1482,16 @@ ${product.status === "active" ? "🚫 ปิดขาย" : "✅ เปิดข
 
 }
 
-function filterProductsByCollection(
-  collectionId
-){
+const productManager =
+  document.getElementById(
+    "productManager"
+  );
 
-  const filter =
-    document.getElementById(
-      "productCollectionFilter"
-    );
+if(productManager){
 
-  if(!filter){
-    return;
-  }
-
-  filter.value =
-    String(collectionId || "");
-
-  renderAdminProductList();
-
-  filter.scrollIntoView({
+  productManager.scrollIntoView({
     behavior:"smooth",
-    block:"center"
+    block:"start"
   });
 
 }
@@ -3166,11 +3155,25 @@ ${escapeHtml(
 )}
 </h3>
 
-<p
+<button
+type="button"
+onclick="
+  filterProductsByCollection(
+    '${escapeJsString(
+      collection.collection_id
+    )}'
+  )
+"
 style="
+  width:auto;
   margin:6px 0;
-  color:#475569;
+  padding:6px 10px;
+  border:none;
+  border-radius:999px;
+  background:#e0f2fe;
+  color:#0369a1;
   font-weight:700;
+  cursor:pointer;
 "
 >
 📦
@@ -3178,7 +3181,7 @@ ${getCollectionProductCount(
   collection.collection_id
 )}
 สินค้า
-</p>
+</button>
 
 <p>
 🆔
