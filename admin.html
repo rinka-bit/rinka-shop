@@ -592,6 +592,31 @@ onchange="renderAdminProductList()">
 </select>
 
 <select
+id="productCollectionFilter"
+onchange="renderAdminProductList()"
+>
+
+  <option value="">
+    ทุก Collection
+  </option>
+
+  ${adminCollections.map(
+    collection => `
+      <option
+      value="${escapeHtml(
+        collection.collection_id
+      )}"
+      >
+        ${escapeHtml(
+          collection.name
+        )}
+      </option>
+    `
+  ).join("")}
+
+</select>
+
+<select
 id="productTypeFilter"
 onchange="renderAdminProductList()">
 <option value="">ทุกประเภท</option>
