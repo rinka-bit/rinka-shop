@@ -382,18 +382,22 @@ const tabs = [
 
 }
 
-function loadAdminData(){
+async function loadAdminData(){
 
   loadStats();
   loadTopProducts();
   loadTopFandoms();
-  renderProductManager();
-  loadAdminProducts();
-  renderOptionManager();
-  renderCollectionManager();
-  loadAdminCollections();
   loadOrders();
   loadAddressRequests();
+
+  renderCollectionManager();
+
+  await loadAdminCollections();
+
+  renderProductManager();
+  renderOptionManager();
+
+  await loadAdminProducts();
 
 }
 
@@ -754,8 +758,11 @@ if(image4File){
         : result.error || "เพิ่มสินค้าไม่สำเร็จ"
     );
 if(result.success){
+
   renderProductManager();
-  loadAdminProducts();
+
+  await loadAdminProducts();
+
 }
 
   }catch(error){
@@ -1199,7 +1206,7 @@ async function loadAdminProducts(){
     return;
   }
 
-  adminProducts =
+adminProducts =
   result.products || [];
 
 renderAdminProductList();
