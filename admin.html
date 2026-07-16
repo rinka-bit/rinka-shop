@@ -457,6 +457,35 @@ type="date">
 </div>
 
 <div>
+<label>Collection</label>
+
+<select id="p_collection_id">
+
+<option value="">
+ไม่ผูก Collection
+</option>
+
+${adminCollections
+  .map(collection=>`
+
+<option
+value="${escapeHtml(
+  collection.collection_id
+)}">
+
+${escapeHtml(
+  collection.name || "-"
+)}
+
+</option>
+
+`)
+  .join("")}
+
+</select>
+</div>
+
+<div>
 <label>ประเภทสินค้า</label>
 <select id="p_product_type">
 <option value="preorder">Preorder</option>
@@ -602,7 +631,15 @@ sale_end:
     main_category: document.getElementById("p_main_category").value,
     fandom: document.getElementById("p_fandom").value,
     sub_category: document.getElementById("p_sub_category").value,
-    round: document.getElementById("p_round").value,
+    round:
+  document.getElementById(
+    "p_round"
+  ).value,
+
+collection_id:
+  document.getElementById(
+    "p_collection_id"
+  ).value,
     description: document.getElementById("p_description").value,
     product_type: document.getElementById("p_product_type").value,
     stock: Number(document.getElementById("p_stock").value || 0),
@@ -1221,6 +1258,17 @@ function renderAdminProductList(){
 
   filtered.forEach(product=>{
 
+    const linkedCollection =
+  adminCollections.find(
+    collection =>
+      String(
+        collection.collection_id
+      ) ===
+      String(
+        product.collection_id
+      )
+  );
+
     html += `
 
 <div class="card">
@@ -1246,6 +1294,17 @@ ${product.name || "-"}
 
 <p>
 🎮 ${product.fandom || "-"}
+</p>
+
+<p>
+🖼️ Collection:
+${
+  linkedCollection
+    ? escapeHtml(
+        linkedCollection.name
+      )
+    : "ไม่ได้ผูก"
+}
 </p>
 
 <p>
@@ -1469,6 +1528,46 @@ value="${escapeHtml(product.sub_category || "")}">
 <input
 id="e_round"
 value="${escapeHtml(product.round || "")}">
+</div>
+
+<div>
+<label>Collection</label>
+
+<select id="e_collection_id">
+
+<option value="">
+ไม่ผูก Collection
+</option>
+
+${adminCollections
+  .map(collection=>`
+
+<option
+value="${escapeHtml(
+  collection.collection_id
+)}"
+
+${
+  String(
+    product.collection_id || ""
+  ) ===
+  String(
+    collection.collection_id || ""
+  )
+    ? "selected"
+    : ""
+}>
+
+${escapeHtml(
+  collection.name || "-"
+)}
+
+</option>
+
+`)
+  .join("")}
+
+</select>
 </div>
 
 <div>
@@ -1704,6 +1803,13 @@ sale_end:
       document.getElementById(
         "e_round"
       ).value.trim(),
+
+    collection_id:
+  document
+    .getElementById(
+      "e_collection_id"
+    )
+    .value,
 
     description:
       document.getElementById(
@@ -2396,6 +2502,90 @@ removeProductOption(
   box.innerHTML = html;
 
 }
+
+  function refreshProductCollectionSelects(){
+
+  const addSelect =
+    document.getElementById(
+      "p_collection_id"
+    );
+
+  if(addSelect){
+
+    const currentValue =
+      addSelect.value;
+
+    addSelect.innerHTML = `
+
+<option value="">
+ไม่ผูก Collection
+</option>
+
+${adminCollections
+  .map(collection=>`
+
+<option
+value="${escapeHtml(
+  collection.collection_id
+)}">
+
+${escapeHtml(
+  collection.name || "-"
+)}
+
+</option>
+
+`)
+  .join("")}
+
+`;
+
+    addSelect.value =
+      currentValue;
+
+  }
+
+  const editSelect =
+    document.getElementById(
+      "e_collection_id"
+    );
+
+  if(editSelect){
+
+    const currentValue =
+      editSelect.value;
+
+    editSelect.innerHTML = `
+
+<option value="">
+ไม่ผูก Collection
+</option>
+
+${adminCollections
+  .map(collection=>`
+
+<option
+value="${escapeHtml(
+  collection.collection_id
+)}">
+
+${escapeHtml(
+  collection.name || "-"
+)}
+
+</option>
+
+`)
+  .join("")}
+
+`;
+
+    editSelect.value =
+      currentValue;
+
+  }
+
+}
   
 function renderCollectionManager(){
 
@@ -2745,9 +2935,11 @@ async function loadAdminCollections(){
     }
 
     adminCollections =
-      result.collections || [];
+  result.collections || [];
 
-    renderAdminCollectionList();
+renderAdminCollectionList();
+
+refreshProductCollectionSelects();
 
   }catch(error){
 
