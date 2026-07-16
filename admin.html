@@ -1264,6 +1264,13 @@ function renderAdminProductList(){
     document.getElementById("productTypeFilter")
       ?.value || "";
 
+  const collectionFilter =
+  document
+    .getElementById(
+      "productCollectionFilter"
+    )
+    ?.value || "";
+
   const filtered =
     adminProducts.filter(product=>{
 
@@ -1283,7 +1290,19 @@ function renderAdminProductList(){
         !typeFilter ||
         product.product_type === typeFilter;
 
-      return matchKeyword && matchStatus && matchType;
+      const matchCollection =
+  !collectionFilter ||
+  String(
+    product.collection_id || ""
+  ) ===
+  String(collectionFilter);
+
+            return (
+        matchKeyword &&
+        matchStatus &&
+        matchType &&
+        matchCollection
+      );
 
     });
 
