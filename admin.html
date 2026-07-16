@@ -1482,16 +1482,49 @@ ${product.status === "active" ? "🚫 ปิดขาย" : "✅ เปิดข
 
 }
 
-const productManager =
-  document.getElementById(
-    "productManager"
-  );
+function filterProductsByCollection(
+  collectionId
+){
 
-if(productManager){
+  // เปิดแท็บ Product Manager ก่อน
+  showAdminTab("products");
 
-  productManager.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
+  const filter =
+    document.getElementById(
+      "productCollectionFilter"
+    );
+
+  if(!filter){
+
+    console.error(
+      "ไม่พบ productCollectionFilter"
+    );
+
+    return;
+
+  }
+
+  filter.value =
+    String(collectionId || "");
+
+  renderAdminProductList();
+
+  requestAnimationFrame(()=>{
+
+    const productManager =
+      document.getElementById(
+        "productManager"
+      );
+
+    if(productManager){
+
+      productManager.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    }
+
   });
 
 }
