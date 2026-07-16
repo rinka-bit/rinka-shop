@@ -3681,7 +3681,7 @@ function openEditCollection(
 
 <input
 type="hidden"
-id="e_collection_id"
+id="e_edit_collection_id"
 value="${escapeHtml(
   collection.collection_id
 )}">
@@ -3813,12 +3813,12 @@ function closeEditCollectionModal(){
 
   const payload = {
 
-    collection_id:
-      document
-        .getElementById(
-          "e_collection_id"
-        )
-        .value,
+   collection_id:
+  document
+    .getElementById(
+      "e_edit_collection_id"
+    )
+    .value,
 
     name:
       document
