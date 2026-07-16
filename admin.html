@@ -1352,13 +1352,48 @@ ${product.name || "-"}
 
 <p>
 🖼️ Collection:
+
 ${
   linkedCollection
-    ? escapeHtml(
-        linkedCollection.name
-      )
-    : "ไม่ได้ผูก"
+    ? `
+      <button
+      type="button"
+      onclick="
+        filterProductsByCollection(
+          '${escapeJsString(
+            linkedCollection.collection_id
+          )}'
+        )
+      "
+      style="
+        width:auto;
+        padding:4px 9px;
+        margin-left:4px;
+        border:none;
+        border-radius:999px;
+        background:#e0f2fe;
+        color:#0369a1;
+        font-weight:700;
+        cursor:pointer;
+      "
+      >
+        ${escapeHtml(
+          linkedCollection.name
+        )}
+      </button>
+    `
+    : `
+      <span
+      style="
+        color:#94a3b8;
+        font-weight:600;
+      "
+      >
+        ไม่ได้ผูก
+      </span>
+    `
 }
+
 </p>
 
 <p>
@@ -1442,6 +1477,31 @@ ${product.status === "active" ? "🚫 ปิดขาย" : "✅ เปิดข
     filtered.length
       ? html
       : "ไม่พบสินค้า";
+
+}
+
+function filterProductsByCollection(
+  collectionId
+){
+
+  const filter =
+    document.getElementById(
+      "productCollectionFilter"
+    );
+
+  if(!filter){
+    return;
+  }
+
+  filter.value =
+    String(collectionId || "");
+
+  renderAdminProductList();
+
+  filter.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
 
 }
 
