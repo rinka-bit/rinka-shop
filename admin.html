@@ -1240,6 +1240,8 @@ refreshOptionProductSelect();
 
 refreshProductCollectionSelects();
 
+renderAdminCollectionList();
+
 }
 
 function renderAdminProductList(){
@@ -1502,6 +1504,20 @@ function filterProductsByCollection(
     behavior:"smooth",
     block:"center"
   });
+
+}
+
+function getCollectionProductCount(
+  collectionId
+){
+
+  return adminProducts.filter(
+    product =>
+      String(
+        product.collection_id || ""
+      ) ===
+      String(collectionId || "")
+  ).length;
 
 }
 
@@ -3149,6 +3165,20 @@ ${escapeHtml(
   collection.name || "-"
 )}
 </h3>
+
+<p
+style="
+  margin:6px 0;
+  color:#475569;
+  font-weight:700;
+"
+>
+📦
+${getCollectionProductCount(
+  collection.collection_id
+)}
+สินค้า
+</p>
 
 <p>
 🆔
