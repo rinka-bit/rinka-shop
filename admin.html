@@ -2889,12 +2889,48 @@ ${
   ""
 }
 
+<div style="
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:12px;
+">
+
 <button
 onclick="
-alert('เดี๋ยวทำแก้ไข Collection ต่อ')
+openEditCollection(
+  '${escapeJsString(
+    collection.collection_id
+  )}'
+)
 ">
 ✏️ แก้ไข
 </button>
+
+<button
+onclick="
+toggleCollectionStatus(
+  '${escapeJsString(
+    collection.collection_id
+  )}'
+)
+"
+style="
+background:
+${
+  collection.status === "active"
+    ? "#ef4444"
+    : "#22c55e"
+};
+">
+${
+  collection.status === "active"
+    ? "🚫 ปิด Collection"
+    : "✅ เปิด Collection"
+}
+</button>
+
+</div>
 
 </div>
 
@@ -3411,6 +3447,437 @@ function resetOptionForm(){
   }
 
 }
+
+function openEditCollection(
+  collectionId
+){
+
+  const collection =
+    adminCollections.find(
+      item =>
+        String(
+          item.collection_id
+        ) ===
+        String(collectionId)
+    );
+
+  if(!collection){
+
+    alert(
+      "ไม่พบข้อมูล Collection"
+    );
+
+    return;
+
+  }
+
+  document
+    .getElementById(
+      "editCollectionForm"
+    )
+    .innerHTML = `
+
+<input
+type="hidden"
+id="e_collection_id"
+value="${escapeHtml(
+  collection.collection_id
+)}">
+
+<div>
+<label>ชื่อ Collection</label>
+
+<input
+id="e_collection_name"
+value="${escapeHtml(
+  collection.name || ""
+)}">
+</div>
+
+<div>
+<label>Fandom</label>
+
+<input
+id="e_collection_fandom"
+value="${escapeHtml(
+  collection.fandom || ""
+)}">
+</div>
+
+<div>
+<label>ประเภท Collection</label>
+
+<input
+id="e_collection_type"
+value="${escapeHtml(
+  collection.collection_type || ""
+)}">
+</div>
+
+<div>
+<label>วันปิดพรี</label>
+
+<input
+id="e_collection_deadline"
+type="date"
+value="${formatDateInput(
+  collection.preorder_deadline
+)}">
+</div>
+
+<div>
+<label>เปลี่ยนรูปการ์ด</label>
+
+<input
+id="e_collection_image_file"
+type="file"
+accept="image/*">
+</div>
+
+<div>
+<label>เปลี่ยนรูป Banner</label>
+
+<input
+id="e_collection_banner_file"
+type="file"
+accept="image/*">
+</div>
+
+<div class="full">
+<label>คำอธิบาย</label>
+
+<textarea
+id="e_collection_description"
+style="height:110px;">${escapeHtml(
+  collection.description || ""
+)}</textarea>
+</div>
+
+<div>
+<label>
+
+<input
+id="e_collection_featured"
+type="checkbox"
+style="width:auto;"
+${
+  isCheckedValue(
+    collection.featured
+  )
+    ? "checked"
+    : ""
+}>
+
+แสดงเป็น Collection แนะนำ
+
+</label>
+</div>
+
+`;
+
+  document
+    .getElementById(
+      "editCollectionModal"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+}
+
+function closeEditCollectionModal(){
+
+  document
+    .getElementById(
+      "editCollectionModal"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+}
+
+  async function submitCollectionEdit(){
+
+  const btn =
+    document.getElementById(
+      "updateCollectionBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "updateCollectionLoading"
+    );
+
+  const payload = {
+
+    collection_id:
+      document
+        .getElementById(
+          "e_collection_id"
+        )
+        .value,
+
+    name:
+      document
+        .getElementById(
+          "e_collection_name"
+        )
+        .value
+        .trim(),
+
+    fandom:
+      document
+        .getElementById(
+          "e_collection_fandom"
+        )
+        .value
+        .trim(),
+
+    collection_type:
+      document
+        .getElementById(
+          "e_collection_type"
+        )
+        .value
+        .trim(),
+
+    preorder_deadline:
+      document
+        .getElementById(
+          "e_collection_deadline"
+        )
+        .value,
+
+    description:
+      document
+        .getElementById(
+          "e_collection_description"
+        )
+        .value,
+
+    featured:
+      document
+        .getElementById(
+          "e_collection_featured"
+        )
+        .checked
+        ? "yes"
+        : "",
+
+    status:"active"
+
+  };
+
+  if(!payload.name){
+
+    alert(
+      "กรุณากรอกชื่อ Collection"
+    );
+
+    return;
+
+  }
+
+  const imageFile =
+    document
+      .getElementById(
+        "e_collection_image_file"
+      )
+      .files[0];
+
+  const bannerFile =
+    document
+      .getElementById(
+        "e_collection_banner_file"
+      )
+      .files[0];
+
+  btn.disabled = true;
+
+  btn.textContent =
+    "กำลังบันทึก...";
+
+  loading.style.display =
+    "block";
+
+  try{
+
+    if(imageFile){
+
+      payload.image_base64 =
+        await fileToBase64(
+          imageFile
+        );
+
+    }
+
+    if(bannerFile){
+
+      payload.banner_base64 =
+        await fileToBase64(
+          bannerFile
+        );
+
+    }
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "updateCollection"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "แก้ไข Collection ไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert(
+      "แก้ไข Collection เรียบร้อยแล้ว"
+    );
+
+    closeEditCollectionModal();
+
+    await loadAdminCollections();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "💾 บันทึกการแก้ไข";
+
+    loading.style.display =
+      "none";
+
+  }
+
+}
+
+  async function toggleCollectionStatus(
+  collectionId
+){
+
+  const collection =
+    adminCollections.find(
+      item =>
+        String(
+          item.collection_id
+        ) ===
+        String(collectionId)
+    );
+
+  const isActive =
+    collection &&
+    collection.status ===
+    "active";
+
+  const ok =
+    confirm(
+      isActive
+        ? "ต้องการปิด Collection นี้ใช่ไหม?"
+        : "ต้องการเปิด Collection นี้ใช่ไหม?"
+    );
+
+  if(!ok){
+    return;
+  }
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "toggleCollectionStatus"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify({
+        collection_id:
+          collectionId
+      })
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "เปลี่ยนสถานะไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert(
+      result.status === "active"
+        ? "เปิด Collection แล้ว"
+        : "ปิด Collection แล้ว"
+    );
+
+    await loadAdminCollections();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }
+
+}
   
 </script>
 
@@ -3470,6 +3937,68 @@ id="updateProductLoading"
 class="loading-text"
 style="display:none;">
 ⏳ กำลังบันทึก...
+</div>
+
+</div>
+
+</div>
+
+<div
+id="editCollectionModal"
+class="hidden"
+style="
+position:fixed;
+inset:0;
+background:rgba(15,23,42,.55);
+z-index:9999;
+padding:20px;
+overflow:auto;
+">
+
+<div
+class="card"
+style="
+max-width:850px;
+margin:30px auto;
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
+<h2>
+✏️ แก้ไข Collection
+</h2>
+
+<button
+type="button"
+onclick="closeEditCollectionModal()"
+style="background:#64748b;">
+✕
+</button>
+
+</div>
+
+<div
+id="editCollectionForm"
+class="product-form">
+</div>
+
+<br>
+
+<button
+id="updateCollectionBtn"
+onclick="submitCollectionEdit()">
+💾 บันทึกการแก้ไข
+</button>
+
+<div
+id="updateCollectionLoading"
+class="loading-text"
+style="display:none;">
+⏳ กำลังบันทึก Collection...
 </div>
 
 </div>
