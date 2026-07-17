@@ -218,6 +218,13 @@ onclick="showAdminTab('collections')">
 🖼️ Collections
 </button>
 
+<button
+class="nav-btn"
+id="nav_gifts"
+onclick="showAdminTab('gifts')">
+🎁 ของแถม
+</button>
+
 <hr>
 
 <button
@@ -306,6 +313,20 @@ class="hidden">
 
 </section>
 
+<section
+id="tab_gifts"
+class="hidden">
+
+<h1 class="section-title">
+🎁 Gift Manager
+</h1>
+
+<div id="giftManager">
+กำลังโหลด...
+</div>
+
+</section>
+
 </main>
 
 </div>
@@ -317,8 +338,13 @@ const API =
   let adminProducts = [];
   let adminCollections = [];
   let adminProductOptions = [];
+
+  let adminGiftCampaigns = [];
+  let adminGiftRules = [];
+  
   let selectedOptionProductId = "";
   let editingOptionId = "";
+  let editingGiftId = "";
   let highlightedProductId = "";
 
 function login(){
@@ -360,7 +386,8 @@ const tabs = [
   "options",
   "orders",
   "address",
-  "collections"
+  "collections",
+  "gifts"
 ];
   
   tabs.forEach(name=>{
@@ -396,9 +423,10 @@ async function loadAdminData(){
   await loadAdminCollections();
 
   renderProductManager();
-  renderOptionManager();
+renderOptionManager();
+renderGiftManager();
 
-  await loadAdminProducts();
+await loadAdminProducts();
 
 }
 
@@ -2942,6 +2970,275 @@ ${escapeHtml(
   }
 
 }
+
+function renderGiftManager(){
+
+  const box =
+    document.getElementById(
+      "giftManager"
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.innerHTML = `
+
+<div class="card">
+
+<h2>
+➕ เพิ่มของแถม
+</h2>
+
+<div class="product-form">
+
+<div>
+<label>
+Collection
+</label>
+
+<select id="g_collection_id">
+
+<option value="">
+-- เลือก Collection --
+</option>
+
+${adminCollections
+  .map(collection=>`
+
+<option
+value="${escapeHtml(
+  collection.collection_id
+)}">
+
+${escapeHtml(
+  collection.name || "-"
+)}
+
+</option>
+
+`)
+  .join("")}
+
+</select>
+</div>
+
+<div>
+<label>
+ชื่อระดับของแถม
+</label>
+
+<input
+id="g_tier_name"
+placeholder="เช่น ของแถมยอดครบ 500 บาท">
+</div>
+
+<div>
+<label>
+ชื่อของแถม
+</label>
+
+<input
+id="g_gift_name"
+placeholder="เช่น โปสการ์ดสุ่ม">
+</div>
+
+<div>
+<label>
+รูปของแถม
+</label>
+
+<input
+id="g_gift_image_file"
+type="file"
+accept="image/*">
+</div>
+
+<div>
+<label>
+สถานะ
+</label>
+
+<select id="g_active">
+
+<option value="yes">
+เปิดใช้งาน
+</option>
+
+<option value="">
+ปิดใช้งาน
+</option>
+
+</select>
+</div>
+
+</div>
+
+<br>
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+">
+
+<button
+id="saveGiftBtn"
+onclick="submitGiftCampaign()">
+💾 บันทึกของแถม
+</button>
+
+<button
+id="cancelGiftEditBtn"
+class="hidden"
+style="background:#64748b;"
+onclick="cancelGiftEdit()">
+ยกเลิกการแก้ไข
+</button>
+
+</div>
+
+<div
+id="saveGiftLoading"
+class="loading-text"
+style="display:none;">
+⏳ กำลังบันทึกของแถม...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+⚙️ กติกาของแถมแต่ละ Collection
+</h2>
+
+<div class="product-form">
+
+<div>
+<label>
+Collection
+</label>
+
+<select id="gr_collection_id">
+
+<option value="">
+-- เลือก Collection --
+</option>
+
+${adminCollections
+  .map(collection=>`
+
+<option
+value="${escapeHtml(
+  collection.collection_id
+)}">
+
+${escapeHtml(
+  collection.name || "-"
+)}
+
+</option>
+
+`)
+  .join("")}
+
+</select>
+</div>
+
+<div>
+<label>
+ยอดขั้นต่ำ
+</label>
+
+<input
+id="gr_min_amount"
+type="number"
+min="0"
+value="0">
+</div>
+
+<div>
+<label>
+จำนวนของแถมที่เลือกได้
+</label>
+
+<input
+id="gr_max_select"
+type="number"
+min="1"
+value="1">
+</div>
+
+<div>
+<label>
+อนุญาตให้เลือกซ้ำ
+</label>
+
+<select id="gr_allow_duplicate">
+
+<option value="no">
+ไม่อนุญาต
+</option>
+
+<option value="yes">
+อนุญาต
+</option>
+
+</select>
+</div>
+
+<div>
+<label>
+สถานะ
+</label>
+
+<select id="gr_active">
+
+<option value="yes">
+เปิดใช้งาน
+</option>
+
+<option value="">
+ปิดใช้งาน
+</option>
+
+</select>
+</div>
+
+</div>
+
+<br>
+
+<button
+id="saveGiftRuleBtn"
+onclick="submitGiftRule()">
+💾 บันทึกกติกา
+</button>
+
+<div
+id="saveGiftRuleLoading"
+class="loading-text"
+style="display:none;">
+⏳ กำลังบันทึกกติกา...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+📋 รายการของแถม
+</h2>
+
+<div id="adminGiftList">
+ยังไม่มีข้อมูล
+</div>
+
+</div>
+
+`;
+}
   
 function renderCollectionManager(){
 
@@ -3296,6 +3593,8 @@ async function loadAdminCollections(){
 renderAdminCollectionList();
 
 refreshProductCollectionSelects();
+
+renderGiftManager();
 
   }catch(error){
 
