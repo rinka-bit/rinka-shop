@@ -841,27 +841,23 @@ document.getElementById("productQty")?.value
 ) || 1;
 
 localStorage.setItem(
-"buyNowCart",
-JSON.stringify([
-{
-...window.currentProduct,
-selected_options:{},
-qty:qty
-}
-])
+  "buyNowCart",
+  JSON.stringify(
+    checkoutItems
+  )
 );
 
- localStorage.setItem(
+localStorage.setItem(
   "checkoutSource",
   "buyNow"
 );
 
 localStorage.removeItem(
   "checkoutCart"
-); 
+);
 
 window.location.href =
-"checkout.html";
+  "checkout.html";
 
 return;
 
