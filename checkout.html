@@ -592,125 +592,150 @@ function escapeHtml(
 
 function goPayment(){
 
-  let hasError = false;
+  /*
+  =========================
+  ตรวจสอบที่อยู่จัดส่ง
+  =========================
+  */
+
+  const addressData =
+    window.checkoutAddress;
+
+
+  if(!addressData){
+
+    alert(
+      "กรุณาเลือกที่อยู่จัดส่งก่อน"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !addressData.receiver ||
+    !addressData.phone ||
+    !addressData.address ||
+    !addressData.province ||
+    !addressData.postcode
+  ){
+
+    alert(
+      "ข้อมูลที่อยู่จัดส่งไม่ครบ กรุณาเลือกหรือแก้ไขที่อยู่ใหม่"
+    );
+
+    return;
+
+  }
+
 
   const gifts = [];
 
-  document
-    .querySelectorAll(
-      ".gift-checkbox:checked"
-    )
-    .forEach(checkbox=>{
+  let validationError =
+    false;
 
-      const giftId =
-        checkbox.value;
 
-      const selectedChar =
-        document.querySelector(
-          `input[name="gift-char-${CSS.escape(
-            giftId
-          )}"]:checked`
-        );
-
-      const charBox =
-        document.getElementById(
-          `gift-char-${giftId}`
-        );
-
-      if(
-        charBox &&
-        charBox.querySelector(
-          "input"
-        ) &&
-        !selectedChar
-      ){
-
-        alert(
-          "กรุณาเลือกตัวละครของของแถม"
-        );
-
-        hasError = true;
-
-        return;
-
-      }
-
-      gifts.push({
-
-        gift_id:
-          giftId,
-
-        tier_name:
-          checkbox.dataset.tierName || "",
-
-        collection_id:
-          checkbox.dataset.collectionId || "",
-
-        character_name:
-          selectedChar
-            ? selectedChar.value
-            : ""
-
-      });
-
-    });
-
+  /*
+  =========================
+  ของแถมแบบเลือกจำนวน
+  =========================
+  */
 
   document
     .querySelectorAll(
       ".gift-quantity"
     )
-    .forEach(input=>{
+    .forEach(quantityInput=>{
+
+      if(validationError){
+
+        return;
+
+      }
+
+
+      const giftId =
+        quantityInput.dataset.giftId ||
+        "";
+
+      const tierName =
+        quantityInput.dataset.tierName ||
+        "";
+
+      const collectionId =
+        quantityInput.dataset.collectionId ||
+        "";
 
       const quantity =
         Number(
-          input.value || 0
+          quantityInput.value || 0
         );
 
-      if(quantity <= 0){
-
-        return;
-
-      }
-
-      const giftId =
-        input.dataset.giftId;
-
-      const selectedChar =
-        document.querySelector(
-          `input[name="gift-char-${CSS.escape(
-            giftId
-          )}"]:checked`
-        );
-
-      const charBox =
-        document.getElementById(
-          `gift-char-${giftId}`
-        );
 
       if(
-        charBox &&
-        charBox.querySelector(
-          "input"
-        ) &&
-        !selectedChar
+        !giftId ||
+        quantity <= 0
       ){
-
-        alert(
-          "กรุณาเลือกตัวละครของของแถม"
-        );
-
-        hasError = true;
 
         return;
 
       }
 
+
+      const characters =
+        giftCharacterMap[
+          giftId
+        ] || [];
+
+
       for(
-        let i = 0;
-        i < quantity;
-        i++
+        let itemIndex = 0;
+        itemIndex < quantity;
+        itemIndex++
       ){
+
+        let characterName = "";
+
+
+        if(characters.length){
+
+          const radioName =
+            `gift-char-${giftId}-${itemIndex}`;
+
+          const selectedCharacter =
+            Array.from(
+              document.querySelectorAll(
+                "input[type='radio']"
+              )
+            )
+            .find(input=>
+
+              input.name === radioName &&
+              input.checked
+
+            );
+
+
+          if(!selectedCharacter){
+
+            alert(
+              `กรุณาเลือกตัวละครของของแถมชิ้นที่ ${itemIndex + 1} ให้ครบ`
+            );
+
+            validationError =
+              true;
+
+            return;
+
+          }
+
+
+          characterName =
+            selectedCharacter.value;
+
+        }
+
 
         gifts.push({
 
@@ -718,15 +743,13 @@ function goPayment(){
             giftId,
 
           tier_name:
-            input.dataset.tierName || "",
+            tierName,
 
           collection_id:
-            input.dataset.collectionId || "",
+            collectionId,
 
           character_name:
-            selectedChar
-              ? selectedChar.value
-              : ""
+            characterName
 
         });
 
@@ -735,21 +758,140 @@ function goPayment(){
     });
 
 
-  if(hasError){
+  if(validationError){
 
     return;
 
   }
 
 
+  /*
+  =========================
+  ของแถมแบบ Checkbox
+  =========================
+  */
+
+  document
+    .querySelectorAll(
+      ".gift-checkbox:checked"
+    )
+    .forEach(checkbox=>{
+
+      if(validationError){
+
+        return;
+
+      }
+
+
+      const giftId =
+        checkbox.dataset.giftId ||
+        checkbox.value ||
+        "";
+
+      const tierName =
+        checkbox.dataset.tierName ||
+        "";
+
+      const collectionId =
+        checkbox.dataset.collectionId ||
+        "";
+
+
+      if(!giftId){
+
+        return;
+
+      }
+
+
+      const characters =
+        giftCharacterMap[
+          giftId
+        ] || [];
+
+      let characterName = "";
+
+
+      if(characters.length){
+
+        const radioName =
+          `gift-char-${giftId}-0`;
+
+        const selectedCharacter =
+          Array.from(
+            document.querySelectorAll(
+              "input[type='radio']"
+            )
+          )
+          .find(input=>
+
+            input.name === radioName &&
+            input.checked
+
+          );
+
+
+        if(!selectedCharacter){
+
+          alert(
+            "กรุณาเลือกตัวละครของของแถมให้ครบ"
+          );
+
+          validationError =
+            true;
+
+          return;
+
+        }
+
+
+        characterName =
+          selectedCharacter.value;
+
+      }
+
+
+      gifts.push({
+
+        gift_id:
+          giftId,
+
+        tier_name:
+          tierName,
+
+        collection_id:
+          collectionId,
+
+        character_name:
+          characterName
+
+      });
+
+    });
+
+
+  if(validationError){
+
+    return;
+
+  }
+
+
+  /*
+  =========================
+  ตรวจจำนวนของแถมแต่ละ Tier
+  =========================
+  */
+
   const tierCards =
     document.querySelectorAll(
       ".gift-tier-card"
     );
 
+
   for(
-    const tierCard
-    of tierCards
+    const tierCard of tierCards
   ){
 
     const tierKey =
@@ -765,10 +907,11 @@ function goPayment(){
         tierKey
       );
 
+
     if(selectedCount > max){
 
       alert(
-        `จำนวนของแถมเกินสิทธิ์ที่เลือกได้สูงสุด ${max} ชิ้น`
+        `เลือกของแถมได้สูงสุด ${max} ชิ้น`
       );
 
       return;
@@ -778,45 +921,20 @@ function goPayment(){
   }
 
 
-  if(!window.checkoutAddress){
+  /*
+  =========================
+  เตรียมข้อมูลไปหน้า Payment
+  =========================
+  */
 
-    alert(
-      "กรุณาเลือกที่อยู่จัดส่ง"
-    );
+  const checkoutData = {
 
-    return;
-
-  }
-
-
-  const addressData = {
+    ...addressData,
 
     email:
-      customer.email,
-
-    receiver:
-      window.checkoutAddress.receiver,
-
-    phone:
-      window.checkoutAddress.phone,
-
-    social:
-      customer.social || "",
-
-    address:
-      window.checkoutAddress.address,
-
-    subdistrict:
-      window.checkoutAddress.subdistrict,
-
-    district:
-      window.checkoutAddress.district,
-
-    province:
-      window.checkoutAddress.province,
-
-    postcode:
-      window.checkoutAddress.postcode,
+      addressData.email ||
+      customer.email ||
+      "",
 
     gifts:
       gifts
@@ -824,26 +942,22 @@ function goPayment(){
   };
 
 
-  console.log(
-    "SELECTED GIFTS",
-    gifts
-  );
+  window.checkoutAddress =
+    checkoutData;
 
 
   localStorage.setItem(
+
     "checkoutAddress",
+
     JSON.stringify(
-      addressData
+      checkoutData
     )
+
   );
 
 
-  localStorage.removeItem(
-    "selectedCheckoutAddress"
-  );
-
-
-  window.location =
+  window.location.href =
     "payment.html";
 
 }
@@ -1566,20 +1680,24 @@ document.addEventListener(
 
     }
 
-    toggleGiftCharacterBox(
-      checkbox.value,
-      checkbox.checked
-    );
+  renderGiftCharacterSelectors(
 
-    updateGiftTierCount(
-      tierKey
-    );
+    checkbox.value,
+
+    checkbox.checked
+      ? 1
+      : 0
+
+);
+
+updateGiftTierCount(
+    tierKey
+);
 
   }
 );
 
-
-document.addEventListener(
+  document.addEventListener(
   "click",
   e=>{
 
@@ -1637,13 +1755,13 @@ document.addEventListener(
 
     if(plusButton){
 
-      const tierSelectedCount =
+      const selectedCount =
         getGiftTierSelectedCount(
           tierKey
         );
 
       if(
-        tierSelectedCount >= max
+        selectedCount >= max
       ){
 
         alert(
@@ -1654,7 +1772,7 @@ document.addEventListener(
 
       }
 
-      quantity += 1;
+      quantity++;
 
     }
 
@@ -1671,21 +1789,21 @@ document.addEventListener(
     quantityInput.value =
       quantity;
 
-    const quantityText =
+    const qtyLabel =
       document.getElementById(
         `gift-qty-${giftId}`
       );
 
-    if(quantityText){
+    if(qtyLabel){
 
-      quantityText.textContent =
+      qtyLabel.textContent =
         quantity;
 
     }
 
-    toggleGiftCharacterBox(
+    renderGiftCharacterSelectors(
       giftId,
-      quantity > 0
+      quantity
     );
 
     updateGiftTierCount(
@@ -1695,80 +1813,164 @@ document.addEventListener(
   }
 );
 
+const giftCharacterMap = {};
 
-async function loadGiftCharacters(
-  giftId
+
+function renderGiftCharacterSelectors(
+  giftId,
+  quantity
 ){
 
-  try{
-
-    const response =
-    await fetch(
-
-      API +
-
-      "?action=giftCharacters"
-
-      +
-
-      "&gift_id="
-
-      +
-
-      encodeURIComponent(
-        giftId
-      )
-
-    );
-
-    const chars =
-    await response.json();
-
-    console.log(
-      "CHARS",
-      giftId,
-      chars
-    );
-
-    if(
-      !Array.isArray(chars)
-      ||
-      !chars.length
-    ){
-      return;
-    }
-
-    const box =
+  const box =
     document.getElementById(
       `gift-char-${giftId}`
     );
 
-    console.log(
-      "BOX",
-      giftId,
-      box
+  if(!box){
+
+    return;
+
+  }
+
+  const chars =
+    giftCharacterMap[
+      giftId
+    ] || [];
+
+  quantity =
+    Math.max(
+      0,
+      Number(
+        quantity || 0
+      )
     );
 
-    if(!box){
-      return;
-    }
+  if(
+    !chars.length ||
+    quantity <= 0
+  ){
 
-    let html = "";
+    box.innerHTML = "";
+
+    box.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  const previousSelections = [];
+
+  box
+    .querySelectorAll(
+      ".gift-character-group"
+    )
+    .forEach((group,index)=>{
+
+      const selected =
+        group.querySelector(
+          "input[type='radio']:checked"
+        );
+
+      previousSelections[
+        index
+      ] =
+        selected
+          ? selected.value
+          : "";
+
+    });
+
+
+  let html = "";
+
+  for(
+    let itemIndex = 0;
+    itemIndex < quantity;
+    itemIndex++
+  ){
+
+    const previousValue =
+      previousSelections[
+        itemIndex
+      ] || "";
+
+    html += `
+
+<div
+class="gift-character-group"
+data-gift-id="${escapeHtml(
+  giftId
+)}"
+data-item-index="${itemIndex}"
+style="
+margin-top:10px;
+padding:10px;
+border:1px solid #e5e5e5;
+border-radius:10px;
+"
+>
+
+<div
+style="
+font-size:13px;
+font-weight:700;
+margin-bottom:8px;
+"
+>
+
+เลือกตัวละครสำหรับชิ้นที่
+${itemIndex + 1}
+
+</div>
+
+`;
 
     chars.forEach(char=>{
 
-     html += `
+      const characterName =
+        String(
+          char.character_name || ""
+        );
 
-<label class="gift-char-item">
+      const checked =
+        previousValue ===
+        characterName;
+
+      html += `
+
+<label
+class="gift-char-item"
+style="
+display:flex;
+align-items:center;
+gap:8px;
+margin-bottom:6px;
+cursor:pointer;
+"
+>
 
 <input
 type="radio"
-name="gift-char-${giftId}"
-value="${char.character_name}"
+
+name="gift-char-${escapeHtml(
+  giftId
+)}-${itemIndex}"
+
+value="${escapeHtml(
+  characterName
+)}"
+
+${checked ? "checked" : ""}
 >
 
 <div class="gift-char-name">
-${char.character_name}
+
+${escapeHtml(
+  characterName
+)}
+
 </div>
 
 </label>
@@ -1777,8 +1979,106 @@ ${char.character_name}
 
     });
 
-    box.innerHTML =
+    html += `
+
+</div>
+
+`;
+
+  }
+
+  box.innerHTML =
     html;
+
+  box.style.display =
+    "block";
+
+}
+
+
+async function loadGiftCharacters(
+  giftId
+){
+
+  try{
+
+    const response =
+      await fetch(
+
+        API +
+
+        "?action=giftCharacters" +
+
+        "&gift_id=" +
+
+        encodeURIComponent(
+          giftId
+        )
+
+      );
+
+    const result =
+      await response.json();
+
+    const chars =
+      Array.isArray(
+        result
+      )
+        ? result
+        : Array.isArray(
+            result.characters
+          )
+            ? result.characters
+            : [];
+
+    console.log(
+      "CHARS",
+      giftId,
+      chars
+    );
+
+    giftCharacterMap[
+      giftId
+    ] =
+      chars;
+
+    const quantityInput =
+      document.querySelector(
+        `.gift-quantity[data-gift-id="${CSS.escape(
+          giftId
+        )}"]`
+      );
+
+    const checkbox =
+      document.querySelector(
+        `.gift-checkbox[data-gift-id="${CSS.escape(
+          giftId
+        )}"]`
+      );
+
+    let quantity = 0;
+
+    if(quantityInput){
+
+      quantity =
+        Number(
+          quantityInput.value || 0
+        );
+
+    }
+    else if(
+      checkbox &&
+      checkbox.checked
+    ){
+
+      quantity = 1;
+
+    }
+
+    renderGiftCharacterSelectors(
+      giftId,
+      quantity
+    );
 
   }
   catch(error){
@@ -1791,7 +2091,7 @@ ${char.character_name}
 
   }
 
-} 
+}
   
 </script>
 
