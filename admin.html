@@ -5716,6 +5716,186 @@ removeGiftCampaign(
 
 }
 
+  async function submitGiftCampaign(){
+
+  const btn =
+    document.getElementById(
+      "saveGiftBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "saveGiftLoading"
+    );
+
+  const collectionId =
+    document
+      .getElementById(
+        "g_collection_id"
+      )
+      ?.value || "";
+
+  const tierName =
+    document
+      .getElementById(
+        "g_tier_name"
+      )
+      ?.value
+      .trim() || "";
+
+  const giftName =
+    document
+      .getElementById(
+        "g_gift_name"
+      )
+      ?.value
+      .trim() || "";
+
+  const active =
+    document
+      .getElementById(
+        "g_active"
+      )
+      ?.value || "";
+
+  const imageFile =
+    document
+      .getElementById(
+        "g_gift_image_file"
+      )
+      ?.files[0];
+
+  if(!collectionId){
+
+    alert(
+      "กรุณาเลือก Collection"
+    );
+
+    return;
+
+  }
+
+  if(!giftName){
+
+    alert(
+      "กรุณากรอกชื่อของแถม"
+    );
+
+    return;
+
+  }
+
+  const payload = {
+
+    gift_id:
+      editingGiftId || "",
+
+    collection_id:
+      collectionId,
+
+    tier_name:
+      tierName,
+
+    gift_name:
+      giftName,
+
+    active:
+      active
+
+  };
+
+  btn.disabled = true;
+
+  btn.textContent =
+    editingGiftId
+      ? "กำลังบันทึกการแก้ไข..."
+      : "กำลังบันทึก...";
+
+  loading.style.display =
+    "block";
+
+  try{
+
+    if(imageFile){
+
+      payload.gift_image_base64 =
+        await fileToBase64(
+          imageFile
+        );
+
+    }
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveGiftCampaign"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "บันทึกของแถมไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert(
+      editingGiftId
+        ? "แก้ไขของแถมเรียบร้อยแล้ว"
+        : "เพิ่มของแถมเรียบร้อยแล้ว"
+    );
+
+    cancelGiftEdit();
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "submitGiftCampaign error:",
+      error
+    );
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  finally{
+
+  btn.disabled = false;
+
+  btn.textContent =
+    "💾 บันทึกของแถม";
+
+  loading.style.display =
+    "none";
+
+}
+
+}
+
   function fillGiftRuleForm(
   collectionId
 ){
