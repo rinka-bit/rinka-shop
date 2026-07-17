@@ -585,76 +585,69 @@ document
 
 function goCheckout(){
 
-const cart =
+  const cart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
 
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
+  const checked =
+    document.querySelectorAll(
+      ".checkout-item:checked"
+    );
 
-const checked =
+  if(
+    checked.length === 0
+  ){
 
-document.querySelectorAll(
-".checkout-item:checked"
-);
+    alert(
+      "กรุณาเลือกสินค้า"
+    );
 
-if(
-checked.length === 0
-){
+    return;
 
-alert(
-"กรุณาเลือกสินค้า"
-);
+  }
 
-return;
+  const selectedItems = [];
 
-}
+  checked.forEach(box=>{
 
-const selectedItems = [];
+    const item =
+      cart[
+        Number(
+          box.dataset.index
+        )
+      ];
 
-checked.forEach(box=>{
+    if(item){
 
-selectedItems.push(
+      selectedItems.push(
+        item
+      );
 
-cart[
-Number(
-box.dataset.index
-)
-]
+    }
 
-);
+  });
 
-});
+  localStorage.setItem(
+    "checkoutCart",
+    JSON.stringify(
+      selectedItems
+    )
+  );
 
-localStorage.setItem(
+  localStorage.setItem(
+    "checkoutSource",
+    "cart"
+  );
 
-"checkoutCart",
+  localStorage.removeItem(
+    "buyNowCart"
+  );
 
-JSON.stringify(
-selectedItems
-)
-
-);
-
-localStorage.setItem(
-  "checkoutCart",
-  JSON.stringify(
-    cart
-  )
-);
-
-localStorage.setItem(
-  "checkoutSource",
-  "cart"
-);
-
-localStorage.removeItem(
-  "buyNowCart"
-);
-
-window.location.href =
-  "checkout.html";
+  window.location.href =
+    "checkout.html";
 
 }
 
