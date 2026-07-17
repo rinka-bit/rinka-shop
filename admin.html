@@ -898,14 +898,49 @@ async function loadTopFandoms(){
     <h2>🎮 แฟนด้อมขายดีที่สุด</h2>
   `;
 
-  result.fandoms.forEach((fandom,index)=>{
-    html += `
-      <p>
-      ${index + 1}. ${fandom.fandom}
-      (${fandom.qty} ชิ้น)
-      </p>
-    `;
-  });
+  result.products.forEach((product,index)=>{
+
+  html += `
+
+<p
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+">
+
+<span>
+
+${index+1}.
+
+${escapeHtml(product.name)}
+
+(${product.qty} ชิ้น)
+
+</span>
+
+<button
+style="
+width:auto;
+padding:5px 10px;
+font-size:13px;
+"
+onclick="
+openProductFromDashboard(
+'${escapeJsString(product.name)}'
+)
+">
+
+เปิดสินค้า
+
+</button>
+
+</p>
+
+`;
+
+});
 
   html += "</div>";
 
@@ -1549,6 +1584,39 @@ function filterProductsByCollection(
       });
 
     }
+
+  });
+
+}
+
+  function openProductFromDashboard(
+  productName
+){
+
+  showAdminTab("products");
+
+  requestAnimationFrame(()=>{
+
+    const input =
+      document.getElementById(
+        "productSearch"
+      );
+
+    if(!input){
+      return;
+    }
+
+    input.value = productName;
+
+    renderAdminProductList();
+
+    document
+      .getElementById(
+        "productManager"
+      )
+      ?.scrollIntoView({
+        behavior:"smooth"
+      });
 
   });
 
