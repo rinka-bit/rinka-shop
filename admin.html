@@ -408,7 +408,7 @@ const tabs = [
 
   });
 
-  if(tab === "gifts"){
+ if(tab === "gifts"){
 
   renderGiftManager();
 
@@ -421,17 +421,21 @@ const tabs = [
 async function loadAdminData(){
 
   loadStats();
+
   loadTopProducts();
+
   loadTopFandoms();
+
   loadOrders();
+
   loadAddressRequests();
 
   renderCollectionManager();
 
   await loadAdminCollections();
-  await loadGiftCampaigns();
 
   renderProductManager();
+
   renderOptionManager();
 
   await loadAdminProducts();
@@ -5603,44 +5607,44 @@ function backToProductManager(){
       "saveGiftLoading"
     );
 
-  const payload = {
+  const collectionId =
+    document
+      .getElementById(
+        "g_collection_id"
+      )
+      ?.value || "";
 
-    gift_id:
-      editingGiftId || "",
+  const tierName =
+    document
+      .getElementById(
+        "g_tier_name"
+      )
+      ?.value
+      .trim() || "";
 
-    collection_id:
-      document
-        .getElementById(
-          "g_collection_id"
-        )
-        ?.value || "",
+  const giftName =
+    document
+      .getElementById(
+        "g_gift_name"
+      )
+      ?.value
+      .trim() || "";
 
-    tier_name:
-      document
-        .getElementById(
-          "g_tier_name"
-        )
-        ?.value
-        .trim() || "",
+  const active =
+    document
+      .getElementById(
+        "g_active"
+      )
+      ?.value || "";
 
-    gift_name:
-      document
-        .getElementById(
-          "g_gift_name"
-        )
-        ?.value
-        .trim() || "",
+  const imageFile =
+    document
+      .getElementById(
+        "g_gift_image_file"
+      )
+      ?.files[0];
 
-    active:
-      document
-        .getElementById(
-          "g_active"
-        )
-        ?.value || ""
-
-  };
-
-  if(!payload.collection_id){
+  if(!collectionId){
 
     alert(
       "กรุณาเลือก Collection"
@@ -5650,7 +5654,17 @@ function backToProductManager(){
 
   }
 
-  if(!payload.gift_name){
+  if(!tierName){
+
+    alert(
+      "กรุณากรอกชื่อระดับของแถม"
+    );
+
+    return;
+
+  }
+
+  if(!giftName){
 
     alert(
       "กรุณากรอกชื่อของแถม"
@@ -5660,12 +5674,37 @@ function backToProductManager(){
 
   }
 
-  const imageFile =
-    document
-      .getElementById(
-        "g_gift_image_file"
-      )
-      ?.files[0];
+  if(
+    !editingGiftId &&
+    !imageFile
+  ){
+
+    alert(
+      "กรุณาเลือกรูปของแถม"
+    );
+
+    return;
+
+  }
+
+  const payload = {
+
+    gift_id:
+      editingGiftId || "",
+
+    collection_id:
+      collectionId,
+
+    tier_name:
+      tierName,
+
+    gift_name:
+      giftName,
+
+    active:
+      active
+
+  };
 
   if(btn){
 
@@ -5730,17 +5769,21 @@ function backToProductManager(){
 
     }
 
-    alert(
-      editingGiftId
-        ? "แก้ไขของแถมเรียบร้อยแล้ว"
-        : "เพิ่มของแถมเรียบร้อยแล้ว"
-    );
+    const wasEditing =
+      Boolean(editingGiftId);
 
     cancelGiftEdit();
 
     await loadGiftCampaigns();
 
-  }catch(error){
+    alert(
+      wasEditing
+        ? "แก้ไขของแถมเรียบร้อยแล้ว"
+        : "เพิ่มของแถมเรียบร้อยแล้ว"
+    );
+
+  }
+  catch(error){
 
     console.error(
       "submitGiftCampaign error:",
@@ -5752,22 +5795,33 @@ function backToProductManager(){
       error.message
     );
 
-  }finally{
+  }
+  finally{
 
-    if(btn){
+    const currentBtn =
+      document.getElementById(
+        "saveGiftBtn"
+      );
 
-      btn.disabled = false;
+    const currentLoading =
+      document.getElementById(
+        "saveGiftLoading"
+      );
 
-      btn.textContent =
+    if(currentBtn){
+
+      currentBtn.disabled = false;
+
+      currentBtn.textContent =
         editingGiftId
           ? "💾 บันทึกการแก้ไข"
           : "💾 บันทึกของแถม";
 
     }
 
-    if(loading){
+    if(currentLoading){
 
-      loading.style.display =
+      currentLoading.style.display =
         "none";
 
     }
@@ -6020,50 +6074,71 @@ function backToProductManager(){
   collectionId
 ){
 
+  const minAmountInput =
+    document.getElementById(
+      "gr_min_amount"
+    );
+
+  const maxSelectInput =
+    document.getElementById(
+      "gr_max_select"
+    );
+
+  const allowDuplicateSelect =
+    document.getElementById(
+      "gr_allow_duplicate"
+    );
+
+  const activeSelect =
+    document.getElementById(
+      "gr_active"
+    );
+
+  if(
+    !minAmountInput ||
+    !maxSelectInput ||
+    !allowDuplicateSelect ||
+    !activeSelect
+  ){
+
+    return;
+
+  }
+
   const rule =
     getGiftRuleByCollection(
       collectionId
     );
 
-  document
-    .getElementById(
-      "gr_min_amount"
-    )
-    .value =
-      rule
-        ? Number(rule.min_amount || 0)
-        : 0;
+  minAmountInput.value =
+    rule
+      ? Number(
+          rule.min_amount || 0
+        )
+      : 0;
 
-  document
-    .getElementById(
-      "gr_max_select"
-    )
-    .value =
-      rule
-        ? Number(rule.max_select || 1)
-        : 1;
+  maxSelectInput.value =
+    rule
+      ? Number(
+          rule.max_select || 1
+        )
+      : 1;
 
-  document
-    .getElementById(
-      "gr_allow_duplicate"
-    )
-    .value =
-      rule &&
-      String(rule.allow_duplicate)
-        .toLowerCase() === "yes"
-        ? "yes"
-        : "no";
+  allowDuplicateSelect.value =
+    rule &&
+    String(
+      rule.allow_duplicate
+    ).toLowerCase() === "yes"
+      ? "yes"
+      : "no";
 
-  document
-    .getElementById(
-      "gr_active"
-    )
-    .value =
-      rule &&
-      String(rule.active)
-        .toLowerCase() === "yes"
-        ? "yes"
-        : "";
+  activeSelect.value =
+    rule &&
+    String(
+      rule.active
+    ).toLowerCase() === "yes"
+      ? "yes"
+      : "";
 
 }
   
