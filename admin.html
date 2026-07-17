@@ -3727,6 +3727,191 @@ ${escapeHtml(error.message)}
   }
 
 }
+
+  function renderAdminGiftList(){
+
+  const box =
+    document.getElementById(
+      "adminGiftList"
+    );
+
+  if(!box){
+    return;
+  }
+
+  if(!adminGiftCampaigns.length){
+
+    box.innerHTML =
+      "ยังไม่มีข้อมูลของแถม";
+
+    return;
+
+  }
+
+  let html =
+    '<div class="grid">';
+
+  adminGiftCampaigns.forEach(gift=>{
+
+    const collection =
+      adminCollections.find(item=>
+
+        String(
+          item.collection_id
+        ) ===
+        String(
+          gift.collection_id
+        )
+
+      );
+
+    const rule =
+      adminGiftRules.find(item=>
+
+        String(
+          item.collection_id
+        ) ===
+        String(
+          gift.collection_id
+        )
+
+      );
+
+    html += `
+
+<div class="card">
+
+${
+  gift.gift_image
+    ? `
+      <img
+      src="${escapeHtml(
+        gift.gift_image
+      )}"
+      alt="${escapeHtml(
+        gift.gift_name || ""
+      )}"
+      style="
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:14px;
+      background:#f1f5f9;
+      margin-bottom:12px;
+      ">
+    `
+    : ""
+}
+
+<h3 style="margin-top:0;">
+
+${escapeHtml(
+  gift.gift_name || "-"
+)}
+
+</h3>
+
+<p>
+🆔
+${escapeHtml(
+  gift.gift_id || "-"
+)}
+</p>
+
+<p>
+🖼️ Collection:
+${escapeHtml(
+  collection
+    ? collection.name
+    : gift.collection_id || "-"
+)}
+</p>
+
+<p>
+🎁 ระดับ:
+${escapeHtml(
+  gift.tier_name || "-"
+)}
+</p>
+
+<p>
+💰 ยอดขั้นต่ำ:
+${rule
+  ? Number(
+      rule.min_amount || 0
+    ).toLocaleString()
+  : "-"
+}
+บาท
+</p>
+
+<p>
+🔢 เลือกได้:
+${rule
+  ? Number(
+      rule.max_select || 1
+    )
+  : "-"
+}
+รายการ
+</p>
+
+<p>
+สถานะ:
+<b>
+${
+  String(
+    gift.active || ""
+  ).toLowerCase() === "yes"
+    ? "เปิดใช้งาน"
+    : "ปิดใช้งาน"
+}
+</b>
+</p>
+
+<div style="
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:12px;
+">
+
+<button
+onclick="
+editGiftCampaign(
+  '${escapeJsString(
+    gift.gift_id
+  )}'
+)
+">
+✏️ แก้ไข
+</button>
+
+<button
+style="background:#ef4444;"
+onclick="
+removeGiftCampaign(
+  '${escapeJsString(
+    gift.gift_id
+  )}'
+)
+">
+🗑️ ลบ
+</button>
+
+</div>
+
+</div>
+
+`;
+
+  });
+
+  html += "</div>";
+
+  box.innerHTML = html;
+
+}
   
 async function loadAdminCollections(){
 
@@ -4972,359 +5157,6 @@ function backToProductManager(){
 
 }
 
-  function renderAdminGiftList(){
-
-  const box =
-    document.getElementById(
-      "adminGiftList"
-    );
-
-  if(!box){
-    return;
-  }
-
-  if(
-    !adminGiftCampaigns ||
-    adminGiftCampaigns.length === 0
-  ){
-
-    box.innerHTML = `
-
-<div
-style="
-padding:20px;
-text-align:center;
-color:#64748b;
-">
-
-🎁 ยังไม่มีรายการของแถม
-
-</div>
-
-`;
-
-    return;
-
-  }
-
-  const grouped = {};
-
-  adminGiftCampaigns.forEach(gift=>{
-
-    const collectionId =
-      gift.collection_id || "";
-
-    if(!grouped[collectionId]){
-
-      grouped[collectionId] = [];
-
-    }
-
-    grouped[collectionId].push(gift);
-
-  });
-
-  let html = "";
-
-  Object.keys(grouped)
-    .forEach(collectionId=>{
-
-      const gifts =
-        grouped[collectionId];
-
-      const collectionName =
-        getCollectionNameById(
-          collectionId
-        );
-
-      const rule =
-        getGiftRuleByCollection(
-          collectionId
-        );
-
-      html += `
-
-<div
-style="
-border:1px solid #e2e8f0;
-border-radius:16px;
-padding:15px;
-margin-bottom:18px;
-background:#ffffff;
-">
-
-<div
-style="
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-gap:12px;
-flex-wrap:wrap;
-margin-bottom:12px;
-">
-
-<div>
-
-<h3
-style="
-margin:0 0 5px;
-">
-
-📦
-${escapeHtml(collectionName)}
-
-</h3>
-
-<div
-style="
-font-size:13px;
-color:#64748b;
-">
-
-Collection ID:
-${escapeHtml(collectionId)}
-
-</div>
-
-</div>
-
-${rule ? `
-
-<div
-style="
-padding:8px 12px;
-border-radius:12px;
-background:#f1f5f9;
-font-size:13px;
-line-height:1.7;
-">
-
-ยอดขั้นต่ำ:
-<b>
-${Number(rule.min_amount || 0)}
-บาท
-</b>
-
-<br>
-
-เลือกได้:
-<b>
-${Number(rule.max_select || 1)}
-ชิ้น
-</b>
-
-<br>
-
-เลือกซ้ำ:
-<b>
-${
-  String(rule.allow_duplicate)
-    .toLowerCase() === "yes"
-    ? "ได้"
-    : "ไม่ได้"
-}
-</b>
-
-<br>
-
-สถานะ:
-<b>
-${
-  String(rule.active)
-    .toLowerCase() === "yes"
-    ? "เปิดใช้งาน"
-    : "ปิดใช้งาน"
-}
-</b>
-
-</div>
-
-` : `
-
-<div
-style="
-padding:8px 12px;
-border-radius:12px;
-background:#fff7ed;
-color:#c2410c;
-font-size:13px;
-">
-
-ยังไม่ได้ตั้งกติกา
-
-</div>
-
-`}
-
-</div>
-
-<div
-style="
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(230px,1fr));
-gap:12px;
-">
-
-`;
-
-      gifts.forEach(gift=>{
-
-        const active =
-          String(gift.active)
-            .toLowerCase() === "yes";
-
-        html += `
-
-<div
-style="
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:12px;
-">
-
-${gift.gift_image ? `
-
-<img
-src="${escapeHtml(
-  gift.gift_image
-)}"
-alt="${escapeHtml(
-  gift.gift_name || "ของแถม"
-)}"
-style="
-width:100%;
-height:160px;
-object-fit:contain;
-border-radius:10px;
-background:#f8fafc;
-margin-bottom:10px;
-"
-onerror="
-this.style.display='none'
-">
-
-` : ""}
-
-<div
-style="
-font-size:13px;
-color:#7c3aed;
-font-weight:700;
-margin-bottom:4px;
-">
-
-${escapeHtml(
-  gift.tier_name || "-"
-)}
-
-</div>
-
-<div
-style="
-font-weight:700;
-margin-bottom:8px;
-">
-
-${escapeHtml(
-  gift.gift_name || "-"
-)}
-
-</div>
-
-<div
-style="
-margin-bottom:10px;
-">
-
-<span
-style="
-display:inline-block;
-padding:4px 8px;
-border-radius:999px;
-font-size:12px;
-font-weight:700;
-background:
-${active ? "#dcfce7" : "#fee2e2"};
-color:
-${active ? "#15803d" : "#b91c1c"};
-">
-
-${active
-  ? "เปิดใช้งาน"
-  : "ปิดใช้งาน"}
-
-</span>
-
-</div>
-
-<div
-style="
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-">
-
-<button
-type="button"
-style="
-width:auto;
-padding:7px 10px;
-background:#7c3aed;
-"
-onclick="
-editGiftCampaign(
-'${escapeJsString(
-  gift.gift_id
-)}'
-)
-">
-
-✏️ แก้ไข
-
-</button>
-
-<button
-type="button"
-style="
-width:auto;
-padding:7px 10px;
-background:#ef4444;
-"
-onclick="
-removeGiftCampaign(
-'${escapeJsString(
-  gift.gift_id
-)}'
-)
-">
-
-🗑️ ลบ
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-      });
-
-      html += `
-
-</div>
-
-</div>
-
-`;
-
-    });
-
-  box.innerHTML = html;
-
-}
-
   function editGiftCampaign(giftId){
 
   const gift =
@@ -5771,44 +5603,44 @@ removeGiftCampaign(
       "saveGiftLoading"
     );
 
-  const collectionId =
-    document
-      .getElementById(
-        "g_collection_id"
-      )
-      ?.value || "";
+  const payload = {
 
-  const tierName =
-    document
-      .getElementById(
-        "g_tier_name"
-      )
-      ?.value
-      .trim() || "";
+    gift_id:
+      editingGiftId || "",
 
-  const giftName =
-    document
-      .getElementById(
-        "g_gift_name"
-      )
-      ?.value
-      .trim() || "";
+    collection_id:
+      document
+        .getElementById(
+          "g_collection_id"
+        )
+        ?.value || "",
 
-  const active =
-    document
-      .getElementById(
-        "g_active"
-      )
-      ?.value || "";
+    tier_name:
+      document
+        .getElementById(
+          "g_tier_name"
+        )
+        ?.value
+        .trim() || "",
 
-  const imageFile =
-    document
-      .getElementById(
-        "g_gift_image_file"
-      )
-      ?.files[0];
+    gift_name:
+      document
+        .getElementById(
+          "g_gift_name"
+        )
+        ?.value
+        .trim() || "",
 
-  if(!collectionId){
+    active:
+      document
+        .getElementById(
+          "g_active"
+        )
+        ?.value || ""
+
+  };
+
+  if(!payload.collection_id){
 
     alert(
       "กรุณาเลือก Collection"
@@ -5818,7 +5650,7 @@ removeGiftCampaign(
 
   }
 
-  if(!giftName){
+  if(!payload.gift_name){
 
     alert(
       "กรุณากรอกชื่อของแถม"
@@ -5828,34 +5660,30 @@ removeGiftCampaign(
 
   }
 
-  const payload = {
+  const imageFile =
+    document
+      .getElementById(
+        "g_gift_image_file"
+      )
+      ?.files[0];
 
-    gift_id:
-      editingGiftId || "",
+  if(btn){
 
-    collection_id:
-      collectionId,
+    btn.disabled = true;
 
-    tier_name:
-      tierName,
+    btn.textContent =
+      editingGiftId
+        ? "กำลังบันทึกการแก้ไข..."
+        : "กำลังบันทึก...";
 
-    gift_name:
-      giftName,
+  }
 
-    active:
-      active
+  if(loading){
 
-  };
+    loading.style.display =
+      "block";
 
-  btn.disabled = true;
-
-  btn.textContent =
-    editingGiftId
-      ? "กำลังบันทึกการแก้ไข..."
-      : "กำลังบันทึก...";
-
-  loading.style.display =
-    "block";
+  }
 
   try{
 
@@ -5895,12 +5723,10 @@ removeGiftCampaign(
 
     if(!result.success){
 
-      alert(
+      throw new Error(
         result.error ||
         "บันทึกของแถมไม่สำเร็จ"
       );
-
-      return;
 
     }
 
@@ -5922,22 +5748,273 @@ removeGiftCampaign(
     );
 
     alert(
-      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+      "บันทึกของแถมไม่สำเร็จ\n" +
+      error.message
     );
 
-  finally{
+  }finally{
 
-  btn.disabled = false;
+    if(btn){
 
-  btn.textContent =
-    "💾 บันทึกของแถม";
+      btn.disabled = false;
 
-  loading.style.display =
-    "none";
+      btn.textContent =
+        editingGiftId
+          ? "💾 บันทึกการแก้ไข"
+          : "💾 บันทึกของแถม";
+
+    }
+
+    if(loading){
+
+      loading.style.display =
+        "none";
+
+    }
+
+  }
 
 }
 
+  function editGiftCampaign(
+  giftId
+){
+
+  const gift =
+    adminGiftCampaigns.find(item=>
+
+      String(
+        item.gift_id
+      ) ===
+      String(giftId)
+
+    );
+
+  if(!gift){
+
+    alert(
+      "ไม่พบข้อมูลของแถม"
+    );
+
+    return;
+
+  }
+
+  editingGiftId =
+    gift.gift_id;
+
+  document
+    .getElementById(
+      "g_collection_id"
+    )
+    .value =
+      gift.collection_id || "";
+
+  document
+    .getElementById(
+      "g_tier_name"
+    )
+    .value =
+      gift.tier_name || "";
+
+  document
+    .getElementById(
+      "g_gift_name"
+    )
+    .value =
+      gift.gift_name || "";
+
+  document
+    .getElementById(
+      "g_active"
+    )
+    .value =
+      String(
+        gift.active || ""
+      ).toLowerCase() === "yes"
+        ? "yes"
+        : "";
+
+  document
+    .getElementById(
+      "saveGiftBtn"
+    )
+    .textContent =
+      "💾 บันทึกการแก้ไข";
+
+  document
+    .getElementById(
+      "cancelGiftEditBtn"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+  document
+    .getElementById(
+      "g_collection_id"
+    )
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+
 }
+
+  function cancelGiftEdit(){
+
+  editingGiftId = "";
+
+  const collection =
+    document.getElementById(
+      "g_collection_id"
+    );
+
+  if(!collection){
+    return;
+  }
+
+  collection.value = "";
+
+  document
+    .getElementById(
+      "g_tier_name"
+    )
+    .value = "";
+
+  document
+    .getElementById(
+      "g_gift_name"
+    )
+    .value = "";
+
+  document
+    .getElementById(
+      "g_gift_image_file"
+    )
+    .value = "";
+
+  document
+    .getElementById(
+      "g_active"
+    )
+    .value = "yes";
+
+  document
+    .getElementById(
+      "saveGiftBtn"
+    )
+    .textContent =
+      "💾 บันทึกของแถม";
+
+  document
+    .getElementById(
+      "cancelGiftEditBtn"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+}
+
+ async function removeGiftCampaign(
+  giftId
+){
+
+  const gift =
+    adminGiftCampaigns.find(item=>
+
+      String(
+        item.gift_id
+      ) ===
+      String(giftId)
+
+    );
+
+  const giftName =
+    gift
+      ? gift.gift_name
+      : giftId;
+
+  const ok =
+    confirm(
+      "ต้องการลบของแถม \"" +
+      giftName +
+      "\" ใช่ไหม?"
+    );
+
+  if(!ok){
+    return;
+  }
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "deleteGiftCampaign"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify({
+        gift_id:giftId
+      })
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        "ลบของแถมไม่สำเร็จ"
+      );
+
+    }
+
+    if(
+      String(editingGiftId) ===
+      String(giftId)
+    ){
+
+      cancelGiftEdit();
+
+    }
+
+    await loadGiftCampaigns();
+
+    alert(
+      "ลบของแถมเรียบร้อยแล้ว"
+    );
+
+  }catch(error){
+
+    console.error(
+      "removeGiftCampaign error:",
+      error
+    );
+
+    alert(
+      "ลบของแถมไม่สำเร็จ\n" +
+      error.message
+    );
+
+  }
+
+} 
 
   function fillGiftRuleForm(
   collectionId
