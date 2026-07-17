@@ -1402,13 +1402,36 @@ ${
 🏷️ ${product.main_category || "-"}
 </p>
 
-${
-  product.options && product.options.length
-  ?
-  `
-  <p>
-  🎭 ตัวเลือก:
-  ${product.options.slice(0,5).join(", ")}
+<p>
+
+<button
+type="button"
+onclick="
+openProductOptions(
+'${escapeJsString(
+product.product_id
+)}'
+)
+"
+style="
+width:auto;
+padding:5px 10px;
+border:none;
+border-radius:999px;
+background:#ede9fe;
+color:#6d28d9;
+font-weight:700;
+cursor:pointer;
+"
+>
+
+🎭
+${getProductOptionCount(product)}
+ตัวเลือก
+
+</button>
+
+</p>
   ${
     product.options.length > 5
     ? `+${product.options.length - 5} เพิ่มเติม`
@@ -1529,6 +1552,49 @@ function filterProductsByCollection(
 
 }
 
+  async function openProductOptions(
+  productId
+){
+
+  showAdminTab("options");
+
+  selectedOptionProductId =
+    String(productId || "");
+
+  const select =
+    document.getElementById(
+      "optionProductSelect"
+    );
+
+  if(select){
+
+    select.value =
+      selectedOptionProductId;
+
+  }
+
+  await loadAdminProductOptions();
+
+  requestAnimationFrame(()=>{
+
+    const manager =
+      document.getElementById(
+        "optionManager"
+      );
+
+    if(manager){
+
+      manager.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    }
+
+  });
+
+}
+
 function getCollectionProductCount(
   collectionId
 ){
@@ -1540,6 +1606,23 @@ function getCollectionProductCount(
       ) ===
       String(collectionId || "")
   ).length;
+
+}
+
+  function getProductOptionCount(
+  product
+){
+
+  if(
+    product.options &&
+    Array.isArray(product.options)
+  ){
+
+    return product.options.length;
+
+  }
+
+  return 0;
 
 }
 
