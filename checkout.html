@@ -1098,6 +1098,93 @@ value="${gift.gift_id}"
 
 }
 
+document.addEventListener(
+  "change",
+  e=>{
+
+    if(
+      !e.target.classList.contains(
+        "gift-checkbox"
+      )
+    ){
+
+      return;
+
+    }
+
+    const tier =
+      e.target.dataset.tier;
+
+    const max =
+      Number(
+        e.target.dataset.max || 1
+      );
+
+    const sameTierBoxes =
+      Array.from(
+        document.querySelectorAll(
+          ".gift-checkbox"
+        )
+      )
+      .filter(
+        checkbox =>
+          checkbox.dataset.tier === tier
+      );
+
+    const checked =
+      sameTierBoxes.filter(
+        checkbox =>
+          checkbox.checked
+      );
+
+    if(
+      checked.length > max
+    ){
+
+      e.target.checked =
+        false;
+
+      alert(
+        `เลือกได้สูงสุด ${max} ชิ้น`
+      );
+
+    }
+
+    const giftId =
+      e.target.value;
+
+    const charBox =
+      document.getElementById(
+        `gift-char-${giftId}`
+      );
+
+    if(charBox){
+
+      charBox.style.display =
+        e.target.checked
+          ? "block"
+          : "none";
+
+      if(!e.target.checked){
+
+        charBox
+          .querySelectorAll(
+            "input"
+          )
+          .forEach(input=>{
+
+            input.checked =
+              false;
+
+          });
+
+      }
+
+    }
+
+  }
+);
+
  async function loadGiftCharacters(
   giftId
 ){
