@@ -851,6 +851,15 @@ qty:qty
 ])
 );
 
+ localStorage.setItem(
+  "checkoutSource",
+  "buyNow"
+);
+
+localStorage.removeItem(
+  "checkoutCart"
+); 
+
 window.location.href =
 "checkout.html";
 
