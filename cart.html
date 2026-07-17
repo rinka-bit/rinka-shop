@@ -637,9 +637,24 @@ selectedItems
 
 );
 
-window.location.href =
+localStorage.setItem(
+  "checkoutCart",
+  JSON.stringify(
+    cart
+  )
+);
 
-"checkout.html";
+localStorage.setItem(
+  "checkoutSource",
+  "cart"
+);
+
+localStorage.removeItem(
+  "buyNowCart"
+);
+
+window.location.href =
+  "checkout.html";
 
 }
 
