@@ -730,9 +730,17 @@ if(found){
 found.qty += qty;
 }else{
 cart.push({
-...window.currentProduct,
-selected_options:{},
-qty:qty
+
+  ...window.currentProduct,
+
+  collection_id:
+    window.currentProduct.collection_id ||
+    "",
+
+  selected_options:{},
+
+  qty:qty
+
 });
 }
 
@@ -784,19 +792,28 @@ found.qty += option.qty;
 
 cart.push({
 
-...window.currentProduct,
+  ...window.currentProduct,
 
-price:finalPrice,
+  collection_id:
+    window.currentProduct.collection_id ||
+    "",
 
-option_group:option.group,
+  price:
+    finalPrice,
 
-option_value:option.value,
+  option_group:
+    option.group,
 
-selected_options:{
-[option.group]:option.value
-},
+  option_value:
+    option.value,
 
-qty:option.qty
+  selected_options:{
+    [option.group]:
+      option.value
+  },
+
+  qty:
+    option.qty
 
 });
 
@@ -817,87 +834,133 @@ alert("เพิ่มลงตะกร้าแล้ว");
   
 function buyNow(){
 
-const selectedOptionItems =
-Object.values(window.optionQty || {})
-.filter(item=>item.qty > 0);
+  const selectedOptionItems =
+    Object.values(
+      window.optionQty || {}
+    )
+    .filter(
+      item =>
+        item.qty > 0
+    );
 
-if(
-(window.currentProduct.options || []).length > 0 &&
-selectedOptionItems.length === 0
-){
+  const hasOptions =
+    (
+      window.currentProduct.options ||
+      []
+    ).length > 0;
 
-alert("กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ");
-return;
+  if(
+    hasOptions &&
+    selectedOptionItems.length === 0
+  ){
 
-}
+    alert(
+      "กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ"
+    );
 
-if(
-(window.currentProduct.options || []).length === 0
-){
+    return;
 
-const qty =
-Number(
-document.getElementById("productQty")?.value
-) || 1;
+  }
 
-localStorage.setItem(
-  "buyNowCart",
-  JSON.stringify(
+  let checkoutItems = [];
+
+  if(!hasOptions){
+
+    const qty =
+      Number(
+        document.getElementById(
+          "productQty"
+        )?.value
+      ) || 1;
+
+    checkoutItems.push({
+
+      ...window.currentProduct,
+
+      collection_id:
+        window.currentProduct.collection_id ||
+        "",
+
+      selected_options:{},
+
+      qty:
+        qty
+
+    });
+
+  }
+  else{
+
+    checkoutItems =
+      selectedOptionItems.map(
+        option=>{
+
+          const finalPrice =
+            Number(
+              window.currentProduct.price ||
+              0
+            )
+            +
+            Number(
+              option.additional_price ||
+              0
+            );
+
+          return {
+
+            ...window.currentProduct,
+
+            collection_id:
+              window.currentProduct.collection_id ||
+              "",
+
+            price:
+              finalPrice,
+
+            option_group:
+              option.group,
+
+            option_value:
+              option.value,
+
+            selected_options:{
+              [option.group]:
+                option.value
+            },
+
+            qty:
+              option.qty
+
+          };
+
+        }
+      );
+
+  }
+
+  console.log(
+    "BUY NOW ITEMS:",
     checkoutItems
-  )
-);
+  );
 
-localStorage.setItem(
-  "checkoutSource",
-  "buyNow"
-);
+  localStorage.setItem(
+    "buyNowCart",
+    JSON.stringify(
+      checkoutItems
+    )
+  );
 
-localStorage.removeItem(
-  "checkoutCart"
-);
+  localStorage.setItem(
+    "checkoutSource",
+    "buyNow"
+  );
 
-window.location.href =
-  "checkout.html";
+  localStorage.removeItem(
+    "checkoutCart"
+  );
 
-return;
-
-}
-
-const checkoutItems =
-selectedOptionItems.map(option=>{
-
-const finalPrice =
-Number(window.currentProduct.price || 0)
-+
-Number(option.additional_price || 0);
-
-return {
-
-...window.currentProduct,
-
-price:finalPrice,
-
-option_group:option.group,
-
-option_value:option.value,
-
-selected_options:{
-[option.group]:option.value
-},
-
-qty:option.qty
-
-};
-
-});
-
-localStorage.setItem(
-"buyNowCart",
-JSON.stringify(checkoutItems)
-);
-
-window.location.href =
-"checkout.html";
+  window.location.href =
+    "checkout.html";
 
 }
   
