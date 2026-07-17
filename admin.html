@@ -966,67 +966,160 @@ openProductSearch(
 
 async function loadTopFandoms(){
 
-  const response =
-    await fetch(API + "?action=topFandoms");
+  const container =
+    document.getElementById(
+      "topFandoms"
+    );
 
-  const result =
-    await response.json();
+  if(!container){
 
-  let html = `
-    <div class="card">
-    <h2>🎮 แฟนด้อมขายดีที่สุด</h2>
-  `;
+    return;
 
-  result.products.forEach((product,index)=>{
+  }
 
-  html += `
+  try{
 
-<p
-style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-">
+    const response =
+      await fetch(
+        API + "?action=topFandoms"
+      );
 
-<span>
+    const result =
+      await response.json();
 
-${index+1}.
+    const fandoms =
+      Array.isArray(
+        result.fandoms
+      )
+        ? result.fandoms
+        : [];
 
-${escapeHtml(product.name)}
+    let html = `
+      <div class="card">
 
-(${product.qty} ชิ้น)
+        <h2>
+          🌟 Fandom ยอดนิยม
+        </h2>
+    `;
 
-</span>
+    if(
+      fandoms.length === 0
+    ){
 
-<button
-style="
-width:auto;
-padding:5px 10px;
-font-size:13px;
-"
-onclick="
-openProductSearch(
-'${escapeJsString(product.name)}'
-)
-">
+      html += `
 
-เปิดสินค้า
+        <p
+        style="
+        color:#777;
+        ">
+          ยังไม่มีข้อมูล Fandom
+        </p>
 
-</button>
+      `;
 
-</p>
+    }
+    else{
 
-`;
+      fandoms.forEach(
+        (
+          fandom,
+          index
+        ) => {
 
-});
+          const fandomName =
+            fandom.fandom ||
+            fandom.name ||
+            "";
 
-  html += "</div>";
+          const qty =
+            fandom.qty ||
+            fandom.quantity ||
+            0;
 
-  document.getElementById("topFandoms").innerHTML = html;
+          html += `
+
+            <p
+            style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+            ">
+
+              <span>
+
+                ${index + 1}.
+
+                ${escapeHtml(
+                  fandomName
+                )}
+
+                (${qty} ชิ้น)
+
+              </span>
+
+              <button
+              style="
+              width:auto;
+              padding:5px 10px;
+              font-size:13px;
+              "
+              onclick="
+              openProductSearch(
+                '${escapeJsString(
+                  fandomName
+                )}'
+              )
+              ">
+                เปิดสินค้า
+              </button>
+
+            </p>
+
+          `;
+
+        }
+      );
+
+    }
+
+    html += `
+      </div>
+    `;
+
+    container.innerHTML =
+      html;
+
+  }
+  catch(error){
+
+    console.error(
+      "loadTopFandoms error:",
+      error
+    );
+
+    container.innerHTML = `
+
+      <div class="card">
+
+        <h2>
+          🌟 Fandom ยอดนิยม
+        </h2>
+
+        <p
+        style="
+        color:#d9534f;
+        ">
+          โหลดข้อมูลไม่สำเร็จ
+        </p>
+
+      </div>
+
+    `;
+
+  }
 
 }
-
 async function loadOrders(){
 
   const response =
