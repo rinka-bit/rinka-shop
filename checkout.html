@@ -253,6 +253,11 @@ loadCheckout();
 
 function loadCheckout(){
 
+  const checkoutSource =
+    localStorage.getItem(
+      "checkoutSource"
+    );
+
   const buyNowCart =
     JSON.parse(
       localStorage.getItem(
@@ -275,6 +280,7 @@ function loadCheckout(){
     );
 
   if(
+    checkoutSource === "buyNow" &&
     Array.isArray(buyNowCart) &&
     buyNowCart.length
   ){
@@ -289,6 +295,7 @@ function loadCheckout(){
 
   }
   else if(
+    checkoutSource === "cart" &&
     Array.isArray(checkoutCart) &&
     checkoutCart.length
   ){
@@ -303,6 +310,34 @@ function loadCheckout(){
 
   }
   else if(
+    Array.isArray(checkoutCart) &&
+    checkoutCart.length
+  ){
+
+    cart =
+      checkoutCart;
+
+    console.log(
+      "CHECKOUT SOURCE:",
+      "checkoutCart fallback"
+    );
+
+  }
+  else if(
+    Array.isArray(buyNowCart) &&
+    buyNowCart.length
+  ){
+
+    cart =
+      buyNowCart;
+
+    console.log(
+      "CHECKOUT SOURCE:",
+      "buyNowCart fallback"
+    );
+
+  }
+  else if(
     Array.isArray(normalCart)
   ){
 
@@ -311,7 +346,7 @@ function loadCheckout(){
 
     console.log(
       "CHECKOUT SOURCE:",
-      "cart"
+      "cart fallback"
     );
 
   }
