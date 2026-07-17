@@ -253,40 +253,84 @@ loadCheckout();
 
 function loadCheckout(){
 
-cart =
-JSON.parse(
-localStorage.getItem(
-"checkoutCart"
-) || "[]"
-);
+  const buyNowCart =
+    JSON.parse(
+      localStorage.getItem(
+        "buyNowCart"
+      ) || "[]"
+    );
 
-if(cart.length===0){
+  const checkoutCart =
+    JSON.parse(
+      localStorage.getItem(
+        "checkoutCart"
+      ) || "[]"
+    );
 
-cart =
-JSON.parse(
-localStorage.getItem(
-"buyNowCart"
-) || "[]"
-);
+  const normalCart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
 
-}
+  if(
+    Array.isArray(buyNowCart) &&
+    buyNowCart.length
+  ){
 
-if(cart.length===0){
+    cart =
+      buyNowCart;
 
-cart =
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
+    console.log(
+      "CHECKOUT SOURCE:",
+      "buyNowCart"
+    );
 
-}
-  
-renderItems();
+  }
+  else if(
+    Array.isArray(checkoutCart) &&
+    checkoutCart.length
+  ){
 
-loadDefaultAddress();
+    cart =
+      checkoutCart;
 
-loadGifts();
+    console.log(
+      "CHECKOUT SOURCE:",
+      "checkoutCart"
+    );
+
+  }
+  else if(
+    Array.isArray(normalCart)
+  ){
+
+    cart =
+      normalCart;
+
+    console.log(
+      "CHECKOUT SOURCE:",
+      "cart"
+    );
+
+  }
+  else{
+
+    cart = [];
+
+  }
+
+  console.log(
+    "CHECKOUT CART:",
+    cart
+  );
+
+  renderItems();
+
+  loadDefaultAddress();
+
+  loadGifts();
 
 }
 
@@ -481,6 +525,36 @@ document
 
 }
 
+function escapeHtml(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
 function goPayment(){
 
 let hasError = false;
@@ -603,145 +677,253 @@ window.location =
 
 async function loadGifts(){
 
+  const giftSection =
+    document.getElementById(
+      "giftSection"
+    );
+
   const collectionTotals = {};
 
   cart.forEach(item=>{
 
-    if(!item.collection_id){
+    const collectionId =
+      String(
+        item.collection_id || ""
+      ).trim();
+
+    if(!collectionId){
+
+      console.warn(
+        "สินค้าไม่มี collection_id",
+        item
+      );
+
       return;
+
     }
 
     if(
       !collectionTotals[
-        item.collection_id
+        collectionId
       ]
     ){
+
       collectionTotals[
-        item.collection_id
+        collectionId
       ] = 0;
+
     }
 
     collectionTotals[
-      item.collection_id
+      collectionId
     ] +=
 
-    Number(item.price)
-    *
-    Number(item.qty);
+      Number(
+        item.price || 0
+      )
+
+      *
+
+      Number(
+        item.qty || 0
+      );
 
   });
 
-  let html = "";
-
-  for(
-    const collectionId
-    in
+  console.log(
+    "COLLECTION TOTALS",
     collectionTotals
-  ){
-
-    const total =
-
-    collectionTotals[
-      collectionId
-    ];
-
-    console.log(
-  "COLLECTION",
-  collectionId,
-  total
-);
-
-    const ruleResponse =
-    await fetch(
-
-      API +
-
-      "?action=giftRules"
-
-      +
-
-      "&collection_id="
-
-      +
-
-      collectionId
-
-      +
-
-      "&total="
-
-      +
-
-      total
-
-    );
-
-    const rules =
-    await ruleResponse.json();
-
-    console.log(
-  "RULES",
-  rules
-);
-
-    if(
-      !rules.length
-    ){
-      continue;
-    }
-
-    const giftResponse =
-    await fetch(
-
-      API +
-
-      "?action=gifts"
-
-      +
-
-      "&collection_id="
-
-      +
-
-      collectionId
-
-    );
-
-    const gifts =
-    await giftResponse.json();
-
-    console.log(
-  "GIFTS",
-  gifts
-);
-
-    rules.forEach(rule=>{
-
-    const normalizedRuleTier =
-  String(
-    rule.tier_name || ""
-  )
-    .trim()
-    .toLowerCase();
-
-const tierGifts =
-  gifts.filter(
-    gift =>
-      String(
-        gift.tier_name || ""
-      )
-        .trim()
-        .toLowerCase() ===
-      normalizedRuleTier
   );
 
-      if(
-        !tierGifts.length
-      ){
-        return;
+  let html = "";
+
+  try{
+
+    for(
+      const collectionId
+      in
+      collectionTotals
+    ){
+
+      const total =
+        collectionTotals[
+          collectionId
+        ];
+
+      console.log(
+        "COLLECTION",
+        collectionId,
+        total
+      );
+
+      const ruleResponse =
+        await fetch(
+
+          API +
+
+          "?action=giftRules" +
+
+          "&collection_id=" +
+
+          encodeURIComponent(
+            collectionId
+          ) +
+
+          "&total=" +
+
+          encodeURIComponent(
+            total
+          )
+
+        );
+
+      const ruleResult =
+        await ruleResponse.json();
+
+      const rules =
+
+        Array.isArray(
+          ruleResult
+        )
+
+        ?
+
+        ruleResult
+
+        :
+
+        Array.isArray(
+          ruleResult.rules
+        )
+
+        ?
+
+        ruleResult.rules
+
+        :
+
+        [];
+
+      console.log(
+        "RULE RESULT",
+        ruleResult
+      );
+
+      console.log(
+        "RULES",
+        rules
+      );
+
+      if(!rules.length){
+
+        continue;
+
       }
 
-      html += `
+      const giftResponse =
+        await fetch(
+
+          API +
+
+          "?action=gifts" +
+
+          "&collection_id=" +
+
+          encodeURIComponent(
+            collectionId
+          )
+
+        );
+
+      const giftResult =
+        await giftResponse.json();
+
+      const gifts =
+
+        Array.isArray(
+          giftResult
+        )
+
+        ?
+
+        giftResult
+
+        :
+
+        Array.isArray(
+          giftResult.gifts
+        )
+
+        ?
+
+        giftResult.gifts
+
+        :
+
+        [];
+
+      console.log(
+        "GIFT RESULT",
+        giftResult
+      );
+
+      console.log(
+        "GIFTS",
+        gifts
+      );
+
+      rules.forEach(rule=>{
+
+        const normalizedRuleTier =
+
+          String(
+            rule.tier_name || ""
+          )
+
+          .trim()
+
+          .toLowerCase();
+
+        const tierKey =
+
+          collectionId +
+
+          "::" +
+
+          normalizedRuleTier;
+
+        const tierGifts =
+
+          gifts.filter(gift=>
+
+            String(
+              gift.tier_name || ""
+            )
+
+            .trim()
+
+            .toLowerCase()
+
+            ===
+
+            normalizedRuleTier
+
+          );
+
+        if(
+          !tierGifts.length
+        ){
+
+          console.warn(
+            "ไม่พบของแถมของ Tier",
+            rule.tier_name
+          );
+
+          return;
+
+        }
+
+        html += `
 
 <div
 style="
@@ -755,7 +937,9 @@ border-radius:12px;
 
 🎁
 
-${rule.tier_name}
+${escapeHtml(
+  rule.tier_name
+)}
 
 </h3>
 
@@ -782,9 +966,9 @@ ${rule.max_select}
 
 `;
 
-      tierGifts.forEach(gift=>{
+        tierGifts.forEach(gift=>{
 
-        html += `
+          html += `
 
 <label
 style="
@@ -799,7 +983,9 @@ cursor:pointer;
 ">
 
 <img
-src="${gift.gift_image}"
+src="${escapeHtml(
+  gift.gift_image || ""
+)}"
 style="
 width:60px;
 height:60px;
@@ -814,8 +1000,10 @@ flex:1;
 
 <div>
 
-<div>
-${gift.gift_name}
+${escapeHtml(
+  gift.gift_name || ""
+)}
+
 </div>
 
 <div
@@ -824,11 +1012,7 @@ class="gift-char-box"
 style="
 display:none;
 margin-top:8px;
-"
->
-
-</div>
-
+">
 </div>
 
 </div>
@@ -840,7 +1024,9 @@ name="gift"
 
 class="gift-checkbox"
 
-data-tier="${rule.tier_name}"
+data-tier="${escapeHtml(
+  tierKey
+)}"
 
 data-max="${rule.max_select}"
 
@@ -852,139 +1038,65 @@ value="${gift.gift_id}"
 
 `;
 
-      });
+        });
 
-      html += `
+        html += `
 
 </div>
 
 `;
 
-    });
+      });
+
+    }
+
+    giftSection.innerHTML =
+      html;
+
+    if(!html){
+
+      console.warn(
+        "ไม่มีของแถมที่ผ่านเงื่อนไข"
+      );
+
+      return;
+
+    }
+
+    document
+
+      .querySelectorAll(
+        "[id^='gift-char-']"
+      )
+
+      .forEach(box=>{
+
+        const giftId =
+
+          box.id.replace(
+            "gift-char-",
+            ""
+          );
+
+        loadGiftCharacters(
+          giftId
+        );
+
+      });
+
+  }
+  catch(error){
+
+    console.error(
+      "loadGifts error",
+      error
+    );
+
+    giftSection.innerHTML = "";
 
   }
 
- if(html){
-
-  document
-    .getElementById(
-      "giftSection"
-    )
-    .innerHTML =
-    html;
-
-  const giftBoxes =
-
-  document.querySelectorAll(
-    "[id^='gift-char-']"
-  );
-
-  giftBoxes.forEach(box=>{
-
-    const giftId =
-
-    box.id.replace(
-      "gift-char-",
-      ""
-    );
-
-    loadGiftCharacters(
-      giftId
-    );
-
-  });
-
 }
-else{
-
-  document
-    .getElementById(
-      "giftSection"
-    )
-    .innerHTML =
-    "";
-
-}
-
-}
-
-document.addEventListener(
-"change",
-e=>{
-
-  if(
-    !e.target.classList.contains(
-      "gift-checkbox"
-    )
-  ){
-    return;
-  }
-
-  const tier =
-
-  e.target.dataset.tier;
-
-  const max =
-
-  Number(
-    e.target.dataset.max
-  );
-
-  const checked =
-
-  document.querySelectorAll(
-
-    `.gift-checkbox[data-tier="${tier}"]:checked`
-
-  );
-
-  if(
-    checked.length > max
-  ){
-
-    e.target.checked =
-    false;
-
-    alert(
-
-      `เลือกได้สูงสุด ${max} ชิ้น`
-
-    );
-
-  }
-
-  const giftId =
-e.target.value;
-
-const charBox =
-document.getElementById(
-`gift-char-${giftId}`
-);
-
-if(charBox){
-
-charBox.style.display =
-e.target.checked
-? "block"
-: "none";
-
-if(!e.target.checked){
-
-charBox
-.querySelectorAll(
-"input"
-)
-.forEach(input=>{
-
-input.checked = false;
-
-});
-
-}
-
-}
-
-});
 
  async function loadGiftCharacters(
   giftId
