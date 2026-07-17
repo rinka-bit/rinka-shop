@@ -3896,10 +3896,14 @@ else{
     );
 
   if(!box){
+
     return;
+
   }
 
-  if(!adminGiftCampaigns.length){
+  if(
+    !adminGiftCampaigns.length
+  ){
 
     box.innerHTML =
       "ยังไม่มีข้อมูลของแถม";
@@ -3911,27 +3915,50 @@ else{
   let html =
     '<div class="grid">';
 
-  adminGiftCampaigns.forEach(gift=>{
+  adminGiftCampaigns.forEach(
+    gift => {
 
-    const collection =
-      adminCollections.find(item=>
+      const collection =
+        adminCollections.find(
+          item =>
 
+            String(
+              item.collection_id
+            ) ===
+            String(
+              gift.collection_id
+            )
+
+        );
+
+      const rule =
+        getGiftRule(
+          gift.collection_id,
+          gift.tier_name
+        );
+
+      const ruleMode =
+        rule &&
         String(
-          item.collection_id
-        ) ===
-        String(
-          gift.collection_id
+          rule.rule_mode || ""
         )
+          .trim()
+          .toLowerCase() ===
+        "replace"
+          ? "replace"
+          : "stack";
 
-      );
+      const ruleModeLabel =
+        ruleMode === "replace"
+          ? "ตัด Tier ที่ต่ำกว่า"
+          : "สะสม Tier ก่อนหน้า";
 
-    const rule =
-  getGiftRule(
-    gift.collection_id,
-    gift.tier_name
-  );
-    
-    html += `
+      const ruleModeIcon =
+        ruleMode === "replace"
+          ? "🔄"
+          : "➕";
+
+      html += `
 
 <div class="card">
 
@@ -3957,7 +3984,10 @@ ${
     : ""
 }
 
-<h3 style="margin-top:0;">
+<h3
+style="
+margin-top:0;
+">
 
 ${escapeHtml(
   gift.gift_name || "-"
@@ -3966,79 +3996,151 @@ ${escapeHtml(
 </h3>
 
 <p>
+
 🆔
+
 ${escapeHtml(
   gift.gift_id || "-"
 )}
+
 </p>
 
 <p>
+
 🖼️ Collection:
+
 ${escapeHtml(
   collection
     ? collection.name
     : gift.collection_id || "-"
 )}
+
 </p>
 
 <p>
+
 🎁 ระดับ:
+
 ${escapeHtml(
   gift.tier_name || "-"
 )}
+
 </p>
 
 <p>
+
 💰 ยอดขั้นต่ำ:
-${rule
-  ? Number(
-      rule.min_amount || 0
-    ).toLocaleString()
-  : "-"
+
+${
+  rule
+    ? Number(
+        rule.min_amount || 0
+      ).toLocaleString()
+    : "-"
 }
+
 บาท
+
 </p>
 
 <p>
+
 🔢 เลือกได้:
-${rule
-  ? Number(
-      rule.max_select || 1
-    )
-  : "-"
+
+${
+  rule
+    ? Number(
+        rule.max_select || 1
+      )
+    : "-"
 }
+
 รายการ
+
 </p>
 
 <p>
-สถานะของแถม:
+
+♻️ เลือกของแถมซ้ำ:
+
+${
+  !rule
+    ? "-"
+    : String(
+        rule.allow_duplicate || ""
+      )
+        .trim()
+        .toLowerCase() ===
+      "yes"
+        ? "อนุญาต"
+        : "ไม่อนุญาต"
+}
+
+</p>
+
+<p>
+
+${ruleModeIcon}
+รูปแบบ Tier:
+
 <b>
+
+${
+  rule
+    ? ruleModeLabel
+    : "-"
+}
+
+</b>
+
+</p>
+
+<p>
+
+สถานะของแถม:
+
+<b>
+
 ${
   String(
     gift.active || ""
-  ).toLowerCase() === "yes"
+  )
+    .trim()
+    .toLowerCase() ===
+  "yes"
     ? "เปิดใช้งาน"
     : "ปิดใช้งาน"
 }
+
 </b>
+
 </p>
 
 <p>
+
 สถานะกติกา:
+
 <b>
+
 ${
   !rule
     ? "ยังไม่ตั้งกติกา"
     : String(
         rule.active || ""
-      ).toLowerCase() === "yes"
+      )
+        .trim()
+        .toLowerCase() ===
+      "yes"
         ? "เปิดใช้งาน"
         : "ปิดใช้งาน"
 }
+
 </b>
+
 </p>
 
-<div style="
+<div
+style="
 display:flex;
 gap:8px;
 flex-wrap:wrap;
@@ -4053,11 +4155,35 @@ editGiftCampaign(
   )}'
 )
 ">
+
 ✏️ แก้ไข
+
 </button>
 
 <button
-style="background:#ef4444;"
+type="button"
+style="
+background:#8b5cf6;
+"
+onclick="
+openGiftRule(
+  '${escapeJsString(
+    gift.collection_id
+  )}',
+  '${escapeJsString(
+    gift.tier_name
+  )}'
+)
+">
+
+⚙️ แก้ไขกติกา
+
+</button>
+
+<button
+style="
+background:#ef4444;
+"
 onclick="
 removeGiftCampaign(
   '${escapeJsString(
@@ -4065,7 +4191,9 @@ removeGiftCampaign(
   )}'
 )
 ">
+
 🗑️ ลบ
+
 </button>
 
 </div>
@@ -4074,11 +4202,14 @@ removeGiftCampaign(
 
 `;
 
-  });
+    }
+  );
 
-  html += "</div>";
+  html +=
+    "</div>";
 
-  box.innerHTML = html;
+  box.innerHTML =
+    html;
 
 }
   
@@ -5402,6 +5533,13 @@ function backToProductManager(){
       )
       ?.value || "no";
 
+  const ruleMode =
+    document
+      .getElementById(
+        "gr_rule_mode"
+      )
+      ?.value || "stack";
+
   const active =
     document
       .getElementById(
@@ -5430,7 +5568,9 @@ function backToProductManager(){
   }
 
   if(
-    !Number.isFinite(minAmount) ||
+    !Number.isFinite(
+      minAmount
+    ) ||
     minAmount < 0
   ){
 
@@ -5443,7 +5583,9 @@ function backToProductManager(){
   }
 
   if(
-    !Number.isInteger(maxSelect) ||
+    !Number.isInteger(
+      maxSelect
+    ) ||
     maxSelect < 1
   ){
 
@@ -5483,6 +5625,9 @@ function backToProductManager(){
     allow_duplicate:
       allowDuplicate,
 
+    rule_mode:
+      ruleMode,
+
     active:
       active
 
@@ -5516,7 +5661,9 @@ function backToProductManager(){
 
     formData.append(
       "payload",
-      JSON.stringify(payload)
+      JSON.stringify(
+        payload
+      )
     );
 
     const response =
@@ -5535,6 +5682,7 @@ function backToProductManager(){
 
       throw new Error(
         result.error ||
+        result.message ||
         "บันทึก Gift Rule ไม่สำเร็จ"
       );
 
@@ -6124,6 +6272,11 @@ function backToProductManager(){
       "gr_allow_duplicate"
     );
 
+  const ruleModeSelect =
+    document.getElementById(
+      "gr_rule_mode"
+    );
+
   const activeSelect =
     document.getElementById(
       "gr_active"
@@ -6135,6 +6288,7 @@ function backToProductManager(){
     !minAmountInput ||
     !maxSelectInput ||
     !allowDuplicateSelect ||
+    !ruleModeSelect ||
     !activeSelect
   ){
 
@@ -6153,12 +6307,17 @@ function backToProductManager(){
     !tierName
   ){
 
-    minAmountInput.value = 0;
+    minAmountInput.value =
+      0;
 
-    maxSelectInput.value = 1;
+    maxSelectInput.value =
+      1;
 
     allowDuplicateSelect.value =
       "no";
+
+    ruleModeSelect.value =
+      "stack";
 
     activeSelect.value =
       "yes";
@@ -6190,18 +6349,94 @@ function backToProductManager(){
   allowDuplicateSelect.value =
     rule &&
     String(
-      rule.allow_duplicate
-    ).toLowerCase() === "yes"
+      rule.allow_duplicate || ""
+    )
+      .trim()
+      .toLowerCase() ===
+    "yes"
       ? "yes"
       : "no";
+
+  ruleModeSelect.value =
+    rule &&
+    String(
+      rule.rule_mode || ""
+    )
+      .trim()
+      .toLowerCase() ===
+    "replace"
+      ? "replace"
+      : "stack";
 
   activeSelect.value =
     rule &&
     String(
-      rule.active
-    ).toLowerCase() === "yes"
+      rule.active || ""
+    )
+      .trim()
+      .toLowerCase() ===
+    "yes"
       ? "yes"
       : "";
+
+}
+
+  function openGiftRule(
+  collectionId,
+  tierName
+){
+
+  const collectionSelect =
+    document.getElementById(
+      "gr_collection_id"
+    );
+
+  const tierSelect =
+    document.getElementById(
+      "gr_tier_name"
+    );
+
+  if(
+    !collectionSelect ||
+    !tierSelect
+  ){
+
+    alert(
+      "ไม่พบฟอร์ม Gift Rule"
+    );
+
+    return;
+
+  }
+
+  collectionSelect.value =
+    String(
+      collectionId || ""
+    );
+
+  updateGiftRuleTierOptions(
+    tierName
+  );
+
+  const ruleForm =
+    document.getElementById(
+      "saveGiftRuleBtn"
+    )
+      ?.closest(
+        ".card"
+      );
+
+  if(ruleForm){
+
+    ruleForm.scrollIntoView({
+
+      behavior:"smooth",
+
+      block:"start"
+
+    });
+
+  }
 
 }
 
@@ -6248,7 +6483,9 @@ function backToProductManager(){
 
 }
 
-  function updateGiftRuleTierOptions(){
+  function updateGiftRuleTierOptions(
+  preferredTierName = ""
+){
 
   const collectionSelect =
     document.getElementById(
@@ -6269,9 +6506,37 @@ function backToProductManager(){
 
   }
 
-  const tiers =
+  const collectionId =
+    String(
+      collectionSelect.value || ""
+    );
+
+  const previousTierName =
+    String(
+      preferredTierName ||
+      tierSelect.value ||
+      ""
+    ).trim();
+
+  if(!collectionId){
+
+    tierSelect.innerHTML = `
+
+      <option value="">
+        เลือก Tier
+      </option>
+
+    `;
+
+    fillGiftRuleForm();
+
+    return;
+
+  }
+
+  const tierNames =
     getGiftTiersByCollection(
-      collectionSelect.value
+      collectionId
     );
 
   tierSelect.innerHTML = `
@@ -6280,19 +6545,45 @@ function backToProductManager(){
       เลือก Tier
     </option>
 
-    ${tiers.map(
-      tier => `
+    ${tierNames
+      .map(
+        tierName => `
 
-        <option
-        value="${escapeHtml(tier)}"
-        >
-          ${escapeHtml(tier)}
-        </option>
+          <option
+          value="${escapeHtml(
+            tierName
+          )}"
+          >
 
-      `
-    ).join("")}
+            ${escapeHtml(
+              tierName
+            )}
+
+          </option>
+
+        `
+      )
+      .join("")}
 
   `;
+
+  const matchingTier =
+    tierNames.find(
+      tierName =>
+
+        String(
+          tierName
+        )
+          .trim()
+          .toLowerCase() ===
+
+        previousTierName
+          .toLowerCase()
+
+    );
+
+  tierSelect.value =
+    matchingTier || "";
 
   fillGiftRuleForm();
 
