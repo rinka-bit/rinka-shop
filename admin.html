@@ -319,6 +319,7 @@ const API =
   let adminProductOptions = [];
   let selectedOptionProductId = "";
   let editingOptionId = "";
+  let highlightedProductId = "";
 
 function login(){
 
@@ -1560,6 +1561,9 @@ function filterProductsByCollection(
 
   selectedOptionProductId =
     String(productId || "");
+    
+  highlightedProductId =
+  selectedOptionProductId;
 
   const select =
     document.getElementById(
@@ -2242,7 +2246,18 @@ function renderOptionManager(){
 
   box.innerHTML = `
 
-<div class="card">
+<div
+class="card"
+style="
+border:
+${
+String(product.product_id)===
+String(highlightedProductId)
+? "3px solid #7c3aed"
+: "1px solid #e5eefc"
+};
+"
+>
 
 <h2>
 ➕ เพิ่มตัวเลือกสินค้า
@@ -2401,9 +2416,41 @@ style="display:none;">
 
 <div class="card">
 
+<div
+style="
+margin-bottom:18px;
+">
+
+<button
+type="button"
+onclick="backToProductManager()"
+style="
+background:#64748b;
+">
+
+⬅ กลับไปหน้าสินค้า
+
+</button>
+
+</div>
+
 <h2>
+
 📋 ตัวเลือกของสินค้า
+
 </h2>
+
+<p
+id="currentOptionProduct"
+style="
+font-weight:700;
+color:#2563eb;
+margin-top:-6px;
+">
+
+ยังไม่ได้เลือกสินค้า
+
+</p>
 
 <div id="adminOptionList">
 
@@ -2479,6 +2526,22 @@ async function handleOptionProductChange(){
 
   selectedOptionProductId =
     select?.value || "";
+
+  const product =
+  adminProducts.find(
+    p=>
+    String(p.product_id)===
+    String(selectedOptionProductId)
+  );
+
+document
+.getElementById(
+"currentOptionProduct"
+)
+.textContent =
+product
+? product.name
+: "ยังไม่ได้เลือกสินค้า";
 
   editingOptionId = "";
 
@@ -4329,6 +4392,36 @@ async function toggleCollectionStatusAdmin(
     alert(
       "เกิดข้อผิดพลาด กรุณาลองใหม่"
     );
+
+  }
+
+}
+
+function backToProductManager(){
+
+  showAdminTab("products");
+
+  if(selectedOptionProductId){
+
+    filterProductsByCollection("");
+
+    requestAnimationFrame(()=>{
+
+      const keyword =
+        document.getElementById(
+          "productSearch"
+        );
+
+      if(keyword){
+
+        keyword.value =
+          selectedOptionProductId;
+
+        renderAdminProductList();
+
+      }
+
+    });
 
   }
 
