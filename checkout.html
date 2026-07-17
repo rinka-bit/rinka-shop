@@ -717,17 +717,23 @@ async function loadGifts(){
 
     rules.forEach(rule=>{
 
-      const tierGifts =
+    const normalizedRuleTier =
+  String(
+    rule.tier_name || ""
+  )
+    .trim()
+    .toLowerCase();
 
-      gifts.filter(
-
-        gift =>
-
-        gift.tier_name
-        ===
-        rule.tier_name
-
-      );
+const tierGifts =
+  gifts.filter(
+    gift =>
+      String(
+        gift.tier_name || ""
+      )
+        .trim()
+        .toLowerCase() ===
+      normalizedRuleTier
+  );
 
       if(
         !tierGifts.length
