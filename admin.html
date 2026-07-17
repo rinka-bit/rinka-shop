@@ -1328,7 +1328,18 @@ function renderAdminProductList(){
 
     html += `
 
-<div class="card">
+<div
+class="card"
+style="
+border:
+${
+String(product.product_id)===
+String(highlightedProductId)
+? "3px solid #7c3aed"
+: "1px solid #e5eefc"
+};
+"
+>
 
 <img
 src="${product.image || ""}"
@@ -1433,16 +1444,6 @@ ${getProductOptionCount(product)}
 </button>
 
 </p>
-  ${
-    product.options.length > 5
-    ? `+${product.options.length - 5} เพิ่มเติม`
-    : ""
-  }
-  </p>
-  `
-  :
-  ""
-}
 
 <p>
 💰 <b>${product.price || 0}</b> บาท
@@ -2246,18 +2247,7 @@ function renderOptionManager(){
 
   box.innerHTML = `
 
-<div
-class="card"
-style="
-border:
-${
-String(product.product_id)===
-String(highlightedProductId)
-? "3px solid #7c3aed"
-: "1px solid #e5eefc"
-};
-"
->
+<div class="card">
 
 <h2>
 ➕ เพิ่มตัวเลือกสินค้า
