@@ -623,23 +623,41 @@ selectedCharacter
 
 }
 
-
 function validateSameGiftCharacters(
   giftId,
   quantity,
-  allowSameCharacter
+  maxSameCharacter
 ){
 
+  quantity =
+    Math.max(
+      0,
+      Number(
+        quantity || 0
+      )
+    );
+
+  maxSameCharacter =
+    Math.max(
+      0,
+      Number(
+        maxSameCharacter || 0
+      )
+    );
+
+
   if(
-    allowSameCharacter ||
-    quantity <= 1
+    quantity <= 1 ||
+    maxSameCharacter <= 0
   ){
 
     return true;
 
   }
 
-  const selectedCharacters = [];
+
+  const characterCounts = {};
+
 
   for(
     let itemIndex = 0;
@@ -649,47 +667,232 @@ function validateSameGiftCharacters(
 
     const characterName =
       getSelectedGiftCharacter(
+
         giftId,
+
         itemIndex
+
       );
 
-    if(characterName){
 
-      selectedCharacters.push(
+    if(!characterName){
+
+      continue;
+
+    }
+
+
+    if(
+      !characterCounts[
         characterName
+      ]
+    ){
+
+      characterCounts[
+        characterName
+      ] = 0;
+
+    }
+
+
+    characterCounts[
+      characterName
+    ]++;
+
+
+    if(
+      characterCounts[
+        characterName
+      ] >
+      maxSameCharacter
+    ){
+
+      alert(
+
+        maxSameCharacter === 1
+
+          ? "ของแถมรายการนี้ไม่สามารถเลือกตัวละครซ้ำกันได้"
+
+          : `ตัวละครเดียวกันเลือกซ้ำได้สูงสุด ${maxSameCharacter} ชิ้น`
+
       );
+
+      return false;
 
     }
 
   }
 
-  const uniqueCharacters =
-    new Set(
-      selectedCharacters
-    );
-
-  if(
-    uniqueCharacters.size !==
-    selectedCharacters.length
-  ){
-
-    alert(
-      "ของแถมรายการนี้ไม่สามารถเลือกตัวละครซ้ำกันได้"
-    );
-
-    return false;
-
-  }
 
   return true;
 
 }
 
+function validateGiftCharacterLimits(
+  gifts
+){
+
+  const characterGroups = {};
+
+
+  gifts.forEach(gift=>{
+
+    const characterName =
+      String(
+        gift.character_name || ""
+      ).trim();
+
+
+    if(!characterName){
+
+      return;
+
+    }
+
+
+    const maxSameCharacter =
+      Math.max(
+        0,
+        Number(
+          gift.max_same_character || 0
+        )
+      );
+
+
+    if(maxSameCharacter <= 0){
+
+      return;
+
+    }
+
+
+    const groupKey =
+
+      String(
+        gift.collection_id || ""
+      ).trim()
+
+      +
+
+      "::"
+
+      +
+
+      String(
+        gift.tier_name || ""
+      )
+        .trim()
+        .toLowerCase()
+
+      +
+
+      "::"
+
+      +
+
+      characterName;
+
+
+    if(
+      !characterGroups[
+        groupKey
+      ]
+    ){
+
+      characterGroups[
+        groupKey
+      ] = {
+
+        characterName:
+          characterName,
+
+        tierName:
+          gift.tier_name || "",
+
+        count:
+          0,
+
+        limit:
+          maxSameCharacter
+
+      };
+
+    }
+
+
+    const group =
+      characterGroups[
+        groupKey
+      ];
+
+
+    group.count++;
+
+
+    /*
+    ถ้าของใน Tier เดียวกันตั้งค่าไม่เท่ากัน
+    ให้ใช้ค่าที่เข้มงวดที่สุด
+    */
+
+    group.limit =
+      Math.min(
+
+        group.limit,
+
+        maxSameCharacter
+
+      );
+
+  });
+
+
+  for(
+    const groupKey
+    in characterGroups
+  ){
+
+    const group =
+      characterGroups[
+        groupKey
+      ];
+
+
+    if(
+      group.count >
+      group.limit
+    ){
+
+      alert(
+
+        group.limit === 1
+
+          ? `ของแถม ${group.tierName} ไม่สามารถเลือกตัวละคร ${group.characterName} ซ้ำกันได้`
+
+          : `ของแถม ${group.tierName} เลือกตัวละคร ${group.characterName} ได้สูงสุด ${group.limit} ชิ้น`
+
+      );
+
+      return false;
+
+    }
+
+  }
+
+
+  return true;
+
+}  
 
 function createGiftSelectionData(
   element,
   characterName
 ){
+
+  const maxSameCharacterValue =
+    Number(
+      element.dataset
+        .maxSameCharacter || 0
+    );
 
   return {
 
@@ -707,11 +910,46 @@ function createGiftSelectionData(
       "",
 
     character_name:
-      characterName || ""
+      characterName || "",
+
+    max_same_character:
+      Number.isFinite(
+        maxSameCharacterValue
+      )
+        ? Math.max(
+            0,
+            maxSameCharacterValue
+          )
+        : 0
 
   };
 
-}  
+}
+
+  function isGiftElementActive(
+  element
+){
+
+  const tierCard =
+    element.closest(
+      ".gift-tier-card"
+    );
+
+
+  if(!tierCard){
+
+    return true;
+
+  }
+
+
+  return String(
+    tierCard.dataset
+      .redemptionActive ||
+    "yes"
+  ) !== "no";
+
+}
 
 function goPayment(){
 
@@ -724,6 +962,7 @@ function goPayment(){
   const addressData =
     window.checkoutAddress;
 
+
   if(!addressData){
 
     alert(
@@ -733,6 +972,7 @@ function goPayment(){
     return;
 
   }
+
 
   if(
     !addressData.receiver ||
@@ -745,6 +985,23 @@ function goPayment(){
     alert(
       "ข้อมูลที่อยู่จัดส่งไม่ครบ กรุณาเลือกหรือแก้ไขที่อยู่ใหม่"
     );
+
+    return;
+
+  }
+
+
+  /*
+  =========================
+  ตรวจสิทธิ์ของแถมก่อนรวบรวม
+  =========================
+  */
+
+  if(
+    !validateGiftRedemption(
+      true
+    )
+  ){
 
     return;
 
@@ -765,21 +1022,38 @@ function goPayment(){
       ".gift-quantity"
     );
 
+
   for(
     const quantityInput
     of quantityInputs
   ){
 
+    if(
+      !isGiftElementActive(
+        quantityInput
+      )
+    ){
+
+      continue;
+
+    }
+
+
     const giftId =
       String(
-        quantityInput.dataset.giftId ||
-        ""
+        quantityInput.dataset
+          .giftId || ""
       ).trim();
 
+
     const quantity =
-      Number(
-        quantityInput.value || 0
+      Math.max(
+        0,
+        Number(
+          quantityInput.value || 0
+        )
       );
+
 
     if(
       !giftId ||
@@ -790,15 +1064,21 @@ function goPayment(){
 
     }
 
+
     const characters =
       giftCharacterMap[
         giftId
       ] || [];
 
-    const allowSameCharacter =
-      quantityInput.dataset
-        .allowSameCharacter ===
-      "yes";
+
+    const maxSameCharacter =
+      Math.max(
+        0,
+        Number(
+          quantityInput.dataset
+            .maxSameCharacter || 0
+        )
+      );
 
 
     if(
@@ -809,7 +1089,7 @@ function goPayment(){
 
         quantity,
 
-        allowSameCharacter
+        maxSameCharacter
 
       )
     ){
@@ -827,13 +1107,18 @@ function goPayment(){
 
       let characterName = "";
 
+
       if(characters.length){
 
         characterName =
           getSelectedGiftCharacter(
+
             giftId,
+
             itemIndex
+
           );
+
 
         if(!characterName){
 
@@ -847,11 +1132,17 @@ function goPayment(){
 
       }
 
+
       gifts.push(
+
         createGiftSelectionData(
+
           quantityInput,
+
           characterName
+
         )
+
       );
 
     }
@@ -870,10 +1161,22 @@ function goPayment(){
       ".gift-checkbox:checked"
     );
 
+
   for(
     const checkbox
     of checkedGiftBoxes
   ){
+
+    if(
+      !isGiftElementActive(
+        checkbox
+      )
+    ){
+
+      continue;
+
+    }
+
 
     const giftId =
       String(
@@ -882,26 +1185,34 @@ function goPayment(){
         ""
       ).trim();
 
+
     if(!giftId){
 
       continue;
 
     }
 
+
     const characters =
       giftCharacterMap[
         giftId
       ] || [];
 
+
     let characterName = "";
+
 
     if(characters.length){
 
       characterName =
         getSelectedGiftCharacter(
+
           giftId,
+
           0
+
         );
+
 
       if(!characterName){
 
@@ -915,11 +1226,17 @@ function goPayment(){
 
     }
 
+
     gifts.push(
+
       createGiftSelectionData(
+
         checkbox,
+
         characterName
+
       )
+
     );
 
   }
@@ -936,16 +1253,29 @@ function goPayment(){
       ".gift-fixed"
     );
 
+
   for(
     const fixedInput
     of fixedGiftInputs
   ){
 
+    if(
+      !isGiftElementActive(
+        fixedInput
+      )
+    ){
+
+      continue;
+
+    }
+
+
     const giftId =
       String(
-        fixedInput.dataset.giftId ||
-        ""
+        fixedInput.dataset
+          .giftId || ""
       ).trim();
+
 
     if(!giftId){
 
@@ -953,20 +1283,27 @@ function goPayment(){
 
     }
 
+
     const characters =
       giftCharacterMap[
         giftId
       ] || [];
 
+
     let characterName = "";
+
 
     if(characters.length){
 
       characterName =
         getSelectedGiftCharacter(
+
           giftId,
+
           0
+
         );
+
 
       if(!characterName){
 
@@ -980,31 +1317,63 @@ function goPayment(){
 
     }
 
+
     gifts.push(
+
       createGiftSelectionData(
+
         fixedInput,
+
         characterName
+
       )
+
     );
 
   }
 
-/*
-=========================
-ตรวจสิทธิ์เลือกของแถมรวม
-=========================
-*/
 
-if(
-  !validateGiftRedemption(
-    true
-  )
-){
+  /*
+  =========================
+  ตรวจจำนวนคาร์ซ้ำรวมทั้ง Tier
+  =========================
+  */
 
-  return;
+  if(
+    !validateGiftCharacterLimits(
+      gifts
+    )
+  ){
 
-}
-  
+    return;
+
+  }
+
+
+  /*
+  =========================
+  ตัดข้อมูลภายในที่ไม่ต้องส่ง
+  =========================
+  */
+
+  const cleanGifts =
+    gifts.map(gift=>({
+
+      gift_id:
+        gift.gift_id,
+
+      tier_name:
+        gift.tier_name,
+
+      collection_id:
+        gift.collection_id,
+
+      character_name:
+        gift.character_name
+
+    }));
+
+
   /*
   =========================
   เตรียมข้อมูลไปหน้า Payment
@@ -1021,17 +1390,20 @@ if(
       "",
 
     gifts:
-      gifts
+      cleanGifts
 
   };
 
+
   console.log(
     "CHECKOUT GIFTS",
-    gifts
+    cleanGifts
   );
+
 
   window.checkoutAddress =
     checkoutData;
+
 
   localStorage.setItem(
 
@@ -1042,6 +1414,7 @@ if(
     )
 
   );
+
 
   window.location.href =
     "payment.html";
@@ -1277,15 +1650,37 @@ function renderCheckboxGift(
       gift.gift_id || ""
     ).trim();
 
+
   const hasCharacterSelect =
     normalizeGiftBoolean(
       gift.has_character_select
     );
 
-  const allowSameCharacter =
-    normalizeGiftBoolean(
-      gift.allow_same_character
+
+  const maxSameCharacterValue =
+    Number(
+      gift.max_same_character
     );
+
+
+  const maxSameCharacter =
+    hasCharacterSelect
+
+      ? (
+          Number.isFinite(
+            maxSameCharacterValue
+          )
+
+            ? Math.max(
+                1,
+                maxSameCharacterValue
+              )
+
+            : 1
+        )
+
+      : 0;
+
 
   return `
 
@@ -1300,7 +1695,8 @@ padding:10px;
 margin-bottom:10px;
 border:1px solid #eee;
 border-radius:12px;
-">
+"
+>
 
 <img
 src="${escapeHtml(
@@ -1318,7 +1714,8 @@ alt=""
 <div
 style="
 flex:1;
-">
+"
+>
 
 <div>
 
@@ -1329,8 +1726,7 @@ ${escapeHtml(
 </div>
 
 ${createGiftCharacterBox(
-  giftId,
-  hasCharacterSelect
+  giftId
 )}
 
 </div>
@@ -1368,10 +1764,8 @@ data-has-character-select="${
     : "no"
 }"
 
-data-allow-same-character="${
-  allowSameCharacter
-    ? "yes"
-    : "no"
+data-max-same-character="${
+  maxSameCharacter
 }"
 
 value="${escapeHtml(
@@ -1384,8 +1778,7 @@ value="${escapeHtml(
 `;
 
 }
-
-
+  
 function renderQuantityGift(
   gift,
   rule,
@@ -1398,6 +1791,7 @@ function renderQuantityGift(
       gift.gift_id || ""
     ).trim();
 
+
   const maxSelect =
     Math.max(
       1,
@@ -1406,15 +1800,37 @@ function renderQuantityGift(
       )
     );
 
+
   const hasCharacterSelect =
     normalizeGiftBoolean(
       gift.has_character_select
     );
 
-  const allowSameCharacter =
-    normalizeGiftBoolean(
-      gift.allow_same_character
+
+  const maxSameCharacterValue =
+    Number(
+      gift.max_same_character
     );
+
+
+  const maxSameCharacter =
+    hasCharacterSelect
+
+      ? (
+          Number.isFinite(
+            maxSameCharacterValue
+          )
+
+            ? Math.max(
+                1,
+                maxSameCharacterValue
+              )
+
+            : 1
+        )
+
+      : 0;
+
 
   return `
 
@@ -1429,7 +1845,8 @@ padding:10px;
 margin-bottom:10px;
 border:1px solid #eee;
 border-radius:12px;
-">
+"
+>
 
 <img
 src="${escapeHtml(
@@ -1447,7 +1864,8 @@ alt=""
 <div
 style="
 flex:1;
-">
+"
+>
 
 <div>
 
@@ -1458,8 +1876,7 @@ ${escapeHtml(
 </div>
 
 ${createGiftCharacterBox(
-  giftId,
-  hasCharacterSelect
+  giftId
 )}
 
 </div>
@@ -1469,14 +1886,17 @@ style="
 display:flex;
 align-items:center;
 gap:8px;
-">
+"
+>
 
 <button
 type="button"
 class="gift-qty-minus"
+
 data-gift-id="${escapeHtml(
   giftId
 )}"
+
 style="
 width:34px;
 height:34px;
@@ -1491,9 +1911,11 @@ margin:0;
 
 <span
 class="gift-qty-value"
+
 id="gift-qty-${escapeHtml(
   giftId
 )}"
+
 style="
 min-width:24px;
 text-align:center;
@@ -1508,9 +1930,11 @@ font-weight:700;
 <button
 type="button"
 class="gift-qty-plus"
+
 data-gift-id="${escapeHtml(
   giftId
 )}"
+
 style="
 width:34px;
 height:34px;
@@ -1551,10 +1975,8 @@ data-has-character-select="${
     : "no"
 }"
 
-data-allow-same-character="${
-  allowSameCharacter
-    ? "yes"
-    : "no"
+data-max-same-character="${
+  maxSameCharacter
 }"
 
 value="0"
@@ -1568,7 +1990,6 @@ value="0"
 
 }
 
-
 function renderFixedSetGift(
   gift,
   rule,
@@ -1581,15 +2002,37 @@ function renderFixedSetGift(
       gift.gift_id || ""
     ).trim();
 
+
   const hasCharacterSelect =
     normalizeGiftBoolean(
       gift.has_character_select
     );
 
-  const allowSameCharacter =
-    normalizeGiftBoolean(
-      gift.allow_same_character
+
+  const maxSameCharacterValue =
+    Number(
+      gift.max_same_character
     );
+
+
+  const maxSameCharacter =
+    hasCharacterSelect
+
+      ? (
+          Number.isFinite(
+            maxSameCharacterValue
+          )
+
+            ? Math.max(
+                1,
+                maxSameCharacterValue
+              )
+
+            : 1
+        )
+
+      : 0;
+
 
   return `
 
@@ -1605,7 +2048,8 @@ margin-bottom:10px;
 border:1px solid #b8e8ff;
 background:#f8fcff;
 border-radius:12px;
-">
+"
+>
 
 <img
 src="${escapeHtml(
@@ -1623,7 +2067,8 @@ alt=""
 <div
 style="
 flex:1;
-">
+"
+>
 
 <div>
 
@@ -1638,15 +2083,15 @@ style="
 font-size:12px;
 color:#4388aa;
 margin-top:4px;
-">
+"
+>
 
 ✓ ได้รับอัตโนมัติ
 
 </div>
 
 ${createGiftCharacterBox(
-  giftId,
-  hasCharacterSelect
+  giftId
 )}
 
 </div>
@@ -1677,10 +2122,8 @@ data-has-character-select="${
     : "no"
 }"
 
-data-allow-same-character="${
-  allowSameCharacter
-    ? "yes"
-    : "no"
+data-max-same-character="${
+  maxSameCharacter
 }"
 
 value="1"
@@ -1691,7 +2134,6 @@ value="1"
 `;
 
 }
-
 
 function renderGiftByMode(
   gift,
@@ -1757,19 +2199,46 @@ function renderGiftByMode(
 
 }
 
+function normalizeRedeemScopeValue(
+  value
+){
 
+  const normalized =
+    String(
+      value ||
+      "current_only"
+    )
+      .trim()
+      .toLowerCase();
+
+  if(
+    normalized ===
+      "current_or_lower" ||
+    normalized ===
+      "current_and_lower"
+  ){
+
+    return "current_or_lower";
+
+  }
+
+  return "current_only";
+
+}
+  
 function renderGiftTier(
   collectionId,
   rule,
   gifts
 ){
 
-  const normalizedRuleTier =
+  const tierName =
     String(
       rule.tier_name || ""
-    )
-      .trim()
-      .toLowerCase();
+    ).trim();
+
+  const normalizedRuleTier =
+    tierName.toLowerCase();
 
   const tierGifts =
     gifts.filter(gift=>
@@ -1787,17 +2256,19 @@ function renderGiftTier(
 
     console.warn(
       "ไม่พบของแถมของ Tier",
-      rule.tier_name
+      tierName
     );
 
     return "";
 
   }
 
+
   const tierKey =
     collectionId +
     "::" +
     normalizedRuleTier;
+
 
   const maxSelect =
     Math.max(
@@ -1807,27 +2278,57 @@ function renderGiftTier(
       )
     );
 
+
   const selectionMode =
     getGiftSelectionMode(
       rule
     );
 
+
   const redeemScope =
-  String(
-    rule.redeem_scope ||
-    "current_only"
-  )
-    .trim()
-    .toLowerCase();
+    normalizeRedeemScopeValue(
+      rule.redeem_scope
+    );
 
-const redeemDescription =
 
-  redeemScope ===
-  "current_and_lower"
+  const lowerTierName =
+    String(
+      rule.lower_tier_name || ""
+    ).trim();
 
-    ? "สิทธิ์ระดับนี้ใช้เลือกของระดับนี้หรือระดับที่ต่ำกว่าได้"
 
-    : "สิทธิ์ระดับนี้ใช้เลือกของระดับนี้เท่านั้น";
+  const lowerTierQuantityValue =
+    Number(
+      rule.lower_tier_quantity
+    );
+
+
+  const lowerTierQuantity =
+    Number.isFinite(
+      lowerTierQuantityValue
+    )
+      ? Math.max(
+          0,
+          lowerTierQuantityValue
+        )
+      : 0;
+
+
+  const hasLowerTierAlternative =
+
+    redeemScope ===
+      "current_or_lower"
+
+    &&
+
+    Boolean(
+      lowerTierName
+    )
+
+    &&
+
+    lowerTierQuantity > 0;
+
 
   const modeDescription = {
 
@@ -1844,6 +2345,15 @@ const redeemDescription =
     selectionMode
   ];
 
+
+  const redeemDescription =
+    hasLowerTierAlternative
+
+      ? `เลือกรับ ${tierName} หรือเปลี่ยนเป็น ${lowerTierName} รวม ${lowerTierQuantity} ชิ้น`
+
+      : "สิทธิ์ระดับนี้ใช้รับของแถมระดับนี้";
+
+
   let html = `
 
 <div
@@ -1858,10 +2368,12 @@ data-collection-id="${escapeHtml(
 )}"
 
 data-tier-name="${escapeHtml(
-  rule.tier_name || ""
+  tierName
 )}"
 
 data-max="${maxSelect}"
+
+data-default-max="${maxSelect}"
 
 data-min-amount="${Number(
   rule.min_amount || 0
@@ -1876,23 +2388,38 @@ data-rule-mode="${escapeHtml(
 )}"
 
 data-redeem-scope="${escapeHtml(
-  rule.redeem_scope ||
-  "current_only"
+  redeemScope
 )}"
+
+data-lower-tier-name="${escapeHtml(
+  lowerTierName
+)}"
+
+data-lower-tier-quantity="${
+  lowerTierQuantity
+}"
+
+data-redemption-choice="current"
 
 style="
 margin-bottom:20px;
 padding:15px;
 border:1px solid #eee;
 border-radius:12px;
-">
+"
+>
 
-<h3>
+<h3
+style="
+margin-top:0;
+margin-bottom:8px;
+"
+>
 
 🎁
 
 ${escapeHtml(
-  rule.tier_name || ""
+  tierName
 )}
 
 </h3>
@@ -1901,8 +2428,10 @@ ${escapeHtml(
 style="
 font-size:13px;
 color:#666;
-margin-bottom:10px;
-">
+margin-bottom:12px;
+line-height:1.7;
+"
+>
 
 ซื้อครบ
 
@@ -1922,6 +2451,151 @@ ${redeemDescription}
 
 `;
 
+
+  /*
+  =========================
+  ตัวเลือกรับ Tier ปัจจุบัน
+  หรือแลกเป็น Tier ต่ำกว่า
+  =========================
+  */
+
+  if(
+    hasLowerTierAlternative
+  ){
+
+    const choiceName =
+      `gift-redeem-${tierKey}`;
+
+    html += `
+
+<div
+class="gift-redemption-choice"
+
+style="
+padding:12px;
+margin-bottom:14px;
+border:1px solid #dcefff;
+background:#f8fcff;
+border-radius:12px;
+"
+>
+
+<div
+style="
+font-size:13px;
+font-weight:700;
+margin-bottom:8px;
+"
+>
+
+เลือกวิธีรับของแถม
+
+</div>
+
+<label
+style="
+display:flex;
+align-items:flex-start;
+gap:8px;
+padding:8px;
+cursor:pointer;
+"
+>
+
+<input
+type="radio"
+
+class="gift-redeem-radio"
+
+name="${escapeHtml(
+  choiceName
+)}"
+
+value="current"
+
+data-tier-key="${escapeHtml(
+  tierKey
+)}"
+
+checked
+>
+
+<span>
+
+รับของแถม
+
+<b>
+${escapeHtml(
+  tierName
+)}
+</b>
+
+ตามปกติ
+
+</span>
+
+</label>
+
+<label
+style="
+display:flex;
+align-items:flex-start;
+gap:8px;
+padding:8px;
+cursor:pointer;
+"
+>
+
+<input
+type="radio"
+
+class="gift-redeem-radio"
+
+name="${escapeHtml(
+  choiceName
+)}"
+
+value="lower"
+
+data-tier-key="${escapeHtml(
+  tierKey
+)}"
+>
+
+<span>
+
+เปลี่ยนเป็นของแถม
+
+<b>
+${escapeHtml(
+  lowerTierName
+)}
+</b>
+
+รวม
+
+<b>
+${lowerTierQuantity}
+ชิ้น
+</b>
+
+</span>
+
+</label>
+
+</div>
+
+`;
+
+  }
+
+
+  /*
+  =========================
+  กล่องนับจำนวน
+  =========================
+  */
+
   if(
     selectionMode ===
     "fixed_set"
@@ -1931,12 +2605,14 @@ ${redeemDescription}
 
 <div
 class="gift-tier-count"
+
 style="
 font-size:13px;
 font-weight:700;
 margin-bottom:12px;
 color:#4388aa;
-">
+"
+>
 
 รับของแถมเซ็ตนี้อัตโนมัติ
 
@@ -1951,11 +2627,13 @@ color:#4388aa;
 
 <div
 class="gift-tier-count"
+
 style="
 font-size:13px;
 font-weight:700;
 margin-bottom:12px;
-">
+"
+>
 
 เลือกแล้ว 0 / ${maxSelect} ชิ้น
 
@@ -1964,6 +2642,25 @@ margin-bottom:12px;
 `;
 
   }
+
+
+  /*
+  =========================
+  รายการของแถมใน Tier
+  =========================
+  */
+
+  html += `
+
+<div
+class="gift-tier-items"
+data-tier-items="${escapeHtml(
+  tierKey
+)}"
+>
+
+`;
+
 
   tierGifts.forEach(gift=>{
 
@@ -1982,11 +2679,15 @@ margin-bottom:12px;
 
   });
 
+
   html += `
 
 </div>
 
+</div>
+
 `;
+
 
   return html;
 
@@ -2191,111 +2892,80 @@ function validateGiftRedemption(
       document.querySelectorAll(
         ".gift-tier-card"
       )
-    )
-    .filter(card=>
-
-      card.dataset.selectionMode !==
-      "fixed_set"
-
-    )
-    .sort(
-      (a,b)=>
-
-        Number(
-          b.dataset.minAmount || 0
-        )
-
-        -
-
-        Number(
-          a.dataset.minAmount || 0
-        )
     );
-
-
-  const collections = {};
-
-
-  tierCards.forEach(card=>{
-
-    const collectionId =
-      card.dataset.collectionId ||
-      "";
-
-    if(!collections[collectionId]){
-
-      collections[collectionId] = [];
-
-    }
-
-    collections[collectionId].push(
-      card
-    );
-
-  });
 
 
   for(
-    const collectionId
-    in collections
+    const tierCard
+    of tierCards
   ){
 
-    let transferableRights = 0;
+    const isActive =
+      String(
+        tierCard.dataset
+          .redemptionActive ||
+        "yes"
+      ) !== "no";
 
 
-    for(
-      const card
-      of collections[
-        collectionId
-      ]
-    ){
+    const tierName =
+      String(
+        tierCard.dataset
+          .tierName ||
+        ""
+      ).trim();
 
-      const tierKey =
-        card.dataset.tierKey;
 
-      const maxSelect =
+    const tierKey =
+      String(
+        tierCard.dataset
+          .tierKey ||
+        ""
+      ).trim();
+
+
+    const selectionMode =
+      String(
+        tierCard.dataset
+          .selectionMode ||
+        "checkbox"
+      )
+        .trim()
+        .toLowerCase();
+
+
+    const maxSelect =
+      Math.max(
+        0,
         Number(
-          card.dataset.max || 0
-        );
+          tierCard.dataset.max ||
+          0
+        )
+      );
+
+
+    /*
+    Tier ที่ถูกปิดเพราะเลือก
+    แลกสิทธิ์ลง Tier ต่ำกว่า
+    ต้องไม่มีรายการที่ถูกเลือกค้างอยู่
+    */
+
+    if(!isActive){
 
       const selectedCount =
         getGiftTierSelectedCount(
           tierKey
         );
 
-      const redeemScope =
-        String(
-          card.dataset.redeemScope ||
-          "current_only"
-        )
-          .trim()
-          .toLowerCase();
-
-
-      const ownRightsUsed =
-        Math.min(
-          selectedCount,
-          maxSelect
-        );
-
-
-      const extraRightsNeeded =
-        Math.max(
-          0,
-          selectedCount -
-          maxSelect
-        );
-
 
       if(
-        extraRightsNeeded >
-        transferableRights
+        selectedCount > 0
       ){
 
         if(showAlert){
 
           alert(
-            "เลือกของแถมเกินสิทธิ์ที่ได้รับ"
+            `ไม่สามารถเลือกของแถม ${tierName} ได้ เนื่องจากเลือกแลกสิทธิ์เป็น Tier ต่ำกว่าแล้ว`
           );
 
         }
@@ -2305,24 +2975,46 @@ function validateGiftRedemption(
       }
 
 
-      transferableRights -=
-        extraRightsNeeded;
+      continue;
+
+    }
 
 
-      const unusedOwnRights =
-        maxSelect -
-        ownRightsUsed;
+    /*
+    Fixed Set ได้รับอัตโนมัติ
+    ไม่ต้องตรวจจำนวนการเลือก
+    */
+
+    if(
+      selectionMode ===
+      "fixed_set"
+    ){
+
+      continue;
+
+    }
 
 
-      if(
-        redeemScope ===
-        "current_and_lower"
-      ){
+    const selectedCount =
+      getGiftTierSelectedCount(
+        tierKey
+      );
 
-        transferableRights +=
-          unusedOwnRights;
+
+    if(
+      selectedCount >
+      maxSelect
+    ){
+
+      if(showAlert){
+
+        alert(
+          `ของแถม ${tierName} เลือกได้สูงสุด ${maxSelect} ชิ้น`
+        );
 
       }
+
+      return false;
 
     }
 
@@ -2384,16 +3076,10 @@ function updateGiftTierCount(
 ){
 
   const tierCard =
-    Array.from(
-      document.querySelectorAll(
-        ".gift-tier-card"
-      )
-    )
-    .find(card=>
-
-      card.dataset.tierKey ===
-      tierKey
-
+    document.querySelector(
+      `.gift-tier-card[data-tier-key="${CSS.escape(
+        tierKey
+      )}"]`
     );
 
 
@@ -2404,16 +3090,60 @@ function updateGiftTierCount(
   }
 
 
+  const countBox =
+    tierCard.querySelector(
+      ".gift-tier-count"
+    );
+
+
+  if(!countBox){
+
+    return;
+
+  }
+
+
+  const isActive =
+    String(
+      tierCard.dataset
+        .redemptionActive ||
+      "yes"
+    ) !== "no";
+
+
+  if(!isActive){
+
+    countBox.textContent =
+      "เปลี่ยนสิทธิ์เป็นของแถม Tier ต่ำกว่าแล้ว";
+
+    countBox.style.color =
+      "#888";
+
+    return;
+
+  }
+
+
   const selectionMode =
-    tierCard.dataset
-      .selectionMode ||
-    "checkbox";
+    String(
+      tierCard.dataset
+        .selectionMode ||
+      "checkbox"
+    )
+      .trim()
+      .toLowerCase();
 
 
   if(
     selectionMode ===
     "fixed_set"
   ){
+
+    countBox.textContent =
+      "รับของแถมเซ็ตนี้อัตโนมัติ";
+
+    countBox.style.color =
+      "#4388aa";
 
     return;
 
@@ -2426,21 +3156,26 @@ function updateGiftTierCount(
     );
 
 
-  const countBox =
-    tierCard.querySelector(
-      ".gift-tier-count"
+  const maxSelect =
+    Math.max(
+      0,
+      Number(
+        tierCard.dataset.max ||
+        0
+      )
     );
 
 
-  if(countBox){
+  countBox.textContent =
+    `เลือกแล้ว ${selectedCount} / ${maxSelect} ชิ้น`;
 
-    countBox.textContent =
-      `เลือกในระดับนี้ ${selectedCount} ชิ้น`;
-
-  }
+  countBox.style.color =
+    selectedCount > maxSelect
+      ? "#c0392b"
+      : "";
 
 }
-
+  
 function updateAllGiftTierCounts(){
 
   document
@@ -2457,7 +3192,392 @@ function updateAllGiftTierCounts(){
 
 }
 
+  function findGiftTierCard(
+  collectionId,
+  tierName
+){
 
+  const normalizedTierName =
+    String(
+      tierName || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  return Array.from(
+    document.querySelectorAll(
+      ".gift-tier-card"
+    )
+  )
+    .find(card=>
+
+      String(
+        card.dataset.collectionId || ""
+      ).trim() ===
+      String(
+        collectionId || ""
+      ).trim()
+
+      &&
+
+      String(
+        card.dataset.tierName || ""
+      )
+        .trim()
+        .toLowerCase() ===
+      normalizedTierName
+
+    ) || null;
+
+}
+
+
+function clearGiftTierSelections(
+  tierCard
+){
+
+  if(!tierCard){
+
+    return;
+
+  }
+
+  tierCard
+    .querySelectorAll(
+      ".gift-checkbox"
+    )
+    .forEach(checkbox=>{
+
+      checkbox.checked =
+        false;
+
+      const giftId =
+        checkbox.dataset.giftId ||
+        checkbox.value ||
+        "";
+
+      renderGiftCharacterSelectors(
+        giftId,
+        0
+      );
+
+    });
+
+
+  tierCard
+    .querySelectorAll(
+      ".gift-quantity"
+    )
+    .forEach(input=>{
+
+      input.value = 0;
+
+      const giftId =
+        input.dataset.giftId ||
+        "";
+
+      const quantityLabel =
+        document.getElementById(
+          `gift-qty-${giftId}`
+        );
+
+      if(quantityLabel){
+
+        quantityLabel.textContent =
+          "0";
+
+      }
+
+      renderGiftCharacterSelectors(
+        giftId,
+        0
+      );
+
+    });
+
+}
+
+
+function setGiftTierActiveState(
+  tierCard,
+  active
+){
+
+  if(!tierCard){
+
+    return;
+
+  }
+
+  tierCard.dataset.redemptionActive =
+    active
+      ? "yes"
+      : "no";
+
+
+  const itemsBox =
+    tierCard.querySelector(
+      ".gift-tier-items"
+    );
+
+
+  if(itemsBox){
+
+    itemsBox.style.opacity =
+      active
+        ? "1"
+        : ".45";
+
+    itemsBox.style.pointerEvents =
+      active
+        ? "auto"
+        : "none";
+
+  }
+
+
+  tierCard
+    .querySelectorAll(
+
+      ".gift-checkbox," +
+
+      ".gift-quantity," +
+
+      ".gift-fixed," +
+
+      ".gift-qty-plus," +
+
+      ".gift-qty-minus"
+
+    )
+    .forEach(element=>{
+
+      element.disabled =
+        !active;
+
+    });
+
+
+  if(!active){
+
+    clearGiftTierSelections(
+      tierCard
+    );
+
+  }
+
+}
+
+function updateTierRedemptionChoice(
+  tierKey,
+  choice
+){
+
+  const sourceTierCard =
+    document.querySelector(
+      `.gift-tier-card[data-tier-key="${CSS.escape(
+        tierKey
+      )}"]`
+    );
+
+  if(!sourceTierCard){
+
+    return;
+
+  }
+
+
+  const collectionId =
+    String(
+      sourceTierCard.dataset
+        .collectionId || ""
+    ).trim();
+
+
+  sourceTierCard.dataset
+    .redemptionChoice =
+      choice === "lower"
+        ? "lower"
+        : "current";
+
+
+  /*
+  =========================
+  รีเซ็ตทุก Tier ใน Collection
+  กลับเป็นสิทธิ์เดิมก่อน
+  =========================
+  */
+
+  const collectionTierCards =
+    Array.from(
+      document.querySelectorAll(
+        ".gift-tier-card"
+      )
+    )
+    .filter(card=>
+
+      String(
+        card.dataset.collectionId || ""
+      ).trim() ===
+      collectionId
+
+    );
+
+
+  collectionTierCards.forEach(card=>{
+
+    const defaultMax =
+      Math.max(
+        1,
+        Number(
+          card.dataset.defaultMax ||
+          card.dataset.max ||
+          1
+        )
+      );
+
+    card.dataset.max =
+      String(
+        defaultMax
+      );
+
+    setGiftTierActiveState(
+      card,
+      true
+    );
+
+  });
+
+
+  /*
+  =========================
+  ตรวจทุก Tier ที่เลือก
+  แลกเป็น Tier ต่ำกว่า
+  =========================
+  */
+
+  collectionTierCards.forEach(card=>{
+
+    const redemptionChoice =
+      String(
+        card.dataset
+          .redemptionChoice ||
+        "current"
+      )
+        .trim()
+        .toLowerCase();
+
+
+    if(
+      redemptionChoice !==
+      "lower"
+    ){
+
+      return;
+
+    }
+
+
+    const lowerTierName =
+      String(
+        card.dataset
+          .lowerTierName || ""
+      ).trim();
+
+
+    const lowerTierQuantity =
+      Math.max(
+        0,
+        Number(
+          card.dataset
+            .lowerTierQuantity || 0
+        )
+      );
+
+
+    const lowerTierCard =
+      findGiftTierCard(
+
+        collectionId,
+
+        lowerTierName
+
+      );
+
+
+    if(
+      !lowerTierCard ||
+      lowerTierQuantity <= 0
+    ){
+
+      console.warn(
+        "ไม่พบ Tier ต่ำกว่าสำหรับแลกสิทธิ์",
+        {
+          collectionId,
+          lowerTierName,
+          lowerTierQuantity
+        }
+      );
+
+      card.dataset
+        .redemptionChoice =
+          "current";
+
+      const currentRadio =
+        card.querySelector(
+          '.gift-redeem-radio[value="current"]'
+        );
+
+      if(currentRadio){
+
+        currentRadio.checked =
+          true;
+
+      }
+
+      return;
+
+    }
+
+
+    /*
+    ปิด Tier ต้นทาง
+    เช่น ปิด Tier 2
+    */
+
+    setGiftTierActiveState(
+      card,
+      false
+    );
+
+
+    /*
+    กำหนดสิทธิ์ Tier ต่ำกว่าเป็นยอดรวมใหม่
+
+    ตัวอย่าง:
+    Tier 1 เดิมเลือกได้ 1
+    แลกจาก Tier 2 แล้วเลือกได้รวม 2
+    ไม่ใช่ 1 + 2 = 3
+    */
+
+    lowerTierCard.dataset.max =
+      String(
+        Math.max(
+          Number(
+            lowerTierCard.dataset.max ||
+            0
+          ),
+          lowerTierQuantity
+        )
+      );
+
+  });
+
+
+  updateAllGiftTierCounts();
+
+}
+  
 function toggleGiftCharacterBox(
   giftId,
   show
@@ -2510,7 +3630,6 @@ document.addEventListener(
 
     }
 
-
     const checkbox =
       e.target;
 
@@ -2551,6 +3670,81 @@ document.addEventListener(
 
 
     updateAllGiftTierCounts();
+
+  }
+);
+
+  document.addEventListener(
+  "change",
+  e=>{
+
+    if(
+      !e.target.classList.contains(
+        "gift-redeem-radio"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    const radio =
+      e.target;
+
+
+    updateTierRedemptionChoice(
+
+      radio.dataset.tierKey,
+
+      radio.value
+
+    );
+
+
+    if(
+      !validateGiftRedemption(
+        false
+      )
+    ){
+
+      const tierCard =
+        radio.closest(
+          ".gift-tier-card"
+        );
+
+
+      const currentRadio =
+        tierCard
+          ? tierCard.querySelector(
+              '.gift-redeem-radio[value="current"]'
+            )
+          : null;
+
+
+      if(currentRadio){
+
+        currentRadio.checked =
+          true;
+
+
+        updateTierRedemptionChoice(
+
+          currentRadio.dataset
+            .tierKey,
+
+          "current"
+
+        );
+
+      }
+
+
+      alert(
+        "ไม่สามารถเปลี่ยนรูปแบบการรับของแถมได้"
+      );
+
+    }
 
   }
 );
