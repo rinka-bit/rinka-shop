@@ -1158,17 +1158,9 @@ function getGiftSelectionMode(
 
 }
 
-
 function createGiftCharacterBox(
-  giftId,
-  hasCharacterSelect
+  giftId
 ){
-
-  if(!hasCharacterSelect){
-
-    return "";
-
-  }
 
   return `
 
@@ -1186,7 +1178,6 @@ margin-top:8px;
 `;
 
 }
-
 
 function renderCheckboxGift(
   gift,
@@ -1890,7 +1881,6 @@ margin-bottom:12px;
 
 }
 
-
 async function loadAllGiftCharacters(){
 
   const giftElements =
@@ -1903,6 +1893,7 @@ async function loadAllGiftCharacters(){
       ".gift-fixed"
 
     );
+
 
   const loadedGiftIds =
     new Set();
@@ -1917,14 +1908,9 @@ async function loadAllGiftCharacters(){
         element.dataset.giftId || ""
       ).trim();
 
-    const hasCharacterSelect =
-      element.dataset
-        .hasCharacterSelect ===
-      "yes";
 
     if(
       !giftId ||
-      !hasCharacterSelect ||
       loadedGiftIds.has(
         giftId
       )
@@ -1934,9 +1920,11 @@ async function loadAllGiftCharacters(){
 
     }
 
+
     loadedGiftIds.add(
       giftId
     );
+
 
     await loadGiftCharacters(
       giftId
@@ -1945,7 +1933,6 @@ async function loadAllGiftCharacters(){
   }
 
 }
-
 
 async function loadGifts(){
 
