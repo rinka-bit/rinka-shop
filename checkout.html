@@ -989,63 +989,22 @@ function goPayment(){
 
   }
 
+/*
+=========================
+ตรวจสิทธิ์เลือกของแถมรวม
+=========================
+*/
 
-  /*
-  =========================
-  ตรวจจำนวนของแถมแต่ละ Tier
-  =========================
-  */
+if(
+  !validateGiftRedemption(
+    true
+  )
+){
 
-  const tierCards =
-    document.querySelectorAll(
-      ".gift-tier-card"
-    );
+  return;
 
-  for(
-    const tierCard
-    of tierCards
-  ){
-
-    const selectionMode =
-      tierCard.dataset
-        .selectionMode ||
-      "checkbox";
-
-    if(
-      selectionMode ===
-      "fixed_set"
-    ){
-
-      continue;
-
-    }
-
-    const tierKey =
-      tierCard.dataset.tierKey;
-
-    const max =
-      Number(
-        tierCard.dataset.max || 1
-      );
-
-    const selectedCount =
-      getGiftTierSelectedCount(
-        tierKey
-      );
-
-    if(selectedCount > max){
-
-      alert(
-        `เลือกของแถมได้สูงสุด ${max} ชิ้น`
-      );
-
-      return;
-
-    }
-
-  }
-
-
+}
+  
   /*
   =========================
   เตรียมข้อมูลไปหน้า Payment
@@ -1853,6 +1812,23 @@ function renderGiftTier(
       rule
     );
 
+  const redeemScope =
+  String(
+    rule.redeem_scope ||
+    "current_only"
+  )
+    .trim()
+    .toLowerCase();
+
+const redeemDescription =
+
+  redeemScope ===
+  "current_and_lower"
+
+    ? "สิทธิ์ระดับนี้ใช้เลือกของระดับนี้หรือระดับที่ต่ำกว่าได้"
+
+    : "สิทธิ์ระดับนี้ใช้เลือกของระดับนี้เท่านั้น";
+
   const modeDescription = {
 
     checkbox:
@@ -1886,6 +1862,10 @@ data-tier-name="${escapeHtml(
 )}"
 
 data-max="${maxSelect}"
+
+data-min-amount="${Number(
+  rule.min_amount || 0
+)}"
 
 data-selection-mode="${escapeHtml(
   selectionMode
@@ -1933,6 +1913,10 @@ margin-bottom:10px;
 <br>
 
 ${modeDescription}
+
+<br>
+
+${redeemDescription}
 
 </div>
 
@@ -2198,6 +2182,157 @@ text-align:center;
 
 }
 
+function validateGiftRedemption(
+  showAlert = true
+){
+
+  const tierCards =
+    Array.from(
+      document.querySelectorAll(
+        ".gift-tier-card"
+      )
+    )
+    .filter(card=>
+
+      card.dataset.selectionMode !==
+      "fixed_set"
+
+    )
+    .sort(
+      (a,b)=>
+
+        Number(
+          b.dataset.minAmount || 0
+        )
+
+        -
+
+        Number(
+          a.dataset.minAmount || 0
+        )
+    );
+
+
+  const collections = {};
+
+
+  tierCards.forEach(card=>{
+
+    const collectionId =
+      card.dataset.collectionId ||
+      "";
+
+    if(!collections[collectionId]){
+
+      collections[collectionId] = [];
+
+    }
+
+    collections[collectionId].push(
+      card
+    );
+
+  });
+
+
+  for(
+    const collectionId
+    in collections
+  ){
+
+    let transferableRights = 0;
+
+
+    for(
+      const card
+      of collections[
+        collectionId
+      ]
+    ){
+
+      const tierKey =
+        card.dataset.tierKey;
+
+      const maxSelect =
+        Number(
+          card.dataset.max || 0
+        );
+
+      const selectedCount =
+        getGiftTierSelectedCount(
+          tierKey
+        );
+
+      const redeemScope =
+        String(
+          card.dataset.redeemScope ||
+          "current_only"
+        )
+          .trim()
+          .toLowerCase();
+
+
+      const ownRightsUsed =
+        Math.min(
+          selectedCount,
+          maxSelect
+        );
+
+
+      const extraRightsNeeded =
+        Math.max(
+          0,
+          selectedCount -
+          maxSelect
+        );
+
+
+      if(
+        extraRightsNeeded >
+        transferableRights
+      ){
+
+        if(showAlert){
+
+          alert(
+            "เลือกของแถมเกินสิทธิ์ที่ได้รับ"
+          );
+
+        }
+
+        return false;
+
+      }
+
+
+      transferableRights -=
+        extraRightsNeeded;
+
+
+      const unusedOwnRights =
+        maxSelect -
+        ownRightsUsed;
+
+
+      if(
+        redeemScope ===
+        "current_and_lower"
+      ){
+
+        transferableRights +=
+          unusedOwnRights;
+
+      }
+
+    }
+
+  }
+
+
+  return true;
+
+}
+  
 function getGiftTierSelectedCount(
   tierKey
 ){
@@ -2244,7 +2379,6 @@ function getGiftTierSelectedCount(
 
 }
 
-
 function updateGiftTierCount(
   tierKey
 ){
@@ -2262,36 +2396,50 @@ function updateGiftTierCount(
 
     );
 
+
   if(!tierCard){
 
     return;
 
   }
 
-  const max =
-    Number(
-      tierCard.dataset.max || 1
-    );
+
+  const selectionMode =
+    tierCard.dataset
+      .selectionMode ||
+    "checkbox";
+
+
+  if(
+    selectionMode ===
+    "fixed_set"
+  ){
+
+    return;
+
+  }
+
 
   const selectedCount =
     getGiftTierSelectedCount(
       tierKey
     );
 
+
   const countBox =
     tierCard.querySelector(
       ".gift-tier-count"
     );
 
+
   if(countBox){
 
     countBox.textContent =
-      `เลือกแล้ว ${selectedCount} / ${max} ชิ้น`;
+      `เลือกในระดับนี้ ${selectedCount} ชิ้น`;
 
   }
 
 }
-
 
 function updateAllGiftTierCounts(){
 
@@ -2348,7 +2496,6 @@ function toggleGiftCharacterBox(
 
 }
 
-
 document.addEventListener(
   "change",
   e=>{
@@ -2363,46 +2510,47 @@ document.addEventListener(
 
     }
 
+
     const checkbox =
       e.target;
 
     const tierKey =
       checkbox.dataset.tier;
 
-    const max =
-      Number(
-        checkbox.dataset.max || 1
-      );
+
+    /*
+    ทดลองเลือกก่อน แล้วตรวจสิทธิ์รวม
+    */
 
     if(
       checkbox.checked &&
-      getGiftTierSelectedCount(
-        tierKey
-      ) > max
+      !validateGiftRedemption(
+        false
+      )
     ){
 
       checkbox.checked =
         false;
 
       alert(
-        `เลือกได้สูงสุด ${max} ชิ้น`
+        "เลือกของแถมเกินสิทธิ์ที่ได้รับ"
       );
 
     }
 
-  renderGiftCharacterSelectors(
 
-    checkbox.value,
+    renderGiftCharacterSelectors(
 
-    checkbox.checked
-      ? 1
-      : 0
+      checkbox.value,
 
-);
+      checkbox.checked
+        ? 1
+        : 0
 
-updateGiftTierCount(
-    tierKey
-);
+    );
+
+
+    updateAllGiftTierCounts();
 
   }
 );
@@ -2450,14 +2598,6 @@ updateGiftTierCount(
 
     }
 
-    const tierKey =
-      quantityInput.dataset.tier;
-
-    const max =
-      Number(
-        quantityInput.dataset.max || 1
-      );
-
     let quantity =
       Number(
         quantityInput.value || 0
@@ -2465,26 +2605,32 @@ updateGiftTierCount(
 
     if(plusButton){
 
-      const selectedCount =
-        getGiftTierSelectedCount(
-          tierKey
-        );
+  quantity++;
 
-      if(
-        selectedCount >= max
-      ){
+  quantityInput.value =
+    quantity;
 
-        alert(
-          `เลือกได้สูงสุด ${max} ชิ้น`
-        );
 
-        return;
+  if(
+    !validateGiftRedemption(
+      false
+    )
+  ){
 
-      }
+    quantity--;
 
-      quantity++;
+    quantityInput.value =
+      quantity;
 
-    }
+    alert(
+      "เลือกของแถมเกินสิทธิ์ที่ได้รับ"
+    );
+
+    return;
+
+  }
+
+}
 
     if(minusButton){
 
@@ -2516,9 +2662,7 @@ updateGiftTierCount(
       quantity
     );
 
-    updateGiftTierCount(
-      tierKey
-    );
+    updateAllGiftTierCounts();
 
   }
 );
