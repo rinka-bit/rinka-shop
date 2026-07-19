@@ -90,15 +90,18 @@ async function loadAdminData(){
     loadAddressRequests();
 
     /*
-    โหลดสินค้าก่อน
-    เพราะ Product Options และ Collections
-    ต้องใช้ adminProducts
+    สร้างหน้าต่าง Manager ก่อนโหลดข้อมูล
     */
-    await loadAdminProducts();
+    renderProductManager();
 
     renderOptionManager();
 
     renderCollectionManager();
+
+    /*
+    แล้วค่อยโหลดข้อมูลลงในหน้าที่สร้างไว้
+    */
+    await loadAdminProducts();
 
     await loadAdminCollections();
 
