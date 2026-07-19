@@ -1,16 +1,21 @@
 async function loadOrders(){
 
   const response =
-    await fetch(API + "?action=orders");
+    await fetch(
+      API + "?action=orders"
+    );
 
   const result =
     await response.json();
 
+  const orders =
+    Array.isArray(result.orders)
+      ? [...result.orders].reverse()
+      : [];
+
   let html = "";
 
-  result.orders.reverse();
-
-  result.orders.forEach(order=>{
+  orders.forEach(order=>{
 
     if(
       order.payment_status !== "paid" ||
@@ -23,16 +28,35 @@ async function loadOrders(){
 
   });
 
-  document.getElementById("orders").innerHTML = html;
+  const box =
+    document.getElementById(
+      "orders"
+    );
 
-  result.orders.forEach(order=>{
+  if(!box){
+    return;
+  }
+
+  box.innerHTML =
+    html ||
+    "ยังไม่มีออเดอร์ที่ต้องดำเนินการ";
+
+  orders.forEach(order=>{
 
     const select =
-      document.getElementById("status_" + order.order_id);
+      document.getElementById(
+        "status_" + order.order_id
+      );
 
     if(select){
-      select.value = order.status;
-      toggleOrderFields(order.order_id);
+
+      select.value =
+        order.status;
+
+      toggleOrderFields(
+        order.order_id
+      );
+
     }
 
   });
@@ -137,66 +161,154 @@ function toggleOrderFields(orderId){
 
 }
 
-async function updateOrderStatus(orderId){
+async function updateOrderStatus(
+  orderId
+){
+
+  const statusElement =
+    document.getElementById(
+      "status_" + orderId
+    );
+
+  if(!statusElement){
+
+    console.error(
+      "ไม่พบช่องสถานะของออเดอร์:",
+      orderId
+    );
+
+    return;
+
+  }
 
   const status =
-    document.getElementById("status_" + orderId).value;
+    statusElement.value;
 
   const payload = {
-    order_id: orderId,
-    status: status
+
+    order_id:
+      orderId,
+
+    status:
+      status
+
   };
 
   if(status === "ready_to_ship"){
 
     payload.import_fee_round2 =
       Number(
-        document.getElementById("import_" + orderId).value || 0
+        document
+          .getElementById(
+            "import_" + orderId
+          )
+          ?.value || 0
       );
 
     payload.domestic_shipping_fee =
       Number(
-        document.getElementById("domestic_" + orderId).value || 0
+        document
+          .getElementById(
+            "domestic_" + orderId
+          )
+          ?.value || 0
       );
+
+    if(
+      payload.import_fee_round2 < 0 ||
+      payload.domestic_shipping_fee < 0
+    ){
+
+      alert(
+        "ค่านำเข้าและค่าส่งในไทยต้องไม่ติดลบ"
+      );
+
+      return;
+
+    }
 
   }
 
   if(status === "shipped"){
 
     payload.courier =
-      document.getElementById("courier_" + orderId).value;
+      document
+        .getElementById(
+          "courier_" + orderId
+        )
+        ?.value
+        .trim() || "";
 
     payload.tracking_no =
-      document.getElementById("tracking_" + orderId).value;
+      document
+        .getElementById(
+          "tracking_" + orderId
+        )
+        ?.value
+        .trim() || "";
+
+    if(
+      !payload.courier ||
+      !payload.tracking_no
+    ){
+
+      alert(
+        "กรุณากรอกขนส่งและเลขพัสดุ"
+      );
+
+      return;
+
+    }
 
   }
 
-  const formData =
-    new FormData();
+  try{
 
-  formData.append(
-    "payload",
-    JSON.stringify(payload)
-  );
+    const formData =
+      new FormData();
 
-  const response =
-    await fetch(
-      API + "?action=updateOrderStatus",
-      {
-        method:"POST",
-        body:formData
-      }
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
     );
 
-  const result =
-    await response.json();
+    const response =
+      await fetch(
+        API +
+        "?action=updateOrderStatus",
+        {
+          method:"POST",
+          body:formData
+        }
+      );
 
-  alert(
-    result.success
-      ? "อัปเดตสถานะแล้ว"
-      : result.error || "อัปเดตไม่สำเร็จ"
-  );
+    const result =
+      await response.json();
 
-  loadOrders();
+    alert(
+      result.success
+        ? "อัปเดตสถานะแล้ว"
+        : result.error ||
+          "อัปเดตไม่สำเร็จ"
+    );
+
+    if(result.success){
+
+      await loadOrders();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "updateOrderStatus error:",
+      error
+    );
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }
 
 }
