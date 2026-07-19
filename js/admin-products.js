@@ -434,7 +434,9 @@ async function loadAdminProducts(){
   }
 
 adminProducts =
-  result.products || [];
+  Array.isArray(result.products)
+    ? result.products
+    : [];
 
 renderAdminProductList();
 
