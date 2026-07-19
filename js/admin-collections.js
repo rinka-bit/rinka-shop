@@ -1,5 +1,3 @@
-let adminCollections = [];
-
 function renderCollectionManager(){
 
   const box =
