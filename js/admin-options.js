@@ -689,24 +689,6 @@ if(
 
 }
 
-    alert(
-      "ราคาเพิ่มต้องไม่ติดลบ"
-    );
-
-    return;
-
-  }
-
-  if(payload.stock < 0){
-
-    alert(
-      "จำนวน Stock ต้องไม่ติดลบ"
-    );
-
-    return;
-
-  }
-
   const btn =
     document.getElementById(
       "saveOptionBtn"
