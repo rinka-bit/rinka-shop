@@ -2867,6 +2867,28 @@ text-align:center;
         );
 
       console.log(
+  "GIFT DEBUG",
+  {
+    collectionId,
+    total,
+    rules,
+    gifts,
+    ruleTiers:
+      rules.map(rule =>
+        String(
+          rule.tier_name || ""
+        ).trim()
+      ),
+    giftTiers:
+      gifts.map(gift =>
+        String(
+          gift.tier_name || ""
+        ).trim()
+      )
+  }
+);
+
+      console.log(
         "GIFTS",
         collectionId,
         gifts
