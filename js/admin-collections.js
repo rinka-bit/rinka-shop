@@ -127,6 +127,194 @@ oninput="renderAdminCollectionList()">
 
 }
 
+async function saveCollectionFromAdmin(){
+
+  const btn =
+    document.getElementById(
+      "saveCollectionBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "saveCollectionLoading"
+    );
+
+  const payload = {
+
+    name:
+      document
+        .getElementById("c_name")
+        .value
+        .trim(),
+
+    fandom:
+      document
+        .getElementById("c_fandom")
+        .value
+        .trim(),
+
+    collection_type:
+      document
+        .getElementById("c_type")
+        .value
+        .trim(),
+
+    preorder_deadline:
+      document
+        .getElementById("c_deadline")
+        .value,
+
+    description:
+      document
+        .getElementById(
+          "c_description"
+        )
+        .value,
+
+    featured:
+      document
+        .getElementById("c_featured")
+        .checked
+        ? "yes"
+        : "",
+
+    status:"active"
+
+  };
+
+  if(!payload.name){
+    alert(
+      "กรุณากรอกชื่อ Collection"
+    );
+    return;
+  }
+
+  const imageFile =
+    document
+      .getElementById(
+        "c_image_file"
+      )
+      .files[0];
+
+  const bannerFile =
+    document
+      .getElementById(
+        "c_banner_file"
+      )
+      .files[0];
+
+  btn.disabled = true;
+  btn.textContent =
+    "กำลังบันทึก...";
+
+  loading.style.display =
+    "block";
+
+  try{
+
+    if(imageFile){
+
+      payload.image_base64 =
+        await fileToBase64(
+          imageFile
+        );
+
+    }
+
+    if(bannerFile){
+
+      payload.banner_base64 =
+        await fileToBase64(
+          bannerFile
+        );
+
+    }
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveCollection"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "เพิ่ม Collection ไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert(
+      "เพิ่ม Collection แล้ว: " +
+      result.collection_id
+    );
+
+    renderCollectionManager();
+
+    await loadAdminCollections();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    const newBtn =
+      document.getElementById(
+        "saveCollectionBtn"
+      );
+
+    const newLoading =
+      document.getElementById(
+        "saveCollectionLoading"
+      );
+
+    if(newBtn){
+
+      newBtn.disabled = false;
+
+      newBtn.textContent =
+        "บันทึก Collection";
+
+    }
+
+    if(newLoading){
+
+      newLoading.style.display =
+        "none";
+
+    }
+
+  }
+
+}
+
 async function loadAdminCollections(){
 
   const box =
@@ -719,6 +907,96 @@ ${
 
     loading.style.display =
       "none";
+
+  }
+
+}
+
+async function toggleCollectionStatusAdmin(
+  collectionId
+){
+
+  const collection =
+    adminCollections.find(
+      item =>
+        String(
+          item.collection_id
+        ) ===
+        String(collectionId)
+    );
+
+  const isActive =
+    collection &&
+    collection.status ===
+    "active";
+
+  const ok =
+    confirm(
+      isActive
+        ? "ต้องการปิด Collection นี้ใช่ไหม?"
+        : "ต้องการเปิด Collection นี้ใช่ไหม?"
+    );
+
+  if(!ok){
+    return;
+  }
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "toggleCollectionStatus"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify({
+        collection_id:
+          collectionId
+      })
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "เปลี่ยนสถานะไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert(
+      result.status === "active"
+        ? "เปิด Collection แล้ว"
+        : "ปิด Collection แล้ว"
+    );
+
+    await loadAdminCollections();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
 
   }
 
