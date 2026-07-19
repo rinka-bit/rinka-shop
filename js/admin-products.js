@@ -1,5 +1,3 @@
-let adminProducts = [];
-
 let highlightedProductId = "";
 
 function renderProductManager(){
