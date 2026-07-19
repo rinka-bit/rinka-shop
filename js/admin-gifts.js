@@ -1170,6 +1170,45 @@ else{
 
 }
 
+function getGiftRule(
+  collectionId,
+  tierName
+){
+
+  const normalizedTier =
+    String(
+      tierName || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  return adminGiftRules.find(
+    rule => {
+
+      const ruleCollectionId =
+        String(
+          rule.collection_id || ""
+        );
+
+      const ruleTierName =
+        String(
+          rule.tier_name || ""
+        )
+          .trim()
+          .toLowerCase();
+
+      return (
+        ruleCollectionId ===
+          String(collectionId) &&
+        ruleTierName ===
+          normalizedTier
+      );
+
+    }
+  ) || null;
+
+}
+
   function renderAdminGiftList(){
 
   const box =
@@ -2602,3 +2641,4 @@ removeGiftCampaign(
   fillGiftRuleForm();
 
 }
+
