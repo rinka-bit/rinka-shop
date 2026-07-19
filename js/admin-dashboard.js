@@ -40,68 +40,163 @@ async function loadStats(){
 
 async function loadTopProducts(){
 
-  const response =
-    await fetch(API + "?action=topProducts");
+  const container =
+    document.getElementById(
+      "topProducts"
+    );
 
-  const result =
-    await response.json();
+  if(!container){
+    return;
+  }
 
-  let html = `
-    <div class="card">
-    <h2>🏆 สินค้าขายดีที่สุด</h2>
-  `;
+  try{
 
-  result.products.forEach((product,index)=>{
+    const response =
+      await fetch(
+        API +
+        "?action=topProducts"
+      );
+
+    const result =
+      await response.json();
+
+    const products =
+      Array.isArray(
+        result.products
+      )
+        ? result.products
+        : [];
+
+    let html = `
+
+      <div class="card">
+
+        <h2>
+          🏆 สินค้าขายดีที่สุด
+        </h2>
+
+    `;
+
+    if(
+      products.length === 0
+    ){
+
+      html += `
+
+        <p
+        style="
+        color:#777;
+        ">
+          ยังไม่มีข้อมูลสินค้า
+        </p>
+
+      `;
+
+    }
+    else{
+
+      products.forEach(
+        (
+          product,
+          index
+        ) => {
+
+          const productName =
+            String(
+              product.name || ""
+            );
+
+          const qty =
+            Number(
+              product.qty || 0
+            );
+
+          html += `
+
+            <p
+            style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+            ">
+
+              <span>
+
+                ${index + 1}.
+
+                ${escapeHtml(
+                  productName || "-"
+                )}
+
+                (${qty.toLocaleString()} ชิ้น)
+
+              </span>
+
+              <button
+              type="button"
+              style="
+              width:auto;
+              padding:5px 10px;
+              font-size:13px;
+              "
+              onclick="
+              openProductSearch(
+                '${escapeJsString(
+                  productName
+                )}'
+              )
+              "
+              >
+                เปิดสินค้า
+              </button>
+
+            </p>
+
+          `;
+
+        }
+      );
+
+    }
 
     html += `
 
-<p
-style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-">
+      </div>
 
-<span>
+    `;
 
-${index + 1}.
+    container.innerHTML =
+      html;
 
-${escapeHtml(
-  product.name
-)}
+  }
+  catch(error){
 
-(${product.qty} ชิ้น)
+    console.error(
+      "loadTopProducts error:",
+      error
+    );
 
-</span>
+    container.innerHTML = `
 
-<button
-style="
-width:auto;
-padding:5px 10px;
-font-size:13px;
-"
-onclick="
-openProductSearch(
-'${escapeJsString(
-  product.name
-)}'
-)
-">
+      <div class="card">
 
-เปิดสินค้า
+        <h2>
+          🏆 สินค้าขายดีที่สุด
+        </h2>
 
-</button>
+        <p
+        style="
+        color:#d9534f;
+        ">
+          โหลดข้อมูลไม่สำเร็จ
+        </p>
 
-</p>
+      </div>
 
-`;
+    `;
 
-  });
-
-  html += "</div>";
-
-  document.getElementById("topProducts").innerHTML = html;
+  }
 
 }
 
