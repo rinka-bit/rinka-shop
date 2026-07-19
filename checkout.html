@@ -1475,7 +1475,6 @@ function getCollectionTotals(){
 
 }
 
-
 async function fetchGiftRules(
   collectionId,
   total
@@ -1505,18 +1504,44 @@ async function fetchGiftRules(
   const result =
     await response.json();
 
-  return Array.isArray(
+  console.log(
+    "GIFT RULE RESPONSE",
+    collectionId,
+    total,
     result
-  )
-    ? result
-    : Array.isArray(
-        result.rules
-      )
-        ? result.rules
-        : [];
+  );
+
+  if(
+    Array.isArray(result)
+  ){
+
+    return result;
+
+  }
+
+  if(
+    Array.isArray(
+      result.rules
+    )
+  ){
+
+    return result.rules;
+
+  }
+
+  if(
+    Array.isArray(
+      result.giftRules
+    )
+  ){
+
+    return result.giftRules;
+
+  }
+
+  return [];
 
 }
-
 
 async function fetchGiftCampaigns(
   collectionId
@@ -1540,19 +1565,44 @@ async function fetchGiftCampaigns(
   const result =
     await response.json();
 
-  return Array.isArray(
+  console.log(
+    "GIFT CAMPAIGN RESPONSE",
+    collectionId,
     result
-  )
-    ? result
-    : Array.isArray(
-        result.gifts
-      )
-        ? result.gifts
-        : [];
+  );
+
+  if(
+    Array.isArray(result)
+  ){
+
+    return result;
+
+  }
+
+  if(
+    Array.isArray(
+      result.gifts
+    )
+  ){
+
+    return result.gifts;
+
+  }
+
+  if(
+    Array.isArray(
+      result.campaigns
+    )
+  ){
+
+    return result.campaigns;
+
+  }
+
+  return [];
 
 }
-
-
+  
 function normalizeGiftBoolean(
   value
 ){
