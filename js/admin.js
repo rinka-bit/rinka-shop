@@ -1,6 +1,8 @@
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
+var adminProducts = [];
+var adminCollections = [];
 
 function login(){
 
@@ -75,39 +77,38 @@ const tabs = [
 
 async function loadAdminData(){
 
-  loadStats();
+  try{
 
-  loadTopProducts();
+    loadStats();
 
-  loadTopFandoms();
+    loadTopProducts();
 
-  loadOrders();
+    loadTopFandoms();
 
-  loadAddressRequests();
+    loadOrders();
 
-  renderCollectionManager();
+    loadAddressRequests();
 
-  renderOptionManager();
+    /*
+    โหลดสินค้าก่อน
+    เพราะ Product Options และ Collections
+    ต้องใช้ adminProducts
+    */
+    await loadAdminProducts();
 
-  /*
-  ต้องโหลดสินค้าก่อน Collections
-  เพราะ Collection ใช้ adminProducts
-  เพื่อนับจำนวนสินค้า
-  */
-  await loadAdminProducts();
+    renderOptionManager();
 
-  await loadAdminCollections();
+    renderCollectionManager();
 
-  /*
-  ไม่มี renderProductManager() แล้ว
-  ใช้ฟังก์ชันแสดงรายการสินค้าแทน
-  */
-  if(
-    typeof renderAdminProductList ===
-    "function"
-  ){
+    await loadAdminCollections();
 
-    renderAdminProductList();
+  }
+  catch(error){
+
+    console.error(
+      "loadAdminData error:",
+      error
+    );
 
   }
 
