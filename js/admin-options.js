@@ -373,7 +373,11 @@ async function loadAdminProductOptions(){
     }
 
     adminProductOptions =
-      result.options || [];
+  Array.isArray(
+    result.options
+  )
+    ? result.options
+    : [];
 
     renderAdminProductOptions();
 
@@ -656,8 +660,34 @@ async function submitProductOption(){
   }
 
   if(
-    payload.additional_price < 0
-  ){
+  !Number.isFinite(
+    payload.additional_price
+  ) ||
+  payload.additional_price < 0
+){
+
+  alert(
+    "ราคาเพิ่มต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
+  );
+
+  return;
+
+}
+
+if(
+  !Number.isInteger(
+    payload.stock
+  ) ||
+  payload.stock < 0
+){
+
+  alert(
+    "จำนวน Stock ต้องเป็นจำนวนเต็มตั้งแต่ 0 ขึ้นไป"
+  );
+
+  return;
+
+}
 
     alert(
       "ราคาเพิ่มต้องไม่ติดลบ"
@@ -1058,6 +1088,31 @@ async function openProductOptions(
       selectedOptionProductId;
 
   }
+
+  const product =
+  adminProducts.find(
+    item =>
+      String(
+        item.product_id
+      ) ===
+      String(
+        selectedOptionProductId
+      )
+  );
+
+const currentProduct =
+  document.getElementById(
+    "currentOptionProduct"
+  );
+
+if(currentProduct){
+
+  currentProduct.textContent =
+    product
+      ? product.name || "-"
+      : "ยังไม่ได้เลือกสินค้า";
+
+}
 
   await loadAdminProductOptions();
 
