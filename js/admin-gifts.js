@@ -1586,12 +1586,43 @@ removeGiftCampaign(
       )
       ?.value || "no";
 
+  const selectionMode =
+    document
+      .getElementById(
+        "gr_selection_mode"
+      )
+      ?.value || "checkbox";
+
   const ruleMode =
     document
       .getElementById(
         "gr_rule_mode"
       )
       ?.value || "stack";
+
+  const redeemScope =
+    document
+      .getElementById(
+        "gr_redeem_scope"
+      )
+      ?.value || "current_only";
+
+  const lowerTierName =
+    document
+      .getElementById(
+        "gr_lower_tier_name"
+      )
+      ?.value
+      .trim() || "";
+
+  const lowerTierQuantity =
+    Number(
+      document
+        .getElementById(
+          "gr_lower_tier_quantity"
+        )
+        ?.value || 1
+    );
 
   const active =
     document
@@ -1628,7 +1659,7 @@ removeGiftCampaign(
   ){
 
     alert(
-      "Min Amount ต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
+      "ยอดขั้นต่ำต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
     );
 
     return;
@@ -1643,7 +1674,40 @@ removeGiftCampaign(
   ){
 
     alert(
-      "Max Select ต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
+      "จำนวนที่เลือกได้ต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
+    );
+
+    return;
+
+  }
+
+  if(
+    redeemScope ===
+      "current_or_lower" &&
+    !lowerTierName
+  ){
+
+    alert(
+      "กรุณาเลือก Tier ต่ำกว่า"
+    );
+
+    return;
+
+  }
+
+  if(
+    redeemScope ===
+      "current_or_lower" &&
+    (
+      !Number.isInteger(
+        lowerTierQuantity
+      ) ||
+      lowerTierQuantity < 1
+    )
+  ){
+
+    alert(
+      "จำนวนสิทธิ์ Tier ต่ำกว่าต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
     );
 
     return;
@@ -1678,8 +1742,26 @@ removeGiftCampaign(
     allow_duplicate:
       allowDuplicate,
 
+    selection_mode:
+      selectionMode,
+
     rule_mode:
       ruleMode,
+
+    redeem_scope:
+      redeemScope,
+
+    lower_tier_name:
+      redeemScope ===
+      "current_or_lower"
+        ? lowerTierName
+        : "",
+
+    lower_tier_quantity:
+      redeemScope ===
+      "current_or_lower"
+        ? lowerTierQuantity
+        : 0,
 
     active:
       active
@@ -1743,31 +1825,14 @@ removeGiftCampaign(
 
     await loadGiftCampaigns();
 
-    const newCollectionSelect =
-      document.getElementById(
-        "gr_collection_id"
-      );
+    document.getElementById(
+      "gr_collection_id"
+    ).value =
+      collectionId;
 
-    if(newCollectionSelect){
-
-      newCollectionSelect.value =
-        collectionId;
-
-    }
-
-    updateGiftRuleTierOptions();
-
-    const newTierSelect =
-      document.getElementById(
-        "gr_tier_name"
-      );
-
-    if(newTierSelect){
-
-      newTierSelect.value =
-        tierName;
-
-    }
+    updateGiftRuleTierOptions(
+      tierName
+    );
 
     fillGiftRuleForm();
 
@@ -1793,31 +1858,13 @@ removeGiftCampaign(
   }
   finally{
 
-    const currentBtn =
-      document.getElementById(
-        "saveGiftRuleBtn"
-      );
+    btn.disabled = false;
 
-    const currentLoading =
-      document.getElementById(
-        "saveGiftRuleLoading"
-      );
+    btn.textContent =
+      "💾 บันทึกเงื่อนไขของแถม";
 
-    if(currentBtn){
-
-      currentBtn.disabled = false;
-
-      currentBtn.textContent =
-        "💾 บันทึกเงื่อนไขของแถม";
-
-    }
-
-    if(currentLoading){
-
-      currentLoading.style.display =
-        "none";
-
-    }
+    loading.style.display =
+      "none";
 
   }
 
@@ -1858,6 +1905,22 @@ removeGiftCampaign(
       ?.value
       .trim() || "";
 
+  const hasCharacterSelect =
+    document
+      .getElementById(
+        "g_has_character_select"
+      )
+      ?.value || "";
+
+  const maxSameCharacter =
+    Number(
+      document
+        .getElementById(
+          "g_max_same_character"
+        )
+        ?.value || 1
+    );
+
   const active =
     document
       .getElementById(
@@ -1885,7 +1948,7 @@ removeGiftCampaign(
   if(!tierName){
 
     alert(
-      "กรุณากรอกชื่อระดับของแถม"
+      "กรุณาเลือก Tier"
     );
 
     return;
@@ -1896,6 +1959,24 @@ removeGiftCampaign(
 
     alert(
       "กรุณากรอกชื่อของแถม"
+    );
+
+    return;
+
+  }
+
+  if(
+    hasCharacterSelect === "yes" &&
+    (
+      !Number.isInteger(
+        maxSameCharacter
+      ) ||
+      maxSameCharacter < 1
+    )
+  ){
+
+    alert(
+      "จำนวนตัวละครซ้ำสูงสุดต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
     );
 
     return;
@@ -1928,6 +2009,14 @@ removeGiftCampaign(
 
     gift_name:
       giftName,
+
+    has_character_select:
+      hasCharacterSelect,
+
+    max_same_character:
+      hasCharacterSelect === "yes"
+        ? maxSameCharacter
+        : 1,
 
     active:
       active
@@ -2005,9 +2094,11 @@ removeGiftCampaign(
     await loadGiftCampaigns();
 
     alert(
+
       wasEditing
         ? "แก้ไขของแถมเรียบร้อยแล้ว"
         : "เพิ่มของแถมเรียบร้อยแล้ว"
+
     );
 
   }
@@ -2063,12 +2154,13 @@ removeGiftCampaign(
 ){
 
   const gift =
-    adminGiftCampaigns.find(item=>
+    adminGiftCampaigns.find(
+      item =>
 
-      String(
-        item.gift_id
-      ) ===
-      String(giftId)
+        String(
+          item.gift_id
+        ) ===
+        String(giftId)
 
     );
 
@@ -2085,117 +2177,224 @@ removeGiftCampaign(
   editingGiftId =
     gift.gift_id;
 
-  document
-    .getElementById(
-      "g_collection_id"
-    )
-    .value =
-      gift.collection_id || "";
-
-  document
-    .getElementById(
-      "g_tier_name"
-    )
-    .value =
-      gift.tier_name || "";
-
-  document
-    .getElementById(
-      "g_gift_name"
-    )
-    .value =
-      gift.gift_name || "";
-
-  document
-    .getElementById(
-      "g_active"
-    )
-    .value =
-      String(
-        gift.active || ""
-      ).toLowerCase() === "yes"
-        ? "yes"
-        : "";
-
-  document
-    .getElementById(
-      "saveGiftBtn"
-    )
-    .textContent =
-      "💾 บันทึกการแก้ไข";
-
-  document
-    .getElementById(
-      "cancelGiftEditBtn"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-  document
-    .getElementById(
-      "g_collection_id"
-    )
-    .scrollIntoView({
-      behavior:"smooth",
-      block:"center"
-    });
-
-}
-
-  function cancelGiftEdit(){
-
-  editingGiftId = "";
-
-  const collection =
+  const collectionSelect =
     document.getElementById(
       "g_collection_id"
     );
 
-  if(!collection){
+  const giftNameInput =
+    document.getElementById(
+      "g_gift_name"
+    );
+
+  const activeSelect =
+    document.getElementById(
+      "g_active"
+    );
+
+  const characterSelect =
+    document.getElementById(
+      "g_has_character_select"
+    );
+
+  const maxSameCharacterInput =
+    document.getElementById(
+      "g_max_same_character"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "saveGiftBtn"
+    );
+
+  const cancelButton =
+    document.getElementById(
+      "cancelGiftEditBtn"
+    );
+
+  if(
+    !collectionSelect ||
+    !giftNameInput ||
+    !activeSelect ||
+    !characterSelect ||
+    !maxSameCharacterInput ||
+    !saveButton ||
+    !cancelButton
+  ){
+
+    alert(
+      "ไม่พบฟอร์มของแถม"
+    );
+
     return;
+
   }
 
-  collection.value = "";
+  collectionSelect.value =
+    gift.collection_id || "";
 
-  document
-    .getElementById(
+  updateGiftCampaignTierOptions(
+    gift.tier_name || ""
+  );
+
+  giftNameInput.value =
+    gift.gift_name || "";
+
+  activeSelect.value =
+    String(
+      gift.active || ""
+    )
+      .trim()
+      .toLowerCase() ===
+    "yes"
+      ? "yes"
+      : "";
+
+  const hasCharacterSelect =
+    String(
+      gift.has_character_select || ""
+    )
+      .trim()
+      .toLowerCase() ===
+    "yes"
+      ? "yes"
+      : "";
+
+  characterSelect.value =
+    hasCharacterSelect;
+
+  maxSameCharacterInput.value =
+    Number(
+      gift.max_same_character || 1
+    );
+
+  toggleGiftCharacterOption();
+
+  saveButton.textContent =
+    "💾 บันทึกการแก้ไข";
+
+  cancelButton.classList.remove(
+    "hidden"
+  );
+
+  collectionSelect.scrollIntoView({
+
+    behavior:"smooth",
+    block:"center"
+
+  });
+
+}
+
+ function cancelGiftEdit(){
+
+  editingGiftId = "";
+
+  const collectionSelect =
+    document.getElementById(
+      "g_collection_id"
+    );
+
+  const tierSelect =
+    document.getElementById(
       "g_tier_name"
-    )
-    .value = "";
+    );
 
-  document
-    .getElementById(
+  const giftNameInput =
+    document.getElementById(
       "g_gift_name"
-    )
-    .value = "";
+    );
 
-  document
-    .getElementById(
+  const imageInput =
+    document.getElementById(
       "g_gift_image_file"
-    )
-    .value = "";
+    );
 
-  document
-    .getElementById(
+  const characterSelect =
+    document.getElementById(
+      "g_has_character_select"
+    );
+
+  const maxSameCharacterInput =
+    document.getElementById(
+      "g_max_same_character"
+    );
+
+  const activeSelect =
+    document.getElementById(
       "g_active"
-    )
-    .value = "yes";
+    );
 
-  document
-    .getElementById(
+  const saveButton =
+    document.getElementById(
       "saveGiftBtn"
-    )
-    .textContent =
+    );
+
+  const cancelButton =
+    document.getElementById(
+      "cancelGiftEditBtn"
+    );
+
+  if(collectionSelect){
+
+    collectionSelect.value = "";
+
+  }
+
+  if(tierSelect){
+
+    tierSelect.value = "";
+
+  }
+
+  if(giftNameInput){
+
+    giftNameInput.value = "";
+
+  }
+
+  if(imageInput){
+
+    imageInput.value = "";
+
+  }
+
+  if(characterSelect){
+
+    characterSelect.value = "";
+
+  }
+
+  if(maxSameCharacterInput){
+
+    maxSameCharacterInput.value = 1;
+
+  }
+
+  if(activeSelect){
+
+    activeSelect.value = "yes";
+
+  }
+
+  if(saveButton){
+
+    saveButton.textContent =
       "💾 บันทึกของแถม";
 
-  document
-    .getElementById(
-      "cancelGiftEditBtn"
-    )
-    .classList.add(
+  }
+
+  if(cancelButton){
+
+    cancelButton.classList.add(
       "hidden"
     );
+
+  }
+
+  toggleGiftCharacterOption();
+
+  updateGiftCampaignTierOptions();
 
 }
 
@@ -2305,7 +2504,7 @@ removeGiftCampaign(
       "gr_collection_id"
     );
 
-  const tierNameInput =
+  const tierSelect =
     document.getElementById(
       "gr_tier_name"
     );
@@ -2325,9 +2524,29 @@ removeGiftCampaign(
       "gr_allow_duplicate"
     );
 
+  const selectionModeSelect =
+    document.getElementById(
+      "gr_selection_mode"
+    );
+
   const ruleModeSelect =
     document.getElementById(
       "gr_rule_mode"
+    );
+
+  const redeemScopeSelect =
+    document.getElementById(
+      "gr_redeem_scope"
+    );
+
+  const lowerTierSelect =
+    document.getElementById(
+      "gr_lower_tier_name"
+    );
+
+  const lowerTierQuantityInput =
+    document.getElementById(
+      "gr_lower_tier_quantity"
     );
 
   const activeSelect =
@@ -2337,11 +2556,15 @@ removeGiftCampaign(
 
   if(
     !collectionSelect ||
-    !tierNameInput ||
+    !tierSelect ||
     !minAmountInput ||
     !maxSelectInput ||
     !allowDuplicateSelect ||
+    !selectionModeSelect ||
     !ruleModeSelect ||
+    !redeemScopeSelect ||
+    !lowerTierSelect ||
+    !lowerTierQuantityInput ||
     !activeSelect
   ){
 
@@ -2350,30 +2573,45 @@ removeGiftCampaign(
   }
 
   const collectionId =
-    collectionSelect.value;
+    String(
+      collectionSelect.value || ""
+    );
 
   const tierName =
-    tierNameInput.value.trim();
+    String(
+      tierSelect.value || ""
+    ).trim();
 
   if(
     !collectionId ||
     !tierName
   ){
 
-    minAmountInput.value =
-      0;
+    minAmountInput.value = 0;
 
-    maxSelectInput.value =
-      1;
+    maxSelectInput.value = 1;
 
     allowDuplicateSelect.value =
       "no";
 
+    selectionModeSelect.value =
+      "checkbox";
+
     ruleModeSelect.value =
       "stack";
 
+    redeemScopeSelect.value =
+      "current_only";
+
+    lowerTierQuantityInput.value =
+      2;
+
     activeSelect.value =
       "yes";
+
+    updateGiftLowerTierOptions();
+
+    toggleLowerTierBox();
 
     return;
 
@@ -2410,16 +2648,79 @@ removeGiftCampaign(
       ? "yes"
       : "no";
 
-  ruleModeSelect.value =
-    rule &&
-    String(
-      rule.rule_mode || ""
+  const selectionMode =
+    rule
+      ? String(
+          rule.selection_mode ||
+          "checkbox"
+        )
+          .trim()
+          .toLowerCase()
+      : "checkbox";
+
+  selectionModeSelect.value =
+    [
+      "checkbox",
+      "quantity",
+      "fixed_set"
+    ].includes(
+      selectionMode
     )
-      .trim()
-      .toLowerCase() ===
-    "replace"
+      ? selectionMode
+      : "checkbox";
+
+  const ruleMode =
+    rule
+      ? String(
+          rule.rule_mode ||
+          "stack"
+        )
+          .trim()
+          .toLowerCase()
+      : "stack";
+
+  ruleModeSelect.value =
+    ruleMode === "replace"
       ? "replace"
       : "stack";
+
+  const redeemScope =
+    rule
+      ? String(
+          rule.redeem_scope ||
+          "current_only"
+        )
+          .trim()
+          .toLowerCase()
+      : "current_only";
+
+  redeemScopeSelect.value =
+    redeemScope ===
+    "current_or_lower"
+      ? "current_or_lower"
+      : "current_only";
+
+  const preferredLowerTierName =
+    rule &&
+    redeemScope ===
+    "current_or_lower"
+      ? String(
+          rule.lower_tier_name || ""
+        ).trim()
+      : "";
+
+  updateGiftLowerTierOptions(
+    preferredLowerTierName
+  );
+
+  lowerTierQuantityInput.value =
+    rule &&
+    redeemScope ===
+    "current_or_lower"
+      ? Number(
+          rule.lower_tier_quantity || 1
+        )
+      : 2;
 
   activeSelect.value =
     rule &&
@@ -2431,6 +2732,8 @@ removeGiftCampaign(
     "yes"
       ? "yes"
       : "";
+
+  toggleLowerTierBox();
 
 }
 
