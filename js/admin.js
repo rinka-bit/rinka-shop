@@ -87,12 +87,28 @@ async function loadAdminData(){
 
   renderCollectionManager();
 
-  await loadAdminCollections();
-
-  renderProductManager();
-
   renderOptionManager();
 
+  /*
+  ต้องโหลดสินค้าก่อน Collections
+  เพราะ Collection ใช้ adminProducts
+  เพื่อนับจำนวนสินค้า
+  */
   await loadAdminProducts();
+
+  await loadAdminCollections();
+
+  /*
+  ไม่มี renderProductManager() แล้ว
+  ใช้ฟังก์ชันแสดงรายการสินค้าแทน
+  */
+  if(
+    typeof renderAdminProductList ===
+    "function"
+  ){
+
+    renderAdminProductList();
+
+  }
 
 }
