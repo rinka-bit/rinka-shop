@@ -316,62 +316,130 @@ loadProduct();
 
 async function loadProduct(){
 
-const response =
-await fetch(
-`${API}?action=product&id=${productId}`
-);
+  try{
 
-const product =
-await response.json();
+    const response =
+      await fetch(
+        `${API}?action=product&id=${encodeURIComponent(
+          productId || ""
+        )}`
+      );
 
-renderProduct(product);
+    const result =
+      await response.json();
+
+    const product =
+      result &&
+      result.product
+        ? result.product
+        : result;
+
+    if(
+      !product ||
+      !product.product_id
+    ){
+
+      document
+        .getElementById(
+          "product"
+        )
+        .innerHTML =
+        "<p>ไม่พบสินค้า</p>";
+
+      return;
+
+    }
+
+    renderProduct(product);
+
+  }catch(error){
+
+    console.error(
+      "loadProduct error",
+      error
+    );
+
+    document
+      .getElementById(
+        "product"
+      )
+      .innerHTML =
+      "<p>โหลดข้อมูลสินค้าไม่สำเร็จ</p>";
+
+  }
 
 }
 
 function renderProduct(product){
 
-window.currentProduct =
-product;
+  window.currentProduct =
+    product;
 
-const images =
+  window.optionQty = {};
 
-product.images &&
-product.images.length
+  const images =
+    Array.isArray(
+      product.images
+    ) &&
+    product.images.length
+      ? product.images.filter(Boolean)
+      : [
+          product.image,
+          product.image2,
+          product.image3,
+          product.image4
+        ].filter(Boolean);
 
-? product.images
+  const mainImage =
+    images[0] || "";
 
-: [product.image];
+  const unitPrice =
+    Number(
+      product.final_price ??
+      product.price ??
+      0
+    );
 
-const mainImage =
-images[0];
+  const oldPrice =
+    Number(
+      product.old_price ??
+      product.price ??
+      0
+    );
 
-const optionGroups = {};
+  const optionGroups = {};
 
-(product.options || []).forEach(option=>{
+  (
+    Array.isArray(product.options)
+      ? product.options
+      : []
+  ).forEach(option=>{
 
-if(
-!optionGroups[
-option.option_name
-]
-){
+    if(
+      !optionGroups[
+        option.option_name
+      ]
+    ){
 
-optionGroups[
-option.option_name
-] = [];
+      optionGroups[
+        option.option_name
+      ] = [];
 
-}
+    }
 
-optionGroups[
-option.option_name
-].push(option);
+    optionGroups[
+      option.option_name
+    ].push(option);
 
-});
+  });
 
-let optionsHtml = "";
+  let optionsHtml = "";
 
-Object.keys(optionGroups).forEach(group=>{
+  Object.keys(
+    optionGroups
+  ).forEach(group=>{
 
-optionsHtml += `
+    optionsHtml += `
 
 <div class="option-section">
 
@@ -383,45 +451,57 @@ ${group}
 
 `;
 
-optionGroups[group].forEach(option=>{
+    optionGroups[group]
+      .forEach(option=>{
 
-const optionId =
-option.option_id ||
-`${group}_${option.option_value}`;
+        const optionId =
+          option.option_id ||
+          `${group}_${option.option_value}`;
 
-const stock =
-Number(option.stock || 0);
+        const stock =
+          Number(
+            option.stock || 0
+          );
 
-const soldOut =
-stock <= 0;
+        const soldOut =
+          stock <= 0;
 
-const image =
-option.character_image ||
-option.image ||
-window.currentProduct.image;
+        const image =
+          option.character_image ||
+          option.image ||
+          product.image ||
+          "";
 
-const addPrice =
-Number(option.additional_price || 0);
+        const addPrice =
+          Number(
+            option.additional_price || 0
+          );
 
-optionsHtml += `
+        optionsHtml += `
 
 <div
-class="option-row ${soldOut ? "soldout" : ""}"
+class="option-row ${
+soldOut ? "soldout" : ""
+}"
 id="optionRow_${optionId}"
 >
 
 <img
 src="${image}"
-alt="${option.option_value}">
+alt="${option.option_value || ""}">
 
 <div class="option-info">
 
 <div class="option-name">
-${option.option_value}
+${option.option_value || ""}
 </div>
 
 <div class="option-price">
-+฿${addPrice}
+${
+addPrice > 0
+  ? `+฿${addPrice.toLocaleString()}`
+  : "ไม่เพิ่มราคา"
+}
 </div>
 
 </div>
@@ -440,8 +520,15 @@ soldOut
 
 <button
 type="button"
-onclick="changeOptionQty('${optionId}','${group}','${option.option_value}',${addPrice},-1)"
->
+onclick="
+changeOptionQty(
+'${optionId}',
+'${group}',
+'${option.option_value}',
+${addPrice},
+-1
+)
+">
 -
 </button>
 
@@ -451,8 +538,15 @@ onclick="changeOptionQty('${optionId}','${group}','${option.option_value}',${add
 
 <button
 type="button"
-onclick="changeOptionQty('${optionId}','${group}','${option.option_value}',${addPrice},1)"
->
+onclick="
+changeOptionQty(
+'${optionId}',
+'${group}',
+'${option.option_value}',
+${addPrice},
+1
+)
+">
 +
 </button>
 
@@ -464,9 +558,9 @@ onclick="changeOptionQty('${optionId}','${group}','${option.option_value}',${add
 
 `;
 
-});
+      });
 
-optionsHtml += `
+    optionsHtml += `
 
 </div>
 
@@ -474,11 +568,11 @@ optionsHtml += `
 
 `;
 
-});
+  });
 
-document.getElementById(
-"product"
-).innerHTML = `
+  document.getElementById(
+    "product"
+  ).innerHTML = `
 
 <div class="product-grid">
 
@@ -486,15 +580,19 @@ document.getElementById(
 
 <img
 id="mainImage"
-src="${mainImage}">
+src="${mainImage}"
+alt="${product.name || ""}">
 
 <div class="thumb-list">
 
-${images.map(image => `
+${images.map(image=>`
 <img
 src="${image}"
+alt="${product.name || ""}"
 onclick="
-document.getElementById('mainImage').src='${image}'
+document
+.getElementById('mainImage')
+.src='${image}'
 ">
 `).join("")}
 
@@ -505,7 +603,7 @@ document.getElementById('mainImage').src='${image}'
 <div>
 
 <h1>
-${product.name}
+${product.name || ""}
 </h1>
 
 <p>
@@ -517,17 +615,17 @@ product.on_sale
 ?
 `
 <div class="old-price">
-฿${product.old_price}
+฿${oldPrice.toLocaleString()}
 </div>
 
 <div class="sale-price">
-฿${product.price}
+฿${unitPrice.toLocaleString()}
 </div>
 `
 :
 `
 <div class="sale-price">
-฿${product.price}
+฿${unitPrice.toLocaleString()}
 </div>
 `
 }
@@ -558,7 +656,11 @@ ${optionsHtml}
 
 <div
 class="qty-selector"
-style="${(product.options || []).length > 0 ? 'display:none;' : ''}"
+style="${
+Object.keys(optionGroups).length > 0
+  ? "display:none;"
+  : ""
+}"
 >
 
 <button
@@ -608,7 +710,7 @@ onclick="changeProductQty(1)"
 `;
 
 }
-
+  
 function changeOptionQty(
 optionId,
 group,
@@ -693,146 +795,193 @@ input.value = qty;
 
 function addToCart(){
 
-const selectedOptionItems =
-Object.values(window.optionQty || {})
-.filter(item=>item.qty > 0);
+  const options =
+    Array.isArray(
+      window.currentProduct.options
+    )
+      ? window.currentProduct.options
+      : [];
 
-if(
-(window.currentProduct.options || []).length > 0 &&
-selectedOptionItems.length === 0
-){
+  const selectedOptionItems =
+    Object.values(
+      window.optionQty || {}
+    )
+    .filter(
+      item =>
+        item.qty > 0
+    );
 
-alert("กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ");
-return;
+  if(
+    options.length > 0 &&
+    selectedOptionItems.length === 0
+  ){
 
-}
+    alert(
+      "กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ"
+    );
 
-if(
-(window.currentProduct.options || []).length === 0
-){
+    return;
 
-const qty =
-Number(
-document.getElementById("productQty")?.value
-) || 1;
+  }
 
-let cart =
-JSON.parse(
-localStorage.getItem("cart") || "[]"
-);
+  let cart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
 
-const found =
-cart.find(item =>
-item.product_id === window.currentProduct.product_id
-);
+  const basePrice =
+    Number(
+      window.currentProduct.final_price ??
+      window.currentProduct.price ??
+      0
+    );
 
-if(found){
-found.qty += qty;
-}else{
-cart.push({
+  if(options.length === 0){
 
-  ...window.currentProduct,
+    const qty =
+      Number(
+        document.getElementById(
+          "productQty"
+        )?.value
+      ) || 1;
 
-  collection_id:
-    window.currentProduct.collection_id ||
-    "",
+    const found =
+      cart.find(item=>
 
-  selected_options:{},
+        item.product_id ===
+        window.currentProduct.product_id
 
-  qty:qty
+        &&
 
-});
-}
+        Object.keys(
+          item.selected_options || {}
+        ).length === 0
 
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
+      );
 
-updateCartCount();
+    if(found){
 
-alert("เพิ่มลงตะกร้าแล้ว");
+      found.qty += qty;
 
-return;
+    }else{
 
-}
-  
-let cart =
-JSON.parse(
-localStorage.getItem("cart") || "[]"
-);
+      cart.push({
 
-selectedOptionItems.forEach(option=>{
+        ...window.currentProduct,
 
-const finalPrice =
-Number(window.currentProduct.price || 0)
-+
-Number(option.additional_price || 0);
+        collection_id:
+          window.currentProduct.collection_id ||
+          "",
 
-const found =
-cart.find(item=>
+        price:
+          basePrice,
 
-item.product_id === window.currentProduct.product_id
+        final_price:
+          basePrice,
 
-&&
+        selected_options:{},
 
-item.option_value === option.value
+        qty:
+          qty
 
-&&
+      });
 
-item.option_group === option.group
+    }
 
-);
+  }else{
 
-if(found){
+    selectedOptionItems.forEach(option=>{
 
-found.qty += option.qty;
+      const unitPrice =
+        basePrice +
+        Number(
+          option.additional_price || 0
+        );
 
-}else{
+      const found =
+        cart.find(item=>
 
-cart.push({
+          item.product_id ===
+          window.currentProduct.product_id
 
-  ...window.currentProduct,
+          &&
 
-  collection_id:
-    window.currentProduct.collection_id ||
-    "",
+          item.option_value ===
+          option.value
 
-  price:
-    finalPrice,
+          &&
 
-  option_group:
-    option.group,
+          item.option_group ===
+          option.group
 
-  option_value:
-    option.value,
+        );
 
-  selected_options:{
-    [option.group]:
-      option.value
-  },
+      if(found){
 
-  qty:
-    option.qty
+        found.qty +=
+          option.qty;
 
-});
+      }else{
 
-}
+        cart.push({
 
-});
+          ...window.currentProduct,
 
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
+          collection_id:
+            window.currentProduct.collection_id ||
+            "",
 
-updateCartCount();
+          price:
+            unitPrice,
 
-alert("เพิ่มลงตะกร้าแล้ว");
+          final_price:
+            unitPrice,
+
+          option_group:
+            option.group,
+
+          option_value:
+            option.value,
+
+          selected_options:{
+            [option.group]:
+              option.value
+          },
+
+          qty:
+            option.qty
+
+        });
+
+      }
+
+    });
+
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  updateCartCount();
+
+  alert(
+    "เพิ่มลงตะกร้าแล้ว"
+  );
 
 }
   
 function buyNow(){
+
+  const options =
+    Array.isArray(
+      window.currentProduct.options
+    )
+      ? window.currentProduct.options
+      : [];
 
   const selectedOptionItems =
     Object.values(
@@ -844,10 +993,7 @@ function buyNow(){
     );
 
   const hasOptions =
-    (
-      window.currentProduct.options ||
-      []
-    ).length > 0;
+    options.length > 0;
 
   if(
     hasOptions &&
@@ -861,6 +1007,13 @@ function buyNow(){
     return;
 
   }
+
+  const basePrice =
+    Number(
+      window.currentProduct.final_price ??
+      window.currentProduct.price ??
+      0
+    );
 
   let checkoutItems = [];
 
@@ -881,6 +1034,12 @@ function buyNow(){
         window.currentProduct.collection_id ||
         "",
 
+      price:
+        basePrice,
+
+      final_price:
+        basePrice,
+
       selected_options:{},
 
       qty:
@@ -888,22 +1047,16 @@ function buyNow(){
 
     });
 
-  }
-  else{
+  }else{
 
     checkoutItems =
       selectedOptionItems.map(
         option=>{
 
-          const finalPrice =
+          const unitPrice =
+            basePrice +
             Number(
-              window.currentProduct.price ||
-              0
-            )
-            +
-            Number(
-              option.additional_price ||
-              0
+              option.additional_price || 0
             );
 
           return {
@@ -915,7 +1068,10 @@ function buyNow(){
               "",
 
             price:
-              finalPrice,
+              unitPrice,
+
+            final_price:
+              unitPrice,
 
             option_group:
               option.group,
@@ -937,11 +1093,6 @@ function buyNow(){
       );
 
   }
-
-  console.log(
-    "BUY NOW ITEMS:",
-    checkoutItems
-  );
 
   localStorage.setItem(
     "buyNowCart",
