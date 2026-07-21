@@ -190,154 +190,145 @@ loadAddresses();
 
 async function loadAddresses(){
 
-const response =
-await fetch(
+  const response =
+    await fetch(
 
-API +
+      API +
+      "?action=customerAddresses&email=" +
+      encodeURIComponent(
+        customer.email
+      )
 
-"?action=customerAddresses&email=" +
+    );
 
-encodeURIComponent(
-customer.email
-)
+  const result =
+    await response.json();
 
-);
+  const addresses =
+    Array.isArray(result)
+      ? result
+      : Array.isArray(result.addresses)
+        ? result.addresses
+        : [];
 
-const addresses =
-await response.json();
+  window.addressesData =
+    addresses;
 
-window.addressesData =
-addresses;
+  let html = "";
 
-let html = "";
+  if(addresses.length === 0){
 
-if(addresses.length === 0){
+    document.getElementById(
+      "addressList"
+    ).innerHTML = `
 
-document.getElementById(
-"addressList"
-).innerHTML =
+      <div class="address-card">
 
-`
-<div class="address-card">
+        ยังไม่มีที่อยู่ที่บันทึกไว้
 
-ยังไม่มีที่อยู่ที่บันทึกไว้
+      </div>
 
-</div>
-`;
+    `;
 
-return;
+    return;
 
-}
+  }
 
-addresses.forEach(address=>{
+  addresses.forEach(address=>{
 
-html += `
+    html += `
 
-<div class="address-card">
+      <div class="address-card">
 
-<div
-class="
-label
-${address.is_default ? 'default' : ''}
-">
+        <div
+        class="
+        label
+        ${address.is_default ? "default" : ""}
+        ">
 
-${address.label || 'ที่อยู่'}
+          ${address.label || "ที่อยู่"}
 
-${
-address.is_default
-?
-' (ค่าเริ่มต้น)'
-:
-''
-}
+          ${
+            address.is_default
+              ? " (ค่าเริ่มต้น)"
+              : ""
+          }
 
-</div>
+        </div>
 
-<div>
+        <div>
 
-<b>
+          <b>
+            ${address.receiver || ""}
+          </b>
 
-${address.receiver}
+        </div>
 
-</b>
+        <div>
+          ${address.phone || ""}
+        </div>
 
-</div>
+        <div>
+          ${address.address || ""}
+        </div>
 
-<div>
+        <div>
+          ${address.subdistrict || ""}
+          ${address.district || ""}
+        </div>
 
-${address.phone}
+        <div>
+          ${address.province || ""}
+          ${address.postcode || ""}
+        </div>
 
-</div>
+        <br>
 
-<div>
+        <button
+        onclick="
+          editAddress(
+            '${address.address_id}'
+          )
+        ">
 
-${address.address}
+          ✏️ แก้ไข
 
-</div>
+        </button>
 
-<div>
+        ${
+          new URLSearchParams(
+            window.location.search
+          ).get("select")
+            ? `
+              <br><br>
 
-${address.subdistrict}
-${address.district}
+              <button
+              onclick="
+                useAddressById(
+                  '${address.address_id}'
+                )
+              ">
 
-</div>
+                ✅ ใช้ที่อยู่นี้
 
-<div>
+              </button>
+            `
+            : ""
+        }
 
-${address.province}
-${address.postcode}
+      </div>
 
-</div>
+    `;
 
-<br>
+  });
 
-<button
-onclick="
-editAddress(
-'${address.address_id}'
-)
-">
-
-✏️ แก้ไข
-
-</button>
-
-${
-new URLSearchParams(
-window.location.search
-).get("select")
-?
-`
-<br><br>
-
-<button
-onclick="
-useAddressById(
-'${address.address_id}'
-)
-">
-
-✅ ใช้ที่อยู่นี้
-
-</button>
-`
-:
-""
-}
-
-</div>
-
-`;
-
-});
-
-document.getElementById(
-"addressList"
-).innerHTML =
-html;
+  document.getElementById(
+    "addressList"
+  ).innerHTML =
+    html;
 
 }
-
+  
 function editAddress(id){
 
 window.location.href =
@@ -381,23 +372,6 @@ orderId;
 return;
 
 }
-
-localStorage.setItem(
-"selectedCheckoutAddress",
-JSON.stringify(address)
-);
-
-window.location.href =
-"checkout.html";
-
-}
-
-function useAddressById(id){
-
-const address =
-window.addressesData.find(
-item => item.address_id === id
-);
 
 localStorage.setItem(
 "selectedCheckoutAddress",
