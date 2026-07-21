@@ -58,8 +58,15 @@ async function initBrowse(){
             "?action=products"
         );
 
-        let products =
-        await response.json();
+        const result =
+  await response.json();
+
+let products =
+  Array.isArray(result)
+    ? result
+    : Array.isArray(result.products)
+      ? result.products
+      : [];
 
         products =
         filterProducts(products);
@@ -330,9 +337,21 @@ function sortProducts(products){
 
             products.sort(
                 (a,b)=>
-                Number(a.price)
+
+                Number(
+                    a.final_price ??
+                    a.price ??
+                    0
+                )
+
                 -
-                Number(b.price)
+
+                Number(
+                    b.final_price ??
+                    b.price ??
+                    0
+                )
+
             );
 
             break;
@@ -341,9 +360,21 @@ function sortProducts(products){
 
             products.sort(
                 (a,b)=>
-                Number(b.price)
+
+                Number(
+                    b.final_price ??
+                    b.price ??
+                    0
+                )
+
                 -
-                Number(a.price)
+
+                Number(
+                    a.final_price ??
+                    a.price ??
+                    0
+                )
+
             );
 
             break;
@@ -352,10 +383,13 @@ function sortProducts(products){
 
             products.sort(
                 (a,b)=>
-                a.name.localeCompare(
-                    b.name,
+
+                (a.name || "")
+                .localeCompare(
+                    b.name || "",
                     "th"
                 )
+
             );
 
             break;
@@ -365,11 +399,15 @@ function sortProducts(products){
             products.sort(
                 (a,b)=>
 
-                Number(b.sort_order || 0)
+                Number(
+                    b.sort_order || 0
+                )
 
                 -
 
-                Number(a.sort_order || 0)
+                Number(
+                    a.sort_order || 0
+                )
 
             );
 
