@@ -227,39 +227,68 @@ loadCollection();
 
 async function loadCollection(){
 
-const collectionResponse =
-await fetch(
-API +
-"?action=collection&id="
-+
-collectionId
-);
+  try{
 
-const collection =
-await collectionResponse.json();
+    const collectionResponse =
+      await fetch(
+        API +
+        "?action=collection&id=" +
+        encodeURIComponent(
+          collectionId
+        )
+      );
 
-const productResponse =
-await fetch(
-API +
-"?action=collectionProducts&id="
-+
-collectionId
-);
+    const collectionResult =
+      await collectionResponse.json();
 
-const products =
-await productResponse.json();
+    const collection =
+      collectionResult.collection ||
+      collectionResult;
 
-renderCollection(
-collection,
-products.length
-);
+    const productResponse =
+      await fetch(
+        API +
+        "?action=collectionProducts&id=" +
+        encodeURIComponent(
+          collectionId
+        )
+      );
 
-allProducts =
-products;
+    const productResult =
+      await productResponse.json();
 
-renderProducts(
-allProducts
-);
+    const products =
+      Array.isArray(productResult)
+        ? productResult
+        : Array.isArray(productResult.products)
+          ? productResult.products
+          : [];
+
+    renderCollection(
+      collection,
+      products.length
+    );
+
+    allProducts =
+      products;
+
+    renderProducts(
+      allProducts
+    );
+
+  }catch(error){
+
+    console.error(
+      "loadCollection error",
+      error
+    );
+
+    document.getElementById(
+      "collectionInfo"
+    ).innerHTML =
+      "<p>โหลดข้อมูล Collection ไม่สำเร็จ</p>";
+
+  }
 
 }
 
