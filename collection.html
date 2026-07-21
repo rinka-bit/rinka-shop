@@ -369,11 +369,25 @@ ${productCount}
 
 function renderProducts(products){
 
-let html = "";
+  let html = "";
 
-products.forEach(product=>{
+  products.forEach(product=>{
 
-html += `
+    const price =
+      Number(
+        product.final_price ??
+        product.price ??
+        0
+      );
+
+    const oldPrice =
+      Number(
+        product.old_price ??
+        product.price ??
+        0
+      );
+
+    html += `
 
 <div
 class="card"
@@ -383,54 +397,48 @@ window.location.href=
 ">
 
 <img
-src="${product.image}">
+src="${product.image || ""}">
 
 <div class="card-body">
 
 <h3>
-${product.name}
+${product.name || ""}
 </h3>
 
 <div class="price-box">
 
 ${
-  product.on_sale
+product.on_sale
 
-  ?
+?
 
-  `
+`
 
-  <div class="sale-price">
+<div class="sale-price">
 
-  ฿${Number(
-    product.price || 0
-  ).toLocaleString()}
+฿${price.toLocaleString()}
 
-  </div>
+</div>
 
-  <div class="old-price">
+<div class="old-price">
 
-  ฿${Number(
-    product.old_price || 0
-  ).toLocaleString()}
+฿${oldPrice.toLocaleString()}
 
-  </div>
+</div>
 
-  `
+`
 
-  :
+:
 
-  `
+`
 
-  <div class="normal-price">
+<div class="normal-price">
 
-  ฿${Number(
-    product.price || 0
-  ).toLocaleString()}
+฿${price.toLocaleString()}
 
-  </div>
+</div>
 
-  `
+`
 
 }
 
@@ -442,11 +450,11 @@ ${
 
 `;
 
-});
+  });
 
-document.getElementById(
-"productGrid"
-).innerHTML = html;
+  document.getElementById(
+    "productGrid"
+  ).innerHTML = html;
 
 }
 
