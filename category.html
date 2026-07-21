@@ -253,47 +253,66 @@ loadProducts();
 
 async function loadProducts(){
 
-const response =
-await fetch(API);
+  try{
 
-const products =
-await response.json();
+    const response =
+      await fetch(API);
 
-const filtered =
+    const result =
+      await response.json();
 
-products.filter(
+    const products =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.products)
+          ? result.products
+          : [];
 
-p =>
+    const filtered =
+      products.filter(
+        product =>
+          product.main_category ===
+          category
+      );
 
-p.main_category === category
+    document
+      .getElementById(
+        "categoryTitle"
+      )
+      .textContent =
+      `🏷️ ${category || "ไม่พบหมวดสินค้า"}`;
 
-);
+    document
+      .getElementById(
+        "productCount"
+      )
+      .textContent =
+      `${filtered.length} รายการ`;
 
-document
-.getElementById(
-"categoryTitle"
-)
-.textContent =
+    document
+      .getElementById(
+        "products"
+      )
+      .innerHTML =
+      filtered
+        .map(createCard)
+        .join("");
 
-`🏷️ ${category}`;
+  }catch(error){
 
-document
-.getElementById(
-"productCount"
-)
-.textContent =
+    console.error(
+      "โหลดสินค้าไม่สำเร็จ",
+      error
+    );
 
-`${filtered.length} รายการ`;
+    document
+      .getElementById(
+        "productCount"
+      )
+      .textContent =
+      "โหลดสินค้าไม่สำเร็จ";
 
-document
-.getElementById(
-"products"
-)
-.innerHTML =
-
-filtered
-.map(createCard)
-.join("");
+  }
 
 }
 
