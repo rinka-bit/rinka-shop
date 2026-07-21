@@ -206,55 +206,47 @@ return status;
 
 async function loadOrders(){
 
-document.getElementById(
-"pageTitle"
-).textContent =
+  document.getElementById(
+    "pageTitle"
+  ).textContent =
+    statusFilter
+      ? getStatusText(statusFilter)
+      : "รายการออเดอร์ทั้งหมด";
 
-statusFilter
-?
-getStatusText(statusFilter)
-:
-"รายการออเดอร์ทั้งหมด";
+  try{
 
-const response =
-await fetch(
+    const response =
+      await fetch(
+        API +
+        "?action=customerOrders&email=" +
+        encodeURIComponent(
+          customer.email
+        )
+      );
 
-API +
+    const result =
+      await response.json();
 
-"?action=customerOrders&email=" +
+    const orders =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.orders)
+          ? result.orders
+          : [];
 
-encodeURIComponent(
-customer.email
-)
+    const filtered =
+      statusFilter
+        ? orders.filter(
+            order =>
+              order.status === statusFilter
+          )
+        : orders;
 
-);
+    let html = "";
 
-const orders =
-await response.json();
+    if(filtered.length === 0){
 
-const filtered =
-
-statusFilter
-
-?
-
-orders.filter(
-o => o.status === statusFilter
-)
-
-:
-
-orders;
-
-let html = "";
-
-if(
-filtered.length === 0
-){
-
-html =
-
-`
+      html = `
 <div
 style="
 background:white;
@@ -267,11 +259,20 @@ border-radius:16px;
 </div>
 `;
 
-}
+    }
 
-filtered.forEach(order=>{
+    filtered.forEach(order=>{
 
-html += `
+      const createdDate =
+        order.created_at
+          ? new Date(
+              order.created_at
+            ).toLocaleDateString(
+              "th-TH"
+            )
+          : "-";
+
+      html += `
 
 <div
 class="order-card"
@@ -290,7 +291,7 @@ align-items:center;
 <img
 src="${
 order.preview_image ||
-'https://placehold.co/100x100'
+"https://placehold.co/100x100"
 }"
 style="
 width:72px;
@@ -305,10 +306,9 @@ style="
 flex:1;
 ">
 
-<div
-class="order-id">
+<div class="order-id">
 
-${order.order_id}
+${order.order_id || "-"}
 
 </div>
 
@@ -329,38 +329,32 @@ color:#666;
 margin-top:4px;
 ">
 
-${order.item_count}
+${Number(
+  order.item_count || 0
+).toLocaleString()}
 รายการ
 
 </div>
 
-<div
-class="order-status">
+<div class="order-status">
 
 ${getStatusText(
-order.status
+  order.status
 )}
 
 </div>
 
-<div
-class="order-total">
+<div class="order-total">
 
 ฿${Number(
-order.total
-).toLocaleString()
-}
+  order.total || 0
+).toLocaleString()}
 
 </div>
 
-<div
-class="order-date">
+<div class="order-date">
 
-${new Date(
-order.created_at
-).toLocaleDateString(
-"th-TH"
-)}
+${createdDate}
 
 </div>
 
@@ -372,12 +366,38 @@ order.created_at
 
 `;
 
-});
+    });
 
-document.getElementById(
-"orderList"
-).innerHTML =
-html;
+    document.getElementById(
+      "orderList"
+    ).innerHTML =
+      html;
+
+  }catch(error){
+
+    console.error(
+      "loadOrders error",
+      error
+    );
+
+    document.getElementById(
+      "orderList"
+    ).innerHTML = `
+
+<div
+style="
+background:white;
+padding:20px;
+border-radius:16px;
+">
+
+โหลดรายการออเดอร์ไม่สำเร็จ
+
+</div>
+
+`;
+
+  }
 
 }
 
