@@ -253,53 +253,78 @@ loadProducts();
 
 async function loadProducts(){
 
-const response =
-await fetch(API);
+  try{
 
-const products =
-await response.json();
+    const response =
+      await fetch(API);
 
-const filtered =
+    const result =
+      await response.json();
 
-products.filter(
+    const products =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.products)
+          ? result.products
+          : [];
 
-p =>
+    const filtered =
+      products.filter(
+        product =>
+          product.fandom === fandom
+      );
 
-p.fandom === fandom
+    document
+      .getElementById(
+        "fandomTitle"
+      )
+      .textContent =
+      `🎮 ${fandom || "ไม่พบ Fandom"}`;
 
-);
+    document
+      .getElementById(
+        "productCount"
+      )
+      .textContent =
+      `${filtered.length} รายการ`;
 
-document
-.getElementById(
-"fandomTitle"
-)
-.textContent =
+    document
+      .getElementById(
+        "products"
+      )
+      .innerHTML =
+      filtered
+        .map(createCard)
+        .join("");
 
-`🎮 ${fandom}`;
+  }catch(error){
 
-document
-.getElementById(
-"productCount"
-)
-.textContent =
+    console.error(
+      "loadProducts error",
+      error
+    );
 
-`${filtered.length} รายการ`;
+    document
+      .getElementById(
+        "productCount"
+      )
+      .textContent =
+      "โหลดสินค้าไม่สำเร็จ";
 
-document
-.getElementById(
-"products"
-)
-.innerHTML =
-
-filtered
-.map(createCard)
-.join("");
+  }
 
 }
 
 function createCard(product){
 
-return `
+  const price =
+    Number(
+      product.final_price ??
+      product.price ??
+      0
+    );
+
+  return `
 
 <div
 class="card"
@@ -309,8 +334,8 @@ window.location.href=
 ">
 
 <img
-src="${product.image}"
-alt="${product.name}">
+src="${product.image || ""}"
+alt="${product.name || ""}">
 
 <div class="card-body">
 
@@ -340,15 +365,15 @@ PREORDER
 }
 
 <h3>
-${product.name}
+${product.name || ""}
 </h3>
 
 <p>
-${product.fandom}
+${product.fandom || ""}
 </p>
 
 <p>
-฿${product.price}
+฿${price.toLocaleString()}
 </p>
 
 </div>
@@ -358,8 +383,6 @@ ${product.fandom}
 `;
 
 }
-
-updateCartCount();
 
 function updateCartCount(){
 
@@ -399,7 +422,7 @@ cartLink.textContent =
 }
 
 }
-loadHome();
+
 </script>
 
 </body>
