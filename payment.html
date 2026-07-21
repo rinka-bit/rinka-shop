@@ -237,21 +237,28 @@ loadBanks();
 
 async function loadBanks(){
 
-const response =
-await fetch(
-API + "?action=banks"
-);
+  try{
 
-bankData =
-await response.json();
+    const response =
+      await fetch(
+        API + "?action=banks"
+      );
 
-console.log(bankData);
+    const result =
+      await response.json();
 
-let html = "";
+    bankData =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.banks)
+          ? result.banks
+          : [];
 
-bankData.forEach((bank,index)=>{
+    let html = "";
 
-html += `
+    bankData.forEach((bank,index)=>{
+
+      html += `
 
 <div class="bank-card">
 
@@ -261,14 +268,18 @@ html += `
 type="radio"
 name="bank"
 
-${index === 0 ? "checked" : ""}
+${index===0?"checked":""}
 
-onclick="showBankById('${bank.account_id}')">
+onclick="
+showBankById(
+'${bank.account_id}'
+)
+">
 
 <div class="bank-info">
 
 <div class="bank-name">
-${bank.bank_name}
+${bank.bank_name || ""}
 </div>
 
 <div class="bank-owner">
@@ -283,21 +294,34 @@ ${bank.account_name || ""}
 
 `;
 
-});
+    });
 
-document.getElementById(
-"bankList"
-).innerHTML = html;
+    document.getElementById(
+      "bankList"
+    ).innerHTML =
+      html;
 
-if(
-  bankData.length
-){
+    if(bankData.length){
 
-  showBank(
-    bankData[0]
-  );
+      showBank(
+        bankData[0]
+      );
 
-}
+    }
+
+  }catch(error){
+
+    console.error(
+      "loadBanks error",
+      error
+    );
+
+    document.getElementById(
+      "bankList"
+    ).innerHTML =
+      "<p>โหลดบัญชีธนาคารไม่สำเร็จ</p>";
+
+  }
 
 }
   
@@ -446,11 +470,10 @@ localStorage.getItem(
 ) || "[]"
 );
 
-if(
-cart.length === 0
-){
+if(cart.length===0){
 
 cart =
+
 JSON.parse(
 localStorage.getItem(
 "buyNowCart"
@@ -459,11 +482,10 @@ localStorage.getItem(
 
 }
 
-if(
-cart.length === 0
-){
+if(cart.length===0){
 
 cart =
+
 JSON.parse(
 localStorage.getItem(
 "cart"
@@ -472,9 +494,7 @@ localStorage.getItem(
 
 }
 
-if(
-cart.length === 0
-){
+if(cart.length===0){
 
 alert(
 "ไม่พบสินค้าในคำสั่งซื้อ"
@@ -483,14 +503,14 @@ alert(
 return;
 
 }
-  
-  const btn =
+
+const btn =
 document.getElementById(
-  "submitBtn"
+"submitBtn"
 );
 
 if(btn.disabled){
-  return;
+return;
 }
 
 btn.disabled = true;
@@ -498,31 +518,42 @@ btn.disabled = true;
 btn.textContent =
 "กำลังส่งข้อมูล...";
 
-  document.getElementById(
-  "loadingOverlay"
+document.getElementById(
+"loadingOverlay"
 ).style.display =
 "flex";
-  
-  const address =
-    JSON.parse(
-      localStorage.getItem(
-        "checkoutAddress"
-      ) || "{}"
-    );
 
-  const total =
-    cart.reduce(
-      (a,b)=>
-      a +
-      (
-        Number(b.price)
-        *
-        Number(b.qty)
-      ),
-      0
-    );
+try{
 
-  const slip =
+const address =
+
+JSON.parse(
+localStorage.getItem(
+"checkoutAddress"
+) || "{}"
+);
+
+const total =
+
+cart.reduce(
+(sum,item)=>
+
+sum +
+
+Number(
+item.final_price ??
+
+(
+Number(item.price||0) *
+Number(item.qty||1)
+)
+
+),
+
+0
+);
+
+const slip =
 document.getElementById(
 "slip"
 );
@@ -533,134 +564,134 @@ alert(
 "กรุณาแนบสลิป"
 );
 
-btn.disabled = false;
+return;
 
-btn.textContent =
-"ยืนยันการชำระเงิน";
+}
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
+const payload = {
+
+customer_name:
+address.receiver,
+
+email:
+address.email,
+
+phone:
+String(
+address.phone || ""
+),
+
+social:
+address.social,
+
+subtotal:
+total,
+
+total:
+total,
+
+items:
+cart,
+
+gifts:
+address.gifts || []
+
+};
+
+const formData =
+new FormData();
+
+formData.append(
+"action",
+"createOrder"
+);
+
+formData.append(
+"payload",
+JSON.stringify(payload)
+);
+
+const response =
+await fetch(
+API,
+{
+method:"POST",
+body:formData
+}
+);
+
+const result =
+await response.json();
+
+if(!result.success){
+
+alert(
+result.error ||
+"สร้างออเดอร์ไม่สำเร็จ"
+);
 
 return;
 
 }
 
-document.getElementById(
-  "loadingOverlay"
-).style.display =
-"flex";
-
-const payload = {
-  customer_name:
-    address.receiver,
-
-  email:
-    address.email,
-
-  phone:
-    String(address.phone || ""),
-
-  social:
-    address.social,
-
-  subtotal:
-    total,
-
-  total:
-    total,
-
-  items:
-    cart,
-
-  gifts:
-    address.gifts || []
-
-};
-
-  const formData =
-  new FormData();
-
-formData.append(
-  "action",
-  "createOrder"
-);
-
-formData.append(
-  "payload",
-  JSON.stringify(
-    payload
-  )
-);
-
-  const response =
-    await fetch(
-      API,
-      {
-        method:"POST",
-        body:formData
-      }
-    );
-
-  const result =
-    await response.json();
-
-  if(result.success){
-
-  const file =
-  slip.files[0];
-
 const base64 =
-  await fileToBase64(file);
+await fileToBase64(
+slip.files[0]
+);
 
-const paymentPayload = {
+const paymentForm =
+new FormData();
 
-  order_id:
-    result.order_id,
+paymentForm.append(
+"action",
+"payment"
+);
 
-  amount:
-    total,
+paymentForm.append(
+"payload",
+JSON.stringify({
 
-  slip_base64:
-    base64
+order_id:
+result.order_id,
 
-};
+amount:
+total,
 
-  const paymentForm =
-    new FormData();
+slip_base64:
+base64
 
-  paymentForm.append(
-    "action",
-    "payment"
-  );
+})
+);
 
-  paymentForm.append(
-    "payload",
-    JSON.stringify(
-      paymentPayload
-    )
-  );
+const paymentResponse =
+await fetch(
+API,
+{
+method:"POST",
+body:paymentForm
+}
+);
 
-  const paymentResponse =
-    await fetch(
-      API,
-      {
-        method:"POST",
-        body:paymentForm
-      }
-    );
+const paymentResult =
+await paymentResponse.json();
 
-  const paymentResult =
-    await paymentResponse.json();
+if(!paymentResult.success){
 
- if(paymentResult.success){
+alert(
+paymentResult.error ||
+"แจ้งชำระเงินไม่สำเร็จ"
+);
+
+return;
+
+}
 
 alert(
 "แจ้งชำระเงินเรียบร้อย"
 );
 
 const fullCart =
+
 JSON.parse(
 localStorage.getItem(
 "cart"
@@ -668,6 +699,7 @@ localStorage.getItem(
 );
 
 const checkoutCart =
+
 JSON.parse(
 localStorage.getItem(
 "checkoutCart"
@@ -675,9 +707,10 @@ localStorage.getItem(
 );
 
 const remainCart =
-fullCart.filter(item =>
 
-!checkoutCart.some(checkoutItem =>
+fullCart.filter(item=>
+
+!checkoutCart.some(checkoutItem=>
 
 JSON.stringify(item)
 ===
@@ -703,35 +736,21 @@ localStorage.removeItem(
 );
 
 window.location =
-"order.html?id="
-+
+"order.html?id=" +
 result.order_id;
 
-}else{
+}catch(error){
 
-console.log(paymentResult);
-
-alert(
-paymentResult.error || "แจ้งชำระเงินไม่สำเร็จ"
+console.error(
+"submitOrder error",
+error
 );
 
-btn.disabled = false;
-
-btn.textContent =
-"ยืนยันการชำระเงิน";
-
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
-
-}
-
-}else{
-
 alert(
-result.error || "สร้างออเดอร์ไม่สำเร็จ"
+"เกิดข้อผิดพลาด กรุณาลองใหม่"
 );
+
+}finally{
 
 btn.disabled = false;
 
