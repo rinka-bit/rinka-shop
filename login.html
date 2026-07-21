@@ -4,87 +4,261 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
 
-<title>เข้าสู่ระบบ</title>
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
+<title>
+เข้าสู่ระบบ | Rinka Shop
+</title>
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+
 body{
 
+margin:0;
 font-family:sans-serif;
-
 background:#f8fbff;
-
+color:#3f4b5a;
 padding:20px;
 
 }
 
 .container{
 
+width:100%;
 max-width:500px;
+margin:30px auto;
 
-margin:auto;
+}
+
+.shop-title{
+
+text-align:center;
+margin-bottom:22px;
+
+}
+
+.shop-title h1{
+
+margin:0 0 6px;
+font-size:32px;
+
+}
+
+.shop-title p{
+
+margin:0;
+color:#777;
+font-size:14px;
 
 }
 
 .card{
 
 background:white;
-
-padding:20px;
-
-border-radius:16px;
-
+padding:22px;
+border-radius:18px;
 box-shadow:
-0 2px 10px rgba(0,0,0,.05);
+0 2px 12px rgba(0,0,0,.06);
+
+}
+
+.tabs{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+background:#f1f7fb;
+padding:5px;
+border-radius:13px;
+margin-bottom:22px;
+
+}
+
+.tab-button{
+
+border:none;
+border-radius:10px;
+padding:11px;
+background:transparent;
+color:#607080;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+
+}
+
+.tab-button.active{
+
+background:white;
+color:#339bd3;
+box-shadow:
+0 2px 7px rgba(0,0,0,.07);
+
+}
+
+.form-section{
+
+display:none;
+
+}
+
+.form-section.active{
+
+display:block;
+
+}
+
+.form-title{
+
+font-size:21px;
+margin:0 0 6px;
+
+}
+
+.form-description{
+
+color:#777;
+font-size:14px;
+margin:0 0 18px;
+line-height:1.6;
+
+}
+
+label{
+
+display:block;
+font-size:14px;
+font-weight:700;
+margin-bottom:7px;
+
+}
+
+.input-group{
+
+margin-bottom:14px;
 
 }
 
 input{
 
 width:100%;
-
-padding:12px;
-
-margin-bottom:12px;
-
-box-sizing:border-box;
-
-border:1px solid #ddd;
-
-border-radius:10px;
+padding:12px 13px;
+border:1px solid #d8e1e7;
+border-radius:11px;
+font-size:15px;
+outline:none;
+background:white;
 
 }
 
-button{
+input:focus{
 
-width:100%;
+border-color:#7dcfff;
+box-shadow:
+0 0 0 3px rgba(125,207,255,.18);
 
-padding:14px;
+}
 
+.password-wrapper{
+
+position:relative;
+
+}
+
+.password-wrapper input{
+
+padding-right:72px;
+
+}
+
+.password-toggle{
+
+position:absolute;
+right:8px;
+top:50%;
+transform:translateY(-50%);
+width:auto;
+padding:7px 9px;
 border:none;
-
-border-radius:12px;
-
-background:#7dcfff;
-
-color:white;
-
-font-size:16px;
-
+background:transparent;
+color:#4d95bc;
+font-size:13px;
 font-weight:700;
-
 cursor:pointer;
 
 }
 
-h1{
+.submit-button{
 
-text-align:center;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#7dcfff;
+color:white;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+margin-top:5px;
 
-margin-bottom:20px;
+}
+
+.submit-button:hover{
+
+background:#66c4f8;
+
+}
+
+.submit-button:disabled{
+
+opacity:.65;
+cursor:not-allowed;
+
+}
+
+.message{
+
+display:none;
+padding:11px 13px;
+border-radius:10px;
+font-size:14px;
+line-height:1.5;
+margin-bottom:15px;
+
+}
+
+.message.error{
+
+display:block;
+background:#fff1f1;
+color:#bf4040;
+border:1px solid #ffd0d0;
+
+}
+
+.message.success{
+
+display:block;
+background:#effbf3;
+color:#26854a;
+border:1px solid #c9efd5;
+
+}
+
+.helper-text{
+
+font-size:12px;
+color:#888;
+line-height:1.5;
+margin-top:6px;
 
 }
 
@@ -100,6 +274,61 @@ transform:rotate(360deg);
 
 }
 
+.loading-overlay{
+
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+z-index:9999;
+justify-content:center;
+align-items:center;
+padding:20px;
+
+}
+
+.loading-card{
+
+width:100%;
+max-width:280px;
+background:white;
+padding:28px;
+border-radius:20px;
+text-align:center;
+
+}
+
+.loading-icon{
+
+font-size:48px;
+animation:
+spin 1s linear infinite;
+
+}
+
+.loading-text{
+
+margin:12px 0 0;
+font-weight:700;
+
+}
+
+@media(max-width:480px){
+
+body{
+padding:14px;
+}
+
+.container{
+margin:15px auto;
+}
+
+.card{
+padding:18px;
+}
+
+}
+
 </style>
 
 </head>
@@ -108,33 +337,306 @@ transform:rotate(360deg);
 
 <div class="container">
 
+<div class="shop-title">
+
 <h1>
-
 ☁️ Rinka Shop
-
 </h1>
+
+<p>
+เข้าสู่ระบบเพื่อจัดการออเดอร์และที่อยู่ของคุณ
+</p>
+
+</div>
 
 <div class="card">
 
-<input
-id="username"
-placeholder="ชื่อที่ใช้แสดง">
-
-<input
-id="email"
-placeholder="Email">
-
-<input
-id="twitter"
-placeholder="Twitter / X">
+<div class="tabs">
 
 <button
-id="registerBtn"
-onclick="register()">
+type="button"
+id="loginTabButton"
+class="tab-button active"
+onclick="showTab('login')"
+>
 
-เริ่มใช้งาน
+เข้าสู่ระบบ
 
 </button>
+
+<button
+type="button"
+id="registerTabButton"
+class="tab-button"
+onclick="showTab('register')"
+>
+
+สมัครสมาชิก
+
+</button>
+
+</div>
+
+<div
+id="pageMessage"
+class="message"
+></div>
+
+<section
+id="loginSection"
+class="form-section active"
+>
+
+<h2 class="form-title">
+เข้าสู่ระบบ
+</h2>
+
+<p class="form-description">
+ใช้อีเมลหรือ Twitter / X ที่ลงทะเบียนไว้
+</p>
+
+<form
+id="loginForm"
+onsubmit="loginCustomer(event)"
+>
+
+<div class="input-group">
+
+<label for="loginIdentity">
+อีเมล หรือ Twitter / X
+</label>
+
+<input
+id="loginIdentity"
+type="text"
+autocomplete="username"
+placeholder="example@email.com หรือ @username"
+required
+>
+
+</div>
+
+<div class="input-group">
+
+<label for="loginPassword">
+รหัสผ่าน
+</label>
+
+<div class="password-wrapper">
+
+<input
+id="loginPassword"
+type="password"
+autocomplete="current-password"
+placeholder="กรอกรหัสผ่าน"
+required
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword(
+  'loginPassword',
+  this
+)"
+>
+
+แสดง
+
+</button>
+
+</div>
+
+</div>
+
+<button
+type="submit"
+id="loginButton"
+class="submit-button"
+>
+
+เข้าสู่ระบบ
+
+</button>
+
+</form>
+
+</section>
+
+<section
+id="registerSection"
+class="form-section"
+>
+
+<h2 class="form-title">
+สมัครสมาชิก
+</h2>
+
+<p class="form-description">
+สร้างบัญชีเพื่อเช็กออเดอร์และบันทึกที่อยู่จัดส่ง
+</p>
+
+<form
+id="registerForm"
+onsubmit="registerCustomer(event)"
+>
+
+<div class="input-group">
+
+<label for="registerUsername">
+ชื่อที่ใช้แสดง
+</label>
+
+<input
+id="registerUsername"
+type="text"
+autocomplete="name"
+placeholder="ชื่อที่ต้องการให้ร้านเรียก"
+required
+>
+
+</div>
+
+<div class="input-group">
+
+<label for="registerEmail">
+อีเมล
+</label>
+
+<input
+id="registerEmail"
+type="email"
+autocomplete="email"
+placeholder="example@email.com"
+required
+>
+
+</div>
+
+<div class="input-group">
+
+<label for="registerTwitter">
+Twitter / X
+</label>
+
+<input
+id="registerTwitter"
+type="text"
+autocomplete="off"
+placeholder="@username"
+>
+
+<p class="helper-text">
+ไม่จำเป็นต้องใส่เครื่องหมาย @ ก็ได้
+</p>
+
+</div>
+
+<div class="input-group">
+
+<label for="registerPassword">
+รหัสผ่าน
+</label>
+
+<div class="password-wrapper">
+
+<input
+id="registerPassword"
+type="password"
+autocomplete="new-password"
+placeholder="อย่างน้อย 8 ตัวอักษร"
+minlength="8"
+required
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword(
+  'registerPassword',
+  this
+)"
+>
+
+แสดง
+
+</button>
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label for="registerConfirmPassword">
+ยืนยันรหัสผ่าน
+</label>
+
+<div class="password-wrapper">
+
+<input
+id="registerConfirmPassword"
+type="password"
+autocomplete="new-password"
+placeholder="กรอกรหัสผ่านอีกครั้ง"
+minlength="8"
+required
+>
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword(
+  'registerConfirmPassword',
+  this
+)"
+>
+
+แสดง
+
+</button>
+
+</div>
+
+</div>
+
+<button
+type="submit"
+id="registerButton"
+class="submit-button"
+>
+
+สมัครสมาชิก
+
+</button>
+
+</form>
+
+</section>
+
+</div>
+
+</div>
+
+<div
+id="loadingOverlay"
+class="loading-overlay"
+>
+
+<div class="loading-card">
+
+<div class="loading-icon">
+☁️
+</div>
+
+<p
+id="loadingText"
+class="loading-text"
+>
+
+กำลังดำเนินการ...
+
+</p>
 
 </div>
 
@@ -143,169 +645,455 @@ onclick="register()">
 <script>
 
 const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-async function register(){
 
-  const btn =
-    document.getElementById(
-      "registerBtn"
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    const sessionToken =
+      localStorage.getItem(
+        "session_token"
+      );
+
+    const customer =
+      getStoredCustomer();
+
+    if(
+      sessionToken &&
+      customer
+    ){
+
+      window.location.replace(
+        "account.html"
+      );
+
+    }
+
+  }
+);
+
+
+function showTab(
+  tabName
+){
+
+  clearMessage();
+
+  const isLogin =
+    tabName ===
+    "login";
+
+  document
+    .getElementById(
+      "loginSection"
+    )
+    .classList.toggle(
+      "active",
+      isLogin
     );
 
-  if(btn.disabled){
+  document
+    .getElementById(
+      "registerSection"
+    )
+    .classList.toggle(
+      "active",
+      !isLogin
+    );
+
+  document
+    .getElementById(
+      "loginTabButton"
+    )
+    .classList.toggle(
+      "active",
+      isLogin
+    );
+
+  document
+    .getElementById(
+      "registerTabButton"
+    )
+    .classList.toggle(
+      "active",
+      !isLogin
+    );
+
+}
+
+
+function togglePassword(
+  inputId,
+  button
+){
+
+  const input =
+    document.getElementById(
+      inputId
+    );
+
+  const shouldShow =
+    input.type ===
+    "password";
+
+  input.type =
+    shouldShow
+      ? "text"
+      : "password";
+
+  button.textContent =
+    shouldShow
+      ? "ซ่อน"
+      : "แสดง";
+
+}
+
+
+async function loginCustomer(
+  event
+){
+
+  event.preventDefault();
+
+  clearMessage();
+
+  const button =
+    document.getElementById(
+      "loginButton"
+    );
+
+  if(button.disabled){
+
     return;
+
   }
 
-  btn.disabled = true;
+  const identity =
+    document
+      .getElementById(
+        "loginIdentity"
+      )
+      .value
+      .trim();
 
-  btn.textContent =
+  const password =
+    document
+      .getElementById(
+        "loginPassword"
+      )
+      .value;
+
+  if(
+    !identity ||
+    !password
+  ){
+
+    showMessage(
+      "กรุณากรอกข้อมูลเข้าสู่ระบบให้ครบ",
+      "error"
+    );
+
+    return;
+
+  }
+
+  setLoading(
+    true,
+    "กำลังเข้าสู่ระบบ..."
+  );
+
+  button.disabled = true;
+  button.textContent =
     "กำลังเข้าสู่ระบบ...";
-
-  document.getElementById(
-    "loadingOverlay"
-  ).style.display =
-    "flex";
 
   try{
 
-    const payload = {
-
-      username:
-        document.getElementById(
-          "username"
-        ).value.trim(),
-
-      email:
-        document.getElementById(
-          "email"
-        ).value.trim(),
-
-      twitter:
-        document.getElementById(
-          "twitter"
-        ).value.trim()
-
-    };
-
-    if(
-      !payload.username ||
-      !payload.email
-    ){
-
-      alert(
-        "กรุณากรอกข้อมูลให้ครบ"
-      );
-
-      return;
-
-    }
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      "action",
-      "saveCustomer"
-    );
-
-    formData.append(
-      "payload",
-      JSON.stringify(
-        payload
-      )
-    );
-
-    const response =
-      await fetch(
-        API,
+    const result =
+      await postApi(
+        "loginCustomer",
         {
-          method:"POST",
-          body:formData
+
+          identity:
+            identity,
+
+          password:
+            password
+
         }
       );
 
-    const result =
-      await response.json();
+    if(
+      !result.success
+    ){
 
-    if(!result.success){
-
-      alert(
+      throw new Error(
+        result.error ||
         result.message ||
-        "เกิดข้อผิดพลาด"
+        "เข้าสู่ระบบไม่สำเร็จ"
       );
-
-      return;
 
     }
 
-    localStorage.setItem(
-
-      "customer",
-
-      JSON.stringify({
-
-        customer_id:
-          result.customer_id,
-
-        ...payload
-
-      })
-
+    saveLoginData(
+      result
     );
 
-    await checkAddress(
-      payload.email
+    window.location.replace(
+      "account.html"
     );
 
   }catch(error){
 
     console.error(
-      "register error",
+      "loginCustomer error",
       error
     );
 
-    alert(
-      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    showMessage(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่",
+      "error"
     );
 
   }finally{
 
-    btn.disabled = false;
+    setLoading(
+      false
+    );
 
-    btn.textContent =
-      "เริ่มใช้งาน";
-
-    document.getElementById(
-      "loadingOverlay"
-    ).style.display =
-      "none";
+    button.disabled = false;
+    button.textContent =
+      "เข้าสู่ระบบ";
 
   }
 
 }
 
-async function checkAddress(email){
+
+async function registerCustomer(
+  event
+){
+
+  event.preventDefault();
+
+  clearMessage();
+
+  const button =
+    document.getElementById(
+      "registerButton"
+    );
+
+  if(button.disabled){
+
+    return;
+
+  }
+
+  const username =
+    document
+      .getElementById(
+        "registerUsername"
+      )
+      .value
+      .trim();
+
+  const email =
+    document
+      .getElementById(
+        "registerEmail"
+      )
+      .value
+      .trim();
+
+  const twitter =
+    document
+      .getElementById(
+        "registerTwitter"
+      )
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById(
+        "registerPassword"
+      )
+      .value;
+
+  const confirmPassword =
+    document
+      .getElementById(
+        "registerConfirmPassword"
+      )
+      .value;
+
+  if(
+    !username ||
+    !email ||
+    !password ||
+    !confirmPassword
+  ){
+
+    showMessage(
+      "กรุณากรอกข้อมูลที่จำเป็นให้ครบ",
+      "error"
+    );
+
+    return;
+
+  }
+
+  if(
+    password.length < 8
+  ){
+
+    showMessage(
+      "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร",
+      "error"
+    );
+
+    return;
+
+  }
+
+  if(
+    password !==
+    confirmPassword
+  ){
+
+    showMessage(
+      "รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน",
+      "error"
+    );
+
+    return;
+
+  }
+
+  setLoading(
+    true,
+    "กำลังสร้างบัญชี..."
+  );
+
+  button.disabled = true;
+  button.textContent =
+    "กำลังสมัครสมาชิก...";
 
   try{
 
+    const result =
+      await postApi(
+        "registerCustomer",
+        {
+
+          username:
+            username,
+
+          email:
+            email,
+
+          twitter:
+            twitter,
+
+          password:
+            password,
+
+          confirm_password:
+            confirmPassword
+
+        }
+      );
+
+    if(
+      !result.success
+    ){
+
+      throw new Error(
+        result.error ||
+        result.message ||
+        "สมัครสมาชิกไม่สำเร็จ"
+      );
+
+    }
+
+    saveLoginData(
+      result
+    );
+
+    await redirectAfterRegister(
+      result.session_token
+    );
+
+  }catch(error){
+
+    console.error(
+      "registerCustomer error",
+      error
+    );
+
+    showMessage(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่",
+      "error"
+    );
+
+  }finally{
+
+    setLoading(
+      false
+    );
+
+    button.disabled = false;
+    button.textContent =
+      "สมัครสมาชิก";
+
+  }
+
+}
+
+
+async function redirectAfterRegister(
+  sessionToken
+){
+
+  try{
+
+    const url =
+      API +
+      "?action=customerAddresses" +
+      "&session_token=" +
+      encodeURIComponent(
+        sessionToken
+      );
+
     const response =
       await fetch(
-
-        API +
-        "?action=customerAddresses&email=" +
-        encodeURIComponent(
-          email
-        )
-
+        url
       );
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "ไม่สามารถตรวจสอบที่อยู่ได้"
+      );
+
+    }
 
     const result =
       await response.json();
 
     const addresses =
-      Array.isArray(result)
+      Array.isArray(
+        result
+      )
         ? result
-        : Array.isArray(result.addresses)
+        : Array.isArray(
+            result.addresses
+          )
           ? result.addresses
           : [];
 
@@ -313,72 +1101,289 @@ async function checkAddress(email){
       addresses.length === 0
     ){
 
-      window.location =
-        "address.html?from=register";
+      window.location.replace(
+        "add-address.html?from=register"
+      );
 
-    }else{
-
-      window.location =
-        "home.html";
+      return;
 
     }
+
+    window.location.replace(
+      "account.html"
+    );
 
   }catch(error){
 
     console.error(
-      "checkAddress error",
+      "redirectAfterRegister error",
       error
     );
 
-    window.location =
-      "home.html";
+    window.location.replace(
+      "account.html"
+    );
 
   }
 
 }
 
+
+async function postApi(
+  action,
+  payload
+){
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "action",
+    action
+  );
+
+  formData.append(
+    "payload",
+    JSON.stringify(
+      payload
+    )
+  );
+
+  const response =
+    await fetch(
+      API,
+      {
+
+        method:
+          "POST",
+
+        body:
+          formData
+
+      }
+    );
+
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+      "ไม่สามารถเชื่อมต่อระบบได้"
+    );
+
+  }
+
+  return await response.json();
+
+}
+
+
+function saveLoginData(
+  result
+){
+
+  const sessionToken =
+    String(
+      result.session_token || ""
+    ).trim();
+
+  if(
+    !sessionToken
+  ){
+
+    throw new Error(
+      "ระบบไม่ได้ส่ง Session Token กลับมา"
+    );
+
+  }
+
+  const customer = {
+
+    customer_id:
+      result.customer_id || "",
+
+    username:
+      result.username || "",
+
+    email:
+      result.email || "",
+
+    twitter:
+      result.twitter || ""
+
+  };
+
+  localStorage.setItem(
+    "session_token",
+    sessionToken
+  );
+
+  localStorage.setItem(
+    "customer",
+    JSON.stringify(
+      customer
+    )
+  );
+
+  if(
+    result.expires_at
+  ){
+
+    localStorage.setItem(
+      "session_expires_at",
+      result.expires_at
+    );
+
+  }else{
+
+    localStorage.removeItem(
+      "session_expires_at"
+    );
+
+  }
+
+  /*
+  เก็บค่าเดี่ยวไว้ชั่วคราว
+  เพื่อให้หน้าเก่าที่ยังไม่ได้แก้ไม่พังทันที
+  */
+
+  localStorage.setItem(
+    "customer_id",
+    customer.customer_id
+  );
+
+  localStorage.setItem(
+    "customer_email",
+    customer.email
+  );
+
+  localStorage.setItem(
+    "customer_username",
+    customer.username
+  );
+
+  localStorage.setItem(
+    "customer_twitter",
+    customer.twitter
+  );
+
+}
+
+
+function getStoredCustomer(){
+
+  try{
+
+    const rawCustomer =
+      localStorage.getItem(
+        "customer"
+      );
+
+    if(
+      !rawCustomer
+    ){
+
+      return null;
+
+    }
+
+    const customer =
+      JSON.parse(
+        rawCustomer
+      );
+
+    if(
+      !customer ||
+      typeof customer !==
+      "object"
+    ){
+
+      return null;
+
+    }
+
+    return customer;
+
+  }catch(error){
+
+    console.error(
+      "getStoredCustomer error",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+function showMessage(
+  message,
+  type
+){
+
+  const element =
+    document.getElementById(
+      "pageMessage"
+    );
+
+  element.textContent =
+    message;
+
+  element.className =
+    "message " +
+    (
+      type === "success"
+        ? "success"
+        : "error"
+    );
+
+}
+
+
+function clearMessage(){
+
+  const element =
+    document.getElementById(
+      "pageMessage"
+    );
+
+  element.textContent = "";
+  element.className =
+    "message";
+
+}
+
+
+function setLoading(
+  isLoading,
+  message
+){
+
+  const overlay =
+    document.getElementById(
+      "loadingOverlay"
+    );
+
+  const text =
+    document.getElementById(
+      "loadingText"
+    );
+
+  text.textContent =
+    message ||
+    "กำลังดำเนินการ...";
+
+  overlay.style.display =
+    isLoading
+      ? "flex"
+      : "none";
+
+}
+
 </script>
 
-<div
-id="loadingOverlay"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-z-index:9999;
-justify-content:center;
-align-items:center;
-">
-
-<div
-style="
-background:white;
-padding:30px;
-border-radius:20px;
-text-align:center;
-">
-
-<div
-style="
-font-size:50px;
-animation:spin 1s linear infinite;
-">
-
-☁️
-
-</div>
-
-<p>
-
-กำลังเข้าสู่ระบบ...
-
-</p>
-
-</div>
-
-</div>
-  
 </body>
 
 </html>
