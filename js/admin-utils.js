@@ -1,11 +1,28 @@
 function escapeHtml(value){
 
-  return String(value || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
@@ -14,7 +31,7 @@ function escapeJsString(
 ){
 
   return String(
-    value || ""
+    value ?? ""
   )
     .replaceAll(
       "\\",
@@ -31,6 +48,14 @@ function escapeJsString(
     .replaceAll(
       "\r",
       ""
+    )
+    .replaceAll(
+      "\u2028",
+      "\\u2028"
+    )
+    .replaceAll(
+      "\u2029",
+      "\\u2029"
     );
 
 }
