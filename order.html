@@ -197,33 +197,70 @@ params.get("id");
 
 async function loadOrder(){
 
-  const response =
-    await fetch(
-      API +
-      "?action=order&id=" +
-      orderId
-    );
+  try{
 
-  const result =
-    await response.json();
+    const response =
+      await fetch(
+        API +
+        "?action=order&id=" +
+        encodeURIComponent(
+          orderId || ""
+        )
+      );
 
-  if(!result.success){
+    const result =
+      await response.json();
 
-    document
-      .getElementById(
-        "orderBox"
-      )
-      .innerHTML =
-      "ไม่พบออเดอร์";
+    if(
+      result.success === false ||
+      !result.order
+    ){
 
-    return;
+      document
+        .getElementById(
+          "orderBox"
+        )
+        .innerHTML =
+        "ไม่พบออเดอร์";
 
-  }
+      return;
 
-  const order =
-    result.order;
+    }
 
-let html = `
+    const order =
+      result.order;
+
+    const items =
+      Array.isArray(order.items)
+        ? order.items
+        : Array.isArray(result.items)
+          ? result.items
+          : [];
+
+    const gifts =
+      Array.isArray(order.gifts)
+        ? order.gifts
+        : Array.isArray(result.gifts)
+          ? result.gifts
+          : [];
+
+    order.items =
+      items;
+
+    order.gifts =
+      gifts;
+
+    const importFee =
+      Number(
+        order.import_fee || 0
+      );
+
+    const domesticShippingFee =
+      Number(
+        order.domestic_shipping_fee || 0
+      );
+
+    let html = `
 
 ${getOrderSummaryCard(order)}
 
@@ -231,110 +268,139 @@ ${getOrderMessage(order)}
 
 ${getOrderTimeline(order.status)}
 
-    <p>
-    การชำระเงิน:
-    ${order.payment_status === "paid"
-    ? '<span class="badge badge-paid">ชำระเงินแล้ว</span>'
-    : '<span class="badge badge-pending">รอชำระเงิน</span>'}
-    </p>
+<p>
 
-    <div
-    style="
-    margin:20px 0;
-    padding:15px;
-    background:#f8fafc;
-    border-radius:12px;
-    ">
+การชำระเงิน:
 
-    <h3>
-    🚚 ข้อมูลการจัดส่ง
-    </h3>
-
-    <p>
-    <b>ขนส่ง:</b>
-    ${order.courier || "-"}
-    </p>
-
-    <p>
-    <b>สถานะจัดส่ง:</b>
-    ${order.shipping_status || "-"}
-    </p>
-
-    <p>
-    <b>สถานะค่าส่ง:</b>
-    ${getShippingPaymentBadge(order.shipping_payment_status)}
-    </p>
-
-    ${
-  order.import_fee_round2 || order.domestic_shipping_fee
-  ?
-  `
-  <div style="
-  margin:12px 0;
-  padding:12px;
-  background:white;
-  border:1px solid #e5e7eb;
-  border-radius:12px;
-  ">
-
-  <p>
-  ค่านำเข้า:
-  <b>${order.import_fee_round2 || 0}</b>
-  บาท
-  </p>
-
-  <p>
-  ค่าส่งในไทย:
-  <b>${order.domestic_shipping_fee || 0}</b>
-  บาท
-  </p>
-
-  <p>
-  รวมค่าส่ง:
-  <b>${
-    Number(order.import_fee_round2 || 0) +
-    Number(order.domestic_shipping_fee || 0)
-  }</b>
-  บาท
-  </p>
-
-  </div>
-  `
-  :
-  ""
+${
+order.payment_status === "paid"
+?
+'<span class="badge badge-paid">ชำระเงินแล้ว</span>'
+:
+'<span class="badge badge-pending">รอชำระเงิน</span>'
 }
 
-    ${
-    order.status === "ready_to_ship" &&
-    order.shipping_payment_status === "unpaid"
+</p>
 
-   ?
+<div
+style="
+margin:20px 0;
+padding:15px;
+background:#f8fafc;
+border-radius:12px;
+">
 
-   `
+<h3>
+🚚 ข้อมูลการจัดส่ง
+</h3>
 
-  <button
-  class="copy-btn"
-  onclick="
-  window.location.href=
-  'shipping-payment.html?id=${order.order_id}'
-  ">
-  💳 ยืนยันที่อยู่ / ชำระค่าส่ง
-  </button>
+<p>
 
-  `
+<b>ขนส่ง:</b>
+${order.courier || "-"}
 
-  :
+</p>
 
-  ""
+<p>
+
+<b>สถานะค่าส่ง:</b>
+${getShippingPaymentBadge(
+  order.shipping_payment_status
+)}
+
+</p>
+
+${
+importFee ||
+domesticShippingFee
+
+?
+
+`
+
+<div
+style="
+margin:12px 0;
+padding:12px;
+background:white;
+border:1px solid #e5e7eb;
+border-radius:12px;
+">
+
+<p>
+
+ค่านำเข้า:
+<b>${importFee.toLocaleString()}</b>
+บาท
+
+</p>
+
+<p>
+
+ค่าส่งในไทย:
+<b>${domesticShippingFee.toLocaleString()}</b>
+บาท
+
+</p>
+
+<p>
+
+รวมค่าส่ง:
+<b>${
+  (
+    importFee +
+    domesticShippingFee
+  ).toLocaleString()
+}</b>
+บาท
+
+</p>
+
+</div>
+
+`
+
+:
+
+""
+
+}
+
+${
+order.status === "ready_to_ship" &&
+order.shipping_payment_status !== "paid"
+
+?
+
+`
+
+<button
+class="copy-btn"
+onclick="
+window.location.href=
+'shipping-payment.html?id=${order.order_id}'
+">
+
+💳 ยืนยันที่อยู่ / ชำระค่าส่ง
+
+</button>
+
+`
+
+:
+
+""
 
 }
 
 <p>
+
 <b>เลขพัสดุ:</b>
 ${order.tracking_no || "-"}
+
 </p>
 
-   ${
+${
 order.tracking_no
 
 ?
@@ -358,7 +424,7 @@ class="copy-btn"
 style="margin-left:10px;"
 onclick="
 openTracking(
-'${order.courier}',
+'${order.courier || ""}',
 '${order.tracking_no}'
 )
 ">
@@ -375,74 +441,106 @@ openTracking(
 
 }
 
-    </div>
+</div>
 
-    <table>
+<table>
 
-      <tr>
+<tr>
 
-        <th>
-        สินค้า
-        </th>
+<th>
+สินค้า
+</th>
 
-        <th>
-        จำนวน
-        </th>
+<th>
+จำนวน
+</th>
 
-        <th>
-        ราคารวม
-        </th>
+<th>
+ราคารวม
+</th>
 
-      </tr>
-  `;
+</tr>
 
- order.items.forEach(item=>{
+`;
 
-  let optionHtml = "";
+    items.forEach(item=>{
 
-  if(item.selected_option){
+      let optionHtml = "";
 
-    try{
+      const selectedOptions =
+        item.selected_options ??
+        item.selected_option;
 
-      const options =
+      if(selectedOptions){
 
-      JSON.parse(
-        item.selected_option
-      );
+        try{
 
-      optionHtml =
+          const options =
+            typeof selectedOptions ===
+            "string"
+              ? JSON.parse(
+                  selectedOptions
+                )
+              : selectedOptions;
 
-      Object.entries(options)
+          optionHtml =
+            Object.entries(
+              options || {}
+            )
+            .map(
+              ([key,value]) => `
 
-      .map(
-        ([key,value])=>
+<div
+style="
+font-size:13px;
+color:#666;
+margin-top:4px;
+">
 
-        `<div style="
-        font-size:13px;
-        color:#666;
-        margin-top:4px;
-        ">
+${key}:
 
-        ${key} :
+${
+Array.isArray(value)
+  ? value.join(", ")
+  : value
+}
 
-        ${
-          Array.isArray(value)
-          ? value.join(", ")
-          : value
+</div>
+
+`
+            )
+            .join("");
+
+        }catch(error){
+
+          console.error(
+            "selected_options parse error",
+            error
+          );
+
         }
 
-        </div>`
+      }
 
-      )
+      const qty =
+        Number(
+          item.qty || 0
+        );
 
-      .join("");
+      const itemTotal =
+        Number(
+          item.final_price ??
+          (
+            Number(
+              item.price || 0
+            )
+            *
+            qty
+          )
+        );
 
-    }
-    catch(e){}
+      html += `
 
-  }
-
-  html += `
 <tr>
 
 <td>
@@ -455,7 +553,7 @@ align-items:flex-start;
 ">
 
 <img
-src="${item.image}"
+src="${item.image || ""}"
 style="
 width:60px;
 height:60px;
@@ -466,7 +564,7 @@ border-radius:10px;
 <div>
 
 <b>
-${item.name}
+${item.name || ""}
 </b>
 
 ${optionHtml}
@@ -477,31 +575,25 @@ ${optionHtml}
 
 </td>
 
-      <td>
-      ${item.qty}
-      </td>
-
 <td>
-${
-Number(item.price)
-*
-Number(item.qty)
-}
+${qty.toLocaleString()}
 </td>
 
-    </tr>
-  `;
+<td>
+฿${itemTotal.toLocaleString()}
+</td>
 
-});
+</tr>
 
-let giftHtml = "";
+`;
 
-if(
-  order.gifts &&
-  order.gifts.length
-){
+    });
 
-  giftHtml += `
+    let giftHtml = "";
+
+    if(gifts.length){
+
+      giftHtml += `
 
 <h3>
 🎁 ของแถม
@@ -509,9 +601,9 @@ if(
 
 `;
 
-  order.gifts.forEach(gift=>{
+      gifts.forEach(gift=>{
 
-  giftHtml += `
+        giftHtml += `
 
 <div
 style="
@@ -525,7 +617,7 @@ border-radius:10px;
 ">
 
 <img
-src="${gift.gift_image}"
+src="${gift.gift_image || ""}"
 style="
 width:60px;
 height:60px;
@@ -535,14 +627,16 @@ border-radius:8px;
 
 <div>
 
-${gift.gift_name}
+${gift.gift_name || ""}
 
 ${
 gift.character_name
 
 ?
 
-`<div
+`
+
+<div
 style="
 font-size:13px;
 color:#666;
@@ -552,7 +646,9 @@ margin-top:4px;
 ตัวละคร:
 ${gift.character_name}
 
-</div>`
+</div>
+
+`
 
 :
 
@@ -564,36 +660,53 @@ ${gift.character_name}
 
 </div>
 
-`;  
+`;
 
-  });
+      });
 
-}
+    }
 
-html += `
+    html += `
 
 </table>
 
 ${giftHtml}
 
 <h3>
+
 รวม
-${order.total}
-บาท
+฿${Number(
+  order.total || 0
+).toLocaleString()}
+
 </h3>
 
 `;
 
-  document
-    .getElementById(
-      "orderBox"
-    )
-    .innerHTML =
+    document
+      .getElementById(
+        "orderBox"
+      )
+      .innerHTML =
       html;
 
-}
+  }catch(error){
 
-loadOrder();
+    console.error(
+      "loadOrder error",
+      error
+    );
+
+    document
+      .getElementById(
+        "orderBox"
+      )
+      .innerHTML =
+      "โหลดข้อมูลออเดอร์ไม่สำเร็จ";
+
+  }
+
+}
 
 function getOrderSummaryCard(order){
 
