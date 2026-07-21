@@ -7,72 +7,108 @@ let cart = JSON.parse(
 
 window.productsData = [];
 
-async function loadProducts() {
+async function loadProducts(){
 
-const container =
-document.getElementById("products");
+  const container =
+    document.getElementById(
+      "products"
+    );
 
-if(!container){
-return;
-}
+  if(!container){
+    return;
+  }
 
-try {
+  try{
 
-const response = await fetch(API);
-const products = await response.json();
+    const response =
+      await fetch(API);
 
-window.productsData = products;
+    const result =
+      await response.json();
 
-const container =
-  document.getElementById("products");
+    const products =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.products)
+          ? result.products
+          : [];
 
-container.innerHTML = "";
+    window.productsData =
+      products;
 
-products.forEach((product, index) => {
+    container.innerHTML = "";
 
-  container.innerHTML += `
-    <div class="card">
+    products.forEach(
+      (product,index)=>{
 
-      <img src="${product.image}" alt="${product.name}">
+        const price =
+          Number(
+            product.final_price ??
+            product.price ??
+            0
+          );
 
-      <div class="card-body">
+        container.innerHTML += `
 
-        <h3>${product.name}</h3>
+          <div class="card">
 
-        <p>${product.fandom || ""}</p>
+            <img
+            src="${product.image || ""}"
+            alt="${product.name || ""}">
 
-        <p class="price">
-          ฿${product.price}
-        </p>
+            <div class="card-body">
 
-        <div class="actions">
+              <h3>
+                ${product.name || "-"}
+              </h3>
 
-          <button
-          onclick="
-          window.location.href=
-          'product.html?id=${product.product_id}'
-          ">
-          ดูรายละเอียด
-          </button>
+              <p>
+                ${product.fandom || ""}
+              </p>
 
-          <button onclick="addToCartByIndex(${index})">
-            เพิ่มลงตะกร้า
-          </button>
+              <p class="price">
+                ฿${price}
+              </p>
 
-        </div>
+              <div class="actions">
 
-      </div>
+                <button
+                onclick="
+                  window.location.href=
+                  'product.html?id=${product.product_id}'
+                ">
+                  ดูรายละเอียด
+                </button>
 
-    </div>
-  `;
+                <button
+                onclick="
+                  addToCartByIndex(${index})
+                ">
+                  เพิ่มลงตะกร้า
+                </button>
 
-});
+              </div>
 
-} catch (error) {
+            </div>
 
-console.error("โหลดสินค้าไม่สำเร็จ", error);
+          </div>
 
-}
+        `;
+
+      }
+    );
+
+  }catch(error){
+
+    console.error(
+      "โหลดสินค้าไม่สำเร็จ",
+      error
+    );
+
+    container.innerHTML =
+      "โหลดสินค้าไม่สำเร็จ";
+
+  }
 
 }
 
@@ -443,119 +479,196 @@ function confirmOrder(){
   submitOrder();
 
 }
+
 async function submitOrder(){
 
   if(cart.length === 0){
 
-    alert("ไม่มีสินค้าในตะกร้า");
+    alert(
+      "ไม่มีสินค้าในตะกร้า"
+    );
+
     return;
 
   }
 
   let subtotal = 0;
 
-  cart.forEach(item=>{
+  const items =
+    cart.map(item=>{
 
-    subtotal +=
-      Number(item.price) * item.qty;
+      const price =
+        Number(
+          item.final_price ??
+          item.price ??
+          0
+        );
 
-  });
+      const qty =
+        Number(
+          item.qty || 1
+        );
 
-  const data = {
+      subtotal +=
+        price * qty;
+
+      return {
+
+        product_id:
+          item.product_id || "",
+
+        name:
+          item.name || "",
+
+        price:
+          price,
+
+        qty:
+          qty,
+
+        final_price:
+          price * qty,
+
+        selected_options:
+          item.selected_options || {},
+
+        collection_id:
+          item.collection_id || ""
+
+      };
+
+    });
+
+  const payload = {
 
     customer_name:
       document.getElementById(
         "customerName"
-      ).value,
+      )?.value.trim() || "",
 
     email:
       document.getElementById(
         "customerEmail"
-      ).value,
+      )?.value.trim() || "",
 
     phone:
       document.getElementById(
         "customerPhone"
-      ).value,
+      )?.value.trim() || "",
 
     social:
       document.getElementById(
         "customerSocial"
-      ).value,
+      )?.value.trim() || "",
 
-    receiver_name:
-      document.getElementById(
-        "receiverName"
-      ).value,
+    subtotal:
+      subtotal,
 
-    address:
-      document.getElementById(
-        "address"
-      ).value,
+    shipping_fee:
+      0,
 
-    province:
-      document.getElementById(
-        "province"
-      ).value,
+    crate_fee:
+      0,
 
-    postcode:
-      document.getElementById(
-        "postcode"
-      ).value,
+    total:
+      subtotal,
 
-    subtotal: subtotal,
+    status:
+      "pending",
 
-    total: subtotal,
+    payment_status:
+      "unpaid",
 
-    items: cart
+    items:
+      items
 
   };
+
+  if(
+    !payload.customer_name ||
+    !payload.email ||
+    !payload.phone
+  ){
+
+    alert(
+      "กรุณากรอกข้อมูลลูกค้าให้ครบ"
+    );
+
+    return;
+
+  }
 
   try{
 
     const formData =
-  new FormData();
+      new FormData();
 
-formData.append(
-  "payload",
-  JSON.stringify(data)
-);
+    formData.append(
+      "action",
+      "createOrder"
+    );
 
-const response =
-  await fetch(
-    "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec",
-    {
-      method:"POST",
-      body: formData
-    }
-  );
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API.replace(
+          "?action=products",
+          ""
+        ),
+        {
+          method:"POST",
+          body:formData
+        }
+      );
 
     const result =
       await response.json();
-    
-console.log(result);
-    
+
+    if(
+      !result.success ||
+      !result.order_id
+    ){
+
+      alert(
+        result.error ||
+        "สร้างออเดอร์ไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
     showPaymentPopup(
-  result.order_id,
-  subtotal
-);
+      result.order_id,
+      subtotal
+    );
 
     cart = [];
 
     saveCart();
 
-    checkout();
-
-    document
-      .getElementById(
+    const summaryItems =
+      document.getElementById(
         "summaryItems"
-      )
-      .innerHTML = "";
+      );
 
-  }
-  catch(error){
+    if(summaryItems){
 
-    console.error(error);
+      summaryItems.innerHTML =
+        "";
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "submitOrder error:",
+      error
+    );
 
     alert(
       "เกิดข้อผิดพลาดในการส่งออเดอร์"
@@ -564,6 +677,7 @@ console.log(result);
   }
 
 }
+
 function showPaymentPopup(
   orderId,
   amount
@@ -640,11 +754,13 @@ async function uploadSlip(
   orderId
 ){
 
-  const file =
+  const fileInput =
     document.getElementById(
       "paymentSlip"
-    ).files[0];
-  console.log(file);
+    );
+
+  const file =
+    fileInput?.files?.[0];
 
   if(!file){
 
@@ -656,49 +772,94 @@ async function uploadSlip(
 
   }
 
-  const amount =
-    document.getElementById(
-      "summaryTotal"
-    ).innerText
-      .replace("รวม ","")
-      .replace(" บาท","");
+  try{
 
-  const payload = {
+    const slipBase64 =
+      await fileToBase64(file);
 
-    order_id: orderId,
+    const amountText =
+      document.getElementById(
+        "summaryTotal"
+      )?.innerText || "";
 
-    amount: amount,
+    const amount =
+      Number(
+        amountText.replace(
+          /[^0-9.]/g,
+          ""
+        )
+      ) || 0;
 
-    slip_url:
-      file.name
+    const payload = {
 
-  };
+      order_id:
+        orderId,
 
-  const formData =
-    new FormData();
+      amount:
+        amount,
 
-  formData.append(
-    "payload",
-    JSON.stringify(payload)
-  );
+      slip_base64:
+        slipBase64
 
-  const response =
-    await fetch(
-      "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=payment",
-      {
-        method:"POST",
-        body:formData
-      }
+    };
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "payment"
     );
 
-  const result =
-    await response.json();
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
 
-  alert(
-    "แจ้งชำระเงินเรียบร้อย"
-  );
+    const response =
+      await fetch(
+        API.replace(
+          "?action=products",
+          ""
+        ),
+        {
+          method:"POST",
+          body:formData
+        }
+      );
 
-  closePayment();
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      alert(
+        result.error ||
+        "แจ้งชำระเงินไม่สำเร็จ"
+      );
+
+      return;
+
+    }
+
+    alert(
+      "แจ้งชำระเงินเรียบร้อย"
+    );
+
+    closePayment();
+
+  }catch(error){
+
+    console.error(
+      "uploadSlip error:",
+      error
+    );
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }
 
 }
 
