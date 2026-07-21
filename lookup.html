@@ -343,84 +343,81 @@ const API =
 
 async function searchOrders(){
 
-const email =
-document
-.getElementById("email")
-.value
-.trim();
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
-const social =
-document
-.getElementById("social")
-.value
-.trim();
+  const social =
+    document
+      .getElementById("social")
+      .value
+      .trim();
 
-if(
-!email &&
-!social
-){
+  if(
+    !email &&
+    !social
+  ){
 
-alert(
-"กรุณากรอกอีเมลหรือ Twitter/X"
-);
+    alert(
+      "กรุณากรอกอีเมลหรือ Twitter/X"
+    );
 
-return;
+    return;
 
-}
-  
-let url = "";
+  }
 
-if(email){
+  try{
 
-url =
+    let url = "";
 
-API +
+    if(email){
 
-"?action=ordersByEmail&email=" +
+      url =
+        API +
+        "?action=ordersByEmail&email=" +
+        encodeURIComponent(email);
 
-encodeURIComponent(email);
+    }else{
 
-}
-else{
+      url =
+        API +
+        "?action=ordersBySocial&social=" +
+        encodeURIComponent(social);
 
-url =
+    }
 
-API +
+    const response =
+      await fetch(url);
 
-"?action=ordersBySocial&social=" +
+    const result =
+      await response.json();
 
-encodeURIComponent(social);
+    const orders =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.orders)
+          ? result.orders
+          : [];
 
-}
+    let html = "";
 
-const response =
-await fetch(url);
+    if(
+      orders.length === 0
+    ){
 
-const result =
-await response.json();
-
-let html = "";
-
-if(
-!result.orders ||
-result.orders.length === 0
-){
-
-html =
-`
+      html = `
 <div class="card">
-
 ไม่พบออเดอร์
-
 </div>
 `;
 
-}
-else{
+    }else{
 
-result.orders.forEach(order=>{
+      orders.forEach(order=>{
 
-html += `
+        html += `
 <div class="card">
 
 <h3>
@@ -446,8 +443,9 @@ ${order.payment_status}
 <p>
 
 ยอดรวม:
-${order.total}
-บาท
+฿${Number(
+  order.total || 0
+).toLocaleString()}
 
 </p>
 
@@ -460,17 +458,38 @@ ${order.total}
 </div>
 `;
 
-});
+      });
+
+    }
+
+    document
+      .getElementById(
+        "result"
+      )
+      .innerHTML =
+      html;
+
+  }catch(error){
+
+    console.error(
+      "searchOrders error",
+      error
+    );
+
+    document
+      .getElementById(
+        "result"
+      )
+      .innerHTML =
+`
+<div class="card">
+เกิดข้อผิดพลาดในการค้นหา
+</div>
+`;
+
+  }
 
 }
-
-document
-.getElementById("result")
-.innerHTML = html;
-
-}
-
-updateCartCount();
 
 function updateCartCount(){
 
