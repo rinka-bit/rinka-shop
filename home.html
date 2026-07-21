@@ -252,148 +252,190 @@ BASE_API + "?action=products";
   
 async function loadHome(){
 
-const response =
-await fetch(API);
+  try{
 
-const products =
-await response.json();
+    const response =
+      await fetch(API);
 
-window.allProducts =
-products;
+    const result =
+      await response.json();
 
-products.sort(
-(a,b)=>
-Number(b.sort_order||0)
--
-Number(a.sort_order||0)
-);
+    const products =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.products)
+          ? result.products
+          : [];
 
-loadFeatured(products);
+    window.allProducts =
+      products;
 
-loadCollections();
+    products.sort(
+      (a,b)=>
+        Number(
+          b.sort_order || 0
+        )
+        -
+        Number(
+          a.sort_order || 0
+        )
+    );
 
-loadNewArrivals(products);
+    loadFeatured(products);
 
-loadFandoms(products);
+    loadCollections();
+
+    loadNewArrivals(products);
+
+    loadFandoms(products);
+
+  }catch(error){
+
+    console.error(
+      "loadHome error",
+      error
+    );
+
+  }
+
 }
 
 async function loadCollections(){
 
-  const response =
-    await fetch(
-      BASE_API +
-      "?action=collections"
-    );
+  try{
 
-  const collections =
-    await response.json();
+    const response =
+      await fetch(
+        BASE_API +
+        "?action=collections"
+      );
 
-  let html = "";
+    const result =
+      await response.json();
 
-  collections.forEach(c=>{
+    const collections =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.collections)
+          ? result.collections
+          : [];
 
-    let countdown = "";
+    let html = "";
 
-    if(c.preorder_deadline){
+    collections.forEach(c=>{
 
-      const deadline =
-        new Date(
-          c.preorder_deadline
-        );
+      let countdown = "";
 
-      const today =
-        new Date();
+      if(c.preorder_deadline){
 
-      const diffDays =
+        const deadline =
+          new Date(
+            c.preorder_deadline
+          );
 
-        Math.ceil(
+        const today =
+          new Date();
 
-          (deadline - today)
+        const diffDays =
+          Math.ceil(
+            (deadline - today)
+            /
+            (1000 * 60 * 60 * 24)
+          );
 
-          /
+        if(diffDays > 0){
 
-          (1000 * 60 * 60 * 24)
+          countdown =
+            `⏰ เหลือ ${diffDays} วัน`;
 
-        );
-
-      if(diffDays > 0){
-
-        countdown =
-          `⏰ เหลือ ${diffDays} วัน`;
+        }
 
       }
 
-    }
+      html += `
 
-    html += `
+<div
+class="collection-card"
+onclick="
+window.location.href=
+'collection.html?id=${c.collection_id}'
+">
 
-    <div
-    class="collection-card"
-    onclick="window.location.href='collection.html?id=${c.collection_id}'">
+<img
+src="${c.image || ""}"
+loading="lazy"
+alt="${c.name || ""}">
 
-      <img
-      src="${c.image}"
-      loading="lazy"
-      alt="${c.name}">
+<div class="collection-content">
 
-      <div class="collection-content">
-
-        <div class="collection-badge-preorder">
-  PREORDER
+<div class="collection-badge-preorder">
+PREORDER
 </div>
 
-        <h3>
-          ${c.name}
-        </h3>
+<h3>
+${c.name || ""}
+</h3>
 
-        <p>
-          ${c.fandom || ""}
-        </p>
+<p>
+${c.fandom || ""}
+</p>
 
-        ${
-          c.description
-          ?
-          `
-          <p class="collection-description">
-            ${c.description}
-          </p>
-          `
-          :
-          ""
-        }
+${
+c.description
+?
+`
+<p class="collection-description">
+${c.description}
+</p>
+`
+:
+""
+}
 
-        <p class="collection-count">
+<p class="collection-count">
 
-          ${c.product_count || 0}
-          รายการ
+${Number(
+  c.product_count || 0
+).toLocaleString()}
+รายการ
 
-        </p>
+</p>
 
-        ${
-          countdown
-          ?
-          `
-          <div class="deadline-badge">
-            ${countdown}
-          </div>
-          `
-          :
-          ""
-        }
+${
+countdown
+?
+`
+<div class="deadline-badge">
+${countdown}
+</div>
+`
+:
+""
+}
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-    `;
+`;
 
-  });
+    });
 
-  document
-    .getElementById(
-      "collectionCards"
-    )
-    .innerHTML = html;
+    document
+      .getElementById(
+        "collectionCards"
+      )
+      .innerHTML =
+      html;
+
+  }catch(error){
+
+    console.error(
+      "loadCollections error",
+      error
+    );
+
+  }
 
 }
   
@@ -448,9 +490,29 @@ return `⏰ เหลือ ${diffDays} วัน`;
 
 function createProductCard(product){
 
-return `
+  const price =
+    Number(
+      product.final_price ??
+      product.price ??
+      0
+    );
 
-<div class="home-card"
+  const oldPrice =
+    Number(
+      product.old_price ??
+      product.price ??
+      0
+    );
+
+  const deadlineText =
+    getDeadlineText(
+      product.preorder_deadline
+    );
+
+  return `
+
+<div
+class="home-card"
 onclick="
 window.location.href=
 'product.html?id=${product.product_id}'
@@ -459,58 +521,48 @@ window.location.href=
 <div class="image-box">
 
 <img
-src="${product.image}"
-alt="${product.name}"
+src="${product.image || ""}"
+alt="${product.name || ""}"
 loading="lazy">
 
 ${
-
 product.new_arrival
-
 ?
-
-`<div class="badge-new">
+`
+<div class="badge-new">
 NEW
-</div>`
-
+</div>
+`
 :
-
 ""
-
 }
 
 ${
-
 product.on_sale
-
 ?
-
-`<div class="badge-sale">
+`
+<div class="badge-sale">
 SALE
-</div>`
-
+</div>
+`
 :
-
 ""
-
 }
 
 ${
-
-product.product_type==="preorder"
-
+product.product_type === "preorder"
 ?
-
-`<div class="badge-preorder">
+`
+<div class="badge-preorder">
 PREORDER
-</div>`
-
+</div>
+`
 :
-
-`<div class="badge-stock">
+`
+<div class="badge-stock">
 พร้อมส่ง
-</div>`
-
+</div>
+`
 }
 
 </div>
@@ -518,7 +570,7 @@ PREORDER
 <div class="card-body">
 
 <h3>
-${product.name}
+${product.name || ""}
 </h3>
 
 <p class="fandom">
@@ -528,62 +580,43 @@ ${product.fandom || ""}
 <div class="price-box">
 
 ${
-
 product.on_sale
-
 ?
-
 `
-
 <div class="sale-price">
-฿${product.price}
+฿${price.toLocaleString()}
 </div>
 
 <div class="old-price">
-฿${product.old_price}
+฿${oldPrice.toLocaleString()}
 </div>
-
 `
-
 :
-
 `
-
 <div class="normal-price">
-฿${product.price}
+฿${price.toLocaleString()}
 </div>
-
 `
-
 }
 
 </div>
 
 ${
-
-getDeadlineText(
-product.preorder_deadline
-)
-
+deadlineText
 ?
-
 `
-
 <div class="deadline">
-${getDeadlineText(product.preorder_deadline)}
+${deadlineText}
 </div>
-
 `
-
 :
-
 ""
-
 }
 
 </div>
 
 </div>
+
 `;
 
 }
@@ -628,44 +661,33 @@ featured
 
 function loadNewArrivals(products){
 
-const today =
-new Date();
+  const arrivals =
+    products.filter(
+      product =>
+        product.new_arrival === true ||
+        Number(
+          product.new_arrival
+        ) === 1 ||
+        String(
+          product.new_arrival || ""
+        )
+          .trim()
+          .toLowerCase() === "true" ||
+        String(
+          product.new_arrival || ""
+        )
+          .trim()
+          .toLowerCase() === "yes"
+    );
 
-const arrivals =
-products.filter(product=>{
-
-if(
-!product.created_at
-){
-return false;
-}
-
-const created =
-new Date(
-product.created_at
-);
-
-const diffDays =
-
-(today - created)
-
-/
-
-(1000*60*60*24);
-
-return diffDays <= 30;
-
-});
-
-document
-.getElementById(
-"newProducts"
-)
-.innerHTML =
-
-arrivals
-.map(createProductCard)
-.join("");
+  document
+    .getElementById(
+      "newProducts"
+    )
+    .innerHTML =
+    arrivals
+      .map(createProductCard)
+      .join("");
 
 }
 
