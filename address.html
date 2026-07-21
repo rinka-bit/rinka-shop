@@ -207,10 +207,24 @@ addressId
 )
 );
 
-const data =
-await response.json();
+const result =
+  await response.json();
 
-if(!data){
+const data =
+  result.address || result;
+
+if(
+  !data ||
+  !data.address_id
+){
+
+  alert(
+    "ไม่พบที่อยู่"
+  );
+
+  return;
+
+}
 
 alert(
 "ไม่พบที่อยู่"
@@ -245,167 +259,186 @@ data.postcode || "";
 
 async function saveAddress(){
 
-const btn =
-document.getElementById(
-"saveAddressBtn"
-);
+  const btn =
+    document.getElementById(
+      "saveAddressBtn"
+    );
 
-if(btn.disabled){
-return;
-}
+  if(btn.disabled){
+    return;
+  }
 
-btn.disabled = true;
+  btn.disabled = true;
 
-btn.textContent =
-"กำลังบันทึก...";
+  btn.textContent =
+    "กำลังบันทึก...";
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"flex";
+  document.getElementById(
+    "loadingOverlay"
+  ).style.display =
+    "flex";
 
-const payload = {
+  try{
 
-address_id:
-addressId || "",
+    const payload = {
 
-email:
-customer.email,
+      address_id:
+        addressId || "",
 
-receiver:
-document.getElementById(
-"receiver"
-).value,
+      email:
+        customer.email,
 
-phone:
-document.getElementById(
-"phone"
-).value,
+      receiver:
+        document.getElementById(
+          "receiver"
+        ).value,
 
-address:
-document.getElementById(
-"address"
-).value,
+      phone:
+        document.getElementById(
+          "phone"
+        ).value,
 
-subdistrict:
-document.getElementById(
-"subdistrict"
-).value,
+      address:
+        document.getElementById(
+          "address"
+        ).value,
 
-district:
-document.getElementById(
-"district"
-).value,
+      subdistrict:
+        document.getElementById(
+          "subdistrict"
+        ).value,
 
-province:
-document.getElementById(
-"province"
-).value,
+      district:
+        document.getElementById(
+          "district"
+        ).value,
 
-postcode:
-document.getElementById(
-"postcode"
-).value,
+      province:
+        document.getElementById(
+          "province"
+        ).value,
 
-label:
-"บ้าน",
+      postcode:
+        document.getElementById(
+          "postcode"
+        ).value,
 
-is_default:
-true
+      label:"บ้าน",
 
-};
+      is_default:true
 
-if(
-!payload.receiver ||
-!payload.phone ||
-!payload.address
-){
+    };
 
-alert(
-"กรุณากรอกข้อมูลให้ครบ"
-);
+    if(
+      !payload.receiver ||
+      !payload.phone ||
+      !payload.address
+    ){
 
-btn.disabled = false;
+      alert(
+        "กรุณากรอกข้อมูลให้ครบ"
+      );
 
-btn.textContent =
-"บันทึกที่อยู่";
+      btn.disabled = false;
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
+      btn.textContent =
+        "บันทึกที่อยู่";
 
-return;
+      document.getElementById(
+        "loadingOverlay"
+      ).style.display =
+        "none";
 
-}
+      return;
 
-const formData =
-new FormData();
+    }
 
-formData.append(
-"action",
-"saveCustomerAddress"
-);
+    const formData =
+      new FormData();
 
-formData.append(
-"payload",
-JSON.stringify(
-payload
-)
-);
+    formData.append(
+      "action",
+      "saveCustomerAddress"
+    );
 
-const response =
-await fetch(
-API,
-{
-method:"POST",
-body:formData
-}
-);
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
 
-const result =
-await response.json();
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
 
-if(result.success){
+    const result =
+      await response.json();
 
-alert(
-"บันทึกที่อยู่เรียบร้อย"
-);
+    if(result.success){
 
-const from =
-new URLSearchParams(window.location.search).get("from");
+      alert(
+        "บันทึกที่อยู่เรียบร้อย"
+      );
 
-if(from === "register"){
+      const from =
+        new URLSearchParams(
+          window.location.search
+        ).get("from");
 
-window.location =
-"home.html";
+      if(from === "register"){
 
-}else{
+        window.location =
+          "home.html";
 
-window.location =
-"address-book.html";
+      }else{
 
-}
+        window.location =
+          "address-book.html";
 
-}
+      }
 
-else{
+    }else{
 
-alert(
-result.error || "บันทึกที่อยู่ไม่สำเร็จ"
-);
+      alert(
+        result.error ||
+        "บันทึกที่อยู่ไม่สำเร็จ"
+      );
 
-btn.disabled = false;
+      btn.disabled = false;
 
-btn.textContent =
-"บันทึกที่อยู่";
+      btn.textContent =
+        "บันทึกที่อยู่";
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
+      document.getElementById(
+        "loadingOverlay"
+      ).style.display =
+        "none";
 
-}
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "บันทึกที่อยู่";
+
+    document.getElementById(
+      "loadingOverlay"
+    ).style.display =
+      "none";
+
+  }
 
 }
 
