@@ -316,65 +316,66 @@ async function loadProducts(){
 
 }
 
-function createCard(product){
+  function createCard(product){
 
-return `
+  const price =
+    Number(
+      product.final_price ??
+      product.price ??
+      0
+    );
 
-<div
-class="card"
-onclick="
-window.location.href=
-'product.html?id=${product.product_id}'
-">
+  return `
 
-<img
-src="${product.image}"
-alt="${product.name}">
+    <div
+    class="card"
+    onclick="
+      window.location.href=
+      'product.html?id=${product.product_id}'
+    ">
 
-<div class="card-body">
+      <img
+      src="${product.image || ""}"
+      alt="${product.name || ""}">
 
-${
-product.new_arrival
-?
-`
-<div class="badge-new">
-NEW
-</div>
-`
-:
-""
+      <div class="card-body">
+
+        ${
+          product.new_arrival
+          ? `
+            <div class="badge-new">
+              NEW
+            </div>
+          `
+          : ""
+        }
+
+        ${
+          product.product_type ===
+          "preorder"
+          ? `
+            <div class="badge-preorder">
+              PREORDER
+            </div>
+          `
+          : ""
+        }
+
+        <h3>
+          ${product.name || "-"}
+        </h3>
+
+        <p>
+          ฿${price}
+        </p>
+
+      </div>
+
+    </div>
+
+  `;
+
 }
-
-${
-product.product_type ===
-"preorder"
-?
-`
-<div class="badge-preorder">
-PREORDER
-</div>
-`
-:
-""
-}
-
-<h3>
-${product.name}
-</h3>
-
-<p>
-฿${product.price}
-</p>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-updateCartCount();
 
 function updateCartCount(){
 
@@ -414,7 +415,7 @@ cartLink.textContent =
 }
 
 }
-loadHome();
+
 </script>
 
 </body>
