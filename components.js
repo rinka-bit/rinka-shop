@@ -1,5 +1,19 @@
 function createProductCard(product){
 
+const price =
+Number(
+product.final_price ??
+product.price ??
+0
+);
+
+const oldPrice =
+Number(
+product.old_price ??
+product.price ??
+0
+);
+
 return `
 
 <div
@@ -102,13 +116,13 @@ product.on_sale
 
 <div class="sale-price">
 
-฿${product.price}
+฿${price.toLocaleString()}
 
 </div>
 
 <div class="old-price">
 
-฿${product.old_price}
+฿${oldPrice.toLocaleString()}
 
 </div>
 
@@ -120,7 +134,7 @@ product.on_sale
 
 <div class="normal-price">
 
-฿${product.price}
+฿${price.toLocaleString()}
 
 </div>
 
