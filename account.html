@@ -515,64 +515,106 @@ loadOrders();
 
 async function loadOrders(){
 
-const response =
-await fetch(
+  try{
 
-API +
-"?action=customerOrders&email="
-+
-encodeURIComponent(
-customer.email
-)
+    const response =
+      await fetch(
 
-);
+        API +
+        "?action=customerOrders&email=" +
+        encodeURIComponent(
+          customer.email
+        )
 
-const orders =
-await response.json();
+      );
 
-const pending =
+    const result =
+      await response.json();
 
-orders.filter(
-o => o.status === "pending"
-).length;
+    const orders =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.orders)
+          ? result.orders
+          : [];
 
-const china =
+    const pending =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "pending"
+      ).length;
 
-orders.filter(
-o => o.status === "china_arrived"
-).length;
+    const china =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "china_arrived"
+      ).length;
 
-const shipping =
+    const shipping =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "shipping_to_th"
+      ).length;
 
-orders.filter(
-o => o.status === "shipping_to_th"
-).length;
+    const ready =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "ready_to_ship"
+      ).length;
 
-const ready =
+    document.getElementById(
+      "pendingCount"
+    ).textContent =
+      pending;
 
-orders.filter(
-o => o.status === "ready_to_ship"
-).length;
+    document.getElementById(
+      "chinaCount"
+    ).textContent =
+      china;
 
-document.getElementById(
-"pendingCount"
-).textContent =
-pending;
+    document.getElementById(
+      "shippingCount"
+    ).textContent =
+      shipping;
 
-document.getElementById(
-"chinaCount"
-).textContent =
-china;
+    document.getElementById(
+      "readyCount"
+    ).textContent =
+      ready;
 
-document.getElementById(
-"shippingCount"
-).textContent =
-shipping;
+  }
+  catch(error){
 
-document.getElementById(
-"readyCount"
-).textContent =
-ready;
+    console.error(
+      "loadOrders error:",
+      error
+    );
+
+    document.getElementById(
+      "pendingCount"
+    ).textContent = "0";
+
+    document.getElementById(
+      "chinaCount"
+    ).textContent = "0";
+
+    document.getElementById(
+      "shippingCount"
+    ).textContent = "0";
+
+    document.getElementById(
+      "readyCount"
+    ).textContent = "0";
+
+  }
 
 }
 
