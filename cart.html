@@ -395,60 +395,58 @@ loadCart();
 
 function loadCart(){
 
-updateCartCount();
+  updateCartCount();
 
-const cart =
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
+  const cart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
 
-let total = 0;
+  let total = 0;
 
-if(
-cart.length === 0
-){
+  if(cart.length === 0){
 
-document
-.getElementById(
-"cartItems"
-)
-.innerHTML =
+    document
+    .getElementById(
+      "cartItems"
+    ).innerHTML = `
+      <h3>
+        🛒 ยังไม่มีสินค้าในตะกร้า
+      </h3>
+    `;
 
-`
-<h3>
+    document
+    .getElementById(
+      "total"
+    ).textContent = "";
 
-🛒 ยังไม่มีสินค้าในตะกร้า
+    return;
 
-</h3>
-`;
+  }
 
-document
-.getElementById(
-"total"
-)
-.textContent = "";
+  document
+  .getElementById(
+    "cartItems"
+  ).innerHTML =
 
-return;
+  cart.map((item,index)=>{
 
-}
+    const price =
+      Number(
+        item.final_price ??
+        item.price ??
+        0
+      );
 
-document
-.getElementById(
-"cartItems"
-)
-.innerHTML =
+    const lineTotal =
+      price *
+      Number(item.qty);
 
-cart.map((item,index)=>{
+    total += lineTotal;
 
-total +=
-
-Number(item.price)
-*
-Number(item.qty);
-
-return `
+    return `
 
 <div class="cart-item">
 
@@ -456,8 +454,7 @@ return `
 type="checkbox"
 class="checkout-item"
 data-index="${index}"
-checked
->
+checked>
 
 <img
 src="${item.image}">
@@ -467,6 +464,7 @@ src="${item.image}">
 <h3>
 ${item.name}
 </h3>
+
 ${
 item.selected_options
 
@@ -478,7 +476,7 @@ item.selected_options
 
 .map(
 
-([key,value]) => {
+([key,value])=>{
 
 const text =
 Array.isArray(value)
@@ -496,8 +494,7 @@ background:#eef8ff;
 padding:5px 10px;
 border-radius:999px;
 display:inline-block;
-"
->
+">
 
 ${key} :
 ${text}
@@ -515,7 +512,9 @@ ${text}
 :
 
 ""
+
 }
+
 <div>
 
 <button
@@ -526,7 +525,9 @@ ${index},
 -1
 )
 ">
+
 −
+
 </button>
 
 ${item.qty}
@@ -539,19 +540,24 @@ ${index},
 1
 )
 ">
+
 +
+
 </button>
 
 </div>
 
 <p>
 
-฿${item.price}
+฿${price}
+
 x
+
 ${item.qty}
 
 =
-฿${item.price * item.qty}
+
+฿${lineTotal}
 
 </p>
 
@@ -562,7 +568,9 @@ removeItem(
 ${index}
 )
 ">
+
 🗑️ ลบ
+
 </button>
 
 </div>
@@ -571,15 +579,13 @@ ${index}
 
 `;
 
-}).join("");
+  }).join("");
 
-document
-.getElementById(
-"total"
-)
-.textContent =
-
-`ยอดรวม ฿${total}`;
+  document
+  .getElementById(
+    "total"
+  ).textContent =
+  `ยอดรวม ฿${total}`;
 
 }
 
