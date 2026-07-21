@@ -346,78 +346,104 @@ const API =
 
 async function submitRequest(){
 
-const payload = {
+  const payload = {
 
-order_id:
-document.getElementById(
-"orderId"
-).value,
+    order_id:
+      document.getElementById(
+        "orderId"
+      ).value.trim(),
 
-customer_name:
-document.getElementById(
-"customerName"
-).value,
+    customer_name:
+      document.getElementById(
+        "customerName"
+      ).value.trim(),
 
-phone:
-document.getElementById(
-"phone"
-).value,
+    phone:
+      document.getElementById(
+        "phone"
+      ).value.trim(),
 
-social:
-document.getElementById(
-"social"
-).value,
+    social:
+      document.getElementById(
+        "social"
+      ).value.trim(),
 
-address:
-document.getElementById(
-"address"
-).value
+    address:
+      document.getElementById(
+        "address"
+      ).value.trim()
 
-};
+  };
 
-const formData =
-new FormData();
+  if(
+    !payload.order_id ||
+    !payload.customer_name ||
+    !payload.address
+  ){
 
-formData.append(
-"payload",
-JSON.stringify(payload)
-);
+    alert(
+      "กรุณากรอกข้อมูลให้ครบ"
+    );
 
-const response =
-await fetch(
+    return;
 
-API +
-"?action=changeAddress",
+  }
 
-{
-method:"POST",
-body:formData
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "changeAddress"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(result.success){
+
+      alert(
+        "ส่งคำขอเรียบร้อย"
+      );
+
+      location.reload();
+
+    }else{
+
+      alert(
+        result.error ||
+        "เกิดข้อผิดพลาด"
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"
+    );
+
+  }
+
 }
-
-);
-
-const result =
-await response.json();
-
-if(result.success){
-
-alert(
-"ส่งคำขอเรียบร้อย"
-);
-
-location.reload();
-
-}else{
-
-alert(
-"เกิดข้อผิดพลาด"
-);
-
-}
-
-}
-
-updateCartCount();
 
 function updateCartCount(){
 
