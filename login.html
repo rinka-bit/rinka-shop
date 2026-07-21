@@ -147,166 +147,193 @@ const API =
 
 async function register(){
 
-const btn =
-document.getElementById(
-"registerBtn"
-);
+  const btn =
+    document.getElementById(
+      "registerBtn"
+    );
 
-if(btn.disabled){
-return;
-}
+  if(btn.disabled){
+    return;
+  }
 
-btn.disabled = true;
+  btn.disabled = true;
 
-btn.textContent =
-"กำลังเข้าสู่ระบบ...";
+  btn.textContent =
+    "กำลังเข้าสู่ระบบ...";
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"flex";
+  document.getElementById(
+    "loadingOverlay"
+  ).style.display =
+    "flex";
 
-const payload = {
+  try{
 
-username:
-document.getElementById(
-"username"
-).value,
+    const payload = {
 
-email:
-document.getElementById(
-"email"
-).value,
+      username:
+        document.getElementById(
+          "username"
+        ).value.trim(),
 
-twitter:
-document.getElementById(
-"twitter"
-).value
+      email:
+        document.getElementById(
+          "email"
+        ).value.trim(),
 
-};
+      twitter:
+        document.getElementById(
+          "twitter"
+        ).value.trim()
 
-if(
-!payload.username ||
-!payload.email
-){
+    };
 
-alert(
-"กรุณากรอกข้อมูลให้ครบ"
-);
+    if(
+      !payload.username ||
+      !payload.email
+    ){
 
-btn.disabled = false;
+      alert(
+        "กรุณากรอกข้อมูลให้ครบ"
+      );
 
-btn.textContent =
-"เริ่มใช้งาน";
+      return;
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
+    }
 
-return;
+    const formData =
+      new FormData();
 
-}
+    formData.append(
+      "action",
+      "saveCustomer"
+    );
 
-const formData =
-new FormData();
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
 
-formData.append(
-"action",
-"saveCustomer"
-);
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
 
-formData.append(
-"payload",
-JSON.stringify(
-payload
-)
-);
+    const result =
+      await response.json();
 
-const response =
-await fetch(
-API,
-{
-method:"POST",
-body:formData
-}
-);
+    if(!result.success){
 
-const result =
-await response.json();
+      alert(
+        result.message ||
+        "เกิดข้อผิดพลาด"
+      );
 
-if(!result.success){
+      return;
 
-alert(
-"เกิดข้อผิดพลาด"
-);
+    }
 
-btn.disabled = false;
+    localStorage.setItem(
 
-btn.textContent =
-"เริ่มใช้งาน";
+      "customer",
 
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
+      JSON.stringify({
 
-return;
+        customer_id:
+          result.customer_id,
 
-}
+        ...payload
 
-localStorage.setItem(
+      })
 
-"customer",
+    );
 
-JSON.stringify({
+    await checkAddress(
+      payload.email
+    );
 
-customer_id:
-result.customer_id,
+  }catch(error){
 
-...payload
+    console.error(
+      "register error",
+      error
+    );
 
-})
+    alert(
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
 
-);
+  }finally{
 
-checkAddress(
-payload.email
-);
+    btn.disabled = false;
+
+    btn.textContent =
+      "เริ่มใช้งาน";
+
+    document.getElementById(
+      "loadingOverlay"
+    ).style.display =
+      "none";
+
+  }
 
 }
 
 async function checkAddress(email){
 
-const response =
-await fetch(
+  try{
 
-API +
-"?action=customerAddresses&email=" +
-encodeURIComponent(
-email
-)
+    const response =
+      await fetch(
 
-);
+        API +
+        "?action=customerAddresses&email=" +
+        encodeURIComponent(
+          email
+        )
 
-const addresses =
-await response.json();
+      );
 
-if(
-addresses.length
-=== 0
-){
+    const result =
+      await response.json();
 
-window.location =
-"address.html?from=register";
+    const addresses =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.addresses)
+          ? result.addresses
+          : [];
 
-}
-else{
+    if(
+      addresses.length === 0
+    ){
 
-window.location =
-"home.html";
+      window.location =
+        "address.html?from=register";
 
-}
+    }else{
+
+      window.location =
+        "home.html";
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "checkAddress error",
+      error
+    );
+
+    window.location =
+      "home.html";
+
+  }
 
 }
 
