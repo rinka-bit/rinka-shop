@@ -371,195 +371,280 @@ function loadCheckout(){
 
 async function loadDefaultAddress(){
 
-let selectedAddress =
-JSON.parse(
-localStorage.getItem(
-"selectedCheckoutAddress"
-) || "null"
-);
+  let selectedAddress =
+    JSON.parse(
+      localStorage.getItem(
+        "selectedCheckoutAddress"
+      ) || "null"
+    );
 
-if(!selectedAddress){
+  try{
 
-const response =
-await fetch(
-API +
-"?action=customerAddresses&email=" +
-encodeURIComponent(
-customer.email
-)
-);
+    if(!selectedAddress){
 
-const addresses =
-await response.json();
+      const response =
+        await fetch(
+          API +
+          "?action=customerAddresses&email=" +
+          encodeURIComponent(
+            customer.email
+          )
+        );
 
-selectedAddress =
-addresses.find(
-a => a.is_default
-) || addresses[0];
+      const result =
+        await response.json();
 
-}
+      const addresses =
+        Array.isArray(result)
+          ? result
+          : Array.isArray(result.addresses)
+            ? result.addresses
+            : [];
 
-if(!selectedAddress){
+      selectedAddress =
+        addresses.find(
+          address =>
+            address.is_default === true ||
+            String(
+              address.is_default || ""
+            ).toLowerCase() === "true" ||
+            Number(
+              address.is_default
+            ) === 1
+        ) ||
+        addresses[0] ||
+        null;
 
-document.getElementById(
-"selectedAddress"
-).innerHTML =
-"ยังไม่มีที่อยู่จัดส่ง กรุณาเพิ่มที่อยู่ก่อน";
+    }
 
-return;
+    if(!selectedAddress){
 
-}
+      document.getElementById(
+        "selectedAddress"
+      ).innerHTML =
+        "ยังไม่มีที่อยู่จัดส่ง กรุณาเพิ่มที่อยู่ก่อน";
 
-window.checkoutAddress =
-selectedAddress;
+      window.checkoutAddress =
+        null;
 
-document.getElementById(
-"selectedAddress"
-).innerHTML = `
+      return;
 
-<div
-style="
-padding:12px;
-border:1px solid #eee;
-border-radius:12px;
-background:#f8fbff;
-line-height:1.7;
-">
+    }
 
-<b>
-${selectedAddress.receiver}
-</b>
+    window.checkoutAddress =
+      selectedAddress;
 
-<br>
+    document.getElementById(
+      "selectedAddress"
+    ).innerHTML = `
 
-${selectedAddress.phone}
+      <div
+      style="
+      padding:12px;
+      border:1px solid #eee;
+      border-radius:12px;
+      background:#f8fbff;
+      line-height:1.7;
+      ">
 
-<br>
+        <b>
+          ${escapeHtml(
+            selectedAddress.receiver || ""
+          )}
+        </b>
 
-${selectedAddress.address}
+        <br>
 
-<br>
+        ${escapeHtml(
+          selectedAddress.phone || ""
+        )}
 
-${selectedAddress.subdistrict}
-${selectedAddress.district}
+        <br>
 
-<br>
+        ${escapeHtml(
+          selectedAddress.address || ""
+        )}
 
-${selectedAddress.province}
-${selectedAddress.postcode}
+        <br>
 
-</div>
+        ${escapeHtml(
+          selectedAddress.subdistrict || ""
+        )}
 
-`;
+        ${escapeHtml(
+          selectedAddress.district || ""
+        )}
+
+        <br>
+
+        ${escapeHtml(
+          selectedAddress.province || ""
+        )}
+
+        ${escapeHtml(
+          selectedAddress.postcode || ""
+        )}
+
+      </div>
+
+    `;
+
+  }catch(error){
+
+    console.error(
+      "loadDefaultAddress error",
+      error
+    );
+
+    window.checkoutAddress =
+      null;
+
+    document.getElementById(
+      "selectedAddress"
+    ).innerHTML =
+      "โหลดที่อยู่จัดส่งไม่สำเร็จ กรุณาลองใหม่";
+
+  }
 
 }
   
 function renderItems(){
 
-let html = "";
-let total = 0;
+  let html = "";
+  let total = 0;
 
-cart.forEach(item=>{
+  if(!cart.length){
 
-const price =
-Number(item.price);
+    document
+      .getElementById(
+        "items"
+      )
+      .innerHTML =
+      "ไม่มีสินค้าในรายการสั่งซื้อ";
 
-const qty =
-Number(item.qty);
+    document
+      .getElementById(
+        "total"
+      )
+      .textContent =
+      "รวม 0 บาท";
 
-total +=
-price * qty;
+    return;
 
-const optionText =
+  }
 
-item.selected_options
+  cart.forEach(item=>{
 
-?
+    const price =
+      Number(
+        item.final_price ??
+        item.price ??
+        0
+      );
 
-Object.entries(
-item.selected_options
-)
+    const qty =
+      Math.max(
+        1,
+        Number(
+          item.qty || 1
+        )
+      );
 
-.map(
-([k,v])=>
+    const lineTotal =
+      price * qty;
 
-`${k}: ${
-Array.isArray(v)
-? v.join(", ")
-: v
-}`
+    total +=
+      lineTotal;
 
-)
+    const optionText =
+      item.selected_options
+        ? Object.entries(
+            item.selected_options
+          )
+          .map(([key,value])=>{
 
-.join("<br>")
+            const text =
+              Array.isArray(value)
+                ? value.join(", ")
+                : value;
 
-:
+            return `
+              ${escapeHtml(key)}:
+              ${escapeHtml(text)}
+            `;
 
-"";
+          })
+          .join("<br>")
+        : "";
 
-html += `
+    html += `
 
-<div
-style="
-padding:12px;
-border:1px solid #eee;
-border-radius:12px;
-margin-bottom:12px;
-">
+      <div
+      style="
+      padding:12px;
+      border:1px solid #eee;
+      border-radius:12px;
+      margin-bottom:12px;
+      ">
 
-<div
-style="
-font-weight:700;
-margin-bottom:6px;
-">
+        <div
+        style="
+        font-weight:700;
+        margin-bottom:6px;
+        ">
 
-${item.name}
+          ${escapeHtml(
+            item.name || ""
+          )}
 
-</div>
+        </div>
 
-<div
-style="
-font-size:13px;
-color:#666;
-margin-bottom:8px;
-">
+        <div
+        style="
+        font-size:13px;
+        color:#666;
+        margin-bottom:8px;
+        ">
 
-${optionText}
+          ${optionText}
 
-</div>
+        </div>
 
-<div>
+        <div>
 
-${qty}
-ชิ้น
+          ${qty} ชิ้น
+          ×
+          ฿${price.toLocaleString()}
 
-×
+          <br>
 
-฿${price}
+          รวม
+          ฿${lineTotal.toLocaleString()}
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-`;
-});
+    `;
 
-document
-.getElementById(
-"items"
-)
-.innerHTML =
-html;
+  });
 
-document
-.getElementById(
-"total"
-)
-.innerHTML =
-`รวม ${total} บาท`;
+  document
+    .getElementById(
+      "items"
+    )
+    .innerHTML =
+    html;
+
+  document
+    .getElementById(
+      "total"
+    )
+    .textContent =
+    `รวม ${total.toLocaleString()} บาท`;
 
 }
-
+  
 function escapeHtml(
   value
 ){
@@ -1455,19 +1540,25 @@ function getCollectionTotals(){
 
     }
 
+    const price =
+      Number(
+        item.final_price ??
+        item.price ??
+        0
+      );
+
+    const qty =
+      Math.max(
+        0,
+        Number(
+          item.qty || 0
+        )
+      );
+
     collectionTotals[
       collectionId
     ] +=
-
-      Number(
-        item.price || 0
-      )
-
-      *
-
-      Number(
-        item.qty || 0
-      );
+      price * qty;
 
   });
 
