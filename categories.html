@@ -411,70 +411,90 @@ loadCategories();
 
 async function loadCategories(){
 
-const response =
-await fetch(API);
+  try{
 
-const products =
-await response.json();
+    const response =
+      await fetch(API);
 
-const categories =
+    const result =
+      await response.json();
 
-[
-...new Set(
-products
-.map(
-p => p.main_category
-)
-.filter(Boolean)
-)
-];
+    const products =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.products)
+          ? result.products
+          : [];
 
-document
-.getElementById(
-"categories"
-)
-.innerHTML =
+    const categories = [
+      ...new Set(
+        products
+          .map(
+            product =>
+              product.main_category
+          )
+          .filter(Boolean)
+      )
+    ];
 
-categories.map(category => {
+    document
+      .getElementById(
+        "categories"
+      )
+      .innerHTML =
 
-const count =
+      categories.map(category=>{
 
-products.filter(
-p=>p.main_category === category
-).length;
+        const count =
+          products.filter(
+            product =>
+              product.main_category ===
+              category
+          ).length;
 
-return `
+        return `
 
-<div
-class="category-card"
-onclick="
+          <div
+          class="category-card"
+          onclick="
+            window.location.href=
+            'browse.html?type=main_category&value=${encodeURIComponent(category)}'
+          ">
 
-window.location.href=
-'browse.html?type=main_category&value=${encodeURIComponent(category)}'
-">
+            <h2>
+              ${category}
+            </h2>
 
-<h2>
+            <p>
+              ${count} รายการ
+            </p>
 
-${category}
+          </div>
 
-</h2>
+        `;
 
-<p>
+      }).join("");
 
-${count}
-รายการ
+  }catch(error){
 
-</p>
+    console.error(
+      "โหลดหมวดสินค้าไม่สำเร็จ",
+      error
+    );
 
-</div>
+    document
+      .getElementById(
+        "categories"
+      )
+      .innerHTML = `
+        <p>
+          โหลดหมวดสินค้าไม่สำเร็จ
+        </p>
+      `;
 
-`;
-
-}).join("");
+  }
 
 }
-
-updateCartCount();
 
 function updateCartCount(){
 
