@@ -11,9 +11,7 @@ function renderGiftManager(){
     );
 
   if(!box){
-
     return;
-
   }
 
   box.innerHTML = `
@@ -317,18 +315,27 @@ ${escapeHtml(
 Tier
 </label>
 
-<select
+<input
 id="gr_tier_name"
-onchange="
+list="gr_tier_name_list"
+placeholder="เช่น Tier 1"
+oninput="
 handleGiftRuleTierChange()
 "
 >
 
-<option value="">
--- เลือก Tier --
-</option>
+<datalist id="gr_tier_name_list">
+</datalist>
 
-</select>
+<p
+style="
+font-size:12px;
+color:#64748b;
+margin:6px 0 0;
+"
+>
+เลือก Tier เดิมจากรายการ หรือพิมพ์ชื่อ Tier ใหม่ได้
+</p>
 
 </div>
 
@@ -501,17 +508,6 @@ margin:6px 0 0;
 
 </div>
 
-<!--
-ช่อง Legacy ชั่วคราว
-
-ฟังก์ชันเดิมบางตัวยังอ้างถึง
-gr_allow_duplicate
-
-จึงเก็บไว้แบบซ่อนก่อน
-จนกว่าจะเปลี่ยน submitGiftRule()
-ในขั้นถัดไป
--->
-
 <div style="display:none;">
 
 <select id="gr_allow_duplicate">
@@ -572,6 +568,8 @@ style="display:none;"
   toggleLowerTierBox();
 
   updateGiftCampaignTierOptions();
+
+  updateGiftRuleTierOptions();
 
 }
 
@@ -2839,7 +2837,7 @@ removeGiftCampaign(
 
 }
 
-  function updateGiftRuleTierOptions(
+function updateGiftRuleTierOptions(
   preferredTierName = ""
 ){
 
@@ -2848,18 +2846,22 @@ removeGiftCampaign(
       "gr_collection_id"
     );
 
-  const tierSelect =
+  const tierInput =
     document.getElementById(
       "gr_tier_name"
     );
 
+  const tierList =
+    document.getElementById(
+      "gr_tier_name_list"
+    );
+
   if(
     !collectionSelect ||
-    !tierSelect
+    !tierInput ||
+    !tierList
   ){
-
     return;
-
   }
 
   const collectionId =
@@ -2870,19 +2872,17 @@ removeGiftCampaign(
   const previousTierName =
     String(
       preferredTierName ||
-      tierSelect.value ||
+      tierInput.value ||
       ""
     ).trim();
 
   if(!collectionId){
 
-    tierSelect.innerHTML = `
+    tierInput.value = "";
 
-      <option value="">
-        เลือก Tier
-      </option>
+    tierInput.disabled = true;
 
-    `;
+    tierList.innerHTML = "";
 
     fillGiftRuleForm();
 
@@ -2890,58 +2890,32 @@ removeGiftCampaign(
 
   }
 
+  tierInput.disabled = false;
+
   const tierNames =
-    getGiftTiersByCollection(
+    getAdminGiftTierNamesByCollection(
       collectionId
     );
 
-  tierSelect.innerHTML = `
-
-    <option value="">
-      เลือก Tier
-    </option>
-
-    ${tierNames
+  tierList.innerHTML =
+    tierNames
       .map(
         tierName => `
 
-          <option
-          value="${escapeHtml(
-            tierName
-          )}"
-          >
+<option
+value="${escapeHtml(
+  tierName
+)}"
+>
+</option>
 
-            ${escapeHtml(
-              tierName
-            )}
-
-          </option>
-
-        `
+`
       )
-      .join("")}
+      .join("");
 
-  `;
-
-  const matchingTier =
-    tierNames.find(
-      tierName =>
-
-        String(
-          tierName
-        )
-          .trim()
-          .toLowerCase() ===
-
-        previousTierName
-          .toLowerCase()
-
-    );
-
-  tierSelect.value =
-    matchingTier || "";
+  tierInput.value =
+    previousTierName;
 
   fillGiftRuleForm();
 
-}
-
+}  
