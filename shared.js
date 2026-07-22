@@ -167,8 +167,13 @@ function compressImage(file, maxWidth = 1280, quality = 0.72) {
 /* ================= Header + Bottom Nav (กัน markup ซ้ำทุกหน้า) =================
  * ใช้: <div id="rkChrome"></div>  แล้วเรียก renderChrome("home", "หน้าแรก")
  * page = "home" | "browse" | "cart" | "account"  (ใช้ไฮไลต์ bottom nav)
+ *
+ * showNav (default true): ปิดได้บนหน้า flow ที่มีปุ่มขั้นตอนของตัวเองอยู่แล้ว
+ * (checkout, payment) เพราะ bottom nav (z-index:200) จะ fixed ทับปุ่มหลักของ
+ * หน้านั้น (z-index:150) ที่ตำแหน่งเดียวกันพอดี — ไม่ใช่แค่แก้ z-index แต่ตัด
+ * tab nav ออกไปเลยระหว่าง flow เพราะไม่ควรมีทางออกจาก flow มาแข่งกับปุ่มหลัก
  */
-function renderChrome(page, title) {
+function renderChrome(page, title, showNav = true) {
   const mount = document.getElementById("rkChrome");
   if (!mount) return;
   const isActive = (p) => (p === page ? "active" : "");
@@ -182,6 +187,9 @@ function renderChrome(page, title) {
         🛒<span class="rk-cart-count" data-cart-count>0</span>
       </a>
     </header>
+    ${
+      showNav
+        ? `
     <nav class="rk-bottom-nav">
       <a href="home.html" class="${isActive("home")}">
         <span class="rk-nav-icon">🏠</span>หน้าแรก
@@ -196,7 +204,9 @@ function renderChrome(page, title) {
       <a href="account.html" class="${isActive("account")}">
         <span class="rk-nav-icon">👤</span>บัญชี
       </a>
-    </nav>
+    </nav>`
+        : ""
+    }
   `;
   RinkaCart.updateBadge();
 }
