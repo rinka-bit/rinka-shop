@@ -2,244 +2,111 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ชำระเงิน — Rinka Shop</title>
-<link rel="stylesheet" href="shared.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ชำระเงิน | Rinka Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <style>
-  body{ padding-bottom: 110px; }
-  .rk-container{ padding: 16px 18px; }
-  .rk-bank-option{
-    display:flex; align-items:center; gap:12px;
-    border: 1.5px solid var(--rk-border); border-radius: var(--rk-radius-sm);
-    padding:12px; margin-bottom:10px; cursor:pointer;
-  }
-  .rk-bank-option.selected{ border-color: var(--rk-primary); background: var(--rk-primary-soft); }
-  .rk-bank-option input{ width:auto; }
-  .rk-bank-name{ font-weight:700; font-size:14.5px; }
-  .rk-bank-owner{ font-size:12.5px; color: var(--rk-ink-soft); }
-  .rk-qr-img{ display:block; width:100%; max-width:280px; margin: 14px auto 0; border-radius: var(--rk-radius-md); }
-  .rk-copy-row{
-    display:flex; align-items:center; justify-content:space-between;
-    background: var(--rk-surface-2); border-radius: var(--rk-radius-sm);
-    padding: 12px 14px; margin-top:10px; font-family: var(--rk-font-mono); font-weight:700;
-  }
-  .rk-upload-box{
-    border: 2px dashed var(--rk-border); border-radius: var(--rk-radius-md);
-    padding: 24px; text-align:center; cursor:pointer; color: var(--rk-ink-soft);
-    position:relative;
-  }
-  .rk-upload-box.has-file{ border-color: var(--rk-success); background: var(--rk-success-soft); color: var(--rk-success); }
-  .rk-upload-box input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
-  .rk-slip-preview{ max-width: 180px; border-radius: var(--rk-radius-sm); margin: 10px auto 0; display:block; }
-  .rk-compress-note{ font-size:11.5px; color: var(--rk-ink-faint); margin-top:6px; }
-
-  .rk-bottom-bar{
-    position:fixed; left:0; right:0; bottom:0; z-index:150;
-    background: rgba(255,255,255,.97); backdrop-filter: blur(10px);
-    border-top: 1px solid var(--rk-border);
-    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
-  }
+.bank-card{border:1px solid var(--mist-dark); border-radius:12px; padding:16px; margin-bottom:12px; display:flex; gap:14px; align-items:center;}
+.bank-card img{width:70px; height:70px; object-fit:contain; border-radius:8px; background:var(--mist);}
 </style>
 </head>
 <body>
+<div id="site-header"></div>
 
-<div id="rkChrome"></div>
+<section class="section">
+  <div class="wrap" style="max-width:640px;">
+    <div class="dashed-panel center" style="margin-bottom:24px;">
+      <div style="font-size:1.9rem;">📮</div>
+      <h2 style="margin:8px 0 4px;">เลขที่ออเดอร์ <span id="orderIdText"></span></h2>
+      <p class="muted mb-0">ยอดที่ต้องชำระ: <strong id="amountText" style="color:var(--stamp);"></strong></p>
+    </div>
 
-<div class="rk-container">
-  <div class="rk-card" style="margin-bottom:14px;">
-    <h2 style="font-size:15px;">เลือกช่องทางชำระเงิน</h2>
-    <div id="bankList"></div>
-    <div id="bankDetail"></div>
+    <h3>ช่องทางการชำระเงิน</h3>
+    <div id="banksList"></div>
+
+    <h3 style="margin-top:24px;">แนบสลิปการโอนเงิน</h3>
+    <div class="slip-drop" id="slipDrop" onclick="document.getElementById('slipInput').click()">
+      <div id="slipPreview">
+        <div style="font-size:2rem;">📎</div>
+        <p class="mb-0 muted">คลิกเพื่อเลือกรูปสลิป (PNG / JPG / WEBP)</p>
+      </div>
+    </div>
+    <input type="file" id="slipInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;" onchange="onSlipSelected(this)">
+
+    <button class="btn btn-primary btn-block" id="submitPaymentBtn" style="margin-top:20px;" onclick="submitPayment()">ยืนยันการชำระเงิน</button>
+    <p class="hint center" style="margin-top:10px;">เมื่อยืนยันแล้ว ระบบจะส่งอีเมลยืนยันให้อัตโนมัติ</p>
   </div>
+</section>
 
-  <div class="rk-card">
-    <h2 style="font-size:15px;">แนบสลิปโอนเงิน</h2>
-    <label class="rk-upload-box" id="uploadBox">
-      <input type="file" id="slip" accept="image/*" onchange="handleSlipSelect(event)">
-      <div id="uploadPrompt">📎 แตะเพื่อเลือกรูปสลิป</div>
-      <img id="slipPreview" class="rk-slip-preview rk-hidden" alt="สลิปที่แนบ">
-    </label>
-    <div class="rk-compress-note" id="compressNote"></div>
-  </div>
-</div>
-
-<div class="rk-bottom-bar">
-  <button id="submitBtn" class="rk-btn rk-btn-primary rk-btn-block" onclick="submitOrder()">
-    ยืนยันการชำระเงิน
-  </button>
-</div>
-
-<script src="toast.js"></script>
-<script src="shared.js"></script>
+<div id="site-footer"></div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/common.js"></script>
 <script>
-// showNav = false: ปิด bottom tab nav ระหว่างหน้าชำระเงิน เพราะมันเป็น
-// fixed bottom ที่ z-index สูงกว่า .rk-bottom-bar และซ้อนทับปุ่ม
-// "ยืนยันการชำระเงิน" พอดี ทำให้กดปุ่มไม่ได้ (นี่คือสาเหตุจริงของบั๊ก)
-renderChrome("payment", "ชำระเงิน", false);
+let SLIP_BASE64 = "";
+const orderId = qs("id");
+const total = qs("total");
 
-let bankData = [];
-let slipBase64 = null;
+document.getElementById("orderIdText").textContent = orderId || "-";
+document.getElementById("amountText").textContent = total ? money(total) : "-";
+
+async function loadBanks(){
+  try{
+    const banks = await RinkaAPI.getBanks();
+    const mount = document.getElementById("banksList");
+    mount.innerHTML = Array.isArray(banks) && banks.length ? banks.map(b => `
+      <div class="bank-card">
+        ${b.qr_image ? `<img src="${b.qr_image}" alt="QR">` : `<div style="width:70px;height:70px;border-radius:8px;background:var(--mist);"></div>`}
+        <div>
+          <div style="font-weight:700;">${b.bank_name}</div>
+          <div class="muted" style="font-size:.88rem;">${b.account_name}</div>
+          <div style="font-family:monospace;font-weight:700;">${b.account_number}</div>
+        </div>
+      </div>`).join("") : `<p class="muted">ยังไม่มีบัญชีรับชำระเงิน</p>`;
+  }catch(e){ /* silent */ }
+}
 loadBanks();
 
-async function loadBanks() {
-  try {
-    const result = await RinkaAPI.get("banks");
-    bankData = Array.isArray(result) ? result : Array.isArray(result.banks) ? result.banks : [];
-    document.getElementById("bankList").innerHTML = bankData
-      .map(
-        (bank, index) => `
-      <label class="rk-bank-option ${index === 0 ? "selected" : ""}" id="bankOpt-${bank.account_id}">
-        <input type="radio" name="bank" ${index === 0 ? "checked" : ""} onclick="showBankById('${bank.account_id}')">
-        <div>
-          <div class="rk-bank-name">${bank.bank_name || ""}</div>
-          <div class="rk-bank-owner">${bank.account_name || ""}</div>
-        </div>
-      </label>`
-      )
-      .join("");
-    if (bankData.length) showBank(bankData[0]);
-  } catch (err) {
-    console.error("loadBanks error", err);
-    document.getElementById("bankList").innerHTML = `<div class="rk-empty">โหลดบัญชีธนาคารไม่สำเร็จ</div>`;
-    showToast("โหลดช่องทางชำระเงินไม่สำเร็จ", "error");
-  }
+function onSlipSelected(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    SLIP_BASE64 = reader.result;
+    document.getElementById("slipPreview").innerHTML = `<img src="${SLIP_BASE64}" alt="สลิป">`;
+  };
+  reader.readAsDataURL(file);
 }
 
-function showBankById(id) {
-  document.querySelectorAll(".rk-bank-option").forEach((el) => el.classList.remove("selected"));
-  document.getElementById(`bankOpt-${id}`)?.classList.add("selected");
-  const bank = bankData.find((b) => b.account_id === id);
-  if (bank) showBank(bank);
-}
+async function submitPayment(){
+  if(!orderId){ toast("ไม่พบเลขออเดอร์", true); return; }
+  if(!SLIP_BASE64){ toast("กรุณาแนบสลิปก่อน", true); return; }
 
-function showBank(bank) {
-  const el = document.getElementById("bankDetail");
-  if (bank.qr_image) {
-    el.innerHTML = `
-      <img src="${bank.qr_image}" class="rk-qr-img">
-      <p class="rk-compress-note" style="text-align:center;margin-top:8px;">
-        iPhone: แตะรูปค้างไว้แล้วเลือก "บันทึกรูปภาพ" · Android: เปิดรูปแล้วกดดาวน์โหลด
-      </p>`;
-  } else {
-    el.innerHTML = `
-      <div class="rk-copy-row">
-        <span>${bank.account_number}</span>
-        <button class="rk-btn rk-btn-outline" style="padding:8px 14px;font-size:13px;" onclick="copyAccount('${bank.account_number}')">คัดลอก</button>
-      </div>`;
-  }
-}
+  const btn = document.getElementById("submitPaymentBtn");
+  btn.disabled = true;
+  btn.textContent = "กำลังส่งข้อมูล...";
 
-function copyAccount(number) {
-  navigator.clipboard.writeText(number);
-  showToast("คัดลอกเลขบัญชีแล้ว", "success", 1800);
-}
-
-/* ---------- ย่อรูปสลิปก่อนอัปโหลด ---------- */
-async function handleSlipSelect(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  document.getElementById("uploadPrompt").textContent = "⏳ กำลังย่อรูป...";
-  try {
-    const originalKB = Math.round(file.size / 1024);
-    slipBase64 = await compressImage(file, 1280, 0.72);
-    const compressedKB = Math.round((slipBase64.length * 0.75) / 1024); // ประมาณขนาดจาก base64
-
-    document.getElementById("uploadBox").classList.add("has-file");
-    document.getElementById("uploadPrompt").classList.add("rk-hidden");
-    const preview = document.getElementById("slipPreview");
-    preview.src = slipBase64;
-    preview.classList.remove("rk-hidden");
-    document.getElementById("compressNote").textContent =
-      `ย่อไฟล์จาก ${originalKB} KB เหลือประมาณ ${compressedKB} KB แล้ว ส่งได้เร็วขึ้น`;
-  } catch (err) {
-    console.error("compressImage error", err);
-    showToast("อ่านไฟล์รูปไม่สำเร็จ ลองเลือกรูปใหม่", "error");
-    document.getElementById("uploadPrompt").textContent = "📎 แตะเพื่อเลือกรูปสลิป";
-  }
-}
-
-/* ---------- Submit order ---------- */
-async function submitOrder() {
-  let cart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
-  if (cart.length === 0) cart = JSON.parse(localStorage.getItem("buyNowCart") || "[]");
-  if (cart.length === 0) cart = RinkaCart.get();
-  if (cart.length === 0) {
-    showToast("ไม่พบสินค้าในคำสั่งซื้อ", "error");
-    return;
-  }
-  if (!slipBase64) {
-    showToast("กรุณาแนบสลิปก่อนยืนยัน", "warning");
-    return;
-  }
-
-  const btn = document.getElementById("submitBtn");
-  if (btn.disabled) return;
-  setSubmitting(true);
-
-  try {
-    const address = JSON.parse(localStorage.getItem("checkoutAddress") || "{}");
-    const total = cart.reduce(
-      (sum, item) => sum + Number(item.final_price ?? Number(item.price || 0) * Number(item.qty || 1)),
-      0
-    );
-
-    const orderPayload = {
-      customer_name: address.receiver,
-      email: address.email,
-      phone: String(address.phone || ""),
-      social: address.social,
-      subtotal: total,
-      total: total,
-      items: cart,
-      gifts: address.gifts || [],
-    };
-
-    const orderResult = await RinkaAPI.post("createOrder", orderPayload);
-    if (!orderResult.success) {
-      showToast(orderResult.error || "สร้างออเดอร์ไม่สำเร็จ", "error");
-      setSubmitting(false);
-      return;
-    }
-
-    const paymentResult = await RinkaAPI.post("payment", {
-      order_id: orderResult.order_id,
-      amount: total,
-      slip_base64: slipBase64,
+  try{
+    const res = await RinkaAPI.submitPayment({
+      order_id: orderId,
+      amount: Number(total || 0),
+      slip_base64: SLIP_BASE64
     });
-    if (!paymentResult.success) {
-      showToast(paymentResult.error || "แจ้งชำระเงินไม่สำเร็จ", "error");
-      setSubmitting(false);
-      return;
+    if(res && res.success){
+      toast("ยืนยันการชำระเงินสำเร็จ ✅");
+      setTimeout(() => location.href = `track.html?id=${encodeURIComponent(orderId)}`, 1200);
+    } else {
+      toast(res.error || "ยืนยันการชำระเงินไม่สำเร็จ", true);
+      btn.disabled = false;
+      btn.textContent = "ยืนยันการชำระเงิน";
     }
-
-    showToast("แจ้งชำระเงินเรียบร้อย 🎉", "success", 2500);
-
-    const fullCart = RinkaCart.get();
-    const checkoutCart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
-    const remainCart = fullCart.filter(
-      (item) => !checkoutCart.some((c) => JSON.stringify(c) === JSON.stringify(item))
-    );
-    RinkaCart.save(remainCart);
-    localStorage.removeItem("checkoutCart");
-    localStorage.removeItem("buyNowCart");
-
-    setTimeout(() => {
-      location.href = "order.html?id=" + orderResult.order_id;
-    }, 600);
-  } catch (err) {
-    console.error("submitOrder error", err);
-    showToast("เกิดข้อผิดพลาด กรุณาลองใหม่", "error");
-    setSubmitting(false);
+  }catch(e){
+    toast("เกิดข้อผิดพลาด กรุณาลองใหม่", true);
+    btn.disabled = false;
+    btn.textContent = "ยืนยันการชำระเงิน";
   }
-}
-
-function setSubmitting(isSubmitting) {
-  const btn = document.getElementById("submitBtn");
-  btn.disabled = isSubmitting;
-  btn.innerHTML = isSubmitting
-    ? `<span class="rk-spinner"></span> กำลังส่งข้อมูล...`
-    : `ยืนยันการชำระเงิน`;
 }
 </script>
 </body>
