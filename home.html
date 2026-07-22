@@ -1,234 +1,774 @@
 <!DOCTYPE html>
+
 <html lang="th">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>☁️ Rinka Shop</title>
-<link rel="stylesheet" href="shared.css">
-<style>
-  .rk-hero{
-    margin: 14px 18px 4px;
-    border-radius: var(--rk-radius-lg);
-    padding: 28px 22px;
-    background:
-      radial-gradient(120% 140% at 100% 0%, rgba(255,255,255,.35), transparent 60%),
-      linear-gradient(135deg, var(--rk-primary), #6FC6FF);
-    color:#fff;
-    position:relative;
-    overflow:hidden;
-  }
-  .rk-hero::after{
-    content:"☁️"; position:absolute; font-size:110px; opacity:.18;
-    right:-18px; bottom:-30px; transform: rotate(-8deg);
-  }
-  .rk-hero h1{ font-size:24px; margin-bottom:6px; }
-  .rk-hero p{ font-size:13.5px; opacity:.92; margin:0 0 18px; line-height:1.5; max-width: 78%; }
-  .rk-hero .rk-btn{ background:#fff; color: var(--rk-primary-dark); }
 
-  .rk-fandom-row{ display:flex; gap:8px; overflow-x:auto; padding: 4px 18px 4px; }
-  .rk-fandom-row::-webkit-scrollbar{ display:none; }
-  .rk-fandom-chip{
-    flex:0 0 auto;
-    background: var(--rk-surface);
-    border: 1.5px solid var(--rk-border);
-    border-radius: 999px;
-    padding: 8px 16px;
-    font-size:13px; font-weight:600;
-    color: var(--rk-ink-soft);
-    cursor:pointer;
-  }
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-  .rk-collection-card{
-    width: 240px;
-    border-radius: var(--rk-radius-md);
-    overflow:hidden;
-    background: var(--rk-surface);
-    box-shadow: var(--rk-shadow);
-    cursor:pointer;
-  }
-  .rk-collection-card .rk-c-img{ aspect-ratio: 16/10; background: var(--rk-surface-2); overflow:hidden; }
-  .rk-collection-card .rk-c-img img{ width:100%; height:100%; object-fit:cover; }
-  .rk-collection-card .rk-c-body{ padding: 12px 14px 14px; }
-  .rk-collection-card h3{ font-size:14.5px; margin:2px 0 4px; }
-  .rk-collection-card .rk-c-fandom{ font-size:11.5px; color: var(--rk-ink-faint); margin-bottom:8px; }
+<title>
+☁️ Rinka Shop
+</title>
 
-  .rk-skel-card{ aspect-ratio: 3/4; }
-</style>
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
+  
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="browse.css">
+<link rel="stylesheet" href="home.css">
+  
 </head>
+
 <body>
 
-<div id="rkChrome"></div>
+<header class="page-header">
 
-<section class="rk-hero">
-  <h1>Rinka Shop</h1>
-  <p>พรีออเดอร์ของสะสมเกม miHoYo · KURO GAMES · PAPERPRESENTED · Ita Bag</p>
-  <button class="rk-btn" onclick="location.href='browse.html'">🔍 ค้นหาสินค้า</button>
-</section>
+<button
+id="menuButton"
+class="icon-btn">
 
-<section class="rk-section">
-  <h2>🎮 Fandom</h2>
-</section>
-<div id="fandomRow" class="rk-fandom-row"></div>
+☰
 
-<section class="rk-section">
-  <h2>🔥 รอบพรีออเดอร์</h2>
-  <p class="rk-section-sub">แต่ละรอบมีปิดรับ อย่าลืมกดตั๋วก่อนหมดเวลา</p>
-</section>
-<div id="collectionRow" class="rk-shelf" style="padding-left:18px;padding-right:18px;"></div>
+</button>
 
-<section class="rk-section">
-  <h2>⏰ พรีออเดอร์จำกัดเวลา</h2>
-</section>
-<div id="featuredGrid" class="rk-grid" style="margin:0 18px;"></div>
+<h1>
 
-<section class="rk-section">
-  <h2>⭐ สินค้าใหม่ล่าสุด</h2>
-</section>
-<div id="newGrid" class="rk-grid" style="margin:0 18px 24px;"></div>
+Rinka Shop
 
-<script src="toast.js"></script>
-<script src="shared.js"></script>
+</h1>
+
+<a
+href="cart.html"
+class="cart-btn">
+
+🛒
+
+<span id="cartCount">
+
+0
+
+</span>
+
+</a>
+
+</header>
+
+<div
+id="overlay"
+class="overlay hidden">
+</div>
+
+<aside
+id="sideMenu"
+class="side-menu">
+
+<div class="menu-header">
+
+<h2>
+
+Rinka Shop
+
+</h2>
+
+</div>
+
+<a href="home.html">
+
+🏠 หน้าแรก
+
+</a>
+
+<a href="browse.html">
+
+🛍️ สินค้าทั้งหมด
+
+</a>
+
+<a href="categories.html">
+
+📦 หมวดสินค้า
+
+</a>
+
+<a href="lookup.html">
+
+📄 เช็กออเดอร์
+
+</a>
+
+<a href="help.html">
+
+🛟 ศูนย์ช่วยเหลือ
+
+</a>
+
+<a href="change-address.html">
+
+📍 เปลี่ยนที่อยู่
+
+</a>
+
+<a href="account.html">
+
+👤 บัญชีของฉัน
+
+</a>
+
+<a href="cart.html">
+
+🛒 ตะกร้า
+
+</a>
+
+<a href="https://x.com/prewithrinka">
+
+📞 ติดต่อร้าน
+
+</a>
+
+</aside>
+  
+<h1
+style="
+font-size:36px;
+margin-bottom:10px;
+">
+</h1>
+
+<p
+style="
+color:#666;
+margin-bottom:25px;
+">
+</p>
+
+<div class="hero-banner">
+
+<div class="hero-content">
+
+<h1>
+☁️ Welcome to Rinka shop
+</h1>
+
+<p>
+
+Pre-order Game Merchandise miHoYo, KURO GAMES,
+PAPERPRESENTED, Ita Bag and more
+
+</p>
+
+<button
+onclick="
+window.location.href=
+'browse.html'
+"
+>
+🔍 ค้นหาสินค้า
+</button>
+
+</div>
+
+</div>
+
+<div
+  id="fandomSection"
+  class="section">
+
+<h2>
+🎮 Fandom
+</h2>
+
+<div id="fandomList">
+</div>
+
+</div>
+  
+<div
+id="collectionSection"
+class="section">
+
+<h2>
+🔥 รอบพรีออเดอร์
+</h2>
+
+<div
+id="collectionCards"
+class="product-grid-home">
+</div>
+
+</div>
+  
+<div
+id="featuredSection"
+class="section">
+
+<h2>
+⏰ พรีออเดอร์จำกัดเวลา
+</h2>
+
+<div
+id="featuredProducts"
+class="product-grid-home">
+</div>
+
+</div>
+  
+<div
+  id="newSection"
+  class="section">
+
+<h2>
+⭐ สินค้าใหม่ล่าสุด
+</h2>
+
+<div
+id="newProducts"
+class="product-grid-home">
+</div>
+
+</div>
+
 <script>
-renderChrome("home", "Rinka Shop");
 
-let allProducts = [];
+const BASE_API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-function skeletonCards(n, cls = "") {
-  return Array.from({ length: n })
-    .map(() => `<div class="rk-skel rk-skel-card ${cls}"></div>`)
-    .join("");
+const API =
+BASE_API + "?action=products";
+  
+async function loadHome(){
+
+  try{
+
+    const response =
+      await fetch(API);
+
+    const result =
+      await response.json();
+
+    const products =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.products)
+          ? result.products
+          : [];
+
+    window.allProducts =
+      products;
+
+    products.sort(
+      (a,b)=>
+        Number(
+          b.sort_order || 0
+        )
+        -
+        Number(
+          a.sort_order || 0
+        )
+    );
+
+    loadFeatured(products);
+
+    loadCollections();
+
+    loadNewArrivals(products);
+
+    loadFandoms(products);
+
+  }catch(error){
+
+    console.error(
+      "loadHome error",
+      error
+    );
+
+  }
+
 }
 
-function ticketBadge(deadline) {
-  const info = getDeadlineInfo(deadline);
-  if (!info) return "";
-  return `<span class="rk-ticket ${info.urgent ? "rk-ticket-urgent" : ""}">⏰ ${info.text}</span>`;
+async function loadCollections(){
+
+  try{
+
+    const response =
+      await fetch(
+        BASE_API +
+        "?action=collections"
+      );
+
+    const result =
+      await response.json();
+
+    const collections =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.collections)
+          ? result.collections
+          : [];
+
+    let html = "";
+
+    collections.forEach(c=>{
+
+      let countdown = "";
+
+      if(c.preorder_deadline){
+
+        const deadline =
+          new Date(
+            c.preorder_deadline
+          );
+
+        const today =
+          new Date();
+
+        const diffDays =
+          Math.ceil(
+            (deadline - today)
+            /
+            (1000 * 60 * 60 * 24)
+          );
+
+        if(diffDays > 0){
+
+          countdown =
+            `⏰ เหลือ ${diffDays} วัน`;
+
+        }
+
+      }
+
+      html += `
+
+<div
+class="collection-card"
+onclick="
+window.location.href=
+'collection.html?id=${c.collection_id}'
+">
+
+<img
+src="${c.image || ""}"
+loading="lazy"
+alt="${c.name || ""}">
+
+<div class="collection-content">
+
+<div class="collection-badge-preorder">
+PREORDER
+</div>
+
+<h3>
+${c.name || ""}
+</h3>
+
+<p>
+${c.fandom || ""}
+</p>
+
+${
+c.description
+?
+`
+<p class="collection-description">
+${c.description}
+</p>
+`
+:
+""
 }
 
-function productCard(p) {
-  const price = Number(p.final_price ?? p.price ?? 0);
-  const oldPrice = Number(p.old_price ?? p.price ?? 0);
-  const badge = p.new_arrival
-    ? `<span class="rk-badge rk-badge-new">NEW</span>`
-    : p.on_sale
-    ? `<span class="rk-badge rk-badge-sale">SALE</span>`
-    : p.product_type === "preorder"
-    ? `<span class="rk-badge rk-badge-preorder">PREORDER</span>`
-    : `<span class="rk-badge rk-badge-stock">พร้อมส่ง</span>`;
+<p class="collection-count">
+
+${Number(
+  c.product_count || 0
+).toLocaleString()}
+รายการ
+
+</p>
+
+${
+countdown
+?
+`
+<div class="deadline-badge">
+${countdown}
+</div>
+`
+:
+""
+}
+
+</div>
+
+</div>
+
+`;
+
+    });
+
+    document
+      .getElementById(
+        "collectionCards"
+      )
+      .innerHTML =
+      html;
+
+  }catch(error){
+
+    console.error(
+      "loadCollections error",
+      error
+    );
+
+  }
+
+}
+  
+function getDeadlineText(deadline){
+
+if(
+!deadline ||
+deadline === "N/A"
+){
+return "";
+}
+
+const today =
+new Date();
+
+const end =
+new Date(deadline);
+
+const diffDays =
+
+Math.ceil(
+
+(end - today)
+
+/
+
+(1000*60*60*24)
+
+);
+
+if(diffDays < 0){
+
+return "";
+
+}
+
+if(diffDays === 0){
+
+return "🔥 ปิดรับวันนี้";
+
+}
+
+if(diffDays === 1){
+
+return "⏰ เหลือ 1 วัน";
+
+}
+
+return `⏰ เหลือ ${diffDays} วัน`;
+
+}
+
+function createProductCard(product){
+
+  const price =
+    Number(
+      product.final_price ??
+      product.price ??
+      0
+    );
+
+  const oldPrice =
+    Number(
+      product.old_price ??
+      product.price ??
+      0
+    );
+
+  const deadlineText =
+    getDeadlineText(
+      product.preorder_deadline
+    );
 
   return `
-    <div class="rk-product-card" onclick="location.href='product.html?id=${p.product_id}'">
-      <div class="rk-img-box">
-        <img src="${p.image || ""}" alt="${p.name || ""}" loading="lazy">
-        ${badge}
-      </div>
-      <div class="rk-body">
-        <h3>${p.name || ""}</h3>
-        <div class="rk-fandom">${p.fandom || ""}</div>
-        <div>
-          <span class="rk-price">${formatBaht(price)}</span>
-          ${p.on_sale ? `<span class="rk-price-old">${formatBaht(oldPrice)}</span>` : ""}
-        </div>
-        <div style="margin-top:6px;">${ticketBadge(p.preorder_deadline)}</div>
-      </div>
-    </div>
-  `;
+
+<div
+class="home-card"
+onclick="
+window.location.href=
+'product.html?id=${product.product_id}'
+">
+
+<div class="image-box">
+
+<img
+src="${product.image || ""}"
+alt="${product.name || ""}"
+loading="lazy">
+
+${
+product.new_arrival
+?
+`
+<div class="badge-new">
+NEW
+</div>
+`
+:
+""
 }
 
-async function loadHome() {
-  document.getElementById("featuredGrid").innerHTML = skeletonCards(4);
-  document.getElementById("newGrid").innerHTML = skeletonCards(4);
-  document.getElementById("collectionRow").innerHTML = skeletonCards(3, "").replace(
-    /rk-skel-card/g,
-    "rk-skel-card"
-  );
-
-  try {
-    const result = await RinkaAPI.get("products");
-    allProducts = Array.isArray(result)
-      ? result
-      : Array.isArray(result.products)
-      ? result.products
-      : [];
-    allProducts.sort((a, b) => Number(b.sort_order || 0) - Number(a.sort_order || 0));
-
-    renderFeatured();
-    renderNew();
-    renderFandoms();
-    loadCollections();
-  } catch (err) {
-    console.error("loadHome error", err);
-    showToast("โหลดสินค้าไม่สำเร็จ ลองรีเฟรชอีกครั้ง", "error");
-    document.getElementById("featuredGrid").innerHTML =
-      `<div class="rk-empty" style="grid-column:1/-1;"><div class="rk-empty-emoji">📡</div>เชื่อมต่อร้านไม่สำเร็จ</div>`;
-  }
+${
+product.on_sale
+?
+`
+<div class="badge-sale">
+SALE
+</div>
+`
+:
+""
 }
 
-function renderFeatured() {
-  const featured = allProducts
-    .filter((p) => p.preorder_deadline && p.preorder_deadline !== "N/A")
-    .sort((a, b) => new Date(a.preorder_deadline) - new Date(b.preorder_deadline));
-  const el = document.getElementById("featuredGrid");
-  el.innerHTML = featured.length
-    ? featured.map(productCard).join("")
-    : `<div class="rk-empty" style="grid-column:1/-1;"><div class="rk-empty-emoji">📦</div>ยังไม่มีรอบพรีออเดอร์ตอนนี้</div>`;
+${
+product.product_type === "preorder"
+?
+`
+<div class="badge-preorder">
+PREORDER
+</div>
+`
+:
+`
+<div class="badge-stock">
+พร้อมส่ง
+</div>
+`
 }
 
-function renderNew() {
-  const arrivals = allProducts.filter(
-    (p) =>
-      p.new_arrival === true ||
-      Number(p.new_arrival) === 1 ||
-      String(p.new_arrival || "").trim().toLowerCase() === "true"
-  );
-  const el = document.getElementById("newGrid");
-  el.innerHTML = arrivals.length
-    ? arrivals.map(productCard).join("")
-    : `<div class="rk-empty" style="grid-column:1/-1;"><div class="rk-empty-emoji">⭐</div>ยังไม่มีสินค้าใหม่</div>`;
+</div>
+
+<div class="card-body">
+
+<h3>
+${product.name || ""}
+</h3>
+
+<p class="fandom">
+${product.fandom || ""}
+</p>
+
+<div class="price-box">
+
+${
+product.on_sale
+?
+`
+<div class="sale-price">
+฿${price.toLocaleString()}
+</div>
+
+<div class="old-price">
+฿${oldPrice.toLocaleString()}
+</div>
+`
+:
+`
+<div class="normal-price">
+฿${price.toLocaleString()}
+</div>
+`
 }
 
-function renderFandoms() {
-  const fandoms = [...new Set(allProducts.map((p) => p.fandom).filter(Boolean))];
-  document.getElementById("fandomRow").innerHTML = fandoms
-    .map((f) => {
-      const count = allProducts.filter((p) => p.fandom === f).length;
-      return `<button class="rk-fandom-chip" onclick="location.href='browse.html?type=fandom&value=${encodeURIComponent(
-        f
-      )}'">${f} · ${count}</button>`;
-    })
-    .join("");
+</div>
+
+${
+deadlineText
+?
+`
+<div class="deadline">
+${deadlineText}
+</div>
+`
+:
+""
 }
 
-async function loadCollections() {
-  try {
-    const result = await RinkaAPI.get("collections");
-    const collections = Array.isArray(result)
-      ? result
-      : Array.isArray(result.collections)
-      ? result.collections
-      : [];
-    const el = document.getElementById("collectionRow");
-    el.innerHTML = collections.length
-      ? collections
-          .map(
-            (c) => `
-        <div class="rk-collection-card" onclick="location.href='collection.html?id=${c.collection_id}'">
-          <div class="rk-c-img"><img src="${c.image || ""}" loading="lazy" alt="${c.name || ""}"></div>
-          <div class="rk-c-body">
-            <h3>${c.name || ""}</h3>
-            <div class="rk-c-fandom">${c.fandom || ""} · ${Number(c.product_count || 0).toLocaleString()} รายการ</div>
-            ${ticketBadge(c.preorder_deadline)}
-          </div>
-        </div>`
-          )
-          .join("")
-      : `<div class="rk-empty">ยังไม่มีรอบพรีออเดอร์</div>`;
-  } catch (err) {
-    console.error("loadCollections error", err);
-  }
+</div>
+
+</div>
+
+`;
+
+}
+
+function loadFeatured(products){
+
+const featured =
+products.filter(
+
+p =>
+
+p.preorder_deadline &&
+
+p.preorder_deadline !== "N/A"
+
+);
+  
+featured.sort((a,b)=>{
+
+return new Date(
+a.preorder_deadline
+)
+
+-
+
+new Date(
+b.preorder_deadline
+);
+
+});
+  
+document
+.getElementById(
+"featuredProducts"
+)
+.innerHTML =
+featured
+.map(createProductCard)
+.join("");
+
+}
+
+function loadNewArrivals(products){
+
+  const arrivals =
+    products.filter(
+      product =>
+        product.new_arrival === true ||
+        Number(
+          product.new_arrival
+        ) === 1 ||
+        String(
+          product.new_arrival || ""
+        )
+          .trim()
+          .toLowerCase() === "true" ||
+        String(
+          product.new_arrival || ""
+        )
+          .trim()
+          .toLowerCase() === "yes"
+    );
+
+  document
+    .getElementById(
+      "newProducts"
+    )
+    .innerHTML =
+    arrivals
+      .map(createProductCard)
+      .join("");
+
+}
+
+function loadFandoms(products){
+
+const fandoms =
+
+[
+...new Set(
+products
+.map(
+p=>p.fandom
+)
+.filter(Boolean)
+)
+];
+
+let html = "";
+
+fandoms.forEach(fandom=>{
+
+const count =
+
+products.filter(
+p=>p.fandom === fandom
+).length;
+
+html += `
+<button
+class="fandom-btn"
+onclick="
+window.location.href='browse.html?type=fandom&value=${encodeURIComponent(fandom)}'
+">
+
+${fandom}
+(${count})
+
+</button>
+`;
+
+});
+
+document
+.getElementById(
+"fandomList"
+)
+.innerHTML = html;
+
+}
+  
+updateCartCount();
+
+function updateCartCount(){
+
+const cart =
+JSON.parse(
+localStorage.getItem("cart") || "[]"
+);
+
+const count =
+cart.reduce(
+(sum,item)=>sum + Number(item.qty || 0),
+0
+);
+
+const cartCount =
+document.getElementById("cartCount");
+
+if(cartCount){
+cartCount.textContent = count;
+}
+
 }
 
 loadHome();
+updateCartCount();
+
 </script>
+
+<script src="menu.js"></script>
+  
 </body>
+
 </html>
