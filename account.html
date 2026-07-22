@@ -1,100 +1,675 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>บัญชีของฉัน | Rinka Shop</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>ฉัน</title>
+
+<style>
+
+body{
+
+font-family:sans-serif;
+
+background:#f8fbff;
+
+padding:20px;
+
+}
+
+.container{
+
+max-width:700px;
+margin:auto;
+
+}
+
+.profile-card{
+
+background:white;
+
+padding:20px;
+
+border-radius:16px;
+
+margin-bottom:20px;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+.profile-name{
+
+font-size:22px;
+
+font-weight:700;
+
+}
+
+.profile-email{
+
+color:#666;
+
+margin-top:5px;
+
+}
+
+.menu-card{
+
+background:white;
+
+padding:18px;
+
+border-radius:16px;
+
+margin-bottom:12px;
+
+cursor:pointer;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+box-shadow:
+0 2px 10px rgba(0,0,0,.05);
+
+}
+
+.menu-card:hover{
+
+transform:translateY(-2px);
+
+}
+
+.count{
+
+font-weight:700;
+
+color:#2563eb;
+
+}
+
+.logout-btn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:12px;
+
+background:#ef4444;
+
+color:white;
+
+font-size:15px;
+
+cursor:pointer;
+
+margin-top:20px;
+
+}
+
+.topbar{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+margin-bottom:20px;
+
+}
+
+.topbar button{
+
+width:44px;
+height:44px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+box-shadow:
+0 2px 8px rgba(0,0,0,.08);
+
+font-size:20px;
+
+cursor:pointer;
+
+}
+
+.page-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px 24px;
+background:#fff;
+position:sticky;
+top:0;
+z-index:100;
+box-shadow:0 3px 10px rgba(0,0,0,.05);
+margin-bottom:20px;
+}
+
+.icon-btn{
+width:auto !important;
+border:none;
+background:none;
+font-size:32px;
+padding:0;
+cursor:pointer;
+}
+
+.cart-btn{
+position:relative;
+font-size:28px;
+text-decoration:none;
+width:auto !important;
+}
+
+#cartCount{
+position:absolute;
+top:-8px;
+right:-8px;
+background:#ff5c7a;
+color:white;
+font-size:12px;
+padding:2px 6px;
+border-radius:20px;
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.35);
+z-index:999;
+opacity:1;
+transition:.25s;
+}
+
+.overlay.hidden{
+opacity:0;
+pointer-events:none;
+}
+
+.side-menu{
+position:fixed;
+top:0;
+left:0;
+width:280px;
+max-width:80%;
+height:100vh;
+background:#fff;
+z-index:1000;
+box-shadow:0 0 30px rgba(0,0,0,.15);
+transform:translateX(-100%);
+transition:.3s ease;
+display:flex;
+flex-direction:column;
+}
+
+.side-menu.open{
+transform:translateX(0);
+}
+
+.menu-header{
+padding:24px;
+border-bottom:1px solid #eee;
+}
+
+.side-menu a{
+padding:18px 24px;
+font-size:16px;
+font-weight:600;
+text-decoration:none;
+color:#333;
+}
+
+.side-menu a:hover{
+background:#f7f9ff;
+}
+
+</style>
+
 </head>
+
 <body>
-<div id="site-header"></div>
 
-<section class="section">
-  <div class="wrap" style="max-width:760px;">
-    <div class="section-head">
-      <h2 id="hello">บัญชีของฉัน</h2>
-      <button class="btn btn-ghost" onclick="logout()">ออกจากระบบ</button>
-    </div>
-    <div id="ordersMount"><div class="spinner"></div></div>
-  </div>
-</section>
+<header class="page-header">
 
-<div id="site-footer"></div>
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/common.js"></script>
+<button
+id="menuButton"
+class="icon-btn">
+
+☰
+
+</button>
+
+<h1 id="pageTitle">
+
+บัญชีของฉัน
+
+</h1>
+
+<a
+href="cart.html"
+class="cart-btn">
+
+🛒
+
+<span id="cartCount">
+
+0
+
+</span>
+
+</a>
+
+</header>
+
+<div
+id="overlay"
+class="overlay hidden">
+</div>
+
+<aside
+id="sideMenu"
+class="side-menu">
+
+<div class="menu-header">
+
+<h2>
+Rinka Shop
+</h2>
+
+</div>
+
+<a href="home.html">🏠 หน้าแรก</a>
+<a href="browse.html">🛍️ สินค้าทั้งหมด</a>
+<a href="categories.html">🏷️ หมวดสินค้า</a>
+<a href="lookup.html">📦 เช็กออเดอร์</a>
+<a href="help.html">🛟 ศูนย์ช่วยเหลือ</a>
+<a href="change-address.html">📍 เปลี่ยนที่อยู่</a>
+<a href="account.html">👤 บัญชีของฉัน</a>
+<a href="cart.html">🛒 ตะกร้า</a>
+<a href="https://x.com/prewithrinka">📞 ติดต่อร้าน</a>
+
+</aside>
+
+<div class="container">
+
+<div
+class="profile-card">
+
+<div
+id="username"
+class="profile-name">
+
+-
+
+</div>
+
+<div
+id="email"
+class="profile-email">
+
+-
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'pending'
+)
+">
+
+<div>
+
+📦 ออเดอร์ของฉัน
+
+</div>
+
+<div
+id="pendingCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'china_arrived'
+)
+">
+
+<div>
+
+🏭 ถึงโกดังจีนแล้ว
+
+</div>
+
+<div
+id="chinaCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'shipping_to_th'
+)
+">
+
+<div>
+
+🚚 กำลังมาไทย
+
+</div>
+
+<div
+id="shippingCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+openStatus(
+'ready_to_ship'
+)
+">
+
+<div>
+
+📬 เตรียมจัดส่ง
+
+</div>
+
+<div
+id="readyCount"
+class="count">
+
+0
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+window.location.href=
+'address-book.html'
+">
+
+<div>
+
+📍 จัดการที่อยู่
+
+</div>
+
+<div>
+
+>
+
+</div>
+
+</div>
+
+<div
+class="menu-card"
+onclick="
+window.location.href=
+'help.html'
+">
+
+<div>
+
+🛟 ศูนย์ช่วยเหลือ
+
+</div>
+
+<div>
+
+>
+
+</div>
+
+</div>
+  
+<button
+class="logout-btn"
+onclick="logout()">
+
+ออกจากระบบ
+
+</button>
+
+</div>
+
 <script>
-const session = RinkaAuth.get();
-if(!session || !session.session_token){
-  location.href = "login.html";
+
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const customer =
+
+JSON.parse(
+localStorage.getItem(
+"customer"
+) || "{}"
+);
+
+if(!customer.email){
+
+window.location =
+"login.html";
+
 }
 
-document.getElementById("hello").textContent = "สวัสดี " + (session?.username || "");
+document.getElementById(
+"username"
+).textContent =
 
-function statusLabel(status){
-  const map = { pending:["รอดำเนินการ","pill-pending"], ready_to_ship:["เตรียมจัดส่ง","pill-pending"],
-    shipped:["จัดส่งแล้ว","pill-shipped"], completed:["สำเร็จ","pill-completed"] };
-  const [label, cls] = map[status] || [status || "-", "pill-pending"];
-  return `<span class="pill ${cls}">${label}</span>`;
-}
+customer.username;
 
-async function loadOrders(){
-  try{
-    const orders = await RinkaAPI.getCustomerOrders(session.session_token);
-    const mount = document.getElementById("ordersMount");
-    if(!Array.isArray(orders) || !orders.length){
-      mount.innerHTML = `<div class="empty-state"><div class="icon">📭</div>ยังไม่มีคำสั่งซื้อ<br><a href="index.html" class="btn btn-outline" style="margin-top:14px;">เริ่มพรีออเดอร์</a></div>`;
-      return;
-    }
-    mount.innerHTML = orders.map(o => `
-      <div class="panel" style="margin-bottom:14px; cursor:pointer;" onclick="toggleDetail('${o.order_id}')">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-weight:700; font-family:monospace;">${o.order_id}</div>
-            <div class="muted" style="font-size:.8rem;">${o.created_at ? new Date(o.created_at).toLocaleDateString('th-TH') : ""}</div>
-          </div>
-          <div style="text-align:right;">
-            ${statusLabel(o.status)}
-            <div style="font-weight:700; margin-top:4px;">${money(o.total)}</div>
-          </div>
-        </div>
-        <div id="detail-${o.order_id}" style="display:none; margin-top:14px; border-top:1px dashed var(--mist-dark); padding-top:14px;"></div>
-      </div>`).join("");
-  }catch(e){
-    document.getElementById("ordersMount").innerHTML = `<div class="empty-state">โหลดข้อมูลไม่สำเร็จ</div>`;
-  }
-}
+document.getElementById(
+"email"
+).textContent =
 
-async function toggleDetail(orderId){
-  const box = document.getElementById("detail-" + orderId);
-  const isOpen = box.style.display === "block";
-  document.querySelectorAll('[id^="detail-"]').forEach(d => d.style.display = "none");
-  if(isOpen) return;
-  box.style.display = "block";
-  box.innerHTML = `<div class="spinner"></div>`;
-  try{
-    const res = await RinkaAPI.getOrderAuthenticated(session.session_token, orderId);
-    if(!res || !res.success){ box.innerHTML = `<p class="muted">ไม่พบรายละเอียดออเดอร์</p>`; return; }
-    const order = res.order;
-    box.innerHTML = `
-      ${(order.items||[]).map(i => `
-        <div class="summary-row"><span>${i.name} ${i.option_value ? '('+i.option_value+')' : ''} × ${i.qty}</span><span>${money(i.final_price)}</span></div>
-      `).join("")}
-      ${order.tracking_no ? `<p class="hint" style="margin-top:10px;">🚚 ${order.courier || ''} เลขพัสดุ: <b>${order.tracking_no}</b></p>` : ""}
-      <a href="track.html?id=${encodeURIComponent(order.order_id)}" class="btn btn-outline" style="margin-top:10px;">ดูสถานะค่านำเข้า/ค่าส่ง</a>
-    `;
-  }catch(e){ box.innerHTML = `<p class="muted">เกิดข้อผิดพลาด</p>`; }
-}
-
-async function logout(){
-  try{ await RinkaAPI.logoutCustomer({ session_token: session.session_token }); }catch(e){}
-  RinkaAuth.clear();
-  location.href = "index.html";
-}
+customer.email;
 
 loadOrders();
+
+async function loadOrders(){
+
+  try{
+
+    const response =
+      await fetch(
+
+        API +
+        "?action=customerOrders&email=" +
+        encodeURIComponent(
+          customer.email
+        )
+
+      );
+
+    const result =
+      await response.json();
+
+    const orders =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.orders)
+          ? result.orders
+          : [];
+
+    const pending =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "pending"
+      ).length;
+
+    const china =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "china_arrived"
+      ).length;
+
+    const shipping =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "shipping_to_th"
+      ).length;
+
+    const ready =
+      orders.filter(
+        order =>
+          String(
+            order.status || ""
+          ) === "ready_to_ship"
+      ).length;
+
+    document.getElementById(
+      "pendingCount"
+    ).textContent =
+      pending;
+
+    document.getElementById(
+      "chinaCount"
+    ).textContent =
+      china;
+
+    document.getElementById(
+      "shippingCount"
+    ).textContent =
+      shipping;
+
+    document.getElementById(
+      "readyCount"
+    ).textContent =
+      ready;
+
+  }
+  catch(error){
+
+    console.error(
+      "loadOrders error:",
+      error
+    );
+
+    document.getElementById(
+      "pendingCount"
+    ).textContent = "0";
+
+    document.getElementById(
+      "chinaCount"
+    ).textContent = "0";
+
+    document.getElementById(
+      "shippingCount"
+    ).textContent = "0";
+
+    document.getElementById(
+      "readyCount"
+    ).textContent = "0";
+
+  }
+
+}
+
+function openStatus(status){
+
+window.location.href =
+
+"orders.html?status=" +
+status;
+
+}
+
+function logout(){
+
+localStorage.removeItem(
+"customer"
+);
+
+window.location =
+"login.html";
+
+}
+
+updateCartCount();
+
+function updateCartCount(){
+
+const cart =
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+const count =
+cart.reduce(
+(sum,item)=>sum + Number(item.qty || 0),
+0
+);
+
+const cartCount =
+document.getElementById(
+"cartCount"
+);
+
+if(cartCount){
+cartCount.textContent = count;
+}
+
+}
+
 </script>
+
+<script src="menu.js"></script>
+  
 </body>
+
 </html>
