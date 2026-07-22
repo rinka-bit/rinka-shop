@@ -1,62 +1,422 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>หมวดหมู่สินค้า | Rinka Shop</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>
+Category
+</title>
+
+<style>
+
+body{
+
+font-family:
+'Kodchasan',
+sans-serif;
+
+background:#f6fbff;
+
+padding:20px;
+
+}
+
+h1{
+
+color:#4a6fa5;
+
+}
+
+#productCount{
+
+color:#6b7280;
+
+margin-bottom:20px;
+
+}
+
+.product-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(
+auto-fill,
+minmax(
+220px,
+1fr
+)
+);
+
+gap:20px;
+
+}
+
+.card{
+
+background:white;
+
+border-radius:20px;
+
+overflow:hidden;
+
+cursor:pointer;
+
+box-shadow:
+0 3px 12px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+transition:.2s;
+
+}
+
+.card:hover{
+
+transform:
+translateY(-4px);
+
+}
+
+.card img{
+
+width:100%;
+
+height:220px;
+
+object-fit:cover;
+
+}
+
+.card-body{
+
+padding:15px;
+
+}
+
+.badge-new{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:#d9f2ff;
+
+color:#2563eb;
+
+font-size:12px;
+
+font-weight:700;
+
+border-radius:999px;
+
+margin-bottom:5px;
+
+}
+
+.badge-preorder{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:#e0f2fe;
+
+color:#0284c7;
+
+font-size:12px;
+
+font-weight:700;
+
+border-radius:999px;
+
+margin-left:5px;
+
+}
+
+.navbar{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:12px;
+
+padding:15px 20px;
+
+margin-bottom:25px;
+
+background:white;
+
+border-radius:20px;
+
+box-shadow:
+0 3px 15px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+}
+
+.navbar a{
+
+text-decoration:none;
+
+font-weight:700;
+
+color:#4a6fa5;
+
+}
+
+.navbar a:hover{
+
+color:#2563eb;
+
+}
+
+</style>
+
 </head>
+
 <body>
-<div id="site-header"></div>
 
-<section class="section">
-  <div class="wrap">
-    <div class="section-head"><div><span class="eyebrow">Category</span><h2 id="cat-title">หมวดหมู่สินค้า</h2></div></div>
-    <div id="grid" class="grid"><div class="spinner"></div></div>
-  </div>
-</section>
+<div class="navbar">
 
-<div id="site-footer"></div>
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/common.js"></script>
+<a href="home.html">
+🏠 หน้าแรก
+</a>
+
+<a href="categories.html">
+🏷️ หมวดสินค้า
+</a>
+
+<a href="lookup.html">
+📦 เช็กออเดอร์
+</a>
+
+<a href="change-address.html">
+📍 เปลี่ยนที่อยู่
+</a>
+
+<a
+href="cart.html"
+id="cartLink">
+
+🛒 ตะกร้า (0)
+
+</a>
+
+<a href="https://x.com/prewithrinka">
+📞 ติดต่อร้าน
+</a>
+
+</div>
+
+<h1 id="categoryTitle">
+Loading...
+</h1>
+
+<p id="productCount">
+</p>
+
+<div
+id="products"
+class="product-grid">
+</div>
+
 <script>
-function productCard(p){
-  const img = p.image || "https://placehold.co/400x400?text=Rinka+Shop";
-  const priceHtml = p.on_sale ? money(p.price) + `<span class="old">${money(p.old_price)}</span>` : money(p.price);
-  return `
-  <div class="product-card">
-    <a href="product.html?id=${encodeURIComponent(p.product_id)}">
-      <div class="product-thumb">
-        ${p.product_type === 'preorder' ? `<span class="stamp-badge">Preorder</span>` : ""}
-        <img src="${img}" alt="${p.name}" loading="lazy">
-      </div>
-      <div class="product-info">
-        <div class="product-fandom">${p.fandom || ""}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">${priceHtml}</div>
-      </div>
-    </a>
-  </div>`;
+
+const API =
+
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+
+const category =
+
+new URLSearchParams(
+window.location.search
+).get("name");
+
+loadProducts();
+
+async function loadProducts(){
+
+  try{
+
+    const response =
+      await fetch(API);
+
+    const result =
+      await response.json();
+
+    const products =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(result.products)
+          ? result.products
+          : [];
+
+    const filtered =
+      products.filter(
+        product =>
+          product.main_category ===
+          category
+      );
+
+    document
+      .getElementById(
+        "categoryTitle"
+      )
+      .textContent =
+      `🏷️ ${category || "ไม่พบหมวดสินค้า"}`;
+
+    document
+      .getElementById(
+        "productCount"
+      )
+      .textContent =
+      `${filtered.length} รายการ`;
+
+    document
+      .getElementById(
+        "products"
+      )
+      .innerHTML =
+      filtered
+        .map(createCard)
+        .join("");
+
+  }catch(error){
+
+    console.error(
+      "โหลดสินค้าไม่สำเร็จ",
+      error
+    );
+
+    document
+      .getElementById(
+        "productCount"
+      )
+      .textContent =
+      "โหลดสินค้าไม่สำเร็จ";
+
+  }
+
 }
 
-async function load(){
-  const id = qs("id");
-  try{
-    const [cats, products] = await Promise.all([RinkaAPI.getCategories(), RinkaAPI.getProducts()]);
-    const cat = Array.isArray(cats) ? cats.find(c => String(c.id) === String(id)) : null;
-    document.getElementById("cat-title").textContent = cat ? cat.name : "หมวดหมู่สินค้า";
-    const filtered = cat
-      ? products.filter(p => p.main_category === cat.name || p.sub_category === cat.name)
-      : products;
-    document.getElementById("grid").innerHTML = filtered.length
-      ? filtered.map(productCard).join("")
-      : `<div class="empty-state"><div class="icon">📦</div>ยังไม่มีสินค้าในหมวดนี้</div>`;
-  }catch(e){ document.getElementById("grid").innerHTML = `<div class="empty-state">โหลดข้อมูลไม่สำเร็จ</div>`; }
+  function createCard(product){
+
+  const price =
+    Number(
+      product.final_price ??
+      product.price ??
+      0
+    );
+
+  return `
+
+    <div
+    class="card"
+    onclick="
+      window.location.href=
+      'product.html?id=${product.product_id}'
+    ">
+
+      <img
+      src="${product.image || ""}"
+      alt="${product.name || ""}">
+
+      <div class="card-body">
+
+        ${
+          product.new_arrival
+          ? `
+            <div class="badge-new">
+              NEW
+            </div>
+          `
+          : ""
+        }
+
+        ${
+          product.product_type ===
+          "preorder"
+          ? `
+            <div class="badge-preorder">
+              PREORDER
+            </div>
+          `
+          : ""
+        }
+
+        <h3>
+          ${product.name || "-"}
+        </h3>
+
+        <p>
+          ฿${price}
+        </p>
+
+      </div>
+
+    </div>
+
+  `;
+
 }
-load();
+
+function updateCartCount(){
+
+const cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+const count =
+
+cart.reduce(
+
+(sum,item)=>
+
+sum +
+Number(item.qty || 0),
+
+0
+
+);
+
+const cartLink =
+
+document.getElementById(
+"cartLink"
+);
+
+if(cartLink){
+
+cartLink.textContent =
+
+`🛒 ตะกร้า (${count})`;
+
+}
+
+}
+
 </script>
+
 </body>
 </html>
