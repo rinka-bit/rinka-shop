@@ -247,6 +247,8 @@ async function loadBanks(){
     const result =
       await response.json();
 
+    console.log("CreateOrder Result", result);
+
     bankData =
       Array.isArray(result)
         ? result
@@ -807,6 +809,11 @@ async function submitOrder(){
 
     const paymentResult =
       await paymentResponse.json();
+
+    console.log("Payment Payload",{
+    order_id:result.order_id,
+    amount:paymentAmount
+});
 
     if(!paymentResult.success){
 
