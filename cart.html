@@ -2,185 +2,74 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ตะกร้าสินค้า — Rinka Shop</title>
-<link rel="stylesheet" href="shared.css">
-<style>
-  .rk-cart-item{
-    display:flex; gap:12px;
-    background: var(--rk-surface);
-    border-radius: var(--rk-radius-md);
-    padding: 12px;
-    box-shadow: var(--rk-shadow);
-    margin: 0 18px 12px;
-  }
-  .rk-cart-item img{
-    width:78px; height:78px; object-fit:cover; border-radius: var(--rk-radius-sm);
-    flex-shrink:0;
-  }
-  .rk-cart-item .rk-ci-body{ flex:1; min-width:0; }
-  .rk-cart-item h3{ font-size:14px; margin:0 0 4px; }
-  .rk-opt-chip{
-    display:inline-block; font-size:11px; color: var(--rk-primary-dark);
-    background: var(--rk-primary-soft); padding:3px 9px; border-radius:999px;
-    margin: 0 4px 4px 0;
-  }
-  .rk-qty-row{ display:flex; align-items:center; gap:10px; margin-top:8px; }
-  .rk-qty-btn{
-    width:28px; height:28px; border-radius:50%; border:none;
-    background: var(--rk-surface-2); font-weight:700; cursor:pointer; font-size:16px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .rk-qty-val{ font-family: var(--rk-font-mono); font-weight:700; min-width:16px; text-align:center; }
-  .rk-ci-price{ margin-left:auto; font-family: var(--rk-font-mono); font-weight:700; color: var(--rk-primary-dark); }
-  .rk-ci-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
-  .rk-remove-btn{ background:none; border:none; color: var(--rk-ink-faint); font-size:16px; cursor:pointer; padding:2px; }
-  input.rk-select-item{ width:18px; height:18px; margin-top:4px; accent-color: var(--rk-primary); }
-
-  .rk-checkout-bar{
-    position:fixed; left:0; right:0; bottom: 76px; /* เหนือ bottom nav */
-    z-index: 150;
-    background: rgba(255,255,255,.97);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid var(--rk-border);
-    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
-    display:flex; align-items:center; gap:14px;
-    box-shadow: 0 -8px 24px rgba(31,64,110,.06);
-  }
-  .rk-checkout-bar .rk-total-block{ flex:1; }
-  .rk-checkout-bar .rk-total-label{ font-size:11px; color: var(--rk-ink-soft); }
-  .rk-checkout-bar .rk-total-amount{ font-family: var(--rk-font-mono); font-size:19px; font-weight:700; color: var(--rk-primary-dark); }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตะกร้าสินค้า | Rinka Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div id="site-header"></div>
 
-<div id="rkChrome"></div>
-
-<div id="cartList" style="padding-top:8px;"></div>
-<div id="cartEmpty" class="rk-hidden"></div>
-
-<div id="checkoutBar" class="rk-checkout-bar rk-hidden">
-  <div class="rk-total-block">
-    <div class="rk-total-label">ยอดรวม (<span id="selectedCount">0</span> ชิ้น)</div>
-    <div class="rk-total-amount" id="totalAmount">฿0</div>
+<section class="section">
+  <div class="wrap two-col">
+    <div>
+      <h2>ตะกร้าสินค้า</h2>
+      <div id="cart-lines" class="panel"></div>
+    </div>
+    <div>
+      <div class="panel">
+        <h3 style="margin-top:0;">สรุปยอด</h3>
+        <div class="summary-row"><span>ยอดสินค้า</span><span id="sumSubtotal">฿0</span></div>
+        <p class="hint">ค่านำเข้า / ค่าจัดส่งในไทย จะแจ้งอีกครั้งเมื่อสินค้าถึงไทยแล้ว</p>
+        <div class="summary-row total"><span>รวมชำระตอนสั่งซื้อ</span><span id="sumTotal">฿0</span></div>
+        <a href="checkout.html" class="btn btn-primary btn-block" id="checkoutBtn" style="margin-top:16px;">ไปหน้าชำระเงิน</a>
+      </div>
+    </div>
   </div>
-  <button class="rk-btn rk-btn-primary" onclick="goCheckout()">สั่งซื้อสินค้า</button>
-</div>
+</section>
 
-<script src="toast.js"></script>
-<script src="shared.js"></script>
+<div id="site-footer"></div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/common.js"></script>
 <script>
-renderChrome("cart", "ตะกร้าสินค้า");
-loadCart();
+function renderCart(){
+  const items = RinkaCart.read();
+  const mount = document.getElementById("cart-lines");
 
-function loadCart() {
-  const cart = RinkaCart.get();
-  const listEl = document.getElementById("cartList");
-  const emptyEl = document.getElementById("cartEmpty");
-  const barEl = document.getElementById("checkoutBar");
-
-  if (cart.length === 0) {
-    listEl.innerHTML = "";
-    barEl.classList.add("rk-hidden");
-    emptyEl.classList.remove("rk-hidden");
-    emptyEl.innerHTML = `
-      <div class="rk-empty">
-        <div class="rk-empty-emoji">🛒</div>
-        <div>ยังไม่มีสินค้าในตะกร้า</div>
-        <div style="margin-top:16px;">
-          <button class="rk-btn rk-btn-primary" onclick="location.href='browse.html'">🔍 ไปเลือกสินค้ากันเถอะ</button>
-        </div>
-      </div>`;
-    return;
-  }
-  emptyEl.classList.add("rk-hidden");
-
-  listEl.innerHTML = cart
-    .map((item, index) => {
-      const price = Number(item.final_price ?? item.price ?? 0);
-      const lineTotal = price * Number(item.qty);
-      const opts = item.selected_options
-        ? Object.entries(item.selected_options)
-            .map(
-              ([k, v]) =>
-                `<span class="rk-opt-chip">${k}: ${Array.isArray(v) ? v.join(", ") : v}</span>`
-            )
-            .join("")
-        : "";
+  if(!items.length){
+    mount.innerHTML = `<div class="empty-state"><div class="icon">🛍️</div>ตะกร้ายังว่างอยู่<br><a href="index.html" class="btn btn-outline" style="margin-top:14px;">เลือกซื้อสินค้า</a></div>`;
+    document.getElementById("checkoutBtn").style.pointerEvents = "none";
+    document.getElementById("checkoutBtn").style.opacity = ".5";
+  } else {
+    mount.innerHTML = items.map(i => {
+      const key = RinkaCart.lineKey(i);
+      const lineTotal = (Number(i.price) + (i.crate_selected ? Number(i.crate_fee||0) : 0)) * i.qty;
       return `
-        <div class="rk-cart-item">
-          <input type="checkbox" class="rk-select-item" data-index="${index}" checked onchange="recalc()">
-          <img src="${item.image || ""}" alt="">
-          <div class="rk-ci-body">
-            <div class="rk-ci-top">
-              <h3>${item.name}</h3>
-              <button class="rk-remove-btn" onclick="removeItem(${index})">🗑️</button>
-            </div>
-            <div>${opts}</div>
-            <div class="rk-qty-row">
-              <button class="rk-qty-btn" onclick="changeQty(${index},-1)">−</button>
-              <span class="rk-qty-val">${item.qty}</span>
-              <button class="rk-qty-btn" onclick="changeQty(${index},1)">+</button>
-              <span class="rk-ci-price">${formatBaht(lineTotal)}</span>
-            </div>
+      <div class="cart-line">
+        <img src="${i.image || 'https://placehold.co/100x100'}" alt="${i.name}">
+        <div class="cart-line-info">
+          <div class="cart-line-name">${i.name}</div>
+          ${i.option_value ? `<div class="cart-line-opt">${i.option_value}</div>` : ""}
+          ${i.crate_selected ? `<div class="cart-line-opt">+ แพ็คลัง</div>` : ""}
+          <div class="qty-control">
+            <button onclick="RinkaCart.updateQty('${key}', ${i.qty - 1}); renderCart();">−</button>
+            <span>${i.qty}</span>
+            <button onclick="RinkaCart.updateQty('${key}', ${i.qty + 1}); renderCart();">+</button>
           </div>
-        </div>`;
-    })
-    .join("");
-
-  document.getElementById("checkoutBar").classList.remove("rk-hidden");
-  recalc();
-}
-
-function recalc() {
-  const cart = RinkaCart.get();
-  const checked = document.querySelectorAll(".rk-select-item:checked");
-  let total = 0;
-  let count = 0;
-  checked.forEach((box) => {
-    const item = cart[Number(box.dataset.index)];
-    if (!item) return;
-    const price = Number(item.final_price ?? item.price ?? 0);
-    total += price * Number(item.qty);
-    count += Number(item.qty);
-  });
-  document.getElementById("totalAmount").textContent = formatBaht(total);
-  document.getElementById("selectedCount").textContent = count;
-}
-
-function changeQty(index, delta) {
-  const cart = RinkaCart.get();
-  cart[index].qty += delta;
-  if (cart[index].qty <= 0) cart.splice(index, 1);
-  RinkaCart.save(cart);
-  loadCart();
-}
-
-function removeItem(index) {
-  const cart = RinkaCart.get();
-  cart.splice(index, 1);
-  RinkaCart.save(cart);
-  loadCart();
-  showToast("ลบสินค้าออกจากตะกร้าแล้ว", "info", 1800);
-}
-
-function goCheckout() {
-  const cart = RinkaCart.get();
-  const checked = document.querySelectorAll(".rk-select-item:checked");
-  if (checked.length === 0) {
-    showToast("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", "warning");
-    return;
+          <span class="remove-link" onclick="RinkaCart.remove('${key}'); renderCart();">ลบออก</span>
+        </div>
+        <div style="font-weight:700;">${money(lineTotal)}</div>
+      </div>`;
+    }).join("");
   }
-  const selectedItems = [];
-  checked.forEach((box) => {
-    const item = cart[Number(box.dataset.index)];
-    if (item) selectedItems.push(item);
-  });
-  localStorage.setItem("checkoutCart", JSON.stringify(selectedItems));
-  localStorage.setItem("checkoutSource", "cart");
-  localStorage.removeItem("buyNowCart");
-  location.href = "checkout.html";
+
+  const { subtotal } = RinkaCart.totals();
+  document.getElementById("sumSubtotal").textContent = money(subtotal);
+  document.getElementById("sumTotal").textContent = money(subtotal);
 }
+renderCart();
 </script>
 </body>
 </html>
