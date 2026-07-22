@@ -2,1042 +2,127 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ทำการสั่งซื้อ — Rinka Shop</title>
-<link rel="stylesheet" href="shared.css">
-<style>
-  body{ padding-bottom: 110px; }
-  .rk-step-panel{ padding: 4px 18px 24px; }
-  .rk-order-item{
-    display:flex; gap:10px; align-items:center;
-    padding: 10px 0; border-bottom: 1px solid var(--rk-border);
-  }
-  .rk-order-item:last-child{ border-bottom:none; }
-  .rk-order-item img{ width:52px; height:52px; border-radius:10px; object-fit:cover; }
-  .rk-order-item .rk-oi-name{ font-size:13.5px; font-weight:600; }
-  .rk-order-item .rk-oi-sub{ font-size:12px; color: var(--rk-ink-soft); }
-  .rk-order-item .rk-oi-price{ margin-left:auto; font-family: var(--rk-font-mono); font-weight:700; }
-
-  .rk-gift-tier{ margin-bottom:14px; }
-  .rk-gift-tier .rk-gt-head{ font-size:13.5px; font-weight:700; margin-bottom:2px; }
-  .rk-gift-tier .rk-gt-sub{ font-size:12px; color: var(--rk-ink-soft); margin-bottom:10px; }
-  .rk-gift-tier.rk-gift-tier-disabled{ opacity:.45; pointer-events:none; }
-  .rk-tier-count{ font-size:12.5px; font-weight:700; margin-bottom:10px; }
-
-  .rk-redeem-choice{
-    border:1.5px solid var(--rk-border); border-radius: var(--rk-radius-sm);
-    padding:10px; margin-bottom:12px; background: var(--rk-surface-2);
-  }
-  .rk-redeem-choice .rk-rc-title{ font-size:12.5px; font-weight:700; margin-bottom:6px; }
-  .rk-redeem-choice label{
-    display:flex; gap:8px; align-items:flex-start; padding:6px 0; font-size:13px; cursor:pointer;
-  }
-
-  .rk-gift-item{
-    border: 1.5px solid var(--rk-border); border-radius: var(--rk-radius-sm);
-    padding:10px; margin-bottom:10px;
-  }
-  .rk-gift-row{ display:flex; align-items:center; gap:12px; }
-  .rk-gift-row img{ width:52px; height:52px; border-radius:8px; object-fit:cover; flex-shrink:0; }
-  .rk-gift-row .rk-gift-name{ flex:1; font-size:13.5px; font-weight:600; }
-  .rk-gift-row input[type="checkbox"]{ width:20px; height:20px; accent-color: var(--rk-primary); flex-shrink:0; }
-  .rk-gift-fixed-note{ font-size:11.5px; color: var(--rk-primary-dark); margin-top:2px; }
-
-  .rk-qty-stepper{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
-  .rk-qty-stepper button{
-    width:30px; height:30px; border-radius:50%; border:1.5px solid var(--rk-border);
-    background: var(--rk-surface); font-size:16px; font-weight:700; cursor:pointer;
-  }
-  .rk-qty-stepper .rk-qty-val{ min-width:20px; text-align:center; font-family: var(--rk-font-mono); font-weight:700; }
-
-  .rk-char-group{ margin-top:10px; }
-  .rk-char-item-group{
-    margin-top:8px; padding:8px; border:1px solid var(--rk-border); border-radius:8px;
-    background: var(--rk-surface-2);
-  }
-  .rk-char-item-group .rk-cg-title{ font-size:12.5px; font-weight:700; margin-bottom:8px; }
-  .rk-char-item{ display:flex; align-items:center; gap:8px; padding:6px 4px; font-size:13px; cursor:pointer; }
-  .rk-char-item input{ width:auto; accent-color: var(--rk-primary); }
-
-  .rk-bottom-bar{
-    position:fixed; left:0; right:0; bottom:0; z-index:150;
-    background: rgba(255,255,255,.97); backdrop-filter: blur(10px);
-    border-top: 1px solid var(--rk-border);
-    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
-    display:flex; gap:10px;
-  }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ชำระเงิน | Rinka Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div id="site-header"></div>
 
-<div id="rkChrome"></div>
+<section class="section">
+  <div class="wrap two-col">
+    <div>
+      <h2>ข้อมูลผู้สั่งซื้อ</h2>
+      <form id="checkoutForm" class="panel stack">
+        <div class="field-row">
+          <div class="field"><label>ชื่อ-นามสกุล *</label><input name="customer_name" required></div>
+          <div class="field"><label>เบอร์โทร *</label><input name="phone" required></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>อีเมล *</label><input type="email" name="email" required></div>
+          <div class="field"><label>Line / Twitter/X (ติดต่อกลับ)</label><input name="social"></div>
+        </div>
 
-<div class="rk-steps">
-  <div class="rk-step rk-step-active" id="stepDot-1">
-    <div class="rk-step-dot">1</div>ที่อยู่
-  </div>
-  <div class="rk-step-line"></div>
-  <div class="rk-step" id="stepDot-2">
-    <div class="rk-step-dot">2</div>ของแถม
-  </div>
-  <div class="rk-step-line"></div>
-  <div class="rk-step" id="stepDot-3">
-    <div class="rk-step-dot">3</div>ตรวจสอบ
-  </div>
-</div>
+        <h3 style="margin-top:8px;">ที่อยู่จัดส่ง</h3>
+        <p class="hint" style="margin-top:-8px;">สำหรับสินค้าพรีออเดอร์ ที่อยู่นี้จะใช้ยืนยันอีกครั้งตอนของถึงไทยและพร้อมจัดส่งจริง</p>
+        <div class="field"><label>ที่อยู่ *</label><textarea name="address" rows="2" required></textarea></div>
+        <div class="field-row">
+          <div class="field"><label>ตำบล/แขวง</label><input name="subdistrict"></div>
+          <div class="field"><label>อำเภอ/เขต</label><input name="district"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>จังหวัด</label><input name="province"></div>
+          <div class="field"><label>รหัสไปรษณีย์</label><input name="postcode"></div>
+        </div>
 
-<!-- STEP 1: ที่อยู่ -->
-<div id="panel-1" class="rk-step-panel">
-  <div class="rk-card" style="margin-bottom:14px;">
-    <h2 style="font-size:15px;">📍 ที่อยู่จัดส่ง</h2>
-    <div class="rk-field">
-      <label>อีเมล</label>
-      <input id="email" type="email" placeholder="you@email.com">
-      <div class="rk-field-msg">กรอกอีเมลให้ถูกต้อง เช่น name@email.com</div>
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">ยืนยันคำสั่งซื้อ &amp; ไปหน้าชำระเงิน</button>
+      </form>
     </div>
-    <button class="rk-btn rk-btn-outline" style="margin-bottom:16px;" onclick="loadAddress()">
-      📥 โหลดที่อยู่ที่เคยบันทึกไว้
-    </button>
-    <div class="rk-field">
-      <label>ชื่อผู้รับ</label>
-      <input id="receiver" placeholder="ชื่อ-นามสกุล">
-      <div class="rk-field-msg">กรอกชื่อผู้รับ</div>
-    </div>
-    <div class="rk-field">
-      <label>เบอร์โทร</label>
-      <input id="phone" placeholder="0812345678" inputmode="numeric">
-      <div class="rk-field-msg">เบอร์โทรต้องเป็นตัวเลข 10 หลัก ขึ้นต้นด้วย 0</div>
-    </div>
-    <div class="rk-field">
-      <label>Twitter / Discord (ถ้ามี)</label>
-      <input id="social" placeholder="@handle">
-    </div>
-    <div class="rk-field">
-      <label>ที่อยู่</label>
-      <textarea id="address" rows="2" placeholder="บ้านเลขที่ ถนน ซอย"></textarea>
-      <div class="rk-field-msg">กรอกที่อยู่</div>
-    </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-      <div class="rk-field"><label>แขวง/ตำบล</label><input id="subdistrict"></div>
-      <div class="rk-field"><label>เขต/อำเภอ</label><input id="district"></div>
-      <div class="rk-field"><label>จังหวัด</label><input id="province"></div>
-      <div class="rk-field"><label>รหัสไปรษณีย์</label><input id="postcode" inputmode="numeric"></div>
-    </div>
-    <button class="rk-btn rk-btn-outline rk-btn-block" onclick="saveAddress()">💾 บันทึกที่อยู่นี้ไว้ใช้ครั้งหน้า</button>
-  </div>
-</div>
 
-<!-- STEP 2: ของแถม -->
-<div id="panel-2" class="rk-step-panel rk-hidden">
-  <div id="giftSection"></div>
-  <div id="noGiftMsg" class="rk-empty rk-hidden">
-    <div class="rk-empty-emoji">🎁</div>รอบนี้ยังไม่มีของแถม ไปต่อได้เลย
+    <div>
+      <div class="panel">
+        <h3 style="margin-top:0;">รายการสั่งซื้อ</h3>
+        <div id="reviewLines"></div>
+        <div class="summary-row total"><span>ยอดที่ต้องชำระตอนนี้</span><span id="reviewTotal">฿0</span></div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- STEP 3: ตรวจสอบ -->
-<div id="panel-3" class="rk-step-panel rk-hidden">
-  <div class="rk-card" style="margin-bottom:14px;">
-    <h2 style="font-size:15px;">รายการสินค้า</h2>
-    <div id="reviewItems"></div>
-  </div>
-  <div class="rk-card">
-    <h2 style="font-size:15px;">📍 จัดส่งไปที่</h2>
-    <div id="reviewAddress" style="font-size:13.5px; color: var(--rk-ink-soft); line-height:1.7;"></div>
-  </div>
-  <div class="rk-card" style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
-    <span style="font-weight:600;">ยอดรวมทั้งหมด</span>
-    <span class="rk-price" style="font-size:20px;" id="reviewTotal">฿0</span>
-  </div>
-</div>
-
-<div class="rk-bottom-bar">
-  <button class="rk-btn rk-btn-outline" id="backBtn" style="flex:0 0 90px;" onclick="prevStep()">ย้อนกลับ</button>
-  <button class="rk-btn rk-btn-primary rk-btn-block" id="nextBtn" onclick="nextStep()">ถัดไป</button>
-</div>
-
-<script src="toast.js"></script>
-<script src="shared.js"></script>
+<div id="site-footer"></div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/common.js"></script>
 <script>
-let cart = [];
-let currentStep = 1;
-let addressData = {};
-let selectedGifts = [];
-const giftCharacterMap = {};
-
-init();
-
-function init() {
-  // ปิด bottom nav ระหว่าง flow — ไม่งั้นจะมาซ้อนทับปุ่ม "ถัดไป" ด้านล่าง
-  renderChrome("cart", "ทำการสั่งซื้อ", false);
-
-  cart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
-  if (cart.length === 0) cart = RinkaCart.get();
-  if (cart.length === 0) {
-    showToast("ไม่พบสินค้าที่จะสั่งซื้อ", "error");
-    setTimeout(() => (location.href = "cart.html"), 1200);
+function renderReview(){
+  const items = RinkaCart.read();
+  if(!items.length){
+    document.getElementById("reviewLines").innerHTML = `<p class="muted">ตะกร้าว่างเปล่า <a href="index.html">เลือกซื้อสินค้า</a></p>`;
+    document.getElementById("submitBtn").disabled = true;
     return;
   }
-  document.getElementById("backBtn").classList.add("rk-hidden");
-  loadGifts();
+  document.getElementById("reviewLines").innerHTML = items.map(i => {
+    const lineTotal = (Number(i.price) + (i.crate_selected ? Number(i.crate_fee||0) : 0)) * i.qty;
+    return `<div class="summary-row"><span>${i.name} ${i.option_value ? '('+i.option_value+')' : ''} × ${i.qty}</span><span>${money(lineTotal)}</span></div>`;
+  }).join("");
+  const { subtotal } = RinkaCart.totals();
+  document.getElementById("reviewTotal").textContent = money(subtotal);
 }
+renderReview();
 
-/* ---------- Step navigation ---------- */
-function goToStep(step) {
-  [1, 2, 3].forEach((s) => {
-    document.getElementById(`panel-${s}`).classList.toggle("rk-hidden", s !== step);
-    const dot = document.getElementById(`stepDot-${s}`);
-    dot.classList.toggle("rk-step-active", s === step);
-    dot.classList.toggle("rk-step-done", s < step);
-  });
-  document.getElementById("backBtn").classList.toggle("rk-hidden", step === 1);
-  document.getElementById("nextBtn").textContent = step === 3 ? "ไปหน้าชำระเงิน" : "ถัดไป";
-  currentStep = step;
-  if (step === 3) renderReview();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-function prevStep() {
-  if (currentStep > 1) goToStep(currentStep - 1);
-}
-function nextStep() {
-  if (currentStep === 1) {
-    if (!validateStep1()) return;
-    goToStep(2);
-  } else if (currentStep === 2) {
-    const gifts = collectAndValidateGifts();
-    if (gifts === null) return;
-    selectedGifts = gifts;
-    goToStep(3);
-  } else {
-    submitAndGoToPayment();
-  }
-}
+document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const items = RinkaCart.read();
+  if(!items.length){ toast("ตะกร้าว่างเปล่า", true); return; }
 
-/* ---------- Step 1: address ---------- */
-function validateStep1() {
-  let ok = true;
-  const emailEl = document.getElementById("email");
-  const receiverEl = document.getElementById("receiver");
-  const phoneEl = document.getElementById("phone");
-  const addressEl = document.getElementById("address");
+  const fd = new FormData(e.target);
+  const address = ["address","subdistrict","district","province","postcode"]
+    .map(k => fd.get(k)).filter(Boolean).join(" ");
 
-  if (!RinkaValidate.email(emailEl.value)) {
-    RinkaValidate.markError(emailEl, "กรอกอีเมลให้ถูกต้อง เช่น name@email.com");
-    ok = false;
-  } else RinkaValidate.clearError(emailEl);
+  const { subtotal } = RinkaCart.totals();
+  const session = RinkaAuth.get();
 
-  if (!RinkaValidate.notEmpty(receiverEl.value)) {
-    RinkaValidate.markError(receiverEl, "กรอกชื่อผู้รับ");
-    ok = false;
-  } else RinkaValidate.clearError(receiverEl);
-
-  if (!RinkaValidate.thaiPhone(phoneEl.value)) {
-    RinkaValidate.markError(phoneEl, "เบอร์โทรต้องเป็นตัวเลข 10 หลัก ขึ้นต้นด้วย 0");
-    ok = false;
-  } else RinkaValidate.clearError(phoneEl);
-
-  if (!RinkaValidate.notEmpty(addressEl.value)) {
-    RinkaValidate.markError(addressEl, "กรอกที่อยู่");
-    ok = false;
-  } else RinkaValidate.clearError(addressEl);
-
-  if (!ok) showToast("กรอกข้อมูลให้ครบก่อนไปต่อนะครับ", "warning");
-  return ok;
-}
-
-/* โหลดที่อยู่: ต้องใช้ action=customerAddresses (endpoint เดิมของร้าน) และ
-   parse เป็น array — ไม่ใช่ action=address ที่คืน object เดี่ยว (ของเดิมที่ผิด) */
-async function loadAddress() {
-  const email = document.getElementById("email").value;
-  if (!RinkaValidate.email(email)) {
-    showToast("กรอกอีเมลให้ถูกต้องก่อนโหลดที่อยู่", "warning");
-    return;
-  }
-  try {
-    const result = await RinkaAPI.get("customerAddresses", { email });
-    const addresses = Array.isArray(result)
-      ? result
-      : Array.isArray(result.addresses)
-      ? result.addresses
-      : [];
-
-    const data =
-      addresses.find(
-        (a) =>
-          a.is_default === true ||
-          String(a.is_default || "").toLowerCase() === "true" ||
-          Number(a.is_default) === 1
-      ) || addresses[0] || null;
-
-    if (!data) {
-      showToast("ไม่พบข้อมูลที่อยู่สำหรับอีเมลนี้", "error");
-      return;
-    }
-    document.getElementById("receiver").value = data.receiver || "";
-    document.getElementById("phone").value = data.phone || "";
-    document.getElementById("social").value = data.twitter || "";
-    document.getElementById("address").value = data.address || "";
-    document.getElementById("subdistrict").value = data.subdistrict || "";
-    document.getElementById("district").value = data.district || "";
-    document.getElementById("province").value = data.province || "";
-    document.getElementById("postcode").value = data.postcode || "";
-    showToast("โหลดที่อยู่สำเร็จ", "success");
-  } catch (err) {
-    console.error(err);
-    showToast("โหลดที่อยู่ไม่สำเร็จ ลองใหม่อีกครั้ง", "error");
-  }
-}
-
-async function saveAddress() {
-  if (!validateStep1()) return;
   const payload = {
-    email: document.getElementById("email").value,
-    twitter: document.getElementById("social").value,
-    contact: "",
-    receiver: document.getElementById("receiver").value,
-    phone: document.getElementById("phone").value,
-    address: document.getElementById("address").value,
-    subdistrict: document.getElementById("subdistrict").value,
-    district: document.getElementById("district").value,
-    province: document.getElementById("province").value,
-    postcode: document.getElementById("postcode").value,
+    customer_name: fd.get("customer_name"),
+    email: fd.get("email"),
+    phone: fd.get("phone"),
+    social: fd.get("social") || "",
+    subtotal: subtotal,
+    total: subtotal,
+    customer_id: session ? session.customer_id : "",
+    shipping_address: address,
+    items: items.map(i => ({
+      product_id: i.product_id,
+      name: i.name,
+      qty: i.qty,
+      price: i.price,
+      selected_options: i.selected_options,
+      final_price: (Number(i.price) + (i.crate_selected ? Number(i.crate_fee||0) : 0)) * i.qty
+    }))
   };
-  try {
-    await RinkaAPI.post("saveAddress", payload);
-    showToast("บันทึกที่อยู่เรียบร้อย", "success");
-  } catch (err) {
-    console.error(err);
-    showToast("บันทึกที่อยู่ไม่สำเร็จ", "error");
-  }
-}
 
-/* ---------- Step 2: gifts ---------- */
-/* ระบบของแถมเต็มรูปแบบ (พอร์ตกลับจาก checkout.html เดิม):
-   - 3 selection mode: checkbox / quantity / fixed_set
-   - เลือกตัวละครต่อชิ้น (loadGiftCharacters) สำหรับของแถมที่ has_character_select
-   - จำกัดตัวละครซ้ำ (max_same_character)
-   - แลกสิทธิ์ tier ปัจจุบัน หรือเปลี่ยนเป็น tier ที่ต่ำกว่า (redeem_scope) */
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "กำลังส่งคำสั่งซื้อ...";
 
-function getCollectionTotals() {
-  const totals = {};
-  cart.forEach((item) => {
-    const collectionId = String(item.collection_id || "").trim();
-    if (!collectionId) return;
-    const price = Number(item.final_price ?? item.price ?? 0);
-    const qty = Math.max(0, Number(item.qty || 0));
-    totals[collectionId] = (totals[collectionId] || 0) + price * qty;
-  });
-  return totals;
-}
-
-async function fetchGiftRules(collectionId, total) {
-  const result = await RinkaAPI.get("giftRules", { collection_id: collectionId, total });
-  if (Array.isArray(result)) return result;
-  if (Array.isArray(result.rules)) return result.rules;
-  if (Array.isArray(result.giftRules)) return result.giftRules;
-  return [];
-}
-
-async function fetchGiftCampaigns(collectionId) {
-  const result = await RinkaAPI.get("gifts", { collection_id: collectionId });
-  if (Array.isArray(result)) return result;
-  if (Array.isArray(result.gifts)) return result.gifts;
-  if (Array.isArray(result.campaigns)) return result.campaigns;
-  return [];
-}
-
-function escapeHtml(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function normalizeGiftBoolean(value) {
-  if (value === true || value === 1) return true;
-  const normalized = String(value || "").trim().toLowerCase();
-  return ["yes", "true", "1", "active"].includes(normalized);
-}
-
-function getGiftSelectionMode(rule) {
-  const mode = String(rule.selection_mode || "checkbox").trim().toLowerCase();
-  if (mode === "quantity" || mode === "fixed_set") return mode;
-  return "checkbox";
-}
-
-function normalizeRedeemScopeValue(value) {
-  const normalized = String(value || "current_only").trim().toLowerCase();
-  if (normalized === "current_or_lower" || normalized === "current_and_lower") {
-    return "current_or_lower";
-  }
-  return "current_only";
-}
-
-function createGiftCharacterBox(giftId) {
-  return `<div id="gift-char-${escapeHtml(giftId)}" class="rk-char-group rk-hidden"></div>`;
-}
-
-function renderCheckboxGift(gift, rule, collectionId, tierKey) {
-  const giftId = String(gift.gift_id || "").trim();
-  const hasCharacterSelect = normalizeGiftBoolean(gift.has_character_select);
-  const maxSameCharacterValue = Number(gift.max_same_character);
-  const maxSameCharacter = hasCharacterSelect
-    ? Number.isFinite(maxSameCharacterValue)
-      ? Math.max(1, maxSameCharacterValue)
-      : 1
-    : 0;
-  return `
-    <div class="rk-gift-item">
-      <div class="rk-gift-row">
-        <img src="${escapeHtml(gift.gift_image || "")}" alt="">
-        <div class="rk-gift-name">${escapeHtml(gift.gift_name || "")}</div>
-        <input type="checkbox" class="gift-checkbox"
-          data-gift-id="${escapeHtml(giftId)}" data-tier="${escapeHtml(tierKey)}"
-          data-tier-name="${escapeHtml(rule.tier_name || "")}" data-collection-id="${escapeHtml(collectionId)}"
-          data-max="${Math.max(1, Number(rule.max_select || 1))}"
-          data-has-character-select="${hasCharacterSelect ? "yes" : "no"}"
-          data-max-same-character="${maxSameCharacter}" value="${escapeHtml(giftId)}">
-      </div>
-      ${createGiftCharacterBox(giftId)}
-    </div>`;
-}
-
-function renderQuantityGift(gift, rule, collectionId, tierKey) {
-  const giftId = String(gift.gift_id || "").trim();
-  const maxSelect = Math.max(1, Number(rule.max_select || 1));
-  const hasCharacterSelect = normalizeGiftBoolean(gift.has_character_select);
-  const maxSameCharacterValue = Number(gift.max_same_character);
-  const maxSameCharacter = hasCharacterSelect
-    ? Number.isFinite(maxSameCharacterValue)
-      ? Math.max(1, maxSameCharacterValue)
-      : 1
-    : 0;
-  return `
-    <div class="rk-gift-item">
-      <div class="rk-gift-row">
-        <img src="${escapeHtml(gift.gift_image || "")}" alt="">
-        <div class="rk-gift-name">${escapeHtml(gift.gift_name || "")}</div>
-        <div class="rk-qty-stepper">
-          <button type="button" class="gift-qty-minus" data-gift-id="${escapeHtml(giftId)}">−</button>
-          <span class="rk-qty-val" id="gift-qty-${escapeHtml(giftId)}">0</span>
-          <button type="button" class="gift-qty-plus" data-gift-id="${escapeHtml(giftId)}">+</button>
-        </div>
-        <input type="hidden" class="gift-quantity"
-          data-gift-id="${escapeHtml(giftId)}" data-tier="${escapeHtml(tierKey)}"
-          data-tier-name="${escapeHtml(rule.tier_name || "")}" data-collection-id="${escapeHtml(collectionId)}"
-          data-max="${maxSelect}" data-has-character-select="${hasCharacterSelect ? "yes" : "no"}"
-          data-max-same-character="${maxSameCharacter}" value="0">
-      </div>
-      ${createGiftCharacterBox(giftId)}
-    </div>`;
-}
-
-function renderFixedSetGift(gift, rule, collectionId, tierKey) {
-  const giftId = String(gift.gift_id || "").trim();
-  const hasCharacterSelect = normalizeGiftBoolean(gift.has_character_select);
-  const maxSameCharacterValue = Number(gift.max_same_character);
-  const maxSameCharacter = hasCharacterSelect
-    ? Number.isFinite(maxSameCharacterValue)
-      ? Math.max(1, maxSameCharacterValue)
-      : 1
-    : 0;
-  return `
-    <div class="rk-gift-item">
-      <div class="rk-gift-row">
-        <img src="${escapeHtml(gift.gift_image || "")}" alt="">
-        <div>
-          <div class="rk-gift-name">${escapeHtml(gift.gift_name || "")}</div>
-          <div class="rk-gift-fixed-note">✓ ได้รับอัตโนมัติ</div>
-        </div>
-        <input type="hidden" class="gift-fixed"
-          data-gift-id="${escapeHtml(giftId)}" data-tier="${escapeHtml(tierKey)}"
-          data-tier-name="${escapeHtml(rule.tier_name || "")}" data-collection-id="${escapeHtml(collectionId)}"
-          data-has-character-select="${hasCharacterSelect ? "yes" : "no"}"
-          data-max-same-character="${maxSameCharacter}" value="1">
-      </div>
-      ${createGiftCharacterBox(giftId)}
-    </div>`;
-}
-
-function renderGiftByMode(gift, rule, collectionId, tierKey) {
-  const mode = getGiftSelectionMode(rule);
-  if (mode === "quantity") return renderQuantityGift(gift, rule, collectionId, tierKey);
-  if (mode === "fixed_set") return renderFixedSetGift(gift, rule, collectionId, tierKey);
-  return renderCheckboxGift(gift, rule, collectionId, tierKey);
-}
-
-function renderRedemptionChoice(tierKey, tierName, lowerTierName, lowerTierQuantity) {
-  const choiceName = `gift-redeem-${tierKey}`;
-  return `
-    <div class="rk-redeem-choice">
-      <div class="rk-rc-title">เลือกวิธีรับของแถม</div>
-      <label>
-        <input type="radio" class="gift-redeem-radio" name="${escapeHtml(choiceName)}" value="current" data-tier-key="${escapeHtml(tierKey)}" checked>
-        <span>รับของแถม <b>${escapeHtml(tierName)}</b> ตามปกติ</span>
-      </label>
-      <label>
-        <input type="radio" class="gift-redeem-radio" name="${escapeHtml(choiceName)}" value="lower" data-tier-key="${escapeHtml(tierKey)}">
-        <span>เปลี่ยนเป็นของแถม <b>${escapeHtml(lowerTierName)}</b> รวม <b>${lowerTierQuantity} ชิ้น</b></span>
-      </label>
-    </div>`;
-}
-
-function renderGiftTier(collectionId, rule, gifts) {
-  const tierName = String(rule.tier_name || "").trim();
-  const normalizedRuleTier = tierName.toLowerCase();
-  const tierGifts = gifts.filter(
-    (g) => String(g.tier_name || "").trim().toLowerCase() === normalizedRuleTier
-  );
-  if (!tierGifts.length) return "";
-
-  const tierKey = collectionId + "::" + normalizedRuleTier;
-  const maxSelect = Math.max(1, Number(rule.max_select || 1));
-  const selectionMode = getGiftSelectionMode(rule);
-  const redeemScope = normalizeRedeemScopeValue(rule.redeem_scope);
-  const lowerTierName = String(rule.lower_tier_name || "").trim();
-  const lowerTierQuantityValue = Number(rule.lower_tier_quantity);
-  const lowerTierQuantity = Number.isFinite(lowerTierQuantityValue)
-    ? Math.max(0, lowerTierQuantityValue)
-    : 0;
-  const hasLowerTierAlternative =
-    redeemScope === "current_or_lower" && Boolean(lowerTierName) && lowerTierQuantity > 0;
-
-  const modeDescription = {
-    checkbox: `เลือกได้สูงสุด ${maxSelect} ชิ้น`,
-    quantity: `เลือกได้สูงสุด ${maxSelect} ชิ้น`,
-    fixed_set: "ได้รับอัตโนมัติ",
-  }[selectionMode];
-
-  return `
-    <div class="rk-card rk-gift-tier"
-      data-tier-key="${escapeHtml(tierKey)}" data-collection-id="${escapeHtml(collectionId)}"
-      data-tier-name="${escapeHtml(tierName)}" data-max="${maxSelect}" data-default-max="${maxSelect}"
-      data-selection-mode="${escapeHtml(selectionMode)}" data-redeem-scope="${escapeHtml(redeemScope)}"
-      data-lower-tier-name="${escapeHtml(lowerTierName)}" data-lower-tier-quantity="${lowerTierQuantity}"
-      data-redemption-active="yes" data-redemption-choice="current">
-      <div class="rk-gt-head">🎁 ${escapeHtml(tierName)}</div>
-      <div class="rk-gt-sub">ซื้อครบ ${formatBaht(rule.min_amount || 0)} · ${modeDescription}</div>
-      ${hasLowerTierAlternative ? renderRedemptionChoice(tierKey, tierName, lowerTierName, lowerTierQuantity) : ""}
-      <div class="rk-tier-count">${
-        selectionMode === "fixed_set" ? "รับของแถมเซ็ตนี้อัตโนมัติ" : `เลือกแล้ว 0 / ${maxSelect} ชิ้น`
-      }</div>
-      <div class="rk-gift-tier-items" data-tier-items="${escapeHtml(tierKey)}">
-        ${tierGifts.map((g) => renderGiftByMode(g, rule, collectionId, tierKey)).join("")}
-      </div>
-    </div>`;
-}
-
-async function loadGiftCharacters(giftId) {
-  try {
-    const result = await RinkaAPI.get("giftCharacters", { gift_id: giftId });
-    const chars = Array.isArray(result) ? result : Array.isArray(result.characters) ? result.characters : [];
-    giftCharacterMap[giftId] = chars;
-
-    const quantityInput = document.querySelector(`.gift-quantity[data-gift-id="${CSS.escape(giftId)}"]`);
-    const checkbox = document.querySelector(`.gift-checkbox[data-gift-id="${CSS.escape(giftId)}"]`);
-    const fixedInput = document.querySelector(`.gift-fixed[data-gift-id="${CSS.escape(giftId)}"]`);
-
-    let quantity = 0;
-    if (quantityInput) quantity = Number(quantityInput.value || 0);
-    else if (checkbox && checkbox.checked) quantity = 1;
-    else if (fixedInput) quantity = 1;
-
-    renderGiftCharacterSelectors(giftId, quantity);
-  } catch (err) {
-    console.error("loadGiftCharacters error", giftId, err);
-  }
-}
-
-async function loadAllGiftCharacters() {
-  const giftElements = document.querySelectorAll(".gift-checkbox,.gift-quantity,.gift-fixed");
-  const loadedGiftIds = new Set();
-  for (const el of giftElements) {
-    const giftId = String(el.dataset.giftId || "").trim();
-    if (!giftId || loadedGiftIds.has(giftId)) continue;
-    loadedGiftIds.add(giftId);
-    await loadGiftCharacters(giftId);
-  }
-}
-
-function renderGiftCharacterSelectors(giftId, quantity) {
-  const box = document.getElementById(`gift-char-${giftId}`);
-  if (!box) return;
-  const chars = giftCharacterMap[giftId] || [];
-  quantity = Math.max(0, Number(quantity || 0));
-
-  if (!chars.length || quantity <= 0) {
-    box.innerHTML = "";
-    box.classList.add("rk-hidden");
-    return;
-  }
-
-  const previousSelections = [];
-  box.querySelectorAll(".rk-char-item-group").forEach((group, index) => {
-    const selected = group.querySelector("input[type='radio']:checked");
-    previousSelections[index] = selected ? selected.value : "";
-  });
-
-  let html = "";
-  for (let i = 0; i < quantity; i++) {
-    const previousValue = previousSelections[i] || "";
-    html += `<div class="rk-char-item-group" data-gift-id="${escapeHtml(giftId)}" data-item-index="${i}">
-      <div class="rk-cg-title">เลือกตัวละครสำหรับชิ้นที่ ${i + 1}</div>`;
-    chars.forEach((char) => {
-      const characterName = String(char.character_name || "");
-      const checked = previousValue === characterName;
-      html += `<label class="rk-char-item">
-        <input type="radio" name="gift-char-${escapeHtml(giftId)}-${i}" value="${escapeHtml(characterName)}" ${checked ? "checked" : ""}>
-        <span>${escapeHtml(characterName)}</span>
-      </label>`;
-    });
-    html += `</div>`;
-  }
-  box.innerHTML = html;
-  box.classList.remove("rk-hidden");
-}
-
-async function loadGifts() {
-  const collectionTotals = getCollectionTotals();
-  const collectionIds = Object.keys(collectionTotals);
-  if (collectionIds.length === 0) {
-    document.getElementById("noGiftMsg").classList.remove("rk-hidden");
-    return;
-  }
-
-  document.getElementById("giftSection").innerHTML =
-    `<div class="rk-empty" style="padding:30px;"><div class="rk-empty-emoji">🎁</div>กำลังโหลดของแถม...</div>`;
-
-  try {
-    let html = "";
-    for (const collectionId of collectionIds) {
-      const total = collectionTotals[collectionId];
-      const rules = await fetchGiftRules(collectionId, total);
-      if (!rules.length) continue;
-      const gifts = await fetchGiftCampaigns(collectionId);
-      rules.forEach((rule) => {
-        html += renderGiftTier(collectionId, rule, gifts);
-      });
+  try{
+    const res = await RinkaAPI.createOrder(payload);
+    if(res && res.success){
+      RinkaCart.clear();
+      location.href = `payment.html?id=${encodeURIComponent(res.order_id)}&total=${subtotal}`;
+    } else {
+      toast(res.error || "สั่งซื้อไม่สำเร็จ กรุณาลองใหม่", true);
+      btn.disabled = false;
+      btn.textContent = "ยืนยันคำสั่งซื้อ & ไปหน้าชำระเงิน";
     }
-
-    if (!html) {
-      document.getElementById("giftSection").innerHTML = "";
-      document.getElementById("noGiftMsg").classList.remove("rk-hidden");
-      return;
-    }
-
-    document.getElementById("giftSection").innerHTML = html;
-    await loadAllGiftCharacters();
-    updateAllGiftTierCounts();
-  } catch (err) {
-    console.error("loadGifts error", err);
-    document.getElementById("giftSection").innerHTML = `<div class="rk-empty">โหลดของแถมไม่สำเร็จ</div>`;
-  }
-}
-
-/* ---------- tier / redemption helpers ---------- */
-function isGiftElementActive(element) {
-  const tierCard = element.closest(".rk-gift-tier");
-  if (!tierCard) return true;
-  return String(tierCard.dataset.redemptionActive || "yes") !== "no";
-}
-
-function getGiftTierSelectedCount(tierKey) {
-  let total = 0;
-  document.querySelectorAll(".gift-checkbox").forEach((cb) => {
-    if (cb.dataset.tier === tierKey && cb.checked) total += 1;
-  });
-  document.querySelectorAll(".gift-quantity").forEach((input) => {
-    if (input.dataset.tier === tierKey) total += Number(input.value || 0);
-  });
-  return total;
-}
-
-function updateGiftTierCount(tierKey) {
-  const tierCard = document.querySelector(`.rk-gift-tier[data-tier-key="${CSS.escape(tierKey)}"]`);
-  if (!tierCard) return;
-  const countBox = tierCard.querySelector(".rk-tier-count");
-  if (!countBox) return;
-
-  const isActive = String(tierCard.dataset.redemptionActive || "yes") !== "no";
-  if (!isActive) {
-    countBox.textContent = "เปลี่ยนสิทธิ์เป็นของแถม Tier ต่ำกว่าแล้ว";
-    countBox.style.color = "var(--rk-ink-faint)";
-    return;
-  }
-
-  const selectionMode = String(tierCard.dataset.selectionMode || "checkbox").toLowerCase();
-  if (selectionMode === "fixed_set") {
-    countBox.textContent = "รับของแถมเซ็ตนี้อัตโนมัติ";
-    countBox.style.color = "var(--rk-primary-dark)";
-    return;
-  }
-
-  const selectedCount = getGiftTierSelectedCount(tierKey);
-  const maxSelect = Math.max(0, Number(tierCard.dataset.max || 0));
-  countBox.textContent = `เลือกแล้ว ${selectedCount} / ${maxSelect} ชิ้น`;
-  countBox.style.color = selectedCount > maxSelect ? "var(--rk-danger)" : "";
-}
-
-function updateAllGiftTierCounts() {
-  document.querySelectorAll(".rk-gift-tier").forEach((card) => updateGiftTierCount(card.dataset.tierKey));
-}
-
-function findGiftTierCard(collectionId, tierName) {
-  const normalized = String(tierName || "").trim().toLowerCase();
-  return (
-    Array.from(document.querySelectorAll(".rk-gift-tier")).find(
-      (card) =>
-        String(card.dataset.collectionId || "").trim() === String(collectionId || "").trim() &&
-        String(card.dataset.tierName || "").trim().toLowerCase() === normalized
-    ) || null
-  );
-}
-
-function clearGiftTierSelections(tierCard) {
-  if (!tierCard) return;
-  tierCard.querySelectorAll(".gift-checkbox").forEach((cb) => {
-    cb.checked = false;
-    renderGiftCharacterSelectors(cb.dataset.giftId || cb.value || "", 0);
-  });
-  tierCard.querySelectorAll(".gift-quantity").forEach((input) => {
-    input.value = 0;
-    const giftId = input.dataset.giftId || "";
-    const label = document.getElementById(`gift-qty-${giftId}`);
-    if (label) label.textContent = "0";
-    renderGiftCharacterSelectors(giftId, 0);
-  });
-}
-
-function setGiftTierActiveState(tierCard, active) {
-  if (!tierCard) return;
-  tierCard.dataset.redemptionActive = active ? "yes" : "no";
-  tierCard.classList.toggle("rk-gift-tier-disabled", !active);
-  tierCard
-    .querySelectorAll(".gift-checkbox,.gift-quantity,.gift-fixed,.gift-qty-plus,.gift-qty-minus")
-    .forEach((el) => (el.disabled = !active));
-  if (!active) clearGiftTierSelections(tierCard);
-}
-
-function updateTierRedemptionChoice(tierKey, choice) {
-  const sourceTierCard = document.querySelector(`.rk-gift-tier[data-tier-key="${CSS.escape(tierKey)}"]`);
-  if (!sourceTierCard) return;
-  const collectionId = String(sourceTierCard.dataset.collectionId || "").trim();
-  sourceTierCard.dataset.redemptionChoice = choice === "lower" ? "lower" : "current";
-
-  const collectionTierCards = Array.from(document.querySelectorAll(".rk-gift-tier")).filter(
-    (card) => String(card.dataset.collectionId || "").trim() === collectionId
-  );
-
-  collectionTierCards.forEach((card) => {
-    const defaultMax = Math.max(1, Number(card.dataset.defaultMax || card.dataset.max || 1));
-    card.dataset.max = String(defaultMax);
-    setGiftTierActiveState(card, true);
-  });
-
-  collectionTierCards.forEach((card) => {
-    const redemptionChoice = String(card.dataset.redemptionChoice || "current").toLowerCase();
-    if (redemptionChoice !== "lower") return;
-
-    const lowerTierName = String(card.dataset.lowerTierName || "").trim();
-    const lowerTierQuantity = Math.max(0, Number(card.dataset.lowerTierQuantity || 0));
-    const lowerTierCard = findGiftTierCard(collectionId, lowerTierName);
-
-    if (!lowerTierCard || lowerTierQuantity <= 0) {
-      card.dataset.redemptionChoice = "current";
-      const currentRadio = card.querySelector('.gift-redeem-radio[value="current"]');
-      if (currentRadio) currentRadio.checked = true;
-      return;
-    }
-
-    setGiftTierActiveState(card, false);
-    lowerTierCard.dataset.max = String(
-      Math.max(Number(lowerTierCard.dataset.max || 0), lowerTierQuantity)
-    );
-  });
-
-  updateAllGiftTierCounts();
-}
-
-function validateGiftRedemption(showMsg = true) {
-  const tierCards = Array.from(document.querySelectorAll(".rk-gift-tier"));
-  for (const tierCard of tierCards) {
-    const isActive = String(tierCard.dataset.redemptionActive || "yes") !== "no";
-    const tierName = String(tierCard.dataset.tierName || "").trim();
-    const tierKey = String(tierCard.dataset.tierKey || "").trim();
-    const selectionMode = String(tierCard.dataset.selectionMode || "checkbox").toLowerCase();
-    const maxSelect = Math.max(0, Number(tierCard.dataset.max || 0));
-
-    if (!isActive) {
-      if (getGiftTierSelectedCount(tierKey) > 0) {
-        if (showMsg) showToast(`ไม่สามารถเลือกของแถม ${tierName} ได้ เนื่องจากเลือกแลกสิทธิ์เป็น Tier ต่ำกว่าแล้ว`, "warning");
-        return false;
-      }
-      continue;
-    }
-    if (selectionMode === "fixed_set") continue;
-
-    const selectedCount = getGiftTierSelectedCount(tierKey);
-    if (selectedCount > maxSelect) {
-      if (showMsg) showToast(`ของแถม ${tierName} เลือกได้สูงสุด ${maxSelect} ชิ้น`, "warning");
-      return false;
-    }
-  }
-  return true;
-}
-
-/* ---------- character validation + collection ---------- */
-function getSelectedGiftCharacter(giftId, itemIndex) {
-  const radioName = `gift-char-${giftId}-${itemIndex}`;
-  const selected = document.querySelector(`input[name="${CSS.escape(radioName)}"]:checked`);
-  return selected ? selected.value : "";
-}
-
-function validateSameGiftCharacters(giftId, quantity, maxSameCharacter) {
-  quantity = Math.max(0, Number(quantity || 0));
-  maxSameCharacter = Math.max(0, Number(maxSameCharacter || 0));
-  if (quantity <= 1 || maxSameCharacter <= 0) return true;
-
-  const counts = {};
-  for (let i = 0; i < quantity; i++) {
-    const name = getSelectedGiftCharacter(giftId, i);
-    if (!name) continue;
-    counts[name] = (counts[name] || 0) + 1;
-    if (counts[name] > maxSameCharacter) {
-      showToast(
-        maxSameCharacter === 1
-          ? "ของแถมรายการนี้ไม่สามารถเลือกตัวละครซ้ำกันได้"
-          : `ตัวละครเดียวกันเลือกซ้ำได้สูงสุด ${maxSameCharacter} ชิ้น`,
-        "warning"
-      );
-      return false;
-    }
-  }
-  return true;
-}
-
-function validateGiftCharacterLimits(gifts) {
-  const groups = {};
-  gifts.forEach((gift) => {
-    const characterName = String(gift.character_name || "").trim();
-    if (!characterName) return;
-    const maxSameCharacter = Math.max(0, Number(gift.max_same_character || 0));
-    if (maxSameCharacter <= 0) return;
-    const key = `${gift.collection_id}::${String(gift.tier_name || "").trim().toLowerCase()}::${characterName}`;
-    if (!groups[key]) {
-      groups[key] = { characterName, tierName: gift.tier_name || "", count: 0, limit: maxSameCharacter };
-    }
-    groups[key].count++;
-    groups[key].limit = Math.min(groups[key].limit, maxSameCharacter);
-  });
-
-  for (const key in groups) {
-    const g = groups[key];
-    if (g.count > g.limit) {
-      showToast(
-        g.limit === 1
-          ? `ของแถม ${g.tierName} ไม่สามารถเลือกตัวละคร ${g.characterName} ซ้ำกันได้`
-          : `ของแถม ${g.tierName} เลือกตัวละคร ${g.characterName} ได้สูงสุด ${g.limit} ชิ้น`,
-        "warning"
-      );
-      return false;
-    }
-  }
-  return true;
-}
-
-function createGiftSelectionData(element, characterName) {
-  const maxSameCharacterValue = Number(element.dataset.maxSameCharacter || 0);
-  return {
-    gift_id: element.dataset.giftId || element.value || "",
-    tier_name: element.dataset.tierName || "",
-    collection_id: element.dataset.collectionId || "",
-    character_name: characterName || "",
-    max_same_character: Number.isFinite(maxSameCharacterValue) ? Math.max(0, maxSameCharacterValue) : 0,
-  };
-}
-
-function collectAndValidateGifts() {
-  if (!validateGiftRedemption(true)) return null;
-
-  const gifts = [];
-
-  const quantityInputs = document.querySelectorAll(".gift-quantity");
-  for (const input of quantityInputs) {
-    if (!isGiftElementActive(input)) continue;
-    const giftId = String(input.dataset.giftId || "").trim();
-    const quantity = Math.max(0, Number(input.value || 0));
-    if (!giftId || quantity <= 0) continue;
-
-    const characters = giftCharacterMap[giftId] || [];
-    const maxSameCharacter = Math.max(0, Number(input.dataset.maxSameCharacter || 0));
-    if (characters.length && !validateSameGiftCharacters(giftId, quantity, maxSameCharacter)) return null;
-
-    for (let i = 0; i < quantity; i++) {
-      let characterName = "";
-      if (characters.length) {
-        characterName = getSelectedGiftCharacter(giftId, i);
-        if (!characterName) {
-          showToast(`กรุณาเลือกตัวละครของของแถมชิ้นที่ ${i + 1}`, "warning");
-          return null;
-        }
-      }
-      gifts.push(createGiftSelectionData(input, characterName));
-    }
-  }
-
-  const checkedGiftBoxes = document.querySelectorAll(".gift-checkbox:checked");
-  for (const checkbox of checkedGiftBoxes) {
-    if (!isGiftElementActive(checkbox)) continue;
-    const giftId = String(checkbox.dataset.giftId || checkbox.value || "").trim();
-    if (!giftId) continue;
-
-    const characters = giftCharacterMap[giftId] || [];
-    let characterName = "";
-    if (characters.length) {
-      characterName = getSelectedGiftCharacter(giftId, 0);
-      if (!characterName) {
-        showToast("กรุณาเลือกตัวละครของของแถมให้ครบ", "warning");
-        return null;
-      }
-    }
-    gifts.push(createGiftSelectionData(checkbox, characterName));
-  }
-
-  const fixedGiftInputs = document.querySelectorAll(".gift-fixed");
-  for (const input of fixedGiftInputs) {
-    if (!isGiftElementActive(input)) continue;
-    const giftId = String(input.dataset.giftId || "").trim();
-    if (!giftId) continue;
-
-    const characters = giftCharacterMap[giftId] || [];
-    let characterName = "";
-    if (characters.length) {
-      characterName = getSelectedGiftCharacter(giftId, 0);
-      if (!characterName) {
-        showToast("กรุณาเลือกตัวละครของของแถมแบบเซ็ตให้ครบ", "warning");
-        return null;
-      }
-    }
-    gifts.push(createGiftSelectionData(input, characterName));
-  }
-
-  if (!validateGiftCharacterLimits(gifts)) return null;
-
-  return gifts.map((g) => ({
-    gift_id: g.gift_id,
-    tier_name: g.tier_name,
-    collection_id: g.collection_id,
-    character_name: g.character_name,
-  }));
-}
-
-document.addEventListener("change", (e) => {
-  if (e.target.classList.contains("gift-checkbox")) {
-    const checkbox = e.target;
-    if (checkbox.checked && !validateGiftRedemption(false)) {
-      checkbox.checked = false;
-      showToast("เลือกของแถมเกินสิทธิ์ที่ได้รับ", "warning");
-    }
-    renderGiftCharacterSelectors(checkbox.dataset.giftId || checkbox.value, checkbox.checked ? 1 : 0);
-    updateAllGiftTierCounts();
-  }
-
-  if (e.target.classList.contains("gift-redeem-radio")) {
-    const radio = e.target;
-    updateTierRedemptionChoice(radio.dataset.tierKey, radio.value);
-    if (!validateGiftRedemption(false)) {
-      const tierCard = radio.closest(".rk-gift-tier");
-      const currentRadio = tierCard ? tierCard.querySelector('.gift-redeem-radio[value="current"]') : null;
-      if (currentRadio) {
-        currentRadio.checked = true;
-        updateTierRedemptionChoice(currentRadio.dataset.tierKey, "current");
-      }
-      showToast("ไม่สามารถเปลี่ยนรูปแบบการรับของแถมได้", "warning");
-    }
+  }catch(err){
+    toast("เกิดข้อผิดพลาด กรุณาลองใหม่", true);
+    btn.disabled = false;
+    btn.textContent = "ยืนยันคำสั่งซื้อ & ไปหน้าชำระเงิน";
   }
 });
-
-document.addEventListener("click", (e) => {
-  const plusButton = e.target.closest(".gift-qty-plus");
-  const minusButton = e.target.closest(".gift-qty-minus");
-  if (!plusButton && !minusButton) return;
-
-  const button = plusButton || minusButton;
-  const giftId = button.dataset.giftId;
-  const quantityInput = document.querySelector(`.gift-quantity[data-gift-id="${CSS.escape(giftId)}"]`);
-  if (!quantityInput) return;
-
-  let quantity = Number(quantityInput.value || 0);
-  if (plusButton) {
-    quantity++;
-    quantityInput.value = quantity;
-    if (!validateGiftRedemption(false)) {
-      quantity--;
-      quantityInput.value = quantity;
-      showToast("เลือกของแถมเกินสิทธิ์ที่ได้รับ", "warning");
-      return;
-    }
-  }
-  if (minusButton) quantity = Math.max(0, quantity - 1);
-
-  quantityInput.value = quantity;
-  const qtyLabel = document.getElementById(`gift-qty-${giftId}`);
-  if (qtyLabel) qtyLabel.textContent = quantity;
-  renderGiftCharacterSelectors(giftId, quantity);
-  updateAllGiftTierCounts();
-});
-
-/* ---------- Step 3: review ---------- */
-function renderReview() {
-  let total = 0;
-  document.getElementById("reviewItems").innerHTML = cart
-    .map((item) => {
-      const price = Number(item.final_price ?? item.price ?? 0);
-      const lineTotal = price * Number(item.qty);
-      total += lineTotal;
-      return `
-        <div class="rk-order-item">
-          <img src="${item.image || ""}" alt="">
-          <div>
-            <div class="rk-oi-name">${item.name}</div>
-            <div class="rk-oi-sub">${item.qty} ชิ้น × ${formatBaht(price)}</div>
-          </div>
-          <div class="rk-oi-price">${formatBaht(lineTotal)}</div>
-        </div>`;
-    })
-    .join("");
-  document.getElementById("reviewTotal").textContent = formatBaht(total);
-
-  const a = collectAddress();
-  document.getElementById("reviewAddress").innerHTML = `
-    ${a.receiver} · ${a.phone}<br>
-    ${a.address} ${a.subdistrict} ${a.district}<br>
-    ${a.province} ${a.postcode}
-  `;
-}
-
-function collectAddress() {
-  return {
-    email: document.getElementById("email").value,
-    receiver: document.getElementById("receiver").value,
-    phone: document.getElementById("phone").value,
-    social: document.getElementById("social").value,
-    address: document.getElementById("address").value,
-    subdistrict: document.getElementById("subdistrict").value,
-    district: document.getElementById("district").value,
-    province: document.getElementById("province").value,
-    postcode: document.getElementById("postcode").value,
-    gifts: selectedGifts,
-  };
-}
-
-function submitAndGoToPayment() {
-  addressData = collectAddress();
-  localStorage.setItem("checkoutAddress", JSON.stringify(addressData));
-  location.href = "payment.html";
-}
 </script>
 </body>
 </html>
