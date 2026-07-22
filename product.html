@@ -1,1159 +1,194 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>สินค้า</title>
-
-<link rel="stylesheet" href="style.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สินค้า | Rinka Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <style>
-
-.product-page{
-  max-width:1000px;
-  margin:auto;
-  padding:20px;
+.pd-wrap{display:grid; grid-template-columns:1fr 1fr; gap:40px; padding:40px 0;}
+@media(max-width:860px){.pd-wrap{grid-template-columns:1fr;}}
+.pd-main-img{aspect-ratio:1/1; border-radius:var(--radius); overflow:hidden; background:var(--mist); border:1px solid var(--mist-dark);}
+.pd-main-img img{width:100%; height:100%; object-fit:cover;}
+.pd-thumbs{display:flex; gap:10px; margin-top:10px;}
+.pd-thumbs img{width:64px; height:64px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent;}
+.pd-thumbs img.active{border-color:var(--stamp);}
+.option-group{margin-bottom:18px;}
+.option-group-label{font-weight:700; font-size:.88rem; margin-bottom:8px;}
+.option-pills{display:flex; gap:8px; flex-wrap:wrap;}
+.option-pill{
+  padding:8px 16px; border-radius:999px; border:1px solid var(--mist-dark);
+  background:var(--paper); cursor:pointer; font-size:.86rem; font-weight:600;
 }
-
-.product-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:30px;
-}
-
-#mainImage{
-width:100%;
-max-width:600px;
-height:auto;
-border-radius:12px;
-}
-
-.thumb-list{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:10px;
-}
-
-.thumb-list img{
-width:70px;
-height:70px;
-object-fit:cover;
-border-radius:8px;
-cursor:pointer;
-border:1px solid #ddd;
-}
-
-@media (max-width:768px){
-
-.product-grid{
-display:block;
-}
-
-.product-image{
-margin-bottom:20px;
-}
-
-}
-  
-.old-price{
-  text-decoration:line-through;
-  color:#888;
-}
-
-.sale-price{
-  color:red;
-  font-size:24px;
-  font-weight:bold;
-}
-
-.actions{
-  margin-top:20px;
-  display:flex;
-  gap:10px;
-}
-
-.actions button{
-
-flex:1;
-
-padding:14px;
-
-border:none;
-
-border-radius:12px;
-
-font-weight:700;
-
-cursor:pointer;
-
-}
-
-.qty-selector{
-
-display:flex;
-align-items:center;
-gap:10px;
-
-margin:20px 0;
-
-}
-
-.qty-selector button{
-
-width:42px;
-height:42px;
-
-border:none;
-border-radius:10px;
-
-background:#f3f3f3;
-
-font-size:20px;
-font-weight:bold;
-
-cursor:pointer;
-
-}
-
-.qty-selector input{
-
-width:70px;
-
-text-align:center;
-
-padding:10px;
-
-border:1px solid #ddd;
-border-radius:10px;
-
-font-size:16px;
-
-}
-  
-.product-topbar{
-
-position:fixed;
-
-top:15px;
-left:15px;
-right:15px;
-
-display:flex;
-justify-content:space-between;
-
-z-index:999;
-
-}
-
-.product-topbar button,
-.product-topbar a{
-
-width:46px;
-height:46px;
-
-border:none;
-
-border-radius:999px;
-
-background:white;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-text-decoration:none;
-
-font-size:22px;
-
-box-shadow:
-0 3px 12px
-rgba(
-0,
-0,
-0,
-0.15
-);
-
-cursor:pointer;
-
-}
-
-.option-section{
-  margin-top:20px;
-}
-
-.option-title{
-  font-size:18px;
-  font-weight:700;
-  margin-bottom:10px;
-}
-
-.option-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.option-row{
-  display:flex;
-  align-items:center;
-  gap:12px;
-
-  padding:10px;
-
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-
-  background:white;
-}
-
-.option-row.selected{
-  border-color:#ff7a00;
-  background:#fff7ed;
-}
-
-.option-row.soldout{
-  opacity:.45;
-  background:#f3f4f6;
-}
-
-.option-row img{
-  width:46px;
-  height:46px;
-  object-fit:cover;
-  border-radius:8px;
-}
-
-.option-info{
-  flex:1;
-}
-
-.option-name{
-  font-weight:700;
-}
-
-.option-price{
-  font-size:13px;
-  color:#666;
-}
-
-.option-qty{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.option-qty button{
-  width:30px;
-  height:30px;
-  border:none;
-  border-radius:8px;
-  background:#eef2ff;
-  font-weight:700;
-}
-
-.option-qty span{
-  min-width:20px;
-  text-align:center;
-}
-
-.soldout-text{
-  color:#999;
-  font-size:13px;
-  font-weight:700;
-}
-  
+.option-pill.selected{background:var(--plum); color:#fff; border-color:var(--plum);}
+.option-pill.disabled{opacity:.4; cursor:not-allowed; text-decoration:line-through;}
+.crate-box{display:flex; align-items:center; gap:10px; padding:12px 14px; border:1px dashed var(--mist-dark); border-radius:10px; margin-bottom:18px;}
+.qty-box{display:flex; align-items:center; gap:10px; margin-bottom:20px;}
+.qty-box button{width:34px; height:34px; border-radius:8px; border:1px solid var(--mist-dark); background:var(--cream); font-weight:700; cursor:pointer;}
+.info-strip{display:flex; gap:18px; flex-wrap:wrap; margin:18px 0; font-size:.84rem; color:var(--ink-soft);}
+.info-strip div{display:flex; align-items:center; gap:6px;}
 </style>
-
 </head>
-
 <body>
+<div id="site-header"></div>
 
-<div class="product-topbar">
-
-<button
-onclick="history.back()">
-
-←
-
-</button>
-
-<a
-href="cart.html"
-id="floatingCart">
-
-🛒
-
-</a>
-
+<div class="wrap pd-wrap" id="pd-root">
+  <div class="spinner"></div>
 </div>
-  
-<div class="product-page">
 
-<div id="product"></div>
-
-</div>
-  
+<div id="site-footer"></div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/common.js"></script>
 <script>
+let PRODUCT = null;
+let SELECTED = {};   // { group: value }
+let CRATE_ON = false;
+let QTY = 1;
 
-const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const productId =
-params.get("id");
-window.optionQty = {};
-
-loadProduct();
-
-async function loadProduct(){
-
-  try{
-
-    const response =
-      await fetch(
-        `${API}?action=product&id=${encodeURIComponent(
-          productId || ""
-        )}`
-      );
-
-    const result =
-      await response.json();
-
-    const product =
-      result &&
-      result.product
-        ? result.product
-        : result;
-
-    if(
-      !product ||
-      !product.product_id
-    ){
-
-      document
-        .getElementById(
-          "product"
-        )
-        .innerHTML =
-        "<p>ไม่พบสินค้า</p>";
-
-      return;
-
-    }
-
-    renderProduct(product);
-
-  }catch(error){
-
-    console.error(
-      "loadProduct error",
-      error
-    );
-
-    document
-      .getElementById(
-        "product"
-      )
-      .innerHTML =
-      "<p>โหลดข้อมูลสินค้าไม่สำเร็จ</p>";
-
-  }
-
-}
-
-function renderProduct(product){
-
-  window.currentProduct =
-    product;
-
-  window.optionQty = {};
-
-  const images =
-    Array.isArray(
-      product.images
-    ) &&
-    product.images.length
-      ? product.images.filter(Boolean)
-      : [
-          product.image,
-          product.image2,
-          product.image3,
-          product.image4
-        ].filter(Boolean);
-
-  const mainImage =
-    images[0] || "";
-
-  const unitPrice =
-    Number(
-      product.final_price ??
-      product.price ??
-      0
-    );
-
-  const oldPrice =
-    Number(
-      product.old_price ??
-      product.price ??
-      0
-    );
-
-  const optionGroups = {};
-
-  (
-    Array.isArray(product.options)
-      ? product.options
-      : []
-  ).forEach(option=>{
-
-    if(
-      !optionGroups[
-        option.option_name
-      ]
-    ){
-
-      optionGroups[
-        option.option_name
-      ] = [];
-
-    }
-
-    optionGroups[
-      option.option_name
-    ].push(option);
-
+function groupOptions(options){
+  const groups = {};
+  (options || []).forEach(o => {
+    if(!groups[o.option_name]) groups[o.option_name] = [];
+    groups[o.option_name].push(o);
   });
-
-  let optionsHtml = "";
-
-  Object.keys(
-    optionGroups
-  ).forEach(group=>{
-
-    optionsHtml += `
-
-<div class="option-section">
-
-<div class="option-title">
-${group}
-</div>
-
-<div class="option-list">
-
-`;
-
-    optionGroups[group]
-      .forEach(option=>{
-
-        const optionId =
-          option.option_id ||
-          `${group}_${option.option_value}`;
-
-        const stock =
-          Number(
-            option.stock || 0
-          );
-
-        const soldOut =
-          stock <= 0;
-
-        const image =
-          option.character_image ||
-          option.image ||
-          product.image ||
-          "";
-
-        const addPrice =
-          Number(
-            option.additional_price || 0
-          );
-
-        optionsHtml += `
-
-<div
-class="option-row ${
-soldOut ? "soldout" : ""
-}"
-id="optionRow_${optionId}"
->
-
-<img
-src="${image}"
-alt="${option.option_value || ""}">
-
-<div class="option-info">
-
-<div class="option-name">
-${option.option_value || ""}
-</div>
-
-<div class="option-price">
-${
-addPrice > 0
-  ? `+฿${addPrice.toLocaleString()}`
-  : "ไม่เพิ่มราคา"
-}
-</div>
-
-</div>
-
-${
-soldOut
-?
-`
-<div class="soldout-text">
-สินค้าหมด
-</div>
-`
-:
-`
-<div class="option-qty">
-
-<button
-type="button"
-onclick="
-changeOptionQty(
-'${optionId}',
-'${group}',
-'${option.option_value}',
-${addPrice},
--1
-)
-">
--
-</button>
-
-<span id="optionQty_${optionId}">
-0
-</span>
-
-<button
-type="button"
-onclick="
-changeOptionQty(
-'${optionId}',
-'${group}',
-'${option.option_value}',
-${addPrice},
-1
-)
-">
-+
-</button>
-
-</div>
-`
+  return groups;
 }
 
-</div>
+function currentUnitPrice(){
+  let price = Number(PRODUCT.price);
+  Object.values(SELECTED).forEach(opt => { price += Number(opt.additional_price || 0); });
+  return price;
+}
 
-`;
+function render(){
+  const p = PRODUCT;
+  const images = (p.images && p.images.length ? p.images : [p.image]).filter(Boolean);
+  const groups = groupOptions(p.options);
 
-      });
+  document.title = p.name + " | Rinka Shop";
 
-    optionsHtml += `
+  document.getElementById("pd-root").innerHTML = `
+    <div>
+      <div class="pd-main-img"><img id="mainImg" src="${images[0] || 'https://placehold.co/600x600'}" alt="${p.name}"></div>
+      ${images.length > 1 ? `<div class="pd-thumbs">${images.map((im,i)=>`<img src="${im}" class="${i===0?'active':''}" onclick="switchImg(this,'${im}')">`).join("")}</div>` : ""}
+    </div>
+    <div>
+      <div class="product-fandom">${p.fandom || p.main_category || ""}</div>
+      <h1 style="font-size:1.6rem;margin:6px 0 10px;">${p.name}</h1>
+      <div class="product-price" style="font-size:1.5rem;margin-bottom:10px;" id="priceDisplay">
+        ${money(p.price)}${p.on_sale ? `<span class="old">${money(p.old_price)}</span>` : ""}
+      </div>
 
-</div>
+      <div class="info-strip">
+        ${p.preorder_deadline ? `<div>⏳ ปิดรับออเดอร์: <b>&nbsp;${p.preorder_deadline}</b></div>` : ""}
+        ${p.estimated_arrival ? `<div>📦 คาดว่าถึงไทย: <b>&nbsp;${p.estimated_arrival}</b></div>` : ""}
+        <div>📊 คงเหลือ: <b>&nbsp;${p.stock}</b> ชิ้น</div>
+      </div>
 
-</div>
+      <div id="optionGroups"></div>
 
-`;
+      ${p.crate_available ? `
+      <label class="crate-box">
+        <input type="checkbox" id="crateCheck" onchange="onCrateToggle(this.checked)">
+        <span>แพ็คแบบลัง (Crate) — เพิ่ม ${money(p.crate_fee)}</span>
+      </label>` : ""}
 
+      <div class="qty-box">
+        <button onclick="changeQty(-1)">−</button>
+        <span id="qtyVal" style="min-width:24px;text-align:center;font-weight:700;">1</span>
+        <button onclick="changeQty(1)">+</button>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="addBtn" onclick="addToCart()">เพิ่มลงตะกร้า</button>
+
+      ${p.description ? `<div style="margin-top:26px;"><h3 style="font-size:1rem;">รายละเอียดสินค้า</h3><p class="muted" style="white-space:pre-line;">${p.description}</p></div>` : ""}
+    </div>
+  `;
+
+  const groupMount = document.getElementById("optionGroups");
+  Object.entries(groups).forEach(([groupName, opts]) => {
+    const div = document.createElement("div");
+    div.className = "option-group";
+    div.innerHTML = `<div class="option-group-label">${groupName}</div>
+      <div class="option-pills">
+        ${opts.map(o => `
+          <span class="option-pill ${Number(o.stock) <= 0 ? 'disabled' : ''}"
+                data-group="${groupName}" data-value="${o.option_value}"
+                onclick="${Number(o.stock) <= 0 ? '' : `selectOption('${groupName.replace(/'/g,"\\'")}', ${JSON.stringify(o).replace(/"/g,'&quot;')})`}">
+            ${o.option_value}${o.additional_price ? ` (+${money(o.additional_price)})` : ""}
+          </span>`).join("")}
+      </div>`;
+    groupMount.appendChild(div);
   });
-
-  document.getElementById(
-    "product"
-  ).innerHTML = `
-
-<div class="product-grid">
-
-<div class="product-image">
-
-<img
-id="mainImage"
-src="${mainImage}"
-alt="${product.name || ""}">
-
-<div class="thumb-list">
-
-${images.map(image=>`
-<img
-src="${image}"
-alt="${product.name || ""}"
-onclick="
-document
-.getElementById('mainImage')
-.src='${image}'
-">
-`).join("")}
-
-</div>
-
-</div>
-
-<div>
-
-<h1>
-${product.name || ""}
-</h1>
-
-<p>
-${product.description || ""}
-</p>
-
-${
-product.on_sale
-?
-`
-<div class="old-price">
-฿${oldPrice.toLocaleString()}
-</div>
-
-<div class="sale-price">
-฿${unitPrice.toLocaleString()}
-</div>
-`
-:
-`
-<div class="sale-price">
-฿${unitPrice.toLocaleString()}
-</div>
-`
 }
 
-<hr>
-
-<p>
-รอบพรี :
-${product.round || "-"}
-</p>
-
-<p>
-กำหนดเข้า :
-${product.estimated_arrival || "-"}
-</p>
-
-<p>
-แฟนด้อม :
-${product.fandom || "-"}
-</p>
-
-<p>
-หมวด :
-${product.sub_category || "-"}
-</p>
-
-${optionsHtml}
-
-<div
-class="qty-selector"
-style="${
-Object.keys(optionGroups).length > 0
-  ? "display:none;"
-  : ""
-}"
->
-
-<button
-type="button"
-onclick="changeProductQty(-1)"
->
--
-</button>
-
-<input
-id="productQty"
-type="number"
-value="1"
-min="1"
-readonly
->
-
-<button
-type="button"
-onclick="changeProductQty(1)"
->
-+
-</button>
-
-</div>
-
-<div class="actions">
-
-<button onclick="buyNow()">
-ซื้อเลย
-</button>
-
-<button onclick="addToCart()">
-เพิ่มลงตะกร้า
-</button>
-
-<button onclick="history.back()">
-กลับ
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}
-  
-function changeOptionQty(
-optionId,
-group,
-value,
-addPrice,
-change
-){
-
-if(
-!window.optionQty[optionId]
-){
-
-window.optionQty[optionId] = {
-group:group,
-value:value,
-additional_price:Number(addPrice || 0),
-qty:0
-};
-
+function switchImg(el, src){
+  document.getElementById("mainImg").src = src;
+  document.querySelectorAll(".pd-thumbs img").forEach(i => i.classList.remove("active"));
+  el.classList.add("active");
 }
 
-window.optionQty[optionId].qty += change;
-
-if(window.optionQty[optionId].qty < 0){
-window.optionQty[optionId].qty = 0;
+function selectOption(group, opt){
+  SELECTED[group] = opt;
+  document.querySelectorAll(`.option-pill[data-group="${CSS.escape(group)}"]`).forEach(el => {
+    el.classList.toggle("selected", el.dataset.value === opt.option_value);
+  });
+  updatePriceDisplay();
 }
 
-const qty =
-window.optionQty[optionId].qty;
+function onCrateToggle(checked){ CRATE_ON = checked; updatePriceDisplay(); }
 
-document
-.getElementById(
-`optionQty_${optionId}`
-)
-.textContent = qty;
-
-const row =
-document.getElementById(
-`optionRow_${optionId}`
-);
-
-if(row){
-
-row.classList.toggle(
-"selected",
-qty > 0
-);
-
+function changeQty(delta){
+  QTY = Math.max(1, QTY + delta);
+  document.getElementById("qtyVal").textContent = QTY;
+  updatePriceDisplay();
 }
 
-}
-
-function changeProductQty(
-change
-){
-
-const input =
-
-document.getElementById(
-"productQty"
-);
-
-if(!input){
-return;
-}
-
-let qty =
-
-Number(
-input.value
-);
-
-qty += change;
-
-if(qty < 1){
-qty = 1;
-}
-
-input.value = qty;
-
+function updatePriceDisplay(){
+  const unit = currentUnitPrice() + (CRATE_ON ? Number(PRODUCT.crate_fee || 0) : 0);
+  document.getElementById("priceDisplay").innerHTML = money(unit * QTY);
 }
 
 function addToCart(){
-
-  const options =
-    Array.isArray(
-      window.currentProduct.options
-    )
-      ? window.currentProduct.options
-      : [];
-
-  const selectedOptionItems =
-    Object.values(
-      window.optionQty || {}
-    )
-    .filter(
-      item =>
-        item.qty > 0
-    );
-
-  if(
-    options.length > 0 &&
-    selectedOptionItems.length === 0
-  ){
-
-    alert(
-      "กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ"
-    );
-
+  const groups = groupOptions(PRODUCT.options);
+  const missing = Object.keys(groups).filter(g => !SELECTED[g]);
+  if(missing.length){
+    toast("กรุณาเลือก " + missing.join(", "), true);
     return;
-
   }
-
-  let cart =
-    JSON.parse(
-      localStorage.getItem(
-        "cart"
-      ) || "[]"
-    );
-
-  const basePrice =
-    Number(
-      window.currentProduct.final_price ??
-      window.currentProduct.price ??
-      0
-    );
-
-  if(options.length === 0){
-
-    const qty =
-      Number(
-        document.getElementById(
-          "productQty"
-        )?.value
-      ) || 1;
-
-    const found =
-      cart.find(item=>
-
-        item.product_id ===
-        window.currentProduct.product_id
-
-        &&
-
-        Object.keys(
-          item.selected_options || {}
-        ).length === 0
-
-      );
-
-    if(found){
-
-      found.qty += qty;
-
-    }else{
-
-      cart.push({
-
-        ...window.currentProduct,
-
-        collection_id:
-          window.currentProduct.collection_id ||
-          "",
-
-        price:
-          basePrice,
-
-        final_price:
-          basePrice,
-
-        selected_options:{},
-
-        qty:
-          qty
-
-      });
-
-    }
-
-  }else{
-
-    selectedOptionItems.forEach(option=>{
-
-      const unitPrice =
-        basePrice +
-        Number(
-          option.additional_price || 0
-        );
-
-      const found =
-        cart.find(item=>
-
-          item.product_id ===
-          window.currentProduct.product_id
-
-          &&
-
-          item.option_value ===
-          option.value
-
-          &&
-
-          item.option_group ===
-          option.group
-
-        );
-
-      if(found){
-
-        found.qty +=
-          option.qty;
-
-      }else{
-
-        cart.push({
-
-          ...window.currentProduct,
-
-          collection_id:
-            window.currentProduct.collection_id ||
-            "",
-
-          price:
-            unitPrice,
-
-          final_price:
-            unitPrice,
-
-          option_group:
-            option.group,
-
-          option_value:
-            option.value,
-
-          selected_options:{
-            [option.group]:
-              option.value
-          },
-
-          qty:
-            option.qty
-
-        });
-
-      }
-
-    });
-
-  }
-
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
-
-  updateCartCount();
-
-  alert(
-    "เพิ่มลงตะกร้าแล้ว"
-  );
-
-}
-  
-function buyNow(){
-
-  const options =
-    Array.isArray(
-      window.currentProduct.options
-    )
-      ? window.currentProduct.options
-      : [];
-
-  const selectedOptionItems =
-    Object.values(
-      window.optionQty || {}
-    )
-    .filter(
-      item =>
-        item.qty > 0
-    );
-
-  const hasOptions =
-    options.length > 0;
-
-  if(
-    hasOptions &&
-    selectedOptionItems.length === 0
-  ){
-
-    alert(
-      "กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ"
-    );
-
-    return;
-
-  }
-
-  const basePrice =
-    Number(
-      window.currentProduct.final_price ??
-      window.currentProduct.price ??
-      0
-    );
-
-  let checkoutItems = [];
-
-  if(!hasOptions){
-
-    const qty =
-      Number(
-        document.getElementById(
-          "productQty"
-        )?.value
-      ) || 1;
-
-    checkoutItems.push({
-
-      ...window.currentProduct,
-
-      collection_id:
-        window.currentProduct.collection_id ||
-        "",
-
-      price:
-        basePrice,
-
-      final_price:
-        basePrice,
-
-      selected_options:{},
-
-      qty:
-        qty
-
-    });
-
-  }else{
-
-    checkoutItems =
-      selectedOptionItems.map(
-        option=>{
-
-          const unitPrice =
-            basePrice +
-            Number(
-              option.additional_price || 0
-            );
-
-          return {
-
-            ...window.currentProduct,
-
-            collection_id:
-              window.currentProduct.collection_id ||
-              "",
-
-            price:
-              unitPrice,
-
-            final_price:
-              unitPrice,
-
-            option_group:
-              option.group,
-
-            option_value:
-              option.value,
-
-            selected_options:{
-              [option.group]:
-                option.value
-            },
-
-            qty:
-              option.qty
-
-          };
-
-        }
-      );
-
-  }
-
-  localStorage.setItem(
-    "buyNowCart",
-    JSON.stringify(
-      checkoutItems
-    )
-  );
-
-  localStorage.setItem(
-    "checkoutSource",
-    "buyNow"
-  );
-
-  localStorage.removeItem(
-    "checkoutCart"
-  );
-
-  window.location.href =
-    "checkout.html";
-
-}
-  
-function updateCartCount(){
-
-const cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const count =
-
-cart.reduce(
-
-(sum,item)=>
-
-sum +
-Number(item.qty || 0),
-
-0
-
-);
-
-const cartLink =
-document.getElementById(
-"floatingCart"
-);
-
-if(cartLink){
-
-cartLink.textContent =
-
-`🛒 ${count}`;
-
+  const optionValues = {};
+  Object.entries(SELECTED).forEach(([g,o]) => optionValues[g] = o.option_value);
+
+  RinkaCart.add({
+    product_id: PRODUCT.product_id,
+    name: PRODUCT.name,
+    image: PRODUCT.image,
+    price: currentUnitPrice(),
+    qty: QTY,
+    selected_options: optionValues,
+    option_value: Object.values(optionValues).join(", "),
+    crate_selected: CRATE_ON,
+    crate_fee: PRODUCT.crate_fee || 0
+  });
+  toast("เพิ่มลงตะกร้าแล้ว 🛍️");
 }
 
+async function load(){
+  const id = qs("id");
+  if(!id){ document.getElementById("pd-root").innerHTML = `<div class="empty-state">ไม่พบสินค้า</div>`; return; }
+  try{
+    const p = await RinkaAPI.getProduct(id);
+    if(!p){ document.getElementById("pd-root").innerHTML = `<div class="empty-state">ไม่พบสินค้านี้</div>`; return; }
+    PRODUCT = p;
+    render();
+  }catch(e){
+    document.getElementById("pd-root").innerHTML = `<div class="empty-state">โหลดสินค้าไม่สำเร็จ</div>`;
+  }
 }
-  
+load();
 </script>
-
 </body>
 </html>
