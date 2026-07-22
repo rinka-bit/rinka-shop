@@ -72,7 +72,10 @@
 <script src="toast.js"></script>
 <script src="shared.js"></script>
 <script>
-renderChrome("cart", "ชำระเงิน");
+// showNav = false: ปิด bottom tab nav ระหว่างหน้าชำระเงิน เพราะมันเป็น
+// fixed bottom ที่ z-index สูงกว่า .rk-bottom-bar และซ้อนทับปุ่ม
+// "ยืนยันการชำระเงิน" พอดี ทำให้กดปุ่มไม่ได้ (นี่คือสาเหตุจริงของบั๊ก)
+renderChrome("payment", "ชำระเงิน", false);
 
 let bankData = [];
 let slipBase64 = null;
