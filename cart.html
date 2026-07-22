@@ -1,75 +1,772 @@
+cart.html
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ตะกร้าสินค้า | Rinka Shop</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>
+ตะกร้าสินค้า
+</title>
+
+<style>
+
+body{
+
+font-family:
+'Kodchasan',
+sans-serif;
+
+background:#f6fbff;
+
+padding:20px;
+
+}
+
+.cart-item{
+
+background:white;
+
+padding:15px;
+
+margin-bottom:15px;
+
+border-radius:20px;
+
+display:flex;
+
+gap:15px;
+
+align-items:center;
+
+box-shadow:
+0 3px 15px
+rgba(
+125,
+207,
+255,
+0.15
+);
+
+}
+
+.cart-item img{
+
+width:100px;
+
+height:100px;
+
+object-fit:cover;
+
+border-radius:12px;
+
+}
+
+.total{
+
+font-size:24px;
+
+font-weight:700;
+
+color:#2563eb;
+
+margin-top:20px;
+
+}
+
+.checkout-btn{
+
+margin-top:20px;
+
+padding:15px 25px;
+
+background:#7dcfff;
+
+border:none;
+
+border-radius:999px;
+
+cursor:pointer;
+
+font-size:16px;
+
+font-weight:700;
+
+}
+
+.qty-btn{
+
+width:32px;
+
+height:32px;
+
+border:none;
+
+border-radius:999px;
+
+background:#d9f2ff;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+.qty-control{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+margin:10px 0;
+
+}
+
+.delete-btn{
+
+background:#ffe4e6;
+
+color:#dc2626;
+
+border:none;
+
+padding:8px 14px;
+
+border-radius:999px;
+
+cursor:pointer;
+
+font-weight:700;
+
+margin-top:10px;
+
+}
+
+.page-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:16px 24px;
+
+background:#fff;
+
+position:sticky;
+
+top:0;
+
+z-index:100;
+
+box-shadow:
+0 3px 10px
+rgba(0,0,0,.05);
+
+}
+
+.icon-btn{
+
+width:auto !important;
+
+border:none;
+background:none;
+
+font-size:32px;
+
+padding:0;
+
+cursor:pointer;
+
+}
+
+.cart-btn{
+
+position:relative;
+
+font-size:28px;
+
+text-decoration:none;
+
+width:auto !important;
+
+}
+
+#cartCount{
+
+position:absolute;
+
+top:-8px;
+
+right:-8px;
+
+background:#ff5c7a;
+
+color:white;
+
+font-size:12px;
+
+padding:2px 6px;
+
+border-radius:20px;
+
+}
+
+.overlay{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.35);
+
+z-index:999;
+
+opacity:1;
+
+transition:.25s;
+
+}
+
+.overlay.hidden{
+
+opacity:0;
+
+pointer-events:none;
+
+}
+
+.side-menu{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:280px;
+
+max-width:80%;
+
+height:100vh;
+
+background:#fff;
+
+z-index:1000;
+
+box-shadow:0 0 30px rgba(0,0,0,.15);
+
+transform:translateX(-100%);
+
+transition:.3s ease;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.side-menu.open{
+
+transform:translateX(0);
+
+}
+
+.menu-header{
+
+padding:24px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.side-menu a{
+
+padding:18px 24px;
+
+font-size:16px;
+
+font-weight:600;
+
+text-decoration:none;
+
+color:#333;
+
+}
+
+.side-menu a:hover{
+
+background:#f7f9ff;
+
+}
+
+</style>
+
 </head>
+
 <body>
-<div id="site-header"></div>
 
-<section class="section">
-  <div class="wrap two-col">
-    <div>
-      <h2>ตะกร้าสินค้า</h2>
-      <div id="cart-lines" class="panel"></div>
-    </div>
-    <div>
-      <div class="panel">
-        <h3 style="margin-top:0;">สรุปยอด</h3>
-        <div class="summary-row"><span>ยอดสินค้า</span><span id="sumSubtotal">฿0</span></div>
-        <p class="hint">ค่านำเข้า / ค่าจัดส่งในไทย จะแจ้งอีกครั้งเมื่อสินค้าถึงไทยแล้ว</p>
-        <div class="summary-row total"><span>รวมชำระตอนสั่งซื้อ</span><span id="sumTotal">฿0</span></div>
-        <a href="checkout.html" class="btn btn-primary btn-block" id="checkoutBtn" style="margin-top:16px;">ไปหน้าชำระเงิน</a>
-      </div>
-    </div>
-  </div>
-</section>
+<header class="page-header">
 
-<div id="site-footer"></div>
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/common.js"></script>
+<button
+id="menuButton"
+class="icon-btn">
+
+☰
+
+</button>
+
+<h1 id="pageTitle">
+
+ตะกร้าสินค้า
+
+</h1>
+
+<a
+href="cart.html"
+class="cart-btn">
+
+🛒
+
+<span id="cartCount">
+
+0
+
+</span>
+
+</a>
+
+</header>
+
+<div
+id="overlay"
+class="overlay hidden">
+</div>
+
+<aside
+id="sideMenu"
+class="side-menu">
+
+<div class="menu-header">
+
+<h2>
+Rinka Shop
+</h2>
+
+</div>
+
+<a href="home.html">🏠 หน้าแรก</a>
+<a href="browse.html">🛍️ สินค้าทั้งหมด</a>
+<a href="categories.html">🏷️ หมวดสินค้า</a>
+<a href="lookup.html">📦 เช็กออเดอร์</a>
+<a href="change-address.html">📍 เปลี่ยนที่อยู่</a>
+<a href="account.html">👤 บัญชีของฉัน</a>
+<a href="cart.html">🛒 ตะกร้า</a>
+<a href="https://x.com/prewithrinka">📞 ติดต่อร้าน</a>
+
+</aside>
+
+<div id="cartItems">
+</div>
+
+<div
+id="total"
+class="total">
+</div>
+
+<button
+class="checkout-btn"
+onclick="
+goCheckout()
+">
+
+สั่งซื้อสินค้า
+
+</button>
+
 <script>
-function renderCart(){
-  const items = RinkaCart.read();
-  const mount = document.getElementById("cart-lines");
 
-  if(!items.length){
-    mount.innerHTML = `<div class="empty-state"><div class="icon">🛍️</div>ตะกร้ายังว่างอยู่<br><a href="index.html" class="btn btn-outline" style="margin-top:14px;">เลือกซื้อสินค้า</a></div>`;
-    document.getElementById("checkoutBtn").style.pointerEvents = "none";
-    document.getElementById("checkoutBtn").style.opacity = ".5";
-  } else {
-    mount.innerHTML = items.map(i => {
-      const key = RinkaCart.lineKey(i);
-      const lineTotal = (Number(i.price) + (i.crate_selected ? Number(i.crate_fee||0) : 0)) * i.qty;
-      return `
-      <div class="cart-line">
-        <img src="${i.image || 'https://placehold.co/100x100'}" alt="${i.name}">
-        <div class="cart-line-info">
-          <div class="cart-line-name">${i.name}</div>
-          ${i.option_value ? `<div class="cart-line-opt">${i.option_value}</div>` : ""}
-          ${i.crate_selected ? `<div class="cart-line-opt">+ แพ็คลัง</div>` : ""}
-          <div class="qty-control">
-            <button onclick="RinkaCart.updateQty('${key}', ${i.qty - 1}); renderCart();">−</button>
-            <span>${i.qty}</span>
-            <button onclick="RinkaCart.updateQty('${key}', ${i.qty + 1}); renderCart();">+</button>
-          </div>
-          <span class="remove-link" onclick="RinkaCart.remove('${key}'); renderCart();">ลบออก</span>
-        </div>
-        <div style="font-weight:700;">${money(lineTotal)}</div>
-      </div>`;
-    }).join("");
+loadCart();
+
+function loadCart(){
+
+  updateCartCount();
+
+  const cart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
+
+  let total = 0;
+
+  if(cart.length === 0){
+
+    document
+    .getElementById(
+      "cartItems"
+    ).innerHTML = `
+      <h3>
+        🛒 ยังไม่มีสินค้าในตะกร้า
+      </h3>
+    `;
+
+    document
+    .getElementById(
+      "total"
+    ).textContent = "";
+
+    return;
+
   }
 
-  const { subtotal } = RinkaCart.totals();
-  document.getElementById("sumSubtotal").textContent = money(subtotal);
-  document.getElementById("sumTotal").textContent = money(subtotal);
+  document
+  .getElementById(
+    "cartItems"
+  ).innerHTML =
+
+  cart.map((item,index)=>{
+
+    const price =
+      Number(
+        item.final_price ??
+        item.price ??
+        0
+      );
+
+    const lineTotal =
+      price *
+      Number(item.qty);
+
+    total += lineTotal;
+
+    return `
+
+<div class="cart-item">
+
+<input
+type="checkbox"
+class="checkout-item"
+data-index="${index}"
+checked>
+
+<img
+src="${item.image}">
+
+<div>
+
+<h3>
+${item.name}
+</h3>
+
+${
+item.selected_options
+
+?
+
+Object.entries(
+item.selected_options
+)
+
+.map(
+
+([key,value])=>{
+
+const text =
+Array.isArray(value)
+? value.join(", ")
+: value;
+
+return `
+
+<p
+style="
+margin:4px 0;
+color:#4a6fa5;
+font-size:14px;
+background:#eef8ff;
+padding:5px 10px;
+border-radius:999px;
+display:inline-block;
+">
+
+${key} :
+${text}
+
+</p>
+
+`;
+
 }
-renderCart();
+
+)
+
+.join("")
+
+:
+
+""
+
+}
+
+<div>
+
+<button
+class="qty-btn"
+onclick="
+changeQty(
+${index},
+-1
+)
+">
+
+−
+
+</button>
+
+${item.qty}
+
+<button
+class="qty-btn"
+onclick="
+changeQty(
+${index},
+1
+)
+">
+
++
+
+</button>
+
+</div>
+
+<p>
+
+฿${price}
+
+x
+
+${item.qty}
+
+=
+
+฿${lineTotal}
+
+</p>
+
+<button
+class="delete-btn"
+onclick="
+removeItem(
+${index}
+)
+">
+
+🗑️ ลบ
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+  }).join("");
+
+  document
+  .getElementById(
+    "total"
+  ).textContent =
+  `ยอดรวม ฿${total}`;
+
+}
+
+function goCheckout(){
+
+  const cart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
+
+  const checked =
+    document.querySelectorAll(
+      ".checkout-item:checked"
+    );
+
+  if(
+    checked.length === 0
+  ){
+
+    alert(
+      "กรุณาเลือกสินค้า"
+    );
+
+    return;
+
+  }
+
+  const selectedItems = [];
+
+  checked.forEach(box=>{
+
+    const item =
+      cart[
+        Number(
+          box.dataset.index
+        )
+      ];
+
+    if(item){
+
+      selectedItems.push(
+        item
+      );
+
+    }
+
+  });
+
+  localStorage.setItem(
+    "checkoutCart",
+    JSON.stringify(
+      selectedItems
+    )
+  );
+
+  localStorage.setItem(
+    "checkoutSource",
+    "cart"
+  );
+
+  localStorage.removeItem(
+    "buyNowCart"
+  );
+
+  window.location.href =
+    "checkout.html";
+
+}
+
+function changeQty(
+index,
+change
+){
+
+let cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+cart[index].qty += change;
+
+if(
+cart[index].qty <= 0
+){
+
+cart.splice(
+index,
+1
+);
+
+}
+
+localStorage.setItem(
+
+"cart",
+
+JSON.stringify(cart)
+
+);
+
+loadCart();
+
+}
+
+function removeItem(
+index
+){
+
+let cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+cart.splice(
+index,
+1
+);
+
+localStorage.setItem(
+
+"cart",
+
+JSON.stringify(cart)
+
+);
+
+loadCart();
+updateCartCount();
+
+}
+
+function updateCartCount(){
+
+const cart =
+
+JSON.parse(
+localStorage.getItem(
+"cart"
+) || "[]"
+);
+
+const count =
+
+cart.reduce(
+
+(sum,item)=>
+
+sum +
+Number(item.qty || 0),
+
+0
+
+);
+
+const cartCount =
+document.getElementById(
+"cartCount"
+);
+
+if(cartCount){
+
+cartCount.textContent =
+count;
+
+}
+
+}
+  
 </script>
+
+<script src="menu.js"></script>
+  
 </body>
+
 </html>
