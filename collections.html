@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คอลเลกชันทั้งหมด | Rinka Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><span class="eyebrow">All Manifests</span><h2>คอลเลกชันพรีออเดอร์ทั้งหมด</h2></div></div>
+    <div id="collections-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/common.js"></script>
+<script>
+async function load(){
+  try{
+    const cols = await RinkaAPI.getCollections();
+    const mount = document.getElementById("collections-grid");
+    mount.innerHTML = Array.isArray(cols) && cols.length ? cols.map(c => `
+      <a class="collection-card" href="collection.html?id=${encodeURIComponent(c.collection_id)}">
+        <img src="${c.banner_image || c.image || 'https://placehold.co/500x300?text=Collection'}" alt="${c.name}">
+        <div class="collection-card-body">
+          <h3>${c.name}</h3>
+          <span>${c.fandom ? c.fandom + " • " : ""}${c.product_count || 0} รายการ${c.preorder_deadline ? " • ปิดรับ " + c.preorder_deadline : ""}</span>
+        </div>
+      </a>`).join("") : `<div class="empty-state"><div class="icon">📭</div>ยังไม่มีคอลเลกชันตอนนี้</div>`;
+  }catch(e){ toast("โหลดข้อมูลไม่สำเร็จ", true); }
+}
+load();
+</script>
+</body>
+</html>
