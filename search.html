@@ -1,1 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ค้นหาสินค้า | Rinka Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
 
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><div><span class="eyebrow">Search Manifest</span><h2 id="q-title">ผลการค้นหา</h2></div></div>
+    <div id="grid" class="grid"><div class="spinner"></div></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/common.js"></script>
+<script>
+function productCard(p){
+  const img = p.image || "https://placehold.co/400x400?text=Rinka+Shop";
+  const priceHtml = p.on_sale ? money(p.price) + `<span class="old">${money(p.old_price)}</span>` : money(p.price);
+  return `
+  <div class="product-card">
+    <a href="product.html?id=${encodeURIComponent(p.product_id)}">
+      <div class="product-thumb">
+        ${p.product_type === 'preorder' ? `<span class="stamp-badge">Preorder</span>` : ""}
+        <img src="${img}" alt="${p.name}" loading="lazy">
+      </div>
+      <div class="product-info">
+        <div class="product-fandom">${p.fandom || ""}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">${priceHtml}</div>
+      </div>
+    </a>
+  </div>`;
+}
+
+async function load(){
+  const q = (qs("q") || "").trim().toLowerCase();
+  document.getElementById("q-title").textContent = q ? `ผลการค้นหา “${q}”` : "สินค้าทั้งหมด";
+  try{
+    const products = await RinkaAPI.getProducts();
+    const filtered = q
+      ? products.filter(p => [p.name, p.fandom, p.main_category, p.sub_category, p.search_keywords]
+          .filter(Boolean).join(" ").toLowerCase().includes(q))
+      : products;
+    document.getElementById("grid").innerHTML = filtered.length
+      ? filtered.map(productCard).join("")
+      : `<div class="empty-state"><div class="icon">🔍</div>ไม่พบสินค้าที่ค้นหา</div>`;
+  }catch(e){ document.getElementById("grid").innerHTML = `<div class="empty-state">โหลดข้อมูลไม่สำเร็จ</div>`; }
+}
+load();
+</script>
+</body>
+</html>
