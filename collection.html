@@ -1,74 +1,527 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>คอลเลกชัน | Rinka Shop</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>Collection</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:15px;
+}
+
+.banner{
+background:white;
+padding:16px;
+border-radius:16px;
+margin-bottom:20px;
+box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.banner h1{
+font-size:32px;
+margin:0 0 10px;
+}
+
+.collection-desc{
+font-size:14px;
+color:#666;
+margin-bottom:10px;
+}
+
+.deadline{
+color:#ef4444;
+font-weight:700;
+font-size:14px;
+}
+
+.collection-banner{
+width:100%;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:
+repeat(2,1fr);
+gap:12px;
+}
+
+.card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+cursor:pointer;
+box-shadow:0 2px 8px rgba(0,0,0,.05);
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-3px);
+}
+
+.card img{
+width:100%;
+height:170px;
+object-fit:cover;
+}
+
+.card-body{
+padding:10px;
+}
+
+.card h3{
+font-size:15px;
+line-height:1.4;
+margin:0 0 8px;
+}
+
+.price{
+font-size:15px;
+font-weight:bold;
+color:#4f46e5;
+}
+
+.price-box{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.sale-price{
+font-size:16px;
+font-weight:700;
+color:#ef4444;
+}
+
+.old-price{
+font-size:13px;
+color:#94a3b8;
+text-decoration:line-through;
+}
+
+.normal-price{
+font-size:15px;
+font-weight:700;
+color:#4f46e5;
+}
+
+.topbar{
+
+display:flex;
+
+justify-content:
+space-between;
+
+align-items:center;
+
+margin-bottom:15px;
+
+}
+
+.topbar button,
+.topbar a{
+
+width:44px;
+height:44px;
+
+border:none;
+
+border-radius:999px;
+
+background:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+text-decoration:none;
+
+font-size:20px;
+
+box-shadow:
+0 2px 8px rgba(0,0,0,.08);
+
+cursor:pointer;
+
+}
+
+</style>
+
 </head>
+
 <body>
-<div id="site-header"></div>
 
-<div id="collection-banner"></div>
+<div class="topbar">
 
-<section class="section">
-  <div class="wrap">
-    <div class="section-head"><div><span class="eyebrow">Items in this manifest</span><h2 id="collection-title">กำลังโหลด...</h2></div></div>
-    <div id="products-grid" class="grid"><div class="spinner"></div></div>
-  </div>
-</section>
+<button
+onclick="history.back()">
 
-<div id="site-footer"></div>
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/common.js"></script>
+←
+
+</button>
+
+<a href="cart.html">
+
+🛒
+
+</a>
+
+</div>
+  
+<div class="container">
+
+<div
+id="collectionInfo"
+class="banner">
+</div>
+
+<input
+id="collectionSearch"
+type="text"
+placeholder="🔍 ค้นหาสินค้าใน Collection..."
+style="
+width:100%;
+padding:12px;
+margin:20px 0;
+border:1px solid #ddd;
+border-radius:12px;
+box-sizing:border-box;
+font-size:15px;
+">
+
+<div
+id="productGrid"
+class="grid">
+</div>
+
+</div>
+
 <script>
-function productCard(p){
-  const img = p.image || "https://placehold.co/400x400?text=Rinka+Shop";
-  const priceHtml = p.on_sale ? money(p.price) + `<span class="old">${money(p.old_price)}</span>` : money(p.price);
-  return `
-  <div class="product-card">
-    <a href="product.html?id=${encodeURIComponent(p.product_id)}">
-      <div class="product-thumb">
-        ${p.product_type === 'preorder' ? `<span class="stamp-badge">Preorder</span>` : ""}
-        <img src="${img}" alt="${p.name}" loading="lazy">
-      </div>
-      <div class="product-info">
-        <div class="product-fandom">${p.fandom || ""}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">${priceHtml}</div>
-      </div>
-    </a>
-  </div>`;
-}
 
-async function load(){
-  const id = qs("id");
-  if(!id){ document.getElementById("collection-title").textContent = "ไม่พบคอลเลกชัน"; return; }
+const API =
+"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const collectionId =
+params.get("id");
+
+let allProducts = [];
+  
+loadCollection();
+
+async function loadCollection(){
+
   try{
-    const [col, products] = await Promise.all([
-      RinkaAPI.getCollection(id),
-      RinkaAPI.getCollectionProducts(id)
-    ]);
 
-    if(col){
-      document.getElementById("collection-title").textContent = col.name;
-      document.title = col.name + " | Rinka Shop";
-      if(col.banner_image){
-        document.getElementById("collection-banner").innerHTML = `
-          <div style="height:220px;background:url('${col.banner_image}') center/cover;"></div>`;
-      }
-    }
+    const collectionResponse =
+      await fetch(
+        API +
+        "?action=collection&id=" +
+        encodeURIComponent(
+          collectionId
+        )
+      );
 
-    const mount = document.getElementById("products-grid");
-    mount.innerHTML = Array.isArray(products) && products.length
-      ? products.map(productCard).join("")
-      : `<div class="empty-state"><div class="icon">📦</div>ยังไม่มีสินค้าในคอลเลกชันนี้</div>`;
-  }catch(e){ toast("โหลดข้อมูลไม่สำเร็จ", true); }
+    const collectionResult =
+      await collectionResponse.json();
+
+    const collection =
+      collectionResult.collection ||
+      collectionResult;
+
+    const productResponse =
+      await fetch(
+        API +
+        "?action=collectionProducts&id=" +
+        encodeURIComponent(
+          collectionId
+        )
+      );
+
+    const productResult =
+      await productResponse.json();
+
+    const products =
+      Array.isArray(productResult)
+        ? productResult
+        : Array.isArray(productResult.products)
+          ? productResult.products
+          : [];
+
+    renderCollection(
+      collection,
+      products.length
+    );
+
+    allProducts =
+      products;
+
+    renderProducts(
+      allProducts
+    );
+
+  }catch(error){
+
+    console.error(
+      "loadCollection error",
+      error
+    );
+
+    document.getElementById(
+      "collectionInfo"
+    ).innerHTML =
+      "<p>โหลดข้อมูล Collection ไม่สำเร็จ</p>";
+
+  }
+
 }
-load();
+
+function renderCollection(
+data,
+productCount
+){
+
+let daysLeft = "";
+
+if(
+data.preorder_deadline
+){
+
+const deadline =
+new Date(
+data.preorder_deadline
+);
+
+const today =
+new Date();
+
+const diff =
+Math.ceil(
+(deadline - today)
+/
+(1000*60*60*24)
+);
+
+if(diff > 0){
+
+daysLeft =
+`เหลืออีก ${diff} วัน`;
+
+}
+
+}
+
+document.getElementById(
+"collectionInfo"
+).innerHTML = `
+
+${data.banner_image ? `
+<img
+src="${data.banner_image}"
+class="collection-banner">
+` : ""}
+
+<h1>
+${data.name}
+</h1>
+
+<p class="collection-desc">
+${data.description || ""}
+</p>
+
+${daysLeft ? `
+<div class="deadline">
+${daysLeft}
+</div>
+` : ""}
+
+<p
+style="
+margin-top:10px;
+font-weight:600;
+color:#666;
+">
+
+${productCount}
+รายการ
+
+</p>
+
+`;
+
+}
+
+function renderProducts(products){
+
+  let html = "";
+
+  products.forEach(product=>{
+
+    const price =
+      Number(
+        product.final_price ??
+        product.price ??
+        0
+      );
+
+    const oldPrice =
+      Number(
+        product.old_price ??
+        product.price ??
+        0
+      );
+
+    html += `
+
+<div
+class="card"
+onclick="
+window.location.href=
+'product.html?id=${product.product_id}'
+">
+
+<img
+src="${product.image || ""}">
+
+<div class="card-body">
+
+<h3>
+${product.name || ""}
+</h3>
+
+<div class="price-box">
+
+${
+product.on_sale
+
+?
+
+`
+
+<div class="sale-price">
+
+฿${price.toLocaleString()}
+
+</div>
+
+<div class="old-price">
+
+฿${oldPrice.toLocaleString()}
+
+</div>
+
+`
+
+:
+
+`
+
+<div class="normal-price">
+
+฿${price.toLocaleString()}
+
+</div>
+
+`
+
+}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+  });
+
+  document.getElementById(
+    "productGrid"
+  ).innerHTML = html;
+
+}
+
+document.addEventListener(
+"input",
+e=>{
+
+if(
+e.target.id !==
+"collectionSearch"
+){
+return;
+}
+
+const keyword =
+
+e.target.value
+.toLowerCase()
+.trim();
+
+if(!keyword){
+
+renderProducts(
+allProducts
+);
+
+return;
+
+}
+
+const filtered =
+
+allProducts.filter(
+product =>
+
+(product.name || "")
+.toLowerCase()
+.includes(
+keyword
+)
+
+||
+
+(product.fandom || "")
+.toLowerCase()
+.includes(
+keyword
+)
+
+||
+
+(product.sub_category || "")
+.toLowerCase()
+.includes(
+keyword
+)
+
+);
+
+renderProducts(
+filtered
+);
+
+});
+  
 </script>
+
 </body>
+
 </html>
