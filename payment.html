@@ -1,843 +1,243 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>ชำระเงิน</title>
-
-<link rel="stylesheet" href="style.css">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ชำระเงิน — Rinka Shop</title>
+<link rel="stylesheet" href="shared.css">
 <style>
+  body{ padding-bottom: 110px; }
+  .rk-container{ padding: 16px 18px; }
+  .rk-bank-option{
+    display:flex; align-items:center; gap:12px;
+    border: 1.5px solid var(--rk-border); border-radius: var(--rk-radius-sm);
+    padding:12px; margin-bottom:10px; cursor:pointer;
+  }
+  .rk-bank-option.selected{ border-color: var(--rk-primary); background: var(--rk-primary-soft); }
+  .rk-bank-option input{ width:auto; }
+  .rk-bank-name{ font-weight:700; font-size:14.5px; }
+  .rk-bank-owner{ font-size:12.5px; color: var(--rk-ink-soft); }
+  .rk-qr-img{ display:block; width:100%; max-width:280px; margin: 14px auto 0; border-radius: var(--rk-radius-md); }
+  .rk-copy-row{
+    display:flex; align-items:center; justify-content:space-between;
+    background: var(--rk-surface-2); border-radius: var(--rk-radius-sm);
+    padding: 12px 14px; margin-top:10px; font-family: var(--rk-font-mono); font-weight:700;
+  }
+  .rk-upload-box{
+    border: 2px dashed var(--rk-border); border-radius: var(--rk-radius-md);
+    padding: 24px; text-align:center; cursor:pointer; color: var(--rk-ink-soft);
+    position:relative;
+  }
+  .rk-upload-box.has-file{ border-color: var(--rk-success); background: var(--rk-success-soft); color: var(--rk-success); }
+  .rk-upload-box input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .rk-slip-preview{ max-width: 180px; border-radius: var(--rk-radius-sm); margin: 10px auto 0; display:block; }
+  .rk-compress-note{ font-size:11.5px; color: var(--rk-ink-faint); margin-top:6px; }
 
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
-box-shadow:0 2px 8px rgba(0,0,0,.05);
-}
-
-button{
-padding:12px 20px;
-cursor:pointer;
-border:none;
-border-radius:8px;
-background:#4f46e5;
-color:white;
-font-size:15px;
-}
-
-button:hover{
-opacity:.9;
-}
-
-.bank-card{
-border:1px solid #ddd;
-border-radius:12px;
-padding:14px;
-margin-bottom:12px;
-background:#fff;
-}
-
-.bank-option{
-display:flex;
-align-items:center;
-gap:12px;
-cursor:pointer;
-}
-
-.bank-option input[type="radio"]{
-width:auto;
-max-width:none;
-padding:0;
-margin:0;
-flex:0 0 auto;
-}
-
-.bank-info{
-display:block;
-}
-
-.bank-name{
-font-size:16px;
-font-weight:700;
-word-break:break-word;
-}
-
-.bank-owner{
-font-size:13px;
-color:#666;
-margin-top:4px;
-word-break:break-word;
-overflow-wrap:break-word;
-}
-
-.qr-image{
-display:block;
-width:100%;
-max-width:320px;
-margin:auto;
-border-radius:12px;
-}
-
-.bank-detail{
-margin-top:20px;
-text-align:center;
-}
-
-.save-tip{
-font-size:13px;
-color:#666;
-margin-top:10px;
-}
-
-.copy-btn{
-margin-top:10px;
-}
-
-@media(max-width:600px){
-
-.container{
-padding:15px;
-}
-
-.card{
-padding:15px;
-}
-
-button{
-width:100%;
-}
-
-}
-
-@keyframes spin{
-
-from{
-transform:rotate(0deg);
-}
-
-to{
-transform:rotate(360deg);
-}
-
-}
-
-.cat-track{
-
-width:220px;
-height:70px;
-
-margin:auto;
-margin-bottom:15px;
-
-overflow:hidden;
-
-position:relative;
-
-}
-
-.cat-loader{
-
-position:absolute;
-
-font-size:48px;
-
-animation:
-catRun 3s linear infinite;
-
-transform:
-scaleX(-1);
-
-}
-
-@keyframes catRun{
-
-0%{
-
-left:-80px;
-
-}
-
-100%{
-
-left:240px;
-
-}
-
-}
-  
+  .rk-bottom-bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:150;
+    background: rgba(255,255,255,.97); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--rk-border);
+    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  }
 </style>
-  
 </head>
-
 <body>
 
-<div class="container">
+<div id="rkChrome"></div>
 
-<h1>
-ชำระเงิน
-</h1>
+<div class="rk-container">
+  <div class="rk-card" style="margin-bottom:14px;">
+    <h2 style="font-size:15px;">เลือกช่องทางชำระเงิน</h2>
+    <div id="bankList"></div>
+    <div id="bankDetail"></div>
+  </div>
 
-<div class="card">
-
-<h2>
-เลือกช่องทางชำระเงิน
-</h2>
-
-<div id="bankList"></div>
-
-<div
-id="bankDetail"
-style="margin-top:20px;">
+  <div class="rk-card">
+    <h2 style="font-size:15px;">แนบสลิปโอนเงิน</h2>
+    <label class="rk-upload-box" id="uploadBox">
+      <input type="file" id="slip" accept="image/*" onchange="handleSlipSelect(event)">
+      <div id="uploadPrompt">📎 แตะเพื่อเลือกรูปสลิป</div>
+      <img id="slipPreview" class="rk-slip-preview rk-hidden" alt="สลิปที่แนบ">
+    </label>
+    <div class="rk-compress-note" id="compressNote"></div>
+  </div>
 </div>
 
+<div class="rk-bottom-bar">
+  <button id="submitBtn" class="rk-btn rk-btn-primary rk-btn-block" onclick="submitOrder()">
+    ยืนยันการชำระเงิน
+  </button>
 </div>
 
-<div class="card">
-
-<h2>
-แนบสลิป
-</h2>
-
-<input
-type="file"
-id="slip">
-
-</div>
-
-<button
-id="submitBtn"
-onclick="submitOrder()">
-
-ยืนยันการชำระเงิน
-
-</button>
-  
-</div>
-
+<script src="toast.js"></script>
+<script src="shared.js"></script>
 <script>
-
-const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+renderChrome("cart", "ชำระเงิน");
 
 let bankData = [];
-
+let slipBase64 = null;
 loadBanks();
 
-async function loadBanks(){
+async function loadBanks() {
+  try {
+    const result = await RinkaAPI.get("banks");
+    bankData = Array.isArray(result) ? result : Array.isArray(result.banks) ? result.banks : [];
+    document.getElementById("bankList").innerHTML = bankData
+      .map(
+        (bank, index) => `
+      <label class="rk-bank-option ${index === 0 ? "selected" : ""}" id="bankOpt-${bank.account_id}">
+        <input type="radio" name="bank" ${index === 0 ? "checked" : ""} onclick="showBankById('${bank.account_id}')">
+        <div>
+          <div class="rk-bank-name">${bank.bank_name || ""}</div>
+          <div class="rk-bank-owner">${bank.account_name || ""}</div>
+        </div>
+      </label>`
+      )
+      .join("");
+    if (bankData.length) showBank(bankData[0]);
+  } catch (err) {
+    console.error("loadBanks error", err);
+    document.getElementById("bankList").innerHTML = `<div class="rk-empty">โหลดบัญชีธนาคารไม่สำเร็จ</div>`;
+    showToast("โหลดช่องทางชำระเงินไม่สำเร็จ", "error");
+  }
+}
 
-  try{
+function showBankById(id) {
+  document.querySelectorAll(".rk-bank-option").forEach((el) => el.classList.remove("selected"));
+  document.getElementById(`bankOpt-${id}`)?.classList.add("selected");
+  const bank = bankData.find((b) => b.account_id === id);
+  if (bank) showBank(bank);
+}
 
-    const response =
-      await fetch(
-        API + "?action=banks"
-      );
+function showBank(bank) {
+  const el = document.getElementById("bankDetail");
+  if (bank.qr_image) {
+    el.innerHTML = `
+      <img src="${bank.qr_image}" class="rk-qr-img">
+      <p class="rk-compress-note" style="text-align:center;margin-top:8px;">
+        iPhone: แตะรูปค้างไว้แล้วเลือก "บันทึกรูปภาพ" · Android: เปิดรูปแล้วกดดาวน์โหลด
+      </p>`;
+  } else {
+    el.innerHTML = `
+      <div class="rk-copy-row">
+        <span>${bank.account_number}</span>
+        <button class="rk-btn rk-btn-outline" style="padding:8px 14px;font-size:13px;" onclick="copyAccount('${bank.account_number}')">คัดลอก</button>
+      </div>`;
+  }
+}
 
-    const result =
-      await response.json();
+function copyAccount(number) {
+  navigator.clipboard.writeText(number);
+  showToast("คัดลอกเลขบัญชีแล้ว", "success", 1800);
+}
 
-    bankData =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(result.banks)
-          ? result.banks
-          : [];
+/* ---------- ย่อรูปสลิปก่อนอัปโหลด ---------- */
+async function handleSlipSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    let html = "";
+  document.getElementById("uploadPrompt").textContent = "⏳ กำลังย่อรูป...";
+  try {
+    const originalKB = Math.round(file.size / 1024);
+    slipBase64 = await compressImage(file, 1280, 0.72);
+    const compressedKB = Math.round((slipBase64.length * 0.75) / 1024); // ประมาณขนาดจาก base64
 
-    bankData.forEach((bank,index)=>{
+    document.getElementById("uploadBox").classList.add("has-file");
+    document.getElementById("uploadPrompt").classList.add("rk-hidden");
+    const preview = document.getElementById("slipPreview");
+    preview.src = slipBase64;
+    preview.classList.remove("rk-hidden");
+    document.getElementById("compressNote").textContent =
+      `ย่อไฟล์จาก ${originalKB} KB เหลือประมาณ ${compressedKB} KB แล้ว ส่งได้เร็วขึ้น`;
+  } catch (err) {
+    console.error("compressImage error", err);
+    showToast("อ่านไฟล์รูปไม่สำเร็จ ลองเลือกรูปใหม่", "error");
+    document.getElementById("uploadPrompt").textContent = "📎 แตะเพื่อเลือกรูปสลิป";
+  }
+}
 
-      html += `
+/* ---------- Submit order ---------- */
+async function submitOrder() {
+  let cart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
+  if (cart.length === 0) cart = JSON.parse(localStorage.getItem("buyNowCart") || "[]");
+  if (cart.length === 0) cart = RinkaCart.get();
+  if (cart.length === 0) {
+    showToast("ไม่พบสินค้าในคำสั่งซื้อ", "error");
+    return;
+  }
+  if (!slipBase64) {
+    showToast("กรุณาแนบสลิปก่อนยืนยัน", "warning");
+    return;
+  }
 
-<div class="bank-card">
+  const btn = document.getElementById("submitBtn");
+  if (btn.disabled) return;
+  setSubmitting(true);
 
-<div class="bank-option">
+  try {
+    const address = JSON.parse(localStorage.getItem("checkoutAddress") || "{}");
+    const total = cart.reduce(
+      (sum, item) => sum + Number(item.final_price ?? Number(item.price || 0) * Number(item.qty || 1)),
+      0
+    );
 
-<input
-type="radio"
-name="bank"
+    const orderPayload = {
+      customer_name: address.receiver,
+      email: address.email,
+      phone: String(address.phone || ""),
+      social: address.social,
+      subtotal: total,
+      total: total,
+      items: cart,
+      gifts: address.gifts || [],
+    };
 
-${index===0?"checked":""}
+    const orderResult = await RinkaAPI.post("createOrder", orderPayload);
+    if (!orderResult.success) {
+      showToast(orderResult.error || "สร้างออเดอร์ไม่สำเร็จ", "error");
+      setSubmitting(false);
+      return;
+    }
 
-onclick="
-showBankById(
-'${bank.account_id}'
-)
-">
-
-<div class="bank-info">
-
-<div class="bank-name">
-${bank.bank_name || ""}
-</div>
-
-<div class="bank-owner">
-${bank.account_name || ""}
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
+    const paymentResult = await RinkaAPI.post("payment", {
+      order_id: orderResult.order_id,
+      amount: total,
+      slip_base64: slipBase64,
     });
-
-    document.getElementById(
-      "bankList"
-    ).innerHTML =
-      html;
-
-    if(bankData.length){
-
-      showBank(
-        bankData[0]
-      );
-
+    if (!paymentResult.success) {
+      showToast(paymentResult.error || "แจ้งชำระเงินไม่สำเร็จ", "error");
+      setSubmitting(false);
+      return;
     }
 
-  }catch(error){
+    showToast("แจ้งชำระเงินเรียบร้อย 🎉", "success", 2500);
 
-    console.error(
-      "loadBanks error",
-      error
+    const fullCart = RinkaCart.get();
+    const checkoutCart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
+    const remainCart = fullCart.filter(
+      (item) => !checkoutCart.some((c) => JSON.stringify(c) === JSON.stringify(item))
     );
+    RinkaCart.save(remainCart);
+    localStorage.removeItem("checkoutCart");
+    localStorage.removeItem("buyNowCart");
 
-    document.getElementById(
-      "bankList"
-    ).innerHTML =
-      "<p>โหลดบัญชีธนาคารไม่สำเร็จ</p>";
-
+    setTimeout(() => {
+      location.href = "order.html?id=" + orderResult.order_id;
+    }, 600);
+  } catch (err) {
+    console.error("submitOrder error", err);
+    showToast("เกิดข้อผิดพลาด กรุณาลองใหม่", "error");
+    setSubmitting(false);
   }
-
-}
-  
-function showBankById(id){
-
-  const bank =
-    bankData.find(
-      b => b.account_id === id
-    );
-
-  if(bank){
-
-    showBank(bank);
-
-  }
-
 }
 
-function showBank(bank){
-
-let html = "";
-
-if(bank.qr_image){
-
-html = `
-
-<div class="bank-detail">
-
-<h3>
-${bank.bank_name}
-</h3>
-
-<img
-src="${bank.qr_image}"
-class="qr-image">
-
-<br>
-
-<button
-onclick="downloadQR('${bank.qr_image}')">
-
-เปิด QR เต็มจอ
-
-</button>
-
-<p class="save-tip">
-
-iPhone:
-แตะรูปค้างไว้แล้วเลือก
-"บันทึกรูปภาพ"
-
-<br>
-
-Android:
-เปิดรูปแล้วกดดาวน์โหลดได้
-
-</p>
-
-</div>
-
-`;
-
-}else{
-
-html = `
-
-<div class="bank-detail">
-
-<h3>
-${bank.bank_name}
-</h3>
-
-<p>
-
-ชื่อบัญชี :
-<br>
-
-<strong>
-${bank.account_name}
-</strong>
-
-</p>
-
-<p>
-
-เลขบัญชี :
-<br>
-
-<strong>
-${bank.account_number}
-</strong>
-
-</p>
-
-<button
-class="copy-btn"
-onclick="
-copyAccount(
-'${bank.account_number}'
-)">
-
-คัดลอกเลขบัญชี
-
-</button>
-
-</div>
-
-`;
-
+function setSubmitting(isSubmitting) {
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = isSubmitting;
+  btn.innerHTML = isSubmitting
+    ? `<span class="rk-spinner"></span> กำลังส่งข้อมูล...`
+    : `ยืนยันการชำระเงิน`;
 }
-
-document.getElementById(
-"bankDetail"
-).innerHTML = html;
-
-}
-
-function copyAccount(number){
-
-  navigator.clipboard.writeText(
-    number
-  );
-
-  alert(
-    "คัดลอกเลขบัญชีแล้ว"
-  );
-
-}
-
-function downloadQR(url){
-
-window.open(
-url,
-"_blank"
-);
-
-}
-  
-async function submitOrder(){
-
-let cart =
-
-JSON.parse(
-localStorage.getItem(
-"checkoutCart"
-) || "[]"
-);
-
-if(cart.length===0){
-
-cart =
-
-JSON.parse(
-localStorage.getItem(
-"buyNowCart"
-) || "[]"
-);
-
-}
-
-if(cart.length===0){
-
-cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-}
-
-if(cart.length===0){
-
-alert(
-"ไม่พบสินค้าในคำสั่งซื้อ"
-);
-
-return;
-
-}
-
-const btn =
-document.getElementById(
-"submitBtn"
-);
-
-if(btn.disabled){
-return;
-}
-
-btn.disabled = true;
-
-btn.textContent =
-"กำลังส่งข้อมูล...";
-
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"flex";
-
-try{
-
-const address =
-
-JSON.parse(
-localStorage.getItem(
-"checkoutAddress"
-) || "{}"
-);
-
-const total =
-
-cart.reduce(
-(sum,item)=>
-
-sum +
-
-Number(
-item.final_price ??
-
-(
-Number(item.price||0) *
-Number(item.qty||1)
-)
-
-),
-
-0
-);
-
-const slip =
-document.getElementById(
-"slip"
-);
-
-if(!slip.files.length){
-
-alert(
-"กรุณาแนบสลิป"
-);
-
-return;
-
-}
-
-const payload = {
-
-customer_name:
-address.receiver,
-
-email:
-address.email,
-
-phone:
-String(
-address.phone || ""
-),
-
-social:
-address.social,
-
-subtotal:
-total,
-
-total:
-total,
-
-items:
-cart,
-
-gifts:
-address.gifts || []
-
-};
-
-const formData =
-new FormData();
-
-formData.append(
-"action",
-"createOrder"
-);
-
-formData.append(
-"payload",
-JSON.stringify(payload)
-);
-
-const response =
-await fetch(
-API,
-{
-method:"POST",
-body:formData
-}
-);
-
-const result =
-await response.json();
-
-if(!result.success){
-
-alert(
-result.error ||
-"สร้างออเดอร์ไม่สำเร็จ"
-);
-
-return;
-
-}
-
-const base64 =
-await fileToBase64(
-slip.files[0]
-);
-
-const paymentForm =
-new FormData();
-
-paymentForm.append(
-"action",
-"payment"
-);
-
-paymentForm.append(
-"payload",
-JSON.stringify({
-
-order_id:
-result.order_id,
-
-amount:
-total,
-
-slip_base64:
-base64
-
-})
-);
-
-const paymentResponse =
-await fetch(
-API,
-{
-method:"POST",
-body:paymentForm
-}
-);
-
-const paymentResult =
-await paymentResponse.json();
-
-if(!paymentResult.success){
-
-alert(
-paymentResult.error ||
-"แจ้งชำระเงินไม่สำเร็จ"
-);
-
-return;
-
-}
-
-alert(
-"แจ้งชำระเงินเรียบร้อย"
-);
-
-const fullCart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const checkoutCart =
-
-JSON.parse(
-localStorage.getItem(
-"checkoutCart"
-) || "[]"
-);
-
-const remainCart =
-
-fullCart.filter(item=>
-
-!checkoutCart.some(checkoutItem=>
-
-JSON.stringify(item)
-===
-JSON.stringify(checkoutItem)
-
-)
-
-);
-
-localStorage.setItem(
-"cart",
-JSON.stringify(
-remainCart
-)
-);
-
-localStorage.removeItem(
-"checkoutCart"
-);
-
-localStorage.removeItem(
-"buyNowCart"
-);
-
-window.location =
-"order.html?id=" +
-result.order_id;
-
-}catch(error){
-
-console.error(
-"submitOrder error",
-error
-);
-
-alert(
-"เกิดข้อผิดพลาด กรุณาลองใหม่"
-);
-
-}finally{
-
-btn.disabled = false;
-
-btn.textContent =
-"ยืนยันการชำระเงิน";
-
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
-
-}
-
-}
-
-function fileToBase64(file){
-
-  return new Promise(
-    (resolve,reject)=>{
-
-      const reader =
-        new FileReader();
-
-      reader.onload =
-        () => resolve(
-          reader.result
-        );
-
-      reader.onerror =
-        reject;
-
-      reader.readAsDataURL(
-        file
-      );
-
-    }
-  );
-
-}
-  
 </script>
-
-<div
-id="loadingOverlay"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-z-index:9999;
-justify-content:center;
-align-items:center;
-">
-
-<div
-style="
-background:white;
-padding:30px;
-border-radius:20px;
-text-align:center;
-max-width:300px;
-">
-
-<div class="cat-track">
-
-<div class="cat-loader">
-
-📦🐈
-
-</div>
-
-</div>
-
-<p>
-
-เจ้าเหมียวกำลังส่งออเดอร์เข้าระบบ 📦🐈
-
-<br><br>
-
-กรุณารอสักครู่
-
-</p>
-
-</div>
-
-</div>
-  
 </body>
-
 </html>
