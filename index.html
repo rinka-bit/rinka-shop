@@ -1,148 +1,25 @@
+index.html
+
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rinka Shop | พรีออเดอร์สินค้าจากต่างประเทศ</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+
+<meta
+http-equiv="refresh"
+content="0; url=home.html">
+
+<title>
+Redirecting...
+</title>
+
 </head>
+
 <body>
 
-<div id="site-header"></div>
+กำลังเข้าสู่หน้าแรก...
 
-<section class="hero">
-  <div class="wrap hero-inner">
-    <div class="hero-copy">
-      <span class="hero-eyebrow">✉️ Preorder Manifest</span>
-      <h1>สั่งของจากต่างประเทศ<br>ไม่ต้องลุ้นเอง ให้เราจัดการ</h1>
-      <p>พรีออเดอร์สินค้านำเข้าครบวงจร ตั้งแต่สั่งซื้อ ตรวจของ ไปจนถึงส่งถึงมือคุณ พร้อมแจ้งสถานะทุกขั้นตอน</p>
-      <div class="hero-cta">
-        <a href="collections.html" class="btn btn-primary">ดูคอลเลกชันพรีออเดอร์</a>
-        <a href="track.html" class="btn btn-outline" style="border-color:#F3E9DE;color:#F3E9DE;">ติดตามพัสดุของฉัน</a>
-      </div>
-    </div>
-    <div class="hero-stamp">
-      <div class="hero-stamp-inner">
-        <strong>Round</strong>
-        <span>Preorder Now</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="wrap" style="margin-top:26px;">
-  <div id="category-chips" class="chip-row"></div>
-</div>
-
-<section class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Featured Manifest</span><h2>คอลเลกชันแนะนำ</h2></div>
-      <a class="see-all" href="collections.html">ดูทั้งหมด →</a>
-    </div>
-    <div id="collections-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
-      <div class="spinner"></div>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="padding-top:0;">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Stamped Featured</span><h2>สินค้าแนะนำ</h2></div>
-    </div>
-    <div id="featured-grid" class="grid"><div class="spinner"></div></div>
-  </div>
-</section>
-
-<section class="section" style="padding-top:0;">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="eyebrow">Fresh Off The Boat</span><h2>เข้าใหม่ล่าสุด</h2></div>
-    </div>
-    <div id="new-grid" class="grid"><div class="spinner"></div></div>
-  </div>
-</section>
-
-<div id="site-footer"></div>
-
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/common.js"></script>
-<script>
-function productCard(p){
-  const img = p.image || "https://placehold.co/400x400?text=Rinka+Shop";
-  const priceHtml = p.on_sale
-    ? money(p.price) + `<span class="old">${money(p.old_price)}</span>`
-    : money(p.price);
-  const eta = p.estimated_arrival ? `📦 คาดว่าถึงไทย ${p.estimated_arrival}` : (p.preorder_deadline ? `⏳ ปิดรับออเดอร์ ${p.preorder_deadline}` : "");
-  return `
-  <div class="product-card">
-    <a href="product.html?id=${encodeURIComponent(p.product_id)}">
-      <div class="product-thumb">
-        ${p.product_type === 'preorder' ? `<span class="stamp-badge">Preorder</span>` : ""}
-        ${p.on_sale ? `<span class="sale-badge">SALE</span>` : ""}
-        <img src="${img}" alt="${p.name}" loading="lazy">
-      </div>
-      <div class="product-info">
-        <div class="product-fandom">${p.fandom || p.main_category || ""}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">${priceHtml}</div>
-        ${eta ? `<div class="product-eta">${eta}</div>` : ""}
-      </div>
-    </a>
-  </div>`;
-}
-
-function collectionCard(c){
-  const img = c.banner_image || c.image || "https://placehold.co/500x300?text=Collection";
-  return `
-  <a class="collection-card" href="collection.html?id=${encodeURIComponent(c.collection_id)}">
-    <img src="${img}" alt="${c.name}" loading="lazy">
-    <div class="collection-card-body">
-      <h3>${c.name}</h3>
-      <span>${c.fandom ? c.fandom + " • " : ""}${c.product_count || 0} รายการ</span>
-    </div>
-  </a>`;
-}
-
-async function loadHome(){
-  try{
-    const [cats, cols, feat, fresh] = await Promise.all([
-      RinkaAPI.getCategories(),
-      RinkaAPI.getCollections(),
-      RinkaAPI.getFeatured(),
-      RinkaAPI.getNewArrivals()
-    ]);
-
-    const chipMount = document.getElementById("category-chips");
-    chipMount.innerHTML = `<a class="chip active" href="collections.html">ทั้งหมด</a>` +
-      (Array.isArray(cats) ? cats.map(c => `<a class="chip" href="category.html?id=${encodeURIComponent(c.id)}">${c.name}</a>`).join("") : "");
-
-    const colMount = document.getElementById("collections-grid");
-    colMount.innerHTML = Array.isArray(cols) && cols.length
-      ? cols.slice(0,6).map(collectionCard).join("")
-      : `<div class="empty-state">ยังไม่มีคอลเลกชันตอนนี้</div>`;
-
-    const featMount = document.getElementById("featured-grid");
-    featMount.innerHTML = Array.isArray(feat) && feat.length
-      ? feat.map(p => productCard(p)).join("")
-      : `<div class="empty-state">ยังไม่มีสินค้าแนะนำ</div>`;
-
-    const newMount = document.getElementById("new-grid");
-    newMount.innerHTML = Array.isArray(fresh) && fresh.length
-      ? fresh.map(p => productCard(p)).join("")
-      : `<div class="empty-state">ยังไม่มีสินค้าเข้าใหม่</div>`;
-
-  }catch(err){
-    console.error(err);
-    toast("โหลดข้อมูลไม่สำเร็จ กรุณาตรวจสอบ API_URL ใน js/config.js", true);
-  }
-}
-loadHome();
-</script>
 </body>
+
 </html>
