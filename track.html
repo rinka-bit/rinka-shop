@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ติดตามออเดอร์ | Rinka Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section class="section">
+  <div class="wrap" style="max-width:640px;">
+    <h2>ติดตามออเดอร์ของฉัน</h2>
+    <form id="lookupForm" class="panel" style="display:flex; gap:10px; margin-bottom:24px;">
+      <input name="order_id" placeholder="กรอกเลขที่ออเดอร์ เช่น ORD1732000000" required style="flex:1; padding:11px 14px; border-radius:10px; border:1px solid var(--mist-dark);">
+      <button class="btn btn-primary">ค้นหา</button>
+    </form>
+
+    <div id="result"></div>
+
+    <p class="hint center" style="margin-top:20px;">
+      ต้องการดูรายละเอียดสินค้าและสถานะแบบเต็ม? <a href="account.html" style="font-weight:700;">เข้าสู่ระบบเพื่อดูประวัติคำสั่งซื้อ</a>
+    </p>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/common.js"></script>
+<script>
+let CURRENT_ORDER = null;
+let SHIP_SLIP_BASE64 = "";
+
+function statusPill(status){
+  const map = {
+    unpaid: ["ยังไม่ชำระ","pill-unpaid"],
+    paid: ["ชำระแล้ว","pill-paid"],
+    combine_later: ["รอส่งรวม","pill-pending"]
+  };
+  const [label, cls] = map[status] || [status, "pill-pending"];
+  return `<span class="pill ${cls}">${label}</span>`;
+}
+
+function renderResult(info){
+  const hasShippingFee = Number(info.import_fee || 0) + Number(info.domestic_shipping_fee || 0) > 0;
+  const total = Number(info.import_fee || 0) + Number(info.domestic_shipping_fee || 0);
+
+  document.getElementById("result").innerHTML = `
+    <div class="panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <div class="muted" style="font-size:.8rem;">เลขออเดอร์</div>
+          <div style="font-weight:700; font-family:monospace;">${info.order_id}</div>
+        </div>
+        ${statusPill(info.shipping_payment_status)}
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-step done"><div class="timeline-dot">🛒</div>สั่งซื้อแล้ว</div>
+        <div class="timeline-step done"><div class="timeline-dot">✈️</div>อยู่ระหว่างขนส่ง</div>
+        <div class="timeline-step ${hasShippingFee ? 'current' : ''}"><div class="timeline-dot">🛃</div>ถึงไทย / รอค่านำเข้า</div>
+        <div class="timeline-step ${info.shipping_payment_status === 'paid' || info.shipping_payment_status === 'combine_later' ? 'current' : ''}"><div class="timeline-dot">📦</div>จัดส่งถึงคุณ</div>
+      </div>
+
+      ${hasShippingFee ? `
+        <div style="margin-top:20px; border-top:1px dashed var(--mist-dark); padding-top:16px;">
+          <div class="summary-row"><span>ค่านำเข้า</span><span>${money(info.import_fee)}</span></div>
+          <div class="summary-row"><span>ค่าส่งในไทย</span><span>${money(info.domestic_shipping_fee)}</span></div>
+          <div class="summary-row total"><span>รวมค่าจัดส่ง</span><span>${money(total)}</span></div>
+        </div>
+
+        ${info.shipping_payment_status === 'unpaid' ? renderShippingPaymentForm(info) : `<p class="hint" style="margin-top:14px;">✅ ดำเนินการเรื่องค่าจัดส่งเรียบร้อยแล้ว</p>`}
+      ` : `<p class="hint" style="margin-top:16px;">ยังไม่มีการแจ้งค่านำเข้า/ค่าส่ง ระบบจะอีเมลแจ้งเมื่อสินค้าถึงไทยแล้ว</p>`}
+    </div>
+  `;
+}
+
+function renderShippingPaymentForm(info){
+  return `
+    <div style="margin-top:18px;">
+      <h3 style="font-size:1rem;">ยืนยันที่อยู่ &amp; วิธีจัดส่ง</h3>
+      <div class="field"><label>ที่อยู่จัดส่ง *</label><textarea id="confirmAddress" rows="2" required>${info.confirmed_address || ""}</textarea></div>
+      <div class="field">
+        <label>วิธีจัดส่ง *</label>
+        <select id="shippingMethod" onchange="onShippingMethodChange()">
+          <option value="ship_now">จัดส่งทันที (ต้องชำระค่าส่งก่อน)</option>
+          <option value="combine_later">รอส่งรวมกับออเดอร์อื่น</option>
+        </select>
+      </div>
+      <div id="slipSection">
+        <div class="slip-drop" onclick="document.getElementById('shipSlipInput').click()">
+          <div id="shipSlipPreview"><div style="font-size:1.8rem;">📎</div><p class="mb-0 muted">แนบสลิปค่าจัดส่ง</p></div>
+        </div>
+        <input type="file" id="shipSlipInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;" onchange="onShipSlipSelected(this)">
+      </div>
+      <button class="btn btn-primary btn-block" style="margin-top:14px;" onclick="submitShippingPayment()">ยืนยัน</button>
+    </div>
+  `;
+}
+
+function onShippingMethodChange(){
+  const method = document.getElementById("shippingMethod").value;
+  document.getElementById("slipSection").style.display = method === "ship_now" ? "block" : "none";
+}
+
+function onShipSlipSelected(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    SHIP_SLIP_BASE64 = reader.result;
+    document.getElementById("shipSlipPreview").innerHTML = `<img src="${SHIP_SLIP_BASE64}" alt="สลิป" style="max-height:180px;margin:0 auto;border-radius:8px;">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitShippingPayment(){
+  const method = document.getElementById("shippingMethod").value;
+  const address = document.getElementById("confirmAddress").value.trim();
+  if(!address){ toast("กรุณากรอกที่อยู่จัดส่ง", true); return; }
+  if(method === "ship_now" && !SHIP_SLIP_BASE64){ toast("กรุณาแนบสลิปค่าจัดส่ง", true); return; }
+
+  try{
+    const res = await RinkaAPI.saveShippingPayment({
+      order_id: CURRENT_ORDER.order_id,
+      shipping_method: method,
+      confirm_address: address,
+      slip_base64: SHIP_SLIP_BASE64
+    });
+    if(res && res.success){
+      toast("บันทึกข้อมูลสำเร็จ ✅");
+      lookup(CURRENT_ORDER.order_id);
+    } else {
+      toast(res.error || "บันทึกไม่สำเร็จ", true);
+    }
+  }catch(e){ toast("เกิดข้อผิดพลาด กรุณาลองใหม่", true); }
+}
+
+async function lookup(orderId){
+  document.getElementById("result").innerHTML = `<div class="spinner"></div>`;
+  try{
+    const info = await RinkaAPI.getShippingInfo(orderId);
+    if(!info || info.success === false){
+      document.getElementById("result").innerHTML = `<div class="empty-state"><div class="icon">🔍</div>ไม่พบออเดอร์นี้ กรุณาตรวจสอบเลขออเดอร์อีกครั้ง</div>`;
+      return;
+    }
+    CURRENT_ORDER = info;
+    renderResult(info);
+  }catch(e){
+    document.getElementById("result").innerHTML = `<div class="empty-state">เกิดข้อผิดพลาด กรุณาลองใหม่</div>`;
+  }
+}
+
+document.getElementById("lookupForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const id = new FormData(e.target).get("order_id").trim();
+  if(id) lookup(id);
+});
+
+const preId = qs("id");
+if(preId){
+  document.querySelector('[name="order_id"]').value = preId;
+  lookup(preId);
+}
+</script>
+</body>
+</html>
