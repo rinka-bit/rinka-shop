@@ -462,307 +462,462 @@ url,
   
 async function submitOrder(){
 
-let cart =
+  let cart =
+    JSON.parse(
+      localStorage.getItem(
+        "checkoutCart"
+      ) || "[]"
+    );
 
-JSON.parse(
-localStorage.getItem(
-"checkoutCart"
-) || "[]"
-);
+  if(
+    !Array.isArray(cart) ||
+    cart.length === 0
+  ){
 
-if(cart.length===0){
+    cart =
+      JSON.parse(
+        localStorage.getItem(
+          "buyNowCart"
+        ) || "[]"
+      );
 
-cart =
+  }
 
-JSON.parse(
-localStorage.getItem(
-"buyNowCart"
-) || "[]"
-);
-
-}
-
-if(cart.length===0){
-
-cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-}
-
-if(cart.length===0){
-
-alert(
-"ไม่พบสินค้าในคำสั่งซื้อ"
-);
-
-return;
-
-}
-
-const btn =
-document.getElementById(
-"submitBtn"
-);
-
-if(btn.disabled){
-return;
-}
-
-btn.disabled = true;
-
-btn.textContent =
-"กำลังส่งข้อมูล...";
-
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"flex";
-
-try{
-
-const address =
-
-JSON.parse(
-localStorage.getItem(
-"checkoutAddress"
-) || "{}"
-);
-
-const total =
-
-cart.reduce(
-(sum,item)=>
-
-sum +
-
-Number(
-item.final_price ??
-
-(
-Number(item.price||0) *
-Number(item.qty||1)
-)
-
-),
-
-0
-);
-
-const slip =
-document.getElementById(
-"slip"
-);
-
-if(!slip.files.length){
-
-alert(
-"กรุณาแนบสลิป"
-);
-
-return;
-
-}
-
-const payload = {
-
-customer_name:
-address.receiver,
-
-email:
-address.email,
-
-phone:
-String(
-address.phone || ""
-),
-
-social:
-address.social,
-
-subtotal:
-total,
-
-total:
-total,
-
-items:
-cart,
-
-gifts:
-address.gifts || []
-
-};
-
-const formData =
-new FormData();
-
-formData.append(
-"action",
-"createOrder"
-);
-
-formData.append(
-"payload",
-JSON.stringify(payload)
-);
-
-const response =
-await fetch(
-API,
-{
-method:"POST",
-body:formData
-}
-);
-
-const result =
-await response.json();
-
-if(!result.success){
-
-alert(
-result.error ||
-"สร้างออเดอร์ไม่สำเร็จ"
-);
-
-return;
-
-}
-
-const base64 =
-await fileToBase64(
-slip.files[0]
-);
-
-const paymentForm =
-new FormData();
-
-paymentForm.append(
-"action",
-"payment"
-);
-
-paymentForm.append(
-"payload",
-JSON.stringify({
-
-order_id:
-result.order_id,
-
-amount:
-total,
-
-slip_base64:
-base64
-
-})
-);
-
-const paymentResponse =
-await fetch(
-API,
-{
-method:"POST",
-body:paymentForm
-}
-);
-
-const paymentResult =
-await paymentResponse.json();
-
-if(!paymentResult.success){
-
-alert(
-paymentResult.error ||
-"แจ้งชำระเงินไม่สำเร็จ"
-);
-
-return;
-
-}
-
-alert(
-"แจ้งชำระเงินเรียบร้อย"
-);
-
-const fullCart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const checkoutCart =
-
-JSON.parse(
-localStorage.getItem(
-"checkoutCart"
-) || "[]"
-);
-
-const remainCart =
-
-fullCart.filter(item=>
-
-!checkoutCart.some(checkoutItem=>
-
-JSON.stringify(item)
-===
-JSON.stringify(checkoutItem)
-
-)
-
-);
-
-localStorage.setItem(
-"cart",
-JSON.stringify(
-remainCart
-)
-);
-
-localStorage.removeItem(
-"checkoutCart"
-);
-
-localStorage.removeItem(
-"buyNowCart"
-);
-
-window.location =
-"order.html?id=" +
-result.order_id;
-
-}catch(error){
-
-console.error(
-"submitOrder error",
-error
-);
-
-alert(
-"เกิดข้อผิดพลาด กรุณาลองใหม่"
-);
-
-}finally{
-
-btn.disabled = false;
-
-btn.textContent =
-"ยืนยันการชำระเงิน";
-
-document.getElementById(
-"loadingOverlay"
-).style.display =
-"none";
-
-}
+  if(
+    !Array.isArray(cart) ||
+    cart.length === 0
+  ){
+
+    cart =
+      JSON.parse(
+        localStorage.getItem(
+          "cart"
+        ) || "[]"
+      );
+
+  }
+
+  if(
+    !Array.isArray(cart) ||
+    cart.length === 0
+  ){
+
+    alert(
+      "ไม่พบสินค้าในคำสั่งซื้อ"
+    );
+
+    return;
+
+  }
+
+  const btn =
+    document.getElementById(
+      "submitBtn"
+    );
+
+  const loadingOverlay =
+    document.getElementById(
+      "loadingOverlay"
+    );
+
+  if(btn.disabled){
+
+    return;
+
+  }
+
+  const slip =
+    document.getElementById(
+      "slip"
+    );
+
+  if(
+    !slip ||
+    !slip.files ||
+    !slip.files.length
+  ){
+
+    alert(
+      "กรุณาแนบสลิป"
+    );
+
+    return;
+
+  }
+
+  btn.disabled =
+    true;
+
+  btn.textContent =
+    "กำลังส่งข้อมูล...";
+
+  if(loadingOverlay){
+
+    loadingOverlay.style.display =
+      "flex";
+
+  }
+
+  try{
+
+    const address =
+      JSON.parse(
+        localStorage.getItem(
+          "checkoutAddress"
+        ) || "{}"
+      );
+
+    /*
+    คำนวณยอดเบื้องต้นใหม่
+    ไม่ใช้ item.final_price เก่าจาก Cart
+    */
+
+    const calculatedTotal =
+      cart.reduce(
+        (
+          sum,
+          item
+        )=>{
+
+          const quantity =
+            Math.max(
+              1,
+              Math.floor(
+                Number(
+                  item.qty !== undefined
+                    ? item.qty
+                    : item.quantity
+                ) || 1
+              )
+            );
+
+          const unitPrice =
+            Number(
+              item.price !== undefined
+                ? item.price
+                : item.unit_price
+            ) || 0;
+
+          const crateFee =
+            Number(
+              item.crate_fee || 0
+            ) || 0;
+
+          return (
+            sum +
+            (
+              unitPrice *
+              quantity
+            ) +
+            crateFee
+          );
+
+        },
+        0
+      );
+
+    if(
+      !Number.isFinite(
+        calculatedTotal
+      ) ||
+      calculatedTotal <= 0
+    ){
+
+      throw new Error(
+        "ยอดรวมคำสั่งซื้อไม่ถูกต้อง"
+      );
+
+    }
+
+    const payload = {
+
+      customer_name:
+        address.receiver || "",
+
+      email:
+        address.email || "",
+
+      phone:
+        String(
+          address.phone || ""
+        ),
+
+      social:
+        address.social || "",
+
+      subtotal:
+        calculatedTotal,
+
+      total:
+        calculatedTotal,
+
+      items:
+        cart,
+
+      gifts:
+        Array.isArray(
+          address.gifts
+        )
+          ? address.gifts
+          : []
+
+    };
+
+    /*
+    สร้างออเดอร์
+    */
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "createOrder"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:
+            "POST",
+
+          body:
+            formData
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "สร้างออเดอร์ไม่สำเร็จ HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        "สร้างออเดอร์ไม่สำเร็จ"
+      );
+
+    }
+
+    const orderId =
+      String(
+        result.order_id || ""
+      ).trim();
+
+    if(!orderId){
+
+      throw new Error(
+        "ระบบไม่ได้ส่งเลขออเดอร์กลับมา"
+      );
+
+    }
+
+    /*
+    ใช้ยอดที่ Backend คำนวณกลับมา
+    ไม่ใช้ยอดจาก Cart หาก Backend มี total
+    */
+
+    const paymentAmount =
+      Number(
+        result.total
+      );
+
+    if(
+      !Number.isFinite(
+        paymentAmount
+      ) ||
+      paymentAmount <= 0
+    ){
+
+      throw new Error(
+        "ยอดชำระเงินจากระบบไม่ถูกต้อง"
+      );
+
+    }
+
+    const base64 =
+      await fileToBase64(
+        slip.files[0]
+      );
+
+    /*
+    บันทึกการชำระเงิน
+    */
+
+    const paymentForm =
+      new FormData();
+
+    paymentForm.append(
+      "action",
+      "payment"
+    );
+
+    paymentForm.append(
+      "payload",
+      JSON.stringify({
+
+        order_id:
+          orderId,
+
+        amount:
+          paymentAmount,
+
+        slip_base64:
+          base64
+
+      })
+    );
+
+    const paymentResponse =
+      await fetch(
+        API,
+        {
+          method:
+            "POST",
+
+          body:
+            paymentForm
+        }
+      );
+
+    if(!paymentResponse.ok){
+
+      throw new Error(
+        "แจ้งชำระเงินไม่สำเร็จ HTTP " +
+        paymentResponse.status
+      );
+
+    }
+
+    const paymentResult =
+      await paymentResponse.json();
+
+    if(!paymentResult.success){
+
+      throw new Error(
+        paymentResult.error ||
+        "แจ้งชำระเงินไม่สำเร็จ"
+      );
+
+    }
+
+    alert(
+      "แจ้งชำระเงินเรียบร้อย"
+    );
+
+    /*
+    ลบสินค้าออกจากตะกร้า
+    */
+
+    const fullCart =
+      JSON.parse(
+        localStorage.getItem(
+          "cart"
+        ) || "[]"
+      );
+
+    const checkoutCart =
+      JSON.parse(
+        localStorage.getItem(
+          "checkoutCart"
+        ) || "[]"
+      );
+
+    if(
+      Array.isArray(
+        fullCart
+      ) &&
+      Array.isArray(
+        checkoutCart
+      ) &&
+      checkoutCart.length
+    ){
+
+      const remainCart =
+        fullCart.filter(
+          item=>
+
+            !checkoutCart.some(
+              checkoutItem=>
+
+                JSON.stringify(
+                  item
+                ) ===
+                JSON.stringify(
+                  checkoutItem
+                )
+
+            )
+
+        );
+
+      localStorage.setItem(
+        "cart",
+        JSON.stringify(
+          remainCart
+        )
+      );
+
+    }
+
+    localStorage.removeItem(
+      "checkoutCart"
+    );
+
+    localStorage.removeItem(
+      "buyNowCart"
+    );
+
+    window.location.href =
+      "order.html?id=" +
+      encodeURIComponent(
+        orderId
+      );
+
+  }catch(error){
+
+    console.error(
+      "submitOrder error",
+      error
+    );
+
+    alert(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    btn.disabled =
+      false;
+
+    btn.textContent =
+      "ยืนยันการชำระเงิน";
+
+    if(loadingOverlay){
+
+      loadingOverlay.style.display =
+        "none";
+
+    }
+
+  }
 
 }
 
