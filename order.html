@@ -197,31 +197,120 @@ params.get("id");
 
 async function loadOrder(){
 
+  const orderBox =
+    document.getElementById(
+      "orderBox"
+    );
+
   try{
+
+    const customer =
+      JSON.parse(
+        localStorage.getItem(
+          "customer"
+        ) || "{}"
+      );
+
+    const sessionToken =
+      String(
+        customer.session_token ||
+        localStorage.getItem(
+          "session_token"
+        ) ||
+        ""
+      ).trim();
+
+    if(!orderId){
+
+      orderBox.innerHTML =
+        "ไม่พบเลขออเดอร์";
+
+      return;
+
+    }
+
+    if(!sessionToken){
+
+      orderBox.innerHTML = `
+
+<p>
+กรุณาเข้าสู่ระบบก่อนตรวจสอบออเดอร์
+</p>
+
+<button
+onclick="
+window.location.href=
+'login.html'
+">
+เข้าสู่ระบบ
+</button>
+
+`;
+
+      return;
+
+    }
 
     const response =
       await fetch(
+
         API +
-        "?action=order&id=" +
+
+        "?action=order" +
+
+        "&id=" +
+
         encodeURIComponent(
-          orderId || ""
+          orderId
+        ) +
+
+        "&session_token=" +
+
+        encodeURIComponent(
+          sessionToken
         )
+
       );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
 
     const result =
       await response.json();
 
-    if(
-      result.success === false ||
-      !result.order
-    ){
+    if(!result.success){
 
-      document
-        .getElementById(
-          "orderBox"
-        )
-        .innerHTML =
-        "ไม่พบออเดอร์";
+      orderBox.innerHTML = `
+
+<p>
+${result.error || "ไม่พบออเดอร์"}
+</p>
+
+${
+  String(
+    result.error || ""
+  ).includes(
+    "เข้าสู่ระบบ"
+  )
+    ? `
+      <button
+      onclick="
+      window.location.href=
+      'login.html'
+      ">
+      เข้าสู่ระบบใหม่
+      </button>
+    `
+    : ""
+}
+
+`;
 
       return;
 
@@ -229,36 +318,6 @@ async function loadOrder(){
 
     const order =
       result.order;
-
-    const items =
-      Array.isArray(order.items)
-        ? order.items
-        : Array.isArray(result.items)
-          ? result.items
-          : [];
-
-    const gifts =
-      Array.isArray(order.gifts)
-        ? order.gifts
-        : Array.isArray(result.gifts)
-          ? result.gifts
-          : [];
-
-    order.items =
-      items;
-
-    order.gifts =
-      gifts;
-
-    const importFee =
-      Number(
-        order.import_fee || 0
-      );
-
-    const domesticShippingFee =
-      Number(
-        order.domestic_shipping_fee || 0
-      );
 
     let html = `
 
@@ -269,17 +328,20 @@ ${getOrderMessage(order)}
 ${getOrderTimeline(order.status)}
 
 <p>
-
 การชำระเงิน:
-
 ${
-order.payment_status === "paid"
-?
-'<span class="badge badge-paid">ชำระเงินแล้ว</span>'
-:
-'<span class="badge badge-pending">รอชำระเงิน</span>'
+  order.payment_status === "paid"
+    ? `
+      <span class="badge badge-paid">
+      ชำระเงินแล้ว
+      </span>
+    `
+    : `
+      <span class="badge badge-pending">
+      รอชำระเงิน
+      </span>
+    `
 }
-
 </p>
 
 <div
@@ -295,28 +357,27 @@ border-radius:12px;
 </h3>
 
 <p>
-
 <b>ขนส่ง:</b>
 ${order.courier || "-"}
-
 </p>
 
 <p>
+<b>สถานะจัดส่ง:</b>
+${order.shipping_status || "-"}
+</p>
 
+<p>
 <b>สถานะค่าส่ง:</b>
 ${getShippingPaymentBadge(
   order.shipping_payment_status
 )}
-
 </p>
 
 ${
-importFee ||
-domesticShippingFee
+  order.import_fee_round2 ||
+  order.domestic_shipping_fee
 
-?
-
-`
+    ? `
 
 <div
 style="
@@ -328,84 +389,82 @@ border-radius:12px;
 ">
 
 <p>
-
 ค่านำเข้า:
-<b>${importFee.toLocaleString()}</b>
+<b>
+${Number(
+  order.import_fee_round2 || 0
+)}
+</b>
 บาท
-
 </p>
 
 <p>
-
 ค่าส่งในไทย:
-<b>${domesticShippingFee.toLocaleString()}</b>
+<b>
+${Number(
+  order.domestic_shipping_fee || 0
+)}
+</b>
 บาท
-
 </p>
 
 <p>
-
 รวมค่าส่ง:
-<b>${
-  (
-    importFee +
-    domesticShippingFee
-  ).toLocaleString()
-}</b>
+<b>
+${
+  Number(
+    order.import_fee_round2 || 0
+  )
+  +
+  Number(
+    order.domestic_shipping_fee || 0
+  )
+}
+</b>
 บาท
-
 </p>
 
 </div>
 
 `
 
-:
-
-""
-
+    : ""
 }
 
 ${
-order.status === "ready_to_ship" &&
-order.shipping_payment_status !== "paid"
+  order.status ===
+    "ready_to_ship" &&
 
-?
+  order.shipping_payment_status ===
+    "unpaid"
 
-`
+    ? `
 
 <button
 class="copy-btn"
 onclick="
 window.location.href=
-'shipping-payment.html?id=${order.order_id}'
+'shipping-payment.html?id=${encodeURIComponent(
+  order.order_id
+)}'
 ">
-
 💳 ยืนยันที่อยู่ / ชำระค่าส่ง
-
 </button>
 
 `
 
-:
-
-""
-
+    : ""
 }
 
 <p>
-
 <b>เลขพัสดุ:</b>
 ${order.tracking_no || "-"}
-
 </p>
 
 ${
-order.tracking_no
+  order.tracking_no
 
-?
-
-`
+    ? `
 
 <button
 class="copy-btn"
@@ -414,34 +473,19 @@ copyTracking(
 '${order.tracking_no}'
 )
 ">
-
 📋 คัดลอกเลขพัสดุ
-
-</button>
-
-<button
-class="copy-btn"
-style="margin-left:10px;"
-onclick="
-openTracking(
-'${order.courier || ""}',
-'${order.tracking_no}'
-)
-">
-
-🔍 ตรวจสอบพัสดุ
-
 </button>
 
 `
 
-:
-
-""
-
+    : ""
 }
 
 </div>
+
+<h3>
+รายการสินค้า
+</h3>
 
 <table>
 
@@ -463,32 +507,40 @@ openTracking(
 
 `;
 
-    items.forEach(item=>{
+    const items =
+      Array.isArray(
+        order.items
+      )
+        ? order.items
+        : [];
 
-      let optionHtml = "";
+    items.forEach(
+      item=>{
 
-      const selectedOptions =
-        item.selected_options ??
-        item.selected_option;
+        let optionHtml = "";
 
-      if(selectedOptions){
+        const selectedOptions =
+          item.selected_options ||
+          item.selected_option ||
+          {};
 
-        try{
-
-          const options =
-            typeof selectedOptions ===
-            "string"
-              ? JSON.parse(
-                  selectedOptions
-                )
-              : selectedOptions;
+        if(
+          selectedOptions &&
+          typeof selectedOptions ===
+          "object"
+        ){
 
           optionHtml =
             Object.entries(
-              options || {}
+              selectedOptions
             )
-            .map(
-              ([key,value]) => `
+              .map(
+                (
+                  [
+                    key,
+                    value
+                  ]
+                )=>`
 
 <div
 style="
@@ -500,46 +552,48 @@ margin-top:4px;
 ${key}:
 
 ${
-Array.isArray(value)
-  ? value.join(", ")
-  : value
+  Array.isArray(
+    value
+  )
+    ? value.join(", ")
+    : value
 }
 
 </div>
 
 `
-            )
-            .join("");
-
-        }catch(error){
-
-          console.error(
-            "selected_options parse error",
-            error
-          );
+              )
+              .join("");
 
         }
 
-      }
+        const quantity =
+          Number(
+            item.qty ||
+            item.quantity ||
+            0
+          );
 
-      const qty =
-        Number(
-          item.qty || 0
-        );
+        const unitPrice =
+          Number(
+            item.price ||
+            item.unit_price ||
+            0
+          );
 
-      const itemTotal =
-        Number(
-          item.final_price ??
-          (
-            Number(
-              item.price || 0
-            )
-            *
-            qty
-          )
-        );
+        const lineTotal =
+          Number(
+            item.final_price
+          ) > 0
+            ? Number(
+                item.final_price
+              )
+            : (
+                unitPrice *
+                quantity
+              );
 
-      html += `
+        html += `
 
 <tr>
 
@@ -564,7 +618,7 @@ border-radius:10px;
 <div>
 
 <b>
-${item.name || ""}
+${item.name || item.product_name || "-"}
 </b>
 
 ${optionHtml}
@@ -576,22 +630,28 @@ ${optionHtml}
 </td>
 
 <td>
-${qty.toLocaleString()}
+${quantity}
 </td>
 
 <td>
-฿${itemTotal.toLocaleString()}
+${lineTotal}
 </td>
 
 </tr>
 
 `;
 
-    });
+      }
+    );
 
     let giftHtml = "";
 
-    if(gifts.length){
+    if(
+      Array.isArray(
+        order.gifts
+      ) &&
+      order.gifts.length
+    ){
 
       giftHtml += `
 
@@ -601,9 +661,10 @@ ${qty.toLocaleString()}
 
 `;
 
-      gifts.forEach(gift=>{
+      order.gifts.forEach(
+        gift=>{
 
-        giftHtml += `
+          giftHtml += `
 
 <div
 style="
@@ -627,14 +688,12 @@ border-radius:8px;
 
 <div>
 
-${gift.gift_name || ""}
+${gift.gift_name || "-"}
 
 ${
-gift.character_name
+  gift.character_name
 
-?
-
-`
+    ? `
 
 <div
 style="
@@ -650,10 +709,7 @@ ${gift.character_name}
 
 `
 
-:
-
-""
-
+    : ""
 }
 
 </div>
@@ -662,7 +718,8 @@ ${gift.character_name}
 
 `;
 
-      });
+        }
+      );
 
     }
 
@@ -673,36 +730,47 @@ ${gift.character_name}
 ${giftHtml}
 
 <h3>
-
 รวม
-฿${Number(
+${Number(
   order.total || 0
-).toLocaleString()}
-
+)}
+บาท
 </h3>
 
 `;
 
-    document
-      .getElementById(
-        "orderBox"
-      )
-      .innerHTML =
+    orderBox.innerHTML =
       html;
 
   }catch(error){
 
     console.error(
-      "loadOrder error",
+      "โหลดออเดอร์ไม่สำเร็จ",
       error
     );
 
-    document
-      .getElementById(
-        "orderBox"
-      )
-      .innerHTML =
-      "โหลดข้อมูลออเดอร์ไม่สำเร็จ";
+    orderBox.innerHTML = `
+
+<p>
+โหลดข้อมูลออเดอร์ไม่สำเร็จ
+</p>
+
+<p
+style="
+font-size:13px;
+color:#666;
+">
+${error.message || error}
+</p>
+
+<button
+onclick="
+loadOrder()
+">
+ลองใหม่
+</button>
+
+`;
 
   }
 
