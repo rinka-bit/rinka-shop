@@ -4,19 +4,22 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
 
-<title>เพิ่มที่อยู่</title>
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
+<title>
+เพิ่มที่อยู่
+</title>
 
 <style>
 
 body{
 
 font-family:sans-serif;
-
 background:#f8fbff;
-
 padding:20px;
 
 }
@@ -24,7 +27,6 @@ padding:20px;
 .container{
 
 max-width:600px;
-
 margin:auto;
 
 }
@@ -32,11 +34,8 @@ margin:auto;
 .card{
 
 background:white;
-
 padding:20px;
-
 border-radius:16px;
-
 box-shadow:
 0 2px 10px rgba(0,0,0,.05);
 
@@ -46,45 +45,47 @@ input,
 textarea{
 
 width:100%;
-
 padding:12px;
-
 margin-bottom:12px;
-
 box-sizing:border-box;
-
 border:1px solid #ddd;
-
 border-radius:10px;
+font-family:inherit;
+font-size:15px;
+
+}
+
+textarea{
+
+min-height:90px;
+resize:vertical;
 
 }
 
 button{
 
 width:100%;
-
 padding:14px;
-
 border:none;
-
 border-radius:12px;
-
 background:#7dcfff;
-
 color:white;
-
 font-size:16px;
-
 font-weight:700;
-
 cursor:pointer;
+
+}
+
+button:disabled{
+
+opacity:.65;
+cursor:not-allowed;
 
 }
 
 h1{
 
 text-align:center;
-
 margin-bottom:20px;
 
 }
@@ -109,45 +110,93 @@ transform:rotate(360deg);
 
 <div class="container">
 
-<h1>
-
+<h1 id="pageTitle">
 📍 เพิ่มที่อยู่จัดส่ง
-
 </h1>
 
 <div class="card">
 
 <input
 id="receiver"
-placeholder="ชื่อผู้รับ">
+type="text"
+placeholder="ชื่อผู้รับ"
+autocomplete="name"
+>
 
 <input
 id="phone"
-placeholder="เบอร์โทร">
+type="tel"
+placeholder="เบอร์โทร"
+autocomplete="tel"
+>
 
 <textarea
 id="address"
-placeholder="ที่อยู่"></textarea>
+placeholder="บ้านเลขที่ หมู่บ้าน ถนน ซอย"
+autocomplete="street-address"
+></textarea>
 
 <input
 id="subdistrict"
-placeholder="แขวง / ตำบล">
+type="text"
+placeholder="แขวง / ตำบล"
+>
 
 <input
 id="district"
-placeholder="เขต / อำเภอ">
+type="text"
+placeholder="เขต / อำเภอ"
+>
 
 <input
 id="province"
-placeholder="จังหวัด">
+type="text"
+placeholder="จังหวัด"
+>
 
 <input
 id="postcode"
-placeholder="รหัสไปรษณีย์">
+type="text"
+inputmode="numeric"
+maxlength="5"
+placeholder="รหัสไปรษณีย์"
+autocomplete="postal-code"
+>
+
+<input
+id="label"
+type="text"
+placeholder="ชื่อที่อยู่ เช่น บ้าน / ที่ทำงาน"
+value="บ้าน"
+>
+
+<label
+style="
+display:flex;
+align-items:center;
+gap:8px;
+margin-bottom:16px;
+"
+>
+
+<input
+id="isDefault"
+type="checkbox"
+checked
+style="
+width:auto;
+margin:0;
+"
+>
+
+ตั้งเป็นที่อยู่เริ่มต้น
+
+</label>
 
 <button
 id="saveAddressBtn"
-onclick="saveAddress()">
+onclick="saveAddress()"
+>
 
 บันทึกที่อยู่
 
@@ -156,293 +205,6 @@ onclick="saveAddress()">
 </div>
 
 </div>
-
-<script>
-
-const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
-
-const customer =
-
-JSON.parse(
-localStorage.getItem(
-"customer"
-) || "{}"
-);
-
-if(!customer.email){
-
-window.location =
-"login.html";
-
-}
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const addressId =
-params.get("id");
-
-if(addressId){
-
-document.querySelector(
-"h1"
-).textContent =
-"📍 แก้ไขที่อยู่จัดส่ง";
-
-loadAddress();
-
-}
-
-async function loadAddress(){
-
-const response =
-await fetch(
-API +
-"?action=customerAddress&id=" +
-encodeURIComponent(
-addressId
-)
-);
-
-const result =
-  await response.json();
-
-const data =
-  result.address || result;
-
-if(
-  !data ||
-  !data.address_id
-){
-
-  alert(
-    "ไม่พบที่อยู่"
-  );
-
-  return;
-
-}
-
-alert(
-"ไม่พบที่อยู่"
-);
-
-return;
-
-}
-
-document.getElementById("receiver").value =
-data.receiver || "";
-
-document.getElementById("phone").value =
-data.phone || "";
-
-document.getElementById("address").value =
-data.address || "";
-
-document.getElementById("subdistrict").value =
-data.subdistrict || "";
-
-document.getElementById("district").value =
-data.district || "";
-
-document.getElementById("province").value =
-data.province || "";
-
-document.getElementById("postcode").value =
-data.postcode || "";
-
-}
-
-async function saveAddress(){
-
-  const btn =
-    document.getElementById(
-      "saveAddressBtn"
-    );
-
-  if(btn.disabled){
-    return;
-  }
-
-  btn.disabled = true;
-
-  btn.textContent =
-    "กำลังบันทึก...";
-
-  document.getElementById(
-    "loadingOverlay"
-  ).style.display =
-    "flex";
-
-  try{
-
-    const payload = {
-
-      address_id:
-        addressId || "",
-
-      email:
-        customer.email,
-
-      receiver:
-        document.getElementById(
-          "receiver"
-        ).value,
-
-      phone:
-        document.getElementById(
-          "phone"
-        ).value,
-
-      address:
-        document.getElementById(
-          "address"
-        ).value,
-
-      subdistrict:
-        document.getElementById(
-          "subdistrict"
-        ).value,
-
-      district:
-        document.getElementById(
-          "district"
-        ).value,
-
-      province:
-        document.getElementById(
-          "province"
-        ).value,
-
-      postcode:
-        document.getElementById(
-          "postcode"
-        ).value,
-
-      label:"บ้าน",
-
-      is_default:true
-
-    };
-
-    if(
-      !payload.receiver ||
-      !payload.phone ||
-      !payload.address
-    ){
-
-      alert(
-        "กรุณากรอกข้อมูลให้ครบ"
-      );
-
-      btn.disabled = false;
-
-      btn.textContent =
-        "บันทึกที่อยู่";
-
-      document.getElementById(
-        "loadingOverlay"
-      ).style.display =
-        "none";
-
-      return;
-
-    }
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      "action",
-      "saveCustomerAddress"
-    );
-
-    formData.append(
-      "payload",
-      JSON.stringify(payload)
-    );
-
-    const response =
-      await fetch(
-        API,
-        {
-          method:"POST",
-          body:formData
-        }
-      );
-
-    const result =
-      await response.json();
-
-    if(result.success){
-
-      alert(
-        "บันทึกที่อยู่เรียบร้อย"
-      );
-
-      const from =
-        new URLSearchParams(
-          window.location.search
-        ).get("from");
-
-      if(from === "register"){
-
-        window.location =
-          "home.html";
-
-      }else{
-
-        window.location =
-          "address-book.html";
-
-      }
-
-    }else{
-
-      alert(
-        result.error ||
-        "บันทึกที่อยู่ไม่สำเร็จ"
-      );
-
-      btn.disabled = false;
-
-      btn.textContent =
-        "บันทึกที่อยู่";
-
-      document.getElementById(
-        "loadingOverlay"
-      ).style.display =
-        "none";
-
-    }
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      "เกิดข้อผิดพลาด กรุณาลองใหม่"
-    );
-
-    btn.disabled = false;
-
-    btn.textContent =
-      "บันทึกที่อยู่";
-
-    document.getElementById(
-      "loadingOverlay"
-    ).style.display =
-      "none";
-
-  }
-
-}
-
-</script>
 
 <div
 id="loadingOverlay"
@@ -454,7 +216,9 @@ background:rgba(0,0,0,.6);
 z-index:9999;
 justify-content:center;
 align-items:center;
-">
+padding:20px;
+"
+>
 
 <div
 style="
@@ -462,26 +226,492 @@ background:white;
 padding:30px;
 border-radius:20px;
 text-align:center;
-">
+"
+>
 
 <div
 style="
 font-size:50px;
 animation:spin 1s linear infinite;
-">
+"
+>
 
 📍
 
 </div>
 
-<p>
+<p id="loadingText">
 กำลังบันทึกที่อยู่...
 </p>
 
 </div>
 
 </div>
-  
+
+<script>
+
+const API =
+  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const sessionToken =
+  localStorage.getItem(
+    "session_token"
+  ) || "";
+
+if(
+  !sessionToken
+){
+
+  window.location.replace(
+    "login.html"
+  );
+
+}
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const addressId =
+  params.get(
+    "id"
+  ) || "";
+
+if(
+  addressId
+){
+
+  document.getElementById(
+    "pageTitle"
+  ).textContent =
+    "📍 แก้ไขที่อยู่จัดส่ง";
+
+  loadAddress();
+
+}
+
+
+async function loadAddress(){
+
+  setLoading(
+    true,
+    "กำลังโหลดข้อมูลที่อยู่..."
+  );
+
+  try{
+
+    const response =
+      await fetch(
+
+        API +
+        "?action=customerAddress" +
+        "&session_token=" +
+        encodeURIComponent(
+          sessionToken
+        ) +
+        "&address_id=" +
+        encodeURIComponent(
+          addressId
+        )
+
+      );
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "ไม่สามารถโหลดข้อมูลที่อยู่ได้"
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        "ไม่พบข้อมูลที่อยู่"
+      );
+
+    }
+
+    const data =
+      result.address ||
+      result;
+
+    if(
+      !data ||
+      !data.address_id
+    ){
+
+      throw new Error(
+        "ไม่พบข้อมูลที่อยู่"
+      );
+
+    }
+
+    document.getElementById(
+      "receiver"
+    ).value =
+      data.receiver || "";
+
+    document.getElementById(
+      "phone"
+    ).value =
+      data.phone || "";
+
+    document.getElementById(
+      "address"
+    ).value =
+      data.address || "";
+
+    document.getElementById(
+      "subdistrict"
+    ).value =
+      data.subdistrict || "";
+
+    document.getElementById(
+      "district"
+    ).value =
+      data.district || "";
+
+    document.getElementById(
+      "province"
+    ).value =
+      data.province || "";
+
+    document.getElementById(
+      "postcode"
+    ).value =
+      data.postcode || "";
+
+    document.getElementById(
+      "label"
+    ).value =
+      data.label ||
+      "บ้าน";
+
+    document.getElementById(
+      "isDefault"
+    ).checked =
+      Boolean(
+        data.is_default
+      );
+
+  }catch(error){
+
+    console.error(
+      "loadAddress error",
+      error
+    );
+
+    alert(
+      error.message ||
+      "ไม่สามารถโหลดข้อมูลที่อยู่ได้"
+    );
+
+    window.location.replace(
+      "address-book.html"
+    );
+
+  }finally{
+
+    setLoading(
+      false
+    );
+
+  }
+
+}
+
+
+async function saveAddress(){
+
+  const button =
+    document.getElementById(
+      "saveAddressBtn"
+    );
+
+  if(
+    button.disabled
+  ){
+
+    return;
+
+  }
+
+  const payload = {
+
+    session_token:
+      sessionToken,
+
+    address_id:
+      addressId,
+
+    receiver:
+      document
+        .getElementById(
+          "receiver"
+        )
+        .value
+        .trim(),
+
+    phone:
+      document
+        .getElementById(
+          "phone"
+        )
+        .value
+        .trim(),
+
+    address:
+      document
+        .getElementById(
+          "address"
+        )
+        .value
+        .trim(),
+
+    subdistrict:
+      document
+        .getElementById(
+          "subdistrict"
+        )
+        .value
+        .trim(),
+
+    district:
+      document
+        .getElementById(
+          "district"
+        )
+        .value
+        .trim(),
+
+    province:
+      document
+        .getElementById(
+          "province"
+        )
+        .value
+        .trim(),
+
+    postcode:
+      document
+        .getElementById(
+          "postcode"
+        )
+        .value
+        .trim(),
+
+    label:
+      document
+        .getElementById(
+          "label"
+        )
+        .value
+        .trim() ||
+      "บ้าน",
+
+    is_default:
+      document
+        .getElementById(
+          "isDefault"
+        )
+        .checked
+
+  };
+
+  if(
+    !payload.receiver ||
+    !payload.phone ||
+    !payload.address ||
+    !payload.subdistrict ||
+    !payload.district ||
+    !payload.province ||
+    !payload.postcode
+  ){
+
+    alert(
+      "กรุณากรอกข้อมูลที่อยู่ให้ครบ"
+    );
+
+    return;
+
+  }
+
+  if(
+    !/^\d{5}$/.test(
+      payload.postcode
+    )
+  ){
+
+    alert(
+      "กรุณากรอกรหัสไปรษณีย์ 5 หลัก"
+    );
+
+    return;
+
+  }
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "กำลังบันทึก...";
+
+  setLoading(
+    true,
+    "กำลังบันทึกที่อยู่..."
+  );
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveAddress"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+
+          method:
+            "POST",
+
+          body:
+            formData
+
+        }
+      );
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "ไม่สามารถเชื่อมต่อระบบได้"
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(
+      !result.success
+    ){
+
+      throw new Error(
+        result.error ||
+        result.message ||
+        "บันทึกที่อยู่ไม่สำเร็จ"
+      );
+
+    }
+
+    alert(
+      addressId
+        ? "แก้ไขที่อยู่เรียบร้อย"
+        : "บันทึกที่อยู่เรียบร้อย"
+    );
+
+    const from =
+      params.get(
+        "from"
+      );
+
+    if(
+      from ===
+      "register"
+    ){
+
+      window.location.replace(
+        "account.html"
+      );
+
+      return;
+
+    }
+
+    window.location.replace(
+      "address-book.html"
+    );
+
+  }catch(error){
+
+    console.error(
+      "saveAddress error",
+      error
+    );
+
+    alert(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "บันทึกที่อยู่";
+
+    setLoading(
+      false
+    );
+
+  }
+
+}
+
+
+function setLoading(
+  isLoading,
+  message
+){
+
+  const overlay =
+    document.getElementById(
+      "loadingOverlay"
+    );
+
+  const loadingText =
+    document.getElementById(
+      "loadingText"
+    );
+
+  loadingText.textContent =
+    message ||
+    "กำลังดำเนินการ...";
+
+  overlay.style.display =
+    isLoading
+      ? "flex"
+      : "none";
+
+}
+
+</script>
+
 </body>
 
 </html>
