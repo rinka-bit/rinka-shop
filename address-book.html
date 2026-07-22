@@ -5,8 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
 
 <title>
 จัดการที่อยู่
@@ -17,9 +19,7 @@ content="width=device-width,initial-scale=1">
 body{
 
 font-family:sans-serif;
-
 background:#f8fbff;
-
 padding:20px;
 
 }
@@ -27,7 +27,6 @@ padding:20px;
 .container{
 
 max-width:700px;
-
 margin:auto;
 
 }
@@ -35,9 +34,7 @@ margin:auto;
 .topbar{
 
 display:flex;
-
 align-items:center;
-
 margin-bottom:20px;
 
 }
@@ -46,15 +43,10 @@ margin-bottom:20px;
 
 width:44px;
 height:44px;
-
 border:none;
-
 border-radius:999px;
-
 background:white;
-
 cursor:pointer;
-
 box-shadow:
 0 2px 8px rgba(0,0,0,.08);
 
@@ -63,13 +55,9 @@ box-shadow:
 .address-card{
 
 background:white;
-
 padding:16px;
-
 border-radius:16px;
-
 margin-bottom:12px;
-
 box-shadow:
 0 2px 10px rgba(0,0,0,.05);
 
@@ -78,15 +66,10 @@ box-shadow:
 .label{
 
 display:inline-block;
-
 background:#eff6ff;
-
 padding:4px 10px;
-
 border-radius:999px;
-
 font-size:12px;
-
 margin-bottom:8px;
 
 }
@@ -94,30 +77,51 @@ margin-bottom:8px;
 .default{
 
 background:#dbeafe;
-
 color:#2563eb;
+
+}
+
+.card-button{
+
+width:auto;
+padding:9px 14px;
+border:none;
+border-radius:10px;
+background:#eaf6ff;
+color:#2684b8;
+font-weight:700;
+cursor:pointer;
+
+}
+
+.select-button{
+
+background:#7dcfff;
+color:white;
 
 }
 
 .add-btn{
 
 width:100%;
-
 padding:14px;
-
 border:none;
-
 border-radius:12px;
-
 background:#60a5fa;
-
 color:white;
-
 font-size:15px;
-
+font-weight:700;
 cursor:pointer;
-
 margin-top:20px;
+
+}
+
+.error-card{
+
+background:#fff1f1;
+color:#b33;
+padding:16px;
+border-radius:16px;
 
 }
 
@@ -133,7 +137,8 @@ margin-top:20px;
 
 <button
 class="back-btn"
-onclick="history.back()">
+onclick="history.back()"
+>
 
 ←
 
@@ -142,23 +147,20 @@ onclick="history.back()">
 </div>
 
 <h2>
-
 📍 จัดการที่อยู่
-
 </h2>
 
 <div id="addressList">
-
 กำลังโหลด...
-
 </div>
 
 <button
 class="add-btn"
 onclick="
-window.location.href=
-'address.html'
-">
+  window.location.href =
+  'address.html'
+"
+>
 
 + เพิ่มที่อยู่ใหม่
 
@@ -169,58 +171,133 @@ window.location.href=
 <script>
 
 const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-const customer =
+const sessionToken =
+  localStorage.getItem(
+    "session_token"
+  ) || "";
 
-JSON.parse(
-localStorage.getItem(
-"customer"
-) || "{}"
-);
+if(
+  !sessionToken
+){
 
-if(!customer.email){
-
-window.location.href =
-"login.html";
+  window.location.replace(
+    "login.html"
+  );
 
 }
 
+let addressesData = [];
+
 loadAddresses();
+
 
 async function loadAddresses(){
 
-  const response =
-    await fetch(
-
-      API +
-      "?action=customerAddresses&email=" +
-      encodeURIComponent(
-        customer.email
-      )
-
-    );
-
-  const result =
-    await response.json();
-
-  const addresses =
-    Array.isArray(result)
-      ? result
-      : Array.isArray(result.addresses)
-        ? result.addresses
-        : [];
-
-  window.addressesData =
-    addresses;
-
-  let html = "";
-
-  if(addresses.length === 0){
-
+  const addressList =
     document.getElementById(
       "addressList"
-    ).innerHTML = `
+    );
+
+  try{
+
+    const response =
+      await fetch(
+
+        API +
+        "?action=customerAddresses" +
+        "&session_token=" +
+        encodeURIComponent(
+          sessionToken
+        )
+
+      );
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "ไม่สามารถโหลดที่อยู่ได้"
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        "กรุณาเข้าสู่ระบบใหม่"
+      );
+
+    }
+
+    const addresses =
+      Array.isArray(
+        result
+      )
+        ? result
+        : Array.isArray(
+            result.addresses
+          )
+          ? result.addresses
+          : [];
+
+    addressesData =
+      addresses;
+
+    renderAddresses(
+      addresses
+    );
+
+  }catch(error){
+
+    console.error(
+      "loadAddresses error",
+      error
+    );
+
+    addressList.innerHTML = `
+
+      <div class="error-card">
+
+        ${
+          escapeHtml(
+            error.message ||
+            "ไม่สามารถโหลดที่อยู่ได้"
+          )
+        }
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+function renderAddresses(
+  addresses
+){
+
+  const addressList =
+    document.getElementById(
+      "addressList"
+    );
+
+  if(
+    addresses.length === 0
+  ){
+
+    addressList.innerHTML = `
 
       <div class="address-card">
 
@@ -234,152 +311,296 @@ async function loadAddresses(){
 
   }
 
-  addresses.forEach(address=>{
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
 
-    html += `
+  const selectType =
+    params.get(
+      "select"
+    );
 
-      <div class="address-card">
+  let html = "";
 
-        <div
-        class="
-        label
-        ${address.is_default ? "default" : ""}
-        ">
+  addresses.forEach(
+    address=>{
 
-          ${address.label || "ที่อยู่"}
+      const addressId =
+        escapeAttribute(
+          address.address_id || ""
+        );
+
+      html += `
+
+        <div class="address-card">
+
+          <div
+          class="
+            label
+            ${
+              address.is_default
+                ? "default"
+                : ""
+            }
+          "
+          >
+
+            ${
+              escapeHtml(
+                address.label ||
+                "ที่อยู่"
+              )
+            }
+
+            ${
+              address.is_default
+                ? " (ค่าเริ่มต้น)"
+                : ""
+            }
+
+          </div>
+
+          <div>
+
+            <b>
+              ${
+                escapeHtml(
+                  address.receiver || ""
+                )
+              }
+            </b>
+
+          </div>
+
+          <div>
+            ${
+              escapeHtml(
+                address.phone || ""
+              )
+            }
+          </div>
+
+          <div>
+            ${
+              escapeHtml(
+                address.address || ""
+              )
+            }
+          </div>
+
+          <div>
+
+            ${
+              escapeHtml(
+                address.subdistrict || ""
+              )
+            }
+
+            ${
+              escapeHtml(
+                address.district || ""
+              )
+            }
+
+          </div>
+
+          <div>
+
+            ${
+              escapeHtml(
+                address.province || ""
+              )
+            }
+
+            ${
+              escapeHtml(
+                address.postcode || ""
+              )
+            }
+
+          </div>
+
+          <br>
+
+          <button
+          class="card-button"
+          onclick="
+            editAddress(
+              '${addressId}'
+            )
+          "
+          >
+
+            ✏️ แก้ไข
+
+          </button>
 
           ${
-            address.is_default
-              ? " (ค่าเริ่มต้น)"
+            selectType
+              ? `
+
+                <button
+                class="
+                  card-button
+                  select-button
+                "
+                onclick="
+                  useAddressById(
+                    '${addressId}'
+                  )
+                "
+                >
+
+                  ✅ ใช้ที่อยู่นี้
+
+                </button>
+
+              `
               : ""
           }
 
         </div>
 
-        <div>
+      `;
 
-          <b>
-            ${address.receiver || ""}
-          </b>
+    }
+  );
 
-        </div>
-
-        <div>
-          ${address.phone || ""}
-        </div>
-
-        <div>
-          ${address.address || ""}
-        </div>
-
-        <div>
-          ${address.subdistrict || ""}
-          ${address.district || ""}
-        </div>
-
-        <div>
-          ${address.province || ""}
-          ${address.postcode || ""}
-        </div>
-
-        <br>
-
-        <button
-        onclick="
-          editAddress(
-            '${address.address_id}'
-          )
-        ">
-
-          ✏️ แก้ไข
-
-        </button>
-
-        ${
-          new URLSearchParams(
-            window.location.search
-          ).get("select")
-            ? `
-              <br><br>
-
-              <button
-              onclick="
-                useAddressById(
-                  '${address.address_id}'
-                )
-              ">
-
-                ✅ ใช้ที่อยู่นี้
-
-              </button>
-            `
-            : ""
-        }
-
-      </div>
-
-    `;
-
-  });
-
-  document.getElementById(
-    "addressList"
-  ).innerHTML =
+  addressList.innerHTML =
     html;
 
 }
-  
-function editAddress(id){
 
-window.location.href =
-"address.html?id=" + id;
 
-}
+function editAddress(
+  addressId
+){
 
-function useAddressById(addressId){
-
-const address =
-window.addressesData.find(
-a => a.address_id === addressId
-);
-
-if(!address){
-return;
-}
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const selectType =
-params.get("select");
-
-if(selectType === "shipping"){
-
-localStorage.setItem(
-"selectedShippingAddress",
-JSON.stringify(address)
-);
-
-const orderId =
-params.get("order_id");
-
-window.location.href =
-"shipping-payment.html?id=" +
-orderId;
-
-return;
+  window.location.href =
+    "address.html?id=" +
+    encodeURIComponent(
+      addressId
+    );
 
 }
 
-localStorage.setItem(
-"selectedCheckoutAddress",
-JSON.stringify(address)
-);
 
-window.location.href =
-"checkout.html";
+function useAddressById(
+  addressId
+){
+
+  const address =
+    addressesData.find(
+      item=>
+        String(
+          item.address_id
+        ) ===
+        String(
+          addressId
+        )
+    );
+
+  if(
+    !address
+  ){
+
+    alert(
+      "ไม่พบข้อมูลที่อยู่"
+    );
+
+    return;
+
+  }
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const selectType =
+    params.get(
+      "select"
+    );
+
+  if(
+    selectType ===
+    "shipping"
+  ){
+
+    localStorage.setItem(
+      "selectedShippingAddress",
+      JSON.stringify(
+        address
+      )
+    );
+
+    const orderId =
+      params.get(
+        "order_id"
+      ) || "";
+
+    window.location.href =
+      "shipping-payment.html?id=" +
+      encodeURIComponent(
+        orderId
+      );
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    "selectedCheckoutAddress",
+    JSON.stringify(
+      address
+    )
+  );
+
+  window.location.href =
+    "checkout.html";
+
+}
+
+
+function escapeHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(
+  value
+){
+
+  return escapeHtml(
+    value
+  );
 
 }
 
