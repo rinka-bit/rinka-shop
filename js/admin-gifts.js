@@ -1703,12 +1703,10 @@ function renderGiftCampaignForm(){
         item =>
 
           String(
-            item.campaign_id ||
-            ""
+            item.campaign_id || ""
           ) ===
           String(
-            adminGiftModalRecordId ||
-            ""
+            adminGiftModalRecordId || ""
           )
       );
 
@@ -1773,6 +1771,17 @@ function renderGiftCampaignForm(){
       : true;
 
   modalBody.innerHTML = `
+
+<input
+type="hidden"
+id="giftCampaignId"
+value="${escapeHtml(
+  campaign
+    ? campaign.campaign_id || ""
+    : ""
+)}"
+>
+
 
 <div class="full">
 
@@ -1867,21 +1876,19 @@ placeholder="รายละเอียดหรือเงื่อนไข�
 
 <div class="full">
 
-<label for="giftCampaignBannerImage">
+<label for="giftCampaignBannerFile">
 
-Banner Image
+รูป Banner
 
 </label>
 
 <br><br>
 
 <input
-type="text"
-id="giftCampaignBannerImage"
-value="${escapeHtml(
-  bannerImage
-)}"
-placeholder="URL รูป Banner"
+type="file"
+id="giftCampaignBannerFile"
+accept="image/*"
+onchange="previewGiftCampaignBanner(event)"
 >
 
 <p
@@ -1891,8 +1898,47 @@ font-size:13px;
 color:#64748b;
 "
 >
-รอบนี้ใช้ช่อง URL ก่อน ระบบอัปโหลดรูปจะเพิ่มภายหลัง
+
+รองรับไฟล์รูปภาพ หากไม่เลือกไฟล์ใหม่ ระบบจะใช้รูปเดิม
+
 </p>
+
+</div>
+
+
+<div
+id="giftCampaignBannerPreviewBox"
+class="full"
+style="
+${
+  bannerImage
+    ? ""
+    : "display:none;"
+}
+"
+>
+
+<label>
+ตัวอย่าง Banner
+</label>
+
+<br><br>
+
+<img
+id="giftCampaignBannerPreview"
+src="${escapeHtml(
+  bannerImage
+)}"
+alt="Campaign Banner Preview"
+style="
+width:100%;
+max-height:280px;
+object-fit:contain;
+background:#f1f5f9;
+border:1px solid #e2e8f0;
+border-radius:14px;
+"
+>
 
 </div>
 
@@ -1917,7 +1963,7 @@ ${isActive ? "selected" : ""}
 </option>
 
 <option
-value="no"
+value=""
 ${!isActive ? "selected" : ""}
 >
 ปิดใช้งาน
@@ -1931,9 +1977,7 @@ ${!isActive ? "selected" : ""}
 <div>
 
 <label>
-
 Campaign ID
-
 </label>
 
 <br><br>
@@ -1972,6 +2016,104 @@ disabled
 
 }
 
+function previewGiftCampaignBanner(
+  event
+){
+
+  const file =
+    event &&
+    event.target &&
+    event.target.files
+      ? event.target.files[0]
+      : null;
+
+  const previewBox =
+    document.getElementById(
+      "giftCampaignBannerPreviewBox"
+    );
+
+  const previewImage =
+    document.getElementById(
+      "giftCampaignBannerPreview"
+    );
+
+  if(
+    !previewBox ||
+    !previewImage
+  ){
+
+    return;
+
+  }
+
+  if(!file){
+
+    previewImage.removeAttribute(
+      "src"
+    );
+
+    previewBox.style.display =
+      "none";
+
+    return;
+
+  }
+
+  if(
+    !String(
+      file.type || ""
+    ).startsWith(
+      "image/"
+    )
+  ){
+
+    alert(
+      "กรุณาเลือกไฟล์รูปภาพเท่านั้น"
+    );
+
+    event.target.value = "";
+
+    previewImage.removeAttribute(
+      "src"
+    );
+
+    previewBox.style.display =
+      "none";
+
+    return;
+
+  }
+
+  const reader =
+    new FileReader();
+
+  reader.onload =
+    loadEvent => {
+
+      previewImage.src =
+        loadEvent.target.result;
+
+      previewBox.style.display =
+        "block";
+
+    };
+
+  reader.onerror =
+    () => {
+
+      alert(
+        "ไม่สามารถอ่านไฟล์รูปภาพได้"
+      );
+
+      event.target.value = "";
+
+    };
+
+  reader.readAsDataURL(
+    file
+  );
+
+}
 
 function renderGiftCampaignCollectionOptions(
   selectedCollectionId = ""
@@ -2063,7 +2205,12 @@ API WILL BE CONNECTED NEXT
 =========================================
 */
 
-function submitGiftCampaign(){
+async function submitGiftCampaign(){
+
+  const campaignIdInput =
+    document.getElementById(
+      "giftCampaignId"
+    );
 
   const campaignNameInput =
     document.getElementById(
@@ -2075,17 +2222,78 @@ function submitGiftCampaign(){
       "giftCampaignCollection"
     );
 
-  const campaignName =
-    campaignNameInput
-      ? campaignNameInput.value.trim()
-      : "";
+  const descriptionInput =
+    document.getElementById(
+      "giftCampaignDescription"
+    );
 
-  const collectionId =
-    collectionInput
-      ? collectionInput.value.trim()
-      : "";
+  const sortOrderInput =
+    document.getElementById(
+      "giftCampaignSortOrder"
+    );
 
-  if(!campaignName){
+  const activeInput =
+    document.getElementById(
+      "giftCampaignActive"
+    );
+
+  const bannerFileInput =
+    document.getElementById(
+      "giftCampaignBannerFile"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "giftModalSaveBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "giftModalLoading"
+    );
+
+  const payload = {
+
+    campaign_id:
+      campaignIdInput
+        ? campaignIdInput.value.trim()
+        : "",
+
+    campaign_name:
+      campaignNameInput
+        ? campaignNameInput.value.trim()
+        : "",
+
+    collection_id:
+      collectionInput
+        ? collectionInput.value.trim()
+        : "",
+
+    description:
+      descriptionInput
+        ? descriptionInput.value
+        : "",
+
+    sort_order:
+      sortOrderInput
+        ? Math.max(
+            0,
+            Number(
+              sortOrderInput.value || 0
+            )
+          )
+        : 0,
+
+    active:
+      activeInput
+        ? activeInput.value
+        : ""
+
+  };
+
+  if(
+    !payload.campaign_name
+  ){
 
     alert(
       "กรุณากรอกชื่อ Campaign"
@@ -2101,7 +2309,9 @@ function submitGiftCampaign(){
 
   }
 
-  if(!collectionId){
+  if(
+    !payload.collection_id
+  ){
 
     alert(
       "กรุณาเลือก Collection"
@@ -2117,11 +2327,162 @@ function submitGiftCampaign(){
 
   }
 
-  alert(
-    adminGiftModalAction === "edit"
-      ? "ฟอร์มแก้ไข Campaign พร้อมแล้ว รอบถัดไปจะเชื่อม API บันทึกการแก้ไข"
-      : "ฟอร์มเพิ่ม Campaign พร้อมแล้ว รอบถัดไปจะเชื่อม API สร้าง Campaign"
-  );
+  const bannerFile =
+    bannerFileInput &&
+    bannerFileInput.files
+      ? bannerFileInput.files[0]
+      : null;
+
+  if(
+    bannerFile &&
+    !String(
+      bannerFile.type || ""
+    ).startsWith(
+      "image/"
+    )
+  ){
+
+    alert(
+      "กรุณาเลือกไฟล์รูปภาพเท่านั้น"
+    );
+
+    return;
+
+  }
+
+  if(saveButton){
+
+    saveButton.disabled =
+      true;
+
+    saveButton.textContent =
+      "กำลังบันทึก...";
+
+  }
+
+  if(loading){
+
+    loading.style.display =
+      "block";
+
+    loading.textContent =
+      bannerFile
+        ? "⏳ กำลังอัปโหลดรูปและบันทึก..."
+        : "⏳ กำลังบันทึก...";
+
+  }
+
+  try{
+
+    if(bannerFile){
+
+      payload.banner_image_base64 =
+        await fileToBase64(
+          bannerFile
+        );
+
+    }
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveGiftCampaign"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        "บันทึก Campaign ไม่สำเร็จ"
+      );
+
+    }
+
+    alert(
+      payload.campaign_id
+        ? "แก้ไข Campaign เรียบร้อยแล้ว"
+        : "เพิ่ม Campaign เรียบร้อยแล้ว"
+    );
+
+    closeGiftModal();
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "submitGiftCampaign error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    const currentSaveButton =
+      document.getElementById(
+        "giftModalSaveBtn"
+      );
+
+    const currentLoading =
+      document.getElementById(
+        "giftModalLoading"
+      );
+
+    if(currentSaveButton){
+
+      currentSaveButton.disabled =
+        false;
+
+      currentSaveButton.textContent =
+        "💾 บันทึก";
+
+    }
+
+    if(currentLoading){
+
+      currentLoading.style.display =
+        "none";
+
+      currentLoading.textContent =
+        "⏳ กำลังบันทึก...";
+
+    }
+
+  }
 
 }
 
