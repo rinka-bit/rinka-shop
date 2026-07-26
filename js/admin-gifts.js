@@ -2515,18 +2515,217 @@ function openEditGiftCampaign(
 
 }
 
-
-function requestDeleteGiftCampaign(
+async function requestDeleteGiftCampaign(
   campaignId
 ){
 
-  alert(
-    "ลบ Campaign: " +
-    campaignId
-  );
+  const normalizedCampaignId =
+    String(
+      campaignId || ""
+    ).trim();
+
+  if(!normalizedCampaignId){
+
+    alert(
+      "ไม่พบ Campaign ID"
+    );
+
+    return;
+
+  }
+
+  const campaign =
+    adminGiftCampaigns.find(
+      item =>
+
+        String(
+          item.campaign_id || ""
+        ) ===
+        normalizedCampaignId
+    );
+
+  if(!campaign){
+
+    alert(
+      "ไม่พบข้อมูล Campaign"
+    );
+
+    return;
+
+  }
+
+  const campaignName =
+    String(
+      campaign.campaign_name ||
+      normalizedCampaignId
+    );
+
+  const childRules =
+    adminGiftRules.filter(
+      rule =>
+
+        String(
+          rule.campaign_id || ""
+        ) ===
+        normalizedCampaignId
+    );
+
+  if(
+    childRules.length > 0
+  ){
+
+    alert(
+      "ไม่สามารถลบ Campaign \"" +
+      campaignName +
+      "\" ได้\n\n" +
+      "Campaign นี้ยังมี Rule อยู่ " +
+      childRules.length +
+      " รายการ\n" +
+      "กรุณาลบ Rule ภายใน Campaign ก่อน"
+    );
+
+    return;
+
+  }
+
+  const confirmed =
+    confirm(
+      "ต้องการลบ Campaign นี้ใช่ไหม?\n\n" +
+      campaignName +
+      "\n\n" +
+      "เมื่อลบแล้วจะไม่สามารถกู้คืนได้"
+    );
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+  const campaignNode =
+    document.querySelector(
+      '[data-gift-node="' +
+      CSS.escape(
+        createGiftNodeKey(
+          "campaign",
+          normalizedCampaignId
+        )
+      ) +
+      '"]'
+    );
+
+  const deleteButton =
+    campaignNode
+      ? campaignNode.querySelector(
+          ".gift-delete-btn"
+        )
+      : null;
+
+  if(deleteButton){
+
+    deleteButton.disabled =
+      true;
+
+    deleteButton.textContent =
+      "กำลังลบ...";
+
+  }
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "deleteGiftCampaign"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify({
+
+        campaign_id:
+          normalizedCampaignId
+
+      })
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        "ลบ Campaign ไม่สำเร็จ"
+      );
+
+    }
+
+    adminGiftOpenNodes.delete(
+      createGiftNodeKey(
+        "campaign",
+        normalizedCampaignId
+      )
+    );
+
+    alert(
+      "ลบ Campaign เรียบร้อยแล้ว"
+    );
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "requestDeleteGiftCampaign error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    if(
+      deleteButton &&
+      document.body.contains(
+        deleteButton
+      )
+    ){
+
+      deleteButton.disabled =
+        false;
+
+      deleteButton.textContent =
+        "🗑️ ลบ";
+
+    }
+
+  }
 
 }
-
 
 /*
 =========================================
