@@ -16,6 +16,13 @@ let adminGiftOpenNodes =
 let adminGiftLoadingPromise =
   null;
 
+let adminGiftModalMode = "";
+
+let adminGiftModalAction = "";
+
+let adminGiftModalRecordId = "";
+
+let adminGiftModalParentId = "";
 
 /*
 =========================================
@@ -1445,18 +1452,691 @@ ${escapeHtml(
 
 }
 
+/*
+=========================================
+GIFT MODAL
+=========================================
+*/
+
+function openGiftModal(
+  mode,
+  action,
+  recordId = "",
+  parentId = ""
+){
+
+  const modal =
+    document.getElementById(
+      "giftModal"
+    );
+
+  const modalBody =
+    document.getElementById(
+      "giftModalBody"
+    );
+
+  const modalTitle =
+    document.getElementById(
+      "giftModalTitle"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "giftModalSaveBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "giftModalLoading"
+    );
+
+  if(
+    !modal ||
+    !modalBody ||
+    !modalTitle ||
+    !saveButton
+  ){
+
+    alert(
+      "ไม่พบ Gift Modal ใน admin.html"
+    );
+
+    return;
+
+  }
+
+  adminGiftModalMode =
+    String(
+      mode || ""
+    );
+
+  adminGiftModalAction =
+    String(
+      action || "create"
+    );
+
+  adminGiftModalRecordId =
+    String(
+      recordId || ""
+    );
+
+  adminGiftModalParentId =
+    String(
+      parentId || ""
+    );
+
+  if(loading){
+
+    loading.style.display =
+      "none";
+
+  }
+
+  saveButton.disabled =
+    false;
+
+  saveButton.textContent =
+    "💾 บันทึก";
+
+  if(
+    adminGiftModalMode ===
+    "campaign"
+  ){
+
+    renderGiftCampaignForm();
+
+  }
+  else{
+
+    modalTitle.textContent =
+      "🎁 Gift Manager";
+
+    modalBody.innerHTML = `
+
+<div class="gift-error full">
+
+ยังไม่รองรับ Modal ประเภทนี้
+
+</div>
+
+`;
+
+  }
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+function closeGiftModal(){
+
+  const modal =
+    document.getElementById(
+      "giftModal"
+    );
+
+  const modalBody =
+    document.getElementById(
+      "giftModalBody"
+    );
+
+  const loading =
+    document.getElementById(
+      "giftModalLoading"
+    );
+
+  if(modal){
+
+    modal.classList.add(
+      "hidden"
+    );
+
+  }
+
+  if(modalBody){
+
+    modalBody.innerHTML =
+      "";
+
+  }
+
+  if(loading){
+
+    loading.style.display =
+      "none";
+
+  }
+
+  adminGiftModalMode = "";
+
+  adminGiftModalAction = "";
+
+  adminGiftModalRecordId = "";
+
+  adminGiftModalParentId = "";
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+function handleGiftModalBackdrop(
+  event
+){
+
+  if(
+    event.target &&
+    event.target.id ===
+    "giftModal"
+  ){
+
+    closeGiftModal();
+
+  }
+
+}
+
+
+function submitGiftModal(){
+
+  if(
+    adminGiftModalMode ===
+    "campaign"
+  ){
+
+    submitGiftCampaign();
+
+    return;
+
+  }
+
+  alert(
+    "ยังไม่รองรับการบันทึกข้อมูลประเภทนี้"
+  );
+
+}
+
 
 /*
 =========================================
-PLACEHOLDER ACTIONS
-PHASE 2 WILL REPLACE THESE
+CAMPAIGN FORM
+=========================================
+*/
+
+function renderGiftCampaignForm(){
+
+  const modalTitle =
+    document.getElementById(
+      "giftModalTitle"
+    );
+
+  const modalBody =
+    document.getElementById(
+      "giftModalBody"
+    );
+
+  if(
+    !modalTitle ||
+    !modalBody
+  ){
+
+    return;
+
+  }
+
+  const isEdit =
+    adminGiftModalAction ===
+    "edit";
+
+  let campaign = null;
+
+  if(isEdit){
+
+    campaign =
+      adminGiftCampaigns.find(
+        item =>
+
+          String(
+            item.campaign_id ||
+            ""
+          ) ===
+          String(
+            adminGiftModalRecordId ||
+            ""
+          )
+      );
+
+    if(!campaign){
+
+      modalTitle.textContent =
+        "✏️ แก้ไข Campaign";
+
+      modalBody.innerHTML = `
+
+<div class="gift-error full">
+
+ไม่พบข้อมูล Campaign ที่ต้องการแก้ไข
+
+</div>
+
+`;
+
+      return;
+
+    }
+
+  }
+
+  modalTitle.textContent =
+    isEdit
+      ? "✏️ แก้ไข Campaign"
+      : "＋ เพิ่ม Campaign";
+
+  const campaignName =
+    campaign
+      ? campaign.campaign_name || ""
+      : "";
+
+  const collectionId =
+    campaign
+      ? campaign.collection_id || ""
+      : "";
+
+  const description =
+    campaign
+      ? campaign.description || ""
+      : "";
+
+  const bannerImage =
+    campaign
+      ? campaign.banner_image || ""
+      : "";
+
+  const sortOrder =
+    campaign
+      ? Number(
+          campaign.sort_order
+        ) || 0
+      : 0;
+
+  const isActive =
+    campaign
+      ? normalizeGiftAdminYes(
+          campaign.active
+        )
+      : true;
+
+  modalBody.innerHTML = `
+
+<div class="full">
+
+<label for="giftCampaignName">
+
+ชื่อ Campaign
+<span style="color:#ef4444;">
+*
+</span>
+
+</label>
+
+<br><br>
+
+<input
+type="text"
+id="giftCampaignName"
+value="${escapeHtml(
+  campaignName
+)}"
+placeholder="เช่น ของแถมรอบพรีออเดอร์ WuWa 3.3"
+>
+
+</div>
+
+
+<div>
+
+<label for="giftCampaignCollection">
+
+Collection
+<span style="color:#ef4444;">
+*
+</span>
+
+</label>
+
+<br><br>
+
+<select id="giftCampaignCollection">
+
+${renderGiftCampaignCollectionOptions(
+  collectionId
+)}
+
+</select>
+
+</div>
+
+
+<div>
+
+<label for="giftCampaignSortOrder">
+
+ลำดับการแสดงผล
+
+</label>
+
+<br><br>
+
+<input
+type="number"
+id="giftCampaignSortOrder"
+value="${sortOrder}"
+min="0"
+step="1"
+>
+
+</div>
+
+
+<div class="full">
+
+<label for="giftCampaignDescription">
+
+รายละเอียด Campaign
+
+</label>
+
+<br><br>
+
+<textarea
+id="giftCampaignDescription"
+rows="4"
+placeholder="รายละเอียดหรือเงื่อนไขเพิ่มเติม"
+>${escapeHtml(
+  description
+)}</textarea>
+
+</div>
+
+
+<div class="full">
+
+<label for="giftCampaignBannerImage">
+
+Banner Image
+
+</label>
+
+<br><br>
+
+<input
+type="text"
+id="giftCampaignBannerImage"
+value="${escapeHtml(
+  bannerImage
+)}"
+placeholder="URL รูป Banner"
+>
+
+<p
+style="
+margin:7px 0 0;
+font-size:13px;
+color:#64748b;
+"
+>
+รอบนี้ใช้ช่อง URL ก่อน ระบบอัปโหลดรูปจะเพิ่มภายหลัง
+</p>
+
+</div>
+
+
+<div>
+
+<label for="giftCampaignActive">
+
+สถานะ
+
+</label>
+
+<br><br>
+
+<select id="giftCampaignActive">
+
+<option
+value="yes"
+${isActive ? "selected" : ""}
+>
+เปิดใช้งาน
+</option>
+
+<option
+value="no"
+${!isActive ? "selected" : ""}
+>
+ปิดใช้งาน
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+
+Campaign ID
+
+</label>
+
+<br><br>
+
+<input
+type="text"
+value="${escapeHtml(
+  campaign
+    ? campaign.campaign_id || ""
+    : "สร้างอัตโนมัติเมื่อบันทึก"
+)}"
+disabled
+>
+
+</div>
+
+`;
+
+  window.setTimeout(
+    () => {
+
+      const nameInput =
+        document.getElementById(
+          "giftCampaignName"
+        );
+
+      if(nameInput){
+
+        nameInput.focus();
+
+      }
+
+    },
+    50
+  );
+
+}
+
+
+function renderGiftCampaignCollectionOptions(
+  selectedCollectionId = ""
+){
+
+  const selectedId =
+    String(
+      selectedCollectionId || ""
+    );
+
+  const collections =
+    Array.isArray(
+      adminCollections
+    )
+      ? [...adminCollections]
+      : [];
+
+  collections.sort(
+    (
+      a,
+      b
+    ) =>
+
+      String(
+        a.name || ""
+      ).localeCompare(
+        String(
+          b.name || ""
+        ),
+        "th"
+      )
+  );
+
+  let html = `
+
+<option value="">
+-- เลือก Collection --
+</option>
+
+`;
+
+  collections.forEach(
+    collection => {
+
+      const collectionId =
+        String(
+          collection.collection_id ||
+          ""
+        );
+
+      const collectionName =
+        collection.name ||
+        collectionId ||
+        "ไม่มีชื่อ Collection";
+
+      html += `
+
+<option
+value="${escapeHtml(
+  collectionId
+)}"
+${
+  collectionId === selectedId
+    ? " selected"
+    : ""
+}
+>
+
+${escapeHtml(
+  collectionName
+)}
+
+</option>
+
+`;
+
+    }
+  );
+
+  return html;
+
+}
+
+
+/*
+=========================================
+CAMPAIGN TEMPORARY SUBMIT
+API WILL BE CONNECTED NEXT
+=========================================
+*/
+
+function submitGiftCampaign(){
+
+  const campaignNameInput =
+    document.getElementById(
+      "giftCampaignName"
+    );
+
+  const collectionInput =
+    document.getElementById(
+      "giftCampaignCollection"
+    );
+
+  const campaignName =
+    campaignNameInput
+      ? campaignNameInput.value.trim()
+      : "";
+
+  const collectionId =
+    collectionInput
+      ? collectionInput.value.trim()
+      : "";
+
+  if(!campaignName){
+
+    alert(
+      "กรุณากรอกชื่อ Campaign"
+    );
+
+    if(campaignNameInput){
+
+      campaignNameInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(!collectionId){
+
+    alert(
+      "กรุณาเลือก Collection"
+    );
+
+    if(collectionInput){
+
+      collectionInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  alert(
+    adminGiftModalAction === "edit"
+      ? "ฟอร์มแก้ไข Campaign พร้อมแล้ว รอบถัดไปจะเชื่อม API บันทึกการแก้ไข"
+      : "ฟอร์มเพิ่ม Campaign พร้อมแล้ว รอบถัดไปจะเชื่อม API สร้าง Campaign"
+  );
+
+}
+
+
+/*
+=========================================
+CAMPAIGN ACTIONS
 =========================================
 */
 
 function openCreateGiftCampaign(){
 
-  alert(
-    "ขั้นต่อไปจะเพิ่มฟอร์มสร้าง Campaign"
+  openGiftModal(
+    "campaign",
+    "create"
   );
 
 }
@@ -1466,8 +2146,9 @@ function openEditGiftCampaign(
   campaignId
 ){
 
-  alert(
-    "แก้ไข Campaign: " +
+  openGiftModal(
+    "campaign",
+    "edit",
     campaignId
   );
 
@@ -1485,6 +2166,12 @@ function requestDeleteGiftCampaign(
 
 }
 
+
+/*
+=========================================
+RULE PLACEHOLDER ACTIONS
+=========================================
+*/
 
 function openCreateGiftRule(
   campaignId
@@ -1522,6 +2209,12 @@ function requestDeleteGiftRule(
 }
 
 
+/*
+=========================================
+GIFT ITEM PLACEHOLDER ACTIONS
+=========================================
+*/
+
 function openCreateGiftItem(
   ruleId
 ){
@@ -1558,6 +2251,12 @@ function requestDeleteGiftItem(
 }
 
 
+/*
+=========================================
+CHARACTER PLACEHOLDER ACTIONS
+=========================================
+*/
+
 function openCreateGiftCharacter(
   giftItemId
 ){
@@ -1592,3 +2291,42 @@ function requestDeleteGiftCharacter(
   );
 
 }
+
+
+/*
+=========================================
+ESC CLOSE MODAL
+=========================================
+*/
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key !==
+      "Escape"
+    ){
+
+      return;
+
+    }
+
+    const modal =
+      document.getElementById(
+        "giftModal"
+      );
+
+    if(
+      modal &&
+      !modal.classList.contains(
+        "hidden"
+      )
+    ){
+
+      closeGiftModal();
+
+    }
+
+  }
+);
