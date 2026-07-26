@@ -1530,6 +1530,9 @@ function openGiftModal(
     loading.style.display =
       "none";
 
+    loading.textContent =
+      "⏳ กำลังบันทึก...";
+
   }
 
   saveButton.disabled =
@@ -1544,6 +1547,14 @@ function openGiftModal(
   ){
 
     renderGiftCampaignForm();
+
+  }
+  else if(
+    adminGiftModalMode ===
+    "rule"
+  ){
+
+    renderGiftRuleForm();
 
   }
   else{
@@ -1571,7 +1582,6 @@ function openGiftModal(
     "hidden";
 
 }
-
 
 function closeGiftModal(){
 
@@ -2002,6 +2012,402 @@ disabled
       const nameInput =
         document.getElementById(
           "giftCampaignName"
+        );
+
+      if(nameInput){
+
+        nameInput.focus();
+
+      }
+
+    },
+    50
+  );
+
+}
+
+function renderGiftRuleForm(){
+
+  const modalTitle =
+    document.getElementById(
+      "giftModalTitle"
+    );
+
+  const modalBody =
+    document.getElementById(
+      "giftModalBody"
+    );
+
+  if(
+    !modalTitle ||
+    !modalBody
+  ){
+
+    return;
+
+  }
+
+  const isEdit =
+    adminGiftModalAction ===
+    "edit";
+
+  let rule = null;
+
+  if(isEdit){
+
+    rule =
+      adminGiftRules.find(
+        item =>
+
+          String(
+            item.rule_id || ""
+          ) ===
+          String(
+            adminGiftModalRecordId || ""
+          )
+      );
+
+    if(!rule){
+
+      modalTitle.textContent =
+        "✏️ แก้ไข Rule";
+
+      modalBody.innerHTML = `
+
+<div class="gift-error full">
+
+ไม่พบข้อมูล Rule ที่ต้องการแก้ไข
+
+</div>
+
+`;
+
+      return;
+
+    }
+
+  }
+
+  const campaignId =
+    isEdit
+      ? String(
+          rule.campaign_id || ""
+        )
+      : String(
+          adminGiftModalParentId || ""
+        );
+
+  const campaign =
+    adminGiftCampaigns.find(
+      item =>
+
+        String(
+          item.campaign_id || ""
+        ) ===
+        campaignId
+    );
+
+  if(!campaign){
+
+    modalTitle.textContent =
+      isEdit
+        ? "✏️ แก้ไข Rule"
+        : "＋ เพิ่ม Rule";
+
+    modalBody.innerHTML = `
+
+<div class="gift-error full">
+
+ไม่พบ Campaign สำหรับ Rule นี้
+
+</div>
+
+`;
+
+    return;
+
+  }
+
+  modalTitle.textContent =
+    isEdit
+      ? "✏️ แก้ไข Rule"
+      : "＋ เพิ่ม Rule";
+
+  const ruleName =
+    rule
+      ? rule.rule_name || ""
+      : "";
+
+  const minAmount =
+    rule
+      ? Number(
+          rule.min_amount
+        ) || 0
+      : 0;
+
+  const maxSelect =
+    rule
+      ? Math.max(
+          1,
+          Number(
+            rule.max_select
+          ) || 1
+        )
+      : 1;
+
+  const sortOrder =
+    rule
+      ? Math.max(
+          0,
+          Number(
+            rule.sort_order
+          ) || 0
+        )
+      : 0;
+
+  const allowDuplicate =
+    rule
+      ? normalizeGiftAdminYes(
+          rule.allow_duplicate
+        )
+      : false;
+
+  const isActive =
+    rule
+      ? normalizeGiftAdminYes(
+          rule.active
+        )
+      : true;
+
+  modalBody.innerHTML = `
+
+<input
+type="hidden"
+id="giftRuleId"
+value="${escapeHtml(
+  rule
+    ? rule.rule_id || ""
+    : ""
+)}"
+>
+
+<input
+type="hidden"
+id="giftRuleCampaignId"
+value="${escapeHtml(
+  campaignId
+)}"
+>
+
+
+<div class="full">
+
+<label>
+
+Campaign
+
+</label>
+
+<br><br>
+
+<input
+type="text"
+value="${escapeHtml(
+  campaign.campaign_name ||
+  campaignId
+)}"
+disabled
+>
+
+</div>
+
+
+<div class="full">
+
+<label for="giftRuleName">
+
+ชื่อ Rule
+<span style="color:#ef4444;">
+*
+</span>
+
+</label>
+
+<br><br>
+
+<input
+type="text"
+id="giftRuleName"
+value="${escapeHtml(
+  ruleName
+)}"
+placeholder="เช่น ซื้อครบ 500 บาท"
+>
+
+</div>
+
+
+<div>
+
+<label for="giftRuleMinAmount">
+
+ยอดขั้นต่ำ
+<span style="color:#ef4444;">
+*
+</span>
+
+</label>
+
+<br><br>
+
+<input
+type="number"
+id="giftRuleMinAmount"
+value="${minAmount}"
+min="0"
+step="0.01"
+>
+
+</div>
+
+
+<div>
+
+<label for="giftRuleMaxSelect">
+
+เลือกของแถมได้สูงสุด
+<span style="color:#ef4444;">
+*
+</span>
+
+</label>
+
+<br><br>
+
+<input
+type="number"
+id="giftRuleMaxSelect"
+value="${maxSelect}"
+min="1"
+step="1"
+>
+
+</div>
+
+
+<div>
+
+<label for="giftRuleAllowDuplicate">
+
+อนุญาตให้เลือกซ้ำ
+
+</label>
+
+<br><br>
+
+<select id="giftRuleAllowDuplicate">
+
+<option
+value=""
+${!allowDuplicate ? "selected" : ""}
+>
+ไม่อนุญาต
+</option>
+
+<option
+value="yes"
+${allowDuplicate ? "selected" : ""}
+>
+อนุญาต
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label for="giftRuleSortOrder">
+
+ลำดับการแสดงผล
+
+</label>
+
+<br><br>
+
+<input
+type="number"
+id="giftRuleSortOrder"
+value="${sortOrder}"
+min="0"
+step="1"
+>
+
+</div>
+
+
+<div>
+
+<label for="giftRuleActive">
+
+สถานะ
+
+</label>
+
+<br><br>
+
+<select id="giftRuleActive">
+
+<option
+value="yes"
+${isActive ? "selected" : ""}
+>
+เปิดใช้งาน
+</option>
+
+<option
+value=""
+${!isActive ? "selected" : ""}
+>
+ปิดใช้งาน
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+
+Rule ID
+
+</label>
+
+<br><br>
+
+<input
+type="text"
+value="${escapeHtml(
+  rule
+    ? rule.rule_id || ""
+    : "สร้างอัตโนมัติเมื่อบันทึก"
+)}"
+disabled
+>
+
+</div>
+
+`;
+
+  window.setTimeout(
+    () => {
+
+      const nameInput =
+        document.getElementById(
+          "giftRuleName"
         );
 
       if(nameInput){
