@@ -1652,7 +1652,6 @@ function handleGiftModalBackdrop(
 
 }
 
-
 function submitGiftModal(){
 
   if(
@@ -1666,6 +1665,17 @@ function submitGiftModal(){
 
   }
 
+  if(
+    adminGiftModalMode ===
+    "rule"
+  ){
+
+    submitGiftRule();
+
+    return;
+
+  }
+
   alert(
     "ยังไม่รองรับการบันทึกข้อมูลประเภทนี้"
   );
@@ -1674,81 +1684,45 @@ function submitGiftModal(){
 
 async function submitGiftRule(){
 
-  const ruleId =
+  const ruleIdInput =
     document.getElementById(
       "giftRuleId"
-    ).value.trim();
+    );
 
-  const campaignId =
+  const campaignIdInput =
     document.getElementById(
       "giftRuleCampaignId"
-    ).value.trim();
+    );
 
-  const ruleName =
+  const ruleNameInput =
     document.getElementById(
       "giftRuleName"
-    ).value.trim();
-
-  const minAmount =
-    Number(
-      document.getElementById(
-        "giftRuleMinAmount"
-      ).value
     );
 
-  const maxSelect =
-    Number(
-      document.getElementById(
-        "giftRuleMaxSelect"
-      ).value
+  const minAmountInput =
+    document.getElementById(
+      "giftRuleMinAmount"
     );
 
-  const allowDuplicate =
+  const maxSelectInput =
+    document.getElementById(
+      "giftRuleMaxSelect"
+    );
+
+  const allowDuplicateInput =
     document.getElementById(
       "giftRuleAllowDuplicate"
-    ).value;
+    );
 
-  const active =
+  const activeInput =
     document.getElementById(
       "giftRuleActive"
-    ).value;
-
-  const sortOrder =
-    Number(
-      document.getElementById(
-        "giftRuleSortOrder"
-      ).value
     );
 
-  if(!ruleName){
-
-    alert(
-      "กรุณากรอกชื่อ Rule"
+  const sortOrderInput =
+    document.getElementById(
+      "giftRuleSortOrder"
     );
-
-    return;
-
-  }
-
-  if(minAmount < 0){
-
-    alert(
-      "ยอดขั้นต่ำไม่ถูกต้อง"
-    );
-
-    return;
-
-  }
-
-  if(maxSelect < 1){
-
-    alert(
-      "จำนวนเลือกสูงสุดต้องมากกว่า 0"
-    );
-
-    return;
-
-  }
 
   const saveButton =
     document.getElementById(
@@ -1760,57 +1734,203 @@ async function submitGiftRule(){
       "giftModalLoading"
     );
 
-  saveButton.disabled =
-    true;
+  const payload = {
 
-  loading.style.display =
-    "block";
+    rule_id:
+      ruleIdInput
+        ? ruleIdInput.value.trim()
+        : "",
+
+    campaign_id:
+      campaignIdInput
+        ? campaignIdInput.value.trim()
+        : "",
+
+    rule_name:
+      ruleNameInput
+        ? ruleNameInput.value.trim()
+        : "",
+
+    min_amount:
+      minAmountInput
+        ? Number(
+            minAmountInput.value
+          )
+        : 0,
+
+    max_select:
+      maxSelectInput
+        ? Number(
+            maxSelectInput.value
+          )
+        : 1,
+
+    allow_duplicate:
+      allowDuplicateInput
+        ? allowDuplicateInput.value
+        : "",
+
+    active:
+      activeInput
+        ? activeInput.value
+        : "",
+
+    sort_order:
+      sortOrderInput
+        ? Number(
+            sortOrderInput.value
+          )
+        : 0
+
+  };
+
+  if(
+    !payload.campaign_id
+  ){
+
+    alert(
+      "ไม่พบ Campaign สำหรับ Rule นี้"
+    );
+
+    return;
+
+  }
+
+  if(
+    !payload.rule_name
+  ){
+
+    alert(
+      "กรุณากรอกชื่อ Rule"
+    );
+
+    if(ruleNameInput){
+
+      ruleNameInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    !Number.isFinite(
+      payload.min_amount
+    ) ||
+    payload.min_amount < 0
+  ){
+
+    alert(
+      "ยอดขั้นต่ำต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
+    );
+
+    if(minAmountInput){
+
+      minAmountInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    !Number.isFinite(
+      payload.max_select
+    ) ||
+    payload.max_select < 1 ||
+    !Number.isInteger(
+      payload.max_select
+    )
+  ){
+
+    alert(
+      "จำนวนสูงสุดที่เลือกได้ต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
+    );
+
+    if(maxSelectInput){
+
+      maxSelectInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    !Number.isFinite(
+      payload.sort_order
+    ) ||
+    payload.sort_order < 0
+  ){
+
+    payload.sort_order = 0;
+
+  }else{
+
+    payload.sort_order =
+      Math.floor(
+        payload.sort_order
+      );
+
+  }
+
+  if(saveButton){
+
+    saveButton.disabled =
+      true;
+
+    saveButton.textContent =
+      "กำลังบันทึก...";
+
+  }
+
+  if(loading){
+
+    loading.style.display =
+      "block";
+
+    loading.textContent =
+      "⏳ กำลังบันทึก Rule...";
+
+  }
 
   try{
 
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveGiftRule"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
     const response =
       await fetch(
-
         API,
-
         {
-
           method:"POST",
-
-          body:JSON.stringify({
-
-            action:
-              "saveGiftRule",
-
-            rule_id:
-              ruleId,
-
-            campaign_id:
-              campaignId,
-
-            rule_name:
-              ruleName,
-
-            min_amount:
-              minAmount,
-
-            max_select:
-              maxSelect,
-
-            allow_duplicate:
-              allowDuplicate,
-
-            active:
-              active,
-
-            sort_order:
-              sortOrder
-
-          })
-
+          body:formData
         }
-
       );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
 
     const result =
       await response.json();
@@ -1820,41 +1940,75 @@ async function submitGiftRule(){
       throw new Error(
         result.error ||
         result.message ||
-        "บันทึกไม่สำเร็จ"
+        "บันทึก Rule ไม่สำเร็จ"
       );
 
     }
+
+    adminGiftOpenNodes.add(
+      createGiftNodeKey(
+        "campaign",
+        payload.campaign_id
+      )
+    );
+
+    alert(
+      payload.rule_id
+        ? "แก้ไข Rule เรียบร้อยแล้ว"
+        : "เพิ่ม Rule เรียบร้อยแล้ว"
+    );
 
     closeGiftModal();
 
     await loadGiftCampaigns();
 
-    alert(
-
-      ruleId
-
-      ? "อัปเดต Rule สำเร็จ"
-
-      : "เพิ่ม Rule สำเร็จ"
-
-    );
-
   }catch(error){
 
-    alert(
-      error.message
+    console.error(
+      "submitGiftRule error:",
+      error
     );
+
+    alert(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    const currentSaveButton =
+      document.getElementById(
+        "giftModalSaveBtn"
+      );
+
+    const currentLoading =
+      document.getElementById(
+        "giftModalLoading"
+      );
+
+    if(currentSaveButton){
+
+      currentSaveButton.disabled =
+        false;
+
+      currentSaveButton.textContent =
+        "💾 บันทึก";
+
+    }
+
+    if(currentLoading){
+
+      currentLoading.style.display =
+        "none";
+
+      currentLoading.textContent =
+        "⏳ กำลังบันทึก...";
+
+    }
 
   }
 
-  loading.style.display =
-    "none";
-
-  saveButton.disabled =
-    false;
-
 }
-
 
 /*
 =========================================
@@ -3326,37 +3480,328 @@ function openCreateGiftRule(
   campaignId
 ){
 
-  alert(
-    "เพิ่ม Rule ใน Campaign: " +
-    campaignId
+  const normalizedCampaignId =
+    String(
+      campaignId || ""
+    ).trim();
+
+  if(!normalizedCampaignId){
+
+    alert(
+      "ไม่พบ Campaign ID"
+    );
+
+    return;
+
+  }
+
+  const campaignExists =
+    adminGiftCampaigns.some(
+      campaign =>
+
+        String(
+          campaign.campaign_id || ""
+        ) ===
+        normalizedCampaignId
+    );
+
+  if(!campaignExists){
+
+    alert(
+      "ไม่พบข้อมูล Campaign"
+    );
+
+    return;
+
+  }
+
+  openGiftModal(
+    "rule",
+    "create",
+    "",
+    normalizedCampaignId
   );
 
 }
-
 
 function openEditGiftRule(
   ruleId
 ){
 
-  alert(
-    "แก้ไข Rule: " +
-    ruleId
+  const normalizedRuleId =
+    String(
+      ruleId || ""
+    ).trim();
+
+  if(!normalizedRuleId){
+
+    alert(
+      "ไม่พบ Rule ID"
+    );
+
+    return;
+
+  }
+
+  const rule =
+    adminGiftRules.find(
+      item =>
+
+        String(
+          item.rule_id || ""
+        ) ===
+        normalizedRuleId
+    );
+
+  if(!rule){
+
+    alert(
+      "ไม่พบข้อมูล Rule"
+    );
+
+    return;
+
+  }
+
+  openGiftModal(
+    "rule",
+    "edit",
+    normalizedRuleId,
+    String(
+      rule.campaign_id || ""
+    )
   );
 
 }
 
-
-function requestDeleteGiftRule(
+async function requestDeleteGiftRule(
   ruleId
 ){
 
-  alert(
-    "ลบ Rule: " +
-    ruleId
-  );
+  const normalizedRuleId =
+    String(
+      ruleId || ""
+    ).trim();
+
+  if(!normalizedRuleId){
+
+    alert(
+      "ไม่พบ Rule ID"
+    );
+
+    return;
+
+  }
+
+  const rule =
+    adminGiftRules.find(
+      item =>
+
+        String(
+          item.rule_id || ""
+        ) ===
+        normalizedRuleId
+    );
+
+  if(!rule){
+
+    alert(
+      "ไม่พบข้อมูล Rule"
+    );
+
+    return;
+
+  }
+
+  const ruleName =
+    String(
+      rule.rule_name ||
+      normalizedRuleId
+    );
+
+  const campaignId =
+    String(
+      rule.campaign_id || ""
+    );
+
+  const childItems =
+    adminGiftItems.filter(
+      item =>
+
+        String(
+          item.rule_id || ""
+        ) ===
+        normalizedRuleId
+    );
+
+  if(
+    childItems.length > 0
+  ){
+
+    alert(
+      "ไม่สามารถลบ Rule \"" +
+      ruleName +
+      "\" ได้\n\n" +
+      "Rule นี้ยังมี Gift Item อยู่ " +
+      childItems.length +
+      " รายการ\n" +
+      "กรุณาลบ Gift Item ภายใน Rule ก่อน"
+    );
+
+    return;
+
+  }
+
+  const confirmed =
+    confirm(
+      "ต้องการลบ Rule นี้ใช่ไหม?\n\n" +
+      ruleName +
+      "\n\n" +
+      "เมื่อลบแล้วจะไม่สามารถกู้คืนได้"
+    );
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+  const ruleNode =
+    document.querySelector(
+      '[data-gift-node="' +
+      CSS.escape(
+        createGiftNodeKey(
+          "rule",
+          normalizedRuleId
+        )
+      ) +
+      '"]'
+    );
+
+  const deleteButton =
+    ruleNode
+      ? ruleNode.querySelector(
+          ".gift-delete-btn"
+        )
+      : null;
+
+  if(deleteButton){
+
+    deleteButton.disabled =
+      true;
+
+    deleteButton.textContent =
+      "กำลังลบ...";
+
+  }
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "deleteGiftRule"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify({
+
+        rule_id:
+          normalizedRuleId
+
+      })
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        result.message ||
+        "ลบ Rule ไม่สำเร็จ"
+      );
+
+    }
+
+    adminGiftOpenNodes.delete(
+      createGiftNodeKey(
+        "rule",
+        normalizedRuleId
+      )
+    );
+
+    if(campaignId){
+
+      adminGiftOpenNodes.add(
+        createGiftNodeKey(
+          "campaign",
+          campaignId
+        )
+      );
+
+    }
+
+    alert(
+      "ลบ Rule เรียบร้อยแล้ว"
+    );
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "requestDeleteGiftRule error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+  }finally{
+
+    if(
+      deleteButton &&
+      document.body.contains(
+        deleteButton
+      )
+    ){
+
+      deleteButton.disabled =
+        false;
+
+      deleteButton.textContent =
+        "🗑️ ลบ";
+
+    }
+
+  }
 
 }
-
 
 /*
 =========================================
