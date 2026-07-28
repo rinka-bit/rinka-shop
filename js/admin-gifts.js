@@ -9,6 +9,7 @@ let adminGiftCampaigns = [];
 let adminGiftRules = [];
 let adminGiftItems = [];
 let adminGiftCharacters = [];
+let adminGiftCampaignExclusions = [];
 
 let adminGiftOpenNodes =
   new Set();
@@ -173,7 +174,8 @@ async function loadGiftManagerData(){
       campaignResult,
       ruleResult,
       itemResult,
-      characterResult
+      characterResult,
+      exclusionResult
     ] =
       await Promise.all([
 
@@ -191,6 +193,10 @@ async function loadGiftManagerData(){
 
         fetchGiftAdminAction(
           "getGiftCharacters"
+        ),
+
+        fetchGiftAdminAction(
+          "getGiftCampaignExclusions"
         )
 
       ]);
@@ -223,6 +229,13 @@ async function loadGiftManagerData(){
         ? characterResult.characters
         : [];
 
+    adminGiftCampaignExclusions =
+      Array.isArray(
+        exclusionResult.exclusions
+      )
+        ? exclusionResult.exclusions
+        : [];
+
     renderGiftCampaignTree();
 
     return {
@@ -239,7 +252,10 @@ async function loadGiftManagerData(){
         adminGiftItems,
 
       characters:
-        adminGiftCharacters
+        adminGiftCharacters,
+
+      exclusions:
+        adminGiftCampaignExclusions
 
     };
 
@@ -255,6 +271,7 @@ async function loadGiftManagerData(){
     adminGiftRules = [];
     adminGiftItems = [];
     adminGiftCharacters = [];
+    adminGiftCampaignExclusions = [];
 
     if(treeBox){
 
@@ -339,6 +356,64 @@ async function fetchGiftAdminAction(
       API +
       "?" +
       query.toString()
+    );
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status
+    );
+
+  }
+
+  const result =
+    await response.json();
+
+  if(!result.success){
+
+    throw new Error(
+      result.error ||
+      result.message ||
+      "เรียก API ไม่สำเร็จ"
+    );
+
+  }
+
+  return result;
+
+}
+
+
+async function postGiftAdminAction(
+  action,
+  payload = {}
+){
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "action",
+    String(
+      action || ""
+    )
+  );
+
+  formData.append(
+    "payload",
+    JSON.stringify(
+      payload || {}
+    )
+  );
+
+  const response =
+    await fetch(
+      API,
+      {
+        method:"POST",
+        body:formData
+      }
     );
 
   if(!response.ok){
@@ -533,6 +608,11 @@ function renderGiftCampaignNode(
       campaign.require_campaign_item
     );
 
+  const exclusions =
+    getGiftCampaignExclusions(
+      campaignId
+    );
+
   return `
 
 <div
@@ -606,6 +686,12 @@ requireCampaignItem
 }
 
 <br>
+
+Exclusions :
+
+${exclusions.length}
+
+&nbsp; • &nbsp;
 
 Rules :
 
@@ -1395,6 +1481,27 @@ function getGiftAdminCollectionName(
 }
 
 
+function getGiftCampaignExclusions(
+  campaignId
+){
+
+  const normalizedCampaignId =
+    String(
+      campaignId || ""
+    );
+
+  return adminGiftCampaignExclusions.filter(
+    exclusion =>
+
+      String(
+        exclusion.campaign_id || ""
+      ) ===
+      normalizedCampaignId
+  );
+
+}
+
+
 function normalizeGiftAdminYes(
   value
 ){
@@ -1582,6 +1689,9 @@ function openGiftModal(
   saveButton.disabled =
     false;
 
+  saveButton.style.display =
+    "";
+
   saveButton.textContent =
     "💾 บันทึก";
 
@@ -1599,6 +1709,17 @@ function openGiftModal(
   ){
 
     renderGiftRuleForm();
+
+  }
+  else if(
+    adminGiftModalMode ===
+    "exclusions"
+  ){
+
+    saveButton.style.display =
+      "none";
+
+    renderGiftCampaignExclusionsForm();
 
   }
   else{
@@ -1663,6 +1784,18 @@ function closeGiftModal(){
 
     loading.style.display =
       "none";
+
+  }
+
+  const saveButton =
+    document.getElementById(
+      "giftModalSaveBtn"
+    );
+
+  if(saveButton){
+
+    saveButton.style.display =
+      "";
 
   }
 
@@ -4159,13 +4292,735 @@ function requestDeleteGiftItem(
 }
 
 function openCampaignExclusions(
-campaignId
+  campaignId
 ){
 
-alert(
-"Excluded Products ของ Campaign : " +
-campaignId
-);
+  const normalizedCampaignId =
+    String(
+      campaignId || ""
+    ).trim();
+
+  if(!normalizedCampaignId){
+
+    alert(
+      "ไม่พบ Campaign ID"
+    );
+
+    return;
+
+  }
+
+  const campaignExists =
+    adminGiftCampaigns.some(
+      campaign =>
+
+        String(
+          campaign.campaign_id || ""
+        ) ===
+        normalizedCampaignId
+    );
+
+  if(!campaignExists){
+
+    alert(
+      "ไม่พบข้อมูล Campaign"
+    );
+
+    return;
+
+  }
+
+  openGiftModal(
+    "exclusions",
+    "manage",
+    normalizedCampaignId
+  );
+
+}
+
+
+function renderGiftCampaignExclusionsForm(){
+
+  const modalTitle =
+    document.getElementById(
+      "giftModalTitle"
+    );
+
+  const modalBody =
+    document.getElementById(
+      "giftModalBody"
+    );
+
+  if(
+    !modalTitle ||
+    !modalBody
+  ){
+
+    return;
+
+  }
+
+  const campaignId =
+    String(
+      adminGiftModalRecordId || ""
+    );
+
+  const campaign =
+    adminGiftCampaigns.find(
+      item =>
+
+        String(
+          item.campaign_id || ""
+        ) ===
+        campaignId
+    );
+
+  if(!campaign){
+
+    modalTitle.textContent =
+      "🚫 Excluded Products";
+
+    modalBody.innerHTML = `
+
+<div class="gift-error full">
+ไม่พบข้อมูล Campaign
+</div>
+
+`;
+
+    return;
+
+  }
+
+  const exclusions =
+    getGiftCampaignExclusions(
+      campaignId
+    );
+
+  modalTitle.textContent =
+    "🚫 Excluded Products";
+
+  modalBody.innerHTML = `
+
+<div class="full">
+
+<label>
+Campaign
+</label>
+
+<br><br>
+
+<input
+type="text"
+value="${escapeHtml(
+  campaign.campaign_name ||
+  campaignId
+)}"
+disabled
+>
+
+</div>
+
+
+<div
+class="full"
+style="
+border:1px solid #dbeafe;
+background:#f8fbff;
+border-radius:14px;
+padding:16px;
+"
+>
+
+<label for="giftExclusionProduct">
+เพิ่มสินค้าที่ไม่นำยอดมาคำนวณ
+</label>
+
+<br><br>
+
+<div
+style="
+display:flex;
+gap:10px;
+align-items:center;
+flex-wrap:wrap;
+"
+>
+
+<select
+id="giftExclusionProduct"
+style="
+flex:1;
+min-width:240px;
+"
+>
+
+${renderGiftExclusionProductOptions(
+  campaignId
+)}
+
+</select>
+
+<button
+type="button"
+class="gift-add-btn"
+style="
+width:auto;
+white-space:nowrap;
+"
+onclick="
+addGiftCampaignExclusion()
+"
+>
+＋ เพิ่มสินค้า
+</button>
+
+</div>
+
+<p
+style="
+margin:10px 0 0;
+font-size:13px;
+color:#64748b;
+"
+>
+สินค้าที่เพิ่มไว้ในรายการนี้จะไม่ถูกนำยอดมารวมเพื่อคำนวณสิทธิ์ของแถมใน Campaign นี้
+</p>
+
+</div>
+
+
+<div class="full">
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:12px;
+"
+>
+
+<strong>
+รายการสินค้าที่ถูกยกเว้น
+</strong>
+
+<span
+style="
+font-size:13px;
+color:#64748b;
+"
+>
+${exclusions.length} รายการ
+</span>
+
+</div>
+
+<div id="giftCampaignExclusionList">
+
+${
+  exclusions.length
+    ? exclusions
+        .map(
+          exclusion =>
+            renderGiftCampaignExclusionRow(
+              exclusion
+            )
+        )
+        .join("")
+    : `
+
+<div class="gift-empty">
+ยังไม่มีสินค้าที่ถูกยกเว้น
+</div>
+
+`
+}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function renderGiftExclusionProductOptions(
+  campaignId
+){
+
+  const excludedProductIds =
+    new Set(
+      getGiftCampaignExclusions(
+        campaignId
+      ).map(
+        exclusion =>
+          String(
+            exclusion.product_id || ""
+          )
+      )
+    );
+
+  const products =
+    Array.isArray(
+      adminProducts
+    )
+      ? [...adminProducts]
+      : [];
+
+  products.sort(
+    (
+      a,
+      b
+    ) =>
+
+      String(
+        a.name || ""
+      ).localeCompare(
+        String(
+          b.name || ""
+        ),
+        "th"
+      )
+  );
+
+  let html = `
+
+<option value="">
+-- เลือกสินค้า --
+</option>
+
+`;
+
+  products.forEach(
+    product => {
+
+      const productId =
+        String(
+          product.product_id || ""
+        );
+
+      if(
+        !productId ||
+        excludedProductIds.has(
+          productId
+        )
+      ){
+
+        return;
+
+      }
+
+      const productName =
+        product.name ||
+        productId;
+
+      const fandom =
+        product.fandom
+          ? " • " + product.fandom
+          : "";
+
+      const collectionName =
+        getGiftAdminCollectionName(
+          product.collection_id
+        );
+
+      const collectionLabel =
+        collectionName
+          ? " • " + collectionName
+          : "";
+
+      html += `
+
+<option
+value="${escapeHtml(
+  productId
+)}"
+>
+
+${escapeHtml(
+  productName +
+  fandom +
+  collectionLabel
+)}
+
+</option>
+
+`;
+
+    }
+  );
+
+  return html;
+
+}
+
+
+function renderGiftCampaignExclusionRow(
+  exclusion
+){
+
+  const exclusionId =
+    String(
+      exclusion.exclusion_id || ""
+    );
+
+  const productId =
+    String(
+      exclusion.product_id || ""
+    );
+
+  const product =
+    Array.isArray(
+      adminProducts
+    )
+      ? adminProducts.find(
+          item =>
+
+            String(
+              item.product_id || ""
+            ) ===
+            productId
+        )
+      : null;
+
+  const productName =
+    product
+      ? product.name || productId
+      : exclusion.product_name ||
+        productId ||
+        "ไม่พบชื่อสินค้า";
+
+  const fandom =
+    product &&
+    product.fandom
+      ? product.fandom
+      : "";
+
+  return `
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:12px;
+border:1px solid #e2e8f0;
+border-radius:12px;
+margin-bottom:10px;
+"
+>
+
+<div style="min-width:0;">
+
+<div
+style="
+font-weight:700;
+word-break:break-word;
+"
+>
+${escapeHtml(
+  productName
+)}
+</div>
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+margin-top:4px;
+word-break:break-word;
+"
+>
+Product ID:
+${escapeHtml(
+  productId || "-"
+)}
+
+${
+  fandom
+    ? `
+      &nbsp; • &nbsp;
+      ${escapeHtml(fandom)}
+    `
+    : ""
+}
+</div>
+
+</div>
+
+<button
+type="button"
+class="gift-action-btn gift-delete-btn"
+style="
+width:auto;
+white-space:nowrap;
+"
+onclick="
+deleteGiftCampaignExclusion(
+  '${escapeJsString(
+    exclusionId
+  )}',
+  '${escapeJsString(
+    productId
+  )}'
+)
+"
+>
+🗑️ ลบ
+</button>
+
+</div>
+
+`;
+
+}
+
+
+async function addGiftCampaignExclusion(){
+
+  const campaignId =
+    String(
+      adminGiftModalRecordId || ""
+    ).trim();
+
+  const productInput =
+    document.getElementById(
+      "giftExclusionProduct"
+    );
+
+  const productId =
+    productInput
+      ? productInput.value.trim()
+      : "";
+
+  if(!campaignId){
+
+    alert(
+      "ไม่พบ Campaign ID"
+    );
+
+    return;
+
+  }
+
+  if(!productId){
+
+    alert(
+      "กรุณาเลือกสินค้าที่ต้องการยกเว้น"
+    );
+
+    if(productInput){
+
+      productInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  const exists =
+    getGiftCampaignExclusions(
+      campaignId
+    ).some(
+      exclusion =>
+
+        String(
+          exclusion.product_id || ""
+        ) ===
+        productId
+    );
+
+  if(exists){
+
+    alert(
+      "สินค้านี้อยู่ในรายการยกเว้นแล้ว"
+    );
+
+    return;
+
+  }
+
+  const button =
+    event &&
+    event.currentTarget
+      ? event.currentTarget
+      : null;
+
+  if(button){
+
+    button.disabled = true;
+
+    button.textContent =
+      "กำลังเพิ่ม...";
+
+  }
+
+  try{
+
+    await postGiftAdminAction(
+      "saveGiftCampaignExclusion",
+      {
+        campaign_id:
+          campaignId,
+
+        product_id:
+          productId
+      }
+    );
+
+    await loadGiftCampaigns();
+
+    adminGiftModalRecordId =
+      campaignId;
+
+    renderGiftCampaignExclusionsForm();
+
+  }catch(error){
+
+    console.error(
+      "addGiftCampaignExclusion error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "เพิ่มสินค้าที่ถูกยกเว้นไม่สำเร็จ"
+    );
+
+  }finally{
+
+    if(
+      button &&
+      document.body.contains(
+        button
+      )
+    ){
+
+      button.disabled = false;
+
+      button.textContent =
+        "＋ เพิ่มสินค้า";
+
+    }
+
+  }
+
+}
+
+
+async function deleteGiftCampaignExclusion(
+  exclusionId,
+  productId = ""
+){
+
+  const normalizedExclusionId =
+    String(
+      exclusionId || ""
+    ).trim();
+
+  const campaignId =
+    String(
+      adminGiftModalRecordId || ""
+    ).trim();
+
+  if(
+    !normalizedExclusionId &&
+    !productId
+  ){
+
+    alert(
+      "ไม่พบข้อมูลรายการยกเว้น"
+    );
+
+    return;
+
+  }
+
+  const confirmed =
+    confirm(
+      "ต้องการนำสินค้านี้ออกจากรายการยกเว้นใช่ไหม?"
+    );
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+  const button =
+    event &&
+    event.currentTarget
+      ? event.currentTarget
+      : null;
+
+  if(button){
+
+    button.disabled = true;
+
+    button.textContent =
+      "กำลังลบ...";
+
+  }
+
+  try{
+
+    await postGiftAdminAction(
+      "deleteGiftCampaignExclusion",
+      {
+        exclusion_id:
+          normalizedExclusionId,
+
+        campaign_id:
+          campaignId,
+
+        product_id:
+          String(
+            productId || ""
+          )
+      }
+    );
+
+    await loadGiftCampaigns();
+
+    adminGiftModalRecordId =
+      campaignId;
+
+    renderGiftCampaignExclusionsForm();
+
+  }catch(error){
+
+    console.error(
+      "deleteGiftCampaignExclusion error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "ลบสินค้าที่ถูกยกเว้นไม่สำเร็จ"
+    );
+
+  }finally{
+
+    if(
+      button &&
+      document.body.contains(
+        button
+      )
+    ){
+
+      button.disabled = false;
+
+      button.textContent =
+        "🗑️ ลบ";
+
+    }
+
+  }
 
 }
 
