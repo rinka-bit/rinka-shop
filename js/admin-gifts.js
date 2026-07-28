@@ -2105,9 +2105,12 @@ function renderGiftCampaignForm(){
 
   const sortOrder =
     campaign
-      ? Number(
-          campaign.sort_order
-        ) || 0
+      ? Math.max(
+          0,
+          Number(
+            campaign.sort_order
+          ) || 0
+        )
       : 0;
 
   const isActive =
@@ -2116,6 +2119,22 @@ function renderGiftCampaignForm(){
           campaign.active
         )
       : true;
+
+  const eligibilityScope =
+    campaign &&
+    String(
+      campaign.eligibility_scope || ""
+    ).trim() ===
+    "fandom_all"
+      ? "fandom_all"
+      : "collection_only";
+
+  const requireCampaignItem =
+    campaign
+      ? normalizeGiftAdminYes(
+          campaign.require_campaign_item
+        )
+      : false;
 
   modalBody.innerHTML = `
 
@@ -2196,6 +2215,191 @@ value="${sortOrder}"
 min="0"
 step="1"
 >
+
+</div>
+
+
+<div
+class="full"
+style="
+border:1px solid #dbeafe;
+background:#f8fbff;
+border-radius:14px;
+padding:16px;
+"
+>
+
+<label style="font-weight:700;">
+
+ขอบเขตสินค้าที่นำมาคำนวณของแถม
+<span style="color:#ef4444;">
+*
+</span>
+
+</label>
+
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:14px;
+"
+>
+
+<label
+style="
+display:flex;
+align-items:flex-start;
+gap:10px;
+cursor:pointer;
+"
+>
+
+<input
+type="radio"
+name="giftCampaignEligibilityScope"
+value="collection_only"
+${eligibilityScope === "collection_only"
+  ? "checked"
+  : ""
+}
+style="
+width:auto;
+margin-top:3px;
+"
+>
+
+<span>
+
+<strong>
+เฉพาะ Collection นี้
+</strong>
+
+<br>
+
+<span
+style="
+font-size:13px;
+color:#64748b;
+"
+>
+
+นับเฉพาะยอดสินค้าที่อยู่ใน Collection ที่เลือก
+
+</span>
+
+</span>
+
+</label>
+
+
+<label
+style="
+display:flex;
+align-items:flex-start;
+gap:10px;
+cursor:pointer;
+"
+>
+
+<input
+type="radio"
+name="giftCampaignEligibilityScope"
+value="fandom_all"
+${eligibilityScope === "fandom_all"
+  ? "checked"
+  : ""
+}
+style="
+width:auto;
+margin-top:3px;
+"
+>
+
+<span>
+
+<strong>
+สินค้าทั้งหมดใน Fandom
+</strong>
+
+<br>
+
+<span
+style="
+font-size:13px;
+color:#64748b;
+"
+>
+
+นับยอดสินค้าทุก Collection ที่อยู่ใน Fandom เดียวกัน
+
+</span>
+
+</span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div
+class="full"
+style="
+border:1px solid #dbeafe;
+background:#f8fbff;
+border-radius:14px;
+padding:16px;
+"
+>
+
+<label
+style="
+display:flex;
+align-items:flex-start;
+gap:10px;
+cursor:pointer;
+"
+>
+
+<input
+type="checkbox"
+id="giftCampaignRequireItem"
+${requireCampaignItem
+  ? "checked"
+  : ""
+}
+style="
+width:auto;
+margin-top:3px;
+"
+>
+
+<span>
+
+<strong>
+ต้องมีสินค้าใน Collection ของ Campaign นี้
+</strong>
+
+<br>
+
+<span
+style="
+font-size:13px;
+color:#64748b;
+"
+>
+
+ลูกค้าต้องซื้อสินค้าใน Collection นี้อย่างน้อย 1 ชิ้น
+จึงจะมีสิทธิ์รับของแถม แม้ยอดรวมจากทั้ง Fandom จะถึงเกณฑ์แล้ว
+
+</span>
+
+</span>
+
+</label>
 
 </div>
 
@@ -2980,6 +3184,16 @@ async function submitGiftCampaign(){
       "giftCampaignActive"
     );
 
+  const requireCampaignItemInput =
+    document.getElementById(
+      "giftCampaignRequireItem"
+    );
+
+  const eligibilityScopeInput =
+    document.querySelector(
+      'input[name="giftCampaignEligibilityScope"]:checked'
+    );
+
   const bannerFileInput =
     document.getElementById(
       "giftCampaignBannerFile"
@@ -2994,6 +3208,13 @@ async function submitGiftCampaign(){
     document.getElementById(
       "giftModalLoading"
     );
+
+  const sortOrderValue =
+    sortOrderInput
+      ? Number(
+          sortOrderInput.value || 0
+        )
+      : 0;
 
   const payload = {
 
@@ -3012,17 +3233,30 @@ async function submitGiftCampaign(){
         ? collectionInput.value.trim()
         : "",
 
+    eligibility_scope:
+      eligibilityScopeInput
+        ? eligibilityScopeInput.value
+        : "collection_only",
+
+    require_campaign_item:
+      requireCampaignItemInput &&
+      requireCampaignItemInput.checked
+        ? "yes"
+        : "",
+
     description:
       descriptionInput
         ? descriptionInput.value
         : "",
 
     sort_order:
-      sortOrderInput
+      Number.isFinite(
+        sortOrderValue
+      )
         ? Math.max(
             0,
-            Number(
-              sortOrderInput.value || 0
+            Math.floor(
+              sortOrderValue
             )
           )
         : 0,
@@ -3070,6 +3304,21 @@ async function submitGiftCampaign(){
 
   }
 
+  if(
+    payload.eligibility_scope !==
+      "collection_only" &&
+    payload.eligibility_scope !==
+      "fandom_all"
+  ){
+
+    alert(
+      "กรุณาเลือกขอบเขตสินค้าที่นำมาคำนวณของแถม"
+    );
+
+    return;
+
+  }
+
   const bannerFile =
     bannerFileInput &&
     bannerFileInput.files
@@ -3111,7 +3360,7 @@ async function submitGiftCampaign(){
     loading.textContent =
       bannerFile
         ? "⏳ กำลังอัปโหลดรูปและบันทึก..."
-        : "⏳ กำลังบันทึก...";
+        : "⏳ กำลังบันทึก Campaign...";
 
   }
 
@@ -3131,7 +3380,9 @@ async function submitGiftCampaign(){
 
     formData.append(
       "action",
-      "saveGiftCampaign"
+      payload.campaign_id
+        ? "updateGiftCampaign"
+        : "saveGiftCampaign"
     );
 
     formData.append(
@@ -3166,7 +3417,26 @@ async function submitGiftCampaign(){
 
       throw new Error(
         result.error ||
+        result.message ||
         "บันทึก Campaign ไม่สำเร็จ"
+      );
+
+    }
+
+    const savedCampaignId =
+      String(
+        result.campaign_id ||
+        payload.campaign_id ||
+        ""
+      );
+
+    if(savedCampaignId){
+
+      adminGiftOpenNodes.add(
+        createGiftNodeKey(
+          "campaign",
+          savedCampaignId
+        )
       );
 
     }
