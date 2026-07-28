@@ -479,7 +479,6 @@ openCreateGiftCampaign()
 
 }
 
-
 function renderGiftCampaignNode(
   campaign
 ){
@@ -522,6 +521,18 @@ function renderGiftCampaignNode(
       campaign.collection_id
     );
 
+  const eligibilityScope =
+    String(
+      campaign.eligibility_scope || ""
+    ) === "fandom_all"
+      ? "Fandom ทั้งหมด"
+      : "Collection นี้";
+
+  const requireCampaignItem =
+    normalizeGiftAdminYes(
+      campaign.require_campaign_item
+    );
+
   return `
 
 <div
@@ -540,9 +551,9 @@ type="button"
 class="gift-toggle-btn"
 onclick="
 toggleGiftAdminNode(
-  '${escapeJsString(
-    nodeKey
-  )}'
+'${escapeJsString(
+nodeKey
+)}'
 )
 "
 >
@@ -558,32 +569,52 @@ ${isOpen ? "▼" : "▶"}
 📦
 
 ${escapeHtml(
-  campaign.campaign_name ||
-  "ไม่มีชื่อ Campaign"
+campaign.campaign_name ||
+"ไม่มีชื่อ Campaign"
 )}
 
 </div>
 
 <div class="gift-node-meta">
 
-Collection:
+Collection :
 
 ${escapeHtml(
-  collectionName ||
-  campaign.collection_id ||
-  "-"
+collectionName ||
+campaign.collection_id ||
+"-"
 )}
 
+<br>
+
+Eligibility :
+
+<b>${eligibilityScope}</b>
+
+${
+requireCampaignItem
+? `
 &nbsp; • &nbsp;
 
-Rules:
+ต้องมีสินค้าใน Campaign
+`
+: `
+&nbsp; • &nbsp;
+
+ไม่บังคับ
+`
+}
+
+<br>
+
+Rules :
 
 ${rules.length}
 
 &nbsp; • &nbsp;
 
 ${renderGiftStatusBadge(
-  campaign.active
+campaign.active
 )}
 
 </div>
@@ -598,10 +629,24 @@ ${renderGiftStatusBadge(
 type="button"
 class="gift-action-btn gift-add-btn"
 onclick="
+openCampaignExclusions(
+'${escapeJsString(
+campaignId
+)}'
+)
+"
+>
+🚫 Exclusions
+</button>
+
+<button
+type="button"
+class="gift-action-btn gift-add-btn"
+onclick="
 openCreateGiftRule(
-  '${escapeJsString(
-    campaignId
-  )}'
+'${escapeJsString(
+campaignId
+)}'
 )
 "
 >
@@ -613,9 +658,9 @@ type="button"
 class="gift-action-btn gift-edit-btn"
 onclick="
 openEditGiftCampaign(
-  '${escapeJsString(
-    campaignId
-  )}'
+'${escapeJsString(
+campaignId
+)}'
 )
 "
 >
@@ -627,9 +672,9 @@ type="button"
 class="gift-action-btn gift-delete-btn"
 onclick="
 requestDeleteGiftCampaign(
-  '${escapeJsString(
-    campaignId
-  )}'
+'${escapeJsString(
+campaignId
+)}'
 )
 "
 >
@@ -642,30 +687,30 @@ requestDeleteGiftCampaign(
 
 <div
 id="${escapeHtml(
-  createGiftChildrenId(
-    nodeKey
-  )
+createGiftChildrenId(
+nodeKey
+)
 )}"
 class="gift-tree-children ${
-  isOpen
-    ? ""
-    : "hidden"
+isOpen
+? ""
+: "hidden"
 }"
 >
 
 ${
-  rules.length
-    ? rules
-        .map(
-          rule =>
-            renderGiftRuleNode(
-              rule
-            )
-        )
-        .join("")
-    : renderGiftEmptyChild(
-        "ยังไม่มี Rule ใน Campaign นี้"
-      )
+rules.length
+? rules
+.map(
+rule =>
+renderGiftRuleNode(
+rule
+)
+)
+.join("")
+: renderGiftEmptyChild(
+"ยังไม่มี Rule ใน Campaign นี้"
+)
 }
 
 </div>
@@ -675,7 +720,6 @@ ${
 `;
 
 }
-
 
 function renderGiftRuleNode(
   rule
@@ -4114,6 +4158,16 @@ function requestDeleteGiftItem(
 
 }
 
+function openCampaignExclusions(
+campaignId
+){
+
+alert(
+"Excluded Products ของ Campaign : " +
+campaignId
+);
+
+}
 
 /*
 =========================================
