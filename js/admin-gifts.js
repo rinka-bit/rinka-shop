@@ -1672,6 +1672,189 @@ function submitGiftModal(){
 
 }
 
+async function submitGiftRule(){
+
+  const ruleId =
+    document.getElementById(
+      "giftRuleId"
+    ).value.trim();
+
+  const campaignId =
+    document.getElementById(
+      "giftRuleCampaignId"
+    ).value.trim();
+
+  const ruleName =
+    document.getElementById(
+      "giftRuleName"
+    ).value.trim();
+
+  const minAmount =
+    Number(
+      document.getElementById(
+        "giftRuleMinAmount"
+      ).value
+    );
+
+  const maxSelect =
+    Number(
+      document.getElementById(
+        "giftRuleMaxSelect"
+      ).value
+    );
+
+  const allowDuplicate =
+    document.getElementById(
+      "giftRuleAllowDuplicate"
+    ).value;
+
+  const active =
+    document.getElementById(
+      "giftRuleActive"
+    ).value;
+
+  const sortOrder =
+    Number(
+      document.getElementById(
+        "giftRuleSortOrder"
+      ).value
+    );
+
+  if(!ruleName){
+
+    alert(
+      "กรุณากรอกชื่อ Rule"
+    );
+
+    return;
+
+  }
+
+  if(minAmount < 0){
+
+    alert(
+      "ยอดขั้นต่ำไม่ถูกต้อง"
+    );
+
+    return;
+
+  }
+
+  if(maxSelect < 1){
+
+    alert(
+      "จำนวนเลือกสูงสุดต้องมากกว่า 0"
+    );
+
+    return;
+
+  }
+
+  const saveButton =
+    document.getElementById(
+      "giftModalSaveBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "giftModalLoading"
+    );
+
+  saveButton.disabled =
+    true;
+
+  loading.style.display =
+    "block";
+
+  try{
+
+    const response =
+      await fetch(
+
+        API,
+
+        {
+
+          method:"POST",
+
+          body:JSON.stringify({
+
+            action:
+              "saveGiftRule",
+
+            rule_id:
+              ruleId,
+
+            campaign_id:
+              campaignId,
+
+            rule_name:
+              ruleName,
+
+            min_amount:
+              minAmount,
+
+            max_select:
+              maxSelect,
+
+            allow_duplicate:
+              allowDuplicate,
+
+            active:
+              active,
+
+            sort_order:
+              sortOrder
+
+          })
+
+        }
+
+      );
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        result.message ||
+        "บันทึกไม่สำเร็จ"
+      );
+
+    }
+
+    closeGiftModal();
+
+    await loadGiftCampaigns();
+
+    alert(
+
+      ruleId
+
+      ? "อัปเดต Rule สำเร็จ"
+
+      : "เพิ่ม Rule สำเร็จ"
+
+    );
+
+  }catch(error){
+
+    alert(
+      error.message
+    );
+
+  }
+
+  loading.style.display =
+    "none";
+
+  saveButton.disabled =
+    false;
+
+}
+
 
 /*
 =========================================
