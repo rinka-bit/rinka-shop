@@ -1721,6 +1721,14 @@ function openGiftModal(
   }
   else if(
     adminGiftModalMode ===
+    "character"
+  ){
+
+    renderGiftCharacterForm();
+
+  }
+  else if(
+    adminGiftModalMode ===
     "exclusions"
   ){
 
@@ -1867,6 +1875,17 @@ function submitGiftModal(){
   ){
 
     submitGiftItem();
+
+    return;
+
+  }
+
+  if(
+    adminGiftModalMode ===
+    "character"
+  ){
+
+    submitGiftCharacter();
 
     return;
 
@@ -2991,6 +3010,727 @@ async function submitGiftItem(){
     alert(
       error.message ||
       "บันทึก Gift Item ไม่สำเร็จ"
+    );
+
+  }finally{
+
+    const currentSaveButton =
+      document.getElementById(
+        "giftModalSaveBtn"
+      );
+
+    const currentLoading =
+      document.getElementById(
+        "giftModalLoading"
+      );
+
+    if(currentSaveButton){
+
+      currentSaveButton.disabled =
+        false;
+
+      currentSaveButton.textContent =
+        "💾 บันทึก";
+
+    }
+
+    if(currentLoading){
+
+      currentLoading.style.display =
+        "none";
+
+    }
+
+  }
+
+}
+
+
+/*
+=========================================
+GIFT CHARACTER FORM
+=========================================
+*/
+
+function renderGiftCharacterForm(){
+
+  const modalTitle =
+    document.getElementById(
+      "giftModalTitle"
+    );
+
+  const modalBody =
+    document.getElementById(
+      "giftModalBody"
+    );
+
+  if(
+    !modalTitle ||
+    !modalBody
+  ){
+
+    return;
+
+  }
+
+  const isEdit =
+    adminGiftModalAction ===
+    "edit";
+
+  let character = null;
+
+  if(isEdit){
+
+    character =
+      adminGiftCharacters.find(
+        row =>
+
+          String(
+            row.character_id || ""
+          ) ===
+          String(
+            adminGiftModalRecordId || ""
+          )
+      );
+
+    if(!character){
+
+      modalTitle.textContent =
+        "✏️ แก้ไข Character";
+
+      modalBody.innerHTML = `
+
+<div class="gift-error full">
+ไม่พบข้อมูล Character ที่ต้องการแก้ไข
+</div>
+
+`;
+
+      return;
+
+    }
+
+  }
+
+  const giftItemId =
+    isEdit
+      ? String(
+          character.gift_item_id || ""
+        )
+      : String(
+          adminGiftModalParentId || ""
+        );
+
+  const item =
+    adminGiftItems.find(
+      row =>
+
+        String(
+          row.gift_item_id || ""
+        ) ===
+        giftItemId
+    );
+
+  if(!item){
+
+    modalTitle.textContent =
+      isEdit
+        ? "✏️ แก้ไข Character"
+        : "＋ เพิ่ม Character";
+
+    modalBody.innerHTML = `
+
+<div class="gift-error full">
+ไม่พบ Gift Item สำหรับ Character นี้
+</div>
+
+`;
+
+    return;
+
+  }
+
+  if(
+    !normalizeGiftAdminYes(
+      item.has_character
+    )
+  ){
+
+    modalTitle.textContent =
+      isEdit
+        ? "✏️ แก้ไข Character"
+        : "＋ เพิ่ม Character";
+
+    modalBody.innerHTML = `
+
+<div class="gift-error full">
+Gift Item นี้ไม่ได้เปิดใช้งานตัวเลือกตัวละคร
+</div>
+
+`;
+
+    return;
+
+  }
+
+  const characterName =
+    character
+      ? character.character_name || ""
+      : "";
+
+  const characterImage =
+    character
+      ? character.character_image || ""
+      : "";
+
+  const sortOrder =
+    character
+      ? Math.max(
+          0,
+          Number(
+            character.sort_order
+          ) || 0
+        )
+      : 0;
+
+  const isActive =
+    character
+      ? normalizeGiftAdminYes(
+          character.active
+        )
+      : true;
+
+  modalTitle.textContent =
+    isEdit
+      ? "✏️ แก้ไข Character"
+      : "＋ เพิ่ม Character";
+
+  modalBody.innerHTML = `
+
+<input
+  type="hidden"
+  id="giftCharacterId"
+  value="${escapeHtml(
+    character
+      ? character.character_id || ""
+      : ""
+  )}"
+>
+
+<input
+  type="hidden"
+  id="giftCharacterItemId"
+  value="${escapeHtml(
+    giftItemId
+  )}"
+>
+
+<div class="full">
+
+<label>
+Gift Item
+</label>
+
+<br><br>
+
+<input
+  type="text"
+  value="${escapeHtml(
+    item.gift_name ||
+    giftItemId
+  )}"
+  disabled
+>
+
+</div>
+
+<div class="full">
+
+<label for="giftCharacterName">
+ชื่อตัวละคร
+<span style="color:#ef4444;">*</span>
+</label>
+
+<br><br>
+
+<input
+  type="text"
+  id="giftCharacterName"
+  value="${escapeHtml(
+    characterName
+  )}"
+  placeholder="เช่น Rover, Jinhsi, Phainon"
+>
+
+</div>
+
+<div class="full">
+
+<label for="giftCharacterImage">
+ลิงก์รูปตัวละคร
+</label>
+
+<br><br>
+
+<input
+  type="url"
+  id="giftCharacterImage"
+  value="${escapeHtml(
+    characterImage
+  )}"
+  placeholder="https://..."
+  oninput="previewGiftCharacterImage()"
+>
+
+</div>
+
+<div
+  id="giftCharacterImagePreviewBox"
+  class="full"
+  style="${
+    characterImage
+      ? ""
+      : "display:none;"
+  }"
+>
+
+<label>
+ตัวอย่างรูป
+</label>
+
+<br><br>
+
+<img
+  id="giftCharacterImagePreview"
+  src="${escapeHtml(
+    characterImage
+  )}"
+  alt="Character Preview"
+  style="
+    width:100%;
+    max-height:280px;
+    object-fit:contain;
+    background:#f1f5f9;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+  "
+  onerror="this.closest('#giftCharacterImagePreviewBox').style.display='none'"
+>
+
+</div>
+
+<div>
+
+<label for="giftCharacterSortOrder">
+ลำดับการแสดงผล
+</label>
+
+<br><br>
+
+<input
+  type="number"
+  id="giftCharacterSortOrder"
+  value="${sortOrder}"
+  min="0"
+  step="1"
+>
+
+</div>
+
+<div>
+
+<label for="giftCharacterActive">
+สถานะ
+</label>
+
+<br><br>
+
+<select id="giftCharacterActive">
+
+<option
+  value="yes"
+  ${isActive ? "selected" : ""}
+>
+เปิดใช้งาน
+</option>
+
+<option
+  value=""
+  ${!isActive ? "selected" : ""}
+>
+ปิดใช้งาน
+</option>
+
+</select>
+
+</div>
+
+<div class="full">
+
+<label>
+Character ID
+</label>
+
+<br><br>
+
+<input
+  type="text"
+  value="${escapeHtml(
+    character
+      ? character.character_id || ""
+      : "สร้างอัตโนมัติเมื่อบันทึก"
+  )}"
+  disabled
+>
+
+</div>
+
+`;
+
+  window.setTimeout(
+    () => {
+
+      const nameInput =
+        document.getElementById(
+          "giftCharacterName"
+        );
+
+      if(nameInput){
+
+        nameInput.focus();
+
+      }
+
+    },
+    50
+  );
+
+}
+
+
+function previewGiftCharacterImage(){
+
+  const input =
+    document.getElementById(
+      "giftCharacterImage"
+    );
+
+  const box =
+    document.getElementById(
+      "giftCharacterImagePreviewBox"
+    );
+
+  const image =
+    document.getElementById(
+      "giftCharacterImagePreview"
+    );
+
+  if(
+    !input ||
+    !box ||
+    !image
+  ){
+
+    return;
+
+  }
+
+  const url =
+    input.value.trim();
+
+  if(!url){
+
+    image.removeAttribute(
+      "src"
+    );
+
+    box.style.display =
+      "none";
+
+    return;
+
+  }
+
+  image.src = url;
+
+  box.style.display =
+    "";
+
+}
+
+
+async function submitGiftCharacter(){
+
+  const characterIdInput =
+    document.getElementById(
+      "giftCharacterId"
+    );
+
+  const giftItemIdInput =
+    document.getElementById(
+      "giftCharacterItemId"
+    );
+
+  const nameInput =
+    document.getElementById(
+      "giftCharacterName"
+    );
+
+  const imageInput =
+    document.getElementById(
+      "giftCharacterImage"
+    );
+
+  const sortOrderInput =
+    document.getElementById(
+      "giftCharacterSortOrder"
+    );
+
+  const activeInput =
+    document.getElementById(
+      "giftCharacterActive"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "giftModalSaveBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "giftModalLoading"
+    );
+
+  const payload = {
+
+    character_id:
+      characterIdInput
+        ? characterIdInput.value.trim()
+        : "",
+
+    gift_item_id:
+      giftItemIdInput
+        ? giftItemIdInput.value.trim()
+        : "",
+
+    character_name:
+      nameInput
+        ? nameInput.value.trim()
+        : "",
+
+    character_image:
+      imageInput
+        ? imageInput.value.trim()
+        : "",
+
+    active:
+      activeInput
+        ? activeInput.value
+        : "",
+
+    sort_order:
+      sortOrderInput
+        ? Number(
+            sortOrderInput.value
+          )
+        : 0
+
+  };
+
+  if(!payload.gift_item_id){
+
+    alert(
+      "ไม่พบ Gift Item สำหรับ Character นี้"
+    );
+
+    return;
+
+  }
+
+  const item =
+    adminGiftItems.find(
+      row =>
+
+        String(
+          row.gift_item_id || ""
+        ) ===
+        payload.gift_item_id
+    );
+
+  if(!item){
+
+    alert(
+      "ไม่พบข้อมูล Gift Item"
+    );
+
+    return;
+
+  }
+
+  if(
+    !normalizeGiftAdminYes(
+      item.has_character
+    )
+  ){
+
+    alert(
+      "Gift Item นี้ไม่ได้เปิดใช้งานตัวเลือกตัวละคร"
+    );
+
+    return;
+
+  }
+
+  if(!payload.character_name){
+
+    alert(
+      "กรุณากรอกชื่อตัวละคร"
+    );
+
+    if(nameInput){
+
+      nameInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    payload.character_image &&
+    !/^https?:\/\//i.test(
+      payload.character_image
+    )
+  ){
+
+    alert(
+      "ลิงก์รูปต้องขึ้นต้นด้วย http:// หรือ https://"
+    );
+
+    if(imageInput){
+
+      imageInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    !Number.isFinite(
+      payload.sort_order
+    ) ||
+    payload.sort_order < 0
+  ){
+
+    payload.sort_order = 0;
+
+  }else{
+
+    payload.sort_order =
+      Math.floor(
+        payload.sort_order
+      );
+
+  }
+
+  if(saveButton){
+
+    saveButton.disabled = true;
+
+    saveButton.textContent =
+      "กำลังบันทึก...";
+
+  }
+
+  if(loading){
+
+    loading.style.display =
+      "block";
+
+    loading.textContent =
+      "⏳ กำลังบันทึก Character...";
+
+  }
+
+  try{
+
+    const action =
+      payload.character_id
+        ? "updateGiftCharacter"
+        : "saveGiftCharacter";
+
+    await postGiftAdminAction(
+      action,
+      payload
+    );
+
+    adminGiftOpenNodes.add(
+      createGiftNodeKey(
+        "item",
+        payload.gift_item_id
+      )
+    );
+
+    const parentRule =
+      adminGiftRules.find(
+        rule =>
+
+          String(
+            rule.rule_id || ""
+          ) ===
+          String(
+            item.rule_id || ""
+          )
+      );
+
+    if(item.rule_id){
+
+      adminGiftOpenNodes.add(
+        createGiftNodeKey(
+          "rule",
+          item.rule_id
+        )
+      );
+
+    }
+
+    if(
+      parentRule &&
+      parentRule.campaign_id
+    ){
+
+      adminGiftOpenNodes.add(
+        createGiftNodeKey(
+          "campaign",
+          parentRule.campaign_id
+        )
+      );
+
+    }
+
+    alert(
+      payload.character_id
+        ? "แก้ไข Character เรียบร้อยแล้ว"
+        : "เพิ่ม Character เรียบร้อยแล้ว"
+    );
+
+    closeGiftModal();
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "submitGiftCharacter error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "บันทึก Character ไม่สำเร็จ"
     );
 
   }finally{
@@ -6115,7 +6855,7 @@ async function deleteGiftCampaignExclusion(
 
 /*
 =========================================
-CHARACTER PLACEHOLDER ACTIONS
+CHARACTER ACTIONS
 =========================================
 */
 
@@ -6123,9 +6863,60 @@ function openCreateGiftCharacter(
   giftItemId
 ){
 
-  alert(
-    "เพิ่ม Character ใน Gift Item: " +
-    giftItemId
+  const normalizedGiftItemId =
+    String(
+      giftItemId || ""
+    ).trim();
+
+  if(!normalizedGiftItemId){
+
+    alert(
+      "ไม่พบ Gift Item ID"
+    );
+
+    return;
+
+  }
+
+  const item =
+    adminGiftItems.find(
+      row =>
+
+        String(
+          row.gift_item_id || ""
+        ) ===
+        normalizedGiftItemId
+    );
+
+  if(!item){
+
+    alert(
+      "ไม่พบข้อมูล Gift Item"
+    );
+
+    return;
+
+  }
+
+  if(
+    !normalizeGiftAdminYes(
+      item.has_character
+    )
+  ){
+
+    alert(
+      "Gift Item นี้ไม่ได้เปิดใช้งานตัวเลือกตัวละคร"
+    );
+
+    return;
+
+  }
+
+  openGiftModal(
+    "character",
+    "create",
+    "",
+    normalizedGiftItemId
   );
 
 }
@@ -6135,22 +6926,156 @@ function openEditGiftCharacter(
   characterId
 ){
 
-  alert(
-    "แก้ไข Character: " +
-    characterId
+  const normalizedCharacterId =
+    String(
+      characterId || ""
+    ).trim();
+
+  if(!normalizedCharacterId){
+
+    alert(
+      "ไม่พบ Character ID"
+    );
+
+    return;
+
+  }
+
+  const character =
+    adminGiftCharacters.find(
+      row =>
+
+        String(
+          row.character_id || ""
+        ) ===
+        normalizedCharacterId
+    );
+
+  if(!character){
+
+    alert(
+      "ไม่พบข้อมูล Character"
+    );
+
+    return;
+
+  }
+
+  openGiftModal(
+    "character",
+    "edit",
+    normalizedCharacterId,
+    String(
+      character.gift_item_id || ""
+    )
   );
 
 }
 
 
-function requestDeleteGiftCharacter(
+async function requestDeleteGiftCharacter(
   characterId
 ){
 
-  alert(
-    "ลบ Character: " +
-    characterId
-  );
+  const normalizedCharacterId =
+    String(
+      characterId || ""
+    ).trim();
+
+  if(!normalizedCharacterId){
+
+    alert(
+      "ไม่พบ Character ID"
+    );
+
+    return;
+
+  }
+
+  const character =
+    adminGiftCharacters.find(
+      row =>
+
+        String(
+          row.character_id || ""
+        ) ===
+        normalizedCharacterId
+    );
+
+  if(!character){
+
+    alert(
+      "ไม่พบข้อมูล Character"
+    );
+
+    return;
+
+  }
+
+  const characterName =
+    String(
+      character.character_name ||
+      normalizedCharacterId
+    );
+
+  const giftItemId =
+    String(
+      character.gift_item_id || ""
+    );
+
+  const confirmed =
+    confirm(
+      "ต้องการลบ Character นี้ใช่ไหม?\n\n" +
+      characterName +
+      "\n\nเมื่อลบแล้วจะไม่สามารถกู้คืนได้"
+    );
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+  try{
+
+    await postGiftAdminAction(
+      "deleteGiftCharacter",
+      {
+        character_id:
+          normalizedCharacterId
+      }
+    );
+
+    if(giftItemId){
+
+      adminGiftOpenNodes.add(
+        createGiftNodeKey(
+          "item",
+          giftItemId
+        )
+      );
+
+    }
+
+    alert(
+      "ลบ Character เรียบร้อยแล้ว"
+    );
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "requestDeleteGiftCharacter error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "ลบ Character ไม่สำเร็จ"
+    );
+
+  }
 
 }
 
