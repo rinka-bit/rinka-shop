@@ -157,6 +157,176 @@ background:#eef8ff;
 
 }
   
+
+.gift-loading,
+.gift-empty,
+.gift-error{
+  padding:16px;
+  border-radius:14px;
+  text-align:center;
+  margin-top:14px;
+}
+
+.gift-loading,
+.gift-empty{
+  background:#f8fbff;
+  color:#64748b;
+}
+
+.gift-error{
+  background:#fff1f2;
+  color:#be123c;
+}
+
+.gift-campaign-card{
+  margin-top:18px;
+  padding:16px;
+  border:1px solid #dbeafe;
+  border-radius:16px;
+  background:#fbfdff;
+}
+
+.gift-campaign-title{
+  margin:0 0 6px;
+  font-size:18px;
+}
+
+.gift-campaign-meta{
+  color:#64748b;
+  font-size:13px;
+  line-height:1.7;
+  margin-bottom:14px;
+}
+
+.gift-rule-card{
+  margin-top:14px;
+  padding:14px;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  background:white;
+}
+
+.gift-rule-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.gift-rule-name{
+  font-weight:700;
+}
+
+.gift-rule-count{
+  font-size:13px;
+  font-weight:700;
+  color:#2563eb;
+  white-space:nowrap;
+}
+
+.gift-item-row{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:12px;
+  border:1px solid #eef2f7;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+.gift-item-row.selected{
+  border-color:#7dcfff;
+  background:#f4fbff;
+}
+
+.gift-item-image{
+  width:64px;
+  height:64px;
+  object-fit:cover;
+  border-radius:10px;
+  background:#f1f5f9;
+  flex:0 0 auto;
+}
+
+.gift-item-main{
+  flex:1;
+  min-width:0;
+}
+
+.gift-item-name{
+  font-weight:700;
+}
+
+.gift-item-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:0 0 auto;
+}
+
+.gift-item-actions input[type="checkbox"]{
+  width:auto;
+  margin:4px 0 0;
+}
+
+.gift-qty-control{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.gift-qty-control button{
+  width:34px;
+  height:34px;
+  padding:0;
+  margin:0;
+  border:none;
+  border-radius:999px;
+  background:#d9f2ff;
+  font-weight:700;
+}
+
+.gift-qty-value{
+  min-width:24px;
+  text-align:center;
+  font-weight:700;
+}
+
+.gift-character-box{
+  margin-top:10px;
+}
+
+.gift-character-title{
+  font-size:13px;
+  font-weight:700;
+  margin:10px 0 6px;
+}
+
+.gift-char-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.gift-char-item{
+  margin:0;
+}
+
+.gift-char-image{
+  width:30px;
+  height:30px;
+  object-fit:cover;
+  border-radius:999px;
+  background:#f1f5f9;
+}
+
+.gift-summary-note{
+  margin-top:12px;
+  color:#64748b;
+  font-size:13px;
+}
+
 </style>
 
 </head>
@@ -675,378 +845,2352 @@ function escapeHtml(
 
 }
 
-function getSelectedGiftCharacter(
-  giftId,
-  itemIndex
+
+/*
+=========================================
+CHECKOUT GIFT ENGINE — SCHEMA 1.1
+Campaign → Rule → Gift Item → Character
+=========================================
+*/
+
+const checkoutGiftState = {
+  campaigns:[],
+  rules:[],
+  items:[],
+  characters:[],
+  exclusions:[],
+  collections:[],
+  eligibleCampaigns:[],
+  selections:{}
+};
+
+
+function normalizeGiftBoolean(
+  value
 ){
 
-  const radioName =
-    `gift-char-${giftId}-${itemIndex}`;
+  if(
+    value === true ||
+    value === 1
+  ){
+    return true;
+  }
 
-  const selectedCharacter =
-    document.querySelector(
-      `input[name="${CSS.escape(
-        radioName
-      )}"]:checked`
+  return [
+    "yes",
+    "true",
+    "1",
+    "active"
+  ].includes(
+    String(
+      value || ""
+    )
+      .trim()
+      .toLowerCase()
+  );
+
+}
+
+
+function normalizeGiftId(
+  value
+){
+
+  return String(
+    value || ""
+  ).trim();
+
+}
+
+
+function getCartItemUnitPrice(
+  item
+){
+
+  const value =
+    Number(
+      item.final_price ??
+      item.price ??
+      0
     );
 
-  console.log(
+  return Number.isFinite(value)
+    ? Math.max(0,value)
+    : 0;
 
-"SELECTED",
+}
 
-giftId,
 
-itemIndex,
+function getCartItemQty(
+  item
+){
 
-selectedCharacter
+  const value =
+    Number(
+      item.qty || 0
+    );
 
-);
+  return Number.isFinite(value)
+    ? Math.max(0,value)
+    : 0;
 
-  return selectedCharacter
-    ? selectedCharacter.value
+}
+
+
+function getCartItemTotal(
+  item
+){
+
+  return (
+    getCartItemUnitPrice(item) *
+    getCartItemQty(item)
+  );
+
+}
+
+
+function getGiftResponseArray(
+  result,
+  keys = []
+){
+
+  if(Array.isArray(result)){
+    return result;
+  }
+
+  for(const key of keys){
+
+    if(
+      result &&
+      Array.isArray(
+        result[key]
+      )
+    ){
+      return result[key];
+    }
+
+  }
+
+  return [];
+
+}
+
+
+async function fetchCheckoutGiftAction(
+  action,
+  parameters = {}
+){
+
+  const query =
+    new URLSearchParams();
+
+  query.set(
+    "action",
+    action
+  );
+
+  Object.entries(
+    parameters || {}
+  ).forEach(
+    ([key,value])=>{
+
+      if(
+        value === undefined ||
+        value === null ||
+        value === ""
+      ){
+        return;
+      }
+
+      query.set(
+        key,
+        String(value)
+      );
+
+    }
+  );
+
+  const response =
+    await fetch(
+      API +
+      "?" +
+      query.toString()
+    );
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status
+    );
+
+  }
+
+  const result =
+    await response.json();
+
+  if(
+    result &&
+    result.success === false
+  ){
+
+    throw new Error(
+      result.error ||
+      result.message ||
+      "เรียก API ไม่สำเร็จ"
+    );
+
+  }
+
+  return result;
+
+}
+
+
+async function fetchCheckoutGiftActionFallback(
+  actions,
+  keys
+){
+
+  let lastError = null;
+
+  for(const action of actions){
+
+    try{
+
+      const result =
+        await fetchCheckoutGiftAction(
+          action
+        );
+
+      const rows =
+        getGiftResponseArray(
+          result,
+          keys
+        );
+
+      if(
+        rows.length ||
+        (
+          result &&
+          result.success === true
+        )
+      ){
+        return rows;
+      }
+
+    }catch(error){
+
+      lastError = error;
+
+      console.warn(
+        "Gift API fallback:",
+        action,
+        error
+      );
+
+    }
+
+  }
+
+  if(lastError){
+    throw lastError;
+  }
+
+  return [];
+
+}
+
+
+async function loadGifts(){
+
+  const giftSection =
+    document.getElementById(
+      "giftSection"
+    );
+
+  if(!giftSection){
+    return;
+  }
+
+  if(!cart.length){
+
+    giftSection.innerHTML = "";
+
+    return;
+
+  }
+
+  giftSection.innerHTML = `
+
+<div class="gift-loading">
+⏳ กำลังตรวจสอบสิทธิ์ของแถม...
+</div>
+
+`;
+
+  try{
+
+    const [
+      campaigns,
+      rules,
+      items,
+      characters,
+      exclusions,
+      collections
+    ] =
+      await Promise.all([
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCampaigns"
+          ],
+          [
+            "campaigns"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftRules"
+          ],
+          [
+            "rules"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftItems"
+          ],
+          [
+            "items",
+            "gifts"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCharacters"
+          ],
+          [
+            "characters"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCampaignExclusions"
+          ],
+          [
+            "exclusions"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getCollections",
+            "collections"
+          ],
+          [
+            "collections"
+          ]
+        ).catch(
+          error => {
+
+            console.warn(
+              "โหลด Collections ไม่สำเร็จ ใช้ข้อมูลจาก Cart แทน",
+              error
+            );
+
+            return [];
+
+          }
+        )
+
+      ]);
+
+    checkoutGiftState.campaigns =
+      campaigns.filter(
+        campaign =>
+          normalizeGiftBoolean(
+            campaign.active
+          )
+      );
+
+    checkoutGiftState.rules =
+      rules.filter(
+        rule =>
+          normalizeGiftBoolean(
+            rule.active
+          )
+      );
+
+    checkoutGiftState.items =
+      items.filter(
+        item =>
+          normalizeGiftBoolean(
+            item.active
+          )
+      );
+
+    checkoutGiftState.characters =
+      characters.filter(
+        character =>
+          normalizeGiftBoolean(
+            character.active
+          )
+      );
+
+    checkoutGiftState.exclusions =
+      exclusions;
+
+    checkoutGiftState.collections =
+      collections;
+
+    checkoutGiftState.eligibleCampaigns =
+      buildEligibleGiftCampaigns();
+
+    renderCheckoutGiftEngine();
+
+  }catch(error){
+
+    console.error(
+      "loadGifts error:",
+      error
+    );
+
+    giftSection.innerHTML = `
+
+<div class="gift-error">
+โหลดข้อมูลของแถมไม่สำเร็จ<br>
+${escapeHtml(
+  error.message ||
+  String(error)
+)}
+</div>
+
+`;
+
+  }
+
+}
+
+
+function getCollectionById(
+  collectionId
+){
+
+  const normalizedId =
+    normalizeGiftId(
+      collectionId
+    );
+
+  return (
+    checkoutGiftState.collections.find(
+      collection =>
+
+        normalizeGiftId(
+          collection.collection_id
+        ) ===
+        normalizedId
+
+    ) ||
+    null
+  );
+
+}
+
+
+function getCampaignFandom(
+  campaign
+){
+
+  const directFandom =
+    String(
+      campaign.fandom || ""
+    ).trim();
+
+  if(directFandom){
+    return directFandom;
+  }
+
+  const collection =
+    getCollectionById(
+      campaign.collection_id
+    );
+
+  if(
+    collection &&
+    collection.fandom
+  ){
+    return String(
+      collection.fandom
+    ).trim();
+  }
+
+  const cartItem =
+    cart.find(
+      item =>
+
+        normalizeGiftId(
+          item.collection_id
+        ) ===
+        normalizeGiftId(
+          campaign.collection_id
+        )
+
+    );
+
+  return cartItem
+    ? String(
+        cartItem.fandom || ""
+      ).trim()
     : "";
 
 }
 
-function validateSameGiftCharacters(
-  giftId,
-  quantity,
-  maxSameCharacter
+
+function getCampaignExcludedProductIds(
+  campaignId
 ){
 
-  quantity =
-    Math.max(
-      0,
-      Number(
-        quantity || 0
-      )
+  const normalizedCampaignId =
+    normalizeGiftId(
+      campaignId
     );
 
-  maxSameCharacter =
-    Math.max(
-      0,
-      Number(
-        maxSameCharacter || 0
+  return new Set(
+
+    checkoutGiftState.exclusions
+      .filter(
+        exclusion =>
+
+          normalizeGiftId(
+            exclusion.campaign_id
+          ) ===
+          normalizedCampaignId
+
       )
-    );
+      .map(
+        exclusion =>
+          normalizeGiftId(
+            exclusion.product_id
+          )
+      )
+      .filter(Boolean)
 
-
-  if(
-    quantity <= 1 ||
-    maxSameCharacter <= 0
-  ){
-
-    return true;
-
-  }
-
-
-  const characterCounts = {};
-
-
-  for(
-    let itemIndex = 0;
-    itemIndex < quantity;
-    itemIndex++
-  ){
-
-    const characterName =
-      getSelectedGiftCharacter(
-
-        giftId,
-
-        itemIndex
-
-      );
-
-
-    if(!characterName){
-
-      continue;
-
-    }
-
-
-    if(
-      !characterCounts[
-        characterName
-      ]
-    ){
-
-      characterCounts[
-        characterName
-      ] = 0;
-
-    }
-
-
-    characterCounts[
-      characterName
-    ]++;
-
-
-    if(
-      characterCounts[
-        characterName
-      ] >
-      maxSameCharacter
-    ){
-
-      alert(
-
-        maxSameCharacter === 1
-
-          ? "ของแถมรายการนี้ไม่สามารถเลือกตัวละครซ้ำกันได้"
-
-          : `ตัวละครเดียวกันเลือกซ้ำได้สูงสุด ${maxSameCharacter} ชิ้น`
-
-      );
-
-      return false;
-
-    }
-
-  }
-
-
-  return true;
+  );
 
 }
 
-function validateGiftCharacterLimits(
-  gifts
+
+function getCampaignEligibleCartItems(
+  campaign
 ){
 
-  const characterGroups = {};
+  const campaignCollectionId =
+    normalizeGiftId(
+      campaign.collection_id
+    );
 
+  const eligibilityScope =
+    String(
+      campaign.eligibility_scope ||
+      "collection_only"
+    )
+      .trim()
+      .toLowerCase();
 
-  gifts.forEach(gift=>{
+  const campaignFandom =
+    getCampaignFandom(
+      campaign
+    )
+      .toLowerCase();
 
-    const characterName =
-      String(
-        gift.character_name || ""
-      ).trim();
+  const excludedProductIds =
+    getCampaignExcludedProductIds(
+      campaign.campaign_id
+    );
 
+  return cart.filter(
+    item => {
 
-    if(!characterName){
+      const productId =
+        normalizeGiftId(
+          item.product_id
+        );
 
-      return;
+      if(
+        productId &&
+        excludedProductIds.has(
+          productId
+        )
+      ){
+        return false;
+      }
+
+      if(
+        eligibilityScope ===
+        "fandom_all"
+      ){
+
+        const itemFandom =
+          String(
+            item.fandom || ""
+          )
+            .trim()
+            .toLowerCase();
+
+        return Boolean(
+          campaignFandom &&
+          itemFandom &&
+          itemFandom === campaignFandom
+        );
+
+      }
+
+      return (
+        normalizeGiftId(
+          item.collection_id
+        ) ===
+        campaignCollectionId
+      );
 
     }
+  );
+
+}
 
 
-    const maxSameCharacter =
+function campaignHasRequiredItem(
+  campaign
+){
+
+  if(
+    !normalizeGiftBoolean(
+      campaign.require_campaign_item
+    )
+  ){
+    return true;
+  }
+
+  const campaignCollectionId =
+    normalizeGiftId(
+      campaign.collection_id
+    );
+
+  const excludedProductIds =
+    getCampaignExcludedProductIds(
+      campaign.campaign_id
+    );
+
+  return cart.some(
+    item => {
+
+      const productId =
+        normalizeGiftId(
+          item.product_id
+        );
+
+      return (
+        normalizeGiftId(
+          item.collection_id
+        ) ===
+        campaignCollectionId &&
+        !excludedProductIds.has(
+          productId
+        ) &&
+        getCartItemQty(item) > 0
+      );
+
+    }
+  );
+
+}
+
+
+function buildEligibleGiftCampaigns(){
+
+  const result = [];
+
+  checkoutGiftState.campaigns.forEach(
+    campaign => {
+
+      if(
+        !campaignHasRequiredItem(
+          campaign
+        )
+      ){
+        return;
+      }
+
+      const eligibleItems =
+        getCampaignEligibleCartItems(
+          campaign
+        );
+
+      const eligibleTotal =
+        eligibleItems.reduce(
+          (
+            sum,
+            item
+          ) =>
+            sum +
+            getCartItemTotal(item),
+          0
+        );
+
+      const campaignRules =
+        checkoutGiftState.rules
+          .filter(
+            rule =>
+
+              normalizeGiftId(
+                rule.campaign_id
+              ) ===
+              normalizeGiftId(
+                campaign.campaign_id
+              ) &&
+
+              eligibleTotal >=
+              Math.max(
+                0,
+                Number(
+                  rule.min_amount || 0
+                )
+              )
+
+          )
+          .sort(
+            (a,b) => {
+
+              const amountDiff =
+                Number(
+                  a.min_amount || 0
+                ) -
+                Number(
+                  b.min_amount || 0
+                );
+
+              if(amountDiff !== 0){
+                return amountDiff;
+              }
+
+              return (
+                Number(
+                  a.sort_order || 0
+                ) -
+                Number(
+                  b.sort_order || 0
+                )
+              );
+
+            }
+          );
+
+      const usableRules =
+        campaignRules
+          .map(
+            rule => {
+
+              const ruleItems =
+                checkoutGiftState.items
+                  .filter(
+                    item =>
+
+                      normalizeGiftId(
+                        item.rule_id
+                      ) ===
+                      normalizeGiftId(
+                        rule.rule_id
+                      )
+
+                  )
+                  .sort(
+                    (a,b) =>
+
+                      Number(
+                        a.sort_order || 0
+                      ) -
+                      Number(
+                        b.sort_order || 0
+                      )
+                  );
+
+              return {
+                ...rule,
+                items:ruleItems
+              };
+
+            }
+          )
+          .filter(
+            rule =>
+              rule.items.length
+          );
+
+      if(!usableRules.length){
+        return;
+      }
+
+      result.push({
+        ...campaign,
+        eligible_total:
+          eligibleTotal,
+        eligible_items:
+          eligibleItems,
+        rules:
+          usableRules
+      });
+
+    }
+  );
+
+  return result.sort(
+    (a,b) =>
+
+      Number(
+        a.sort_order || 0
+      ) -
+      Number(
+        b.sort_order || 0
+      )
+  );
+
+}
+
+
+function getCharactersForGiftItem(
+  giftItemId
+){
+
+  const normalizedGiftItemId =
+    normalizeGiftId(
+      giftItemId
+    );
+
+  return checkoutGiftState.characters
+    .filter(
+      character =>
+
+        normalizeGiftId(
+          character.gift_item_id
+        ) ===
+        normalizedGiftItemId
+
+    )
+    .sort(
+      (a,b) =>
+
+        Number(
+          a.sort_order || 0
+        ) -
+        Number(
+          b.sort_order || 0
+        )
+    );
+
+}
+
+
+function getGiftRuleSelection(
+  ruleId
+){
+
+  const normalizedRuleId =
+    normalizeGiftId(
+      ruleId
+    );
+
+  if(
+    !checkoutGiftState.selections[
+      normalizedRuleId
+    ]
+  ){
+
+    checkoutGiftState.selections[
+      normalizedRuleId
+    ] = {};
+
+  }
+
+  return checkoutGiftState.selections[
+    normalizedRuleId
+  ];
+
+}
+
+
+function getGiftItemSelectionQty(
+  ruleId,
+  giftItemId
+){
+
+  const ruleSelection =
+    getGiftRuleSelection(
+      ruleId
+    );
+
+  const itemSelection =
+    ruleSelection[
+      normalizeGiftId(
+        giftItemId
+      )
+    ];
+
+  return itemSelection
+    ? Math.max(
+        0,
+        Number(
+          itemSelection.qty || 0
+        )
+      )
+    : 0;
+
+}
+
+
+function getGiftRuleSelectedCount(
+  ruleId
+){
+
+  const ruleSelection =
+    getGiftRuleSelection(
+      ruleId
+    );
+
+  return Object.values(
+    ruleSelection
+  ).reduce(
+    (
+      sum,
+      selection
+    ) =>
+      sum +
       Math.max(
         0,
         Number(
-          gift.max_same_character || 0
+          selection.qty || 0
         )
+      ),
+    0
+  );
+
+}
+
+
+function renderCheckoutGiftEngine(){
+
+  const giftSection =
+    document.getElementById(
+      "giftSection"
+    );
+
+  if(!giftSection){
+    return;
+  }
+
+  const campaigns =
+    checkoutGiftState
+      .eligibleCampaigns;
+
+  if(!campaigns.length){
+
+    giftSection.innerHTML = `
+
+<div class="gift-empty">
+ยังไม่มีของแถมที่ผ่านเงื่อนไขสำหรับรายการนี้
+</div>
+
+`;
+
+    return;
+  }
+
+  let html = `
+
+<h2 style="margin-top:24px;">
+🎁 ของแถมที่ได้รับสิทธิ์
+</h2>
+
+`;
+
+  campaigns.forEach(
+    campaign => {
+
+      const scopeText =
+        String(
+          campaign.eligibility_scope ||
+          "collection_only"
+        ) === "fandom_all"
+          ? "คำนวณจากสินค้าทั้ง Fandom"
+          : "คำนวณจาก Collection นี้";
+
+      html += `
+
+<div class="gift-campaign-card">
+
+<h3 class="gift-campaign-title">
+${escapeHtml(
+  campaign.campaign_name ||
+  "Gift Campaign"
+)}
+</h3>
+
+<div class="gift-campaign-meta">
+
+${escapeHtml(scopeText)}
+
+<br>
+
+ยอดที่นำมาคำนวณ:
+<b>
+฿${Number(
+  campaign.eligible_total || 0
+).toLocaleString(
+  "th-TH",
+  {
+    maximumFractionDigits:2
+  }
+)}
+</b>
+
+</div>
+
+`;
+
+      campaign.rules.forEach(
+        rule => {
+
+          html +=
+            renderCheckoutGiftRule(
+              campaign,
+              rule
+            );
+
+        }
       );
 
+      html += `
 
-    if(maxSameCharacter <= 0){
+</div>
 
-      return;
+`;
 
     }
+  );
+
+  html += `
+
+<div class="gift-summary-note">
+สามารถเว้นของแถมไว้ไม่เลือกได้ แต่จำนวนที่เลือกต้องไม่เกินสิทธิ์ของแต่ละ Rule
+</div>
+
+`;
+
+  giftSection.innerHTML =
+    html;
+
+  refreshAllGiftRuleUI();
+
+}
 
 
-    const groupKey =
+function renderCheckoutGiftRule(
+  campaign,
+  rule
+){
 
-      String(
-        gift.collection_id || ""
-      ).trim()
-
-      +
-
-      "::"
-
-      +
-
-      String(
-        gift.tier_name || ""
+  const maxSelect =
+    Math.max(
+      1,
+      Number(
+        rule.max_select || 1
       )
-        .trim()
-        .toLowerCase()
+    );
 
-      +
+  const allowDuplicate =
+    normalizeGiftBoolean(
+      rule.allow_duplicate
+    );
 
-      "::"
+  let html = `
 
-      +
+<div
+class="gift-rule-card"
+data-gift-rule-id="${escapeHtml(
+  rule.rule_id || ""
+)}"
+data-gift-max="${maxSelect}"
+data-gift-duplicate="${
+  allowDuplicate
+    ? "yes"
+    : "no"
+}"
+>
 
-      characterName;
+<div class="gift-rule-header">
+
+<div>
+
+<div class="gift-rule-name">
+${escapeHtml(
+  rule.rule_name ||
+  "Gift Rule"
+)}
+</div>
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+margin-top:4px;
+"
+>
+ซื้อครบ
+฿${Number(
+  rule.min_amount || 0
+).toLocaleString(
+  "th-TH",
+  {
+    maximumFractionDigits:2
+  }
+)}
+•
+เลือกได้สูงสุด ${maxSelect} ชิ้น
+${
+  allowDuplicate
+    ? " • เลือกรายการเดิมซ้ำได้"
+    : ""
+}
+</div>
+
+</div>
+
+<div
+class="gift-rule-count"
+data-gift-count-for="${escapeHtml(
+  rule.rule_id || ""
+)}"
+>
+เลือกแล้ว 0 / ${maxSelect}
+</div>
+
+</div>
+
+`;
+
+  rule.items.forEach(
+    item => {
+
+      html +=
+        renderCheckoutGiftItem(
+          campaign,
+          rule,
+          item,
+          allowDuplicate
+        );
+
+    }
+  );
+
+  html += `
+
+</div>
+
+`;
+
+  return html;
+
+}
 
 
-    if(
-      !characterGroups[
-        groupKey
-      ]
-    ){
+function renderCheckoutGiftItem(
+  campaign,
+  rule,
+  item,
+  allowDuplicate
+){
 
-      characterGroups[
-        groupKey
-      ] = {
+  const giftItemId =
+    normalizeGiftId(
+      item.gift_item_id
+    );
 
-        characterName:
-          characterName,
+  const hasCharacter =
+    normalizeGiftBoolean(
+      item.has_character
+    );
 
-        tierName:
-          gift.tier_name || "",
+  const image =
+    String(
+      item.gift_image || ""
+    ).trim();
 
-        count:
-          0,
+  return `
 
-        limit:
-          maxSameCharacter
+<div
+class="gift-item-row"
+data-gift-row="${escapeHtml(
+  giftItemId
+)}"
+>
 
+${
+  image
+    ? `
+
+<img
+class="gift-item-image"
+src="${escapeHtml(image)}"
+alt=""
+onerror="this.style.visibility='hidden'"
+>
+
+`
+    : `
+
+<div class="gift-item-image"></div>
+
+`
+}
+
+<div class="gift-item-main">
+
+<div class="gift-item-name">
+${escapeHtml(
+  item.gift_name ||
+  "Gift Item"
+)}
+</div>
+
+${
+  hasCharacter
+    ? `
+
+<div
+class="gift-character-box"
+data-gift-character-box="${escapeHtml(
+  giftItemId
+)}"
+></div>
+
+`
+    : ""
+}
+
+</div>
+
+<div class="gift-item-actions">
+
+${
+  allowDuplicate
+    ? `
+
+<div class="gift-qty-control">
+
+<button
+type="button"
+onclick="
+changeCheckoutGiftQty(
+'${escapeJsValue(
+  rule.rule_id
+)}',
+'${escapeJsValue(
+  giftItemId
+)}',
+-1
+)
+"
+>
+−
+</button>
+
+<span
+class="gift-qty-value"
+data-gift-qty-for="${escapeHtml(
+  rule.rule_id +
+  "::" +
+  giftItemId
+)}"
+>
+0
+</span>
+
+<button
+type="button"
+onclick="
+changeCheckoutGiftQty(
+'${escapeJsValue(
+  rule.rule_id
+)}',
+'${escapeJsValue(
+  giftItemId
+)}',
+1
+)
+"
+>
++
+</button>
+
+</div>
+
+`
+    : `
+
+<input
+type="checkbox"
+data-gift-checkbox-rule="${escapeHtml(
+  rule.rule_id || ""
+)}"
+data-gift-checkbox-item="${escapeHtml(
+  giftItemId
+)}"
+onchange="
+toggleCheckoutGiftItem(
+this
+)
+"
+>
+
+`
+}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function escapeJsValue(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .replaceAll(
+      "\\",
+      "\\\\"
+    )
+    .replaceAll(
+      "'",
+      "\\'"
+    )
+    .replaceAll(
+      "\r",
+      "\\r"
+    )
+    .replaceAll(
+      "\n",
+      "\\n"
+    );
+
+}
+
+
+function findGiftRule(
+  ruleId
+){
+
+  const normalizedRuleId =
+    normalizeGiftId(
+      ruleId
+    );
+
+  for(
+    const campaign
+    of checkoutGiftState
+      .eligibleCampaigns
+  ){
+
+    const rule =
+      campaign.rules.find(
+        item =>
+
+          normalizeGiftId(
+            item.rule_id
+          ) ===
+          normalizedRuleId
+
+      );
+
+    if(rule){
+
+      return {
+        campaign,
+        rule
       };
 
     }
 
+  }
 
-    const group =
-      characterGroups[
-        groupKey
-      ];
+  return null;
 
-
-    group.count++;
+}
 
 
-    /*
-    ถ้าของใน Tier เดียวกันตั้งค่าไม่เท่ากัน
-    ให้ใช้ค่าที่เข้มงวดที่สุด
-    */
+function findGiftItemInRule(
+  rule,
+  giftItemId
+){
 
-    group.limit =
-      Math.min(
+  const normalizedGiftItemId =
+    normalizeGiftId(
+      giftItemId
+    );
 
-        group.limit,
+  return rule.items.find(
+    item =>
 
-        maxSameCharacter
+      normalizeGiftId(
+        item.gift_item_id
+      ) ===
+      normalizedGiftItemId
 
-      );
+  ) || null;
 
-  });
+}
 
 
-  for(
-    const groupKey
-    in characterGroups
+function toggleCheckoutGiftItem(
+  checkbox
+){
+
+  const ruleId =
+    checkbox.dataset
+      .giftCheckboxRule;
+
+  const giftItemId =
+    checkbox.dataset
+      .giftCheckboxItem;
+
+  const found =
+    findGiftRule(
+      ruleId
+    );
+
+  if(!found){
+
+    checkbox.checked = false;
+
+    return;
+  }
+
+  const maxSelect =
+    Math.max(
+      1,
+      Number(
+        found.rule.max_select || 1
+      )
+    );
+
+  const selectedCount =
+    getGiftRuleSelectedCount(
+      ruleId
+    );
+
+  if(
+    checkbox.checked &&
+    selectedCount >= maxSelect
   ){
 
-    const group =
-      characterGroups[
-        groupKey
-      ];
+    checkbox.checked = false;
+
+    alert(
+      `Rule นี้เลือกของแถมได้สูงสุด ${maxSelect} ชิ้น`
+    );
+
+    return;
+  }
+
+  setCheckoutGiftItemQty(
+    ruleId,
+    giftItemId,
+    checkbox.checked
+      ? 1
+      : 0
+  );
+
+}
 
 
-    if(
-      group.count >
-      group.limit
+function changeCheckoutGiftQty(
+  ruleId,
+  giftItemId,
+  change
+){
+
+  const found =
+    findGiftRule(
+      ruleId
+    );
+
+  if(!found){
+    return;
+  }
+
+  const maxSelect =
+    Math.max(
+      1,
+      Number(
+        found.rule.max_select || 1
+      )
+    );
+
+  const currentQty =
+    getGiftItemSelectionQty(
+      ruleId,
+      giftItemId
+    );
+
+  const nextQty =
+    Math.max(
+      0,
+      currentQty +
+      Number(change || 0)
+    );
+
+  const selectedWithoutCurrent =
+    getGiftRuleSelectedCount(
+      ruleId
+    ) -
+    currentQty;
+
+  if(
+    nextQty +
+    selectedWithoutCurrent >
+    maxSelect
+  ){
+
+    alert(
+      `Rule นี้เลือกของแถมได้สูงสุด ${maxSelect} ชิ้น`
+    );
+
+    return;
+  }
+
+  setCheckoutGiftItemQty(
+    ruleId,
+    giftItemId,
+    nextQty
+  );
+
+}
+
+
+function setCheckoutGiftItemQty(
+  ruleId,
+  giftItemId,
+  qty
+){
+
+  const found =
+    findGiftRule(
+      ruleId
+    );
+
+  if(!found){
+    return;
+  }
+
+  const item =
+    findGiftItemInRule(
+      found.rule,
+      giftItemId
+    );
+
+  if(!item){
+    return;
+  }
+
+  const normalizedRuleId =
+    normalizeGiftId(
+      ruleId
+    );
+
+  const normalizedGiftItemId =
+    normalizeGiftId(
+      giftItemId
+    );
+
+  const ruleSelection =
+    getGiftRuleSelection(
+      normalizedRuleId
+    );
+
+  const normalizedQty =
+    Math.max(
+      0,
+      Math.floor(
+        Number(qty || 0)
+      )
+    );
+
+  if(normalizedQty <= 0){
+
+    delete ruleSelection[
+      normalizedGiftItemId
+    ];
+
+  }else{
+
+    const previous =
+      ruleSelection[
+        normalizedGiftItemId
+      ] || {};
+
+    ruleSelection[
+      normalizedGiftItemId
+    ] = {
+      qty:
+        normalizedQty,
+      characters:
+        Array.isArray(
+          previous.characters
+        )
+          ? previous.characters.slice(
+              0,
+              normalizedQty
+            )
+          : []
+    };
+
+  }
+
+  refreshGiftItemUI(
+    found.rule,
+    item
+  );
+
+  refreshGiftRuleUI(
+    found.rule
+  );
+
+}
+
+
+function refreshAllGiftRuleUI(){
+
+  checkoutGiftState
+    .eligibleCampaigns
+    .forEach(
+      campaign =>
+
+        campaign.rules.forEach(
+          rule => {
+
+            rule.items.forEach(
+              item =>
+                refreshGiftItemUI(
+                  rule,
+                  item
+                )
+            );
+
+            refreshGiftRuleUI(
+              rule
+            );
+
+          }
+        )
+
+    );
+
+}
+
+
+function refreshGiftRuleUI(
+  rule
+){
+
+  const ruleId =
+    normalizeGiftId(
+      rule.rule_id
+    );
+
+  const countBox =
+    document.querySelector(
+      `[data-gift-count-for="${CSS.escape(
+        ruleId
+      )}"]`
+    );
+
+  if(!countBox){
+    return;
+  }
+
+  const selectedCount =
+    getGiftRuleSelectedCount(
+      ruleId
+    );
+
+  const maxSelect =
+    Math.max(
+      1,
+      Number(
+        rule.max_select || 1
+      )
+    );
+
+  countBox.textContent =
+    `เลือกแล้ว ${selectedCount} / ${maxSelect}`;
+
+  countBox.style.color =
+    selectedCount > maxSelect
+      ? "#be123c"
+      : "#2563eb";
+
+}
+
+
+function refreshGiftItemUI(
+  rule,
+  item
+){
+
+  const ruleId =
+    normalizeGiftId(
+      rule.rule_id
+    );
+
+  const giftItemId =
+    normalizeGiftId(
+      item.gift_item_id
+    );
+
+  const qty =
+    getGiftItemSelectionQty(
+      ruleId,
+      giftItemId
+    );
+
+  const row =
+    document.querySelector(
+      `[data-gift-row="${CSS.escape(
+        giftItemId
+      )}"]`
+    );
+
+  if(row){
+
+    row.classList.toggle(
+      "selected",
+      qty > 0
+    );
+
+  }
+
+  const checkbox =
+    document.querySelector(
+      `[data-gift-checkbox-rule="${CSS.escape(
+        ruleId
+      )}"][data-gift-checkbox-item="${CSS.escape(
+        giftItemId
+      )}"]`
+    );
+
+  if(checkbox){
+
+    checkbox.checked =
+      qty > 0;
+
+  }
+
+  const qtyBox =
+    document.querySelector(
+      `[data-gift-qty-for="${CSS.escape(
+        ruleId +
+        "::" +
+        giftItemId
+      )}"]`
+    );
+
+  if(qtyBox){
+
+    qtyBox.textContent =
+      String(qty);
+
+  }
+
+  renderGiftCharacterSelectors(
+    rule,
+    item,
+    qty
+  );
+
+}
+
+
+function renderGiftCharacterSelectors(
+  rule,
+  item,
+  quantity
+){
+
+  const giftItemId =
+    normalizeGiftId(
+      item.gift_item_id
+    );
+
+  const box =
+    document.querySelector(
+      `[data-gift-character-box="${CSS.escape(
+        giftItemId
+      )}"]`
+    );
+
+  if(!box){
+    return;
+  }
+
+  const characters =
+    getCharactersForGiftItem(
+      giftItemId
+    );
+
+  if(
+    quantity <= 0 ||
+    !characters.length
+  ){
+
+    box.innerHTML = "";
+
+    return;
+  }
+
+  const selection =
+    getGiftRuleSelection(
+      rule.rule_id
+    )[
+      giftItemId
+    ];
+
+  const selectedCharacters =
+    selection &&
+    Array.isArray(
+      selection.characters
+    )
+      ? selection.characters
+      : [];
+
+  let html = "";
+
+  for(
+    let index = 0;
+    index < quantity;
+    index++
+  ){
+
+    html += `
+
+<div
+class="gift-character-title"
+>
+เลือกตัวละครสำหรับชิ้นที่
+${index + 1}
+</div>
+
+<div class="gift-char-list">
+
+`;
+
+    characters.forEach(
+      character => {
+
+        const characterId =
+          normalizeGiftId(
+            character.character_id
+          );
+
+        const checked =
+          normalizeGiftId(
+            selectedCharacters[
+              index
+            ]
+          ) ===
+          characterId;
+
+        const characterImage =
+          String(
+            character.character_image ||
+            character.image ||
+            ""
+          ).trim();
+
+        html += `
+
+<label class="gift-char-item">
+
+<input
+type="radio"
+name="gift-character-${escapeHtml(
+  rule.rule_id +
+  "-" +
+  giftItemId +
+  "-" +
+  index
+)}"
+value="${escapeHtml(
+  characterId
+)}"
+${
+  checked
+    ? " checked"
+    : ""
+}
+onchange="
+selectCheckoutGiftCharacter(
+'${escapeJsValue(
+  rule.rule_id
+)}',
+'${escapeJsValue(
+  giftItemId
+)}',
+${index},
+this.value
+)
+"
+>
+
+${
+  characterImage
+    ? `
+
+<img
+class="gift-char-image"
+src="${escapeHtml(
+  characterImage
+)}"
+alt=""
+>
+
+`
+    : ""
+}
+
+<span>
+${escapeHtml(
+  character.character_name ||
+  characterId
+)}
+</span>
+
+</label>
+
+`;
+
+      }
+    );
+
+    html += `
+
+</div>
+
+`;
+
+  }
+
+  box.innerHTML =
+    html;
+
+}
+
+
+function selectCheckoutGiftCharacter(
+  ruleId,
+  giftItemId,
+  itemIndex,
+  characterId
+){
+
+  const ruleSelection =
+    getGiftRuleSelection(
+      ruleId
+    );
+
+  const itemSelection =
+    ruleSelection[
+      normalizeGiftId(
+        giftItemId
+      )
+    ];
+
+  if(!itemSelection){
+    return;
+  }
+
+  if(
+    !Array.isArray(
+      itemSelection.characters
+    )
+  ){
+
+    itemSelection.characters = [];
+
+  }
+
+  itemSelection.characters[
+    Number(itemIndex)
+  ] =
+    normalizeGiftId(
+      characterId
+    );
+
+}
+
+
+function validateCheckoutGiftSelections(){
+
+  for(
+    const campaign
+    of checkoutGiftState
+      .eligibleCampaigns
+  ){
+
+    for(
+      const rule
+      of campaign.rules
     ){
 
-      alert(
+      const selectedCount =
+        getGiftRuleSelectedCount(
+          rule.rule_id
+        );
 
-        group.limit === 1
+      const maxSelect =
+        Math.max(
+          1,
+          Number(
+            rule.max_select || 1
+          )
+        );
 
-          ? `ของแถม ${group.tierName} ไม่สามารถเลือกตัวละคร ${group.characterName} ซ้ำกันได้`
+      if(
+        selectedCount > maxSelect
+      ){
 
-          : `ของแถม ${group.tierName} เลือกตัวละคร ${group.characterName} ได้สูงสุด ${group.limit} ชิ้น`
+        alert(
+          `ของแถม ${rule.rule_name || ""} เลือกได้สูงสุด ${maxSelect} ชิ้น`
+        );
 
-      );
+        return false;
+      }
 
-      return false;
+      const ruleSelection =
+        getGiftRuleSelection(
+          rule.rule_id
+        );
+
+      for(
+        const [
+          giftItemId,
+          selection
+        ]
+        of Object.entries(
+          ruleSelection
+        )
+      ){
+
+        const item =
+          findGiftItemInRule(
+            rule,
+            giftItemId
+          );
+
+        if(!item){
+          continue;
+        }
+
+        const qty =
+          Math.max(
+            0,
+            Number(
+              selection.qty || 0
+            )
+          );
+
+        if(
+          !normalizeGiftBoolean(
+            item.has_character
+          )
+        ){
+          continue;
+        }
+
+        const characters =
+          getCharactersForGiftItem(
+            giftItemId
+          );
+
+        if(!characters.length){
+
+          alert(
+            `ของแถม ${item.gift_name || ""} เปิดให้เลือกตัวละคร แต่ยังไม่มี Character ที่ใช้งานได้`
+          );
+
+          return false;
+        }
+
+        const selectedCharacters =
+          Array.isArray(
+            selection.characters
+          )
+            ? selection.characters
+            : [];
+
+        for(
+          let index = 0;
+          index < qty;
+          index++
+        ){
+
+          if(
+            !normalizeGiftId(
+              selectedCharacters[
+                index
+              ]
+            )
+          ){
+
+            alert(
+              `กรุณาเลือกตัวละครของ ${item.gift_name || "ของแถม"} ชิ้นที่ ${index + 1}`
+            );
+
+            return false;
+          }
+
+        }
+
+        const maxSameCharacter =
+          Math.max(
+            1,
+            Number(
+              item.max_same_character || 1
+            )
+          );
+
+        const counts = {};
+
+        selectedCharacters
+          .slice(
+            0,
+            qty
+          )
+          .forEach(
+            characterId => {
+
+              const normalizedId =
+                normalizeGiftId(
+                  characterId
+                );
+
+              counts[
+                normalizedId
+              ] =
+                (
+                  counts[
+                    normalizedId
+                  ] || 0
+                ) + 1;
+
+            }
+          );
+
+        for(
+          const [
+            characterId,
+            count
+          ]
+          of Object.entries(
+            counts
+          )
+        ){
+
+          if(
+            count >
+            maxSameCharacter
+          ){
+
+            const character =
+              characters.find(
+                item =>
+
+                  normalizeGiftId(
+                    item.character_id
+                  ) ===
+                  characterId
+
+              );
+
+            alert(
+              `${character ? character.character_name : "ตัวละครเดียวกัน"} เลือกซ้ำได้สูงสุด ${maxSameCharacter} ชิ้น`
+            );
+
+            return false;
+          }
+
+        }
+
+      }
 
     }
 
   }
 
-
   return true;
 
-}  
+}
 
-function createGiftSelectionData(
-  element,
-  characterName
-){
 
-  const maxSameCharacterValue =
-    Number(
-      element.dataset
-        .maxSameCharacter || 0
+function collectCheckoutGiftSelections(){
+
+  const gifts = [];
+
+  checkoutGiftState
+    .eligibleCampaigns
+    .forEach(
+      campaign => {
+
+        campaign.rules.forEach(
+          rule => {
+
+            const ruleSelection =
+              getGiftRuleSelection(
+                rule.rule_id
+              );
+
+            Object.entries(
+              ruleSelection
+            ).forEach(
+              ([
+                giftItemId,
+                selection
+              ]) => {
+
+                const item =
+                  findGiftItemInRule(
+                    rule,
+                    giftItemId
+                  );
+
+                if(!item){
+                  return;
+                }
+
+                const qty =
+                  Math.max(
+                    0,
+                    Number(
+                      selection.qty || 0
+                    )
+                  );
+
+                const characters =
+                  getCharactersForGiftItem(
+                    giftItemId
+                  );
+
+                for(
+                  let index = 0;
+                  index < qty;
+                  index++
+                ){
+
+                  const characterId =
+                    normalizeGiftId(
+                      selection.characters &&
+                      selection.characters[
+                        index
+                      ]
+                    );
+
+                  const character =
+                    characters.find(
+                      row =>
+
+                        normalizeGiftId(
+                          row.character_id
+                        ) ===
+                        characterId
+
+                    );
+
+                  gifts.push({
+
+                    campaign_id:
+                      normalizeGiftId(
+                        campaign.campaign_id
+                      ),
+
+                    campaign_name:
+                      campaign.campaign_name ||
+                      "",
+
+                    rule_id:
+                      normalizeGiftId(
+                        rule.rule_id
+                      ),
+
+                    rule_name:
+                      rule.rule_name ||
+                      "",
+
+                    tier_name:
+                      rule.rule_name ||
+                      "",
+
+                    gift_item_id:
+                      giftItemId,
+
+                    gift_id:
+                      giftItemId,
+
+                    gift_name:
+                      item.gift_name ||
+                      "",
+
+                    character_id:
+                      characterId,
+
+                    character_name:
+                      character
+                        ? character.character_name || ""
+                        : "",
+
+                    collection_id:
+                      normalizeGiftId(
+                        campaign.collection_id
+                      )
+
+                  });
+
+                }
+
+              }
+            );
+
+          }
+        );
+
+      }
     );
 
-  return {
-
-    gift_id:
-      element.dataset.giftId ||
-      element.value ||
-      "",
-
-    tier_name:
-      element.dataset.tierName ||
-      "",
-
-    collection_id:
-      element.dataset.collectionId ||
-      "",
-
-    character_name:
-      characterName || "",
-
-    max_same_character:
-      Number.isFinite(
-        maxSameCharacterValue
-      )
-        ? Math.max(
-            0,
-            maxSameCharacterValue
-          )
-        : 0
-
-  };
+  return gifts;
 
 }
 
-  function isGiftElementActive(
-  element
-){
-
-  const tierCard =
-    element.closest(
-      ".gift-tier-card"
-    );
-
-
-  if(!tierCard){
-
-    return true;
-
-  }
-
-
-  return String(
-    tierCard.dataset
-      .redemptionActive ||
-    "yes"
-  ) !== "no";
-
-}
 
 function goPayment(){
 
-  /*
-  =========================
-  ตรวจสอบที่อยู่จัดส่ง
-  =========================
-  */
-
   const addressData =
     window.checkoutAddress;
-
 
   if(!addressData){
 
@@ -1057,7 +3201,6 @@ function goPayment(){
     return;
 
   }
-
 
   if(
     !addressData.receiver ||
@@ -1075,395 +3218,14 @@ function goPayment(){
 
   }
 
-
-  /*
-  =========================
-  ตรวจสิทธิ์ของแถมก่อนรวบรวม
-  =========================
-  */
-
   if(
-    !validateGiftRedemption(
-      true
-    )
+    !validateCheckoutGiftSelections()
   ){
-
     return;
-
   }
 
-
-  const gifts = [];
-
-
-  /*
-  =========================
-  ของแถมแบบ Quantity
-  =========================
-  */
-
-  const quantityInputs =
-    document.querySelectorAll(
-      ".gift-quantity"
-    );
-
-
-  for(
-    const quantityInput
-    of quantityInputs
-  ){
-
-    if(
-      !isGiftElementActive(
-        quantityInput
-      )
-    ){
-
-      continue;
-
-    }
-
-
-    const giftId =
-      String(
-        quantityInput.dataset
-          .giftId || ""
-      ).trim();
-
-
-    const quantity =
-      Math.max(
-        0,
-        Number(
-          quantityInput.value || 0
-        )
-      );
-
-
-    if(
-      !giftId ||
-      quantity <= 0
-    ){
-
-      continue;
-
-    }
-
-
-    const characters =
-      giftCharacterMap[
-        giftId
-      ] || [];
-
-
-    const maxSameCharacter =
-      Math.max(
-        0,
-        Number(
-          quantityInput.dataset
-            .maxSameCharacter || 0
-        )
-      );
-
-
-    if(
-      characters.length &&
-      !validateSameGiftCharacters(
-
-        giftId,
-
-        quantity,
-
-        maxSameCharacter
-
-      )
-    ){
-
-      return;
-
-    }
-
-
-    for(
-      let itemIndex = 0;
-      itemIndex < quantity;
-      itemIndex++
-    ){
-
-      let characterName = "";
-
-
-      if(characters.length){
-
-        characterName =
-          getSelectedGiftCharacter(
-
-            giftId,
-
-            itemIndex
-
-          );
-
-
-        if(!characterName){
-
-          alert(
-            `กรุณาเลือกตัวละครของของแถมชิ้นที่ ${itemIndex + 1} ให้ครบ`
-          );
-
-          return;
-
-        }
-
-      }
-
-
-      gifts.push(
-
-        createGiftSelectionData(
-
-          quantityInput,
-
-          characterName
-
-        )
-
-      );
-
-    }
-
-  }
-
-
-  /*
-  =========================
-  ของแถมแบบ Checkbox
-  =========================
-  */
-
-  const checkedGiftBoxes =
-    document.querySelectorAll(
-      ".gift-checkbox:checked"
-    );
-
-
-  for(
-    const checkbox
-    of checkedGiftBoxes
-  ){
-
-    if(
-      !isGiftElementActive(
-        checkbox
-      )
-    ){
-
-      continue;
-
-    }
-
-
-    const giftId =
-      String(
-        checkbox.dataset.giftId ||
-        checkbox.value ||
-        ""
-      ).trim();
-
-
-    if(!giftId){
-
-      continue;
-
-    }
-
-
-    const characters =
-      giftCharacterMap[
-        giftId
-      ] || [];
-
-
-    let characterName = "";
-
-
-    if(characters.length){
-
-      characterName =
-        getSelectedGiftCharacter(
-
-          giftId,
-
-          0
-
-        );
-
-
-      if(!characterName){
-
-        alert(
-          "กรุณาเลือกตัวละครของของแถมให้ครบ"
-        );
-
-        return;
-
-      }
-
-    }
-
-
-    gifts.push(
-
-      createGiftSelectionData(
-
-        checkbox,
-
-        characterName
-
-      )
-
-    );
-
-  }
-
-
-  /*
-  =========================
-  ของแถมแบบ Fixed Set
-  =========================
-  */
-
-  const fixedGiftInputs =
-    document.querySelectorAll(
-      ".gift-fixed"
-    );
-
-
-  for(
-    const fixedInput
-    of fixedGiftInputs
-  ){
-
-    if(
-      !isGiftElementActive(
-        fixedInput
-      )
-    ){
-
-      continue;
-
-    }
-
-
-    const giftId =
-      String(
-        fixedInput.dataset
-          .giftId || ""
-      ).trim();
-
-
-    if(!giftId){
-
-      continue;
-
-    }
-
-
-    const characters =
-      giftCharacterMap[
-        giftId
-      ] || [];
-
-
-    let characterName = "";
-
-
-    if(characters.length){
-
-      characterName =
-        getSelectedGiftCharacter(
-
-          giftId,
-
-          0
-
-        );
-
-
-      if(!characterName){
-
-        alert(
-          "กรุณาเลือกตัวละครของของแถมแบบเซ็ตให้ครบ"
-        );
-
-        return;
-
-      }
-
-    }
-
-
-    gifts.push(
-
-      createGiftSelectionData(
-
-        fixedInput,
-
-        characterName
-
-      )
-
-    );
-
-  }
-
-
-  /*
-  =========================
-  ตรวจจำนวนคาร์ซ้ำรวมทั้ง Tier
-  =========================
-  */
-
-  if(
-    !validateGiftCharacterLimits(
-      gifts
-    )
-  ){
-
-    return;
-
-  }
-
-
-  /*
-  =========================
-  ตัดข้อมูลภายในที่ไม่ต้องส่ง
-  =========================
-  */
-
-  const cleanGifts =
-    gifts.map(gift=>({
-
-      gift_id:
-        gift.gift_id,
-
-      tier_name:
-        gift.tier_name,
-
-      collection_id:
-        gift.collection_id,
-
-      character_name:
-        gift.character_name
-
-    }));
-
-
-  /*
-  =========================
-  เตรียมข้อมูลไปหน้า Payment
-  =========================
-  */
+  const gifts =
+    collectCheckoutGiftSelections();
 
   const checkoutData = {
 
@@ -1475,2847 +3237,30 @@ function goPayment(){
       "",
 
     gifts:
-      cleanGifts
+      gifts
 
   };
 
-
   console.log(
-    "CHECKOUT GIFTS",
-    cleanGifts
+    "CHECKOUT GIFTS:",
+    gifts
   );
-
 
   window.checkoutAddress =
     checkoutData;
 
-
   localStorage.setItem(
-
     "checkoutAddress",
-
     JSON.stringify(
       checkoutData
     )
-
   );
-
 
   window.location.href =
     "payment.html";
 
 }
-  
-function getCollectionTotals(){
 
-  const collectionTotals = {};
-
-  cart.forEach(item=>{
-
-    const collectionId =
-      String(
-        item.collection_id || ""
-      ).trim();
-
-    if(!collectionId){
-
-      console.warn(
-        "สินค้าไม่มี collection_id",
-        item
-      );
-
-      return;
-
-    }
-
-    if(
-      !collectionTotals[
-        collectionId
-      ]
-    ){
-
-      collectionTotals[
-        collectionId
-      ] = 0;
-
-    }
-
-    const price =
-      Number(
-        item.final_price ??
-        item.price ??
-        0
-      );
-
-    const qty =
-      Math.max(
-        0,
-        Number(
-          item.qty || 0
-        )
-      );
-
-    collectionTotals[
-      collectionId
-    ] +=
-      price * qty;
-
-  });
-
-  return collectionTotals;
-
-}
-
-async function fetchGiftRules(
-  collectionId,
-  total
-){
-
-  const response =
-    await fetch(
-
-      API +
-
-      "?action=giftRules" +
-
-      "&collection_id=" +
-
-      encodeURIComponent(
-        collectionId
-      ) +
-
-      "&total=" +
-
-      encodeURIComponent(
-        total
-      )
-
-    );
-
-  const result =
-    await response.json();
-
-  console.log(
-    "GIFT RULE RESPONSE",
-    collectionId,
-    total,
-    result
-  );
-
-  if(
-    Array.isArray(result)
-  ){
-
-    return result;
-
-  }
-
-  if(
-    Array.isArray(
-      result.rules
-    )
-  ){
-
-    return result.rules;
-
-  }
-
-  if(
-    Array.isArray(
-      result.giftRules
-    )
-  ){
-
-    return result.giftRules;
-
-  }
-
-  return [];
-
-}
-
-async function fetchGiftCampaigns(
-  collectionId
-){
-
-  const response =
-    await fetch(
-
-      API +
-
-      "?action=gifts" +
-
-      "&collection_id=" +
-
-      encodeURIComponent(
-        collectionId
-      )
-
-    );
-
-  const result =
-    await response.json();
-
-  console.log(
-    "GIFT CAMPAIGN RESPONSE",
-    collectionId,
-    result
-  );
-
-  if(
-    Array.isArray(result)
-  ){
-
-    return result;
-
-  }
-
-  if(
-    Array.isArray(
-      result.gifts
-    )
-  ){
-
-    return result.gifts;
-
-  }
-
-  if(
-    Array.isArray(
-      result.campaigns
-    )
-  ){
-
-    return result.campaigns;
-
-  }
-
-  return [];
-
-}
-  
-function normalizeGiftBoolean(
-  value
-){
-
-  if(
-    value === true ||
-    value === 1
-  ){
-
-    return true;
-
-  }
-
-  const normalizedValue =
-    String(
-      value || ""
-    )
-      .trim()
-      .toLowerCase();
-
-  return [
-
-    "yes",
-
-    "true",
-
-    "1",
-
-    "active"
-
-  ].includes(
-    normalizedValue
-  );
-
-}
-
-
-function getGiftSelectionMode(
-  rule
-){
-
-  const selectionMode =
-    String(
-      rule.selection_mode ||
-      "checkbox"
-    )
-      .trim()
-      .toLowerCase();
-
-  if(
-    selectionMode ===
-      "quantity" ||
-    selectionMode ===
-      "fixed_set"
-  ){
-
-    return selectionMode;
-
-  }
-
-  return "checkbox";
-
-}
-
-function createGiftCharacterBox(
-  giftId
-){
-
-  return `
-
-<div
-id="gift-char-${escapeHtml(
-  giftId
-)}"
-class="gift-char-box"
-style="
-display:none;
-margin-top:8px;
-">
-</div>
-
-`;
-
-}
-
-function renderCheckboxGift(
-  gift,
-  rule,
-  collectionId,
-  tierKey
-){
-
-  const giftId =
-    String(
-      gift.gift_id || ""
-    ).trim();
-
-
-  const hasCharacterSelect =
-    normalizeGiftBoolean(
-      gift.has_character_select
-    );
-
-
-  const maxSameCharacterValue =
-    Number(
-      gift.max_same_character
-    );
-
-
-  const maxSameCharacter =
-    hasCharacterSelect
-
-      ? (
-          Number.isFinite(
-            maxSameCharacterValue
-          )
-
-            ? Math.max(
-                1,
-                maxSameCharacterValue
-              )
-
-            : 1
-        )
-
-      : 0;
-
-
-  return `
-
-<div
-class="gift-item"
-data-selection-mode="checkbox"
-style="
-display:flex;
-align-items:flex-start;
-gap:12px;
-padding:10px;
-margin-bottom:10px;
-border:1px solid #eee;
-border-radius:12px;
-"
->
-
-<img
-src="${escapeHtml(
-  gift.gift_image || ""
-)}"
-style="
-width:60px;
-height:60px;
-object-fit:cover;
-border-radius:8px;
-"
-alt=""
->
-
-<div
-style="
-flex:1;
-"
->
-
-<div>
-
-${escapeHtml(
-  gift.gift_name || ""
-)}
-
-</div>
-
-${createGiftCharacterBox(
-  giftId
-)}
-
-</div>
-
-<input
-type="checkbox"
-class="gift-checkbox"
-
-data-gift-id="${escapeHtml(
-  giftId
-)}"
-
-data-tier="${escapeHtml(
-  tierKey
-)}"
-
-data-tier-name="${escapeHtml(
-  rule.tier_name || ""
-)}"
-
-data-collection-id="${escapeHtml(
-  collectionId
-)}"
-
-data-max="${Math.max(
-  1,
-  Number(
-    rule.max_select || 1
-  )
-)}"
-
-data-has-character-select="${
-  hasCharacterSelect
-    ? "yes"
-    : "no"
-}"
-
-data-max-same-character="${
-  maxSameCharacter
-}"
-
-value="${escapeHtml(
-  giftId
-)}"
->
-
-</div>
-
-`;
-
-}
-  
-function renderQuantityGift(
-  gift,
-  rule,
-  collectionId,
-  tierKey
-){
-
-  const giftId =
-    String(
-      gift.gift_id || ""
-    ).trim();
-
-
-  const maxSelect =
-    Math.max(
-      1,
-      Number(
-        rule.max_select || 1
-      )
-    );
-
-
-  const hasCharacterSelect =
-    normalizeGiftBoolean(
-      gift.has_character_select
-    );
-
-
-  const maxSameCharacterValue =
-    Number(
-      gift.max_same_character
-    );
-
-
-  const maxSameCharacter =
-    hasCharacterSelect
-
-      ? (
-          Number.isFinite(
-            maxSameCharacterValue
-          )
-
-            ? Math.max(
-                1,
-                maxSameCharacterValue
-              )
-
-            : 1
-        )
-
-      : 0;
-
-
-  return `
-
-<div
-class="gift-item"
-data-selection-mode="quantity"
-style="
-display:flex;
-align-items:flex-start;
-gap:12px;
-padding:10px;
-margin-bottom:10px;
-border:1px solid #eee;
-border-radius:12px;
-"
->
-
-<img
-src="${escapeHtml(
-  gift.gift_image || ""
-)}"
-style="
-width:60px;
-height:60px;
-object-fit:cover;
-border-radius:8px;
-"
-alt=""
->
-
-<div
-style="
-flex:1;
-"
->
-
-<div>
-
-${escapeHtml(
-  gift.gift_name || ""
-)}
-
-</div>
-
-${createGiftCharacterBox(
-  giftId
-)}
-
-</div>
-
-<div
-style="
-display:flex;
-align-items:center;
-gap:8px;
-"
->
-
-<button
-type="button"
-class="gift-qty-minus"
-
-data-gift-id="${escapeHtml(
-  giftId
-)}"
-
-style="
-width:34px;
-height:34px;
-padding:0;
-margin:0;
-"
->
-
-−
-
-</button>
-
-<span
-class="gift-qty-value"
-
-id="gift-qty-${escapeHtml(
-  giftId
-)}"
-
-style="
-min-width:24px;
-text-align:center;
-font-weight:700;
-"
->
-
-0
-
-</span>
-
-<button
-type="button"
-class="gift-qty-plus"
-
-data-gift-id="${escapeHtml(
-  giftId
-)}"
-
-style="
-width:34px;
-height:34px;
-padding:0;
-margin:0;
-"
->
-
-+
-
-</button>
-
-<input
-type="hidden"
-class="gift-quantity"
-
-data-gift-id="${escapeHtml(
-  giftId
-)}"
-
-data-tier="${escapeHtml(
-  tierKey
-)}"
-
-data-tier-name="${escapeHtml(
-  rule.tier_name || ""
-)}"
-
-data-collection-id="${escapeHtml(
-  collectionId
-)}"
-
-data-max="${maxSelect}"
-
-data-has-character-select="${
-  hasCharacterSelect
-    ? "yes"
-    : "no"
-}"
-
-data-max-same-character="${
-  maxSameCharacter
-}"
-
-value="0"
->
-
-</div>
-
-</div>
-
-`;
-
-}
-
-function renderFixedSetGift(
-  gift,
-  rule,
-  collectionId,
-  tierKey
-){
-
-  const giftId =
-    String(
-      gift.gift_id || ""
-    ).trim();
-
-
-  const hasCharacterSelect =
-    normalizeGiftBoolean(
-      gift.has_character_select
-    );
-
-
-  const maxSameCharacterValue =
-    Number(
-      gift.max_same_character
-    );
-
-
-  const maxSameCharacter =
-    hasCharacterSelect
-
-      ? (
-          Number.isFinite(
-            maxSameCharacterValue
-          )
-
-            ? Math.max(
-                1,
-                maxSameCharacterValue
-              )
-
-            : 1
-        )
-
-      : 0;
-
-
-  return `
-
-<div
-class="gift-item gift-fixed-item"
-data-selection-mode="fixed_set"
-style="
-display:flex;
-align-items:flex-start;
-gap:12px;
-padding:10px;
-margin-bottom:10px;
-border:1px solid #b8e8ff;
-background:#f8fcff;
-border-radius:12px;
-"
->
-
-<img
-src="${escapeHtml(
-  gift.gift_image || ""
-)}"
-style="
-width:60px;
-height:60px;
-object-fit:cover;
-border-radius:8px;
-"
-alt=""
->
-
-<div
-style="
-flex:1;
-"
->
-
-<div>
-
-${escapeHtml(
-  gift.gift_name || ""
-)}
-
-</div>
-
-<div
-style="
-font-size:12px;
-color:#4388aa;
-margin-top:4px;
-"
->
-
-✓ ได้รับอัตโนมัติ
-
-</div>
-
-${createGiftCharacterBox(
-  giftId
-)}
-
-</div>
-
-<input
-type="hidden"
-class="gift-fixed"
-
-data-gift-id="${escapeHtml(
-  giftId
-)}"
-
-data-tier="${escapeHtml(
-  tierKey
-)}"
-
-data-tier-name="${escapeHtml(
-  rule.tier_name || ""
-)}"
-
-data-collection-id="${escapeHtml(
-  collectionId
-)}"
-
-data-has-character-select="${
-  hasCharacterSelect
-    ? "yes"
-    : "no"
-}"
-
-data-max-same-character="${
-  maxSameCharacter
-}"
-
-value="1"
->
-
-</div>
-
-`;
-
-}
-
-function renderGiftByMode(
-  gift,
-  rule,
-  collectionId,
-  tierKey
-){
-
-  const selectionMode =
-    getGiftSelectionMode(
-      rule
-    );
-
-  if(
-    selectionMode ===
-    "quantity"
-  ){
-
-    return renderQuantityGift(
-
-      gift,
-
-      rule,
-
-      collectionId,
-
-      tierKey
-
-    );
-
-  }
-
-  if(
-    selectionMode ===
-    "fixed_set"
-  ){
-
-    return renderFixedSetGift(
-
-      gift,
-
-      rule,
-
-      collectionId,
-
-      tierKey
-
-    );
-
-  }
-
-  return renderCheckboxGift(
-
-    gift,
-
-    rule,
-
-    collectionId,
-
-    tierKey
-
-  );
-
-}
-
-function normalizeRedeemScopeValue(
-  value
-){
-
-  const normalized =
-    String(
-      value ||
-      "current_only"
-    )
-      .trim()
-      .toLowerCase();
-
-  if(
-    normalized ===
-      "current_or_lower" ||
-    normalized ===
-      "current_and_lower"
-  ){
-
-    return "current_or_lower";
-
-  }
-
-  return "current_only";
-
-}
-  
-function renderGiftTier(
-  collectionId,
-  rule,
-  gifts
-){
-
-  const tierName =
-    String(
-      rule.tier_name || ""
-    ).trim();
-
-  const normalizedRuleTier =
-    tierName.toLowerCase();
-
-  const tierGifts =
-    gifts.filter(gift=>
-
-      String(
-        gift.tier_name || ""
-      )
-        .trim()
-        .toLowerCase() ===
-      normalizedRuleTier
-
-    );
-
-  if(!tierGifts.length){
-
-    console.warn(
-      "ไม่พบของแถมของ Tier",
-      tierName
-    );
-
-    return "";
-
-  }
-
-
-  const tierKey =
-    collectionId +
-    "::" +
-    normalizedRuleTier;
-
-
-  const maxSelect =
-    Math.max(
-      1,
-      Number(
-        rule.max_select || 1
-      )
-    );
-
-
-  const selectionMode =
-    getGiftSelectionMode(
-      rule
-    );
-
-
-  const redeemScope =
-    normalizeRedeemScopeValue(
-      rule.redeem_scope
-    );
-
-
-  const lowerTierName =
-    String(
-      rule.lower_tier_name || ""
-    ).trim();
-
-
-  const lowerTierQuantityValue =
-    Number(
-      rule.lower_tier_quantity
-    );
-
-
-  const lowerTierQuantity =
-    Number.isFinite(
-      lowerTierQuantityValue
-    )
-      ? Math.max(
-          0,
-          lowerTierQuantityValue
-        )
-      : 0;
-
-
-  const hasLowerTierAlternative =
-
-    redeemScope ===
-      "current_or_lower"
-
-    &&
-
-    Boolean(
-      lowerTierName
-    )
-
-    &&
-
-    lowerTierQuantity > 0;
-
-
-  const modeDescription = {
-
-    checkbox:
-      `เลือกได้สูงสุด ${maxSelect} ชิ้น โดยแต่ละรายการเลือกได้ 1 ครั้ง`,
-
-    quantity:
-      `เลือกได้สูงสุด ${maxSelect} ชิ้น และเพิ่มจำนวนรายการเดิมได้`,
-
-    fixed_set:
-      "ได้รับของแถมในเซ็ตนี้อัตโนมัติ"
-
-  }[
-    selectionMode
-  ];
-
-
-  const redeemDescription =
-    hasLowerTierAlternative
-
-      ? `เลือกรับ ${tierName} หรือเปลี่ยนเป็น ${lowerTierName} รวม ${lowerTierQuantity} ชิ้น`
-
-      : "สิทธิ์ระดับนี้ใช้รับของแถมระดับนี้";
-
-
-  let html = `
-
-<div
-class="gift-tier-card"
-
-data-tier-key="${escapeHtml(
-  tierKey
-)}"
-
-data-collection-id="${escapeHtml(
-  collectionId
-)}"
-
-data-tier-name="${escapeHtml(
-  tierName
-)}"
-
-data-max="${maxSelect}"
-
-data-default-max="${maxSelect}"
-
-data-min-amount="${Number(
-  rule.min_amount || 0
-)}"
-
-data-selection-mode="${escapeHtml(
-  selectionMode
-)}"
-
-data-rule-mode="${escapeHtml(
-  rule.rule_mode || "stack"
-)}"
-
-data-redeem-scope="${escapeHtml(
-  redeemScope
-)}"
-
-data-lower-tier-name="${escapeHtml(
-  lowerTierName
-)}"
-
-data-lower-tier-quantity="${
-  lowerTierQuantity
-}"
-
-data-redemption-choice="current"
-
-style="
-margin-bottom:20px;
-padding:15px;
-border:1px solid #eee;
-border-radius:12px;
-"
->
-
-<h3
-style="
-margin-top:0;
-margin-bottom:8px;
-"
->
-
-🎁
-
-${escapeHtml(
-  tierName
-)}
-
-</h3>
-
-<div
-style="
-font-size:13px;
-color:#666;
-margin-bottom:12px;
-line-height:1.7;
-"
->
-
-ซื้อครบ
-
-฿${Number(
-  rule.min_amount || 0
-).toLocaleString()}
-
-<br>
-
-${modeDescription}
-
-<br>
-
-${redeemDescription}
-
-</div>
-
-`;
-
-
-  /*
-  =========================
-  ตัวเลือกรับ Tier ปัจจุบัน
-  หรือแลกเป็น Tier ต่ำกว่า
-  =========================
-  */
-
-  if(
-    hasLowerTierAlternative
-  ){
-
-    const choiceName =
-      `gift-redeem-${tierKey}`;
-
-    html += `
-
-<div
-class="gift-redemption-choice"
-
-style="
-padding:12px;
-margin-bottom:14px;
-border:1px solid #dcefff;
-background:#f8fcff;
-border-radius:12px;
-"
->
-
-<div
-style="
-font-size:13px;
-font-weight:700;
-margin-bottom:8px;
-"
->
-
-เลือกวิธีรับของแถม
-
-</div>
-
-<label
-style="
-display:flex;
-align-items:flex-start;
-gap:8px;
-padding:8px;
-cursor:pointer;
-"
->
-
-<input
-type="radio"
-
-class="gift-redeem-radio"
-
-name="${escapeHtml(
-  choiceName
-)}"
-
-value="current"
-
-data-tier-key="${escapeHtml(
-  tierKey
-)}"
-
-checked
->
-
-<span>
-
-รับของแถม
-
-<b>
-${escapeHtml(
-  tierName
-)}
-</b>
-
-ตามปกติ
-
-</span>
-
-</label>
-
-<label
-style="
-display:flex;
-align-items:flex-start;
-gap:8px;
-padding:8px;
-cursor:pointer;
-"
->
-
-<input
-type="radio"
-
-class="gift-redeem-radio"
-
-name="${escapeHtml(
-  choiceName
-)}"
-
-value="lower"
-
-data-tier-key="${escapeHtml(
-  tierKey
-)}"
->
-
-<span>
-
-เปลี่ยนเป็นของแถม
-
-<b>
-${escapeHtml(
-  lowerTierName
-)}
-</b>
-
-รวม
-
-<b>
-${lowerTierQuantity}
-ชิ้น
-</b>
-
-</span>
-
-</label>
-
-</div>
-
-`;
-
-  }
-
-
-  /*
-  =========================
-  กล่องนับจำนวน
-  =========================
-  */
-
-  if(
-    selectionMode ===
-    "fixed_set"
-  ){
-
-    html += `
-
-<div
-class="gift-tier-count"
-
-style="
-font-size:13px;
-font-weight:700;
-margin-bottom:12px;
-color:#4388aa;
-"
->
-
-รับของแถมเซ็ตนี้อัตโนมัติ
-
-</div>
-
-`;
-
-  }
-  else{
-
-    html += `
-
-<div
-class="gift-tier-count"
-
-style="
-font-size:13px;
-font-weight:700;
-margin-bottom:12px;
-"
->
-
-เลือกแล้ว 0 / ${maxSelect} ชิ้น
-
-</div>
-
-`;
-
-  }
-
-
-  /*
-  =========================
-  รายการของแถมใน Tier
-  =========================
-  */
-
-  html += `
-
-<div
-class="gift-tier-items"
-data-tier-items="${escapeHtml(
-  tierKey
-)}"
->
-
-`;
-
-
-  tierGifts.forEach(gift=>{
-
-    html +=
-      renderGiftByMode(
-
-        gift,
-
-        rule,
-
-        collectionId,
-
-        tierKey
-
-      );
-
-  });
-
-
-  html += `
-
-</div>
-
-</div>
-
-`;
-
-
-  return html;
-
-}
-
-async function loadAllGiftCharacters(){
-
-  const giftElements =
-    document.querySelectorAll(
-
-      ".gift-checkbox," +
-
-      ".gift-quantity," +
-
-      ".gift-fixed"
-
-    );
-
-
-  const loadedGiftIds =
-    new Set();
-
-
-  for(
-    const element of giftElements
-  ){
-
-    const giftId =
-      String(
-        element.dataset.giftId || ""
-      ).trim();
-
-
-    if(
-      !giftId ||
-      loadedGiftIds.has(
-        giftId
-      )
-    ){
-
-      continue;
-
-    }
-
-
-    loadedGiftIds.add(
-      giftId
-    );
-
-
-    await loadGiftCharacters(
-      giftId
-    );
-
-  }
-
-}
-
-async function loadGifts(){
-
-  const giftSection =
-    document.getElementById(
-      "giftSection"
-    );
-
-  const collectionTotals =
-    getCollectionTotals();
-
-  console.log(
-    "COLLECTION TOTALS",
-    collectionTotals
-  );
-
-  let html = "";
-
-  giftSection.innerHTML = `
-
-<div
-style="
-padding:14px;
-color:#666;
-text-align:center;
-">
-
-กำลังโหลดของแถม...
-
-</div>
-
-`;
-
-  try{
-
-    for(
-      const collectionId
-      in collectionTotals
-    ){
-
-      const total =
-        collectionTotals[
-          collectionId
-        ];
-
-      const rules =
-        await fetchGiftRules(
-
-          collectionId,
-
-          total
-
-        );
-
-      console.log(
-        "RULES",
-        collectionId,
-        rules
-      );
-
-      if(!rules.length){
-
-        continue;
-
-      }
-
-      const gifts =
-        await fetchGiftCampaigns(
-          collectionId
-        );
-
-      console.log(
-  "GIFT DEBUG",
-  {
-    collectionId,
-    total,
-    rules,
-    gifts,
-    ruleTiers:
-      rules.map(rule =>
-        String(
-          rule.tier_name || ""
-        ).trim()
-      ),
-    giftTiers:
-      gifts.map(gift =>
-        String(
-          gift.tier_name || ""
-        ).trim()
-      )
-  }
-);
-
-      console.log(
-        "GIFTS",
-        collectionId,
-        gifts
-      );
-
-      rules.forEach(rule=>{
-
-        html +=
-          renderGiftTier(
-
-            collectionId,
-
-            rule,
-
-            gifts
-
-          );
-
-      });
-
-    }
-
-    giftSection.innerHTML =
-      html;
-
-    if(!html){
-
-      console.warn(
-        "ไม่มีของแถมที่ผ่านเงื่อนไข"
-      );
-
-      return;
-
-    }
-
-    await loadAllGiftCharacters();
-
-    updateAllGiftTierCounts();
-
-  }
-  catch(error){
-
-    console.error(
-      "loadGifts error",
-      error
-    );
-
-    giftSection.innerHTML = `
-
-<div
-style="
-padding:14px;
-color:#c0392b;
-text-align:center;
-">
-
-โหลดข้อมูลของแถมไม่สำเร็จ
-
-</div>
-
-`;
-
-  }
-
-}
-
-function validateGiftRedemption(
-  showAlert = true
-){
-
-  const tierCards =
-    Array.from(
-      document.querySelectorAll(
-        ".gift-tier-card"
-      )
-    );
-
-
-  for(
-    const tierCard
-    of tierCards
-  ){
-
-    const isActive =
-      String(
-        tierCard.dataset
-          .redemptionActive ||
-        "yes"
-      ) !== "no";
-
-
-    const tierName =
-      String(
-        tierCard.dataset
-          .tierName ||
-        ""
-      ).trim();
-
-
-    const tierKey =
-      String(
-        tierCard.dataset
-          .tierKey ||
-        ""
-      ).trim();
-
-
-    const selectionMode =
-      String(
-        tierCard.dataset
-          .selectionMode ||
-        "checkbox"
-      )
-        .trim()
-        .toLowerCase();
-
-
-    const maxSelect =
-      Math.max(
-        0,
-        Number(
-          tierCard.dataset.max ||
-          0
-        )
-      );
-
-
-    /*
-    Tier ที่ถูกปิดเพราะเลือก
-    แลกสิทธิ์ลง Tier ต่ำกว่า
-    ต้องไม่มีรายการที่ถูกเลือกค้างอยู่
-    */
-
-    if(!isActive){
-
-      const selectedCount =
-        getGiftTierSelectedCount(
-          tierKey
-        );
-
-
-      if(
-        selectedCount > 0
-      ){
-
-        if(showAlert){
-
-          alert(
-            `ไม่สามารถเลือกของแถม ${tierName} ได้ เนื่องจากเลือกแลกสิทธิ์เป็น Tier ต่ำกว่าแล้ว`
-          );
-
-        }
-
-        return false;
-
-      }
-
-
-      continue;
-
-    }
-
-
-    /*
-    Fixed Set ได้รับอัตโนมัติ
-    ไม่ต้องตรวจจำนวนการเลือก
-    */
-
-    if(
-      selectionMode ===
-      "fixed_set"
-    ){
-
-      continue;
-
-    }
-
-
-    const selectedCount =
-      getGiftTierSelectedCount(
-        tierKey
-      );
-
-
-    if(
-      selectedCount >
-      maxSelect
-    ){
-
-      if(showAlert){
-
-        alert(
-          `ของแถม ${tierName} เลือกได้สูงสุด ${maxSelect} ชิ้น`
-        );
-
-      }
-
-      return false;
-
-    }
-
-  }
-
-
-  return true;
-
-}
-  
-function getGiftTierSelectedCount(
-  tierKey
-){
-
-  let total = 0;
-
-  document
-    .querySelectorAll(
-      ".gift-checkbox"
-    )
-    .forEach(checkbox=>{
-
-      if(
-        checkbox.dataset.tier === tierKey &&
-        checkbox.checked
-      ){
-
-        total += 1;
-
-      }
-
-    });
-
-  document
-    .querySelectorAll(
-      ".gift-quantity"
-    )
-    .forEach(input=>{
-
-      if(
-        input.dataset.tier === tierKey
-      ){
-
-        total +=
-          Number(
-            input.value || 0
-          );
-
-      }
-
-    });
-
-  return total;
-
-}
-
-function updateGiftTierCount(
-  tierKey
-){
-
-  const tierCard =
-    document.querySelector(
-      `.gift-tier-card[data-tier-key="${CSS.escape(
-        tierKey
-      )}"]`
-    );
-
-
-  if(!tierCard){
-
-    return;
-
-  }
-
-
-  const countBox =
-    tierCard.querySelector(
-      ".gift-tier-count"
-    );
-
-
-  if(!countBox){
-
-    return;
-
-  }
-
-
-  const isActive =
-    String(
-      tierCard.dataset
-        .redemptionActive ||
-      "yes"
-    ) !== "no";
-
-
-  if(!isActive){
-
-    countBox.textContent =
-      "เปลี่ยนสิทธิ์เป็นของแถม Tier ต่ำกว่าแล้ว";
-
-    countBox.style.color =
-      "#888";
-
-    return;
-
-  }
-
-
-  const selectionMode =
-    String(
-      tierCard.dataset
-        .selectionMode ||
-      "checkbox"
-    )
-      .trim()
-      .toLowerCase();
-
-
-  if(
-    selectionMode ===
-    "fixed_set"
-  ){
-
-    countBox.textContent =
-      "รับของแถมเซ็ตนี้อัตโนมัติ";
-
-    countBox.style.color =
-      "#4388aa";
-
-    return;
-
-  }
-
-
-  const selectedCount =
-    getGiftTierSelectedCount(
-      tierKey
-    );
-
-
-  const maxSelect =
-    Math.max(
-      0,
-      Number(
-        tierCard.dataset.max ||
-        0
-      )
-    );
-
-
-  countBox.textContent =
-    `เลือกแล้ว ${selectedCount} / ${maxSelect} ชิ้น`;
-
-  countBox.style.color =
-    selectedCount > maxSelect
-      ? "#c0392b"
-      : "";
-
-}
-  
-function updateAllGiftTierCounts(){
-
-  document
-    .querySelectorAll(
-      ".gift-tier-card"
-    )
-    .forEach(card=>{
-
-      updateGiftTierCount(
-        card.dataset.tierKey
-      );
-
-    });
-
-}
-
-  function findGiftTierCard(
-  collectionId,
-  tierName
-){
-
-  const normalizedTierName =
-    String(
-      tierName || ""
-    )
-      .trim()
-      .toLowerCase();
-
-  return Array.from(
-    document.querySelectorAll(
-      ".gift-tier-card"
-    )
-  )
-    .find(card=>
-
-      String(
-        card.dataset.collectionId || ""
-      ).trim() ===
-      String(
-        collectionId || ""
-      ).trim()
-
-      &&
-
-      String(
-        card.dataset.tierName || ""
-      )
-        .trim()
-        .toLowerCase() ===
-      normalizedTierName
-
-    ) || null;
-
-}
-
-
-function clearGiftTierSelections(
-  tierCard
-){
-
-  if(!tierCard){
-
-    return;
-
-  }
-
-  tierCard
-    .querySelectorAll(
-      ".gift-checkbox"
-    )
-    .forEach(checkbox=>{
-
-      checkbox.checked =
-        false;
-
-      const giftId =
-        checkbox.dataset.giftId ||
-        checkbox.value ||
-        "";
-
-      renderGiftCharacterSelectors(
-        giftId,
-        0
-      );
-
-    });
-
-
-  tierCard
-    .querySelectorAll(
-      ".gift-quantity"
-    )
-    .forEach(input=>{
-
-      input.value = 0;
-
-      const giftId =
-        input.dataset.giftId ||
-        "";
-
-      const quantityLabel =
-        document.getElementById(
-          `gift-qty-${giftId}`
-        );
-
-      if(quantityLabel){
-
-        quantityLabel.textContent =
-          "0";
-
-      }
-
-      renderGiftCharacterSelectors(
-        giftId,
-        0
-      );
-
-    });
-
-}
-
-
-function setGiftTierActiveState(
-  tierCard,
-  active
-){
-
-  if(!tierCard){
-
-    return;
-
-  }
-
-  tierCard.dataset.redemptionActive =
-    active
-      ? "yes"
-      : "no";
-
-
-  const itemsBox =
-    tierCard.querySelector(
-      ".gift-tier-items"
-    );
-
-
-  if(itemsBox){
-
-    itemsBox.style.opacity =
-      active
-        ? "1"
-        : ".45";
-
-    itemsBox.style.pointerEvents =
-      active
-        ? "auto"
-        : "none";
-
-  }
-
-
-  tierCard
-    .querySelectorAll(
-
-      ".gift-checkbox," +
-
-      ".gift-quantity," +
-
-      ".gift-fixed," +
-
-      ".gift-qty-plus," +
-
-      ".gift-qty-minus"
-
-    )
-    .forEach(element=>{
-
-      element.disabled =
-        !active;
-
-    });
-
-
-  if(!active){
-
-    clearGiftTierSelections(
-      tierCard
-    );
-
-  }
-
-}
-
-function updateTierRedemptionChoice(
-  tierKey,
-  choice
-){
-
-  const sourceTierCard =
-    document.querySelector(
-      `.gift-tier-card[data-tier-key="${CSS.escape(
-        tierKey
-      )}"]`
-    );
-
-  if(!sourceTierCard){
-
-    return;
-
-  }
-
-
-  const collectionId =
-    String(
-      sourceTierCard.dataset
-        .collectionId || ""
-    ).trim();
-
-
-  sourceTierCard.dataset
-    .redemptionChoice =
-      choice === "lower"
-        ? "lower"
-        : "current";
-
-
-  /*
-  =========================
-  รีเซ็ตทุก Tier ใน Collection
-  กลับเป็นสิทธิ์เดิมก่อน
-  =========================
-  */
-
-  const collectionTierCards =
-    Array.from(
-      document.querySelectorAll(
-        ".gift-tier-card"
-      )
-    )
-    .filter(card=>
-
-      String(
-        card.dataset.collectionId || ""
-      ).trim() ===
-      collectionId
-
-    );
-
-
-  collectionTierCards.forEach(card=>{
-
-    const defaultMax =
-      Math.max(
-        1,
-        Number(
-          card.dataset.defaultMax ||
-          card.dataset.max ||
-          1
-        )
-      );
-
-    card.dataset.max =
-      String(
-        defaultMax
-      );
-
-    setGiftTierActiveState(
-      card,
-      true
-    );
-
-  });
-
-
-  /*
-  =========================
-  ตรวจทุก Tier ที่เลือก
-  แลกเป็น Tier ต่ำกว่า
-  =========================
-  */
-
-  collectionTierCards.forEach(card=>{
-
-    const redemptionChoice =
-      String(
-        card.dataset
-          .redemptionChoice ||
-        "current"
-      )
-        .trim()
-        .toLowerCase();
-
-
-    if(
-      redemptionChoice !==
-      "lower"
-    ){
-
-      return;
-
-    }
-
-
-    const lowerTierName =
-      String(
-        card.dataset
-          .lowerTierName || ""
-      ).trim();
-
-
-    const lowerTierQuantity =
-      Math.max(
-        0,
-        Number(
-          card.dataset
-            .lowerTierQuantity || 0
-        )
-      );
-
-
-    const lowerTierCard =
-      findGiftTierCard(
-
-        collectionId,
-
-        lowerTierName
-
-      );
-
-
-    if(
-      !lowerTierCard ||
-      lowerTierQuantity <= 0
-    ){
-
-      console.warn(
-        "ไม่พบ Tier ต่ำกว่าสำหรับแลกสิทธิ์",
-        {
-          collectionId,
-          lowerTierName,
-          lowerTierQuantity
-        }
-      );
-
-      card.dataset
-        .redemptionChoice =
-          "current";
-
-      const currentRadio =
-        card.querySelector(
-          '.gift-redeem-radio[value="current"]'
-        );
-
-      if(currentRadio){
-
-        currentRadio.checked =
-          true;
-
-      }
-
-      return;
-
-    }
-
-
-    /*
-    ปิด Tier ต้นทาง
-    เช่น ปิด Tier 2
-    */
-
-    setGiftTierActiveState(
-      card,
-      false
-    );
-
-
-    /*
-    กำหนดสิทธิ์ Tier ต่ำกว่าเป็นยอดรวมใหม่
-
-    ตัวอย่าง:
-    Tier 1 เดิมเลือกได้ 1
-    แลกจาก Tier 2 แล้วเลือกได้รวม 2
-    ไม่ใช่ 1 + 2 = 3
-    */
-
-    lowerTierCard.dataset.max =
-      String(
-        Math.max(
-          Number(
-            lowerTierCard.dataset.max ||
-            0
-          ),
-          lowerTierQuantity
-        )
-      );
-
-  });
-
-
-  updateAllGiftTierCounts();
-
-}
-  
-function toggleGiftCharacterBox(
-  giftId,
-  show
-){
-
-  const charBox =
-    document.getElementById(
-      `gift-char-${giftId}`
-    );
-
-  if(!charBox){
-
-    return;
-
-  }
-
-  charBox.style.display =
-    show
-      ? "block"
-      : "none";
-
-  if(!show){
-
-    charBox
-      .querySelectorAll(
-        "input"
-      )
-      .forEach(input=>{
-
-        input.checked =
-          false;
-
-      });
-
-  }
-
-}
-
-document.addEventListener(
-  "change",
-  e=>{
-
-    if(
-      !e.target.classList.contains(
-        "gift-checkbox"
-      )
-    ){
-
-      return;
-
-    }
-
-    const checkbox =
-      e.target;
-
-    const tierKey =
-      checkbox.dataset.tier;
-
-
-    /*
-    ทดลองเลือกก่อน แล้วตรวจสิทธิ์รวม
-    */
-
-    if(
-      checkbox.checked &&
-      !validateGiftRedemption(
-        false
-      )
-    ){
-
-      checkbox.checked =
-        false;
-
-      alert(
-        "เลือกของแถมเกินสิทธิ์ที่ได้รับ"
-      );
-
-    }
-
-
-    renderGiftCharacterSelectors(
-
-      checkbox.value,
-
-      checkbox.checked
-        ? 1
-        : 0
-
-    );
-
-
-    updateAllGiftTierCounts();
-
-  }
-);
-
-  document.addEventListener(
-  "change",
-  e=>{
-
-    if(
-      !e.target.classList.contains(
-        "gift-redeem-radio"
-      )
-    ){
-
-      return;
-
-    }
-
-
-    const radio =
-      e.target;
-
-
-    updateTierRedemptionChoice(
-
-      radio.dataset.tierKey,
-
-      radio.value
-
-    );
-
-
-    if(
-      !validateGiftRedemption(
-        false
-      )
-    ){
-
-      const tierCard =
-        radio.closest(
-          ".gift-tier-card"
-        );
-
-
-      const currentRadio =
-        tierCard
-          ? tierCard.querySelector(
-              '.gift-redeem-radio[value="current"]'
-            )
-          : null;
-
-
-      if(currentRadio){
-
-        currentRadio.checked =
-          true;
-
-
-        updateTierRedemptionChoice(
-
-          currentRadio.dataset
-            .tierKey,
-
-          "current"
-
-        );
-
-      }
-
-
-      alert(
-        "ไม่สามารถเปลี่ยนรูปแบบการรับของแถมได้"
-      );
-
-    }
-
-  }
-);
-
-  document.addEventListener(
-  "click",
-  e=>{
-
-    const plusButton =
-      e.target.closest(
-        ".gift-qty-plus"
-      );
-
-    const minusButton =
-      e.target.closest(
-        ".gift-qty-minus"
-      );
-
-    if(
-      !plusButton &&
-      !minusButton
-    ){
-
-      return;
-
-    }
-
-    const button =
-      plusButton ||
-      minusButton;
-
-    const giftId =
-      button.dataset.giftId;
-
-    const quantityInput =
-      document.querySelector(
-        `.gift-quantity[data-gift-id="${CSS.escape(
-          giftId
-        )}"]`
-      );
-
-    if(!quantityInput){
-
-      return;
-
-    }
-
-    let quantity =
-      Number(
-        quantityInput.value || 0
-      );
-
-    if(plusButton){
-
-  quantity++;
-
-  quantityInput.value =
-    quantity;
-
-
-  if(
-    !validateGiftRedemption(
-      false
-    )
-  ){
-
-    quantity--;
-
-    quantityInput.value =
-      quantity;
-
-    alert(
-      "เลือกของแถมเกินสิทธิ์ที่ได้รับ"
-    );
-
-    return;
-
-  }
-
-}
-
-    if(minusButton){
-
-      quantity =
-        Math.max(
-          0,
-          quantity - 1
-        );
-
-    }
-
-    quantityInput.value =
-      quantity;
-
-    const qtyLabel =
-      document.getElementById(
-        `gift-qty-${giftId}`
-      );
-
-    if(qtyLabel){
-
-      qtyLabel.textContent =
-        quantity;
-
-    }
-
-    renderGiftCharacterSelectors(
-      giftId,
-      quantity
-    );
-
-    updateAllGiftTierCounts();
-
-  }
-);
-
-const giftCharacterMap = {};
-
-
-function renderGiftCharacterSelectors(
-  giftId,
-  quantity
-){
-
-  const box =
-    document.getElementById(
-      `gift-char-${giftId}`
-    );
-
-  if(!box){
-
-    return;
-
-  }
-
-  const chars =
-    giftCharacterMap[
-      giftId
-    ] || [];
-
-  quantity =
-    Math.max(
-      0,
-      Number(
-        quantity || 0
-      )
-    );
-
-  if(
-    !chars.length ||
-    quantity <= 0
-  ){
-
-    box.innerHTML = "";
-
-    box.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  const previousSelections = [];
-
-  box
-    .querySelectorAll(
-      ".gift-character-group"
-    )
-    .forEach((group,index)=>{
-
-      const selected =
-        group.querySelector(
-          "input[type='radio']:checked"
-        );
-
-      previousSelections[
-        index
-      ] =
-        selected
-          ? selected.value
-          : "";
-
-    });
-
-
-  let html = "";
-
-  for(
-    let itemIndex = 0;
-    itemIndex < quantity;
-    itemIndex++
-  ){
-
-    const previousValue =
-      previousSelections[
-        itemIndex
-      ] || "";
-
-    html += `
-
-<div
-class="gift-character-group"
-data-gift-id="${escapeHtml(
-  giftId
-)}"
-data-item-index="${itemIndex}"
-style="
-margin-top:10px;
-padding:10px;
-border:1px solid #e5e5e5;
-border-radius:10px;
-"
->
-
-<div
-style="
-font-size:13px;
-font-weight:700;
-margin-bottom:8px;
-"
->
-
-เลือกตัวละครสำหรับชิ้นที่
-${itemIndex + 1}
-
-</div>
-
-`;
-
-    chars.forEach(char=>{
-
-      const characterName =
-        String(
-          char.character_name || ""
-        );
-
-      const checked =
-        previousValue ===
-        characterName;
-
-      html += `
-
-<label
-class="gift-char-item"
-style="
-display:flex;
-align-items:center;
-gap:8px;
-margin-bottom:6px;
-cursor:pointer;
-"
->
-
-<input
-type="radio"
-
-name="gift-char-${escapeHtml(
-  giftId
-)}-${itemIndex}"
-
-value="${escapeHtml(
-  characterName
-)}"
-
-${checked ? "checked" : ""}
->
-
-<div class="gift-char-name">
-
-${escapeHtml(
-  characterName
-)}
-
-</div>
-
-</label>
-
-`;
-
-    });
-
-    html += `
-
-</div>
-
-`;
-
-  }
-
-  box.innerHTML =
-    html;
-
-  box.style.display =
-    "block";
-
-}
-
-
-async function loadGiftCharacters(
-  giftId
-){
-
-  try{
-
-    const response =
-      await fetch(
-
-        API +
-
-        "?action=giftCharacters" +
-
-        "&gift_id=" +
-
-        encodeURIComponent(
-          giftId
-        )
-
-      );
-
-    const result =
-      await response.json();
-
-    const chars =
-      Array.isArray(
-        result
-      )
-        ? result
-        : Array.isArray(
-            result.characters
-          )
-            ? result.characters
-            : [];
-
-    console.log(
-      "CHARS",
-      giftId,
-      chars
-    );
-
-    giftCharacterMap[
-      giftId
-    ] =
-      chars;
-
-    const quantityInput =
-      document.querySelector(
-        `.gift-quantity[data-gift-id="${CSS.escape(
-          giftId
-        )}"]`
-      );
-
-    const checkbox =
-  document.querySelector(
-    `.gift-checkbox[data-gift-id="${CSS.escape(
-      giftId
-    )}"]`
-  );
-
-const fixedInput =
-  document.querySelector(
-    `.gift-fixed[data-gift-id="${CSS.escape(
-      giftId
-    )}"]`
-  );
-
-let quantity = 0;
-
-if(quantityInput){
-
-  quantity =
-    Number(
-      quantityInput.value || 0
-    );
-
-}
-else if(
-  checkbox &&
-  checkbox.checked
-){
-
-  quantity = 1;
-
-}
-else if(fixedInput){
-
-  quantity = 1;
-
-}
-
-    renderGiftCharacterSelectors(
-      giftId,
-      quantity
-    );
-
-  }
-  catch(error){
-
-    console.error(
-      "loadGiftCharacters error",
-      giftId,
-      error
-    );
-
-  }
-
-}
-  
 </script>
 
 </body>
