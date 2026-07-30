@@ -1713,6 +1713,14 @@ function openGiftModal(
   }
   else if(
     adminGiftModalMode ===
+    "item"
+  ){
+
+    renderGiftItemForm();
+
+  }
+  else if(
+    adminGiftModalMode ===
     "exclusions"
   ){
 
@@ -1848,6 +1856,17 @@ function submitGiftModal(){
   ){
 
     submitGiftRule();
+
+    return;
+
+  }
+
+  if(
+    adminGiftModalMode ===
+    "item"
+  ){
+
+    submitGiftItem();
 
     return;
 
@@ -2186,6 +2205,827 @@ async function submitGiftRule(){
   }
 
 }
+
+/*
+=========================================
+GIFT ITEM FORM
+=========================================
+*/
+
+function renderGiftItemForm(){
+
+  const modalTitle =
+    document.getElementById(
+      "giftModalTitle"
+    );
+
+  const modalBody =
+    document.getElementById(
+      "giftModalBody"
+    );
+
+  if(
+    !modalTitle ||
+    !modalBody
+  ){
+
+    return;
+
+  }
+
+  const isEdit =
+    adminGiftModalAction ===
+    "edit";
+
+  let item = null;
+
+  if(isEdit){
+
+    item =
+      adminGiftItems.find(
+        row =>
+
+          String(
+            row.gift_item_id || ""
+          ) ===
+          String(
+            adminGiftModalRecordId || ""
+          )
+      );
+
+    if(!item){
+
+      modalTitle.textContent =
+        "✏️ แก้ไข Gift Item";
+
+      modalBody.innerHTML = `
+
+<div class="gift-error full">
+ไม่พบข้อมูล Gift Item ที่ต้องการแก้ไข
+</div>
+
+`;
+
+      return;
+
+    }
+
+  }
+
+  const ruleId =
+    isEdit
+      ? String(
+          item.rule_id || ""
+        )
+      : String(
+          adminGiftModalParentId || ""
+        );
+
+  const rule =
+    adminGiftRules.find(
+      row =>
+
+        String(
+          row.rule_id || ""
+        ) ===
+        ruleId
+    );
+
+  if(!rule){
+
+    modalTitle.textContent =
+      isEdit
+        ? "✏️ แก้ไข Gift Item"
+        : "＋ เพิ่ม Gift Item";
+
+    modalBody.innerHTML = `
+
+<div class="gift-error full">
+ไม่พบ Rule สำหรับ Gift Item นี้
+</div>
+
+`;
+
+    return;
+
+  }
+
+  const giftName =
+    item
+      ? item.gift_name || ""
+      : "";
+
+  const giftImage =
+    item
+      ? item.gift_image || ""
+      : "";
+
+  const hasCharacter =
+    item
+      ? normalizeGiftAdminYes(
+          item.has_character
+        )
+      : false;
+
+  const maxSameCharacter =
+    item &&
+    hasCharacter
+      ? Math.max(
+          1,
+          Number(
+            item.max_same_character
+          ) || 1
+        )
+      : 1;
+
+  const sortOrder =
+    item
+      ? Math.max(
+          0,
+          Number(
+            item.sort_order
+          ) || 0
+        )
+      : 0;
+
+  const isActive =
+    item
+      ? normalizeGiftAdminYes(
+          item.active
+        )
+      : true;
+
+  modalTitle.textContent =
+    isEdit
+      ? "✏️ แก้ไข Gift Item"
+      : "＋ เพิ่ม Gift Item";
+
+  modalBody.innerHTML = `
+
+<input
+  type="hidden"
+  id="giftItemId"
+  value="${escapeHtml(
+    item
+      ? item.gift_item_id || ""
+      : ""
+  )}"
+>
+
+<input
+  type="hidden"
+  id="giftItemRuleId"
+  value="${escapeHtml(
+    ruleId
+  )}"
+>
+
+<div class="full">
+
+<label>
+Rule
+</label>
+
+<br><br>
+
+<input
+  type="text"
+  value="${escapeHtml(
+    rule.rule_name ||
+    ruleId
+  )}"
+  disabled
+>
+
+</div>
+
+<div class="full">
+
+<label for="giftItemName">
+ชื่อ Gift Item
+<span style="color:#ef4444;">*</span>
+</label>
+
+<br><br>
+
+<input
+  type="text"
+  id="giftItemName"
+  value="${escapeHtml(
+    giftName
+  )}"
+  placeholder="เช่น โปสการ์ดสุ่ม 1 ใบ"
+>
+
+</div>
+
+<div class="full">
+
+<label for="giftItemImage">
+ลิงก์รูปของแถม
+</label>
+
+<br><br>
+
+<input
+  type="url"
+  id="giftItemImage"
+  value="${escapeHtml(
+    giftImage
+  )}"
+  placeholder="https://..."
+  oninput="previewGiftItemImage()"
+>
+
+</div>
+
+<div
+  id="giftItemImagePreviewBox"
+  class="full"
+  style="${
+    giftImage
+      ? ""
+      : "display:none;"
+  }"
+>
+
+<label>
+ตัวอย่างรูป
+</label>
+
+<br><br>
+
+<img
+  id="giftItemImagePreview"
+  src="${escapeHtml(
+    giftImage
+  )}"
+  alt="Gift Item Preview"
+  style="
+    width:100%;
+    max-height:280px;
+    object-fit:contain;
+    background:#f1f5f9;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+  "
+  onerror="this.closest('#giftItemImagePreviewBox').style.display='none'"
+>
+
+</div>
+
+<div
+  class="full"
+  style="
+    border:1px solid #dbeafe;
+    background:#f8fbff;
+    border-radius:14px;
+    padding:16px;
+  "
+>
+
+<label
+  style="
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    cursor:pointer;
+  "
+>
+
+<input
+  type="checkbox"
+  id="giftItemHasCharacter"
+  ${hasCharacter ? "checked" : ""}
+  style="width:auto;margin-top:3px;"
+  onchange="toggleGiftItemCharacterFields()"
+>
+
+<span>
+
+<strong>
+มีตัวเลือกตัวละคร
+</strong>
+
+<br>
+
+<span
+  style="font-size:13px;color:#64748b;"
+>
+เปิดใช้เมื่อของแถมชิ้นนี้ให้ลูกค้าเลือกตัวละคร
+</span>
+
+</span>
+
+</label>
+
+</div>
+
+<div
+  id="giftItemMaxSameCharacterBox"
+  class="full"
+  style="${
+    hasCharacter
+      ? ""
+      : "display:none;"
+  }"
+>
+
+<label for="giftItemMaxSameCharacter">
+เลือกตัวละครเดิมได้สูงสุด
+<span style="color:#ef4444;">*</span>
+</label>
+
+<br><br>
+
+<input
+  type="number"
+  id="giftItemMaxSameCharacter"
+  value="${maxSameCharacter}"
+  min="1"
+  step="1"
+>
+
+</div>
+
+<div>
+
+<label for="giftItemSortOrder">
+ลำดับการแสดงผล
+</label>
+
+<br><br>
+
+<input
+  type="number"
+  id="giftItemSortOrder"
+  value="${sortOrder}"
+  min="0"
+  step="1"
+>
+
+</div>
+
+<div>
+
+<label for="giftItemActive">
+สถานะ
+</label>
+
+<br><br>
+
+<select id="giftItemActive">
+
+<option
+  value="yes"
+  ${isActive ? "selected" : ""}
+>
+เปิดใช้งาน
+</option>
+
+<option
+  value=""
+  ${!isActive ? "selected" : ""}
+>
+ปิดใช้งาน
+</option>
+
+</select>
+
+</div>
+
+<div class="full">
+
+<label>
+Gift Item ID
+</label>
+
+<br><br>
+
+<input
+  type="text"
+  value="${escapeHtml(
+    item
+      ? item.gift_item_id || ""
+      : "สร้างอัตโนมัติเมื่อบันทึก"
+  )}"
+  disabled
+>
+
+</div>
+
+`;
+
+  window.setTimeout(
+    () => {
+
+      const nameInput =
+        document.getElementById(
+          "giftItemName"
+        );
+
+      if(nameInput){
+
+        nameInput.focus();
+
+      }
+
+    },
+    50
+  );
+
+}
+
+
+function toggleGiftItemCharacterFields(){
+
+  const checkbox =
+    document.getElementById(
+      "giftItemHasCharacter"
+    );
+
+  const box =
+    document.getElementById(
+      "giftItemMaxSameCharacterBox"
+    );
+
+  if(!box){
+
+    return;
+
+  }
+
+  box.style.display =
+    checkbox && checkbox.checked
+      ? ""
+      : "none";
+
+}
+
+
+function previewGiftItemImage(){
+
+  const input =
+    document.getElementById(
+      "giftItemImage"
+    );
+
+  const box =
+    document.getElementById(
+      "giftItemImagePreviewBox"
+    );
+
+  const image =
+    document.getElementById(
+      "giftItemImagePreview"
+    );
+
+  if(
+    !input ||
+    !box ||
+    !image
+  ){
+
+    return;
+
+  }
+
+  const url =
+    input.value.trim();
+
+  if(!url){
+
+    image.removeAttribute(
+      "src"
+    );
+
+    box.style.display =
+      "none";
+
+    return;
+
+  }
+
+  image.src = url;
+
+  box.style.display =
+    "";
+
+}
+
+
+async function submitGiftItem(){
+
+  const giftItemIdInput =
+    document.getElementById(
+      "giftItemId"
+    );
+
+  const ruleIdInput =
+    document.getElementById(
+      "giftItemRuleId"
+    );
+
+  const nameInput =
+    document.getElementById(
+      "giftItemName"
+    );
+
+  const imageInput =
+    document.getElementById(
+      "giftItemImage"
+    );
+
+  const hasCharacterInput =
+    document.getElementById(
+      "giftItemHasCharacter"
+    );
+
+  const maxSameCharacterInput =
+    document.getElementById(
+      "giftItemMaxSameCharacter"
+    );
+
+  const sortOrderInput =
+    document.getElementById(
+      "giftItemSortOrder"
+    );
+
+  const activeInput =
+    document.getElementById(
+      "giftItemActive"
+    );
+
+  const saveButton =
+    document.getElementById(
+      "giftModalSaveBtn"
+    );
+
+  const loading =
+    document.getElementById(
+      "giftModalLoading"
+    );
+
+  const hasCharacter =
+    Boolean(
+      hasCharacterInput &&
+      hasCharacterInput.checked
+    );
+
+  const payload = {
+
+    gift_item_id:
+      giftItemIdInput
+        ? giftItemIdInput.value.trim()
+        : "",
+
+    rule_id:
+      ruleIdInput
+        ? ruleIdInput.value.trim()
+        : "",
+
+    gift_name:
+      nameInput
+        ? nameInput.value.trim()
+        : "",
+
+    gift_image:
+      imageInput
+        ? imageInput.value.trim()
+        : "",
+
+    has_character:
+      hasCharacter
+        ? "yes"
+        : "",
+
+    max_same_character:
+      hasCharacter &&
+      maxSameCharacterInput
+        ? Number(
+            maxSameCharacterInput.value
+          )
+        : 0,
+
+    active:
+      activeInput
+        ? activeInput.value
+        : "",
+
+    sort_order:
+      sortOrderInput
+        ? Number(
+            sortOrderInput.value
+          )
+        : 0
+
+  };
+
+  if(!payload.rule_id){
+
+    alert(
+      "ไม่พบ Rule สำหรับ Gift Item นี้"
+    );
+
+    return;
+
+  }
+
+  if(!payload.gift_name){
+
+    alert(
+      "กรุณากรอกชื่อ Gift Item"
+    );
+
+    if(nameInput){
+
+      nameInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    payload.gift_image &&
+    !/^https?:\/\//i.test(
+      payload.gift_image
+    )
+  ){
+
+    alert(
+      "ลิงก์รูปต้องขึ้นต้นด้วย http:// หรือ https://"
+    );
+
+    if(imageInput){
+
+      imageInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    hasCharacter &&
+    (
+      !Number.isInteger(
+        payload.max_same_character
+      ) ||
+      payload.max_same_character < 1
+    )
+  ){
+
+    alert(
+      "จำนวนตัวละครเดิมสูงสุดต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
+    );
+
+    if(maxSameCharacterInput){
+
+      maxSameCharacterInput.focus();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    !Number.isFinite(
+      payload.sort_order
+    ) ||
+    payload.sort_order < 0
+  ){
+
+    payload.sort_order = 0;
+
+  }else{
+
+    payload.sort_order =
+      Math.floor(
+        payload.sort_order
+      );
+
+  }
+
+  if(saveButton){
+
+    saveButton.disabled = true;
+
+    saveButton.textContent =
+      "กำลังบันทึก...";
+
+  }
+
+  if(loading){
+
+    loading.style.display =
+      "block";
+
+    loading.textContent =
+      "⏳ กำลังบันทึก Gift Item...";
+
+  }
+
+  try{
+
+    const action =
+      payload.gift_item_id
+        ? "updateGiftItem"
+        : "saveGiftItem";
+
+    const result =
+      await postGiftAdminAction(
+        action,
+        payload
+      );
+
+    const savedItemId =
+      String(
+        result.gift_item_id ||
+        (
+          result.gift_item &&
+          result.gift_item.gift_item_id
+        ) ||
+        payload.gift_item_id ||
+        ""
+      );
+
+    adminGiftOpenNodes.add(
+      createGiftNodeKey(
+        "rule",
+        payload.rule_id
+      )
+    );
+
+    if(savedItemId){
+
+      adminGiftOpenNodes.add(
+        createGiftNodeKey(
+          "item",
+          savedItemId
+        )
+      );
+
+    }
+
+    alert(
+      payload.gift_item_id
+        ? "แก้ไข Gift Item เรียบร้อยแล้ว"
+        : "เพิ่ม Gift Item เรียบร้อยแล้ว"
+    );
+
+    closeGiftModal();
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "submitGiftItem error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "บันทึก Gift Item ไม่สำเร็จ"
+    );
+
+  }finally{
+
+    const currentSaveButton =
+      document.getElementById(
+        "giftModalSaveBtn"
+      );
+
+    const currentLoading =
+      document.getElementById(
+        "giftModalLoading"
+      );
+
+    if(currentSaveButton){
+
+      currentSaveButton.disabled =
+        false;
+
+      currentSaveButton.textContent =
+        "💾 บันทึก";
+
+    }
+
+    if(currentLoading){
+
+      currentLoading.style.display =
+        "none";
+
+    }
+
+  }
+
+}
+
 
 /*
 =========================================
@@ -4252,7 +5092,7 @@ async function requestDeleteGiftRule(
 
 /*
 =========================================
-GIFT ITEM PLACEHOLDER ACTIONS
+GIFT ITEM ACTIONS
 =========================================
 */
 
@@ -4260,9 +5100,46 @@ function openCreateGiftItem(
   ruleId
 ){
 
-  alert(
-    "เพิ่ม Gift Item ใน Rule: " +
-    ruleId
+  const normalizedRuleId =
+    String(
+      ruleId || ""
+    ).trim();
+
+  if(!normalizedRuleId){
+
+    alert(
+      "ไม่พบ Rule ID"
+    );
+
+    return;
+
+  }
+
+  const ruleExists =
+    adminGiftRules.some(
+      rule =>
+
+        String(
+          rule.rule_id || ""
+        ) ===
+        normalizedRuleId
+    );
+
+  if(!ruleExists){
+
+    alert(
+      "ไม่พบข้อมูล Rule"
+    );
+
+    return;
+
+  }
+
+  openGiftModal(
+    "item",
+    "create",
+    "",
+    normalizedRuleId
   );
 
 }
@@ -4272,24 +5149,236 @@ function openEditGiftItem(
   giftItemId
 ){
 
-  alert(
-    "แก้ไข Gift Item: " +
-    giftItemId
+  const normalizedGiftItemId =
+    String(
+      giftItemId || ""
+    ).trim();
+
+  if(!normalizedGiftItemId){
+
+    alert(
+      "ไม่พบ Gift Item ID"
+    );
+
+    return;
+
+  }
+
+  const item =
+    adminGiftItems.find(
+      row =>
+
+        String(
+          row.gift_item_id || ""
+        ) ===
+        normalizedGiftItemId
+    );
+
+  if(!item){
+
+    alert(
+      "ไม่พบข้อมูล Gift Item"
+    );
+
+    return;
+
+  }
+
+  openGiftModal(
+    "item",
+    "edit",
+    normalizedGiftItemId,
+    String(
+      item.rule_id || ""
+    )
   );
 
 }
 
 
-function requestDeleteGiftItem(
+async function requestDeleteGiftItem(
   giftItemId
 ){
 
-  alert(
-    "ลบ Gift Item: " +
-    giftItemId
-  );
+  const normalizedGiftItemId =
+    String(
+      giftItemId || ""
+    ).trim();
+
+  if(!normalizedGiftItemId){
+
+    alert(
+      "ไม่พบ Gift Item ID"
+    );
+
+    return;
+
+  }
+
+  const item =
+    adminGiftItems.find(
+      row =>
+
+        String(
+          row.gift_item_id || ""
+        ) ===
+        normalizedGiftItemId
+    );
+
+  if(!item){
+
+    alert(
+      "ไม่พบข้อมูล Gift Item"
+    );
+
+    return;
+
+  }
+
+  const childCharacters =
+    adminGiftCharacters.filter(
+      character =>
+
+        String(
+          character.gift_item_id || ""
+        ) ===
+        normalizedGiftItemId
+    );
+
+  if(childCharacters.length){
+
+    alert(
+      "ไม่สามารถลบ Gift Item \"" +
+      String(
+        item.gift_name ||
+        normalizedGiftItemId
+      ) +
+      "\" ได้\n\n" +
+      "Gift Item นี้ยังมี Character อยู่ " +
+      childCharacters.length +
+      " รายการ\n" +
+      "กรุณาลบ Character ภายในก่อน"
+    );
+
+    return;
+
+  }
+
+  const confirmed =
+    confirm(
+      "ต้องการลบ Gift Item นี้ใช่ไหม?\n\n" +
+      String(
+        item.gift_name ||
+        normalizedGiftItemId
+      ) +
+      "\n\nเมื่อลบแล้วจะไม่สามารถกู้คืนได้"
+    );
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+  const itemNode =
+    document.querySelector(
+      '[data-gift-node="' +
+      CSS.escape(
+        createGiftNodeKey(
+          "item",
+          normalizedGiftItemId
+        )
+      ) +
+      '"]'
+    );
+
+  const deleteButton =
+    itemNode
+      ? itemNode.querySelector(
+          ".gift-delete-btn"
+        )
+      : null;
+
+  if(deleteButton){
+
+    deleteButton.disabled = true;
+
+    deleteButton.textContent =
+      "กำลังลบ...";
+
+  }
+
+  try{
+
+    await postGiftAdminAction(
+      "deleteGiftItem",
+      {
+        gift_item_id:
+          normalizedGiftItemId
+      }
+    );
+
+    adminGiftOpenNodes.delete(
+      createGiftNodeKey(
+        "item",
+        normalizedGiftItemId
+      )
+    );
+
+    const ruleId =
+      String(
+        item.rule_id || ""
+      );
+
+    if(ruleId){
+
+      adminGiftOpenNodes.add(
+        createGiftNodeKey(
+          "rule",
+          ruleId
+        )
+      );
+
+    }
+
+    alert(
+      "ลบ Gift Item เรียบร้อยแล้ว"
+    );
+
+    await loadGiftCampaigns();
+
+  }catch(error){
+
+    console.error(
+      "requestDeleteGiftItem error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "ลบ Gift Item ไม่สำเร็จ"
+    );
+
+  }finally{
+
+    if(
+      deleteButton &&
+      document.body.contains(
+        deleteButton
+      )
+    ){
+
+      deleteButton.disabled = false;
+
+      deleteButton.textContent =
+        "🗑️ ลบ";
+
+    }
+
+  }
 
 }
+
 
 function openCampaignExclusions(
   campaignId
