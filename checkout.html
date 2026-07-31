@@ -1535,9 +1535,7 @@ function getCampaignEligibleCartItems(
 
   if(
     !campaign ||
-    !Array.isArray(
-      cart
-    ) ||
+    !Array.isArray(cart) ||
     cart.length===0
   ){
 
@@ -1547,243 +1545,116 @@ function getCampaignEligibleCartItems(
 
 
   const campaignId =
-    normalizeText(
+    normalizeGiftId(
       campaign.campaign_id ||
       campaign.gift_id
     );
 
 
   const collectionId =
-    normalizeText(
+    normalizeGiftId(
       campaign.collection_id
     );
 
 
   const campaignFandom =
-    normalizeText(
+    String(
       getCampaignFandom(
         campaign
-      )
-    ).toLowerCase();
+      ) || ""
+    )
+      .trim()
+      .toLowerCase();
 
 
-  const eligibilityScope =
-    normalizeText(
+  /*
+  รองรับชื่อทั้ง V2 และชื่อเก่าที่เคยใช้
+  */
+
+  const rawScope =
+    String(
       campaign.eligibility_scope ||
-      "collection"
-    ).toLowerCase();
+      "collection_only"
+    )
+      .trim()
+      .toLowerCase();
 
 
-  const requireCampaignItem =
-    normalizeGiftBoolean(
-      campaign.require_campaign_item
-    );
-
-
-  const excludedProductIds =
-    new Set(
-      (
-        checkoutGiftState.exclusions ||
-        []
-      )
-      .filter(
-        exclusion=>{
-
-          return (
-            normalizeText(
-              exclusion.campaign_id
-            ) ===
-            campaignId
-          );
-
-        }
-      )
-      .map(
-        exclusion=>
-          normalizeText(
-            exclusion.product_id
-          )
-      )
-      .filter(Boolean)
-    );
-
-
-  const matchedItems =
-    cart.filter(
-      item=>{
-
-        const productId =
-          normalizeText(
-            item.product_id
-          );
-
-
-        if(
-          productId &&
-          excludedProductIds.has(
-            productId
-          )
-        ){
-
-          return false;
-
-        }
-
-
-        const itemCollectionId =
-          normalizeText(
-            item.collection_id
-          );
-
-
-        const itemFandom =
-          normalizeText(
-            item.fandom
-          ).toLowerCase();
-
-
-        /*
-        =========================
-        COLLECTION
-        =========================
-        */
-
-        if(
-          eligibilityScope ===
-          "collection"
-        ){
-
-          if(!collectionId){
-
-            return false;
-
-          }
-
-          return (
-            itemCollectionId ===
-            collectionId
-          );
-
-        }
-
-
-        /*
-        =========================
-        FANDOM
-        =========================
-        */
-
-        if(
-          eligibilityScope ===
-          "fandom"
-        ){
-
-          if(!campaignFandom){
-
-            return false;
-
-          }
-
-          return (
-            itemFandom ===
-            campaignFandom
-          );
-
-        }
-
-
-        /*
-        =========================
-        ALL
-        =========================
-        */
-
-        if(
-          eligibilityScope ===
-          "all"
-        ){
-
-          return true;
-
-        }
-
-
-        /*
-        fallback
-        ถ้าค่าเก่าไม่มี scope ชัดเจน
-        */
-
-        if(collectionId){
-
-          return (
-            itemCollectionId ===
-            collectionId
-          );
-
-        }
-
-
-        if(campaignFandom){
-
-          return (
-            itemFandom ===
-            campaignFandom
-          );
-
-        }
-
-
-        return false;
-
-      }
-    );
+  let scope =
+    rawScope;
 
 
   if(
-    matchedItems.length===0
+    scope === "collection"
   ){
 
-    return [];
+    scope =
+      "collection_only";
 
   }
 
 
+  if(
+    scope === "fandom"
+  ){
+
+    scope =
+      "fandom_all";
+
+  }
+
+
+  const excludedProductIds =
+    getCampaignExcludedProductIds(
+      campaignId
+    );
+
+
   /*
-  ถ้า campaign กำหนดว่า
-  ต้องมีสินค้าจาก campaign/collection นี้จริง ๆ
+  =========================================
+  ต้องมีสินค้าจาก Campaign ก่อนหรือไม่
+  =========================================
   */
 
   if(
-    requireCampaignItem
+    normalizeGiftBoolean(
+      campaign.require_campaign_item
+    )
   ){
 
     const hasCampaignItem =
-      matchedItems.some(
+      cart.some(
         item=>{
 
-          if(collectionId){
-
-            return (
-              normalizeText(
-                item.collection_id
-              ) ===
-              collectionId
+          const productId =
+            normalizeGiftId(
+              item.product_id
             );
+
+
+          if(
+            excludedProductIds.has(
+              productId
+            )
+          ){
+
+            return false;
 
           }
 
-          if(campaignFandom){
 
-            return (
-              normalizeText(
-                item.fandom
-              ).toLowerCase() ===
-              campaignFandom
-            );
+          return (
 
-          }
+            normalizeGiftId(
+              item.collection_id
+            ) ===
+            collectionId &&
 
-          return false;
+            getCartItemQty(
+              item
+            ) > 0
+
+          );
 
         }
       );
@@ -1798,7 +1669,135 @@ function getCampaignEligibleCartItems(
   }
 
 
-  return matchedItems;
+  /*
+  =========================================
+  กรองสินค้าที่ใช้คำนวณยอด
+  =========================================
+  */
+
+  return cart.filter(
+    item=>{
+
+      const productId =
+        normalizeGiftId(
+          item.product_id
+        );
+
+
+      if(
+        excludedProductIds.has(
+          productId
+        )
+      ){
+
+        return false;
+
+      }
+
+
+      if(
+        getCartItemQty(
+          item
+        ) <= 0
+      ){
+
+        return false;
+
+      }
+
+
+      const itemCollectionId =
+        normalizeGiftId(
+          item.collection_id
+        );
+
+
+      const itemFandom =
+        String(
+          item.fandom || ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      /*
+      =========================
+      Collection only
+      =========================
+      */
+
+      if(
+        scope ===
+        "collection_only"
+      ){
+
+        return (
+
+          !!collectionId &&
+
+          itemCollectionId ===
+          collectionId
+
+        );
+
+      }
+
+
+      /*
+      =========================
+      Fandom all
+      =========================
+      */
+
+      if(
+        scope ===
+        "fandom_all"
+      ){
+
+        return (
+
+          !!campaignFandom &&
+
+          itemFandom ===
+          campaignFandom
+
+        );
+
+      }
+
+
+      /*
+      =========================
+      All cart
+      compatibility
+      =========================
+      */
+
+      if(
+        scope === "all"
+      ){
+
+        return true;
+
+      }
+
+
+      /*
+      Unknown scope:
+      ปลอดภัยไว้ก่อน ไม่เอาสินค้าเข้า
+      =========================
+      */
+
+      console.warn(
+        "Unknown gift eligibility_scope:",
+        rawScope,
+        campaignId
+      );
+
+      return false;
+
+    }
+  );
 
 }
 
@@ -1858,60 +1857,44 @@ function buildEligibleGiftCampaigns(){
   const rules =
     checkoutGiftState.rules || [];
 
+  const giftItems =
+    checkoutGiftState.items || [];
+
 
   campaigns.forEach(
     campaign=>{
 
       const campaignId =
-        normalizeText(
+        normalizeGiftId(
           campaign.campaign_id ||
           campaign.gift_id
         );
 
       if(!campaignId){
+
         return;
+
       }
 
 
-      const campaignRules =
-        rules
-          .filter(
-            rule=>{
+      /*
+      =========================================
+      1. หา Cart Items ที่ Campaign นี้ใช้คำนวณ
+      =========================================
+      */
 
-              return (
-                normalizeText(
-                  rule.campaign_id
-                ) ===
-                campaignId
-              );
-
-            }
-          )
-          .sort(
-            (
-              a,
-              b
-            )=>{
-
-              return (
-                Number(
-                  a.min_amount || 0
-                ) -
-                Number(
-                  b.min_amount || 0
-                )
-              );
-
-            }
-          );
+      const eligibleCartItems =
+        getCampaignEligibleCartItems(
+          campaign
+        );
 
 
       if(
-        campaignRules.length===0
+        eligibleCartItems.length===0
       ){
 
-        console.warn(
-          "Gift campaign ไม่มี rule:",
+        console.log(
+          "Gift campaign ไม่มีสินค้าเข้าเงื่อนไข:",
           campaignId
         );
 
@@ -1920,23 +1903,14 @@ function buildEligibleGiftCampaigns(){
       }
 
 
-      const eligibleItems =
-        getCampaignEligibleCartItems(
-          campaign
-        );
-
-
-      if(
-        eligibleItems.length===0
-      ){
-
-        return;
-
-      }
-
+      /*
+      =========================================
+      2. คำนวณยอด
+      =========================================
+      */
 
       const eligibleTotal =
-        eligibleItems.reduce(
+        eligibleCartItems.reduce(
           (
             sum,
             item
@@ -1966,30 +1940,72 @@ function buildEligibleGiftCampaigns(){
       }
 
 
-      const matchedRules =
-        campaignRules.filter(
-          rule=>{
+      /*
+      =========================================
+      3. หา Rules ของ Campaign
+      =========================================
+      */
 
-            const minAmount =
-              Number(
-                rule.min_amount || 0
+      const campaignRules =
+        rules
+          .filter(
+            rule=>{
+
+              return (
+                normalizeGiftId(
+                  rule.campaign_id
+                ) ===
+                campaignId
               );
 
-            return (
-              Number.isFinite(
-                minAmount
-              ) &&
-              eligibleTotal >=
-                minAmount
-            );
+            }
+          )
+          .filter(
+            rule=>{
 
-          }
-        );
+              const minAmount =
+                Number(
+                  rule.min_amount || 0
+                );
+
+              return (
+                Number.isFinite(
+                  minAmount
+                ) &&
+                eligibleTotal >=
+                  minAmount
+              );
+
+            }
+          )
+          .sort(
+            (
+              a,
+              b
+            )=>{
+
+              return (
+                Number(
+                  a.min_amount || 0
+                ) -
+                Number(
+                  b.min_amount || 0
+                )
+              );
+
+            }
+          );
 
 
       if(
-        matchedRules.length===0
+        campaignRules.length===0
       ){
+
+        console.log(
+          "Gift campaign ยอดยังไม่ถึง Rule:",
+          campaignId,
+          eligibleTotal
+        );
 
         return;
 
@@ -1997,76 +2013,42 @@ function buildEligibleGiftCampaigns(){
 
 
       /*
-      ใช้ tier สูงสุดที่ลูกค้าถึง
+      =========================================
+      4. GiftItems ของ Campaign
+      =========================================
       */
 
-      const matchedRule =
-        matchedRules[
-          matchedRules.length-1
-        ];
-
-
-      const maxSelectRaw =
-        Number(
-          matchedRule.max_select || 0
-        );
-
-      const maxSelect =
-        Number.isFinite(
-          maxSelectRaw
-        )
-          ? Math.max(
-              0,
-              Math.floor(
-                maxSelectRaw
-              )
-            )
-          : 0;
-
-
-      if(
-        maxSelect<=0
-      ){
-
-        return;
-
-      }
-
-
       const campaignGiftItems =
-        (
-          checkoutGiftState.items ||
-          []
-        )
-        .filter(
-          item=>{
+        giftItems
+          .filter(
+            item=>{
 
-            return (
-              normalizeText(
-                item.campaign_id
-              ) ===
-              campaignId
-            );
+              return (
+                normalizeGiftId(
+                  item.campaign_id
+                ) ===
+                campaignId
+              );
 
-          }
-        )
-        .sort(
-          (
-            a,
-            b
-          )=>{
+            }
+          )
+          .sort(
+            (
+              a,
+              b
+            )=>{
 
-            return (
-              Number(
-                a.sort_order || 0
-              ) -
-              Number(
-                b.sort_order || 0
-              )
-            );
+              return (
+                Number(
+                  a.sort_order || 0
+                ) -
+                Number(
+                  b.sort_order || 0
+                )
+              );
 
-          }
-        );
+            }
+          );
 
 
       if(
@@ -2074,7 +2056,7 @@ function buildEligibleGiftCampaigns(){
       ){
 
         console.warn(
-          "Gift campaign ไม่มี GiftItems:",
+          "Campaign ไม่มี GiftItems:",
           campaignId
         );
 
@@ -2083,24 +2065,117 @@ function buildEligibleGiftCampaigns(){
       }
 
 
+      /*
+      =========================================
+      5. ใส่ GiftItems เข้าแต่ละ Rule
+
+      รองรับทั้ง:
+      - item.rule_id
+      - item ไม่มี rule_id
+
+      ถ้า GiftItem ไม่มี rule_id
+      จะถือว่าใช้ได้กับทุก Rule ของ Campaign
+      =========================================
+      */
+
+      const preparedRules =
+        campaignRules
+          .map(
+            rule=>{
+
+              const ruleId =
+                normalizeGiftId(
+                  rule.rule_id
+                );
+
+
+              const ruleItems =
+                campaignGiftItems.filter(
+                  item=>{
+
+                    const itemRuleId =
+                      normalizeGiftId(
+                        item.rule_id
+                      );
+
+
+                    /*
+                    ถ้า GiftItem ไม่ระบุ rule_id
+                    ให้ใช้กับ Rule นี้ได้
+                    */
+
+                    if(!itemRuleId){
+
+                      return true;
+
+                    }
+
+
+                    return (
+                      itemRuleId ===
+                      ruleId
+                    );
+
+                  }
+                );
+
+
+              return{
+
+                ...rule,
+
+                items:
+                  ruleItems
+
+              };
+
+            }
+          )
+          .filter(
+            rule=>
+              rule.items.length>0
+          );
+
+
+      if(
+        preparedRules.length===0
+      ){
+
+        console.warn(
+          "Campaign มี GiftItems แต่ไม่มี Item ที่ผูกกับ Rule:",
+          campaignId
+        );
+
+        return;
+
+      }
+
+
+      /*
+      =========================================
+      6. Campaign object สำหรับ Renderer
+
+      สำคัญ:
+      renderCheckoutGiftEngine()
+      ต้องอ่าน property ตรงจาก object นี้
+      =========================================
+      */
+
       result.push({
 
-        campaign,
+        ...campaign,
 
-        rule:
-          matchedRule,
+        campaign_id:
+          campaignId,
+
+        eligible_items:
+          eligibleCartItems,
+
+        eligible_total:
+          eligibleTotal,
 
         rules:
-          campaignRules,
-
-        eligibleItems,
-
-        eligibleTotal,
-
-        maxSelect,
-
-        giftItems:
-          campaignGiftItems
+          preparedRules
 
       });
 
