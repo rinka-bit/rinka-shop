@@ -1101,7 +1101,6 @@ async function fetchCheckoutGiftActionFallback(
 
 }
 
-
 async function loadGifts(){
 
   const giftSection =
@@ -1130,6 +1129,16 @@ async function loadGifts(){
 `;
 
   try{
+
+    console.log(
+      "========== GIFT DEBUG START =========="
+    );
+
+    console.log(
+      "CART:",
+      cart
+    );
+
 
     const [
       campaigns,
@@ -1210,6 +1219,38 @@ async function loadGifts(){
 
       ]);
 
+
+    console.log(
+      "RAW CAMPAIGNS:",
+      campaigns
+    );
+
+    console.log(
+      "RAW RULES:",
+      rules
+    );
+
+    console.log(
+      "RAW ITEMS:",
+      items
+    );
+
+    console.log(
+      "RAW CHARACTERS:",
+      characters
+    );
+
+    console.log(
+      "RAW EXCLUSIONS:",
+      exclusions
+    );
+
+    console.log(
+      "RAW COLLECTIONS:",
+      collections
+    );
+
+
     checkoutGiftState.campaigns =
       campaigns.filter(
         campaign =>
@@ -1217,6 +1258,7 @@ async function loadGifts(){
             campaign.active
           )
       );
+
 
     checkoutGiftState.rules =
       rules.filter(
@@ -1226,6 +1268,7 @@ async function loadGifts(){
           )
       );
 
+
     checkoutGiftState.items =
       items.filter(
         item =>
@@ -1233,6 +1276,7 @@ async function loadGifts(){
             item.active
           )
       );
+
 
     checkoutGiftState.characters =
       characters.filter(
@@ -1242,16 +1286,112 @@ async function loadGifts(){
           )
       );
 
+
     checkoutGiftState.exclusions =
       exclusions;
+
 
     checkoutGiftState.collections =
       collections;
 
+
+    console.log(
+      "ACTIVE CAMPAIGNS:",
+      checkoutGiftState.campaigns
+    );
+
+    console.log(
+      "ACTIVE RULES:",
+      checkoutGiftState.rules
+    );
+
+    console.log(
+      "ACTIVE ITEMS:",
+      checkoutGiftState.items
+    );
+
+    console.log(
+      "ACTIVE CHARACTERS:",
+      checkoutGiftState.characters
+    );
+
+
     checkoutGiftState.eligibleCampaigns =
       buildEligibleGiftCampaigns();
 
+
+    console.log(
+      "ELIGIBLE CAMPAIGNS:",
+      checkoutGiftState.eligibleCampaigns
+    );
+
+
+    checkoutGiftState.campaigns.forEach(
+      campaign=>{
+
+        const campaignItems =
+          getCampaignEligibleCartItems(
+            campaign
+          );
+
+        const campaignTotal =
+          campaignItems.reduce(
+            (
+              sum,
+              item
+            )=>
+              sum +
+              getCartItemTotal(
+                item
+              ),
+            0
+          );
+
+
+        console.log(
+          "CAMPAIGN CHECK:",
+          {
+
+            campaign_id:
+              campaign.campaign_id,
+
+            campaign_name:
+              campaign.campaign_name,
+
+            collection_id:
+              campaign.collection_id,
+
+            eligibility_scope:
+              campaign.eligibility_scope,
+
+            require_campaign_item:
+              campaign.require_campaign_item,
+
+            fandom:
+              getCampaignFandom(
+                campaign
+              ),
+
+            eligible_items:
+              campaignItems,
+
+            eligible_total:
+              campaignTotal
+
+          }
+        );
+
+      }
+    );
+
+
+    console.log(
+      "========== GIFT DEBUG END =========="
+    );
+
+
     renderCheckoutGiftEngine();
+
 
   }catch(error){
 
@@ -1260,14 +1400,20 @@ async function loadGifts(){
       error
     );
 
+
     giftSection.innerHTML = `
 
 <div class="gift-error">
-โหลดข้อมูลของแถมไม่สำเร็จ<br>
+
+โหลดข้อมูลของแถมไม่สำเร็จ
+
+<br>
+
 ${escapeHtml(
   error.message ||
   String(error)
 )}
+
 </div>
 
 `;
@@ -1275,7 +1421,6 @@ ${escapeHtml(
   }
 
 }
-
 
 function getCollectionById(
   collectionId
