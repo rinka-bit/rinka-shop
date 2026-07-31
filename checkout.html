@@ -1529,84 +1529,278 @@ function getCampaignExcludedProductIds(
 
 }
 
-
 function getCampaignEligibleCartItems(
   campaign
 ){
 
-  const campaignCollectionId =
-    normalizeGiftId(
+  if(
+    !campaign ||
+    !Array.isArray(
+      cart
+    ) ||
+    cart.length===0
+  ){
+
+    return [];
+
+  }
+
+
+  const campaignId =
+    normalizeText(
+      campaign.campaign_id ||
+      campaign.gift_id
+    );
+
+
+  const collectionId =
+    normalizeText(
       campaign.collection_id
     );
 
-  const eligibilityScope =
-    String(
-      campaign.eligibility_scope ||
-      "collection_only"
-    )
-      .trim()
-      .toLowerCase();
 
   const campaignFandom =
-    getCampaignFandom(
-      campaign
-    )
-      .toLowerCase();
+    normalizeText(
+      getCampaignFandom(
+        campaign
+      )
+    ).toLowerCase();
 
-  const excludedProductIds =
-    getCampaignExcludedProductIds(
-      campaign.campaign_id
+
+  const eligibilityScope =
+    normalizeText(
+      campaign.eligibility_scope ||
+      "collection"
+    ).toLowerCase();
+
+
+  const requireCampaignItem =
+    normalizeGiftBoolean(
+      campaign.require_campaign_item
     );
 
-  return cart.filter(
-    item => {
 
-      const productId =
-        normalizeGiftId(
-          item.product_id
-        );
+  const excludedProductIds =
+    new Set(
+      (
+        checkoutGiftState.exclusions ||
+        []
+      )
+      .filter(
+        exclusion=>{
 
-      if(
-        productId &&
-        excludedProductIds.has(
-          productId
-        )
-      ){
-        return false;
-      }
+          return (
+            normalizeText(
+              exclusion.campaign_id
+            ) ===
+            campaignId
+          );
 
-      if(
-        eligibilityScope ===
-        "fandom_all"
-      ){
+        }
+      )
+      .map(
+        exclusion=>
+          normalizeText(
+            exclusion.product_id
+          )
+      )
+      .filter(Boolean)
+    );
+
+
+  const matchedItems =
+    cart.filter(
+      item=>{
+
+        const productId =
+          normalizeText(
+            item.product_id
+          );
+
+
+        if(
+          productId &&
+          excludedProductIds.has(
+            productId
+          )
+        ){
+
+          return false;
+
+        }
+
+
+        const itemCollectionId =
+          normalizeText(
+            item.collection_id
+          );
+
 
         const itemFandom =
-          String(
-            item.fandom || ""
-          )
-            .trim()
-            .toLowerCase();
+          normalizeText(
+            item.fandom
+          ).toLowerCase();
 
-        return Boolean(
-          campaignFandom &&
-          itemFandom &&
-          itemFandom === campaignFandom
-        );
+
+        /*
+        =========================
+        COLLECTION
+        =========================
+        */
+
+        if(
+          eligibilityScope ===
+          "collection"
+        ){
+
+          if(!collectionId){
+
+            return false;
+
+          }
+
+          return (
+            itemCollectionId ===
+            collectionId
+          );
+
+        }
+
+
+        /*
+        =========================
+        FANDOM
+        =========================
+        */
+
+        if(
+          eligibilityScope ===
+          "fandom"
+        ){
+
+          if(!campaignFandom){
+
+            return false;
+
+          }
+
+          return (
+            itemFandom ===
+            campaignFandom
+          );
+
+        }
+
+
+        /*
+        =========================
+        ALL
+        =========================
+        */
+
+        if(
+          eligibilityScope ===
+          "all"
+        ){
+
+          return true;
+
+        }
+
+
+        /*
+        fallback
+        ถ้าค่าเก่าไม่มี scope ชัดเจน
+        */
+
+        if(collectionId){
+
+          return (
+            itemCollectionId ===
+            collectionId
+          );
+
+        }
+
+
+        if(campaignFandom){
+
+          return (
+            itemFandom ===
+            campaignFandom
+          );
+
+        }
+
+
+        return false;
 
       }
+    );
 
-      return (
-        normalizeGiftId(
-          item.collection_id
-        ) ===
-        campaignCollectionId
+
+  if(
+    matchedItems.length===0
+  ){
+
+    return [];
+
+  }
+
+
+  /*
+  ถ้า campaign กำหนดว่า
+  ต้องมีสินค้าจาก campaign/collection นี้จริง ๆ
+  */
+
+  if(
+    requireCampaignItem
+  ){
+
+    const hasCampaignItem =
+      matchedItems.some(
+        item=>{
+
+          if(collectionId){
+
+            return (
+              normalizeText(
+                item.collection_id
+              ) ===
+              collectionId
+            );
+
+          }
+
+          if(campaignFandom){
+
+            return (
+              normalizeText(
+                item.fandom
+              ).toLowerCase() ===
+              campaignFandom
+            );
+
+          }
+
+          return false;
+
+        }
       );
 
+
+    if(!hasCampaignItem){
+
+      return [];
+
     }
-  );
+
+  }
+
+
+  return matchedItems;
 
 }
-
 
 function campaignHasRequiredItem(
   campaign
@@ -1654,157 +1848,269 @@ function campaignHasRequiredItem(
 
 }
 
-
 function buildEligibleGiftCampaigns(){
 
   const result = [];
 
-  checkoutGiftState.campaigns.forEach(
-    campaign => {
+  const campaigns =
+    checkoutGiftState.campaigns || [];
 
-      if(
-        !campaignHasRequiredItem(
-          campaign
-        )
-      ){
+  const rules =
+    checkoutGiftState.rules || [];
+
+
+  campaigns.forEach(
+    campaign=>{
+
+      const campaignId =
+        normalizeText(
+          campaign.campaign_id ||
+          campaign.gift_id
+        );
+
+      if(!campaignId){
         return;
       }
 
-      const eligibleItems =
-        getCampaignEligibleCartItems(
-          campaign
-        );
-
-      const eligibleTotal =
-        eligibleItems.reduce(
-          (
-            sum,
-            item
-          ) =>
-            sum +
-            getCartItemTotal(item),
-          0
-        );
 
       const campaignRules =
-        checkoutGiftState.rules
+        rules
           .filter(
-            rule =>
+            rule=>{
 
-              normalizeGiftId(
-                rule.campaign_id
-              ) ===
-              normalizeGiftId(
-                campaign.campaign_id
-              ) &&
+              return (
+                normalizeText(
+                  rule.campaign_id
+                ) ===
+                campaignId
+              );
 
-              eligibleTotal >=
-              Math.max(
-                0,
-                Number(
-                  rule.min_amount || 0
-                )
-              )
-
+            }
           )
           .sort(
-            (a,b) => {
+            (
+              a,
+              b
+            )=>{
 
-              const amountDiff =
+              return (
                 Number(
                   a.min_amount || 0
                 ) -
                 Number(
                   b.min_amount || 0
-                );
-
-              if(amountDiff !== 0){
-                return amountDiff;
-              }
-
-              return (
-                Number(
-                  a.sort_order || 0
-                ) -
-                Number(
-                  b.sort_order || 0
                 )
               );
 
             }
           );
 
-      const usableRules =
-        campaignRules
-          .map(
-            rule => {
 
-              const ruleItems =
-                checkoutGiftState.items
-                  .filter(
-                    item =>
+      if(
+        campaignRules.length===0
+      ){
 
-                      normalizeGiftId(
-                        item.rule_id
-                      ) ===
-                      normalizeGiftId(
-                        rule.rule_id
-                      )
+        console.warn(
+          "Gift campaign ไม่มี rule:",
+          campaignId
+        );
 
-                  )
-                  .sort(
-                    (a,b) =>
-
-                      Number(
-                        a.sort_order || 0
-                      ) -
-                      Number(
-                        b.sort_order || 0
-                      )
-                  );
-
-              return {
-                ...rule,
-                items:ruleItems
-              };
-
-            }
-          )
-          .filter(
-            rule =>
-              rule.items.length
-          );
-
-      if(!usableRules.length){
         return;
+
       }
 
+
+      const eligibleItems =
+        getCampaignEligibleCartItems(
+          campaign
+        );
+
+
+      if(
+        eligibleItems.length===0
+      ){
+
+        return;
+
+      }
+
+
+      const eligibleTotal =
+        eligibleItems.reduce(
+          (
+            sum,
+            item
+          )=>{
+
+            return (
+              sum +
+              getCartItemTotal(
+                item
+              )
+            );
+
+          },
+          0
+        );
+
+
+      if(
+        !Number.isFinite(
+          eligibleTotal
+        ) ||
+        eligibleTotal<=0
+      ){
+
+        return;
+
+      }
+
+
+      const matchedRules =
+        campaignRules.filter(
+          rule=>{
+
+            const minAmount =
+              Number(
+                rule.min_amount || 0
+              );
+
+            return (
+              Number.isFinite(
+                minAmount
+              ) &&
+              eligibleTotal >=
+                minAmount
+            );
+
+          }
+        );
+
+
+      if(
+        matchedRules.length===0
+      ){
+
+        return;
+
+      }
+
+
+      /*
+      ใช้ tier สูงสุดที่ลูกค้าถึง
+      */
+
+      const matchedRule =
+        matchedRules[
+          matchedRules.length-1
+        ];
+
+
+      const maxSelectRaw =
+        Number(
+          matchedRule.max_select || 0
+        );
+
+      const maxSelect =
+        Number.isFinite(
+          maxSelectRaw
+        )
+          ? Math.max(
+              0,
+              Math.floor(
+                maxSelectRaw
+              )
+            )
+          : 0;
+
+
+      if(
+        maxSelect<=0
+      ){
+
+        return;
+
+      }
+
+
+      const campaignGiftItems =
+        (
+          checkoutGiftState.items ||
+          []
+        )
+        .filter(
+          item=>{
+
+            return (
+              normalizeText(
+                item.campaign_id
+              ) ===
+              campaignId
+            );
+
+          }
+        )
+        .sort(
+          (
+            a,
+            b
+          )=>{
+
+            return (
+              Number(
+                a.sort_order || 0
+              ) -
+              Number(
+                b.sort_order || 0
+              )
+            );
+
+          }
+        );
+
+
+      if(
+        campaignGiftItems.length===0
+      ){
+
+        console.warn(
+          "Gift campaign ไม่มี GiftItems:",
+          campaignId
+        );
+
+        return;
+
+      }
+
+
       result.push({
-        ...campaign,
-        eligible_total:
-          eligibleTotal,
-        eligible_items:
-          eligibleItems,
+
+        campaign,
+
+        rule:
+          matchedRule,
+
         rules:
-          usableRules
+          campaignRules,
+
+        eligibleItems,
+
+        eligibleTotal,
+
+        maxSelect,
+
+        giftItems:
+          campaignGiftItems
+
       });
 
     }
   );
 
-  return result.sort(
-    (a,b) =>
 
-      Number(
-        a.sort_order || 0
-      ) -
-      Number(
-        b.sort_order || 0
-      )
-  );
+  return result;
 
 }
-
 
 function getCharactersForGiftItem(
   giftItemId
