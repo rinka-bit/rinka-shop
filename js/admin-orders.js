@@ -214,13 +214,11 @@ async function loadAdminOrderDetail(
   }
 
 
-  const actions = [
+ const actions = [
 
-    "order",
+  "getOrder"
 
-    "getOrder"
-
-  ];
+];
 
 
   for(const action of actions){
