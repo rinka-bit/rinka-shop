@@ -73,6 +73,10 @@ const tabs = [
 
 }
 
+if(tab === "manual_order"){
+  renderManualOrderManager();
+}
+
 }
 
 async function loadAdminData(){
