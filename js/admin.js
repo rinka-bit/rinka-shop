@@ -35,47 +35,89 @@ if(sessionStorage.getItem("adminLoggedIn") === "true"){
   loadAdminData();
 }
 
-function showAdminTab(tab){
+function showAdminTab(
+  tab
+){
 
-const tabs = [
-  "dashboard",
-  "products",
-  "options",
-  "orders",
-  "address",
-  "collections",
-  "gifts"
-];
-  
-  tabs.forEach(name=>{
+  const tabs = [
 
-    document
-      .getElementById("tab_" + name)
-      .classList.toggle(
-        "hidden",
-        name !== tab
-      );
+    "dashboard",
 
-    document
-      .getElementById("nav_" + name)
-      .classList.toggle(
-        "active",
-        name === tab
-      );
+    "products",
 
-  });
+    "options",
 
- if(tab === "gifts"){
+    "orders",
 
-  renderGiftManager();
+    "address",
 
-  loadGiftCampaigns();
+    "collections",
 
-}
+    "gifts",
 
-if(tab === "manual_order"){
-  renderManualOrderManager();
-}
+    "manual_order"
+
+  ];
+
+
+  tabs.forEach(
+    name=>{
+
+      const section =
+        document.getElementById(
+          "tab_" +
+          name
+        );
+
+
+      const navButton =
+        document.getElementById(
+          "nav_" +
+          name
+        );
+
+
+      if(section){
+
+        section.classList.toggle(
+          "hidden",
+          name !== tab
+        );
+
+      }
+
+
+      if(navButton){
+
+        navButton.classList.toggle(
+          "active",
+          name === tab
+        );
+
+      }
+
+    }
+  );
+
+
+  if(
+    tab === "gifts"
+  ){
+
+    renderGiftManager();
+
+    loadGiftCampaigns();
+
+  }
+
+
+  if(
+    tab === "manual_order"
+  ){
+
+    renderManualOrderManager();
+
+  }
 
 }
 
@@ -93,24 +135,33 @@ async function loadAdminData(){
 
     loadAddressRequests();
 
+
     /*
     สร้างหน้าต่าง Manager ก่อนโหลดข้อมูล
     */
+
     renderProductManager();
 
     renderOptionManager();
 
     renderCollectionManager();
 
+
     /*
-    แล้วค่อยโหลดข้อมูลลงในหน้าที่สร้างไว้
+    แล้วค่อยโหลดข้อมูล
     */
+
     await loadAdminProducts();
 
     await loadAdminCollections();
 
-  }
-  catch(error){
+
+    /*
+    Manual Order ยังไม่ต้อง render ตอนเปิด Admin
+    จะ render เมื่อกดแท็บเท่านั้น
+    */
+
+  }catch(error){
 
     console.error(
       "loadAdminData error:",
@@ -119,4 +170,5 @@ async function loadAdminData(){
 
   }
 
+}
 }
