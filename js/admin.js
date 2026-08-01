@@ -110,14 +110,65 @@ function showAdminTab(
 
   }
 
+if(
+  tab === "manual_order"
+){
+
+  const manager =
+    document.getElementById(
+      "manualOrderManager"
+    );
+
 
   if(
-    tab === "manual_order"
+    typeof renderManualOrderManager ===
+    "function"
   ){
 
     renderManualOrderManager();
 
+  }else{
+
+    console.error(
+      "โหลด admin-manual-order.js ไม่สำเร็จ หรือไฟล์มี Syntax Error"
+    );
+
+
+    if(manager){
+
+      manager.innerHTML = `
+
+<div
+style="
+padding:16px;
+background:#fef2f2;
+border:1px solid #fecaca;
+border-radius:12px;
+color:#991b1b;
+"
+>
+
+ไม่สามารถเปิดหน้าสร้างออเดอร์ได้
+
+<br><br>
+
+ไม่พบฟังก์ชัน
+<b>renderManualOrderManager()</b>
+
+<br>
+
+กรุณาตรวจไฟล์
+<b>js/admin-manual-order.js</b>
+
+</div>
+
+`;
+
+    }
+
   }
+
+}
 
 }
 
