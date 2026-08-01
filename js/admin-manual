@@ -1,5 +1,31 @@
 /* Rinka Admin Manual Order MVP */
-const ManualOrder={products:[],collections:[],cart:[],gifts:[],loading:false};
+const ManualOrder = {
+
+  products:[],
+
+  collections:[],
+
+  campaigns:[],
+
+  rules:[],
+
+  items:[],
+
+  characters:[],
+
+  exclusions:[],
+
+  cart:[],
+
+  gifts:[],
+
+  customers:[],
+
+  selectedCustomer:null,
+
+  loading:false
+
+};
 
 function renderManualOrderManager(){
   const root=document.getElementById('manualOrderManager');
@@ -14,12 +40,89 @@ function renderManualOrderManager(){
   .mo-total{font-size:26px;font-weight:800;color:#2563eb}.mo-gift{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:10px;margin-top:8px}
   @media(max-width:800px){.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}}
   </style>
-  <div class="mo-card"><h3>👤 ข้อมูลลูกค้า</h3><div class="mo-grid">
-  <label>แอค X<input id="mo_social" placeholder="@username"></label>
-  <label>อีเมล *<input id="mo_email" type="email"></label>
-  <label>เบอร์โทร *<input id="mo_phone"></label>
-  <label>ชื่อผู้รับ *<input id="mo_name"></label>
-  </div></div>
+  <div class="mo-card">
+
+<h3>
+👤 ข้อมูลลูกค้า
+</h3>
+
+<div class="mo-grid">
+
+<label class="mo-full">
+
+ค้นหาลูกค้าเดิม
+
+<div
+style="
+display:flex;
+gap:8px;
+align-items:center;
+"
+>
+
+<input
+id="mo_customer_search"
+placeholder="อีเมล / แอค X / เบอร์โทร"
+>
+
+<button
+type="button"
+style="
+width:auto;
+white-space:nowrap;
+"
+onclick="searchManualCustomer()"
+>
+🔍 ค้นหา
+</button>
+
+</div>
+
+</label>
+
+<div
+id="mo_customer_result"
+class="mo-full"
+></div>
+
+<label>
+แอค X
+
+<input
+id="mo_social"
+placeholder="@username"
+>
+</label>
+
+<label>
+อีเมล *
+
+<input
+id="mo_email"
+type="email"
+>
+</label>
+
+<label>
+เบอร์โทร *
+
+<input
+id="mo_phone"
+>
+</label>
+
+<label>
+ชื่อผู้รับ *
+
+<input
+id="mo_name"
+>
+</label>
+
+</div>
+
+</div>
+
   <div class="mo-card"><h3>🛍️ สินค้า</h3><div class="mo-grid">
   <label>ประเภท<select id="mo_type" onchange="filterManualProducts()"><option value="preorder">พรีออเดอร์</option><option value="instock">พร้อมส่ง</option></select></label>
   <label>Collection<select id="mo_collection" onchange="filterManualProducts()"><option value="">ทั้งหมด</option></select></label>
@@ -57,6 +160,377 @@ function moArray(v,...keys){if(Array.isArray(v))return v;for(const k of keys)if(
 function moBool(v){return v===true||v===1||['yes','true','1','active'].includes(String(v||'').trim().toLowerCase())}
 function moEsc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')}
 function moPrice(p){const n=Number(p.final_price??p.sale_price??p.price??0);return Number.isFinite(n)?n:0}
+
+async function searchManualCustomer(){
+
+  const keyword =
+    document
+      .getElementById(
+        "mo_customer_search"
+      )
+      ?.value
+      .trim() || "";
+
+
+  const box =
+    document.getElementById(
+      "mo_customer_result"
+    );
+
+
+  if(!keyword){
+
+    alert(
+      "กรุณากรอกอีเมล แอค X หรือเบอร์โทร"
+    );
+
+    return;
+
+  }
+
+
+  if(box){
+
+    box.innerHTML = `
+
+<div
+style="
+padding:14px;
+background:#f8fafc;
+border-radius:12px;
+"
+>
+⏳ กำลังค้นหา...
+</div>
+
+`;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+
+        API +
+
+        "?action=adminCustomerSearch" +
+
+        "&keyword=" +
+
+        encodeURIComponent(
+          keyword
+        )
+
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        "ค้นหาลูกค้าไม่สำเร็จ"
+      );
+
+    }
+
+
+    ManualOrder.customers =
+      Array.isArray(
+        result.customers
+      )
+        ? result.customers
+        : [];
+
+
+    if(
+      ManualOrder.customers.length === 0
+    ){
+
+      box.innerHTML = `
+
+<div
+style="
+padding:14px;
+background:#f8fafc;
+border-radius:12px;
+color:#64748b;
+"
+>
+ไม่พบลูกค้าเดิม สามารถกรอกข้อมูลใหม่ได้
+</div>
+
+`;
+
+      return;
+
+    }
+
+
+    box.innerHTML =
+      ManualOrder.customers
+        .map(
+          (
+            customer,
+            index
+          )=>{
+
+            return `
+
+<div
+style="
+padding:14px;
+margin-bottom:10px;
+border:1px solid #dbeafe;
+background:#eff6ff;
+border-radius:12px;
+"
+>
+
+<div
+style="
+font-weight:800;
+"
+>
+${moEsc(
+  customer.customer_name ||
+  customer.receiver ||
+  customer.email ||
+  "-"
+)}
+</div>
+
+<div
+style="
+margin-top:5px;
+font-size:13px;
+color:#475569;
+"
+>
+
+${moEsc(
+  customer.email || ""
+)}
+
+${
+  customer.social
+    ? " • " +
+      moEsc(
+        customer.social
+      )
+    : ""
+}
+
+</div>
+
+<div
+style="
+margin-top:6px;
+font-size:13px;
+color:#475569;
+"
+>
+
+เคยสั่ง
+${Number(
+  customer.order_count || 0
+)}
+ออเดอร์
+
+•
+
+ยอดรวม
+฿${Number(
+  customer.total_spent || 0
+).toLocaleString(
+  "th-TH",
+  {
+    maximumFractionDigits:2
+  }
+)}
+
+</div>
+
+<button
+type="button"
+style="
+width:auto;
+margin-top:10px;
+"
+onclick="
+useManualCustomer(
+${index}
+)
+"
+>
+ใช้ข้อมูลนี้
+</button>
+
+</div>
+
+`;
+
+          }
+        )
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "searchManualCustomer error:",
+      error
+    );
+
+
+    if(box){
+
+      box.innerHTML = `
+
+<div
+style="
+padding:14px;
+background:#fef2f2;
+border:1px solid #fecaca;
+border-radius:12px;
+color:#991b1b;
+"
+>
+
+ค้นหาไม่สำเร็จ
+
+<br>
+
+${moEsc(
+  error.message ||
+  String(error)
+)}
+
+</div>
+
+`;
+
+    }
+
+  }
+
+}
+
+function useManualCustomer(
+  index
+){
+
+  const customer =
+    ManualOrder.customers[
+      index
+    ];
+
+
+  if(!customer){
+
+    return;
+
+  }
+
+
+  ManualOrder.selectedCustomer =
+    customer;
+
+
+  setManualField(
+    "mo_social",
+    customer.social || ""
+  );
+
+
+  setManualField(
+    "mo_email",
+    customer.email || ""
+  );
+
+
+  setManualField(
+    "mo_phone",
+    customer.phone || ""
+  );
+
+
+  setManualField(
+    "mo_name",
+    customer.customer_name ||
+    customer.receiver ||
+    ""
+  );
+
+
+  setManualField(
+    "mo_address",
+    customer.address || ""
+  );
+
+
+  setManualField(
+    "mo_subdistrict",
+    customer.subdistrict || ""
+  );
+
+
+  setManualField(
+    "mo_district",
+    customer.district || ""
+  );
+
+
+  setManualField(
+    "mo_province",
+    customer.province || ""
+  );
+
+
+  setManualField(
+    "mo_postcode",
+    customer.postcode || ""
+  );
+
+}
+
+
+function setManualField(
+  id,
+  value
+){
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+
+  if(element){
+
+    element.value =
+      value || "";
+
+  }
+
+}
 
 function filterManualProducts(){
   const type=document.getElementById('mo_type').value, col=document.getElementById('mo_collection').value, q=document.getElementById('mo_search').value.trim().toLowerCase();
@@ -104,7 +578,23 @@ async function submitManualOrder(){
   if(!document.getElementById('mo_name').value.trim()||!document.getElementById('mo_email').value.trim()||!document.getElementById('mo_phone').value.trim())return alert('กรอกข้อมูลลูกค้าให้ครบ');
   if(!ManualOrder.cart.length)return alert('เพิ่มสินค้าอย่างน้อย 1 รายการ');
   if(status==='paid'&&!slip)return alert('สถานะชำระแล้วต้องแนบสลิป');
-  const payload={customer_name:moVal('mo_name'),email:moVal('mo_email'),phone:moVal('mo_phone'),social:moVal('mo_social'),items:ManualOrder.cart,gifts:ManualOrder.gifts,address:{receiver:moVal('mo_name'),email:moVal('mo_email'),phone:moVal('mo_phone'),address:moVal('mo_address'),subdistrict:moVal('mo_subdistrict'),district:moVal('mo_district'),province:moVal('mo_province'),postcode:moVal('mo_postcode')},payment:{method:document.getElementById('mo_method').value,status,amount:moSubtotal(),slip_base64:slip?await moFile(slip):''},order_source:'admin',admin_note:moVal('mo_note')};
+  const payload={
+
+  customer_id:
+    ManualOrder.selectedCustomer
+      ? ManualOrder.selectedCustomer.customer_id || ""
+      : "",
+
+  customer_name:
+    moVal(
+      "mo_name"
+    ),
+
+  email:
+    moVal(
+      "mo_email"
+    ),
+  phone:moVal('mo_phone'),social:moVal('mo_social'),items:ManualOrder.cart,gifts:ManualOrder.gifts,address:{receiver:moVal('mo_name'),email:moVal('mo_email'),phone:moVal('mo_phone'),address:moVal('mo_address'),subdistrict:moVal('mo_subdistrict'),district:moVal('mo_district'),province:moVal('mo_province'),postcode:moVal('mo_postcode')},payment:{method:document.getElementById('mo_method').value,status,amount:moSubtotal(),slip_base64:slip?await moFile(slip):''},order_source:'admin',admin_note:moVal('mo_note')};
   ManualOrder.loading=true;document.getElementById('mo_submit').disabled=true;
   try{const fd=new FormData();fd.append('payload',JSON.stringify(payload));const r=await fetch(API+'?action=adminManualOrder',{method:'POST',body:fd});const j=await r.json();if(!j.success)throw new Error(j.error||'สร้างออเดอร์ไม่สำเร็จ');alert('สร้างออเดอร์สำเร็จ '+j.order_id);renderManualOrderManager();if(typeof loadOrders==='function')loadOrders()}catch(e){alert(e.message)}finally{ManualOrder.loading=false;const b=document.getElementById('mo_submit');if(b)b.disabled=false}
 }
