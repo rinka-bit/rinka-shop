@@ -1,4 +1,5 @@
 /* Rinka Admin Manual Order MVP */
+
 const ManualOrder = {
 
   products:[],
