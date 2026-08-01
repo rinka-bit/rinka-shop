@@ -56,6 +56,11 @@ function renderManualOrderManager(){
   .mo-gift-character{margin-top:8px}
   .mo-gift-character select{margin-top:5px}
   .mo-gift-count{font-size:12px;color:#166534;font-weight:700}
+  .mo-preview-section{border-top:1px solid #e5e7eb;padding-top:12px;margin-top:12px}
+  .mo-preview-item{padding:10px 0;border-bottom:1px solid #f1f5f9}
+  .mo-preview-total{font-size:24px;font-weight:800;color:#2563eb}
+  .mo-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .mo-preview-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
   @media(max-width:800px){.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}}
   </style>
   <div class="mo-card">
@@ -159,7 +164,7 @@ id="mo_name"
   <label class="mo-full">แนบสลิป<input id="mo_slip" type="file" accept="image/*"></label>
   <label class="mo-full">หมายเหตุ<textarea id="mo_note" rows="2"></textarea></label>
   </div></div>
-  <button id="mo_submit" onclick="submitManualOrder()">✅ ยืนยันคำสั่งซื้อ</button>
+  <button id="mo_submit" onclick="openManualOrderPreview()">🔎 ตรวจสอบออเดอร์</button>
 
   <div
   id="mo_product_modal"
@@ -189,6 +194,36 @@ id="mo_name"
       </div>
 
       <div id="mo_modal_body"></div>
+
+    </div>
+
+  </div>
+
+  <div
+  id="mo_preview_modal"
+  class="mo-modal hidden"
+  onclick="handleManualPreviewBackdrop(event)"
+  >
+
+    <div class="mo-modal-card">
+
+      <div class="mo-modal-header">
+
+        <h3 style="margin:0;">
+        🔎 ตรวจสอบออเดอร์
+        </h3>
+
+        <button
+        type="button"
+        style="background:#64748b;width:auto;"
+        onclick="closeManualOrderPreview()"
+        >
+        ✕
+        </button>
+
+      </div>
+
+      <div id="mo_preview_body"></div>
 
     </div>
 
@@ -2174,16 +2209,160 @@ function moCssEscape(
   );
 
 }
-async function submitManualOrder(){
-  if(ManualOrder.loading)return;
-  const slip=document.getElementById('mo_slip').files[0];const status=document.getElementById('mo_paystatus').value;
-  if(!document.getElementById('mo_name').value.trim()||!document.getElementById('mo_email').value.trim()||!document.getElementById('mo_phone').value.trim())return alert('กรอกข้อมูลลูกค้าให้ครบ');
-  if(!ManualOrder.cart.length)return alert('เพิ่มสินค้าอย่างน้อย 1 รายการ');
-  if(status==='paid'&&!slip)return alert('สถานะชำระแล้วต้องแนบสลิป');
+
+function getManualGiftDisplayRows(){
+
+  return (ManualOrder.gifts || [])
+    .map(
+      gift=>{
+
+        const item =
+          (ManualOrder.items || [])
+            .find(
+              row=>
+                String(
+                  row.gift_item_id || ""
+                ).trim() ===
+                String(
+                  gift.gift_item_id || ""
+                ).trim()
+            );
+
+        const character =
+          (ManualOrder.characters || [])
+            .find(
+              row=>
+                String(
+                  row.character_id || ""
+                ).trim() ===
+                String(
+                  gift.character_id || ""
+                ).trim()
+            );
+
+        return {
+
+          gift_name:
+            item
+              ? item.gift_name || "ของแถม"
+              : "ของแถม",
+
+          character_name:
+            character
+              ? character.character_name || ""
+              : ""
+
+        };
+
+      }
+    );
+
+}
+
+
+function validateManualOrderForm(){
+
+  const name =
+    moVal(
+      "mo_name"
+    );
+
+  const email =
+    moVal(
+      "mo_email"
+    );
+
+  const phone =
+    moVal(
+      "mo_phone"
+    );
+
+  const address =
+    moVal(
+      "mo_address"
+    );
+
+  const province =
+    moVal(
+      "mo_province"
+    );
+
+  const postcode =
+    moVal(
+      "mo_postcode"
+    );
+
+  const status =
+    document
+      .getElementById(
+        "mo_paystatus"
+      )
+      ?.value || "unpaid";
+
+  const slip =
+    document
+      .getElementById(
+        "mo_slip"
+      )
+      ?.files?.[0];
+
+  if(
+    !name ||
+    !email ||
+    !phone
+  ){
+
+    throw new Error(
+      "กรุณากรอกชื่อ อีเมล และเบอร์โทรให้ครบ"
+    );
+
+  }
+
+  if(
+    !ManualOrder.cart.length
+  ){
+
+    throw new Error(
+      "กรุณาเพิ่มสินค้าอย่างน้อย 1 รายการ"
+    );
+
+  }
+
+  if(
+    !address ||
+    !province ||
+    !postcode
+  ){
+
+    throw new Error(
+      "กรุณากรอกที่อยู่ จังหวัด และรหัสไปรษณีย์"
+    );
+
+  }
+
+  if(
+    status === "paid" &&
+    !slip
+  ){
+
+    throw new Error(
+      "สถานะชำระแล้วต้องแนบสลิป"
+    );
+
+  }
+
+  validateManualGiftSelections();
+
+  return true;
+
+}
+
+
+function openManualOrderPreview(){
 
   try{
 
-    validateManualGiftSelections();
+    validateManualOrderForm();
 
   }catch(error){
 
@@ -2195,6 +2374,437 @@ async function submitManualOrder(){
     return;
 
   }
+
+  const modal =
+    document.getElementById(
+      "mo_preview_modal"
+    );
+
+  const body =
+    document.getElementById(
+      "mo_preview_body"
+    );
+
+  if(
+    !modal ||
+    !body
+  ){
+    return;
+  }
+
+  const paymentMethod =
+    document
+      .getElementById(
+        "mo_method"
+      )
+      ?.value || "";
+
+  const paymentStatus =
+    document
+      .getElementById(
+        "mo_paystatus"
+      )
+      ?.value || "";
+
+  const paymentMethodLabel =
+    paymentMethod ===
+    "credit_card_qr"
+      ? "QR บัตรเครดิต"
+      : "บัญชีธนาคาร";
+
+  const paymentStatusLabel = {
+
+    paid:
+      "ชำระแล้ว",
+
+    pending_verification:
+      "รอตรวจสอบ",
+
+    unpaid:
+      "ยังไม่ชำระ"
+
+  }[
+    paymentStatus
+  ] || paymentStatus;
+
+  const itemsHtml =
+    ManualOrder.cart
+      .map(
+        item=>`
+
+<div class="mo-preview-item">
+
+  <div class="mo-row">
+
+    <div>
+
+      <b>
+        ${moEsc(
+          item.name || ""
+        )}
+      </b>
+
+      ${
+        Object.keys(
+          item.selected_options || {}
+        ).length
+          ? `
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+margin-top:4px;
+"
+>
+${moEsc(
+  Object.entries(
+    item.selected_options
+  )
+    .map(
+      ([key,value])=>
+        key +
+        ": " +
+        (
+          Array.isArray(value)
+            ? value.join(", ")
+            : value
+        )
+    )
+    .join(" / ")
+)}
+</div>
+
+`
+          : ""
+      }
+
+      <div
+      style="
+      font-size:13px;
+      color:#64748b;
+      margin-top:4px;
+      "
+      >
+      ${Number(
+        item.qty || 0
+      )} ชิ้น
+      ×
+      ฿${Number(
+        item.price || 0
+      ).toLocaleString("th-TH")}
+      </div>
+
+    </div>
+
+    <b>
+      ฿${(
+        Number(
+          item.price || 0
+        ) *
+        Number(
+          item.qty || 0
+        ) +
+        Number(
+          item.crate_fee || 0
+        )
+      ).toLocaleString("th-TH")}
+    </b>
+
+  </div>
+
+</div>
+
+`
+      )
+      .join("");
+
+  const gifts =
+    getManualGiftDisplayRows();
+
+  const giftsHtml =
+    gifts.length
+      ? gifts.map(
+          gift=>`
+
+<div class="mo-preview-item">
+
+  🎁
+  <b>
+    ${moEsc(
+      gift.gift_name
+    )}
+  </b>
+
+  ${
+    gift.character_name
+      ? `
+
+<div
+style="
+font-size:13px;
+color:#166534;
+margin-top:4px;
+"
+>
+ตัวละคร:
+${moEsc(
+  gift.character_name
+)}
+</div>
+
+`
+      : ""
+  }
+
+</div>
+
+`
+        ).join("")
+      : `
+
+<div class="mo-empty">
+ไม่มีของแถม
+</div>
+
+`;
+
+  const addressText = [
+
+    moVal("mo_name"),
+    moVal("mo_phone"),
+    moVal("mo_address"),
+    moVal("mo_subdistrict"),
+    moVal("mo_district"),
+    moVal("mo_province"),
+    moVal("mo_postcode")
+
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  body.innerHTML = `
+
+<div class="mo-preview-grid">
+
+  <div>
+
+    <b>ลูกค้า</b>
+
+    <div>
+      ${moEsc(
+        moVal("mo_name")
+      )}
+    </div>
+
+    <div>
+      ${moEsc(
+        moVal("mo_email")
+      )}
+    </div>
+
+    <div>
+      ${moEsc(
+        moVal("mo_phone")
+      )}
+    </div>
+
+    ${
+      moVal("mo_social")
+        ? `
+
+<div>
+  ${moEsc(
+    moVal("mo_social")
+  )}
+</div>
+
+`
+        : ""
+    }
+
+  </div>
+
+  <div>
+
+    <b>การชำระเงิน</b>
+
+    <div>
+      ${moEsc(
+        paymentMethodLabel
+      )}
+    </div>
+
+    <div>
+      ${moEsc(
+        paymentStatusLabel
+      )}
+    </div>
+
+  </div>
+
+</div>
+
+<div class="mo-preview-section">
+
+  <h4>
+    🛍️ รายการสินค้า
+  </h4>
+
+  ${itemsHtml}
+
+</div>
+
+<div class="mo-preview-section">
+
+  <h4>
+    🎁 ของแถม
+  </h4>
+
+  ${giftsHtml}
+
+</div>
+
+<div class="mo-preview-section">
+
+  <h4>
+    📍 ที่อยู่จัดส่ง
+  </h4>
+
+  <div>
+    ${moEsc(
+      addressText
+    )}
+  </div>
+
+</div>
+
+<div
+class="mo-row"
+style="
+margin-top:18px;
+padding-top:16px;
+border-top:2px solid #dbeafe;
+"
+>
+
+  <b>
+    ยอดรวม
+  </b>
+
+  <div class="mo-preview-total">
+    ฿${moSubtotal().toLocaleString(
+      "th-TH",
+      {
+        maximumFractionDigits:2
+      }
+    )}
+  </div>
+
+</div>
+
+<div class="mo-preview-actions">
+
+  <button
+  type="button"
+  style="background:#64748b;"
+  onclick="closeManualOrderPreview()"
+  >
+  กลับไปแก้ไข
+  </button>
+
+  <button
+  type="button"
+  onclick="submitManualOrder()"
+  >
+  ✅ ยืนยันสร้างออเดอร์
+  </button>
+
+</div>
+
+`;
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+function closeManualOrderPreview(){
+
+  const modal =
+    document.getElementById(
+      "mo_preview_modal"
+    );
+
+  if(modal){
+
+    modal.classList.add(
+      "hidden"
+    );
+
+  }
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+function handleManualPreviewBackdrop(
+  event
+){
+
+  if(
+    event.target &&
+    event.target.id ===
+    "mo_preview_modal"
+  ){
+
+    closeManualOrderPreview();
+
+  }
+
+}
+
+async function submitManualOrder(){
+
+  if(ManualOrder.loading){
+    return;
+  }
+
+  try{
+
+    validateManualOrderForm();
+
+  }catch(error){
+
+    alert(
+      error.message ||
+      String(error)
+    );
+
+    return;
+
+  }
+
+  const slip =
+    document
+      .getElementById(
+        "mo_slip"
+      )
+      .files[0];
+
+  const status =
+    document
+      .getElementById(
+        "mo_paystatus"
+      )
+      .value;
 
   const payload={
 
@@ -2214,7 +2824,7 @@ async function submitManualOrder(){
     ),
   phone:moVal('mo_phone'),social:moVal('mo_social'),items:ManualOrder.cart,gifts:ManualOrder.gifts,address:{receiver:moVal('mo_name'),email:moVal('mo_email'),phone:moVal('mo_phone'),address:moVal('mo_address'),subdistrict:moVal('mo_subdistrict'),district:moVal('mo_district'),province:moVal('mo_province'),postcode:moVal('mo_postcode')},payment:{method:document.getElementById('mo_method').value,status,amount:moSubtotal(),slip_base64:slip?await moFile(slip):''},order_source:'admin',admin_note:moVal('mo_note')};
   ManualOrder.loading=true;document.getElementById('mo_submit').disabled=true;
-  try{const fd=new FormData();fd.append('payload',JSON.stringify(payload));const r=await fetch(API+'?action=adminManualOrder',{method:'POST',body:fd});const j=await r.json();if(!j.success)throw new Error(j.error||'สร้างออเดอร์ไม่สำเร็จ');alert('สร้างออเดอร์สำเร็จ '+j.order_id);renderManualOrderManager();if(typeof loadOrders==='function')loadOrders()}catch(e){alert(e.message)}finally{ManualOrder.loading=false;const b=document.getElementById('mo_submit');if(b)b.disabled=false}
+  try{const fd=new FormData();fd.append('payload',JSON.stringify(payload));const r=await fetch(API+'?action=adminManualOrder',{method:'POST',body:fd});const j=await r.json();if(!j.success)throw new Error(j.error||'สร้างออเดอร์ไม่สำเร็จ');alert('สร้างออเดอร์สำเร็จ '+j.order_id);closeManualOrderPreview();renderManualOrderManager();if(typeof loadOrders==='function')loadOrders()}catch(e){alert(e.message)}finally{ManualOrder.loading=false;const b=document.getElementById('mo_submit');if(b)b.disabled=false}
 }
 function moVal(id){return document.getElementById(id)?.value.trim()||''}
 function moFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(new Error('อ่านสลิปไม่สำเร็จ'));r.readAsDataURL(f)})}
@@ -2228,6 +2838,8 @@ document.addEventListener(
     ){
 
       closeManualProductModal();
+
+      closeManualOrderPreview();
 
     }
 
