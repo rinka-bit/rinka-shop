@@ -390,6 +390,14 @@ onclick="showAdminTab('gifts')">
 🎁 ของแถม
 </button>
 
+<button
+class="nav-btn"
+id="nav_manual_order"
+onclick="showAdminTab('manual_order')">
+🧾 สร้างออเดอร์
+</button>
+
+
 <hr>
 
 <button
@@ -490,6 +498,11 @@ class="hidden">
 กำลังโหลด...
 </div>
 
+</section>
+
+<section id="tab_manual_order" class="hidden">
+  <h1 class="section-title">🧾 สร้างออเดอร์ให้ลูกค้า</h1>
+  <div id="manualOrderManager">กำลังโหลด...</div>
 </section>
 
 </main>
@@ -732,6 +745,8 @@ style="display:none;"
 
 <script src="js/admin-orders.js"></script>
 <script src="js/admin-address.js"></script>
+
+<script src="js/admin-manual-order.js"></script>
 
 <script src="js/admin.js"></script>
 
