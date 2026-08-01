@@ -1,0 +1,1148 @@
+
+/*
+=========================================================
+RINKA SHOP — ADMIN SALES PANEL
+=========================================================
+*/
+
+function createAdminSalesOrder(
+  data
+){
+
+  try{
+
+    data =
+      data || {};
+
+    const orderPayload = {
+
+      customer_name:
+        normalizeText(
+          data.customer_name
+        ),
+
+      email:
+        normalizeEmail(
+          data.email
+        ),
+
+      phone:
+        normalizeText(
+          data.phone
+        ),
+
+      social:
+        normalizeText(
+          data.social
+        ),
+
+      customer_id:
+        normalizeId(
+          data.customer_id
+        ),
+
+      items:
+        Array.isArray(
+          data.items
+        )
+          ? data.items
+          : [],
+
+      gifts:
+        Array.isArray(
+          data.gifts
+        )
+          ? data.gifts
+          : []
+
+    };
+
+    const orderResult =
+      OrderService.create(
+        orderPayload
+      );
+
+    if(
+      !orderResult ||
+      !orderResult.success
+    ){
+
+      throw new Error(
+        orderResult &&
+        (
+          orderResult.error ||
+          orderResult.message
+        )
+          ? (
+              orderResult.error ||
+              orderResult.message
+            )
+          : "สร้างออเดอร์ไม่สำเร็จ"
+      );
+
+    }
+
+    const orderId =
+      normalizeId(
+        orderResult.order_id
+      );
+
+    if(
+      data.address &&
+      typeof data.address ===
+        "object"
+    ){
+
+      saveAdminSalesAddress(
+        orderId,
+        orderPayload.email,
+        data.address
+      );
+
+    }
+
+    updateAdminSalesOrderMetadata(
+      orderId,
+      {
+
+        order_source:
+          normalizeText(
+            data.order_source ||
+            "admin"
+          ),
+
+        admin_note:
+          normalizeText(
+            data.admin_note
+          ),
+
+        payment_method:
+          normalizeText(
+            data.payment &&
+            data.payment.method
+          )
+
+      }
+    );
+
+    const payment =
+      data.payment &&
+      typeof data.payment ===
+        "object"
+        ? data.payment
+        : {};
+
+    const paymentStatus =
+      normalizeText(
+        payment.status ||
+        "unpaid"
+      )
+        .toLowerCase();
+
+    let paymentResult = {
+
+      success:true,
+      skipped:true,
+      status:
+        paymentStatus
+
+    };
+
+    if(
+      paymentStatus !==
+      "unpaid"
+    ){
+
+      paymentResult =
+        saveAdminSalesPayment(
+          {
+
+            order_id:
+              orderId,
+
+            amount:
+              Number(
+                payment.amount ||
+                orderResult.total ||
+                0
+              ),
+
+            slip_base64:
+              payment.slip_base64 ||
+              "",
+
+            payment_method:
+              payment.method ||
+              "credit_card_qr",
+
+            status:
+              paymentStatus,
+
+            admin_note:
+              data.admin_note ||
+              ""
+
+          }
+        );
+
+      if(
+        !paymentResult.success
+      ){
+
+        throw new Error(
+          paymentResult.error ||
+          "บันทึกการชำระเงินไม่สำเร็จ"
+        );
+
+      }
+
+    }
+
+    try{
+
+      if(
+        typeof sendOrderConfirmationEmail ===
+        "function"
+      ){
+
+        sendOrderConfirmationEmail(
+          orderId
+        );
+
+      }
+
+    }catch(emailError){
+
+      console.error(
+        "sendOrderConfirmationEmail error:",
+        emailError
+      );
+
+    }
+
+    return {
+
+      success:true,
+
+      order_id:
+        orderId,
+
+      subtotal:
+        orderResult.subtotal,
+
+      total:
+        orderResult.total,
+
+      payment_status:
+        paymentStatus,
+
+      payment:
+        paymentResult
+
+    };
+
+  }catch(error){
+
+    console.error(
+      "createAdminSalesOrder error:",
+      error
+    );
+
+    return {
+
+      success:false,
+
+      error:
+        error.message ||
+        error.toString()
+
+    };
+
+  }
+
+}
+
+function searchAdminSalesCustomers(
+  keyword
+){
+
+  try{
+
+    const target =
+      normalizeText(
+        keyword
+      )
+        .toLowerCase();
+
+    if(!target){
+
+      return {
+
+        success:true,
+        customers:[]
+
+      };
+
+    }
+
+    const customersData =
+      getSheetData(
+        "Customers"
+      );
+
+    const ordersData =
+      getSheetData(
+        "Orders"
+      );
+
+    const addressSheet =
+      SpreadsheetApp
+        .getActiveSpreadsheet()
+        .getSheetByName(
+          "CustomerAddresses"
+        );
+
+    const addressRows =
+      addressSheet
+        ? addressSheet
+            .getDataRange()
+            .getValues()
+        : [];
+
+    const addressHeaders =
+      addressRows.length
+        ? addressRows[0]
+        : [];
+
+    const ADDRESS_COL =
+      addressRows.length
+        ? createHeaderMap(
+            addressHeaders
+          )
+        : {};
+
+    const orderStats = {};
+
+    for(
+      let index = 1;
+      index < ordersData.rows.length;
+      index++
+    ){
+
+      const row =
+        ordersData.rows[index];
+
+      const email =
+        normalizeEmail(
+          row[
+            ordersData.COL.email
+          ]
+        );
+
+      if(!email){
+        continue;
+      }
+
+      if(!orderStats[email]){
+
+        orderStats[email] = {
+
+          order_count:0,
+          total_spent:0
+
+        };
+
+      }
+
+      orderStats[email].order_count++;
+
+      orderStats[email].total_spent +=
+        Number(
+          row[
+            ordersData.COL.total
+          ] || 0
+        );
+
+    }
+
+    const results = [];
+
+    for(
+      let index = 1;
+      index < customersData.rows.length;
+      index++
+    ){
+
+      const row =
+        customersData.rows[index];
+
+      const customer =
+        sheetRowToObject(
+          customersData.headers,
+          row
+        );
+
+      const email =
+        normalizeEmail(
+          customer.email
+        );
+
+      const username =
+        normalizeText(
+          customer.username
+        );
+
+      const twitter =
+        normalizeText(
+          customer.twitter ||
+          customer.social
+        );
+
+      const haystack = [
+
+        email,
+        username,
+        twitter,
+        customer.phone || ""
+
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      if(
+        !haystack.includes(
+          target
+        )
+      ){
+        continue;
+      }
+
+      let address = null;
+
+      if(
+        addressRows.length > 1 &&
+        ADDRESS_COL.email !==
+          undefined
+      ){
+
+        for(
+          let rowIndex = 1;
+          rowIndex < addressRows.length;
+          rowIndex++
+        ){
+
+          const addressEmail =
+            normalizeEmail(
+              addressRows[rowIndex][
+                ADDRESS_COL.email
+              ]
+            );
+
+          if(
+            addressEmail !==
+            email
+          ){
+            continue;
+          }
+
+          address =
+            sheetRowToObject(
+              addressHeaders,
+              addressRows[rowIndex]
+            );
+
+          const isDefault =
+            String(
+              address.is_default || ""
+            )
+              .trim()
+              .toLowerCase();
+
+          if(
+            [
+              "true",
+              "yes",
+              "1",
+              "default"
+            ].includes(
+              isDefault
+            )
+          ){
+            break;
+          }
+
+        }
+
+      }
+
+      results.push({
+
+        customer_id:
+          customer.customer_id || "",
+
+        customer_name:
+          address &&
+          address.receiver
+            ? address.receiver
+            : username,
+
+        receiver:
+          address
+            ? address.receiver || ""
+            : "",
+
+        email:
+          email,
+
+        phone:
+          address
+            ? address.phone || ""
+            : customer.phone || "",
+
+        social:
+          twitter,
+
+        address:
+          address
+            ? address.address || ""
+            : "",
+
+        subdistrict:
+          address
+            ? address.subdistrict || ""
+            : "",
+
+        district:
+          address
+            ? address.district || ""
+            : "",
+
+        province:
+          address
+            ? address.province || ""
+            : "",
+
+        postcode:
+          address
+            ? address.postcode || ""
+            : "",
+
+        order_count:
+          orderStats[email]
+            ? orderStats[email]
+                .order_count
+            : 0,
+
+        total_spent:
+          orderStats[email]
+            ? orderStats[email]
+                .total_spent
+            : 0
+
+      });
+
+      if(
+        results.length >= 10
+      ){
+        break;
+      }
+
+    }
+
+    return {
+
+      success:true,
+      customers:
+        results
+
+    };
+
+  }catch(error){
+
+    return {
+
+      success:false,
+
+      error:
+        error.message ||
+        error.toString(),
+
+      customers:[]
+
+    };
+
+  }
+
+}
+
+function saveAdminSalesAddress(
+  orderId,
+  email,
+  address
+){
+
+  const data =
+    getSheetData(
+      "CustomerAddresses"
+    );
+
+  requireHeaders(
+    data.COL,
+    [
+      "address_id",
+      "email",
+      "receiver",
+      "phone",
+      "address",
+      "subdistrict",
+      "district",
+      "province",
+      "postcode"
+    ],
+    "CustomerAddresses"
+  );
+
+  const addressId =
+    "ADDR" +
+    new Date().getTime() +
+    Utilities
+      .getUuid()
+      .replace(
+        /-/g,
+        ""
+      )
+      .substring(
+        0,
+        6
+      );
+
+  const record = {
+
+    address_id:
+      addressId,
+
+    email:
+      normalizeEmail(
+        email ||
+        address.email
+      ),
+
+    receiver:
+      normalizeText(
+        address.receiver
+      ),
+
+    phone:
+      normalizeText(
+        address.phone
+      ),
+
+    address:
+      normalizeText(
+        address.address
+      ),
+
+    subdistrict:
+      normalizeText(
+        address.subdistrict
+      ),
+
+    district:
+      normalizeText(
+        address.district
+      ),
+
+    province:
+      normalizeText(
+        address.province
+      ),
+
+    postcode:
+      normalizeText(
+        address.postcode
+      ),
+
+    label:
+      normalizeText(
+        address.label ||
+        "Sales Panel"
+      ),
+
+    is_default:
+      "",
+
+    created_at:
+      new Date()
+
+  };
+
+  data.sheet
+    .getRange(
+      data.sheet.getLastRow() + 1,
+      1,
+      1,
+      data.headers.length
+    )
+    .setValues([
+      buildSheetRow(
+        data.headers,
+        record
+      )
+    ]);
+
+  const confirmedAddress = [
+
+    record.receiver,
+    record.phone,
+    record.address,
+    record.subdistrict,
+    record.district,
+    record.province,
+    record.postcode
+
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  updateAdminSalesOrderMetadata(
+    orderId,
+    {
+
+      confirmed_address:
+        confirmedAddress,
+
+      confirm_address:
+        confirmedAddress
+
+    }
+  );
+
+  return {
+
+    success:true,
+
+    address_id:
+      addressId,
+
+    confirmed_address:
+      confirmedAddress
+
+  };
+
+}
+
+function saveAdminSalesPayment(
+  data
+){
+
+  try{
+
+    const orderId =
+      normalizeId(
+        data.order_id
+      );
+
+    if(!orderId){
+
+      throw new Error(
+        "ไม่พบ order_id"
+      );
+
+    }
+
+    const amount =
+      Number(
+        data.amount || 0
+      );
+
+    if(
+      !Number.isFinite(
+        amount
+      ) ||
+      amount <= 0
+    ){
+
+      throw new Error(
+        "ยอดชำระไม่ถูกต้อง"
+      );
+
+    }
+
+    const status =
+      normalizeText(
+        data.status ||
+        "pending_verification"
+      )
+        .toLowerCase();
+
+    if(
+      typeof savePayment ===
+        "function" &&
+      status === "paid" &&
+      data.slip_base64
+    ){
+
+      const result =
+        savePayment(
+          {
+
+            order_id:
+              orderId,
+
+            amount:
+              amount,
+
+            slip_base64:
+              data.slip_base64,
+
+            payment_method:
+              data.payment_method ||
+              "credit_card_qr",
+
+            admin_note:
+              data.admin_note ||
+              "",
+
+            created_by:
+              "admin"
+
+          }
+        );
+
+      if(
+        !result ||
+        !result.success
+      ){
+
+        throw new Error(
+          result &&
+          (
+            result.error ||
+            result.message
+          )
+            ? (
+                result.error ||
+                result.message
+              )
+            : "savePayment ไม่สำเร็จ"
+        );
+
+      }
+
+      updateAdminSalesOrderMetadata(
+        orderId,
+        {
+
+          payment_method:
+            data.payment_method ||
+            "credit_card_qr",
+
+          order_source:
+            "admin"
+
+        }
+      );
+
+      return result;
+
+    }
+
+    const paymentData =
+      getSheetData(
+        "Payments"
+      );
+
+    requireHeaders(
+      paymentData.COL,
+      [
+        "payment_id",
+        "order_id",
+        "amount",
+        "slip_url",
+        "status",
+        "created_at"
+      ],
+      "Payments"
+    );
+
+    let slipUrl = "";
+
+    if(data.slip_base64){
+
+      slipUrl =
+        uploadAdminSalesSlip(
+          data.slip_base64,
+          orderId
+        );
+
+    }
+
+    const paymentId =
+      "PAY" +
+      new Date().getTime();
+
+    const record = {
+
+      payment_id:
+        paymentId,
+
+      order_id:
+        orderId,
+
+      amount:
+        amount,
+
+      slip_url:
+        slipUrl,
+
+      status:
+        status,
+
+      created_at:
+        new Date(),
+
+      payment_method:
+        data.payment_method ||
+        "credit_card_qr",
+
+      created_by:
+        "admin",
+
+      admin_note:
+        data.admin_note ||
+        ""
+
+    };
+
+    paymentData.sheet
+      .getRange(
+        paymentData.sheet.getLastRow() + 1,
+        1,
+        1,
+        paymentData.headers.length
+      )
+      .setValues([
+        buildSheetRow(
+          paymentData.headers,
+          record
+        )
+      ]);
+
+    updateAdminSalesOrderMetadata(
+      orderId,
+      {
+
+        payment_status:
+          status,
+
+        payment_method:
+          data.payment_method ||
+          "credit_card_qr",
+
+        order_source:
+          "admin"
+
+      }
+    );
+
+    return {
+
+      success:true,
+
+      payment_id:
+        paymentId,
+
+      slip_url:
+        slipUrl,
+
+      status:
+        status
+
+    };
+
+  }catch(error){
+
+    return {
+
+      success:false,
+
+      error:
+        error.message ||
+        error.toString()
+
+    };
+
+  }
+
+}
+
+function uploadAdminSalesSlip(
+  dataUrl,
+  orderId
+){
+
+  if(
+    !dataUrl ||
+    !String(dataUrl).includes(
+      "base64,"
+    )
+  ){
+
+    return "";
+
+  }
+
+  const parts =
+    String(dataUrl).split(
+      "base64,"
+    );
+
+  const meta =
+    parts[0] || "";
+
+  const base64 =
+    parts[1] || "";
+
+  const mimeMatch =
+    meta.match(
+      /data:(.*?);/
+    );
+
+  const mimeType =
+    mimeMatch
+      ? mimeMatch[1]
+      : "image/jpeg";
+
+  const extension =
+    mimeType.includes("png")
+      ? "png"
+      : mimeType.includes("webp")
+        ? "webp"
+        : "jpg";
+
+  const blob =
+    Utilities.newBlob(
+      Utilities.base64Decode(
+        base64
+      ),
+      mimeType,
+      orderId +
+      "_admin_slip." +
+      extension
+    );
+
+  const folder =
+    DriveApp.getRootFolder();
+
+  const file =
+    folder.createFile(
+      blob
+    );
+
+  return file.getUrl();
+
+}
+
+function updateAdminSalesOrderMetadata(
+  orderId,
+  updates
+){
+
+  const data =
+    getSheetData(
+      "Orders"
+    );
+
+  const targetOrderId =
+    normalizeId(
+      orderId
+    );
+
+  if(!targetOrderId){
+
+    throw new Error(
+      "ไม่พบ order_id"
+    );
+
+  }
+
+  let rowNumber = 0;
+  let row = null;
+
+  for(
+    let index = 1;
+    index < data.rows.length;
+    index++
+  ){
+
+    if(
+      normalizeId(
+        data.rows[index][
+          data.COL.order_id
+        ]
+      ) ===
+      targetOrderId
+    ){
+
+      rowNumber =
+        index + 1;
+
+      row =
+        data.rows[index].slice();
+
+      break;
+
+    }
+
+  }
+
+  if(!rowNumber){
+
+    throw new Error(
+      "ไม่พบออเดอร์: " +
+      targetOrderId
+    );
+
+  }
+
+  Object.entries(
+    updates || {}
+  ).forEach(
+    ([key,value])=>{
+
+      if(
+        data.COL[key] !==
+        undefined
+      ){
+
+        row[
+          data.COL[key]
+        ] =
+          value;
+
+      }
+
+    }
+  );
+
+  data.sheet
+    .getRange(
+      rowNumber,
+      1,
+      1,
+      data.headers.length
+    )
+    .setValues([
+      row.slice(
+        0,
+        data.headers.length
+      )
+    ]);
+
+  return {
+
+    success:true
+
+  };
+
+}
