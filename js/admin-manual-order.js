@@ -50,6 +50,12 @@ function renderManualOrderManager(){
   .mo-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
   .mo-product-image{width:120px;height:120px;object-fit:cover;border-radius:14px;background:#f1f5f9}
   .mo-empty{padding:14px;background:#f8fafc;border-radius:12px;color:#64748b}
+  .mo-gift-rule{margin-top:10px;padding-top:10px;border-top:1px solid #dcfce7}
+  .mo-gift-choice{display:flex;align-items:flex-start;gap:10px;margin-top:8px;padding:8px;border-radius:10px;background:#fff}
+  .mo-gift-choice input{width:auto;margin-top:4px}
+  .mo-gift-character{margin-top:8px}
+  .mo-gift-character select{margin-top:5px}
+  .mo-gift-count{font-size:12px;color:#166534;font-weight:700}
   @media(max-width:800px){.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}}
   </style>
   <div class="mo-card">
@@ -1386,30 +1392,810 @@ function moQty(i,d){ManualOrder.cart[i].qty=Math.max(1,ManualOrder.cart[i].qty+d
 function moRemove(i){ManualOrder.cart.splice(i,1);ManualOrder.gifts=[];renderManualCart();renderManualGifts()}
 function moSubtotal(){return ManualOrder.cart.reduce((s,x)=>s+x.price*x.qty+Number(x.crate_fee||0),0)}
 
-function renderManualGifts(){
-  const box=document.getElementById('mo_gifts');if(!ManualOrder.cart.length){box.innerHTML='ระบบจะคำนวณหลังเพิ่มสินค้า';return}
-  const eligible=[];
-  (ManualOrder.campaigns||[]).filter(x=>moBool(x.active)).forEach(c=>{
-    const col=String(c.collection_id||''), scope=String(c.eligibility_scope||'collection_only');
-    const ci=ManualOrder.collections.find(x=>String(x.collection_id)===col);const fandom=String(c.fandom||ci?.fandom||'').toLowerCase();
-    const items=ManualOrder.cart.filter(x=>scope==='fandom_all'?String(x.fandom||'').toLowerCase()===fandom:String(x.collection_id||'')===col);
-    const total=items.reduce((s,x)=>s+x.price*x.qty+Number(x.crate_fee||0),0);
-    const rules=(ManualOrder.rules||[]).filter(r=>moBool(r.active)&&String(r.campaign_id)===String(c.campaign_id)&&total>=Number(r.min_amount||0)).map(r=>({...r,items:(ManualOrder.items||[]).filter(i=>moBool(i.active)&&String(i.rule_id)===String(r.rule_id))})).filter(r=>r.items.length);
-    if(rules.length)eligible.push({...c,total,rules});
-  });
-  if(!eligible.length){box.innerHTML='ยังไม่มีของแถมที่ผ่านเงื่อนไข';ManualOrder.gifts=[];return}
-  box.innerHTML=eligible.map(c=>`<div class="mo-gift"><b>${moEsc(c.campaign_name)}</b><div>ยอดคำนวณ ฿${c.total.toLocaleString()}</div>${c.rules.map(r=>`<div style="margin-top:8px"><b>${moEsc(r.rule_name)} (เลือกได้ ${r.max_select})</b>${r.items.map(i=>`<label style="display:block;margin-top:6px"><input type="checkbox" data-campaign="${moEsc(c.campaign_id)}" data-rule="${moEsc(r.rule_id)}" data-item="${moEsc(i.gift_item_id)}" onchange="collectManualGiftInputs()"> ${moEsc(i.gift_name)}</label>`).join('')}</div>`).join('')}</div>`).join('');
-}
-function collectManualGiftInputs(){
-  ManualOrder.gifts=[...document.querySelectorAll('#mo_gifts input:checked')].map(x=>({campaign_id:x.dataset.campaign,rule_id:x.dataset.rule,gift_item_id:x.dataset.item,gift_id:x.dataset.item,character_id:''}));
+function getManualEligibleGiftCampaigns(){
+
+  const result = [];
+
+  (ManualOrder.campaigns || [])
+    .filter(campaign=>moBool(campaign.active))
+    .forEach(campaign=>{
+
+      const campaignId =
+        String(campaign.campaign_id || "").trim();
+
+      const collectionId =
+        String(campaign.collection_id || "").trim();
+
+      const collection =
+        ManualOrder.collections.find(
+          item=>
+            String(item.collection_id || "").trim() ===
+            collectionId
+        );
+
+      const fandom =
+        String(
+          campaign.fandom ||
+          collection?.fandom ||
+          ""
+        ).trim().toLowerCase();
+
+      let scope =
+        String(
+          campaign.eligibility_scope ||
+          "collection_only"
+        ).trim().toLowerCase();
+
+      if(scope === "collection"){
+        scope = "collection_only";
+      }
+
+      if(scope === "fandom"){
+        scope = "fandom_all";
+      }
+
+      const excluded =
+        new Set(
+          (ManualOrder.exclusions || [])
+            .filter(
+              item=>
+                String(item.campaign_id || "").trim() ===
+                campaignId
+            )
+            .map(
+              item=>
+                String(item.product_id || "").trim()
+            )
+        );
+
+      if(
+        moBool(
+          campaign.require_campaign_item
+        )
+      ){
+
+        const hasCampaignItem =
+          ManualOrder.cart.some(
+            item=>
+              !excluded.has(
+                String(item.product_id || "").trim()
+              ) &&
+              String(item.collection_id || "").trim() ===
+              collectionId
+          );
+
+        if(!hasCampaignItem){
+          return;
+        }
+
+      }
+
+      const eligibleCart =
+        ManualOrder.cart.filter(item=>{
+
+          const productId =
+            String(item.product_id || "").trim();
+
+          if(excluded.has(productId)){
+            return false;
+          }
+
+          if(scope === "collection_only"){
+
+            return (
+              String(item.collection_id || "").trim() ===
+              collectionId
+            );
+
+          }
+
+          if(scope === "fandom_all"){
+
+            return (
+              String(item.fandom || "").trim().toLowerCase() ===
+              fandom
+            );
+
+          }
+
+          return scope === "all";
+
+        });
+
+      const total =
+        eligibleCart.reduce(
+          (sum,item)=>
+            sum +
+            Number(item.price || 0) *
+            Number(item.qty || 0) +
+            Number(item.crate_fee || 0),
+          0
+        );
+
+      const rules =
+        (ManualOrder.rules || [])
+          .filter(
+            rule=>
+              moBool(rule.active) &&
+              String(rule.campaign_id || "").trim() ===
+              campaignId &&
+              total >= Number(rule.min_amount || 0)
+          )
+          .sort(
+            (a,b)=>
+              Number(a.min_amount || 0) -
+              Number(b.min_amount || 0)
+          )
+          .map(rule=>({
+
+            ...rule,
+
+            items:
+              (ManualOrder.items || [])
+                .filter(
+                  item=>
+                    moBool(item.active) &&
+                    String(item.rule_id || "").trim() ===
+                    String(rule.rule_id || "").trim()
+                )
+
+          }))
+          .filter(rule=>rule.items.length);
+
+      if(rules.length){
+
+        result.push({
+
+          ...campaign,
+
+          total,
+
+          rules
+
+        });
+
+      }
+
+    });
+
+  return result;
+
 }
 
+
+function renderManualGifts(){
+
+  const box =
+    document.getElementById(
+      "mo_gifts"
+    );
+
+  if(!box){
+    return;
+  }
+
+  if(!ManualOrder.cart.length){
+
+    box.innerHTML =
+      "ระบบจะคำนวณหลังเพิ่มสินค้า";
+
+    ManualOrder.gifts = [];
+
+    return;
+  }
+
+  const eligible =
+    getManualEligibleGiftCampaigns();
+
+  if(!eligible.length){
+
+    box.innerHTML =
+      "ยังไม่มีของแถมที่ผ่านเงื่อนไข";
+
+    ManualOrder.gifts = [];
+
+    return;
+  }
+
+  const previous =
+    Array.isArray(ManualOrder.gifts)
+      ? [...ManualOrder.gifts]
+      : [];
+
+  box.innerHTML =
+    eligible.map(campaign=>`
+
+<div class="mo-gift">
+
+  <b>
+    🎁 ${moEsc(
+      campaign.campaign_name ||
+      "Gift Campaign"
+    )}
+  </b>
+
+  <div
+  style="
+  margin-top:4px;
+  color:#166534;
+  font-size:13px;
+  "
+  >
+    ยอดคำนวณ ฿${Number(
+      campaign.total || 0
+    ).toLocaleString("th-TH")}
+  </div>
+
+  ${campaign.rules.map(rule=>{
+
+    const ruleId =
+      String(rule.rule_id || "").trim();
+
+    const maxSelect =
+      Math.max(
+        1,
+        Math.floor(
+          Number(rule.max_select || 1)
+        )
+      );
+
+    const allowDuplicate =
+      moBool(rule.allow_duplicate);
+
+    return `
+
+<div class="mo-gift-rule">
+
+  <div class="mo-row">
+
+    <b>
+      ${moEsc(rule.rule_name || "Gift Rule")}
+    </b>
+
+    <span
+    id="mo_gift_count_${moEsc(ruleId)}"
+    class="mo-gift-count"
+    >
+      0 / ${maxSelect}
+    </span>
+
+  </div>
+
+  ${rule.items.map(item=>{
+
+    const itemId =
+      String(item.gift_item_id || "").trim();
+
+    return `
+
+<div class="mo-gift-choice">
+
+  ${
+    allowDuplicate
+      ? `
+
+<input
+type="number"
+min="0"
+max="${maxSelect}"
+value="0"
+data-mo-gift-rule="${moEsc(ruleId)}"
+data-mo-gift-item="${moEsc(itemId)}"
+onchange="collectManualGiftInputs()"
+style="width:72px;"
+>
+
+`
+      : `
+
+<input
+type="checkbox"
+data-mo-gift-rule="${moEsc(ruleId)}"
+data-mo-gift-item="${moEsc(itemId)}"
+onchange="collectManualGiftInputs()"
+>
+
+`
+  }
+
+  <div style="flex:1;">
+
+    <b>
+      ${moEsc(item.gift_name || "ของแถม")}
+    </b>
+
+    ${
+      moBool(item.has_character)
+        ? `
+
+<div
+id="mo_gift_character_${moEsc(itemId)}"
+class="mo-gift-character"
+></div>
+
+`
+        : ""
+    }
+
+  </div>
+
+</div>
+
+`;
+
+  }).join("")}
+
+</div>
+
+`;
+
+  }).join("")}
+
+</div>
+
+`).join("");
+
+  ManualOrder.gifts =
+    previous;
+
+  syncManualGiftControls();
+  collectManualGiftInputs(true);
+
+}
+
+
+function syncManualGiftControls(){
+
+  const grouped = {};
+
+  (ManualOrder.gifts || [])
+    .forEach(gift=>{
+
+      const ruleId =
+        String(gift.rule_id || "").trim();
+
+      const itemId =
+        String(
+          gift.gift_item_id ||
+          gift.gift_id ||
+          ""
+        ).trim();
+
+      const key =
+        ruleId + "::" + itemId;
+
+      if(!grouped[key]){
+
+        grouped[key] = {
+
+          qty:0,
+
+          characters:[]
+
+        };
+
+      }
+
+      grouped[key].qty++;
+
+      grouped[key].characters.push(
+        String(gift.character_id || "").trim()
+      );
+
+    });
+
+  Object.entries(grouped)
+    .forEach(([key,value])=>{
+
+      const [ruleId,itemId] =
+        key.split("::");
+
+      const input =
+        document.querySelector(
+          `[data-mo-gift-rule="${moCssEscape(ruleId)}"][data-mo-gift-item="${moCssEscape(itemId)}"]`
+        );
+
+      if(!input){
+        return;
+      }
+
+      if(input.type === "checkbox"){
+
+        input.checked =
+          value.qty > 0;
+
+      }else{
+
+        input.value =
+          value.qty;
+
+      }
+
+      renderManualGiftCharacters(
+        ruleId,
+        itemId,
+        value.qty,
+        value.characters
+      );
+
+    });
+
+}
+
+
+function collectManualGiftInputs(
+  silent
+){
+
+  const next = [];
+
+  for(
+    const campaign of
+    getManualEligibleGiftCampaigns()
+  ){
+
+    for(const rule of campaign.rules){
+
+      const ruleId =
+        String(rule.rule_id || "").trim();
+
+      const maxSelect =
+        Math.max(
+          1,
+          Math.floor(
+            Number(rule.max_select || 1)
+          )
+        );
+
+      const inputs =
+        [
+          ...document.querySelectorAll(
+            `[data-mo-gift-rule="${moCssEscape(ruleId)}"]`
+          )
+        ];
+
+      let count = 0;
+
+      for(const input of inputs){
+
+        const itemId =
+          String(
+            input.dataset.moGiftItem || ""
+          ).trim();
+
+        const item =
+          rule.items.find(
+            giftItem=>
+              String(
+                giftItem.gift_item_id || ""
+              ).trim() ===
+              itemId
+          );
+
+        if(!item){
+          continue;
+        }
+
+        const qty =
+          input.type === "checkbox"
+            ? (input.checked ? 1 : 0)
+            : Math.max(
+                0,
+                Math.floor(
+                  Number(input.value || 0)
+                )
+              );
+
+        count += qty;
+
+        if(count > maxSelect){
+
+          if(!silent){
+
+            alert(
+              `เลือกของแถมได้สูงสุด ${maxSelect} ชิ้น`
+            );
+
+          }
+
+          renderManualGifts();
+
+          return false;
+        }
+
+        const oldCharacters =
+          (ManualOrder.gifts || [])
+            .filter(
+              gift=>
+                String(gift.rule_id || "").trim() ===
+                ruleId &&
+                String(
+                  gift.gift_item_id ||
+                  gift.gift_id ||
+                  ""
+                ).trim() ===
+                itemId
+            )
+            .map(
+              gift=>
+                String(
+                  gift.character_id || ""
+                ).trim()
+            );
+
+        renderManualGiftCharacters(
+          ruleId,
+          itemId,
+          qty,
+          oldCharacters
+        );
+
+        for(
+          let index=0;
+          index<qty;
+          index++
+        ){
+
+          const select =
+            document.querySelector(
+              `[data-mo-character-rule="${moCssEscape(ruleId)}"][data-mo-character-item="${moCssEscape(itemId)}"][data-mo-character-index="${index}"]`
+            );
+
+          next.push({
+
+            campaign_id:
+              campaign.campaign_id,
+
+            rule_id:
+              rule.rule_id,
+
+            gift_item_id:
+              item.gift_item_id,
+
+            gift_id:
+              item.gift_item_id,
+
+            character_id:
+              select
+                ? select.value
+                : oldCharacters[index] || ""
+
+          });
+
+        }
+
+      }
+
+      const countBox =
+        document.getElementById(
+          "mo_gift_count_" +
+          ruleId
+        );
+
+      if(countBox){
+
+        countBox.textContent =
+          count +
+          " / " +
+          maxSelect;
+
+      }
+
+    }
+
+  }
+
+  ManualOrder.gifts =
+    next;
+
+  return true;
+
+}
+
+
+function renderManualGiftCharacters(
+  ruleId,
+  itemId,
+  qty,
+  selectedIds
+){
+
+  const item =
+    (ManualOrder.items || [])
+      .find(
+        giftItem=>
+          String(
+            giftItem.gift_item_id || ""
+          ).trim() ===
+          String(itemId || "").trim()
+      );
+
+  const box =
+    document.getElementById(
+      "mo_gift_character_" +
+      itemId
+    );
+
+  if(
+    !box ||
+    !item ||
+    !moBool(item.has_character)
+  ){
+    return;
+  }
+
+  const characters =
+    (ManualOrder.characters || [])
+      .filter(
+        character=>
+          moBool(character.active) &&
+          String(
+            character.gift_item_id || ""
+          ).trim() ===
+          String(itemId || "").trim()
+      );
+
+  let html = "";
+
+  for(
+    let index=0;
+    index<qty;
+    index++
+  ){
+
+    html += `
+
+<label
+style="
+display:block;
+margin-top:8px;
+font-size:13px;
+"
+>
+
+ตัวละครชิ้นที่ ${index + 1}
+
+<select
+data-mo-character-rule="${moEsc(ruleId)}"
+data-mo-character-item="${moEsc(itemId)}"
+data-mo-character-index="${index}"
+onchange="collectManualGiftInputs(true)"
+>
+
+<option value="">
+เลือกตัวละคร
+</option>
+
+${characters.map(character=>`
+
+<option
+value="${moEsc(
+  character.character_id || ""
+)}"
+>
+${moEsc(
+  character.character_name || "-"
+)}
+</option>
+
+`).join("")}
+
+</select>
+
+</label>
+
+`;
+
+  }
+
+  box.innerHTML =
+    html;
+
+  [
+    ...box.querySelectorAll("select")
+  ].forEach(select=>{
+
+    const index =
+      Number(
+        select.dataset.moCharacterIndex
+      );
+
+    select.value =
+      Array.isArray(selectedIds)
+        ? selectedIds[index] || ""
+        : "";
+
+  });
+
+}
+
+
+function validateManualGiftSelections(){
+
+  collectManualGiftInputs(true);
+
+  for(const gift of ManualOrder.gifts){
+
+    const item =
+      (ManualOrder.items || [])
+        .find(
+          giftItem=>
+            String(
+              giftItem.gift_item_id || ""
+            ).trim() ===
+            String(
+              gift.gift_item_id || ""
+            ).trim()
+        );
+
+    if(
+      item &&
+      moBool(item.has_character) &&
+      !String(
+        gift.character_id || ""
+      ).trim()
+    ){
+
+      throw new Error(
+        "กรุณาเลือกตัวละครของ " +
+        (
+          item.gift_name ||
+          "ของแถม"
+        )
+      );
+
+    }
+
+  }
+
+}
+
+
+function moCssEscape(
+  value
+){
+
+  if(
+    window.CSS &&
+    typeof CSS.escape === "function"
+  ){
+
+    return CSS.escape(
+      String(value || "")
+    );
+
+  }
+
+  return String(
+    value || ""
+  ).replace(
+    /["\\]/g,
+    "\\$&"
+  );
+
+}
 async function submitManualOrder(){
   if(ManualOrder.loading)return;
   const slip=document.getElementById('mo_slip').files[0];const status=document.getElementById('mo_paystatus').value;
   if(!document.getElementById('mo_name').value.trim()||!document.getElementById('mo_email').value.trim()||!document.getElementById('mo_phone').value.trim())return alert('กรอกข้อมูลลูกค้าให้ครบ');
   if(!ManualOrder.cart.length)return alert('เพิ่มสินค้าอย่างน้อย 1 รายการ');
   if(status==='paid'&&!slip)return alert('สถานะชำระแล้วต้องแนบสลิป');
+
+  try{
+
+    validateManualGiftSelections();
+
+  }catch(error){
+
+    alert(
+      error.message ||
+      String(error)
+    );
+
+    return;
+
+  }
+
   const payload={
 
   customer_id:
