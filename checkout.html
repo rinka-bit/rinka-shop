@@ -1866,8 +1866,7 @@ function buildEligibleGiftCampaigns(){
 
       const campaignId =
         normalizeGiftId(
-          campaign.campaign_id ||
-          campaign.gift_id
+          campaign.campaign_id
         );
 
       if(!campaignId){
@@ -1879,7 +1878,7 @@ function buildEligibleGiftCampaigns(){
 
       /*
       =========================================
-      1. หา Cart Items ที่ Campaign นี้ใช้คำนวณ
+      1. หาสินค้าที่ Campaign นี้ใช้คำนวณ
       =========================================
       */
 
@@ -1894,7 +1893,7 @@ function buildEligibleGiftCampaigns(){
       ){
 
         console.log(
-          "Gift campaign ไม่มีสินค้าเข้าเงื่อนไข:",
+          "Campaign ไม่มีสินค้าเข้าเงื่อนไข:",
           campaignId
         );
 
@@ -1905,7 +1904,7 @@ function buildEligibleGiftCampaigns(){
 
       /*
       =========================================
-      2. คำนวณยอด
+      2. คำนวณยอดที่ใช้รับของแถม
       =========================================
       */
 
@@ -1914,16 +1913,11 @@ function buildEligibleGiftCampaigns(){
           (
             sum,
             item
-          )=>{
-
-            return (
-              sum +
-              getCartItemTotal(
-                item
-              )
-            );
-
-          },
+          )=>
+            sum +
+            getCartItemTotal(
+              item
+            ),
           0
         );
 
@@ -1942,23 +1936,21 @@ function buildEligibleGiftCampaigns(){
 
       /*
       =========================================
-      3. หา Rules ของ Campaign
+      3. หา Rule ที่อยู่ใน Campaign
+         และยอดถึงเงื่อนไข
       =========================================
       */
 
-      const campaignRules =
+      const matchedRules =
         rules
           .filter(
-            rule=>{
+            rule=>
 
-              return (
-                normalizeGiftId(
-                  rule.campaign_id
-                ) ===
-                campaignId
-              );
+              normalizeGiftId(
+                rule.campaign_id
+              ) ===
+              campaignId
 
-            }
           )
           .filter(
             rule=>{
@@ -1973,7 +1965,7 @@ function buildEligibleGiftCampaigns(){
                   minAmount
                 ) &&
                 eligibleTotal >=
-                  minAmount
+                minAmount
               );
 
             }
@@ -1982,27 +1974,23 @@ function buildEligibleGiftCampaigns(){
             (
               a,
               b
-            )=>{
+            )=>
 
-              return (
-                Number(
-                  a.min_amount || 0
-                ) -
-                Number(
-                  b.min_amount || 0
-                )
-              );
-
-            }
+              Number(
+                a.min_amount || 0
+              ) -
+              Number(
+                b.min_amount || 0
+              )
           );
 
 
       if(
-        campaignRules.length===0
+        matchedRules.length===0
       ){
 
         console.log(
-          "Gift campaign ยอดยังไม่ถึง Rule:",
+          "ยอดยังไม่ถึง Rule:",
           campaignId,
           eligibleTotal
         );
@@ -2014,72 +2002,14 @@ function buildEligibleGiftCampaigns(){
 
       /*
       =========================================
-      4. GiftItems ของ Campaign
-      =========================================
-      */
+      4. เชื่อม Gift Item ด้วย rule_id
 
-      const campaignGiftItems =
-        giftItems
-          .filter(
-            item=>{
-
-              return (
-                normalizeGiftId(
-                  item.campaign_id
-                ) ===
-                campaignId
-              );
-
-            }
-          )
-          .sort(
-            (
-              a,
-              b
-            )=>{
-
-              return (
-                Number(
-                  a.sort_order || 0
-                ) -
-                Number(
-                  b.sort_order || 0
-                )
-              );
-
-            }
-          );
-
-
-      if(
-        campaignGiftItems.length===0
-      ){
-
-        console.warn(
-          "Campaign ไม่มี GiftItems:",
-          campaignId
-        );
-
-        return;
-
-      }
-
-
-      /*
-      =========================================
-      5. ใส่ GiftItems เข้าแต่ละ Rule
-
-      รองรับทั้ง:
-      - item.rule_id
-      - item ไม่มี rule_id
-
-      ถ้า GiftItem ไม่มี rule_id
-      จะถือว่าใช้ได้กับทุก Rule ของ Campaign
+      GiftItems ไม่มี campaign_id
       =========================================
       */
 
       const preparedRules =
-        campaignRules
+        matchedRules
           .map(
             rule=>{
 
@@ -2090,37 +2020,32 @@ function buildEligibleGiftCampaigns(){
 
 
               const ruleItems =
-                campaignGiftItems.filter(
-                  item=>{
+                giftItems
+                  .filter(
+                    item=>
 
-                    const itemRuleId =
                       normalizeGiftId(
                         item.rule_id
-                      );
-
-
-                    /*
-                    ถ้า GiftItem ไม่ระบุ rule_id
-                    ให้ใช้กับ Rule นี้ได้
-                    */
-
-                    if(!itemRuleId){
-
-                      return true;
-
-                    }
-
-
-                    return (
-                      itemRuleId ===
+                      ) ===
                       ruleId
-                    );
 
-                  }
-                );
+                  )
+                  .sort(
+                    (
+                      a,
+                      b
+                    )=>
+
+                      Number(
+                        a.sort_order || 0
+                      ) -
+                      Number(
+                        b.sort_order || 0
+                      )
+                  );
 
 
-              return{
+              return {
 
                 ...rule,
 
@@ -2142,7 +2067,7 @@ function buildEligibleGiftCampaigns(){
       ){
 
         console.warn(
-          "Campaign มี GiftItems แต่ไม่มี Item ที่ผูกกับ Rule:",
+          "พบ Rule แต่ไม่มี Gift Item ที่เชื่อมด้วย rule_id:",
           campaignId
         );
 
@@ -2153,11 +2078,7 @@ function buildEligibleGiftCampaigns(){
 
       /*
       =========================================
-      6. Campaign object สำหรับ Renderer
-
-      สำคัญ:
-      renderCheckoutGiftEngine()
-      ต้องอ่าน property ตรงจาก object นี้
+      5. ส่งโครงสร้างที่ Renderer ใช้งาน
       =========================================
       */
 
