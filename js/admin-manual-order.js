@@ -39,6 +39,17 @@ function renderManualOrderManager(){
   .mo-product{border:1px solid #e5e7eb;border-radius:12px;padding:10px;cursor:pointer}.mo-product:hover{border-color:#7dcfff}
   .mo-row{display:flex;justify-content:space-between;gap:10px;align-items:center}.mo-item{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin-top:8px}
   .mo-total{font-size:26px;font-weight:800;color:#2563eb}.mo-gift{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:10px;margin-top:8px}
+  .mo-modal{position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:99999;padding:20px;overflow:auto}
+  .mo-modal.hidden{display:none}
+  .mo-modal-card{max-width:650px;margin:40px auto;background:white;border-radius:18px;padding:18px}
+  .mo-modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+  .mo-option-group{margin-bottom:16px}
+  .mo-option-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .mo-option-choice{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid #dbeafe;border-radius:999px}
+  .mo-option-choice input{width:auto}
+  .mo-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+  .mo-product-image{width:120px;height:120px;object-fit:cover;border-radius:14px;background:#f1f5f9}
+  .mo-empty{padding:14px;background:#f8fafc;border-radius:12px;color:#64748b}
   @media(max-width:800px){.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}}
   </style>
   <div class="mo-card">
@@ -142,7 +153,40 @@ id="mo_name"
   <label class="mo-full">แนบสลิป<input id="mo_slip" type="file" accept="image/*"></label>
   <label class="mo-full">หมายเหตุ<textarea id="mo_note" rows="2"></textarea></label>
   </div></div>
-  <button id="mo_submit" onclick="submitManualOrder()">✅ ยืนยันคำสั่งซื้อ</button>`;
+  <button id="mo_submit" onclick="submitManualOrder()">✅ ยืนยันคำสั่งซื้อ</button>
+
+  <div
+  id="mo_product_modal"
+  class="mo-modal hidden"
+  onclick="handleManualProductModalBackdrop(event)"
+  >
+
+    <div class="mo-modal-card">
+
+      <div class="mo-modal-header">
+
+        <h3
+        id="mo_modal_title"
+        style="margin:0;"
+        >
+        เพิ่มสินค้า
+        </h3>
+
+        <button
+        type="button"
+        style="background:#64748b;width:auto;"
+        onclick="closeManualProductModal()"
+        >
+        ✕
+        </button>
+
+      </div>
+
+      <div id="mo_modal_body"></div>
+
+    </div>
+
+  </div>`;
   loadManualOrderData();
 }
 
@@ -156,7 +200,64 @@ async function loadManualOrderData(){
   document.getElementById('mo_collection').innerHTML='<option value="">ทั้งหมด</option>'+ManualOrder.collections.map(x=>`<option value="${moEsc(x.collection_id)}">${moEsc(x.name)}</option>`).join('');
   filterManualProducts();renderManualCart();renderManualGifts();
 }
-async function moGet(action){const r=await fetch(API+'?action='+encodeURIComponent(action));const j=await r.json();if(j&&j.success===false)throw new Error(j.error||action);return j}
+async function moGet(action){
+
+  const separator =
+    String(action).includes("&")
+      ? "&"
+      : "";
+
+  const parts =
+    String(action).split("&");
+
+  const actionName =
+    parts.shift();
+
+  const query =
+    parts.length
+      ? "&" + parts.join("&")
+      : "";
+
+  const response =
+    await fetch(
+      API +
+      "?action=" +
+      encodeURIComponent(
+        actionName
+      ) +
+      query
+    );
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status +
+      " (" +
+      actionName +
+      ")"
+    );
+
+  }
+
+  const result =
+    await response.json();
+
+  if(
+    result &&
+    result.success === false
+  ){
+
+    throw new Error(
+      result.error ||
+      actionName
+    );
+
+  }
+
+  return result;
+
+}
 function moArray(v,...keys){if(Array.isArray(v))return v;for(const k of keys)if(v&&Array.isArray(v[k]))return v[k];return []}
 function moBool(v){return v===true||v===1||['yes','true','1','active'].includes(String(v||'').trim().toLowerCase())}
 function moEsc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')}
@@ -534,17 +635,747 @@ function setManualField(
 }
 
 function filterManualProducts(){
-  const type=document.getElementById('mo_type').value, col=document.getElementById('mo_collection').value, q=document.getElementById('mo_search').value.trim().toLowerCase();
-  const rows=ManualOrder.products.filter(p=>String(p.product_type||'preorder').toLowerCase()===type&&(!col||String(p.collection_id||'')===col)&&(!q||[p.name,p.fandom,p.sub_category].join(' ').toLowerCase().includes(q)));
-  document.getElementById('mo_products').innerHTML=rows.length?rows.map(p=>`<div class="mo-product" onclick="addManualProduct('${moEsc(p.product_id)}')"><b>${moEsc(p.name)}</b><div>฿${moPrice(p).toLocaleString()}</div><small>${moEsc(p.fandom||'')}</small></div>`).join(''):'ไม่พบสินค้า';
+
+  const type =
+    document
+      .getElementById(
+        "mo_type"
+      )
+      .value;
+
+  const collection =
+    document
+      .getElementById(
+        "mo_collection"
+      )
+      .value;
+
+  const search =
+    document
+      .getElementById(
+        "mo_search"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+  const rows =
+    ManualOrder.products.filter(
+      product=>{
+
+        const productType =
+          String(
+            product.product_type ||
+            "preorder"
+          )
+            .trim()
+            .toLowerCase();
+
+        if(
+          productType !== type
+        ){
+          return false;
+        }
+
+        if(
+          collection &&
+          String(
+            product.collection_id || ""
+          ) !== collection
+        ){
+          return false;
+        }
+
+        if(search){
+
+          const haystack = [
+
+            product.name,
+            product.fandom,
+            product.sub_category,
+            product.round
+
+          ]
+            .join(" ")
+            .toLowerCase();
+
+          if(
+            !haystack.includes(
+              search
+            )
+          ){
+            return false;
+          }
+
+        }
+
+        return true;
+
+      }
+    );
+
+  const box =
+    document.getElementById(
+      "mo_products"
+    );
+
+  box.innerHTML =
+    rows.length
+
+      ? rows.map(
+          product=>`
+
+<div
+class="mo-product"
+onclick="
+openManualProductModal(
+'${moEsc(
+  product.product_id
+)}'
+)
+"
+>
+
+<b>
+${moEsc(
+  product.name
+)}
+</b>
+
+<div>
+฿${moPrice(
+  product
+).toLocaleString()}
+</div>
+
+<small>
+${moEsc(
+  product.fandom || ""
+)}
+</small>
+
+</div>
+
+`
+        ).join("")
+
+      : "ไม่พบสินค้า";
+
 }
-function addManualProduct(id){
-  const p=ManualOrder.products.find(x=>String(x.product_id)===String(id));if(!p)return;
-  const qty=Math.max(1,Number(prompt('จำนวน',1)||1));
-  const option=prompt('ตัวเลือก/ตัวละคร (เว้นว่างได้)','')||'';
-  const key=id+'::'+option;const ex=ManualOrder.cart.find(x=>x._key===key);
-  if(ex)ex.qty+=qty;else ManualOrder.cart.push({_key:key,product_id:p.product_id,product_name:p.name,name:p.name,price:moPrice(p),qty,selected_options:option?{ตัวเลือก:option}:{},crate_selected:'No',crate_fee:0,collection_id:p.collection_id||'',fandom:p.fandom||''});
-  renderManualCart();renderManualGifts();
+
+
+async function openManualProductModal(
+  productId
+){
+
+  const product =
+    ManualOrder.products.find(
+      item=>
+        String(
+          item.product_id
+        ) ===
+        String(
+          productId
+        )
+    );
+
+  if(!product){
+    return;
+  }
+
+  const modal =
+    document.getElementById(
+      "mo_product_modal"
+    );
+
+  const title =
+    document.getElementById(
+      "mo_modal_title"
+    );
+
+  const body =
+    document.getElementById(
+      "mo_modal_body"
+    );
+
+  if(
+    !modal ||
+    !title ||
+    !body
+  ){
+    return;
+  }
+
+  title.textContent =
+    product.name ||
+    "เพิ่มสินค้า";
+
+  body.innerHTML = `
+
+<div class="mo-empty">
+⏳ กำลังโหลดตัวเลือกสินค้า...
+</div>
+
+`;
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+  document.body.style.overflow =
+    "hidden";
+
+  let options =
+    Array.isArray(
+      product.options
+    )
+      ? product.options
+      : [];
+
+  if(
+    options.length === 0
+  ){
+
+    try{
+
+      const optionResult =
+        await moGet(
+          "adminProductOptions" +
+          "&product_id=" +
+          encodeURIComponent(
+            product.product_id
+          )
+        );
+
+      options =
+        moArray(
+          optionResult,
+          "options"
+        );
+
+    }catch(error){
+
+      console.warn(
+        "โหลดตัวเลือกสินค้าไม่สำเร็จ:",
+        error
+      );
+
+      options = [];
+
+    }
+
+  }
+
+  const groupedOptions = {};
+
+  options.forEach(
+    option=>{
+
+      const optionName =
+        String(
+          option.option_name ||
+          "ตัวเลือก"
+        ).trim();
+
+      if(
+        !groupedOptions[
+          optionName
+        ]
+      ){
+
+        groupedOptions[
+          optionName
+        ] = [];
+
+      }
+
+      groupedOptions[
+        optionName
+      ].push(
+        option
+      );
+
+    }
+  );
+
+  let optionHtml = "";
+
+  Object.entries(
+    groupedOptions
+  ).forEach(
+    (
+      [
+        optionName,
+        values
+      ]
+    )=>{
+
+      const selectionType =
+        String(
+          values[0]
+            ?.selection_type ||
+          "single"
+        )
+          .trim()
+          .toLowerCase();
+
+      optionHtml += `
+
+<div
+class="mo-option-group"
+data-option-name="${moEsc(
+  optionName
+)}"
+data-selection-type="${moEsc(
+  selectionType
+)}"
+>
+
+<b>
+${moEsc(
+  optionName
+)}
+</b>
+
+<div class="mo-option-list">
+
+`;
+
+      values.forEach(
+        option=>{
+
+          const inputType =
+            selectionType ===
+            "multiple"
+              ? "checkbox"
+              : "radio";
+
+          const inputName =
+            "mo_option_" +
+            product.product_id +
+            "_" +
+            optionName;
+
+          optionHtml += `
+
+<label class="mo-option-choice">
+
+<input
+type="${inputType}"
+name="${moEsc(
+  inputName
+)}"
+value="${moEsc(
+  option.option_value || ""
+)}"
+data-additional-price="${Number(
+  option.additional_price || 0
+)}"
+>
+
+<span>
+
+${moEsc(
+  option.option_value || "-"
+)}
+
+${
+  Number(
+    option.additional_price || 0
+  ) > 0
+
+    ? ` (+฿${Number(
+        option.additional_price
+      ).toLocaleString()})`
+
+    : ""
+}
+
+</span>
+
+</label>
+
+`;
+
+        }
+      );
+
+      optionHtml += `
+
+</div>
+
+</div>
+
+`;
+
+    }
+  );
+
+  body.innerHTML = `
+
+<div class="mo-grid">
+
+<div class="mo-full">
+
+${
+  product.image
+    ? `
+
+<img
+src="${moEsc(
+  product.image
+)}"
+class="mo-product-image"
+>
+
+`
+    : ""
+}
+
+</div>
+
+<div class="mo-full">
+
+${
+  optionHtml ||
+  `
+
+<div class="mo-empty">
+สินค้านี้ไม่มีตัวเลือกเพิ่มเติม
+</div>
+
+`
+}
+
+</div>
+
+<label>
+
+จำนวน
+
+<input
+id="mo_modal_qty"
+type="number"
+min="1"
+value="1"
+>
+
+</label>
+
+<label>
+
+เลือกตีลังไม้
+
+<select id="mo_modal_crate_selected">
+
+<option value="No">
+ไม่เลือก
+</option>
+
+<option value="Yes">
+เลือก
+</option>
+
+</select>
+
+</label>
+
+<label>
+
+ค่าตีลังไม้
+
+<input
+id="mo_modal_crate_fee"
+type="number"
+min="0"
+step="0.01"
+value="0"
+>
+
+</label>
+
+</div>
+
+<div class="mo-modal-actions">
+
+<button
+type="button"
+style="background:#64748b;"
+onclick="closeManualProductModal()"
+>
+ยกเลิก
+</button>
+
+<button
+type="button"
+onclick="
+confirmAddManualProduct(
+'${moEsc(
+  product.product_id
+)}'
+)
+"
+>
+＋ เพิ่มสินค้า
+</button>
+
+</div>
+
+`;
+
+}
+
+
+function confirmAddManualProduct(
+  productId
+){
+
+  const product =
+    ManualOrder.products.find(
+      item=>
+        String(
+          item.product_id
+        ) ===
+        String(
+          productId
+        )
+    );
+
+  if(!product){
+    return;
+  }
+
+  const selectedOptions = {};
+  let additionalPrice = 0;
+
+  const groups =
+    document.querySelectorAll(
+      "#mo_modal_body .mo-option-group"
+    );
+
+  for(const group of groups){
+
+    const optionName =
+      group.dataset.optionName ||
+      "ตัวเลือก";
+
+    const selectionType =
+      group.dataset.selectionType ||
+      "single";
+
+    const selectedInputs =
+      [
+        ...group.querySelectorAll(
+          "input:checked"
+        )
+      ];
+
+    if(
+      selectedInputs.length === 0
+    ){
+
+      alert(
+        "กรุณาเลือก " +
+        optionName
+      );
+
+      return;
+
+    }
+
+    if(
+      selectionType ===
+      "multiple"
+    ){
+
+      selectedOptions[
+        optionName
+      ] =
+        selectedInputs.map(
+          input=>
+            input.value
+        );
+
+    }else{
+
+      selectedOptions[
+        optionName
+      ] =
+        selectedInputs[0].value;
+
+    }
+
+    selectedInputs.forEach(
+      input=>{
+
+        additionalPrice +=
+          Number(
+            input.dataset
+              .additionalPrice ||
+            0
+          );
+
+      }
+    );
+
+  }
+
+  const qty =
+    Math.max(
+      1,
+      Math.floor(
+        Number(
+          document
+            .getElementById(
+              "mo_modal_qty"
+            )
+            ?.value || 1
+        )
+      )
+    );
+
+  const crateSelected =
+    document
+      .getElementById(
+        "mo_modal_crate_selected"
+      )
+      ?.value || "No";
+
+  const crateFee =
+    crateSelected === "Yes"
+      ? Math.max(
+          0,
+          Number(
+            document
+              .getElementById(
+                "mo_modal_crate_fee"
+              )
+              ?.value || 0
+          )
+        )
+      : 0;
+
+  const unitPrice =
+    moPrice(
+      product
+    ) +
+    additionalPrice;
+
+  const key =
+
+    product.product_id +
+
+    "::" +
+
+    JSON.stringify(
+      selectedOptions
+    ) +
+
+    "::" +
+
+    crateSelected +
+
+    "::" +
+
+    crateFee;
+
+  const existing =
+    ManualOrder.cart.find(
+      item=>
+        item._key === key
+    );
+
+  if(existing){
+
+    existing.qty +=
+      qty;
+
+  }else{
+
+    ManualOrder.cart.push({
+
+      _key:
+        key,
+
+      product_id:
+        product.product_id,
+
+      product_name:
+        product.name,
+
+      name:
+        product.name,
+
+      price:
+        unitPrice,
+
+      qty:
+        qty,
+
+      selected_options:
+        selectedOptions,
+
+      crate_selected:
+        crateSelected,
+
+      crate_fee:
+        crateFee,
+
+      collection_id:
+        product.collection_id ||
+        "",
+
+      fandom:
+        product.fandom ||
+        ""
+
+    });
+
+  }
+
+  closeManualProductModal();
+
+  renderManualCart();
+  renderManualGifts();
+
+}
+
+
+function closeManualProductModal(){
+
+  const modal =
+    document.getElementById(
+      "mo_product_modal"
+    );
+
+  if(modal){
+
+    modal.classList.add(
+      "hidden"
+    );
+
+  }
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+function handleManualProductModalBackdrop(
+  event
+){
+
+  if(
+    event.target &&
+    event.target.id ===
+    "mo_product_modal"
+  ){
+
+    closeManualProductModal();
+
+  }
+
 }
 function renderManualCart(){
   const box=document.getElementById('mo_cart');
@@ -601,3 +1432,18 @@ async function submitManualOrder(){
 }
 function moVal(id){return document.getElementById(id)?.value.trim()||''}
 function moFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(new Error('อ่านสลิปไม่สำเร็จ'));r.readAsDataURL(f)})}
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.key === "Escape"
+    ){
+
+      closeManualProductModal();
+
+    }
+
+  }
+);
