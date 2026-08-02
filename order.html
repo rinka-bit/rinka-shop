@@ -77,7 +77,20 @@ function statusBadge(s){const c=s==="pending"?"pending":s==="ready_to_ship"?"rea
 function shippingBadge(s){if(s==="paid")return '<span class="badge paid">ชำระค่าส่งแล้ว</span>';if(s==="combine_later")return '<span class="badge progress">รอส่งรวม</span>';return '<span class="badge pending">รอชำระค่าส่ง</span>'}
 function messageHtml(s){const m={pending:["m-pending","📦 ร้านกดสั่งสินค้าให้เรียบร้อยแล้ว"],china_arrived:["m-progress","🏭 สินค้าถึงโกดังจีนแล้ว"],shipping_to_th:["m-progress","🚚 สินค้ากำลังเดินทางมายังประเทศไทย"],ready_to_ship:["m-ready","📬 สินค้าถึงไทยแล้ว กรุณายืนยันที่อยู่และชำระค่าส่ง"],shipped:["m-done","🎉 ร้านจัดส่งสินค้าเรียบร้อยแล้ว"]}[s];return m?`<div class="message ${m[0]}">${m[1]}</div>`:""}
 function timeline(current){const steps=[["pending","📦","กดสั่งสินค้าแล้ว"],["china_arrived","🏭","ถึงโกดังจีน"],["shipping_to_th","🚚","กำลังมาไทย"],["ready_to_ship","📬","เตรียมจัดส่ง"],["shipped","✅","จัดส่งแล้ว"]];const idx=steps.findIndex(x=>x[0]===current);return steps.map((x,i)=>`<div class="timeline-step ${i<=idx?"done":""}"><div class="timeline-dot">${i<=idx?"🟢":"⚪"}</div><div class="timeline-line"><strong>${x[1]} ${x[2]}</strong></div></div>`).join("")}
-function openTracking(c,t){if(!t)return;const x=c.toLowerCase();let u=x.includes("flash")?"https://www.flashexpress.co.th/tracking/?se="+encodeURIComponent(t):x.includes("kerry")||x.includes("kex")?"https://th.kex-express.com/th/track/?track="+encodeURIComponent(t):x.includes("j&t")||x.includes("jnt")||x.includes("jt")?"https://www.jtexpress.co.th/index/query/gzquery.html?bills="+encodeURIComponent(t):x.includes("ไปรษณีย์")||x.includes("thaipost")||x.includes("ems")?"https://track.thailandpost.co.th/?trackNumber="+encodeURIComponent(t):"https://parcelsapp.com/en/tracking/"+encodeURIComponent(t);window.open(u,"_blank","noopener,noreferrer")}
+function openTracking(c,t){
+
+  if(!t){
+    return;
+  }
+
+  window.open(
+    "https://track.thailandpost.co.th/?trackNumber=" +
+    encodeURIComponent(t),
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
 async function copyText(t){try{await navigator.clipboard.writeText(t);toast("คัดลอกเลขพัสดุแล้ว")}catch(e){toast("คัดลอกไม่สำเร็จ")}}
 function toast(t){const b=document.getElementById("toast");b.textContent=t;b.classList.add("show");setTimeout(()=>b.classList.remove("show"),1800)}
 function state(t,m,retry){const b=document.getElementById("orderBox");b.className="state";b.innerHTML=`<div style="font-size:50px">⚠️</div><h2>${esc(t)}</h2><p>${esc(m||"")}</p>${retry?'<button onclick="loadOrder()">ลองใหม่</button>':'<a href="orders.html">กลับไปรายการออเดอร์</a>'}`}
