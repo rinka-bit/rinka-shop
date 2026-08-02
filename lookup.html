@@ -4,239 +4,530 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width,initial-scale=1">
 
-<title>
-ค้นหาออเดอร์
-</title>
+<title>เช็กออเดอร์ | Rinka Shop</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
 
 <style>
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-margin-bottom:15px;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
+:root{
+  --lookup-primary:#7dcfff;
+  --lookup-primary-dark:#4ba5db;
+  --lookup-background:#f6fbff;
+  --lookup-card:#ffffff;
+  --lookup-text:#334155;
+  --lookup-muted:#64748b;
+  --lookup-border:#dbe7f1;
+  --lookup-danger:#be123c;
 }
 
-input{
-width:100%;
-padding:12px;
-box-sizing:border-box;
-margin-bottom:10px;
-}
-
-button{
-padding:12px 20px;
-border:none;
-border-radius:8px;
-background:#4f46e5;
-color:white;
-cursor:pointer;
+*{
+  box-sizing:border-box;
 }
 
 body{
-font-family:Arial,sans-serif;
-max-width:800px;
-margin:auto;
-padding:20px;
+  margin:0;
+  font-family:'Kodchasan',sans-serif;
+  color:var(--lookup-text);
+  background:
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      var(--lookup-background) 100%
+    );
 }
 
-#pageTitle{
-font-size:28px;
-margin:0;
-}
-
-h1{
-color:#4a6fa5;
+button,
+input,
+a{
+  font:inherit;
 }
 
 button{
-width:100%;
-max-width:220px;
+  cursor:pointer;
 }
-  
+
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
 .page-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 16px;
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid rgba(219,231,241,.95);
+  box-shadow:0 5px 18px rgba(71,85,105,.07);
+  backdrop-filter:blur(10px);
+}
 
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:16px 24px;
-
-background:#fff;
-
-position:sticky;
-
-top:0;
-
-z-index:100;
-
-box-shadow:
-0 3px 10px
-rgba(0,0,0,.05);
-
+.page-header h1{
+  flex:1;
+  margin:0;
+  padding:0 12px;
+  color:#3f6078;
+  text-align:center;
+  font-size:20px;
 }
 
 .icon-btn{
-
-width:44px !important;
-height:44px !important;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-border:none !important;
-background:#ffffff !important;
-color:#4a6fa5 !important;
-
-font-size:32px !important;
-line-height:1;
-
-padding:0 !important;
-
-cursor:pointer;
-
-position:relative;
-z-index:101;
-
+  width:46px !important;
+  height:46px;
+  padding:0 !important;
+  border:none;
+  border-radius:999px;
+  background:#fff;
+  color:var(--lookup-text);
+  font-size:25px;
+  box-shadow:0 4px 14px rgba(71,85,105,.10);
 }
 
 .cart-btn{
-
-position:relative;
-
-font-size:28px;
-
-text-decoration:none;
-
-width:auto !important;
-
+  position:relative;
+  width:46px !important;
+  height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:#fff;
+  text-decoration:none;
+  font-size:21px;
+  box-shadow:0 4px 14px rgba(71,85,105,.10);
 }
 
 #cartCount{
+  position:absolute;
+  top:-5px;
+  right:-5px;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  border-radius:999px;
+  background:#ff5c7a;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  font-weight:700;
+}
 
-position:absolute;
+.lookup-container{
+  width:min(820px,100%);
+  margin:auto;
+  padding:22px 16px 48px;
+}
 
-top:-8px;
+.lookup-hero{
+  margin-bottom:18px;
+  padding:22px;
+  border:1px solid var(--lookup-border);
+  border-radius:23px;
+  background:
+    linear-gradient(
+      135deg,
+      #f3fbff,
+      #ffffff
+    );
+  box-shadow:0 10px 30px rgba(86,142,178,.10);
+}
 
-right:-8px;
+.lookup-hero h2{
+  margin:0;
+  color:#355a73;
+  font-size:25px;
+}
 
-background:#ff5c7a;
+.lookup-hero p{
+  margin:9px 0 0;
+  color:var(--lookup-muted);
+  line-height:1.65;
+}
 
-color:white;
+.lookup-card{
+  padding:19px;
+  border:1px solid var(--lookup-border);
+  border-radius:21px;
+  background:#fff;
+  box-shadow:0 8px 25px rgba(86,142,178,.08);
+}
 
-font-size:12px;
+.lookup-methods{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
 
-padding:2px 6px;
+.lookup-field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
 
-border-radius:20px;
+.lookup-field label{
+  font-weight:700;
+  color:#45677e;
+}
 
+.lookup-field small{
+  color:var(--lookup-muted);
+}
+
+.lookup-field input{
+  width:100%;
+  min-height:46px;
+  padding:11px 13px;
+  border:1px solid #d7e3ec;
+  border-radius:13px;
+  background:#fff;
+  outline:none;
+}
+
+.lookup-field input:focus{
+  border-color:var(--lookup-primary-dark);
+  box-shadow:0 0 0 3px rgba(125,207,255,.16);
+}
+
+.lookup-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:15px;
+}
+
+.lookup-hint{
+  color:var(--lookup-muted);
+  font-size:12px;
+}
+
+.lookup-button{
+  min-width:150px;
+  min-height:46px;
+  border:none;
+  border-radius:999px;
+  padding:11px 18px;
+  background:
+    linear-gradient(
+      135deg,
+      #7dcfff,
+      #57b8ed
+    );
+  color:#fff;
+  font-weight:700;
+  box-shadow:0 8px 19px rgba(87,184,237,.22);
+}
+
+.lookup-result-section{
+  margin-top:20px;
+}
+
+.lookup-result-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.lookup-result-heading h2{
+  margin:0;
+  color:#3f6078;
+  font-size:18px;
+}
+
+.lookup-result-count{
+  color:var(--lookup-muted);
+  font-size:13px;
+}
+
+.lookup-order-list{
+  display:grid;
+  gap:12px;
+}
+
+.lookup-order-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  padding:15px;
+  border:1px solid var(--lookup-border);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 7px 20px rgba(86,142,178,.07);
+}
+
+.lookup-order-id{
+  font-weight:700;
+  overflow-wrap:anywhere;
+}
+
+.lookup-order-date{
+  margin-top:5px;
+  color:var(--lookup-muted);
+  font-size:12px;
+}
+
+.lookup-order-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+
+.lookup-badge{
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.badge-pending{
+  background:#fff7ed;
+  color:#c2410c;
+}
+
+.badge-progress{
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+
+.badge-ready{
+  background:#fefce8;
+  color:#a16207;
+}
+
+.badge-shipped,
+.badge-paid{
+  background:#ecfdf5;
+  color:#166534;
+}
+
+.badge-unpaid{
+  background:#fff1f2;
+  color:#be123c;
+}
+
+.lookup-order-side{
+  min-width:120px;
+  text-align:right;
+}
+
+.lookup-order-total{
+  color:#2563eb;
+  font-size:19px;
+  font-weight:700;
+}
+
+.lookup-detail-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:10px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#eef8ff;
+  color:#3476a2;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:700;
+}
+
+.lookup-state{
+  min-height:240px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:25px;
+  text-align:center;
+  border:1px solid var(--lookup-border);
+  border-radius:20px;
+  background:#fff;
+}
+
+.lookup-state h2,
+.lookup-state p{
+  margin:0;
+}
+
+.lookup-state p{
+  color:var(--lookup-muted);
+}
+
+.lookup-state-icon{
+  font-size:48px;
+}
+
+.lookup-state button,
+.lookup-state a{
+  padding:10px 16px;
+  border:none;
+  border-radius:999px;
+  background:var(--lookup-primary);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.lookup-spinner{
+  width:35px;
+  height:35px;
+  border:4px solid #dff2fc;
+  border-top-color:var(--lookup-primary-dark);
+  border-radius:50%;
+  animation:lookupSpin .8s linear infinite;
+}
+
+@keyframes lookupSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.lookup-message{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:#fff1f2;
+  border:1px solid #fecaca;
+  color:#9f1239;
+}
+
+.lookup-message.hidden{
+  display:none;
 }
 
 .overlay{
-
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.35);
-
-z-index:999;
-
-opacity:1;
-
-transition:.25s;
-
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:rgba(0,0,0,.35);
+  opacity:1;
+  transition:.25s;
 }
 
 .overlay.hidden{
-
-opacity:0;
-
-pointer-events:none;
-
+  opacity:0;
+  pointer-events:none;
 }
 
 .side-menu{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:280px;
-
-max-width:80%;
-
-height:100vh;
-
-background:#fff;
-
-z-index:1000;
-
-box-shadow:0 0 30px rgba(0,0,0,.15);
-
-transform:translateX(-100%);
-
-transition:.3s ease;
-
-display:flex;
-
-flex-direction:column;
-
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:1000;
+  width:280px;
+  max-width:82%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  box-shadow:0 0 30px rgba(0,0,0,.15);
+  transform:translateX(-100%);
+  transition:.3s ease;
 }
 
 .side-menu.open{
-
-transform:translateX(0);
-
+  transform:translateX(0);
 }
 
 .menu-header{
-
-padding:24px;
-
-border-bottom:1px solid #eee;
-
+  padding:24px;
+  border-bottom:1px solid #eee;
 }
 
 .side-menu a{
-
-padding:18px 24px;
-
-font-size:16px;
-
-font-weight:600;
-
-text-decoration:none;
-
-color:#333;
-
+  padding:18px 24px;
+  color:#333;
+  text-decoration:none;
+  font-size:16px;
+  font-weight:600;
 }
 
 .side-menu a:hover{
-
-background:#f7f9ff;
-
+  background:#f7f9ff;
 }
 
-.back-btn{
-margin:16px 0;
-padding:10px 16px;
-border:none;
-border-radius:999px;
-background:#e0f2fe;
-color:#2563eb;
-font-weight:700;
-cursor:pointer;
+.hidden{
+  display:none !important;
+}
+
+@media(max-width:650px){
+
+  .page-header{
+    min-height:64px;
+    padding:9px 11px;
+  }
+
+  .page-header h1{
+    font-size:17px;
+  }
+
+  .lookup-container{
+    padding:14px 10px 36px;
+  }
+
+  .lookup-hero{
+    padding:18px;
+    border-radius:19px;
+  }
+
+  .lookup-hero h2{
+    font-size:21px;
+  }
+
+  .lookup-card{
+    padding:15px;
+    border-radius:18px;
+  }
+
+  .lookup-methods{
+    grid-template-columns:1fr;
+  }
+
+  .lookup-actions{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .lookup-button{
+    width:100%;
+  }
+
+  .lookup-order-card{
+    grid-template-columns:1fr;
+  }
+
+  .lookup-order-side{
+    text-align:left;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .lookup-detail-link{
+    margin-top:0;
+  }
+
 }
 
 </style>
@@ -249,28 +540,25 @@ cursor:pointer;
 
 <button
 id="menuButton"
-class="icon-btn">
-
+class="icon-btn"
+type="button"
+aria-label="เปิดเมนู">
 ☰
-
 </button>
 
-<h1 id="pageTitle">
-
+<h1>
 เช็กออเดอร์
-
 </h1>
 
 <a
 href="cart.html"
-class="cart-btn">
+class="cart-btn"
+aria-label="เปิดตะกร้าสินค้า">
 
 🛒
 
 <span id="cartCount">
-
 0
-
 </span>
 
 </a>
@@ -301,237 +589,801 @@ Rinka Shop
 <a href="change-address.html">📍 เปลี่ยนที่อยู่</a>
 <a href="account.html">👤 บัญชีของฉัน</a>
 <a href="cart.html">🛒 ตะกร้า</a>
-<a href="https://x.com/prewithrinka">📞 ติดต่อร้าน</a>
+<a
+href="https://x.com/prewithrinka"
+target="_blank"
+rel="noopener noreferrer">
+📞 ติดต่อร้าน
+</a>
 
 </aside>
-  
-<h1>
-📦 ค้นหาออเดอร์
-</h1>
 
-<h3>
-📧 ค้นหาด้วยอีเมล
-</h3>
+<main class="lookup-container">
+
+<section class="lookup-hero">
+
+<h2>
+📦 ค้นหาออเดอร์
+</h2>
+
+<p>
+กรอกอีเมลหรือแอค Twitter/X ที่ใช้สั่งซื้อ ระบบจะแสดงรายการออเดอร์ที่ค้นพบ
+</p>
+
+</section>
+
+<section class="lookup-card">
+
+<div class="lookup-methods">
+
+<div class="lookup-field">
+
+<label for="email">
+📧 อีเมล
+</label>
 
 <input
 id="email"
-placeholder="กรอกอีเมลที่ใช้สั่งซื้อ">
+type="email"
+placeholder="name@example.com"
+autocomplete="email">
 
-<h3>
-🐦 ค้นหาด้วย Twitter/X
-</h3>
+<small>
+ใช้อีเมลที่กรอกตอนสั่งซื้อ
+</small>
+
+</div>
+
+<div class="lookup-field">
+
+<label for="social">
+🐦 Twitter / X
+</label>
 
 <input
 id="social"
-placeholder="@username">
+type="text"
+placeholder="@username"
+autocomplete="off">
+
+<small>
+ใส่ @ หรือไม่ใส่ก็ได้
+</small>
+
+</div>
+
+</div>
+
+<div
+id="lookupMessage"
+class="lookup-message hidden">
+</div>
+
+<div class="lookup-actions">
+
+<div class="lookup-hint">
+กรอกอย่างใดอย่างหนึ่งก็ได้
+</div>
 
 <button
+id="searchButton"
+class="lookup-button"
+type="button"
 onclick="searchOrders()">
-
-ค้นหา
-
+ค้นหาออเดอร์
 </button>
 
-<br><br>
+</div>
 
-<div id="result"></div>
+</section>
+
+<section
+id="resultSection"
+class="lookup-result-section hidden">
+
+<div class="lookup-result-heading">
+
+<h2>
+ผลการค้นหา
+</h2>
+
+<div
+id="resultCount"
+class="lookup-result-count">
+0 รายการ
+</div>
+
+</div>
+
+<div
+id="result"
+class="lookup-order-list">
+</div>
+
+</section>
+
+</main>
 
 <script>
 
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
+let lookupLoading = false;
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    updateCartCount();
+
+    [
+      "email",
+      "social"
+    ].forEach(
+      id=>{
+
+        const input =
+          document.getElementById(id);
+
+        input.addEventListener(
+          "keydown",
+          event=>{
+
+            if(event.key === "Enter"){
+
+              event.preventDefault();
+              searchOrders();
+
+            }
+
+          }
+        );
+
+        input.addEventListener(
+          "input",
+          clearLookupMessage
+        );
+
+      }
+    );
+
+  }
+);
+
 async function searchOrders(){
+
+  if(lookupLoading){
+    return;
+  }
+
+  clearLookupMessage();
 
   const email =
     document
-      .getElementById("email")
+      .getElementById(
+        "email"
+      )
       .value
       .trim();
 
   const social =
-    document
-      .getElementById("social")
-      .value
-      .trim();
+    normalizeLookupSocial(
+      document
+        .getElementById(
+          "social"
+        )
+        .value
+        .trim()
+    );
 
   if(
     !email &&
     !social
   ){
 
-    alert(
+    showLookupMessage(
       "กรุณากรอกอีเมลหรือ Twitter/X"
     );
+
+    document
+      .getElementById(
+        "email"
+      )
+      .focus();
 
     return;
 
   }
 
-  try{
+  if(
+    email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      email
+    )
+  ){
 
-    let url = "";
-
-    if(email){
-
-      url =
-        API +
-        "?action=ordersByEmail&email=" +
-        encodeURIComponent(email);
-
-    }else{
-
-      url =
-        API +
-        "?action=ordersBySocial&social=" +
-        encodeURIComponent(social);
-
-    }
-
-    const response =
-      await fetch(url);
-
-    const result =
-      await response.json();
-
-    const orders =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(result.orders)
-          ? result.orders
-          : [];
-
-    let html = "";
-
-    if(
-      orders.length === 0
-    ){
-
-      html = `
-<div class="card">
-ไม่พบออเดอร์
-</div>
-`;
-
-    }else{
-
-      orders.forEach(order=>{
-
-        html += `
-<div class="card">
-
-<h3>
-
-${order.order_id}
-
-</h3>
-
-<p>
-
-สถานะ:
-${order.status}
-
-</p>
-
-<p>
-
-การชำระเงิน:
-${order.payment_status}
-
-</p>
-
-<p>
-
-ยอดรวม:
-฿${Number(
-  order.total || 0
-).toLocaleString()}
-
-</p>
-
-<a href="order.html?id=${order.order_id}">
-
-ดูรายละเอียด
-
-</a>
-
-</div>
-`;
-
-      });
-
-    }
-
-    document
-      .getElementById(
-        "result"
-      )
-      .innerHTML =
-      html;
-
-  }catch(error){
-
-    console.error(
-      "searchOrders error",
-      error
+    showLookupMessage(
+      "รูปแบบอีเมลไม่ถูกต้อง"
     );
 
     document
       .getElementById(
-        "result"
+        "email"
       )
-      .innerHTML =
-`
-<div class="card">
-เกิดข้อผิดพลาดในการค้นหา
+      .focus();
+
+    return;
+
+  }
+
+  const resultSection =
+    document.getElementById(
+      "resultSection"
+    );
+
+  const resultBox =
+    document.getElementById(
+      "result"
+    );
+
+  resultSection.classList.remove(
+    "hidden"
+  );
+
+  resultBox.innerHTML = `
+
+<div class="lookup-state">
+
+  <div class="lookup-spinner"></div>
+
+  <h2>
+    กำลังค้นหาออเดอร์
+  </h2>
+
+  <p>
+    รอสักครู่นะคะ
+  </p>
+
 </div>
+
 `;
+
+  setLookupLoading(true);
+
+  try{
+
+    const query =
+      new URLSearchParams();
+
+    if(email){
+
+      query.set(
+        "action",
+        "ordersByEmail"
+      );
+
+      query.set(
+        "email",
+        email
+      );
+
+    }else{
+
+      query.set(
+        "action",
+        "ordersBySocial"
+      );
+
+      query.set(
+        "social",
+        social
+      );
+
+    }
+
+    const response =
+      await fetch(
+        API +
+        "?" +
+        query.toString()
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        "ค้นหาออเดอร์ไม่สำเร็จ"
+      );
+
+    }
+
+    const orders =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(
+            result.orders
+          )
+            ? result.orders
+            : [];
+
+    renderLookupOrders(
+      orders
+    );
+
+  }catch(error){
+
+    console.error(
+      "searchOrders error:",
+      error
+    );
+
+    resultBox.innerHTML = `
+
+<div class="lookup-state">
+
+  <div class="lookup-state-icon">
+    ⚠️
+  </div>
+
+  <h2>
+    ค้นหาออเดอร์ไม่สำเร็จ
+  </h2>
+
+  <p>
+    ${escapeLookupHtml(
+      error.message ||
+      String(error)
+    )}
+  </p>
+
+  <button
+  type="button"
+  onclick="searchOrders()">
+    ลองใหม่
+  </button>
+
+</div>
+
+`;
+
+    document
+      .getElementById(
+        "resultCount"
+      )
+      .textContent =
+      "0 รายการ";
+
+  }finally{
+
+    setLookupLoading(false);
 
   }
 
 }
 
-function updateCartCount(){
+function renderLookupOrders(
+  orders
+){
 
-const cart =
+  const resultBox =
+    document.getElementById(
+      "result"
+    );
 
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
+  const countBox =
+    document.getElementById(
+      "resultCount"
+    );
 
-const count =
+  countBox.textContent =
+    `${Number(
+      orders.length
+    ).toLocaleString("th-TH")} รายการ`;
 
-cart.reduce(
+  if(!orders.length){
 
-(sum,item)=>
+    resultBox.innerHTML = `
 
-sum +
-Number(item.qty || 0),
+<div class="lookup-state">
 
-0
+  <div class="lookup-state-icon">
+    🔍
+  </div>
 
-);
+  <h2>
+    ไม่พบออเดอร์
+  </h2>
 
-const cartCount =
-document.getElementById(
-"cartCount"
-);
+  <p>
+    ตรวจสอบอีเมลหรือแอค Twitter/X แล้วลองอีกครั้ง
+  </p>
 
-if(cartCount){
+</div>
 
-cartCount.textContent =
-count;
+`;
+
+    return;
+
+  }
+
+  resultBox.innerHTML =
+    orders.map(
+      createLookupOrderCard
+    ).join("");
 
 }
+
+function createLookupOrderCard(
+  order
+){
+
+  const orderId =
+    String(
+      order.order_id ||
+      ""
+    );
+
+  const detailUrl =
+    "order.html?id=" +
+    encodeURIComponent(
+      orderId
+    );
+
+  const createdDate =
+    formatLookupDate(
+      order.created_at
+    );
+
+  return `
+
+<article class="lookup-order-card">
+
+  <div>
+
+    <div class="lookup-order-id">
+      ${escapeLookupHtml(
+        orderId ||
+        "-"
+      )}
+    </div>
+
+    <div class="lookup-order-date">
+      ${escapeLookupHtml(
+        createdDate
+      )}
+    </div>
+
+    <div class="lookup-order-meta">
+
+      <span
+      class="lookup-badge ${getLookupStatusClass(order.status)}">
+        ${escapeLookupHtml(
+          getLookupStatusText(
+            order.status
+          )
+        )}
+      </span>
+
+      <span
+      class="lookup-badge ${
+        order.payment_status ===
+        "paid"
+          ? "badge-paid"
+          : "badge-unpaid"
+      }">
+
+        ${
+          order.payment_status ===
+          "paid"
+            ? "ชำระเงินแล้ว"
+            : "รอชำระเงิน"
+        }
+
+      </span>
+
+    </div>
+
+  </div>
+
+  <div class="lookup-order-side">
+
+    <div class="lookup-order-total">
+
+      ฿${Number(
+        order.total || 0
+      ).toLocaleString(
+        "th-TH"
+      )}
+
+    </div>
+
+    <a
+    href="${escapeLookupAttribute(detailUrl)}"
+    class="lookup-detail-link">
+      ดูรายละเอียด
+    </a>
+
+  </div>
+
+</article>
+
+`;
+
+}
+
+function setLookupLoading(
+  loading
+){
+
+  lookupLoading =
+    Boolean(loading);
+
+  const button =
+    document.getElementById(
+      "searchButton"
+    );
+
+  button.disabled =
+    lookupLoading;
+
+  button.textContent =
+    lookupLoading
+      ? "กำลังค้นหา..."
+      : "ค้นหาออเดอร์";
+
+}
+
+function showLookupMessage(
+  message
+){
+
+  const box =
+    document.getElementById(
+      "lookupMessage"
+    );
+
+  box.textContent =
+    String(message || "");
+
+  box.classList.remove(
+    "hidden"
+  );
+
+}
+
+function clearLookupMessage(){
+
+  const box =
+    document.getElementById(
+      "lookupMessage"
+    );
+
+  box.textContent = "";
+
+  box.classList.add(
+    "hidden"
+  );
+
+}
+
+function normalizeLookupSocial(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .trim()
+    .replace(
+      /^@+/,
+      ""
+    );
+
+}
+
+function getLookupStatusText(
+  status
+){
+
+  return {
+
+    pending:
+      "รอจัดการ",
+
+    china_arrived:
+      "ถึงโกดังจีนแล้ว",
+
+    shipping_to_th:
+      "กำลังมาไทย",
+
+    ready_to_ship:
+      "เตรียมจัดส่ง",
+
+    shipped:
+      "จัดส่งแล้ว"
+
+  }[
+    String(
+      status || ""
+    )
+  ] ||
+  String(
+    status || "-"
+  );
+
+}
+
+function getLookupStatusClass(
+  status
+){
+
+  const normalized =
+    String(
+      status || ""
+    );
+
+  if(normalized === "pending"){
+
+    return "badge-pending";
+
+  }
+
+  if(normalized === "ready_to_ship"){
+
+    return "badge-ready";
+
+  }
+
+  if(normalized === "shipped"){
+
+    return "badge-shipped";
+
+  }
+
+  return "badge-progress";
+
+}
+
+function formatLookupDate(
+  value
+){
+
+  if(!value){
+    return "-";
+  }
+
+  const date =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return "-";
+
+  }
+
+  return date.toLocaleDateString(
+    "th-TH",
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    }
+  );
+
+}
+
+function updateCartCount(){
+
+  let cart = [];
+
+  try{
+
+    const stored =
+      JSON.parse(
+        localStorage.getItem(
+          "cart"
+        ) || "[]"
+      );
+
+    cart =
+      Array.isArray(stored)
+        ? stored
+        : [];
+
+  }catch(error){
+
+    cart = [];
+
+  }
+
+  const count =
+    cart.reduce(
+      (sum,item)=>
+        sum +
+        Number(item.qty || 0),
+      0
+    );
+
+  const cartCount =
+    document.getElementById(
+      "cartCount"
+    );
+
+  if(cartCount){
+
+    cartCount.textContent =
+      count > 99
+        ? "99+"
+        : String(count);
+
+  }
+
+}
+
+function escapeLookupHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+function escapeLookupAttribute(
+  value
+){
+
+  return escapeLookupHtml(
+    value
+  );
 
 }
 
 </script>
 
 <script src="menu.js"></script>
-  
+
 </body>
 
 </html>
