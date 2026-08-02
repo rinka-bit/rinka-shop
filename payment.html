@@ -4,238 +4,998 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width,initial-scale=1">
 
-<title>ชำระเงิน</title>
+<title>ชำระเงิน | Rinka Shop</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 
 <style>
 
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
+:root{
+  --payment-primary:#7dcfff;
+  --payment-primary-dark:#4aa4db;
+  --payment-background:#f6fbff;
+  --payment-card:#ffffff;
+  --payment-text:#334155;
+  --payment-muted:#64748b;
+  --payment-border:#dbe7f1;
+  --payment-danger:#be123c;
 }
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
-box-shadow:0 2px 8px rgba(0,0,0,.05);
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:'Kodchasan',sans-serif;
+  color:var(--payment-text);
+  background:
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      var(--payment-background) 100%
+    );
+}
+
+button,
+input,
+a{
+  font:inherit;
 }
 
 button{
-padding:12px 20px;
-cursor:pointer;
-border:none;
-border-radius:8px;
-background:#4f46e5;
-color:white;
-font-size:15px;
+  cursor:pointer;
 }
 
-button:hover{
-opacity:.9;
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
 }
 
-.bank-card{
-border:1px solid #ddd;
-border-radius:12px;
-padding:14px;
-margin-bottom:12px;
-background:#fff;
+.payment-topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 16px;
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid rgba(219,231,241,.95);
+  box-shadow:0 5px 18px rgba(71,85,105,.07);
+  backdrop-filter:blur(10px);
 }
 
-.bank-option{
-display:flex;
-align-items:center;
-gap:12px;
-cursor:pointer;
+.payment-topbar button,
+.payment-topbar a{
+  width:46px;
+  height:46px;
+  border:none;
+  border-radius:999px;
+  background:#fff;
+  color:var(--payment-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  font-size:21px;
+  box-shadow:0 4px 14px rgba(71,85,105,.10);
 }
 
-.bank-option input[type="radio"]{
-width:auto;
-max-width:none;
-padding:0;
-margin:0;
-flex:0 0 auto;
+.payment-topbar h1{
+  flex:1;
+  margin:0;
+  padding:0 12px;
+  text-align:center;
+  color:#3f6078;
+  font-size:20px;
 }
 
-.bank-info{
-display:block;
+.payment-cart{
+  position:relative;
 }
 
-.bank-name{
-font-size:16px;
-font-weight:700;
-word-break:break-word;
+.payment-cart-count{
+  position:absolute;
+  top:-5px;
+  right:-5px;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  border-radius:999px;
+  background:#ff5c7a;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  font-weight:700;
 }
 
-.bank-owner{
-font-size:13px;
-color:#666;
-margin-top:4px;
-word-break:break-word;
-overflow-wrap:break-word;
+.payment-container{
+  width:min(1160px,100%);
+  margin:auto;
+  padding:22px 18px 130px;
 }
 
-.qr-image{
-display:block;
-width:100%;
-max-width:320px;
-margin:auto;
-border-radius:12px;
+.payment-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(300px,.75fr);
+  gap:22px;
+  align-items:start;
 }
 
-.bank-detail{
-margin-top:20px;
-text-align:center;
+.payment-card{
+  margin-bottom:18px;
+  padding:18px;
+  background:#fff;
+  border:1px solid var(--payment-border);
+  border-radius:21px;
+  box-shadow:0 8px 25px rgba(86,142,178,.08);
 }
 
-.save-tip{
-font-size:13px;
-color:#666;
-margin-top:10px;
+.payment-card h2{
+  margin:0 0 14px;
+  color:#3f6078;
+  font-size:19px;
 }
 
-.copy-btn{
-margin-top:10px;
+.payment-section-note{
+  margin:-6px 0 14px;
+  color:var(--payment-muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+.payment-bank-list{
+  display:grid;
+  gap:10px;
+}
+
+.payment-bank-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px;
+  border:1px solid var(--payment-border);
+  border-radius:16px;
+  background:#fff;
+  cursor:pointer;
+  transition:.18s ease;
+}
+
+.payment-bank-card:hover{
+  border-color:#9bdcff;
+}
+
+.payment-bank-card.selected{
+  border-color:var(--payment-primary-dark);
+  background:#eef9ff;
+  box-shadow:0 0 0 2px rgba(125,207,255,.13);
+}
+
+.payment-bank-card input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.payment-bank-main{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-width:0;
+}
+
+.payment-bank-icon{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  background:#edf7fc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+}
+
+.payment-bank-name{
+  font-weight:700;
+}
+
+.payment-bank-owner{
+  margin-top:4px;
+  color:var(--payment-muted);
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+
+.payment-bank-check{
+  width:26px;
+  height:26px;
+  border-radius:999px;
+  background:#dff2fc;
+  color:#3d8fbe;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  opacity:0;
+}
+
+.payment-bank-card.selected .payment-bank-check{
+  opacity:1;
+}
+
+.payment-detail-card{
+  margin-top:15px;
+  padding:16px;
+  border:1px solid #d7ebf7;
+  border-radius:17px;
+  background:linear-gradient(135deg,#f4fbff,#fbfdff);
+}
+
+.payment-detail-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.payment-detail-head h3{
+  margin:5px 0 0;
+  color:#355a73;
+}
+
+.payment-detail-label{
+  color:var(--payment-muted);
+  font-size:12px;
+}
+
+.payment-detail-icon{
+  font-size:28px;
+}
+
+.payment-qr-wrap{
+  width:min(330px,100%);
+  margin:16px auto;
+  padding:10px;
+  border-radius:17px;
+  background:#fff;
+  border:1px solid var(--payment-border);
+}
+
+.payment-qr-image{
+  width:100%;
+  display:block;
+  border-radius:12px;
+}
+
+.payment-account-line{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 0;
+  border-bottom:1px solid #e8f0f5;
+  color:var(--payment-muted);
+  font-size:13px;
+}
+
+.payment-account-line strong{
+  color:var(--payment-text);
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+
+.payment-account-number{
+  letter-spacing:.5px;
+  font-size:16px;
+}
+
+.payment-secondary-button{
+  width:100%;
+  min-height:43px;
+  margin-top:14px;
+  border:1px solid #cce5f4;
+  border-radius:999px;
+  background:#eef8ff;
+  color:#3476a2;
+  font-weight:700;
+}
+
+.payment-save-tip{
+  margin:10px 0 0;
+  color:var(--payment-muted);
+  text-align:center;
+  font-size:11px;
+  line-height:1.6;
+}
+
+.payment-slip-drop{
+  position:relative;
+  min-height:170px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:20px;
+  border:2px dashed #bddceb;
+  border-radius:17px;
+  background:#fbfdff;
+  text-align:center;
+  transition:.18s ease;
+}
+
+.payment-slip-drop.dragging{
+  border-color:var(--payment-primary-dark);
+  background:#eef9ff;
+}
+
+.payment-slip-drop input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+
+.payment-slip-icon{
+  font-size:42px;
+}
+
+.payment-slip-drop b{
+  color:#3f6078;
+}
+
+.payment-slip-drop span{
+  color:var(--payment-muted);
+  font-size:12px;
+}
+
+.payment-slip-preview{
+  margin-top:13px;
+}
+
+.payment-slip-preview.hidden{
+  display:none;
+}
+
+.payment-slip-preview-card{
+  display:grid;
+  grid-template-columns:95px minmax(0,1fr);
+  gap:12px;
+  padding:12px;
+  border:1px solid #d7ebf7;
+  border-radius:15px;
+  background:#f8fcff;
+}
+
+.payment-slip-preview-card img{
+  width:95px;
+  height:95px;
+  object-fit:contain;
+  border-radius:11px;
+  background:#fff;
+}
+
+.payment-slip-preview-card div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+}
+
+.payment-slip-preview-card b{
+  overflow-wrap:anywhere;
+}
+
+.payment-slip-preview-card span{
+  color:var(--payment-muted);
+  font-size:12px;
+}
+
+.payment-slip-preview-card button{
+  border:none;
+  border-radius:999px;
+  padding:7px 11px;
+  background:#eaf6fc;
+  color:#3476a2;
+  font-weight:700;
+}
+
+.payment-summary{
+  position:sticky;
+  top:88px;
+  padding:19px;
+  background:#fff;
+  border:1px solid var(--payment-border);
+  border-radius:21px;
+  box-shadow:0 11px 32px rgba(86,142,178,.11);
+}
+
+.payment-summary h2{
+  margin:0 0 14px;
+  color:#3f6078;
+  font-size:19px;
+}
+
+.payment-summary-item{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid #edf2f6;
+}
+
+.payment-summary-item div{
+  min-width:0;
+}
+
+.payment-summary-item b{
+  display:block;
+  font-size:13px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+.payment-summary-item span{
+  display:block;
+  margin-top:4px;
+  color:var(--payment-muted);
+  font-size:11px;
+}
+
+.payment-summary-item strong{
+  flex:0 0 auto;
+  color:#347fb4;
+  font-size:13px;
+}
+
+.payment-summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:9px 0;
+  color:var(--payment-muted);
+  font-size:14px;
+}
+
+.payment-summary-row strong{
+  color:var(--payment-text);
+}
+
+.payment-summary-total{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:8px;
+  padding-top:15px;
+  border-top:1px solid var(--payment-border);
+}
+
+.payment-summary-total span{
+  font-weight:700;
+}
+
+.payment-summary-total strong{
+  color:#2563eb;
+  font-size:28px;
+}
+
+.payment-submit{
+  width:100%;
+  min-height:51px;
+  margin-top:18px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#7dcfff,#57b8ed);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:0 9px 22px rgba(87,184,237,.25);
+}
+
+.payment-back-link{
+  display:block;
+  margin-top:11px;
+  color:#53748b;
+  text-align:center;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:600;
+}
+
+.payment-loading-box,
+.payment-empty-box{
+  min-height:130px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:18px;
+  text-align:center;
+  border:1px dashed #cfdee7;
+  border-radius:15px;
+  background:#fbfdff;
+  color:var(--payment-muted);
+}
+
+.payment-empty-box a{
+  color:#3476a2;
+  font-weight:700;
+  text-decoration:none;
+}
+
+.payment-error-box{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:15px;
+  border:1px solid #fecaca;
+  border-radius:15px;
+  background:#fff1f2;
+  color:#9f1239;
+}
+
+.payment-error-box button{
+  width:max-content;
+  border:none;
+  border-radius:999px;
+  padding:8px 13px;
+  background:#be123c;
+  color:#fff;
+  font-weight:700;
+}
+
+.payment-spinner{
+  width:30px;
+  height:30px;
+  border:4px solid #dff2fc;
+  border-top-color:var(--payment-primary-dark);
+  border-radius:50%;
+  animation:paymentSpin .8s linear infinite;
+}
+
+@keyframes paymentSpin{
+  to{transform:rotate(360deg)}
+}
+
+.payment-state-icon{
+  font-size:40px;
+}
+
+.payment-toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  z-index:3000;
+  width:min(410px,calc(100% - 28px));
+  padding:13px 16px;
+  border-radius:14px;
+  background:#18384e;
+  color:#fff;
+  text-align:center;
+  font-weight:600;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.2s ease;
+  box-shadow:0 12px 30px rgba(15,23,42,.24);
+}
+
+.payment-toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.payment-toast.error{
+  background:#991b1b;
+}
+
+.payment-success-state{
+  position:fixed;
+  inset:0;
+  z-index:4000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(15,23,42,.64);
+}
+
+.payment-success-state.show{
+  display:flex;
+}
+
+.payment-success-state > div{
+  width:min(390px,100%);
+  padding:28px;
+  border-radius:22px;
+  background:#fff;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(15,23,42,.25);
+}
+
+.payment-success-state h2,
+.payment-success-state p{
+  margin:8px 0;
+}
+
+.payment-success-state p{
+  color:var(--payment-muted);
+}
+
+.payment-success-icon{
+  width:66px;
+  height:66px;
+  margin:auto;
+  border-radius:999px;
+  background:#dcfce7;
+  color:#166534;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  font-weight:700;
+}
+
+.loading-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:3500;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(15,23,42,.65);
+}
+
+.loading-overlay-card{
+  width:min(330px,100%);
+  padding:27px;
+  border-radius:22px;
+  background:#fff;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(15,23,42,.25);
+}
+
+.cat-track{
+  width:220px;
+  max-width:100%;
+  height:70px;
+  margin:auto auto 15px;
+  overflow:hidden;
+  position:relative;
+}
+
+.cat-loader{
+  position:absolute;
+  font-size:48px;
+  animation:catRun 3s linear infinite;
+  transform:scaleX(-1);
+}
+
+@keyframes catRun{
+  0%{left:-80px}
+  100%{left:240px}
+}
+
+@media(max-width:850px){
+
+  .payment-layout{
+    grid-template-columns:1fr;
+  }
+
+  .payment-summary{
+    position:static;
+  }
+
 }
 
 @media(max-width:600px){
 
-.container{
-padding:15px;
-}
+  .payment-topbar{
+    min-height:64px;
+    padding:9px 11px;
+  }
 
-.card{
-padding:15px;
-}
+  .payment-topbar h1{
+    font-size:17px;
+  }
 
-button{
-width:100%;
-}
+  .payment-container{
+    padding:14px 10px 116px;
+  }
 
-}
+  .payment-card{
+    padding:14px;
+    border-radius:18px;
+  }
 
-@keyframes spin{
+  .payment-slip-preview-card{
+    grid-template-columns:76px minmax(0,1fr);
+  }
 
-from{
-transform:rotate(0deg);
-}
-
-to{
-transform:rotate(360deg);
-}
-
-}
-
-.cat-track{
-
-width:220px;
-height:70px;
-
-margin:auto;
-margin-bottom:15px;
-
-overflow:hidden;
-
-position:relative;
+  .payment-slip-preview-card img{
+    width:76px;
+    height:76px;
+  }
 
 }
 
-.cat-loader{
-
-position:absolute;
-
-font-size:48px;
-
-animation:
-catRun 3s linear infinite;
-
-transform:
-scaleX(-1);
-
-}
-
-@keyframes catRun{
-
-0%{
-
-left:-80px;
-
-}
-
-100%{
-
-left:240px;
-
-}
-
-}
-  
 </style>
-  
+
 </head>
 
 <body>
 
-<div class="container">
+<header class="payment-topbar">
+
+<button
+type="button"
+aria-label="กลับหน้าก่อนหน้า"
+onclick="goPaymentBack()">
+←
+</button>
 
 <h1>
 ชำระเงิน
 </h1>
 
-<div class="card">
+<a
+href="cart.html"
+class="payment-cart"
+aria-label="เปิดตะกร้าสินค้า">
+
+<span>🛒</span>
+
+<span
+id="paymentCartCount"
+class="payment-cart-count">
+0
+</span>
+
+</a>
+
+</header>
+
+<main class="payment-container">
+
+<div class="payment-layout">
+
+<section>
+
+<div class="payment-card">
 
 <h2>
 เลือกช่องทางชำระเงิน
 </h2>
 
-<div id="bankList"></div>
+<p class="payment-section-note">
+เลือกบัญชีหรือ QR ที่ต้องการใช้ชำระเงิน
+</p>
 
 <div
-id="bankDetail"
-style="margin-top:20px;">
+id="bankList"
+class="payment-bank-list">
 </div>
+
+<div id="bankDetail"></div>
 
 </div>
 
-<div class="card">
+<div class="payment-card">
 
 <h2>
 แนบสลิป
 </h2>
 
+<p class="payment-section-note">
+รองรับไฟล์ JPG, PNG และ WEBP ขนาดไม่เกิน 8 MB
+</p>
+
+<label
+id="paymentSlipDrop"
+class="payment-slip-drop">
+
 <input
 type="file"
-id="slip">
+id="slip"
+accept="image/jpeg,image/png,image/webp">
+
+<span class="payment-slip-icon">
+📄
+</span>
+
+<b>
+ลากไฟล์มาวาง หรือแตะเพื่อเลือกไฟล์
+</b>
+
+<span>
+ควรเห็นยอดและเวลาในสลิปชัดเจน
+</span>
+
+</label>
+
+<div
+id="paymentSlipPreview"
+class="payment-slip-preview hidden">
+</div>
+
+</div>
+
+</section>
+
+<aside class="payment-summary">
+
+<h2>
+สรุปคำสั่งซื้อ
+</h2>
+
+<div id="paymentSummaryItems"></div>
+
+<div class="payment-summary-row">
+
+<span>
+จำนวนสินค้า
+</span>
+
+<strong id="paymentItemCount">
+0 ชิ้น
+</strong>
+
+</div>
+
+<div class="payment-summary-row">
+
+<span>
+ของแถม
+</span>
+
+<strong id="paymentGiftCount">
+0 รายการ
+</strong>
+
+</div>
+
+<div class="payment-summary-total">
+
+<span>
+ยอดรวม
+</span>
+
+<strong id="paymentSummaryTotal">
+฿0
+</strong>
 
 </div>
 
 <button
 id="submitBtn"
-onclick="submitOrder()">
-
+type="button"
+class="payment-submit"
+onclick="submitOrder()"
+disabled>
 ยืนยันการชำระเงิน
-
 </button>
-  
+
+<a
+href="checkout.html"
+class="payment-back-link">
+กลับไปตรวจสอบคำสั่งซื้อ
+</a>
+
+</aside>
+
+</div>
+
+</main>
+
+<div
+id="paymentToast"
+class="payment-toast"
+role="status"
+aria-live="polite">
+</div>
+
+<div
+id="paymentSuccessState"
+class="payment-success-state">
+<div></div>
+</div>
+
+<div
+id="loadingOverlay"
+class="loading-overlay">
+
+<div class="loading-overlay-card">
+
+<div class="cat-track">
+
+<div class="cat-loader">
+📦🐈
+</div>
+
+</div>
+
+<h3>
+เจ้าเหมียวกำลังส่งออเดอร์เข้าระบบ
+</h3>
+
+<p>
+กรุณาอย่าปิดหน้านี้จนกว่าจะดำเนินการเสร็จ
+</p>
+
+</div>
+
 </div>
 
 <script>
-
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
 let bankData = [];
 
-loadBanks();
+
+let selectedBankId = "";
+let paymentSubmitting = false;
+let paymentToastTimer = null;
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    renderPaymentSummary();
+    updatePaymentCartCount();
+    bindSlipInput();
+    loadBanks();
+
+  }
+);
 
 async function loadBanks(){
+
+  const list =
+    document.getElementById(
+      "bankList"
+    );
+
+  const detail =
+    document.getElementById(
+      "bankDetail"
+    );
+
+  list.innerHTML = `
+
+<div class="payment-loading-box">
+
+  <span class="payment-spinner"></span>
+
+  <span>
+    กำลังโหลดช่องทางชำระเงิน...
+  </span>
+
+</div>
+
+`;
+
+  detail.innerHTML = "";
 
   try{
 
@@ -244,10 +1004,29 @@ async function loadBanks(){
         API + "?action=banks"
       );
 
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
     const result =
       await response.json();
 
-    console.log("CreateOrder Result", result);
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        "โหลดบัญชีธนาคารไม่สำเร็จ"
+      );
+
+    }
 
     bankData =
       Array.isArray(result)
@@ -256,83 +1035,186 @@ async function loadBanks(){
           ? result.banks
           : [];
 
-    let html = "";
+    bankData =
+      bankData.filter(
+        bank=>
+          normalizePaymentBoolean(
+            bank.status === undefined
+              ? true
+              : bank.status
+          )
+      );
 
-    bankData.forEach((bank,index)=>{
+    if(!bankData.length){
 
-      html += `
+      list.innerHTML = `
 
-<div class="bank-card">
+<div class="payment-empty-box">
 
-<div class="bank-option">
+  <div class="payment-state-icon">
+    🏦
+  </div>
 
-<input
-type="radio"
-name="bank"
+  <b>
+    ยังไม่มีช่องทางชำระเงิน
+  </b>
 
-${index===0?"checked":""}
-
-onclick="
-showBankById(
-'${bank.account_id}'
-)
-">
-
-<div class="bank-info">
-
-<div class="bank-name">
-${bank.bank_name || ""}
-</div>
-
-<div class="bank-owner">
-${bank.account_name || ""}
-</div>
-
-</div>
-
-</div>
+  <span>
+    กรุณาติดต่อร้านเพื่อสอบถามช่องทางชำระเงิน
+  </span>
 
 </div>
 
 `;
 
-    });
+      updatePaymentButtonState();
 
-    document.getElementById(
-      "bankList"
-    ).innerHTML =
-      html;
-
-    if(bankData.length){
-
-      showBank(
-        bankData[0]
-      );
+      return;
 
     }
+
+    list.innerHTML =
+      bankData
+        .map(
+          (bank,index)=>{
+
+            const accountId =
+              String(
+                bank.account_id ||
+                index
+              );
+
+            return `
+
+<label
+class="payment-bank-card"
+data-payment-bank="${escapePaymentAttribute(accountId)}">
+
+  <input
+  type="radio"
+  name="bank"
+  value="${escapePaymentAttribute(accountId)}"
+  ${index === 0 ? "checked" : ""}
+  onchange='selectPaymentBank(${JSON.stringify(accountId)})'>
+
+  <div class="payment-bank-main">
+
+    <div class="payment-bank-icon">
+      🏦
+    </div>
+
+    <div>
+
+      <div class="payment-bank-name">
+        ${escapePaymentHtml(
+          bank.bank_name ||
+          "บัญชีธนาคาร"
+        )}
+      </div>
+
+      <div class="payment-bank-owner">
+        ${escapePaymentHtml(
+          bank.account_name ||
+          ""
+        )}
+      </div>
+
+    </div>
+
+  </div>
+
+  <span class="payment-bank-check">
+    ✓
+  </span>
+
+</label>
+
+`;
+
+          }
+        )
+        .join("");
+
+    selectPaymentBank(
+      String(
+        bankData[0].account_id ||
+        0
+      )
+    );
 
   }catch(error){
 
     console.error(
-      "loadBanks error",
+      "loadBanks error:",
       error
     );
 
-    document.getElementById(
-      "bankList"
-    ).innerHTML =
-      "<p>โหลดบัญชีธนาคารไม่สำเร็จ</p>";
+    list.innerHTML = `
+
+<div class="payment-error-box">
+
+  <b>
+    โหลดบัญชีธนาคารไม่สำเร็จ
+  </b>
+
+  <span>
+    ${escapePaymentHtml(
+      error.message ||
+      String(error)
+    )}
+  </span>
+
+  <button
+  type="button"
+  onclick="loadBanks()">
+    ลองใหม่
+  </button>
+
+</div>
+
+`;
+
+    updatePaymentButtonState();
 
   }
 
 }
-  
-function showBankById(id){
+
+
+function selectPaymentBank(
+  id
+){
+
+  selectedBankId =
+    String(id || "");
+
+  document
+    .querySelectorAll(
+      ".payment-bank-card"
+    )
+    .forEach(
+      card=>{
+
+        card.classList.toggle(
+          "selected",
+          card.dataset.paymentBank ===
+          selectedBankId
+        );
+
+      }
+    );
 
   const bank =
     bankData.find(
-      b => b.account_id === id
-    );
+      item=>
+        String(
+          item.account_id || ""
+        ) ===
+        selectedBankId
+    ) ||
+    bankData[
+      Number(selectedBankId)
+    ];
 
   if(bank){
 
@@ -340,94 +1222,174 @@ function showBankById(id){
 
   }
 
+  updatePaymentButtonState();
+
 }
+
 
 function showBank(bank){
 
-let html = "";
+  const detail =
+    document.getElementById(
+      "bankDetail"
+    );
 
-if(bank.qr_image){
+  const bankName =
+    escapePaymentHtml(
+      bank.bank_name ||
+      "ช่องทางชำระเงิน"
+    );
 
-html = `
+  const accountName =
+    escapePaymentHtml(
+      bank.account_name ||
+      ""
+    );
 
-<div class="bank-detail">
+  const accountNumber =
+    String(
+      bank.account_number ||
+      ""
+    );
 
-<h3>
-${bank.bank_name}
-</h3>
+  if(bank.qr_image){
 
-<img
-src="${bank.qr_image}"
-class="qr-image">
+    detail.innerHTML = `
 
-<br>
+<div class="payment-detail-card">
 
-<button
-onclick="downloadQR('${bank.qr_image}')">
+  <div class="payment-detail-head">
 
-เปิด QR เต็มจอ
+    <div>
 
-</button>
+      <span class="payment-detail-label">
+        QR ชำระเงิน
+      </span>
 
-<p class="save-tip">
+      <h3>
+        ${bankName}
+      </h3>
 
-iPhone:
-แตะรูปค้างไว้แล้วเลือก
-"บันทึกรูปภาพ"
+    </div>
 
-<br>
+    <span class="payment-detail-icon">
+      📱
+    </span>
 
-Android:
-เปิดรูปแล้วกดดาวน์โหลดได้
+  </div>
 
-</p>
+  <div class="payment-qr-wrap">
+
+    <img
+    src="${escapePaymentAttribute(bank.qr_image)}"
+    class="payment-qr-image"
+    alt="QR ${escapePaymentAttribute(bank.bank_name || "")}">
+
+  </div>
+
+  ${
+    accountName
+      ? `
+
+<div class="payment-account-line">
+
+  <span>
+    ชื่อบัญชี
+  </span>
+
+  <strong>
+    ${accountName}
+  </strong>
+
+</div>
+
+`
+      : ""
+  }
+
+  <button
+  type="button"
+  class="payment-secondary-button"
+  onclick='openPaymentQR(${JSON.stringify(String(bank.qr_image || ""))})'>
+    เปิด QR เต็มจอ
+  </button>
+
+  <p class="payment-save-tip">
+    แตะรูปค้างไว้เพื่อบันทึก หรือเปิดเต็มจอแล้วดาวน์โหลด
+  </p>
 
 </div>
 
 `;
 
-}else{
+    return;
 
-html = `
+  }
 
-<div class="bank-detail">
+  detail.innerHTML = `
 
-<h3>
-${bank.bank_name}
-</h3>
+<div class="payment-detail-card">
 
-<p>
+  <div class="payment-detail-head">
 
-ชื่อบัญชี :
-<br>
+    <div>
 
-<strong>
-${bank.account_name}
-</strong>
+      <span class="payment-detail-label">
+        โอนผ่านบัญชีธนาคาร
+      </span>
 
-</p>
+      <h3>
+        ${bankName}
+      </h3>
 
-<p>
+    </div>
 
-เลขบัญชี :
-<br>
+    <span class="payment-detail-icon">
+      💳
+    </span>
 
-<strong>
-${bank.account_number}
-</strong>
+  </div>
 
-</p>
+  <div class="payment-account-line">
+
+    <span>
+      ชื่อบัญชี
+    </span>
+
+    <strong>
+      ${accountName || "-"}
+    </strong>
+
+  </div>
+
+  <div class="payment-account-line">
+
+    <span>
+      เลขบัญชี
+    </span>
+
+    <strong class="payment-account-number">
+      ${escapePaymentHtml(
+        accountNumber || "-"
+      )}
+    </strong>
+
+  </div>
+
+  ${
+    accountNumber
+      ? `
 
 <button
-class="copy-btn"
-onclick="
-copyAccount(
-'${bank.account_number}'
-)">
-
-คัดลอกเลขบัญชี
-
+type="button"
+class="payment-secondary-button"
+onclick='copyPaymentAccount(${JSON.stringify(accountNumber)})'>
+  คัดลอกเลขบัญชี
 </button>
+
+`
+      : ""
+  }
 
 </div>
 
@@ -435,33 +1397,49 @@ copyAccount(
 
 }
 
-document.getElementById(
-"bankDetail"
-).innerHTML = html;
+
+async function copyPaymentAccount(
+  number
+){
+
+  try{
+
+    await navigator.clipboard.writeText(
+      String(number || "")
+    );
+
+    showPaymentToast(
+      "คัดลอกเลขบัญชีแล้ว"
+    );
+
+  }catch(error){
+
+    showPaymentToast(
+      "คัดลอกไม่สำเร็จ กรุณากดค้างเพื่อคัดลอก",
+      true
+    );
+
+  }
 
 }
 
-function copyAccount(number){
 
-  navigator.clipboard.writeText(
-    number
+function openPaymentQR(
+  url
+){
+
+  if(!url){
+    return;
+  }
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
   );
 
-  alert(
-    "คัดลอกเลขบัญชีแล้ว"
-  );
-
 }
 
-function downloadQR(url){
-
-window.open(
-url,
-"_blank"
-);
-
-}
-  
 async function submitOrder(){
 
   let cart =
@@ -528,6 +1506,17 @@ async function submitOrder(){
 
   }
 
+  if(!selectedBankId){
+
+    showPaymentToast(
+      "กรุณาเลือกช่องทางชำระเงิน",
+      true
+    );
+
+    return;
+
+  }
+
   const slip =
     document.getElementById(
       "slip"
@@ -539,19 +1528,41 @@ async function submitOrder(){
     !slip.files.length
   ){
 
-    alert(
-      "กรุณาแนบสลิป"
+    showPaymentToast(
+      "กรุณาแนบสลิป",
+      true
     );
 
     return;
 
   }
 
+  try{
+
+    validatePaymentSlip(
+      slip.files[0]
+    );
+
+  }catch(error){
+
+    showPaymentToast(
+      error.message ||
+      String(error),
+      true
+    );
+
+    return;
+
+  }
+
+  paymentSubmitting =
+    true;
+
   btn.disabled =
     true;
 
   btn.textContent =
-    "กำลังส่งข้อมูล...";
+    "⏳ กำลังส่งข้อมูล...";
 
   if(loadingOverlay){
 
@@ -824,8 +1835,8 @@ async function submitOrder(){
 
     }
 
-    alert(
-      "แจ้งชำระเงินเรียบร้อย"
+    showPaymentSuccess(
+      orderId
     );
 
     /*
@@ -891,11 +1902,18 @@ async function submitOrder(){
       "buyNowCart"
     );
 
-    window.location.href =
-      "order.html?id=" +
-      encodeURIComponent(
-        orderId
-      );
+    setTimeout(
+      ()=>{
+
+        window.location.href =
+          "order.html?id=" +
+          encodeURIComponent(
+            orderId
+          );
+
+      },
+      1100
+    );
 
   }catch(error){
 
@@ -904,18 +1922,24 @@ async function submitOrder(){
       error
     );
 
-    alert(
+    showPaymentToast(
       error.message ||
-      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+      "เกิดข้อผิดพลาด กรุณาลองใหม่",
+      true
     );
 
   }finally{
+
+    paymentSubmitting =
+      false;
 
     btn.disabled =
       false;
 
     btn.textContent =
       "ยืนยันการชำระเงิน";
+
+    updatePaymentButtonState();
 
     if(loadingOverlay){
 
@@ -952,54 +1976,784 @@ function fileToBase64(file){
   );
 
 }
-  
-</script>
 
-<div
-id="loadingOverlay"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-z-index:9999;
-justify-content:center;
-align-items:center;
-">
+function bindSlipInput(){
 
-<div
-style="
-background:white;
-padding:30px;
-border-radius:20px;
-text-align:center;
-max-width:300px;
-">
+  const input =
+    document.getElementById(
+      "slip"
+    );
 
-<div class="cat-track">
+  const dropArea =
+    document.getElementById(
+      "paymentSlipDrop"
+    );
 
-<div class="cat-loader">
+  if(!input || !dropArea){
+    return;
+  }
 
-📦🐈
+  input.addEventListener(
+    "change",
+    handlePaymentSlipChange
+  );
+
+  [
+    "dragenter",
+    "dragover"
+  ].forEach(
+    eventName=>{
+
+      dropArea.addEventListener(
+        eventName,
+        event=>{
+
+          event.preventDefault();
+
+          dropArea.classList.add(
+            "dragging"
+          );
+
+        }
+      );
+
+    }
+  );
+
+  [
+    "dragleave",
+    "drop"
+  ].forEach(
+    eventName=>{
+
+      dropArea.addEventListener(
+        eventName,
+        event=>{
+
+          event.preventDefault();
+
+          dropArea.classList.remove(
+            "dragging"
+          );
+
+        }
+      );
+
+    }
+  );
+
+  dropArea.addEventListener(
+    "drop",
+    event=>{
+
+      const file =
+        event.dataTransfer &&
+        event.dataTransfer.files &&
+        event.dataTransfer.files[0];
+
+      if(!file){
+        return;
+      }
+
+      const transfer =
+        new DataTransfer();
+
+      transfer.items.add(file);
+
+      input.files =
+        transfer.files;
+
+      handlePaymentSlipChange();
+
+    }
+  );
+
+}
+
+
+function handlePaymentSlipChange(){
+
+  const input =
+    document.getElementById(
+      "slip"
+    );
+
+  const preview =
+    document.getElementById(
+      "paymentSlipPreview"
+    );
+
+  const file =
+    input &&
+    input.files &&
+    input.files[0];
+
+  if(!file){
+
+    preview.innerHTML = "";
+    preview.classList.add(
+      "hidden"
+    );
+
+    updatePaymentButtonState();
+
+    return;
+
+  }
+
+  try{
+
+    validatePaymentSlip(file);
+
+  }catch(error){
+
+    input.value = "";
+
+    preview.innerHTML = "";
+    preview.classList.add(
+      "hidden"
+    );
+
+    showPaymentToast(
+      error.message ||
+      String(error),
+      true
+    );
+
+    updatePaymentButtonState();
+
+    return;
+
+  }
+
+  const url =
+    URL.createObjectURL(file);
+
+  preview.innerHTML = `
+
+<div class="payment-slip-preview-card">
+
+  <img
+  src="${escapePaymentAttribute(url)}"
+  alt="ตัวอย่างสลิป">
+
+  <div>
+
+    <b>
+      ${escapePaymentHtml(file.name)}
+    </b>
+
+    <span>
+      ${formatPaymentFileSize(file.size)}
+    </span>
+
+    <button
+    type="button"
+    onclick="clearPaymentSlip()">
+      เลือกไฟล์ใหม่
+    </button>
+
+  </div>
 
 </div>
 
+`;
+
+  preview.classList.remove(
+    "hidden"
+  );
+
+  updatePaymentButtonState();
+
+}
+
+
+function clearPaymentSlip(){
+
+  const input =
+    document.getElementById(
+      "slip"
+    );
+
+  if(input){
+
+    input.value = "";
+
+  }
+
+  handlePaymentSlipChange();
+
+}
+
+
+function validatePaymentSlip(
+  file
+){
+
+  if(!file){
+
+    throw new Error(
+      "กรุณาแนบสลิป"
+    );
+
+  }
+
+  const allowed = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if(
+    file.type &&
+    !allowed.includes(file.type)
+  ){
+
+    throw new Error(
+      "รองรับเฉพาะไฟล์ JPG, PNG หรือ WEBP"
+    );
+
+  }
+
+  if(
+    Number(file.size || 0) >
+    8 * 1024 * 1024
+  ){
+
+    throw new Error(
+      "ไฟล์สลิปต้องมีขนาดไม่เกิน 8 MB"
+    );
+
+  }
+
+  return true;
+
+}
+
+
+function renderPaymentSummary(){
+
+  const box =
+    document.getElementById(
+      "paymentSummaryItems"
+    );
+
+  const totalBox =
+    document.getElementById(
+      "paymentSummaryTotal"
+    );
+
+  const giftBox =
+    document.getElementById(
+      "paymentGiftCount"
+    );
+
+  const cart =
+    getPaymentCheckoutCart();
+
+  let total = 0;
+  let totalQty = 0;
+
+  if(!cart.length){
+
+    box.innerHTML = `
+
+<div class="payment-empty-box">
+
+  <div class="payment-state-icon">
+    🛒
+  </div>
+
+  <b>
+    ไม่พบสินค้าในคำสั่งซื้อ
+  </b>
+
+  <a href="browse.html">
+    กลับไปเลือกสินค้า
+  </a>
+
 </div>
+
+`;
+
+    totalBox.textContent =
+      "฿0";
+
+    giftBox.textContent =
+      "0 รายการ";
+
+    updatePaymentButtonState();
+
+    return;
+
+  }
+
+  box.innerHTML =
+    cart.map(
+      item=>{
+
+        const qty =
+          Math.max(
+            1,
+            Number(
+              item.qty ||
+              item.quantity ||
+              1
+            )
+          );
+
+        const price =
+          Number(
+            item.price ??
+            item.final_price ??
+            item.unit_price ??
+            0
+          );
+
+        const lineTotal =
+          price * qty +
+          Number(
+            item.crate_fee || 0
+          );
+
+        total +=
+          lineTotal;
+
+        totalQty +=
+          qty;
+
+        return `
+
+<div class="payment-summary-item">
+
+  <div>
+
+    <b>
+      ${escapePaymentHtml(
+        item.name ||
+        item.product_name ||
+        "สินค้า"
+      )}
+    </b>
+
+    <span>
+      ${qty} ชิ้น × ฿${price.toLocaleString("th-TH")}
+    </span>
+
+  </div>
+
+  <strong>
+    ฿${lineTotal.toLocaleString("th-TH")}
+  </strong>
+
+</div>
+
+`;
+
+      }
+    ).join("");
+
+  totalBox.textContent =
+    `฿${total.toLocaleString("th-TH")}`;
+
+  const address =
+    getPaymentStoredValue(
+      "checkoutAddress",
+      {}
+    );
+
+  const gifts =
+    Array.isArray(
+      address.gifts
+    )
+      ? address.gifts
+      : [];
+
+  giftBox.textContent =
+    `${gifts.length.toLocaleString("th-TH")} รายการ`;
+
+  const qtyBox =
+    document.getElementById(
+      "paymentItemCount"
+    );
+
+  if(qtyBox){
+
+    qtyBox.textContent =
+      `${totalQty.toLocaleString("th-TH")} ชิ้น`;
+
+  }
+
+  updatePaymentButtonState();
+
+}
+
+
+function getPaymentCheckoutCart(){
+
+  const source =
+    localStorage.getItem(
+      "checkoutSource"
+    );
+
+  const checkoutCart =
+    getPaymentStoredValue(
+      "checkoutCart",
+      []
+    );
+
+  const buyNowCart =
+    getPaymentStoredValue(
+      "buyNowCart",
+      []
+    );
+
+  const normalCart =
+    getPaymentStoredValue(
+      "cart",
+      []
+    );
+
+  if(
+    source === "buyNow" &&
+    Array.isArray(buyNowCart) &&
+    buyNowCart.length
+  ){
+
+    return buyNowCart;
+
+  }
+
+  if(
+    source === "cart" &&
+    Array.isArray(checkoutCart) &&
+    checkoutCart.length
+  ){
+
+    return checkoutCart;
+
+  }
+
+  if(
+    Array.isArray(checkoutCart) &&
+    checkoutCart.length
+  ){
+
+    return checkoutCart;
+
+  }
+
+  if(
+    Array.isArray(buyNowCart) &&
+    buyNowCart.length
+  ){
+
+    return buyNowCart;
+
+  }
+
+  return Array.isArray(normalCart)
+    ? normalCart
+    : [];
+
+}
+
+
+function updatePaymentButtonState(){
+
+  const button =
+    document.getElementById(
+      "submitBtn"
+    );
+
+  if(!button){
+    return;
+  }
+
+  const file =
+    document.getElementById(
+      "slip"
+    )?.files?.[0];
+
+  const cart =
+    getPaymentCheckoutCart();
+
+  button.disabled =
+    paymentSubmitting ||
+    !selectedBankId ||
+    !file ||
+    !cart.length;
+
+}
+
+
+function updatePaymentCartCount(){
+
+  const cart =
+    getPaymentStoredValue(
+      "cart",
+      []
+    );
+
+  const count =
+    Array.isArray(cart)
+      ? cart.reduce(
+          (sum,item)=>
+            sum +
+            Number(item.qty || 0),
+          0
+        )
+      : 0;
+
+  const box =
+    document.getElementById(
+      "paymentCartCount"
+    );
+
+  if(box){
+
+    box.textContent =
+      count > 99
+        ? "99+"
+        : String(count);
+
+  }
+
+}
+
+
+function showPaymentSuccess(
+  orderId
+){
+
+  const box =
+    document.getElementById(
+      "paymentSuccessState"
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.innerHTML = `
+
+<div class="payment-success-icon">
+  ✓
+</div>
+
+<h2>
+  แจ้งชำระเงินเรียบร้อย
+</h2>
 
 <p>
-
-เจ้าเหมียวกำลังส่งออเดอร์เข้าระบบ 📦🐈
-
-<br><br>
-
-กรุณารอสักครู่
-
+  เลขออเดอร์
+  <b>
+    ${escapePaymentHtml(orderId)}
+  </b>
 </p>
 
-</div>
+<p>
+  กำลังเปิดหน้าคำสั่งซื้อ...
+</p>
 
-</div>
-  
+`;
+
+  box.classList.add(
+    "show"
+  );
+
+}
+
+
+function showPaymentToast(
+  message,
+  error
+){
+
+  const toast =
+    document.getElementById(
+      "paymentToast"
+    );
+
+  if(!toast){
+    return;
+  }
+
+  toast.textContent =
+    String(message || "");
+
+  toast.classList.toggle(
+    "error",
+    Boolean(error)
+  );
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    paymentToastTimer
+  );
+
+  paymentToastTimer =
+    setTimeout(
+      ()=>{
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      2500
+    );
+
+}
+
+
+function getPaymentStoredValue(
+  key,
+  fallback
+){
+
+  try{
+
+    const raw =
+      localStorage.getItem(key);
+
+    if(raw === null){
+
+      return fallback;
+
+    }
+
+    return JSON.parse(raw);
+
+  }catch(error){
+
+    return fallback;
+
+  }
+
+}
+
+
+function formatPaymentFileSize(
+  bytes
+){
+
+  const size =
+    Number(bytes || 0);
+
+  if(size < 1024){
+
+    return size + " B";
+
+  }
+
+  if(size < 1024 * 1024){
+
+    return (
+      size / 1024
+    ).toFixed(1) + " KB";
+
+  }
+
+  return (
+    size /
+    1024 /
+    1024
+  ).toFixed(1) + " MB";
+
+}
+
+
+function normalizePaymentBoolean(
+  value
+){
+
+  if(
+    value === true ||
+    value === 1
+  ){
+
+    return true;
+
+  }
+
+  const normalized =
+    String(
+      value || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  if(!normalized){
+
+    return true;
+
+  }
+
+  return [
+    "true",
+    "yes",
+    "1",
+    "active",
+    "enabled"
+  ].includes(
+    normalized
+  );
+
+}
+
+
+function escapePaymentHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function escapePaymentAttribute(
+  value
+){
+
+  return escapePaymentHtml(
+    value
+  );
+
+}
+
+
+function goPaymentBack(){
+
+  if(
+    document.referrer &&
+    document.referrer !==
+    window.location.href
+  ){
+
+    history.back();
+
+  }else{
+
+    window.location.href =
+      "checkout.html";
+
+  }
+
+}
+
+</script>
+
 </body>
 
 </html>
