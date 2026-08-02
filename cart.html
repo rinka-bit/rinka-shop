@@ -4,304 +4,556 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1">
 
-<title>
-ตะกร้าสินค้า
-</title>
+<title>ตะกร้าสินค้า | Rinka Shop</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
 
 <style>
 
+:root{
+  --cart-primary:#7dcfff;
+  --cart-primary-dark:#4aa4db;
+  --cart-background:#f6fbff;
+  --cart-card:#ffffff;
+  --cart-text:#334155;
+  --cart-muted:#64748b;
+  --cart-border:#dbe7f1;
+  --cart-danger:#dc2626;
+}
+
+*{
+  box-sizing:border-box;
+}
+
 body{
-
-font-family:
-'Kodchasan',
-sans-serif;
-
-background:#f6fbff;
-
-padding:20px;
-
+  margin:0;
+  font-family:'Kodchasan',sans-serif;
+  background:
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      var(--cart-background) 100%
+    );
+  color:var(--cart-text);
 }
 
-.cart-item{
-
-background:white;
-
-padding:15px;
-
-margin-bottom:15px;
-
-border-radius:20px;
-
-display:flex;
-
-gap:15px;
-
-align-items:center;
-
-box-shadow:
-0 3px 15px
-rgba(
-125,
-207,
-255,
-0.15
-);
-
+button,
+input,
+a{
+  font:inherit;
 }
 
-.cart-item img{
-
-width:100px;
-
-height:100px;
-
-object-fit:cover;
-
-border-radius:12px;
-
+button{
+  cursor:pointer;
 }
 
-.total{
-
-font-size:24px;
-
-font-weight:700;
-
-color:#2563eb;
-
-margin-top:20px;
-
-}
-
-.checkout-btn{
-
-margin-top:20px;
-
-padding:15px 25px;
-
-background:#7dcfff;
-
-border:none;
-
-border-radius:999px;
-
-cursor:pointer;
-
-font-size:16px;
-
-font-weight:700;
-
-}
-
-.qty-btn{
-
-width:32px;
-
-height:32px;
-
-border:none;
-
-border-radius:999px;
-
-background:#d9f2ff;
-
-font-weight:700;
-
-cursor:pointer;
-
-}
-
-.qty-control{
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-margin:10px 0;
-
-}
-
-.delete-btn{
-
-background:#ffe4e6;
-
-color:#dc2626;
-
-border:none;
-
-padding:8px 14px;
-
-border-radius:999px;
-
-cursor:pointer;
-
-font-weight:700;
-
-margin-top:10px;
-
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
 }
 
 .page-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  min-height:70px;
+  padding:12px 18px;
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid rgba(219,231,241,.95);
+  box-shadow:0 5px 18px rgba(71,85,105,.07);
+  backdrop-filter:blur(10px);
+}
 
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:16px 24px;
-
-background:#fff;
-
-position:sticky;
-
-top:0;
-
-z-index:100;
-
-box-shadow:
-0 3px 10px
-rgba(0,0,0,.05);
-
+.page-header h1{
+  flex:1;
+  margin:0;
+  padding:0 12px;
+  text-align:center;
+  font-size:21px;
+  color:#3f6078;
 }
 
 .icon-btn{
-
-width:auto !important;
-
-border:none;
-background:none;
-
-font-size:32px;
-
-padding:0;
-
-cursor:pointer;
-
+  width:44px !important;
+  height:44px;
+  padding:0 !important;
+  border:none;
+  border-radius:999px;
+  background:#fff;
+  color:var(--cart-text);
+  font-size:25px;
+  box-shadow:0 4px 13px rgba(71,85,105,.10);
 }
 
 .cart-btn{
-
-position:relative;
-
-font-size:28px;
-
-text-decoration:none;
-
-width:auto !important;
-
+  position:relative;
+  width:44px !important;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:#fff;
+  text-decoration:none;
+  font-size:22px;
+  box-shadow:0 4px 13px rgba(71,85,105,.10);
 }
 
 #cartCount{
+  position:absolute;
+  top:-5px;
+  right:-5px;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:#ff5c7a;
+  color:#fff;
+  font-size:10px;
+  font-weight:700;
+}
 
-position:absolute;
+.cart-page{
+  width:min(1120px,100%);
+  margin:auto;
+  padding:22px 18px 130px;
+}
 
-top:-8px;
+.cart-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.65fr) minmax(300px,.75fr);
+  gap:22px;
+  align-items:start;
+}
 
-right:-8px;
+.cart-main{
+  min-width:0;
+}
 
-background:#ff5c7a;
+.cart-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+  padding:13px 15px;
+  background:#fff;
+  border:1px solid var(--cart-border);
+  border-radius:16px;
+  box-shadow:0 6px 18px rgba(86,142,178,.06);
+}
 
-color:white;
+.cart-select-all{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:600;
+}
 
-font-size:12px;
+.cart-select-all input{
+  width:18px;
+  height:18px;
+}
 
-padding:2px 6px;
+.cart-count-text{
+  color:var(--cart-muted);
+  font-size:13px;
+}
 
-border-radius:20px;
+.cart-item{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto 110px minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+  margin-bottom:14px;
+  padding:15px;
+  background:#fff;
+  border:1px solid var(--cart-border);
+  border-radius:20px;
+  box-shadow:0 7px 22px rgba(86,142,178,.08);
+}
 
+.cart-item.is-unselected{
+  opacity:.62;
+}
+
+.checkout-item{
+  width:19px;
+  height:19px;
+  margin-top:5px;
+}
+
+.cart-image{
+  width:110px;
+  height:110px;
+  border-radius:14px;
+  object-fit:cover;
+  background:#edf7fc;
+}
+
+.cart-image-placeholder{
+  width:110px;
+  height:110px;
+  border-radius:14px;
+  background:#edf7fc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#94a3b8;
+  font-size:12px;
+  text-align:center;
+}
+
+.cart-info{
+  min-width:0;
+}
+
+.cart-name{
+  margin:0;
+  font-size:17px;
+  line-height:1.45;
+  color:#334155;
+  overflow-wrap:anywhere;
+}
+
+.cart-option-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:9px;
+}
+
+.cart-option-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#eef8ff;
+  color:#3b6f95;
+  font-size:12px;
+  font-weight:600;
+}
+
+.cart-meta{
+  margin-top:10px;
+  color:var(--cart-muted);
+  font-size:13px;
+}
+
+.cart-actions-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.qty-control{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.qty-btn{
+  width:34px;
+  height:34px;
+  border:1px solid #d8e8f1;
+  border-radius:999px;
+  background:#eaf7fd;
+  color:#347fb4;
+  font-size:18px;
+  font-weight:700;
+}
+
+.qty-value{
+  min-width:28px;
+  text-align:center;
+  font-weight:700;
+}
+
+.line-total{
+  font-size:17px;
+  font-weight:700;
+  color:#347fb4;
+}
+
+.delete-btn{
+  border:none;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#ffe4e6;
+  color:var(--cart-danger);
+  font-weight:700;
+}
+
+.cart-summary{
+  position:sticky;
+  top:90px;
+  padding:18px;
+  background:#fff;
+  border:1px solid var(--cart-border);
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(86,142,178,.10);
+}
+
+.cart-summary h2{
+  margin:0 0 16px;
+  font-size:19px;
+  color:#3f6078;
+}
+
+.summary-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:9px 0;
+  color:var(--cart-muted);
+  font-size:14px;
+}
+
+.summary-row strong{
+  color:var(--cart-text);
+}
+
+.summary-total{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:10px;
+  padding-top:15px;
+  border-top:1px solid var(--cart-border);
+}
+
+.summary-total span{
+  font-weight:700;
+}
+
+.summary-total strong{
+  color:#2563eb;
+  font-size:27px;
+}
+
+.checkout-btn{
+  width:100%;
+  min-height:50px;
+  margin-top:18px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#7dcfff,#59b8ed);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:0 9px 20px rgba(86,184,237,.25);
+}
+
+.continue-link{
+  display:block;
+  margin-top:11px;
+  text-align:center;
+  color:#4f7591;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:600;
+}
+
+.cart-state{
+  min-height:380px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+  padding:30px 18px;
+  text-align:center;
+  background:#fff;
+  border:1px solid var(--cart-border);
+  border-radius:22px;
+}
+
+.cart-state h2,
+.cart-state p{
+  margin:0;
+}
+
+.cart-state p{
+  color:var(--cart-muted);
+}
+
+.cart-state-icon{
+  font-size:54px;
+}
+
+.cart-state-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:6px;
+  padding:11px 18px;
+  border:none;
+  border-radius:999px;
+  background:var(--cart-primary);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
 }
 
 .overlay{
-
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.35);
-
-z-index:999;
-
-opacity:1;
-
-transition:.25s;
-
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:rgba(0,0,0,.35);
+  opacity:1;
+  transition:.25s;
 }
 
 .overlay.hidden{
-
-opacity:0;
-
-pointer-events:none;
-
+  opacity:0;
+  pointer-events:none;
 }
 
 .side-menu{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:280px;
-
-max-width:80%;
-
-height:100vh;
-
-background:#fff;
-
-z-index:1000;
-
-box-shadow:0 0 30px rgba(0,0,0,.15);
-
-transform:translateX(-100%);
-
-transition:.3s ease;
-
-display:flex;
-
-flex-direction:column;
-
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:1000;
+  width:280px;
+  max-width:82%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  box-shadow:0 0 30px rgba(0,0,0,.15);
+  transform:translateX(-100%);
+  transition:.3s ease;
 }
 
 .side-menu.open{
-
-transform:translateX(0);
-
+  transform:translateX(0);
 }
 
 .menu-header{
-
-padding:24px;
-
-border-bottom:1px solid #eee;
-
+  padding:24px;
+  border-bottom:1px solid #eee;
 }
 
 .side-menu a{
-
-padding:18px 24px;
-
-font-size:16px;
-
-font-weight:600;
-
-text-decoration:none;
-
-color:#333;
-
+  padding:18px 24px;
+  color:#333;
+  text-decoration:none;
+  font-size:16px;
+  font-weight:600;
 }
 
 .side-menu a:hover{
+  background:#f7f9ff;
+}
 
-background:#f7f9ff;
+.cart-toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  z-index:2000;
+  width:min(390px,calc(100% - 28px));
+  transform:translate(-50%,20px);
+  padding:13px 16px;
+  border-radius:14px;
+  background:#18384e;
+  color:#fff;
+  text-align:center;
+  font-weight:600;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s ease;
+  box-shadow:0 12px 30px rgba(15,23,42,.24);
+}
+
+.cart-toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.cart-toast.error{
+  background:#991b1b;
+}
+
+.hidden{
+  display:none !important;
+}
+
+@media(max-width:850px){
+
+  .cart-layout{
+    grid-template-columns:1fr;
+  }
+
+  .cart-summary{
+    position:static;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .page-header{
+    min-height:64px;
+    padding:10px 12px;
+  }
+
+  .page-header h1{
+    font-size:18px;
+  }
+
+  .cart-page{
+    padding:14px 10px 118px;
+  }
+
+  .cart-toolbar{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .cart-item{
+    grid-template-columns:auto 82px minmax(0,1fr);
+    gap:10px;
+    padding:12px;
+    border-radius:17px;
+  }
+
+  .cart-image,
+  .cart-image-placeholder{
+    width:82px;
+    height:82px;
+  }
+
+  .cart-name{
+    font-size:14px;
+  }
+
+  .cart-actions-row{
+    grid-column:2/4;
+  }
+
+  .line-total{
+    font-size:16px;
+  }
 
 }
 
@@ -315,28 +567,25 @@ background:#f7f9ff;
 
 <button
 id="menuButton"
-class="icon-btn">
-
+class="icon-btn"
+type="button"
+aria-label="เปิดเมนู">
 ☰
-
 </button>
 
 <h1 id="pageTitle">
-
 ตะกร้าสินค้า
-
 </h1>
 
 <a
 href="cart.html"
-class="cart-btn">
+class="cart-btn"
+aria-label="เปิดตะกร้าสินค้า">
 
 🛒
 
 <span id="cartCount">
-
 0
-
 </span>
 
 </a>
@@ -367,405 +616,866 @@ Rinka Shop
 <a href="change-address.html">📍 เปลี่ยนที่อยู่</a>
 <a href="account.html">👤 บัญชีของฉัน</a>
 <a href="cart.html">🛒 ตะกร้า</a>
-<a href="https://x.com/prewithrinka">📞 ติดต่อร้าน</a>
+<a
+href="https://x.com/prewithrinka"
+target="_blank"
+rel="noopener noreferrer">
+📞 ติดต่อร้าน
+</a>
 
 </aside>
+
+<main class="cart-page">
+
+<div
+id="cartContent"
+class="cart-layout">
+
+<section class="cart-main">
+
+<div class="cart-toolbar">
+
+<label class="cart-select-all">
+
+<input
+id="selectAllCart"
+type="checkbox"
+checked
+onchange="toggleSelectAllCart(this.checked)">
+
+เลือกทั้งหมด
+
+</label>
+
+<div
+id="cartItemCountText"
+class="cart-count-text">
+0 รายการ
+</div>
+
+</div>
 
 <div id="cartItems">
 </div>
 
-<div
-id="total"
-class="total">
+</section>
+
+<aside class="cart-summary">
+
+<h2>สรุปคำสั่งซื้อ</h2>
+
+<div class="summary-row">
+
+<span>สินค้าที่เลือก</span>
+
+<strong id="selectedItemCount">
+0 ชิ้น
+</strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>ยอดสินค้า</span>
+
+<strong id="selectedSubtotal">
+฿0
+</strong>
+
+</div>
+
+<div class="summary-total">
+
+<span>ยอดรวม</span>
+
+<strong id="total">
+฿0
+</strong>
+
 </div>
 
 <button
+id="checkoutButton"
 class="checkout-btn"
-onclick="
-goCheckout()
-">
-
-สั่งซื้อสินค้า
-
+type="button"
+onclick="goCheckout()">
+สั่งซื้อสินค้าที่เลือก
 </button>
+
+<a
+href="browse.html"
+class="continue-link">
+เลือกซื้อสินค้าต่อ
+</a>
+
+</aside>
+
+</div>
+
+<div
+id="cartEmptyState"
+class="cart-state hidden">
+
+<div class="cart-state-icon">
+🛒
+</div>
+
+<h2>ยังไม่มีสินค้าในตะกร้า</h2>
+
+<p>
+เลือกสินค้าที่ชอบแล้วกลับมาที่นี่ได้เลยค่ะ
+</p>
+
+<a
+href="browse.html"
+class="cart-state-button">
+เลือกซื้อสินค้า
+</a>
+
+</div>
+
+</main>
+
+<div
+id="cartToast"
+class="cart-toast"
+role="status"
+aria-live="polite">
+</div>
 
 <script>
 
-loadCart();
+let cartToastTimer = null;
+let cartActionLoading = false;
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    loadCart();
+
+  }
+);
 
 function loadCart(){
 
-  updateCartCount();
-
   const cart =
-    JSON.parse(
-      localStorage.getItem(
-        "cart"
-      ) || "[]"
+    getStoredCart();
+
+  updateCartCount(
+    cart
+  );
+
+  const content =
+    document.getElementById(
+      "cartContent"
     );
 
-  let total = 0;
+  const empty =
+    document.getElementById(
+      "cartEmptyState"
+    );
 
-  if(cart.length === 0){
+  if(!cart.length){
 
-    document
-    .getElementById(
-      "cartItems"
-    ).innerHTML = `
-      <h3>
-        🛒 ยังไม่มีสินค้าในตะกร้า
-      </h3>
-    `;
+    content.classList.add(
+      "hidden"
+    );
 
-    document
-    .getElementById(
-      "total"
-    ).textContent = "";
+    empty.classList.remove(
+      "hidden"
+    );
 
     return;
 
   }
 
+  content.classList.remove(
+    "hidden"
+  );
+
+  empty.classList.add(
+    "hidden"
+  );
+
   document
-  .getElementById(
-    "cartItems"
-  ).innerHTML =
+    .getElementById(
+      "cartItems"
+    )
+    .innerHTML =
+    cart.map(
+      createCartItemHtml
+    ).join("");
 
-  cart.map((item,index)=>{
+  document
+    .getElementById(
+      "cartItemCountText"
+    )
+    .textContent =
+    `${cart.length.toLocaleString("th-TH")} รายการ`;
 
-    const price =
+  syncSelectAllCart();
+  updateCartSummary();
+
+}
+
+function createCartItemHtml(
+  item,
+  index
+){
+
+  const price =
+    getCartItemPrice(
+      item
+    );
+
+  const qty =
+    Math.max(
+      1,
       Number(
-        item.final_price ??
-        item.price ??
-        0
-      );
+        item.qty || 1
+      )
+    );
 
-    const lineTotal =
-      price *
-      Number(item.qty);
+  const lineTotal =
+    price * qty;
 
-    total += lineTotal;
+  const options =
+    item.selected_options &&
+    typeof item.selected_options ===
+    "object"
+      ? item.selected_options
+      : {};
 
-    return `
+  const optionHtml =
+    Object.entries(options)
+      .map(
+        ([key,value])=>{
 
-<div class="cart-item">
+          const text =
+            Array.isArray(value)
+              ? value.join(", ")
+              : String(value || "");
 
-<input
-type="checkbox"
-class="checkout-item"
-data-index="${index}"
-checked>
+          return `
+
+<span class="cart-option-badge">
+  ${escapeCartHtml(key)}:
+  ${escapeCartHtml(text)}
+</span>
+
+`;
+
+        }
+      )
+      .join("");
+
+  return `
+
+<article
+id="cartItem_${index}"
+class="cart-item">
+
+  <input
+  type="checkbox"
+  class="checkout-item"
+  data-index="${index}"
+  checked
+  aria-label="เลือก ${escapeCartAttribute(item.name || "สินค้า")}"
+  onchange="handleCartSelectionChange()">
+
+  ${
+    item.image
+      ? `
 
 <img
-src="${item.image}">
+src="${escapeCartAttribute(item.image)}"
+alt="${escapeCartAttribute(item.name || "")}"
+class="cart-image"
+loading="lazy">
 
-<div>
+`
+      : `
 
-<h3>
-${item.name}
-</h3>
+<div class="cart-image-placeholder">
+  ไม่มีรูปสินค้า
+</div>
 
-${
-item.selected_options
+`
+  }
 
-?
+  <div class="cart-info">
 
-Object.entries(
-item.selected_options
-)
+    <h2 class="cart-name">
+      ${escapeCartHtml(
+        item.name ||
+        item.product_name ||
+        "สินค้า"
+      )}
+    </h2>
 
-.map(
+    ${
+      optionHtml
+        ? `
 
-([key,value])=>{
+<div class="cart-option-list">
+  ${optionHtml}
+</div>
 
-const text =
-Array.isArray(value)
-? value.join(", ")
-: value;
+`
+        : ""
+    }
 
-return `
+    <div class="cart-meta">
 
-<p
-style="
-margin:4px 0;
-color:#4a6fa5;
-font-size:14px;
-background:#eef8ff;
-padding:5px 10px;
-border-radius:999px;
-display:inline-block;
-">
+      ฿${price.toLocaleString("th-TH")}
+      ×
+      ${qty.toLocaleString("th-TH")}
 
-${key} :
-${text}
+    </div>
 
-</p>
+    <div class="cart-actions-row">
+
+      <div class="qty-control">
+
+        <button
+        class="qty-btn"
+        type="button"
+        aria-label="ลดจำนวน"
+        onclick="changeQty(${index},-1)">
+          −
+        </button>
+
+        <span class="qty-value">
+          ${qty}
+        </span>
+
+        <button
+        class="qty-btn"
+        type="button"
+        aria-label="เพิ่มจำนวน"
+        onclick="changeQty(${index},1)">
+          +
+        </button>
+
+      </div>
+
+      <div class="line-total">
+        ฿${lineTotal.toLocaleString("th-TH")}
+      </div>
+
+      <button
+      class="delete-btn"
+      type="button"
+      onclick="removeItem(${index})">
+        🗑️ ลบ
+      </button>
+
+    </div>
+
+  </div>
+
+</article>
 
 `;
 
 }
 
-)
-
-.join("")
-
-:
-
-""
-
-}
-
-<div>
-
-<button
-class="qty-btn"
-onclick="
-changeQty(
-${index},
--1
-)
-">
-
-−
-
-</button>
-
-${item.qty}
-
-<button
-class="qty-btn"
-onclick="
-changeQty(
-${index},
-1
-)
-">
-
-+
-
-</button>
-
-</div>
-
-<p>
-
-฿${price}
-
-x
-
-${item.qty}
-
-=
-
-฿${lineTotal}
-
-</p>
-
-<button
-class="delete-btn"
-onclick="
-removeItem(
-${index}
-)
-">
-
-🗑️ ลบ
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-  }).join("");
+function handleCartSelectionChange(){
 
   document
-  .getElementById(
-    "total"
-  ).textContent =
-  `ยอดรวม ฿${total}`;
+    .querySelectorAll(
+      ".checkout-item"
+    )
+    .forEach(
+      checkbox=>{
+
+        const card =
+          document.getElementById(
+            "cartItem_" +
+            checkbox.dataset.index
+          );
+
+        if(card){
+
+          card.classList.toggle(
+            "is-unselected",
+            !checkbox.checked
+          );
+
+        }
+
+      }
+    );
+
+  syncSelectAllCart();
+  updateCartSummary();
+
+}
+
+function toggleSelectAllCart(
+  checked
+){
+
+  document
+    .querySelectorAll(
+      ".checkout-item"
+    )
+    .forEach(
+      checkbox=>{
+
+        checkbox.checked =
+          Boolean(checked);
+
+      }
+    );
+
+  handleCartSelectionChange();
+
+}
+
+function syncSelectAllCart(){
+
+  const checkboxes =
+    [
+      ...document.querySelectorAll(
+        ".checkout-item"
+      )
+    ];
+
+  const selectAll =
+    document.getElementById(
+      "selectAllCart"
+    );
+
+  if(!selectAll){
+    return;
+  }
+
+  const selectedCount =
+    checkboxes.filter(
+      checkbox=>
+        checkbox.checked
+    ).length;
+
+  selectAll.checked =
+    checkboxes.length > 0 &&
+    selectedCount ===
+    checkboxes.length;
+
+  selectAll.indeterminate =
+    selectedCount > 0 &&
+    selectedCount <
+    checkboxes.length;
+
+}
+
+function updateCartSummary(){
+
+  const cart =
+    getStoredCart();
+
+  const selectedIndexes =
+    [
+      ...document.querySelectorAll(
+        ".checkout-item:checked"
+      )
+    ]
+      .map(
+        checkbox=>
+          Number(
+            checkbox.dataset.index
+          )
+      )
+      .filter(
+        index=>
+          Number.isInteger(index)
+      );
+
+  let totalQty = 0;
+  let subtotal = 0;
+
+  selectedIndexes.forEach(
+    index=>{
+
+      const item =
+        cart[index];
+
+      if(!item){
+        return;
+      }
+
+      const qty =
+        Math.max(
+          1,
+          Number(item.qty || 1)
+        );
+
+      totalQty +=
+        qty;
+
+      subtotal +=
+        getCartItemPrice(item) *
+        qty;
+
+    }
+  );
+
+  document
+    .getElementById(
+      "selectedItemCount"
+    )
+    .textContent =
+    `${totalQty.toLocaleString("th-TH")} ชิ้น`;
+
+  document
+    .getElementById(
+      "selectedSubtotal"
+    )
+    .textContent =
+    `฿${subtotal.toLocaleString("th-TH")}`;
+
+  document
+    .getElementById(
+      "total"
+    )
+    .textContent =
+    `฿${subtotal.toLocaleString("th-TH")}`;
+
+  const checkoutButton =
+    document.getElementById(
+      "checkoutButton"
+    );
+
+  checkoutButton.disabled =
+    selectedIndexes.length === 0 ||
+    cartActionLoading;
+
+  checkoutButton.textContent =
+    selectedIndexes.length
+      ? `สั่งซื้อสินค้าที่เลือก (${totalQty} ชิ้น)`
+      : "กรุณาเลือกสินค้า";
 
 }
 
 function goCheckout(){
 
+  if(cartActionLoading){
+    return;
+  }
+
   const cart =
-    JSON.parse(
-      localStorage.getItem(
-        "cart"
-      ) || "[]"
-    );
+    getStoredCart();
 
-  const checked =
-    document.querySelectorAll(
-      ".checkout-item:checked"
-    );
+  const selectedItems =
+    [
+      ...document.querySelectorAll(
+        ".checkout-item:checked"
+      )
+    ]
+      .map(
+        checkbox=>
+          cart[
+            Number(
+              checkbox.dataset.index
+            )
+          ]
+      )
+      .filter(Boolean);
 
-  if(
-    checked.length === 0
-  ){
+  if(!selectedItems.length){
 
-    alert(
-      "กรุณาเลือกสินค้า"
+    showCartToast(
+      "กรุณาเลือกสินค้าอย่างน้อย 1 รายการ",
+      true
     );
 
     return;
 
   }
 
-  const selectedItems = [];
+  cartActionLoading = true;
+  updateCartSummary();
 
-  checked.forEach(box=>{
+  try{
 
-    const item =
-      cart[
-        Number(
-          box.dataset.index
-        )
-      ];
+    localStorage.setItem(
+      "checkoutCart",
+      JSON.stringify(
+        selectedItems
+      )
+    );
 
-    if(item){
+    localStorage.setItem(
+      "checkoutSource",
+      "cart"
+    );
 
-      selectedItems.push(
-        item
-      );
+    localStorage.removeItem(
+      "buyNowCart"
+    );
 
-    }
+    window.location.href =
+      "checkout.html";
 
-  });
+  }catch(error){
 
-  localStorage.setItem(
-    "checkoutCart",
-    JSON.stringify(
-      selectedItems
-    )
-  );
+    cartActionLoading = false;
+    updateCartSummary();
 
-  localStorage.setItem(
-    "checkoutSource",
-    "cart"
-  );
+    showCartToast(
+      "ไม่สามารถเตรียมข้อมูล Checkout ได้",
+      true
+    );
 
-  localStorage.removeItem(
-    "buyNowCart"
-  );
-
-  window.location.href =
-    "checkout.html";
+  }
 
 }
 
 function changeQty(
-index,
-change
+  index,
+  change
 ){
 
-let cart =
+  const cart =
+    getStoredCart();
 
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
+  const item =
+    cart[index];
 
-cart[index].qty += change;
+  if(!item){
+    return;
+  }
 
-if(
-cart[index].qty <= 0
-){
+  const nextQty =
+    Number(item.qty || 1) +
+    Number(change || 0);
 
-cart.splice(
-index,
-1
-);
+  if(nextQty <= 0){
 
-}
+    removeItem(index);
 
-localStorage.setItem(
+    return;
+  }
 
-"cart",
+  item.qty =
+    nextQty;
 
-JSON.stringify(cart)
-
-);
-
-loadCart();
+  saveCart(cart);
+  loadCart();
 
 }
 
 function removeItem(
-index
+  index
 ){
 
-let cart =
+  const cart =
+    getStoredCart();
 
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
+  const item =
+    cart[index];
 
-cart.splice(
-index,
-1
-);
+  if(!item){
+    return;
+  }
 
-localStorage.setItem(
+  const confirmed =
+    window.confirm(
+      `ลบ "${item.name || item.product_name || "สินค้า"}" ออกจากตะกร้าหรือไม่?`
+    );
 
-"cart",
+  if(!confirmed){
+    return;
+  }
 
-JSON.stringify(cart)
+  cart.splice(
+    index,
+    1
+  );
 
-);
+  saveCart(cart);
+  loadCart();
 
-loadCart();
-updateCartCount();
-
-}
-
-function updateCartCount(){
-
-const cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const count =
-
-cart.reduce(
-
-(sum,item)=>
-
-sum +
-Number(item.qty || 0),
-
-0
-
-);
-
-const cartCount =
-document.getElementById(
-"cartCount"
-);
-
-if(cartCount){
-
-cartCount.textContent =
-count;
+  showCartToast(
+    "ลบสินค้าออกจากตะกร้าแล้ว"
+  );
 
 }
 
+function saveCart(
+  cart
+){
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(
+      Array.isArray(cart)
+        ? cart
+        : []
+    )
+  );
+
 }
-  
+
+function getStoredCart(){
+
+  try{
+
+    const stored =
+      JSON.parse(
+        localStorage.getItem(
+          "cart"
+        ) || "[]"
+      );
+
+    return Array.isArray(stored)
+      ? stored
+      : [];
+
+  }catch(error){
+
+    console.warn(
+      "อ่านตะกร้าไม่สำเร็จ:",
+      error
+    );
+
+    localStorage.removeItem(
+      "cart"
+    );
+
+    showCartToast(
+      "ข้อมูลตะกร้าเสีย ระบบได้รีเซ็ตตะกร้าแล้ว",
+      true
+    );
+
+    return [];
+
+  }
+
+}
+
+function getCartItemPrice(
+  item
+){
+
+  const value =
+    Number(
+      item.final_price ??
+      item.price ??
+      0
+    );
+
+  return Number.isFinite(value)
+    ? value
+    : 0;
+
+}
+
+function updateCartCount(
+  cart
+){
+
+  const items =
+    Array.isArray(cart)
+      ? cart
+      : getStoredCart();
+
+  const count =
+    items.reduce(
+      (sum,item)=>
+        sum +
+        Number(item.qty || 0),
+      0
+    );
+
+  const cartCount =
+    document.getElementById(
+      "cartCount"
+    );
+
+  if(cartCount){
+
+    cartCount.textContent =
+      count > 99
+        ? "99+"
+        : String(count);
+
+  }
+
+}
+
+function escapeCartHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+function escapeCartAttribute(
+  value
+){
+
+  return escapeCartHtml(
+    value
+  );
+
+}
+
+function showCartToast(
+  message,
+  error
+){
+
+  const toast =
+    document.getElementById(
+      "cartToast"
+    );
+
+  if(!toast){
+    return;
+  }
+
+  toast.textContent =
+    String(message || "");
+
+  toast.classList.toggle(
+    "error",
+    Boolean(error)
+  );
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    cartToastTimer
+  );
+
+  cartToastTimer =
+    setTimeout(
+      ()=>{
+        toast.classList.remove(
+          "show"
+        );
+      },
+      2200
+    );
+
+}
+
 </script>
 
 <script src="menu.js"></script>
-  
+
 </body>
 
 </html>
