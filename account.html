@@ -152,16 +152,120 @@ button{
 }
 
 .profile-avatar{
-  width:62px;
-  height:62px;
+  width:72px;
+  height:72px;
   border-radius:999px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#dff3ff;
-  color:#3476a2;
-  font-size:28px;
+  background:
+    linear-gradient(
+      135deg,
+      var(--avatar-color-start,#c7ecff),
+      var(--avatar-color-end,#82d1ff)
+    );
+  color:#ffffff;
+  font-size:30px;
   font-weight:700;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  border:4px solid rgba(255,255,255,.92);
+  box-shadow:
+    0 8px 20px
+    rgba(72,153,204,.22);
+  user-select:none;
+}
+
+.profile-avatar-note{
+  margin-top:8px;
+  color:#7890a0;
+  font-size:11px;
+}
+
+.profile-avatar-wrap{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.profile-avatar{
+  overflow:hidden;
+}
+
+.profile-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.profile-avatar-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:8px;
+}
+
+.profile-avatar-button{
+  min-height:40px;
+  padding:9px 14px;
+  border:1px solid #cde6f5;
+  border-radius:999px;
+  background:#eef8ff;
+  color:#3476a2;
+  font-weight:700;
+}
+
+.profile-avatar-file{
+  display:none;
+}
+
+.profile-avatar-preview{
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #d7ebf7;
+  border-radius:14px;
+  background:#f8fcff;
+}
+
+.profile-avatar-preview.hidden{
+  display:none;
+}
+
+.profile-avatar-preview img{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:999px;
+  border:3px solid #fff;
+  box-shadow:0 6px 18px rgba(72,153,204,.18);
+}
+
+.profile-avatar-preview-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.profile-avatar-save,
+.profile-avatar-cancel{
+  min-height:38px;
+  padding:8px 13px;
+  border:none;
+  border-radius:999px;
+  font-weight:700;
+}
+
+.profile-avatar-save{
+  background:linear-gradient(135deg,#7dcfff,#57b8ed);
+  color:#fff;
+}
+
+.profile-avatar-cancel{
+  background:#eef2f7;
+  color:#526777;
 }
 
 .profile-info{
@@ -503,8 +607,64 @@ rel="noopener noreferrer">
 
 <section class="profile-card">
 
-<div class="profile-avatar">
-👤
+<div class="profile-avatar-wrap">
+
+<div
+id="profileAvatar"
+class="profile-avatar"
+aria-label="รูปโปรไฟล์">
+R
+</div>
+
+<div class="profile-avatar-actions">
+
+<label
+for="profileAvatarFile"
+class="profile-avatar-button">
+📷 เปลี่ยนรูปโปรไฟล์
+</label>
+
+<input
+id="profileAvatarFile"
+class="profile-avatar-file"
+type="file"
+accept="image/jpeg,image/png,image/webp">
+
+<span class="profile-avatar-note">
+JPG, PNG หรือ WEBP ไม่เกิน 5 MB
+</span>
+
+</div>
+
+</div>
+
+<div
+id="profileAvatarPreview"
+class="profile-avatar-preview hidden">
+
+<img
+id="profileAvatarPreviewImage"
+alt="ตัวอย่างรูปโปรไฟล์">
+
+<div class="profile-avatar-preview-actions">
+
+<button
+id="profileAvatarSaveButton"
+type="button"
+class="profile-avatar-save"
+onclick="saveProfileAvatar()">
+บันทึกรูป
+</button>
+
+<button
+type="button"
+class="profile-avatar-cancel"
+onclick="cancelProfileAvatar()">
+ยกเลิก
+</button>
+
+</div>
+
 </div>
 
 <div class="profile-info">
@@ -703,11 +863,522 @@ document.addEventListener(
     }
 
     renderAccountProfile();
+    renderAccountAvatar();
+    bindProfileAvatarUpload();
     updateCartCount();
     loadOrders();
 
   }
 );
+
+let selectedProfileAvatarFile = null;
+let selectedProfileAvatarPreviewUrl = "";
+
+function renderAccountAvatar(){
+
+  const avatar =
+    document.getElementById(
+      "profileAvatar"
+    );
+
+  if(!avatar){
+    return;
+  }
+
+  const avatarUrl =
+    String(
+      customer.avatar_url || ""
+    ).trim();
+
+  if(avatarUrl){
+
+    avatar.innerHTML = `
+
+<img
+src="${escapeAccountHtml(avatarUrl)}"
+alt="รูปโปรไฟล์"
+referrerpolicy="no-referrer">
+
+`;
+
+    avatar.title =
+      customer.username ||
+      customer.customer_name ||
+      customer.email ||
+      "รูปโปรไฟล์";
+
+    return;
+
+  }
+
+  const displayName =
+    String(
+      customer.username ||
+      customer.customer_name ||
+      customer.email ||
+      "R"
+    ).trim();
+
+  const firstCharacter =
+    Array.from(
+      displayName
+    )
+      .find(
+        character=>
+          character.trim()
+      ) ||
+    "R";
+
+  avatar.textContent =
+    firstCharacter.toUpperCase();
+
+  const palette = [
+
+    ["#8fd8ff","#5caef2"],
+    ["#b8b5ff","#8583e8"],
+    ["#ffb8d2","#ec7fa8"],
+    ["#9be7d1","#54bda0"],
+    ["#ffd39f","#efa35d"],
+    ["#b6d7ff","#719fe7"]
+
+  ];
+
+  let hash = 0;
+
+  for(
+    const character of
+    displayName
+  ){
+
+    hash =
+      (
+        hash * 31 +
+        character.codePointAt(0)
+      ) >>> 0;
+
+  }
+
+  const selectedPalette =
+    palette[
+      hash %
+      palette.length
+    ];
+
+  avatar.style.setProperty(
+    "--avatar-color-start",
+    selectedPalette[0]
+  );
+
+  avatar.style.setProperty(
+    "--avatar-color-end",
+    selectedPalette[1]
+  );
+
+  avatar.title =
+    displayName;
+
+}
+
+
+function bindProfileAvatarUpload(){
+
+  const input =
+    document.getElementById(
+      "profileAvatarFile"
+    );
+
+  if(!input){
+    return;
+  }
+
+  input.addEventListener(
+    "change",
+    handleProfileAvatarSelection
+  );
+
+}
+
+
+function handleProfileAvatarSelection(){
+
+  const input =
+    document.getElementById(
+      "profileAvatarFile"
+    );
+
+  const file =
+    input &&
+    input.files &&
+    input.files[0];
+
+  if(!file){
+
+    cancelProfileAvatar();
+
+    return;
+
+  }
+
+  try{
+
+    validateProfileAvatarFile(
+      file
+    );
+
+  }catch(error){
+
+    input.value = "";
+
+    showAccountAvatarMessage(
+      error.message ||
+      String(error),
+      true
+    );
+
+    return;
+
+  }
+
+  if(selectedProfileAvatarPreviewUrl){
+
+    URL.revokeObjectURL(
+      selectedProfileAvatarPreviewUrl
+    );
+
+  }
+
+  selectedProfileAvatarFile =
+    file;
+
+  selectedProfileAvatarPreviewUrl =
+    URL.createObjectURL(file);
+
+  document
+    .getElementById(
+      "profileAvatarPreviewImage"
+    )
+    .src =
+    selectedProfileAvatarPreviewUrl;
+
+  document
+    .getElementById(
+      "profileAvatarPreview"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+}
+
+
+function validateProfileAvatarFile(
+  file
+){
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if(
+    !file ||
+    !allowedTypes.includes(
+      file.type
+    )
+  ){
+
+    throw new Error(
+      "รองรับเฉพาะไฟล์ JPG, PNG หรือ WEBP"
+    );
+
+  }
+
+  if(
+    Number(file.size || 0) >
+    5 * 1024 * 1024
+  ){
+
+    throw new Error(
+      "ไฟล์รูปต้องมีขนาดไม่เกิน 5 MB"
+    );
+
+  }
+
+  return true;
+
+}
+
+
+async function saveProfileAvatar(){
+
+  if(!selectedProfileAvatarFile){
+
+    showAccountAvatarMessage(
+      "กรุณาเลือกรูปก่อน",
+      true
+    );
+
+    return;
+
+  }
+
+  const button =
+    document.getElementById(
+      "profileAvatarSaveButton"
+    );
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "กำลังอัปโหลด...";
+
+  try{
+
+    const imageBase64 =
+      await accountFileToBase64(
+        selectedProfileAvatarFile
+      );
+
+    const payload = {
+
+      session_token:
+        sessionToken,
+
+      image_base64:
+        imageBase64,
+
+      file_name:
+        selectedProfileAvatarFile.name,
+
+      mime_type:
+        selectedProfileAvatarFile.type
+
+    };
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveCustomerAvatar"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result &&
+        (
+          result.error ||
+          result.message
+        ) ||
+        "บันทึกรูปโปรไฟล์ไม่สำเร็จ"
+      );
+
+    }
+
+    customer.avatar_url =
+      result.avatar_url ||
+      "";
+
+    localStorage.setItem(
+      "customer",
+      JSON.stringify(
+        customer
+      )
+    );
+
+    renderAccountAvatar();
+
+    cancelProfileAvatar();
+
+    showAccountAvatarMessage(
+      "เปลี่ยนรูปโปรไฟล์เรียบร้อยแล้ว",
+      false
+    );
+
+  }catch(error){
+
+    console.error(
+      "saveProfileAvatar error:",
+      error
+    );
+
+    showAccountAvatarMessage(
+      error.message ||
+      "อัปโหลดรูปไม่สำเร็จ",
+      true
+    );
+
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "บันทึกรูป";
+
+  }
+
+}
+
+
+function cancelProfileAvatar(){
+
+  const input =
+    document.getElementById(
+      "profileAvatarFile"
+    );
+
+  const preview =
+    document.getElementById(
+      "profileAvatarPreview"
+    );
+
+  if(input){
+
+    input.value = "";
+
+  }
+
+  selectedProfileAvatarFile =
+    null;
+
+  if(selectedProfileAvatarPreviewUrl){
+
+    URL.revokeObjectURL(
+      selectedProfileAvatarPreviewUrl
+    );
+
+    selectedProfileAvatarPreviewUrl =
+      "";
+
+  }
+
+  preview.classList.add(
+    "hidden"
+  );
+
+}
+
+
+function accountFileToBase64(
+  file
+){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        ()=>resolve(
+          reader.result
+        );
+
+      reader.onerror =
+        ()=>reject(
+          new Error(
+            "อ่านไฟล์รูปไม่สำเร็จ"
+          )
+        );
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+function showAccountAvatarMessage(
+  message,
+  isError
+){
+
+  if(
+    typeof showToast ===
+    "function"
+  ){
+
+    showToast(
+      message,
+      isError
+        ? "error"
+        : "success"
+    );
+
+    return;
+
+  }
+
+  const box =
+    document.getElementById(
+      "accountOrderError"
+    );
+
+  box.textContent =
+    message;
+
+  box.classList.toggle(
+    "hidden",
+    false
+  );
+
+  box.style.background =
+    isError
+      ? "#fff1f2"
+      : "#ecfdf5";
+
+  box.style.color =
+    isError
+      ? "#9f1239"
+      : "#166534";
+
+  setTimeout(
+    ()=>box.classList.add(
+      "hidden"
+    ),
+    2800
+  );
+
+}
+
 
 function renderAccountProfile(){
 
@@ -1133,6 +1804,7 @@ function escapeAccountHtml(
 
 </script>
 
+<script src="toast.js"></script>
 <script src="menu.js"></script>
 
 </body>
