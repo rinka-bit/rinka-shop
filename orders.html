@@ -1,408 +1,91 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>
-รายการออเดอร์
-</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>รายการออเดอร์ | Rinka Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-body{
-
-font-family:sans-serif;
-
-background:#f8fbff;
-
-padding:20px;
-
-}
-
-.container{
-
-max-width:800px;
-margin:auto;
-
-}
-
-.topbar{
-
-display:flex;
-
-align-items:center;
-
-margin-bottom:20px;
-
-}
-
-.back-btn{
-
-width:44px;
-height:44px;
-
-border:none;
-
-border-radius:999px;
-
-background:white;
-
-cursor:pointer;
-
-box-shadow:
-0 2px 8px rgba(0,0,0,.08);
-
-}
-
-.order-card{
-
-background:white;
-
-padding:16px;
-
-border-radius:16px;
-
-margin-bottom:12px;
-
-cursor:pointer;
-
-box-shadow:
-0 2px 10px rgba(0,0,0,.05);
-
-}
-
-.order-id{
-
-font-weight:700;
-
-font-size:16px;
-
-}
-
-.order-status{
-
-margin-top:6px;
-
-font-size:14px;
-
-color:#2563eb;
-
-}
-
-.order-total{
-
-margin-top:6px;
-
-font-weight:700;
-
-}
-
-.order-date{
-
-font-size:12px;
-
-color:#666;
-
-margin-top:6px;
-
-}
-
+:root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--card:#fff;--text:#334155;--muted:#64748b;--border:#dbe7f1}
+*{box-sizing:border-box} body{margin:0;font-family:'Kodchasan',sans-serif;background:linear-gradient(180deg,#fbfdff,var(--bg));color:var(--text)}
+button,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;min-height:68px;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.topbar button,.topbar a{width:46px;height:46px;border:none;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);font-size:21px;box-shadow:0 4px 14px rgba(71,85,105,.1)}
+.topbar h1{margin:0;flex:1;text-align:center;font-size:20px;color:#3f6078}.container{width:min(900px,100%);margin:auto;padding:20px 16px 46px}
+.filter-bar{display:flex;gap:9px;overflow:auto;padding-bottom:6px;margin-bottom:16px}.filter-chip{flex:0 0 auto;padding:9px 13px;border:1px solid var(--border);border-radius:999px;background:#fff;color:#4f6f84;text-decoration:none;font-size:13px;font-weight:700}.filter-chip.active{background:#e9f7ff;border-color:#90d6fb;color:#2f7ca9}
+.order-list{display:grid;gap:13px}.order-card{display:grid;grid-template-columns:82px minmax(0,1fr) auto;gap:13px;align-items:center;padding:14px;background:#fff;border:1px solid var(--border);border-radius:19px;box-shadow:0 7px 22px rgba(86,142,178,.08);cursor:pointer;transition:.2s}
+.order-card:hover{transform:translateY(-3px);box-shadow:0 13px 28px rgba(86,142,178,.13)}.order-image{width:82px;height:82px;border-radius:13px;object-fit:cover;background:#edf7fc}
+.order-main{min-width:0}.order-id{font-weight:700}.order-name{margin-top:4px;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.order-meta{margin-top:5px;color:var(--muted);font-size:12px}
+.order-side{text-align:right}.order-total{font-weight:700;color:#287caf}.order-date{margin-top:5px;color:var(--muted);font-size:11px}.badge{display:inline-flex;margin-top:7px;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:700}.b-pending{background:#fff7ed;color:#c2410c}.b-progress{background:#eff6ff;color:#1d4ed8}.b-ready{background:#fefce8;color:#a16207}.b-shipped{background:#ecfdf5;color:#166534}
+.state{min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;background:#fff;border:1px solid var(--border);border-radius:21px;padding:25px}.state p{margin:0;color:var(--muted)}.state a,.state button{border:none;border-radius:999px;padding:10px 17px;background:var(--p);color:#fff;text-decoration:none;font-weight:700}.spinner{width:36px;height:36px;border:4px solid #dff2fc;border-top-color:var(--pd);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){.container{padding:14px 10px 36px}.order-card{grid-template-columns:68px minmax(0,1fr);gap:10px}.order-image{width:68px;height:68px}.order-side{grid-column:2;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px}.order-side .badge{margin-top:0}.topbar h1{font-size:17px}}
 </style>
-
 </head>
-
 <body>
-
-<div class="container">
-
-<div class="topbar">
-
-<button
-class="back-btn"
-onclick="history.back()">
-
-←
-
-</button>
-
-</div>
-
-<h2 id="pageTitle">
-
-รายการออเดอร์
-
-</h2>
-
-<div id="orderList">
-
-กำลังโหลด...
-
-</div>
-
-</div>
-
+<header class="topbar">
+<button type="button" onclick="goOrdersBack()" aria-label="กลับ">←</button>
+<h1 id="pageTitle">รายการออเดอร์</h1>
+<a href="account.html" aria-label="บัญชี">👤</a>
+</header>
+<main class="container">
+<nav class="filter-bar" id="filterBar"></nav>
+<section id="orderList" class="state">
+<div class="spinner"></div><h2>กำลังโหลดออเดอร์</h2><p>รอสักครู่นะคะ</p>
+</section>
+</main>
 <script>
-
-const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
-
-const customer =
-
-JSON.parse(
-localStorage.getItem(
-"customer"
-) || "{}"
-);
-
-if(
-!customer.email
-){
-
-window.location.href =
-"login.html";
-
+const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+const customer=safeJson(localStorage.getItem("customer"),{});
+const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
+const params=new URLSearchParams(location.search);
+const statusFilter=params.get("status")||"";
+const FILTERS=[
+["","ทั้งหมด"],["pending","รอจัดการ"],["china_arrived","ถึงโกดังจีน"],["shipping_to_th","กำลังมาไทย"],["ready_to_ship","เตรียมจัดส่ง"],["shipped","จัดส่งแล้ว"]
+];
+document.addEventListener("DOMContentLoaded",()=>{renderFilters();loadOrders()});
+function renderFilters(){
+ document.getElementById("filterBar").innerHTML=FILTERS.map(([v,t])=>`<a class="filter-chip ${v===statusFilter?"active":""}" href="orders.html${v?`?status=${encodeURIComponent(v)}`:""}">${t}</a>`).join("");
 }
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const statusFilter =
-params.get("status");
-
-loadOrders();
-
-function getStatusText(status){
-
-switch(status){
-
-case "pending":
-return "📦 ออเดอร์ของฉัน";
-
-case "china_arrived":
-return "🏭 ถึงโกดังจีนแล้ว";
-
-case "shipping_to_th":
-return "🚚 กำลังมาไทย";
-
-case "ready_to_ship":
-return "📬 เตรียมจัดส่ง";
-
-case "shipped":
-return "✅ จัดส่งแล้ว";
-
-default:
-return status;
-
-}
-
-}
-
+function statusText(s){return {pending:"รอจัดการ",china_arrived:"ถึงโกดังจีนแล้ว",shipping_to_th:"กำลังมาไทย",ready_to_ship:"เตรียมจัดส่ง",shipped:"จัดส่งแล้ว"}[s]||s||"-"}
+function statusClass(s){return s==="pending"?"b-pending":s==="ready_to_ship"?"b-ready":s==="shipped"?"b-shipped":"b-progress"}
 async function loadOrders(){
-
-  document.getElementById(
-    "pageTitle"
-  ).textContent =
-    statusFilter
-      ? getStatusText(statusFilter)
-      : "รายการออเดอร์ทั้งหมด";
-
-  try{
-
-    const response =
-      await fetch(
-        API +
-        "?action=customerOrders&email=" +
-        encodeURIComponent(
-          customer.email
-        )
-      );
-
-    const result =
-      await response.json();
-
-    const orders =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(result.orders)
-          ? result.orders
-          : [];
-
-    const filtered =
-      statusFilter
-        ? orders.filter(
-            order =>
-              order.status === statusFilter
-          )
-        : orders;
-
-    let html = "";
-
-    if(filtered.length === 0){
-
-      html = `
-<div
-style="
-background:white;
-padding:20px;
-border-radius:16px;
-">
-
-ยังไม่มีออเดอร์
-
-</div>
-`;
-
-    }
-
-    filtered.forEach(order=>{
-
-      const createdDate =
-        order.created_at
-          ? new Date(
-              order.created_at
-            ).toLocaleDateString(
-              "th-TH"
-            )
-          : "-";
-
-      html += `
-
-<div
-class="order-card"
-onclick="
-window.location.href=
-'order.html?id=${order.order_id}'
-">
-
-<div
-style="
-display:flex;
-gap:12px;
-align-items:center;
-">
-
-<img
-src="${
-order.preview_image ||
-"https://placehold.co/100x100"
-}"
-style="
-width:72px;
-height:72px;
-object-fit:cover;
-border-radius:12px;
-flex-shrink:0;
-">
-
-<div
-style="
-flex:1;
-">
-
-<div class="order-id">
-
-${order.order_id || "-"}
-
-</div>
-
-<div
-style="
-font-weight:600;
-margin-top:4px;
-">
-
-${order.preview_name || "-"}
-
-</div>
-
-<div
-style="
-font-size:13px;
-color:#666;
-margin-top:4px;
-">
-
-${Number(
-  order.item_count || 0
-).toLocaleString()}
-รายการ
-
-</div>
-
-<div class="order-status">
-
-${getStatusText(
-  order.status
-)}
-
-</div>
-
-<div class="order-total">
-
-฿${Number(
-  order.total || 0
-).toLocaleString()}
-
-</div>
-
-<div class="order-date">
-
-${createdDate}
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-    });
-
-    document.getElementById(
-      "orderList"
-    ).innerHTML =
-      html;
-
-  }catch(error){
-
-    console.error(
-      "loadOrders error",
-      error
-    );
-
-    document.getElementById(
-      "orderList"
-    ).innerHTML = `
-
-<div
-style="
-background:white;
-padding:20px;
-border-radius:16px;
-">
-
-โหลดรายการออเดอร์ไม่สำเร็จ
-
-</div>
-
-`;
-
+ const box=document.getElementById("orderList");
+ if(!sessionToken&&!customer.email){location.href="login.html";return}
+ document.getElementById("pageTitle").textContent=statusFilter?statusText(statusFilter):"รายการออเดอร์ทั้งหมด";
+ try{
+  const q=new URLSearchParams({action:"customerOrders"});
+  if(sessionToken) q.set("session_token",sessionToken); else q.set("email",customer.email||"");
+  const res=await fetch(API+"?"+q.toString());
+  if(!res.ok) throw new Error("HTTP "+res.status);
+  const data=await res.json();
+  if(data&&data.success===false) throw new Error(data.error||"โหลดออเดอร์ไม่สำเร็จ");
+  const orders=Array.isArray(data)?data:Array.isArray(data.orders)?data.orders:[];
+  const rows=statusFilter?orders.filter(o=>String(o.status||"")===statusFilter):orders;
+  if(!rows.length){
+   box.className="state";
+   box.innerHTML=`<div style="font-size:50px">📦</div><h2>ยังไม่มีออเดอร์</h2><p>${statusFilter?"ยังไม่มีออเดอร์ในสถานะนี้":"เมื่อสั่งซื้อแล้ว ออเดอร์จะแสดงที่นี่"}</p><a href="browse.html">เลือกซื้อสินค้า</a>`;
+   return;
   }
-
+  box.className="order-list";
+  box.innerHTML=rows.map(orderCard).join("");
+ }catch(err){
+  console.error(err);box.className="state";box.innerHTML=`<div style="font-size:50px">⚠️</div><h2>โหลดออเดอร์ไม่สำเร็จ</h2><p>${esc(err.message||String(err))}</p><button onclick="loadOrders()">ลองใหม่</button>`;
+ }
 }
-
+function orderCard(o){
+ const date=o.created_at?new Date(o.created_at).toLocaleDateString("th-TH",{year:"numeric",month:"short",day:"numeric"}):"-";
+ const url="order.html?id="+encodeURIComponent(o.order_id||"");
+ return `<article class="order-card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)">
+ ${o.preview_image?`<img class="order-image" src="${attr(o.preview_image)}" alt="${attr(o.preview_name||"")}">`:`<div class="order-image" style="display:flex;align-items:center;justify-content:center">📦</div>`}
+ <div class="order-main"><div class="order-id">${esc(o.order_id||"-")}</div><div class="order-name">${esc(o.preview_name||"รายการสินค้า")}</div><div class="order-meta">${Number(o.item_count||0).toLocaleString("th-TH")} รายการ</div></div>
+ <div class="order-side"><div><div class="order-total">฿${Number(o.total||0).toLocaleString("th-TH")}</div><div class="order-date">${date}</div></div><span class="badge ${statusClass(o.status)}">${statusText(o.status)}</span></div></article>`;
+}
+function cardKey(e,el){if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click()}}
+function goOrdersBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="account.html"}
+function safeJson(v,f){try{return JSON.parse(v||"")}catch(e){return f}}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function attr(v){return esc(v)}
 </script>
-
 </body>
-
 </html>
