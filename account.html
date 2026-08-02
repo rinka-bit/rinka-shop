@@ -895,9 +895,14 @@ function renderAccountAvatar(){
     avatar.innerHTML = `
 
 <img
-src="${escapeAccountHtml(avatarUrl)}"
+src="${escapeAccountHtml(
+  normalizeCustomerAvatarUrl(
+    avatarUrl
+  )
+)}"
 alt="รูปโปรไฟล์"
-referrerpolicy="no-referrer">
+referrerpolicy="no-referrer"
+onerror="handleCustomerAvatarError(this)">
 
 `;
 
@@ -976,6 +981,82 @@ referrerpolicy="no-referrer">
 
   avatar.title =
     displayName;
+
+}
+
+
+function normalizeCustomerAvatarUrl(
+  url
+){
+
+  const value =
+    String(
+      url || ""
+    ).trim();
+
+  if(!value){
+    return "";
+  }
+
+  const idMatch =
+    value.match(
+      /(?:[?&]id=|\/d\/)([-\w]{20,})/
+    );
+
+  if(
+    idMatch &&
+    idMatch[1]
+  ){
+
+    return (
+      "https://drive.google.com/thumbnail?id=" +
+      encodeURIComponent(
+        idMatch[1]
+      ) +
+      "&sz=w1000"
+    );
+
+  }
+
+  return value;
+
+}
+
+
+function handleCustomerAvatarError(
+  image
+){
+
+  if(!image){
+    return;
+  }
+
+  const avatar =
+    document.getElementById(
+      "profileAvatar"
+    );
+
+  customer.avatar_url = "";
+
+  localStorage.setItem(
+    "customer",
+    JSON.stringify(
+      customer
+    )
+  );
+
+  if(avatar){
+
+    avatar.innerHTML = "";
+
+  }
+
+  renderAccountAvatar();
+
+  showAccountAvatarMessage(
+    "โหลดรูปโปรไฟล์ไม่สำเร็จ กรุณาอัปโหลดใหม่",
+    true
+  );
 
 }
 
