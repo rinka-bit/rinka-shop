@@ -14,6 +14,96 @@
     function(tab){
 
       if(
+        tab ===
+        "legacy_orders"
+      ){
+
+        const knownTabs = [
+
+          "dashboard",
+          "products",
+          "options",
+          "orders",
+          "address",
+          "collections",
+          "gifts",
+          "manual_order",
+          "legacy_orders"
+
+        ];
+
+        knownTabs.forEach(
+          name=>{
+
+            const section =
+              document.getElementById(
+                "tab_" +
+                name
+              );
+
+            const navButton =
+              document.getElementById(
+                "nav_" +
+                name
+              );
+
+            if(section){
+
+              section.classList.toggle(
+                "hidden",
+                name !==
+                "legacy_orders"
+              );
+
+            }
+
+            if(navButton){
+
+              navButton.classList.toggle(
+                "active",
+                name ===
+                "legacy_orders"
+              );
+
+            }
+
+          }
+        );
+
+        renderLegacyOrderManager();
+        loadLegacyUnlinkedOrders();
+
+        return;
+
+      }
+
+      const legacySection =
+        document.getElementById(
+          "tab_legacy_orders"
+        );
+
+      const legacyButton =
+        document.getElementById(
+          "nav_legacy_orders"
+        );
+
+      if(legacySection){
+
+        legacySection.classList.add(
+          "hidden"
+        );
+
+      }
+
+      if(legacyButton){
+
+        legacyButton.classList.remove(
+          "active"
+        );
+
+      }
+
+      if(
         typeof originalShowAdminTab ===
         "function"
       ){
@@ -21,16 +111,6 @@
         originalShowAdminTab(
           tab
         );
-
-      }
-
-      if(
-        tab ===
-        "legacy_orders"
-      ){
-
-        renderLegacyOrderManager();
-        loadLegacyUnlinkedOrders();
 
       }
 
