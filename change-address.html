@@ -19,9 +19,18 @@ button,input,textarea,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;m
 </style>
 </head>
 <body>
-<header class="topbar"><button type="button" onclick="goBack()" aria-label="กลับ">←</button><h1>เปลี่ยนที่อยู่</h1><a href="account.html" aria-label="บัญชี">👤</a></header>
+<header class="topbar"><button type="button" onclick="goBack()" aria-label="กลับ">←</button><h1>เปลี่ยนที่อยู่ของออเดอร์</h1><a href="account.html" aria-label="บัญชี">👤</a></header>
 <main class="container">
-<section class="card"><h2>📍 ขอเปลี่ยนที่อยู่จัดส่ง</h2><p class="note">ใช้สำหรับออเดอร์ที่สร้างแล้ว ร้านจะตรวจสอบคำขอก่อนแก้ไขข้อมูลจัดส่ง</p>
+<section class="card"><h2>📍 ขอเปลี่ยนที่อยู่ของออเดอร์</h2>
+<p class="note">
+หน้านี้ใช้สำหรับเปลี่ยนที่อยู่ของออเดอร์ที่สร้างแล้ว จึงจำเป็นต้องกรอกเลขออเดอร์
+</p>
+<div style="margin-bottom:16px;padding:13px;border:1px solid #dbe7f1;border-radius:14px;background:#f8fcff;line-height:1.65;">
+ต้องการเพิ่มหรือแก้ไขที่อยู่ในบัญชีโดยไม่ผูกกับออเดอร์?
+<a href="address-book.html" style="color:#3476a2;font-weight:700;">
+ไปหน้าจัดการที่อยู่
+</a>
+</div>
 <div id="message" class="message hidden"></div>
 <div class="grid">
 <div class="field"><label for="orderId">เลขออเดอร์ *</label><input id="orderId" autocomplete="off"><span id="orderIdError" class="error"></span></div>
