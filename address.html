@@ -7,98 +7,355 @@
 
 <meta
 name="viewport"
-content="width=device-width,initial-scale=1"
->
+content="width=device-width,initial-scale=1">
 
-<title>
-เพิ่มที่อยู่
-</title>
+<title>เพิ่มที่อยู่ | Rinka Shop</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
 
 <style>
 
+:root{
+  --address-primary:#7dcfff;
+  --address-primary-dark:#4ba5db;
+  --address-background:#f6fbff;
+  --address-card:#ffffff;
+  --address-text:#334155;
+  --address-muted:#64748b;
+  --address-border:#dbe7f1;
+  --address-danger:#be123c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
 body{
-
-font-family:sans-serif;
-background:#f8fbff;
-padding:20px;
-
+  margin:0;
+  font-family:'Kodchasan',sans-serif;
+  color:var(--address-text);
+  background:
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      var(--address-background) 100%
+    );
 }
 
-.container{
-
-max-width:600px;
-margin:auto;
-
-}
-
-.card{
-
-background:white;
-padding:20px;
-border-radius:16px;
-box-shadow:
-0 2px 10px rgba(0,0,0,.05);
-
-}
-
+button,
 input,
-textarea{
-
-width:100%;
-padding:12px;
-margin-bottom:12px;
-box-sizing:border-box;
-border:1px solid #ddd;
-border-radius:10px;
-font-family:inherit;
-font-size:15px;
-
-}
-
-textarea{
-
-min-height:90px;
-resize:vertical;
-
+textarea,
+a{
+  font:inherit;
 }
 
 button{
-
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#7dcfff;
-color:white;
-font-size:16px;
-font-weight:700;
-cursor:pointer;
-
+  cursor:pointer;
 }
 
 button:disabled{
-
-opacity:.65;
-cursor:not-allowed;
-
+  opacity:.55;
+  cursor:not-allowed;
 }
 
-h1{
-
-text-align:center;
-margin-bottom:20px;
-
+.address-topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 16px;
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid rgba(219,231,241,.95);
+  box-shadow:0 5px 18px rgba(71,85,105,.07);
+  backdrop-filter:blur(10px);
 }
 
-@keyframes spin{
-
-from{
-transform:rotate(0deg);
+.address-topbar button,
+.address-topbar a{
+  width:46px;
+  height:46px;
+  border:none;
+  border-radius:999px;
+  background:#fff;
+  color:var(--address-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  font-size:21px;
+  box-shadow:0 4px 14px rgba(71,85,105,.10);
 }
 
-to{
-transform:rotate(360deg);
+.address-topbar h1{
+  flex:1;
+  margin:0;
+  padding:0 12px;
+  color:#3f6078;
+  text-align:center;
+  font-size:20px;
 }
+
+.address-container{
+  width:min(760px,100%);
+  margin:auto;
+  padding:22px 16px 48px;
+}
+
+.address-hero{
+  margin-bottom:16px;
+  padding:20px;
+  border:1px solid var(--address-border);
+  border-radius:21px;
+  background:
+    linear-gradient(
+      135deg,
+      #f3fbff,
+      #ffffff
+    );
+  box-shadow:0 9px 28px rgba(86,142,178,.09);
+}
+
+.address-hero h2{
+  margin:0;
+  color:#355a73;
+  font-size:23px;
+}
+
+.address-hero p{
+  margin:8px 0 0;
+  color:var(--address-muted);
+  line-height:1.65;
+}
+
+.address-card{
+  padding:20px;
+  border:1px solid var(--address-border);
+  border-radius:21px;
+  background:#fff;
+  box-shadow:0 8px 25px rgba(86,142,178,.08);
+}
+
+.address-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.address-field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.address-field.full{
+  grid-column:1/-1;
+}
+
+.address-field label{
+  color:#45677e;
+  font-weight:700;
+}
+
+.address-field input,
+.address-field textarea{
+  width:100%;
+  padding:11px 13px;
+  border:1px solid #d7e3ec;
+  border-radius:13px;
+  background:#fff;
+  outline:none;
+}
+
+.address-field textarea{
+  min-height:105px;
+  resize:vertical;
+}
+
+.address-field input:focus,
+.address-field textarea:focus{
+  border-color:var(--address-primary-dark);
+  box-shadow:0 0 0 3px rgba(125,207,255,.16);
+}
+
+.address-field input.invalid,
+.address-field textarea.invalid{
+  border-color:#fca5a5;
+  background:#fff8f8;
+}
+
+.address-error{
+  min-height:17px;
+  color:var(--address-danger);
+  font-size:11px;
+}
+
+.address-default-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:16px;
+  padding:13px;
+  border:1px solid #dceaf2;
+  border-radius:14px;
+  background:#f8fcff;
+}
+
+.address-default-row input{
+  width:19px;
+  height:19px;
+  margin:0;
+}
+
+.address-message{
+  margin-bottom:14px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:#fff1f2;
+  border:1px solid #fecaca;
+  color:#9f1239;
+  line-height:1.6;
+}
+
+.address-message.success{
+  background:#ecfdf5;
+  border-color:#86efac;
+  color:#166534;
+}
+
+.address-message.hidden{
+  display:none;
+}
+
+.address-submit{
+  width:100%;
+  min-height:50px;
+  margin-top:18px;
+  border:none;
+  border-radius:999px;
+  background:
+    linear-gradient(
+      135deg,
+      #7dcfff,
+      #57b8ed
+    );
+  color:#fff;
+  font-weight:700;
+  box-shadow:0 9px 22px rgba(87,184,237,.24);
+}
+
+.loading-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(15,23,42,.64);
+}
+
+.loading-card{
+  width:min(330px,100%);
+  padding:27px;
+  border-radius:22px;
+  background:#fff;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(15,23,42,.25);
+}
+
+.loading-icon{
+  font-size:48px;
+  animation:addressSpin 1s linear infinite;
+}
+
+@keyframes addressSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.address-state{
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  text-align:center;
+  padding:25px;
+  border:1px solid var(--address-border);
+  border-radius:21px;
+  background:#fff;
+}
+
+.address-state p{
+  margin:0;
+  color:var(--address-muted);
+}
+
+.address-state button,
+.address-state a{
+  padding:10px 16px;
+  border:none;
+  border-radius:999px;
+  background:var(--address-primary);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.address-spinner{
+  width:36px;
+  height:36px;
+  border:4px solid #dff2fc;
+  border-top-color:var(--address-primary-dark);
+  border-radius:50%;
+  animation:addressSpin .8s linear infinite;
+}
+
+.hidden{
+  display:none !important;
+}
+
+@media(max-width:600px){
+
+  .address-topbar{
+    min-height:64px;
+    padding:9px 11px;
+  }
+
+  .address-topbar h1{
+    font-size:17px;
+  }
+
+  .address-container{
+    padding:14px 10px 36px;
+  }
+
+  .address-hero{
+    padding:18px;
+    border-radius:19px;
+  }
+
+  .address-card{
+    padding:15px;
+    border-radius:18px;
+  }
+
+  .address-grid{
+    grid-template-columns:1fr;
+  }
+
+  .address-field.full{
+    grid-column:auto;
+  }
 
 }
 
@@ -108,140 +365,261 @@ transform:rotate(360deg);
 
 <body>
 
-<div class="container">
+<header class="address-topbar">
 
-<h1 id="pageTitle">
-📍 เพิ่มที่อยู่จัดส่ง
+<button
+type="button"
+aria-label="กลับ"
+onclick="goAddressBack()">
+←
+</button>
+
+<h1 id="topbarTitle">
+เพิ่มที่อยู่
 </h1>
 
-<div class="card">
+<a
+href="account.html"
+aria-label="บัญชีของฉัน">
+👤
+</a>
+
+</header>
+
+<main class="address-container">
+
+<section class="address-hero">
+
+<h2 id="pageTitle">
+📍 เพิ่มที่อยู่จัดส่ง
+</h2>
+
+<p>
+กรอกข้อมูลให้ครบเพื่อใช้สำหรับจัดส่งสินค้า
+</p>
+
+</section>
+
+<section
+id="addressLoadingState"
+class="address-state hidden">
+
+<div class="address-spinner"></div>
+
+<h2>
+กำลังโหลดที่อยู่
+</h2>
+
+<p>
+รอสักครู่นะคะ
+</p>
+
+</section>
+
+<section
+id="addressFormCard"
+class="address-card">
+
+<div
+id="addressMessage"
+class="address-message hidden">
+</div>
+
+<div class="address-grid">
+
+<div class="address-field">
+
+<label for="receiver">
+ชื่อผู้รับ *
+</label>
 
 <input
 id="receiver"
 type="text"
-placeholder="ชื่อผู้รับ"
 autocomplete="name"
->
+placeholder="ชื่อ-นามสกุล">
+
+<span
+id="receiverError"
+class="address-error">
+</span>
+
+</div>
+
+<div class="address-field">
+
+<label for="phone">
+เบอร์โทร *
+</label>
 
 <input
 id="phone"
 type="tel"
-placeholder="เบอร์โทร"
+inputmode="tel"
 autocomplete="tel"
->
+placeholder="08x-xxx-xxxx">
+
+<span
+id="phoneError"
+class="address-error">
+</span>
+
+</div>
+
+<div class="address-field full">
+
+<label for="address">
+บ้านเลขที่ หมู่บ้าน ถนน ซอย *
+</label>
 
 <textarea
 id="address"
-placeholder="บ้านเลขที่ หมู่บ้าน ถนน ซอย"
 autocomplete="street-address"
-></textarea>
+placeholder="กรอกที่อยู่โดยละเอียด">
+</textarea>
+
+<span
+id="addressError"
+class="address-error">
+</span>
+
+</div>
+
+<div class="address-field">
+
+<label for="subdistrict">
+แขวง / ตำบล *
+</label>
 
 <input
 id="subdistrict"
 type="text"
-placeholder="แขวง / ตำบล"
->
+placeholder="แขวง / ตำบล">
+
+<span
+id="subdistrictError"
+class="address-error">
+</span>
+
+</div>
+
+<div class="address-field">
+
+<label for="district">
+เขต / อำเภอ *
+</label>
 
 <input
 id="district"
 type="text"
-placeholder="เขต / อำเภอ"
->
+placeholder="เขต / อำเภอ">
+
+<span
+id="districtError"
+class="address-error">
+</span>
+
+</div>
+
+<div class="address-field">
+
+<label for="province">
+จังหวัด *
+</label>
 
 <input
 id="province"
 type="text"
-placeholder="จังหวัด"
->
+placeholder="จังหวัด">
+
+<span
+id="provinceError"
+class="address-error">
+</span>
+
+</div>
+
+<div class="address-field">
+
+<label for="postcode">
+รหัสไปรษณีย์ *
+</label>
 
 <input
 id="postcode"
 type="text"
 inputmode="numeric"
 maxlength="5"
-placeholder="รหัสไปรษณีย์"
 autocomplete="postal-code"
->
+placeholder="เช่น 10110">
+
+<span
+id="postcodeError"
+class="address-error">
+</span>
+
+</div>
+
+<div class="address-field full">
+
+<label for="label">
+ชื่อที่อยู่
+</label>
 
 <input
 id="label"
 type="text"
-placeholder="ชื่อที่อยู่ เช่น บ้าน / ที่ทำงาน"
-value="บ้าน"
->
+placeholder="บ้าน / ที่ทำงาน"
+value="บ้าน">
 
-<label
-style="
-display:flex;
-align-items:center;
-gap:8px;
-margin-bottom:16px;
-"
->
+<span class="address-error">
+</span>
+
+</div>
+
+</div>
+
+<label class="address-default-row">
 
 <input
 id="isDefault"
 type="checkbox"
-checked
-style="
-width:auto;
-margin:0;
-"
->
+checked>
 
+<span>
 ตั้งเป็นที่อยู่เริ่มต้น
+</span>
 
 </label>
 
 <button
 id="saveAddressBtn"
-onclick="saveAddress()"
->
-
+class="address-submit"
+type="button"
+onclick="saveAddress()">
 บันทึกที่อยู่
-
 </button>
 
-</div>
+</section>
 
-</div>
+</main>
 
 <div
 id="loadingOverlay"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-z-index:9999;
-justify-content:center;
-align-items:center;
-padding:20px;
-"
->
+class="loading-overlay">
 
-<div
-style="
-background:white;
-padding:30px;
-border-radius:20px;
-text-align:center;
-"
->
+<div class="loading-card">
 
-<div
-style="
-font-size:50px;
-animation:spin 1s linear infinite;
-"
->
-
+<div class="loading-icon">
 📍
-
 </div>
 
-<p id="loadingText">
-กำลังบันทึกที่อยู่...
+<h3 id="loadingText">
+กำลังดำเนินการ...
+</h3>
+
+<p>
+กรุณารอสักครู่
 </p>
 
 </div>
@@ -253,20 +631,22 @@ animation:spin 1s linear infinite;
 const API =
   "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-const sessionToken =
-  localStorage.getItem(
-    "session_token"
-  ) || "";
-
-if(
-  !sessionToken
-){
-
-  window.location.replace(
-    "login.html"
+const customer =
+  safeAddressJson(
+    localStorage.getItem(
+      "customer"
+    ),
+    {}
   );
 
-}
+const sessionToken =
+  String(
+    customer.session_token ||
+    localStorage.getItem(
+      "session_token"
+    ) ||
+    ""
+  ).trim();
 
 const params =
   new URLSearchParams(
@@ -278,51 +658,146 @@ const addressId =
     "id"
   ) || "";
 
-if(
-  addressId
-){
+let addressSubmitting = false;
 
-  document.getElementById(
-    "pageTitle"
-  ).textContent =
-    "📍 แก้ไขที่อยู่จัดส่ง";
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
 
-  loadAddress();
+    if(!sessionToken){
+
+      window.location.replace(
+        "login.html"
+      );
+
+      return;
+
+    }
+
+    bindAddressInputs();
+
+    if(addressId){
+
+      document
+        .getElementById(
+          "pageTitle"
+        )
+        .textContent =
+        "📍 แก้ไขที่อยู่จัดส่ง";
+
+      document
+        .getElementById(
+          "topbarTitle"
+        )
+        .textContent =
+        "แก้ไขที่อยู่";
+
+      loadAddress();
+
+    }
+
+  }
+);
+
+function bindAddressInputs(){
+
+  [
+    "receiver",
+    "phone",
+    "address",
+    "subdistrict",
+    "district",
+    "province",
+    "postcode"
+  ].forEach(
+    id=>{
+
+      document
+        .getElementById(id)
+        .addEventListener(
+          "input",
+          ()=>clearAddressFieldError(id)
+        );
+
+    }
+  );
+
+  document
+    .getElementById(
+      "postcode"
+    )
+    .addEventListener(
+      "input",
+      event=>{
+
+        event.target.value =
+          event.target.value
+            .replace(
+              /\D/g,
+              ""
+            )
+            .slice(
+              0,
+              5
+            );
+
+      }
+    );
 
 }
 
-
 async function loadAddress(){
 
-  setLoading(
-    true,
-    "กำลังโหลดข้อมูลที่อยู่..."
+  const formCard =
+    document.getElementById(
+      "addressFormCard"
+    );
+
+  const loadingState =
+    document.getElementById(
+      "addressLoadingState"
+    );
+
+  formCard.classList.add(
+    "hidden"
+  );
+
+  loadingState.classList.remove(
+    "hidden"
   );
 
   try{
 
+    const query =
+      new URLSearchParams();
+
+    query.set(
+      "action",
+      "customerAddress"
+    );
+
+    query.set(
+      "session_token",
+      sessionToken
+    );
+
+    query.set(
+      "address_id",
+      addressId
+    );
+
     const response =
       await fetch(
-
         API +
-        "?action=customerAddress" +
-        "&session_token=" +
-        encodeURIComponent(
-          sessionToken
-        ) +
-        "&address_id=" +
-        encodeURIComponent(
-          addressId
-        )
-
+        "?" +
+        query.toString()
       );
 
-    if(
-      !response.ok
-    ){
+    if(!response.ok){
 
       throw new Error(
-        "ไม่สามารถโหลดข้อมูลที่อยู่ได้"
+        "HTTP " +
+        response.status
       );
 
     }
@@ -331,6 +806,7 @@ async function loadAddress(){
       await response.json();
 
     if(
+      result &&
       result.success === false
     ){
 
@@ -356,95 +832,107 @@ async function loadAddress(){
 
     }
 
-    document.getElementById(
-      "receiver"
-    ).value =
-      data.receiver || "";
-
-    document.getElementById(
-      "phone"
-    ).value =
-      data.phone || "";
-
-    document.getElementById(
-      "address"
-    ).value =
-      data.address || "";
-
-    document.getElementById(
-      "subdistrict"
-    ).value =
-      data.subdistrict || "";
-
-    document.getElementById(
-      "district"
-    ).value =
-      data.district || "";
-
-    document.getElementById(
-      "province"
-    ).value =
-      data.province || "";
-
-    document.getElementById(
-      "postcode"
-    ).value =
-      data.postcode || "";
-
-    document.getElementById(
+    [
+      "receiver",
+      "phone",
+      "address",
+      "subdistrict",
+      "district",
+      "province",
+      "postcode",
       "label"
-    ).value =
-      data.label ||
-      "บ้าน";
+    ].forEach(
+      id=>{
 
-    document.getElementById(
-      "isDefault"
-    ).checked =
-      Boolean(
+        document
+          .getElementById(id)
+          .value =
+          data[id] ||
+          (
+            id === "label"
+              ? "บ้าน"
+              : ""
+          );
+
+      }
+    );
+
+    document
+      .getElementById(
+        "isDefault"
+      )
+      .checked =
+      normalizeAddressBoolean(
         data.is_default
       );
 
   }catch(error){
 
     console.error(
-      "loadAddress error",
+      "loadAddress error:",
       error
     );
 
-    alert(
-      error.message ||
-      "ไม่สามารถโหลดข้อมูลที่อยู่ได้"
-    );
+    loadingState.innerHTML = `
 
-    window.location.replace(
-      "address-book.html"
-    );
+<div style="font-size:48px">
+⚠️
+</div>
+
+<h2>
+โหลดที่อยู่ไม่สำเร็จ
+</h2>
+
+<p>
+${escapeAddressHtml(
+  error.message ||
+  String(error)
+)}
+</p>
+
+<button
+type="button"
+onclick="loadAddress()">
+ลองใหม่
+</button>
+
+<a href="address-book.html">
+กลับไปหน้าที่อยู่
+</a>
+
+`;
+
+    return;
 
   }finally{
 
-    setLoading(
-      false
-    );
+    if(
+      loadingState.querySelector(
+        ".address-spinner"
+      )
+    ){
+
+      loadingState.classList.add(
+        "hidden"
+      );
+
+      formCard.classList.remove(
+        "hidden"
+      );
+
+    }
 
   }
 
 }
 
-
 async function saveAddress(){
 
-  const button =
-    document.getElementById(
-      "saveAddressBtn"
-    );
-
-  if(
-    button.disabled
-  ){
-
+  if(addressSubmitting){
     return;
-
   }
+
+  clearAddressMessage();
 
   const payload = {
 
@@ -455,68 +943,44 @@ async function saveAddress(){
       addressId,
 
     receiver:
-      document
-        .getElementById(
-          "receiver"
-        )
-        .value
-        .trim(),
+      getAddressValue(
+        "receiver"
+      ),
 
     phone:
-      document
-        .getElementById(
-          "phone"
-        )
-        .value
-        .trim(),
+      getAddressValue(
+        "phone"
+      ),
 
     address:
-      document
-        .getElementById(
-          "address"
-        )
-        .value
-        .trim(),
+      getAddressValue(
+        "address"
+      ),
 
     subdistrict:
-      document
-        .getElementById(
-          "subdistrict"
-        )
-        .value
-        .trim(),
+      getAddressValue(
+        "subdistrict"
+      ),
 
     district:
-      document
-        .getElementById(
-          "district"
-        )
-        .value
-        .trim(),
+      getAddressValue(
+        "district"
+      ),
 
     province:
-      document
-        .getElementById(
-          "province"
-        )
-        .value
-        .trim(),
+      getAddressValue(
+        "province"
+      ),
 
     postcode:
-      document
-        .getElementById(
-          "postcode"
-        )
-        .value
-        .trim(),
+      getAddressValue(
+        "postcode"
+      ),
 
     label:
-      document
-        .getElementById(
-          "label"
-        )
-        .value
-        .trim() ||
+      getAddressValue(
+        "label"
+      ) ||
       "บ้าน",
 
     is_default:
@@ -529,44 +993,19 @@ async function saveAddress(){
   };
 
   if(
-    !payload.receiver ||
-    !payload.phone ||
-    !payload.address ||
-    !payload.subdistrict ||
-    !payload.district ||
-    !payload.province ||
-    !payload.postcode
-  ){
-
-    alert(
-      "กรุณากรอกข้อมูลที่อยู่ให้ครบ"
-    );
-
-    return;
-
-  }
-
-  if(
-    !/^\d{5}$/.test(
-      payload.postcode
+    !validateAddressPayload(
+      payload
     )
   ){
 
-    alert(
-      "กรุณากรอกรหัสไปรษณีย์ 5 หลัก"
-    );
-
     return;
 
   }
 
-  button.disabled =
+  addressSubmitting =
     true;
 
-  button.textContent =
-    "กำลังบันทึก...";
-
-  setLoading(
+  setAddressLoading(
     true,
     "กำลังบันทึกที่อยู่..."
   );
@@ -592,22 +1031,16 @@ async function saveAddress(){
       await fetch(
         API,
         {
-
-          method:
-            "POST",
-
-          body:
-            formData
-
+          method:"POST",
+          body:formData
         }
       );
 
-    if(
-      !response.ok
-    ){
+    if(!response.ok){
 
       throw new Error(
-        "ไม่สามารถเชื่อมต่อระบบได้"
+        "HTTP " +
+        response.status
       );
 
     }
@@ -615,9 +1048,7 @@ async function saveAddress(){
     const result =
       await response.json();
 
-    if(
-      !result.success
-    ){
+    if(!result.success){
 
       throw new Error(
         result.error ||
@@ -627,55 +1058,37 @@ async function saveAddress(){
 
     }
 
-    alert(
+    showAddressMessage(
       addressId
-        ? "แก้ไขที่อยู่เรียบร้อย"
-        : "บันทึกที่อยู่เรียบร้อย"
+        ? "แก้ไขที่อยู่เรียบร้อยแล้ว"
+        : "บันทึกที่อยู่เรียบร้อยแล้ว",
+      true
     );
 
-    const from =
-      params.get(
-        "from"
-      );
-
-    if(
-      from ===
-      "register"
-    ){
-
-      window.location.replace(
-        "account.html"
-      );
-
-      return;
-
-    }
-
-    window.location.replace(
-      "address-book.html"
+    setTimeout(
+      redirectAfterAddressSave,
+      650
     );
 
   }catch(error){
 
     console.error(
-      "saveAddress error",
+      "saveAddress error:",
       error
     );
 
-    alert(
+    showAddressMessage(
       error.message ||
-      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+      "เกิดข้อผิดพลาด กรุณาลองใหม่",
+      false
     );
 
   }finally{
 
-    button.disabled =
+    addressSubmitting =
       false;
 
-    button.textContent =
-      "บันทึกที่อยู่";
-
-    setLoading(
+    setAddressLoading(
       false
     );
 
@@ -683,9 +1096,271 @@ async function saveAddress(){
 
 }
 
+function validateAddressPayload(
+  payload
+){
 
-function setLoading(
-  isLoading,
+  let valid = true;
+
+  const required = [
+
+    [
+      "receiver",
+      "กรุณากรอกชื่อผู้รับ"
+    ],
+
+    [
+      "phone",
+      "กรุณากรอกเบอร์โทร"
+    ],
+
+    [
+      "address",
+      "กรุณากรอกที่อยู่"
+    ],
+
+    [
+      "subdistrict",
+      "กรุณากรอกแขวง/ตำบล"
+    ],
+
+    [
+      "district",
+      "กรุณากรอกเขต/อำเภอ"
+    ],
+
+    [
+      "province",
+      "กรุณากรอกจังหวัด"
+    ],
+
+    [
+      "postcode",
+      "กรุณากรอกรหัสไปรษณีย์"
+    ]
+
+  ];
+
+  required.forEach(
+    ([id,message])=>{
+
+      if(!payload[id]){
+
+        setAddressFieldError(
+          id,
+          message
+        );
+
+        valid = false;
+
+      }
+
+    }
+  );
+
+  if(
+    payload.phone &&
+    !/^[0-9+\-\s]{8,20}$/.test(
+      payload.phone
+    )
+  ){
+
+    setAddressFieldError(
+      "phone",
+      "รูปแบบเบอร์โทรไม่ถูกต้อง"
+    );
+
+    valid = false;
+
+  }
+
+  if(
+    payload.postcode &&
+    !/^\d{5}$/.test(
+      payload.postcode
+    )
+  ){
+
+    setAddressFieldError(
+      "postcode",
+      "รหัสไปรษณีย์ต้องมี 5 หลัก"
+    );
+
+    valid = false;
+
+  }
+
+  return valid;
+
+}
+
+function redirectAfterAddressSave(){
+
+  const from =
+    params.get(
+      "from"
+    );
+
+  const returnSelect =
+    params.get(
+      "return_select"
+    );
+
+  const orderId =
+    params.get(
+      "order_id"
+    ) || "";
+
+  if(from === "register"){
+
+    window.location.replace(
+      "account.html"
+    );
+
+    return;
+
+  }
+
+  if(returnSelect === "checkout"){
+
+    window.location.replace(
+      "address-book.html?select=checkout"
+    );
+
+    return;
+
+  }
+
+  if(returnSelect === "shipping"){
+
+    const query =
+      new URLSearchParams();
+
+    query.set(
+      "select",
+      "shipping"
+    );
+
+    if(orderId){
+
+      query.set(
+        "order_id",
+        orderId
+      );
+
+    }
+
+    window.location.replace(
+      "address-book.html?" +
+      query.toString()
+    );
+
+    return;
+
+  }
+
+  window.location.replace(
+    "address-book.html"
+  );
+
+}
+
+function setAddressFieldError(
+  id,
+  message
+){
+
+  const input =
+    document.getElementById(id);
+
+  const error =
+    document.getElementById(
+      id +
+      "Error"
+    );
+
+  input.classList.add(
+    "invalid"
+  );
+
+  error.textContent =
+    message;
+
+}
+
+function clearAddressFieldError(
+  id
+){
+
+  const input =
+    document.getElementById(id);
+
+  const error =
+    document.getElementById(
+      id +
+      "Error"
+    );
+
+  if(input){
+
+    input.classList.remove(
+      "invalid"
+    );
+
+  }
+
+  if(error){
+
+    error.textContent = "";
+
+  }
+
+}
+
+function showAddressMessage(
+  message,
+  success
+){
+
+  const box =
+    document.getElementById(
+      "addressMessage"
+    );
+
+  box.textContent =
+    String(message || "");
+
+  box.className =
+    "address-message" +
+    (
+      success
+        ? " success"
+        : ""
+    );
+
+  box.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+function clearAddressMessage(){
+
+  const box =
+    document.getElementById(
+      "addressMessage"
+    );
+
+  box.textContent = "";
+
+  box.className =
+    "address-message hidden";
+
+}
+
+function setAddressLoading(
+  loading,
   message
 ){
 
@@ -694,19 +1369,138 @@ function setLoading(
       "loadingOverlay"
     );
 
-  const loadingText =
+  const text =
     document.getElementById(
       "loadingText"
     );
 
-  loadingText.textContent =
+  const button =
+    document.getElementById(
+      "saveAddressBtn"
+    );
+
+  text.textContent =
     message ||
     "กำลังดำเนินการ...";
 
   overlay.style.display =
-    isLoading
+    loading
       ? "flex"
       : "none";
+
+  button.disabled =
+    Boolean(loading);
+
+  button.textContent =
+    loading
+      ? "กำลังบันทึก..."
+      : (
+          addressId
+            ? "บันทึกการแก้ไข"
+            : "บันทึกที่อยู่"
+        );
+
+}
+
+function goAddressBack(){
+
+  if(
+    document.referrer &&
+    document.referrer !==
+    window.location.href
+  ){
+
+    history.back();
+
+  }else{
+
+    window.location.href =
+      "address-book.html";
+
+  }
+
+}
+
+function getAddressValue(
+  id
+){
+
+  return document
+    .getElementById(id)
+    .value
+    .trim();
+
+}
+
+function normalizeAddressBoolean(
+  value
+){
+
+  return (
+    value === true ||
+    value === 1 ||
+    [
+      "true",
+      "yes",
+      "1",
+      "default"
+    ].includes(
+      String(
+        value || ""
+      )
+        .trim()
+        .toLowerCase()
+    )
+  );
+
+}
+
+function safeAddressJson(
+  value,
+  fallback
+){
+
+  try{
+
+    return JSON.parse(
+      value || ""
+    );
+
+  }catch(error){
+
+    return fallback;
+
+  }
+
+}
+
+function escapeAddressHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
