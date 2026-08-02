@@ -2049,7 +2049,22 @@ function collectManualGiftInputs(
           return false;
         }
 
-        const oldCharacters =
+        const currentCharacterSelects =
+          [
+            ...document.querySelectorAll(
+              `[data-mo-character-rule="${moCssEscape(ruleId)}"][data-mo-character-item="${moCssEscape(itemId)}"]`
+            )
+          ];
+
+        const currentCharacters =
+          currentCharacterSelects.map(
+            select=>
+              String(
+                select.value || ""
+              ).trim()
+          );
+
+        const savedCharacters =
           (ManualOrder.gifts || [])
             .filter(
               gift=>
@@ -2069,11 +2084,16 @@ function collectManualGiftInputs(
                 ).trim()
             );
 
+        const selectedCharacters =
+          currentCharacterSelects.length
+            ? currentCharacters
+            : savedCharacters;
+
         renderManualGiftCharacters(
           ruleId,
           itemId,
           qty,
-          oldCharacters
+          selectedCharacters
         );
 
         for(
@@ -2104,7 +2124,7 @@ function collectManualGiftInputs(
             character_id:
               select
                 ? select.value
-                : oldCharacters[index] || ""
+                : selectedCharacters[index] || ""
 
           });
 
