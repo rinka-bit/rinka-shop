@@ -4,165 +4,474 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1">
 
-<title>Checkout</title>
+<title>ยืนยันคำสั่งซื้อ | Rinka Shop</title>
 
-<link rel="stylesheet"
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
 href="style.css">
 
 <style>
 
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
+:root{
+  --checkout-primary:#7dcfff;
+  --checkout-primary-dark:#4aa4db;
+  --checkout-background:#f6fbff;
+  --checkout-card:#ffffff;
+  --checkout-text:#334155;
+  --checkout-muted:#64748b;
+  --checkout-border:#dbe7f1;
+  --checkout-danger:#be123c;
+  --checkout-success:#166534;
 }
 
-.card{
-
-background:white;
-
-padding:16px;
-
-border-radius:16px;
-
-margin-bottom:20px;
-
-box-shadow:
-0 2px 8px rgba(0,0,0,.05);
-
+*{
+  box-sizing:border-box;
 }
 
+body{
+  margin:0;
+  font-family:'Kodchasan',sans-serif;
+  color:var(--checkout-text);
+  background:
+    linear-gradient(
+      180deg,
+      #fbfdff 0%,
+      var(--checkout-background) 100%
+    );
+}
+
+button,
 input,
-textarea{
-width:100%;
-padding:10px;
-margin:5px 0;
-box-sizing:border-box;
+a{
+  font:inherit;
 }
 
 button{
-padding:10px 20px;
-cursor:pointer;
-margin-top:10px;
+  cursor:pointer;
 }
 
-.topbar{
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-margin-bottom:20px;
-
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
 }
 
-.topbar button{
-
-width:44px;
-height:44px;
-
-border:none;
-
-border-radius:999px;
-
-background:white;
-
-box-shadow:
-0 2px 8px rgba(0,0,0,.08);
-
-font-size:20px;
-
-cursor:pointer;
-
+.checkout-topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 16px;
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid rgba(219,231,241,.95);
+  backdrop-filter:blur(10px);
+  box-shadow:0 5px 18px rgba(71,85,105,.07);
 }
 
-.topbar h2{
-
-margin:0;
-
-font-size:20px;
-
+.checkout-topbar button,
+.checkout-topbar a{
+  width:46px;
+  height:46px;
+  border:none;
+  border-radius:999px;
+  background:#fff;
+  color:var(--checkout-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  font-size:21px;
+  box-shadow:0 4px 14px rgba(71,85,105,.10);
 }
 
-.product-topbar{
-
-position:fixed;
-
-top:15px;
-left:15px;
-right:15px;
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-z-index:999;
-
+.checkout-topbar h1{
+  flex:1;
+  margin:0;
+  padding:0 12px;
+  text-align:center;
+  color:#3f6078;
+  font-size:20px;
 }
 
-.product-topbar button,
-.product-topbar a{
-
-width:46px;
-height:46px;
-
-border:none;
-
-border-radius:999px;
-
-background:white;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-text-decoration:none;
-
-font-size:22px;
-
-box-shadow:
-0 3px 12px rgba(0,0,0,.15);
-
-cursor:pointer;
-
+.checkout-cart{
+  position:relative;
 }
 
-.gift-char-item{
-
-display:inline-flex;
-align-items:center;
-gap:8px;
-
-padding:8px 12px;
-
-border:1px solid #ddd;
-border-radius:999px;
-
-margin-right:8px;
-margin-top:8px;
-
-cursor:pointer;
-
+.checkout-cart-count{
+  position:absolute;
+  top:-5px;
+  right:-5px;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  border-radius:999px;
+  background:#ff5c7a;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  font-weight:700;
 }
 
-.gift-char-item:has(input:checked){
-
-border-color:#7dcfff;
-background:#eef8ff;
-
+.checkout-container{
+  width:min(1160px,100%);
+  margin:auto;
+  padding:22px 18px 130px;
 }
-  
+
+.checkout-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(300px,.75fr);
+  gap:22px;
+  align-items:start;
+}
+
+.checkout-main{
+  min-width:0;
+}
+
+.checkout-card{
+  margin-bottom:18px;
+  padding:18px;
+  background:#fff;
+  border:1px solid var(--checkout-border);
+  border-radius:21px;
+  box-shadow:0 8px 25px rgba(86,142,178,.08);
+}
+
+.checkout-card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.checkout-card-header h2{
+  margin:0;
+  color:#3f6078;
+  font-size:19px;
+}
+
+.checkout-card-header span{
+  color:var(--checkout-muted);
+  font-size:13px;
+}
+
+.checkout-secondary-button{
+  border:1px solid #cde6f5;
+  border-radius:999px;
+  padding:9px 14px;
+  background:#eef8ff;
+  color:#3476a2;
+  font-weight:700;
+}
+
+.checkout-address-card{
+  padding:15px;
+  border:1px solid #d7ebf7;
+  border-radius:16px;
+  background:linear-gradient(135deg,#f3fbff,#fbfdff);
+}
+
+.checkout-address-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:11px;
+}
+
+.checkout-address-name{
+  font-size:17px;
+  font-weight:700;
+}
+
+.checkout-default-badge{
+  display:inline-flex;
+  margin-top:6px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#dcfce7;
+  color:#166534;
+  font-size:11px;
+  font-weight:700;
+}
+
+.checkout-address-icon{
+  font-size:25px;
+}
+
+.checkout-address-line{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin-top:8px;
+  color:#526777;
+  line-height:1.65;
+}
+
+.checkout-address-empty,
+.checkout-empty-state{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:180px;
+  padding:22px;
+  text-align:center;
+  border:1px dashed #cbdde8;
+  border-radius:16px;
+  background:#fbfdff;
+}
+
+.checkout-address-empty span,
+.checkout-empty-state p{
+  margin:0;
+  color:var(--checkout-muted);
+}
+
+.checkout-empty-state a{
+  display:inline-flex;
+  padding:10px 16px;
+  border-radius:999px;
+  background:var(--checkout-primary);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.checkout-state-icon{
+  font-size:42px;
+}
+
+.checkout-inline-loading{
+  min-height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+  color:var(--checkout-muted);
+}
+
+.checkout-mini-spinner{
+  width:24px;
+  height:24px;
+  border:3px solid #dff2fc;
+  border-top-color:var(--checkout-primary-dark);
+  border-radius:50%;
+  animation:checkoutSpin .8s linear infinite;
+}
+
+@keyframes checkoutSpin{
+  to{transform:rotate(360deg)}
+}
+
+.checkout-error-box{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:15px;
+  border:1px solid #fecaca;
+  border-radius:15px;
+  background:#fff1f2;
+  color:#9f1239;
+}
+
+.checkout-error-box button{
+  width:max-content;
+  border:none;
+  border-radius:999px;
+  padding:8px 13px;
+  background:#be123c;
+  color:#fff;
+  font-weight:700;
+}
+
+.checkout-product-card{
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr) auto;
+  gap:13px;
+  align-items:start;
+  padding:13px 0;
+  border-bottom:1px solid #edf2f6;
+}
+
+.checkout-product-card:last-child{
+  border-bottom:none;
+  padding-bottom:0;
+}
+
+.checkout-product-image,
+.checkout-product-placeholder{
+  width:82px;
+  height:82px;
+  border-radius:13px;
+  background:#edf7fc;
+}
+
+.checkout-product-image{
+  object-fit:cover;
+}
+
+.checkout-product-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#94a3b8;
+  font-size:11px;
+  text-align:center;
+}
+
+.checkout-product-main{
+  min-width:0;
+}
+
+.checkout-product-main h3{
+  margin:0;
+  font-size:15px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+.checkout-option-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
+}
+
+.checkout-option-badge{
+  display:inline-flex;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#eef8ff;
+  color:#3f7194;
+  font-size:11px;
+  font-weight:600;
+}
+
+.checkout-product-meta{
+  margin-top:8px;
+  color:var(--checkout-muted);
+  font-size:12px;
+}
+
+.checkout-product-total{
+  min-width:90px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+  text-align:right;
+}
+
+.checkout-product-total span{
+  color:var(--checkout-muted);
+  font-size:11px;
+}
+
+.checkout-product-total strong{
+  color:#347fb4;
+  font-size:16px;
+}
+
+.checkout-summary{
+  position:sticky;
+  top:88px;
+  padding:19px;
+  background:#fff;
+  border:1px solid var(--checkout-border);
+  border-radius:21px;
+  box-shadow:0 11px 32px rgba(86,142,178,.11);
+}
+
+.checkout-summary h2{
+  margin:0 0 15px;
+  color:#3f6078;
+  font-size:19px;
+}
+
+.checkout-summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:9px 0;
+  color:var(--checkout-muted);
+  font-size:14px;
+}
+
+.checkout-summary-row strong{
+  color:var(--checkout-text);
+}
+
+.checkout-total-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:9px;
+  padding-top:15px;
+  border-top:1px solid var(--checkout-border);
+}
+
+.checkout-total-row span{
+  font-weight:700;
+}
+
+.checkout-total-row strong{
+  color:#2563eb;
+  font-size:28px;
+}
+
+.checkout-payment-button{
+  width:100%;
+  min-height:51px;
+  margin-top:18px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#7dcfff,#57b8ed);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:0 9px 22px rgba(87,184,237,.25);
+}
+
+.checkout-back-link{
+  display:block;
+  margin-top:11px;
+  color:#53748b;
+  text-align:center;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:600;
+}
+
+/* Gift Engine UI */
+
+#giftSection{
+  margin-top:4px;
+}
 
 .gift-loading,
 .gift-empty,
 .gift-error{
-  padding:16px;
-  border-radius:14px;
+  padding:17px;
+  border-radius:15px;
   text-align:center;
   margin-top:14px;
 }
@@ -171,39 +480,42 @@ background:#eef8ff;
 .gift-empty{
   background:#f8fbff;
   color:#64748b;
+  border:1px solid #e3eef5;
 }
 
 .gift-error{
   background:#fff1f2;
   color:#be123c;
+  border:1px solid #fecdd3;
 }
 
 .gift-campaign-card{
-  margin-top:18px;
-  padding:16px;
+  margin-top:16px;
+  padding:15px;
   border:1px solid #dbeafe;
-  border-radius:16px;
-  background:#fbfdff;
+  border-radius:17px;
+  background:linear-gradient(135deg,#fbfdff,#f5fbff);
 }
 
 .gift-campaign-title{
   margin:0 0 6px;
-  font-size:18px;
+  font-size:17px;
+  color:#3f6078;
 }
 
 .gift-campaign-meta{
   color:#64748b;
   font-size:13px;
   line-height:1.7;
-  margin-bottom:14px;
+  margin-bottom:13px;
 }
 
 .gift-rule-card{
-  margin-top:14px;
-  padding:14px;
+  margin-top:13px;
+  padding:13px;
   border:1px solid #e5e7eb;
-  border-radius:14px;
-  background:white;
+  border-radius:15px;
+  background:#fff;
 }
 
 .gift-rule-header{
@@ -211,7 +523,7 @@ background:#eef8ff;
   justify-content:space-between;
   align-items:flex-start;
   gap:12px;
-  margin-bottom:12px;
+  margin-bottom:11px;
 }
 
 .gift-rule-name{
@@ -219,30 +531,34 @@ background:#eef8ff;
 }
 
 .gift-rule-count{
-  font-size:13px;
-  font-weight:700;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#eff6ff;
   color:#2563eb;
+  font-size:12px;
+  font-weight:700;
   white-space:nowrap;
 }
 
 .gift-item-row{
   display:flex;
   align-items:flex-start;
-  gap:12px;
-  padding:12px;
+  gap:11px;
+  padding:11px;
   border:1px solid #eef2f7;
-  border-radius:12px;
-  margin-top:10px;
+  border-radius:13px;
+  margin-top:9px;
 }
 
 .gift-item-row.selected{
   border-color:#7dcfff;
   background:#f4fbff;
+  box-shadow:0 0 0 2px rgba(125,207,255,.10);
 }
 
 .gift-item-image{
-  width:64px;
-  height:64px;
+  width:60px;
+  height:60px;
   object-fit:cover;
   border-radius:10px;
   background:#f1f5f9;
@@ -266,7 +582,8 @@ background:#eef8ff;
 }
 
 .gift-item-actions input[type="checkbox"]{
-  width:auto;
+  width:18px;
+  height:18px;
   margin:4px 0 0;
 }
 
@@ -284,6 +601,7 @@ background:#eef8ff;
   border:none;
   border-radius:999px;
   background:#d9f2ff;
+  color:#347fb4;
   font-weight:700;
 }
 
@@ -294,37 +612,159 @@ background:#eef8ff;
 }
 
 .gift-character-box{
-  margin-top:10px;
+  margin-top:9px;
 }
 
 .gift-character-title{
-  font-size:13px;
+  margin:9px 0 6px;
+  font-size:12px;
   font-weight:700;
-  margin:10px 0 6px;
+  color:#526777;
 }
 
 .gift-char-list{
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
+  gap:7px;
 }
 
 .gift-char-item{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin:0;
+  padding:7px 10px;
+  border:1px solid #dfe9ef;
+  border-radius:999px;
+  background:#fff;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.gift-char-item:has(input:checked){
+  border-color:#7dcfff;
+  background:#eef8ff;
+}
+
+.gift-char-item input{
+  width:auto;
   margin:0;
 }
 
 .gift-char-image{
-  width:30px;
-  height:30px;
+  width:29px;
+  height:29px;
   object-fit:cover;
   border-radius:999px;
   background:#f1f5f9;
 }
 
 .gift-summary-note{
-  margin-top:12px;
+  margin-top:11px;
   color:#64748b;
-  font-size:13px;
+  font-size:12px;
+  line-height:1.65;
+}
+
+.checkout-message{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  z-index:2000;
+  width:min(410px,calc(100% - 28px));
+  padding:13px 16px;
+  border-radius:14px;
+  background:#18384e;
+  color:#fff;
+  text-align:center;
+  font-weight:600;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.2s ease;
+  box-shadow:0 12px 30px rgba(15,23,42,.24);
+}
+
+.checkout-message.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.checkout-message.error{
+  background:#991b1b;
+}
+
+@media(max-width:850px){
+
+  .checkout-layout{
+    grid-template-columns:1fr;
+  }
+
+  .checkout-summary{
+    position:static;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .checkout-topbar{
+    min-height:64px;
+    padding:9px 11px;
+  }
+
+  .checkout-topbar h1{
+    font-size:17px;
+  }
+
+  .checkout-container{
+    padding:14px 10px 116px;
+  }
+
+  .checkout-card{
+    padding:14px;
+    border-radius:18px;
+  }
+
+  .checkout-card-header{
+    align-items:flex-start;
+  }
+
+  .checkout-card-header h2{
+    font-size:17px;
+  }
+
+  .checkout-product-card{
+    grid-template-columns:68px minmax(0,1fr);
+  }
+
+  .checkout-product-image,
+  .checkout-product-placeholder{
+    width:68px;
+    height:68px;
+  }
+
+  .checkout-product-total{
+    grid-column:2;
+    min-width:0;
+    align-items:flex-start;
+    text-align:left;
+    flex-direction:row;
+  }
+
+  .gift-rule-header{
+    flex-direction:column;
+  }
+
+  .gift-item-row{
+    flex-wrap:wrap;
+  }
+
+  .gift-item-actions{
+    width:100%;
+    justify-content:flex-end;
+  }
+
 }
 
 </style>
@@ -333,73 +773,190 @@ background:#eef8ff;
 
 <body>
 
-<div class="product-topbar">
+<header class="checkout-topbar">
 
 <button
-onclick="history.back()">
+type="button"
+aria-label="กลับหน้าก่อนหน้า"
+onclick="goCheckoutBack()">
 ←
 </button>
-
-<a
-href="cart.html"
-id="floatingCart">
-🛒
-</a>
-
-</div>
-
-<div class="container">
 
 <h1>
 ยืนยันคำสั่งซื้อ
 </h1>
 
-<div class="card">
+<a
+href="cart.html"
+class="checkout-cart"
+aria-label="เปิดตะกร้าสินค้า">
+
+<span>🛒</span>
+
+<span
+id="checkoutCartCount"
+class="checkout-cart-count">
+0
+</span>
+
+</a>
+
+</header>
+
+<main class="checkout-container">
+
+<div class="checkout-layout">
+
+<section class="checkout-main">
+
+<div class="checkout-card">
+
+<div class="checkout-card-header">
+
+<div>
 
 <h2>
 📍 ที่อยู่จัดส่ง
 </h2>
 
-<div id="selectedAddress"></div>
+</div>
 
 <button
-onclick="
-window.location.href=
-'address-book.html?select=checkout'
-">
+type="button"
+class="checkout-secondary-button"
+onclick="window.location.href='address-book.html?select=checkout'">
 เปลี่ยนที่อยู่
 </button>
-  
 
 </div>
 
-<div class="card">
+<div id="selectedAddress">
+
+<div class="checkout-inline-loading">
+
+<span class="checkout-mini-spinner"></span>
+
+<span>
+กำลังโหลดที่อยู่จัดส่ง...
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="checkout-card">
+
+<div class="checkout-card-header">
 
 <h2>
-รายการสินค้า
+🛍️ รายการสินค้า
 </h2>
+
+<span id="checkoutItemCount">
+0 ชิ้น
+</span>
+
+</div>
 
 <div id="items"></div>
 
-<div
-id="giftSection">
 </div>
 
-<h3 id="total">
-รวม 0 บาท
-</h3>
+<div class="checkout-card">
+
+<div class="checkout-card-header">
+
+<h2>
+🎁 ของแถม
+</h2>
+
+</div>
+
+<div id="giftSection">
+
+<div class="gift-loading">
+⏳ กำลังตรวจสอบสิทธิ์ของแถม...
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<aside class="checkout-summary">
+
+<h2>
+สรุปคำสั่งซื้อ
+</h2>
+
+<div class="checkout-summary-row">
+
+<span>
+จำนวนสินค้า
+</span>
+
+<strong id="checkoutItemCountSummary">
+ตรวจสอบด้านซ้าย
+</strong>
+
+</div>
+
+<div class="checkout-summary-row">
+
+<span>
+ยอดสินค้า
+</span>
+
+<strong id="checkoutSubtotal">
+฿0
+</strong>
+
+</div>
+
+<div class="checkout-total-row">
+
+<span>
+ยอดรวม
+</span>
+
+<strong id="total">
+฿0
+</strong>
 
 </div>
 
 <button
-onclick="goPayment()">
+id="checkoutPaymentButton"
+type="button"
+class="checkout-payment-button"
+onclick="goPayment()"
+disabled>
 ไปชำระเงิน
 </button>
 
+<a
+href="cart.html"
+class="checkout-back-link">
+กลับไปแก้ไขตะกร้า
+</a>
+
+</aside>
+
+</div>
+
+</main>
+
+<div
+id="checkoutMessage"
+class="checkout-message"
+role="status"
+aria-live="polite">
 </div>
 
 <script>
-
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
@@ -537,50 +1094,128 @@ function loadCheckout(){
 
   loadGifts();
 
+  updateCheckoutCartCount();
+
+  updateCheckoutPaymentState();
+
 }
 
 async function loadDefaultAddress(){
 
+  const box =
+    document.getElementById(
+      "selectedAddress"
+    );
+
+  if(box){
+
+    box.innerHTML = `
+
+<div class="checkout-inline-loading">
+
+  <span class="checkout-mini-spinner"></span>
+
+  <span>
+    กำลังโหลดที่อยู่จัดส่ง...
+  </span>
+
+</div>
+
+`;
+
+  }
+
   let selectedAddress =
-    JSON.parse(
-      localStorage.getItem(
-        "selectedCheckoutAddress"
-      ) || "null"
+    getCheckoutStoredValue(
+      "selectedCheckoutAddress",
+      null
     );
 
   try{
 
     if(!selectedAddress){
 
+      const sessionToken =
+        localStorage.getItem(
+          "session_token"
+        ) ||
+        customer.session_token ||
+        "";
+
+      const query =
+        new URLSearchParams();
+
+      query.set(
+        "action",
+        "customerAddresses"
+      );
+
+      if(sessionToken){
+
+        query.set(
+          "session_token",
+          sessionToken
+        );
+
+      }else if(customer.email){
+
+        /*
+        รองรับ Backend เวอร์ชันเก่าชั่วคราว
+        */
+
+        query.set(
+          "email",
+          customer.email
+        );
+
+      }
+
       const response =
         await fetch(
           API +
-          "?action=customerAddresses&email=" +
-          encodeURIComponent(
-            customer.email
-          )
+          "?" +
+          query.toString()
         );
+
+      if(!response.ok){
+
+        throw new Error(
+          "HTTP " +
+          response.status
+        );
+
+      }
 
       const result =
         await response.json();
 
+      if(
+        result &&
+        result.success === false
+      ){
+
+        throw new Error(
+          result.error ||
+          "โหลดที่อยู่ไม่สำเร็จ"
+        );
+
+      }
+
       const addresses =
         Array.isArray(result)
           ? result
-          : Array.isArray(result.addresses)
-            ? result.addresses
-            : [];
+          : Array.isArray(
+              result.addresses
+            )
+              ? result.addresses
+              : [];
 
       selectedAddress =
         addresses.find(
           address =>
-            address.is_default === true ||
-            String(
-              address.is_default || ""
-            ).toLowerCase() === "true" ||
-            Number(
+            normalizeCheckoutBoolean(
               address.is_default
-            ) === 1
+            )
         ) ||
         addresses[0] ||
         null;
@@ -589,13 +1224,30 @@ async function loadDefaultAddress(){
 
     if(!selectedAddress){
 
-      document.getElementById(
-        "selectedAddress"
-      ).innerHTML =
-        "ยังไม่มีที่อยู่จัดส่ง กรุณาเพิ่มที่อยู่ก่อน";
-
       window.checkoutAddress =
         null;
+
+      box.innerHTML = `
+
+<div class="checkout-address-empty">
+
+  <div class="checkout-state-icon">
+    📍
+  </div>
+
+  <b>
+    ยังไม่มีที่อยู่จัดส่ง
+  </b>
+
+  <span>
+    กรุณาเพิ่มหรือเลือกที่อยู่ก่อนดำเนินการต่อ
+  </span>
+
+</div>
+
+`;
+
+      updateCheckoutPaymentState();
 
       return;
 
@@ -604,60 +1256,85 @@ async function loadDefaultAddress(){
     window.checkoutAddress =
       selectedAddress;
 
-    document.getElementById(
-      "selectedAddress"
-    ).innerHTML = `
+    box.innerHTML = `
 
-      <div
-      style="
-      padding:12px;
-      border:1px solid #eee;
-      border-radius:12px;
-      background:#f8fbff;
-      line-height:1.7;
-      ">
+<div class="checkout-address-card">
 
-        <b>
-          ${escapeHtml(
-            selectedAddress.receiver || ""
-          )}
-        </b>
+  <div class="checkout-address-head">
 
-        <br>
+    <div>
+
+      <div class="checkout-address-name">
 
         ${escapeHtml(
-          selectedAddress.phone || ""
-        )}
-
-        <br>
-
-        ${escapeHtml(
-          selectedAddress.address || ""
-        )}
-
-        <br>
-
-        ${escapeHtml(
-          selectedAddress.subdistrict || ""
-        )}
-
-        ${escapeHtml(
-          selectedAddress.district || ""
-        )}
-
-        <br>
-
-        ${escapeHtml(
-          selectedAddress.province || ""
-        )}
-
-        ${escapeHtml(
-          selectedAddress.postcode || ""
+          selectedAddress.receiver ||
+          customer.username ||
+          "ผู้รับสินค้า"
         )}
 
       </div>
 
-    `;
+      ${
+        normalizeCheckoutBoolean(
+          selectedAddress.is_default
+        )
+          ? `
+
+<span class="checkout-default-badge">
+  ค่าเริ่มต้น
+</span>
+
+`
+          : ""
+      }
+
+    </div>
+
+    <span class="checkout-address-icon">
+      📦
+    </span>
+
+  </div>
+
+  <div class="checkout-address-line">
+
+    <span>📞</span>
+
+    <span>
+      ${escapeHtml(
+        selectedAddress.phone || "-"
+      )}
+    </span>
+
+  </div>
+
+  <div class="checkout-address-line">
+
+    <span>📍</span>
+
+    <span>
+
+      ${escapeHtml(
+        [
+          selectedAddress.address,
+          selectedAddress.subdistrict,
+          selectedAddress.district,
+          selectedAddress.province,
+          selectedAddress.postcode
+        ]
+          .filter(Boolean)
+          .join(" ")
+      )}
+
+    </span>
+
+  </div>
+
+</div>
+
+`;
+
+    updateCheckoutPaymentState();
 
   }catch(error){
 
@@ -669,152 +1346,297 @@ async function loadDefaultAddress(){
     window.checkoutAddress =
       null;
 
-    document.getElementById(
-      "selectedAddress"
-    ).innerHTML =
-      "โหลดที่อยู่จัดส่งไม่สำเร็จ กรุณาลองใหม่";
+    box.innerHTML = `
+
+<div class="checkout-error-box">
+
+  <b>
+    โหลดที่อยู่จัดส่งไม่สำเร็จ
+  </b>
+
+  <span>
+    ${escapeHtml(
+      error.message ||
+      String(error)
+    )}
+  </span>
+
+  <button
+  type="button"
+  onclick="loadDefaultAddress()">
+    ลองใหม่
+  </button>
+
+</div>
+
+`;
+
+    updateCheckoutPaymentState();
 
   }
 
 }
-  
+
 function renderItems(){
+
+  const itemsBox =
+    document.getElementById(
+      "items"
+    );
+
+  const totalBox =
+    document.getElementById(
+      "total"
+    );
+
+  const subtotalBox =
+    document.getElementById(
+      "checkoutSubtotal"
+    );
+
+  const countBox =
+    document.getElementById(
+      "checkoutItemCount"
+    );
 
   let html = "";
   let total = 0;
+  let totalQty = 0;
 
   if(!cart.length){
 
-    document
-      .getElementById(
-        "items"
-      )
-      .innerHTML =
-      "ไม่มีสินค้าในรายการสั่งซื้อ";
+    itemsBox.innerHTML = `
 
-    document
-      .getElementById(
-        "total"
-      )
-      .textContent =
-      "รวม 0 บาท";
+<div class="checkout-empty-state">
+
+  <div class="checkout-state-icon">
+    🛒
+  </div>
+
+  <h3>
+    ไม่มีสินค้าในรายการสั่งซื้อ
+  </h3>
+
+  <p>
+    กรุณากลับไปเลือกสินค้าก่อนดำเนินการต่อ
+  </p>
+
+  <a href="browse.html">
+    เลือกซื้อสินค้า
+  </a>
+
+</div>
+
+`;
+
+    totalBox.textContent =
+      "฿0";
+
+    if(subtotalBox){
+
+      subtotalBox.textContent =
+        "฿0";
+
+    }
+
+    if(countBox){
+
+      countBox.textContent =
+        "0 ชิ้น";
+
+    }
+
+    const summaryCount =
+      document.getElementById(
+        "checkoutItemCountSummary"
+      );
+
+    if(summaryCount){
+
+      summaryCount.textContent =
+        "0 ชิ้น";
+
+    }
+
+    updateCheckoutPaymentState();
 
     return;
 
   }
 
-  cart.forEach(item=>{
+  cart.forEach(
+    (item,index)=>{
 
-    const price =
-      Number(
-        item.final_price ??
-        item.price ??
-        0
-      );
-
-    const qty =
-      Math.max(
-        1,
+      const price =
         Number(
-          item.qty || 1
-        )
-      );
+          item.final_price ??
+          item.price ??
+          0
+        );
 
-    const lineTotal =
-      price * qty;
-
-    total +=
-      lineTotal;
-
-    const optionText =
-      item.selected_options
-        ? Object.entries(
-            item.selected_options
+      const qty =
+        Math.max(
+          1,
+          Number(
+            item.qty || 1
           )
-          .map(([key,value])=>{
+        );
 
-            const text =
-              Array.isArray(value)
-                ? value.join(", ")
-                : value;
+      const lineTotal =
+        price * qty;
 
-            return `
-              ${escapeHtml(key)}:
-              ${escapeHtml(text)}
-            `;
+      total +=
+        lineTotal;
 
-          })
-          .join("<br>")
-        : "";
+      totalQty +=
+        qty;
 
-    html += `
+      const optionEntries =
+        item.selected_options &&
+        typeof item.selected_options ===
+          "object"
+          ? Object.entries(
+              item.selected_options
+            )
+          : [];
 
-      <div
-      style="
-      padding:12px;
-      border:1px solid #eee;
-      border-radius:12px;
-      margin-bottom:12px;
-      ">
+      const optionHtml =
+        optionEntries
+          .map(
+            ([key,value])=>{
 
-        <div
-        style="
-        font-weight:700;
-        margin-bottom:6px;
-        ">
+              const text =
+                Array.isArray(value)
+                  ? value.join(", ")
+                  : value;
 
-          ${escapeHtml(
-            item.name || ""
-          )}
+              return `
 
-        </div>
+<span class="checkout-option-badge">
 
-        <div
-        style="
-        font-size:13px;
-        color:#666;
-        margin-bottom:8px;
-        ">
+  ${escapeHtml(key)}:
+  ${escapeHtml(text)}
 
-          ${optionText}
+</span>
 
-        </div>
+`;
 
-        <div>
+            }
+          )
+          .join("");
 
-          ${qty} ชิ้น
-          ×
-          ฿${price.toLocaleString()}
+      html += `
 
-          <br>
+<article class="checkout-product-card">
 
-          รวม
-          ฿${lineTotal.toLocaleString()}
+  ${
+    item.image
+      ? `
 
-        </div>
+<img
+class="checkout-product-image"
+src="${escapeHtml(item.image)}"
+alt="${escapeHtml(item.name || "")}"
+loading="lazy">
 
-      </div>
+`
+      : `
 
-    `;
+<div class="checkout-product-placeholder">
+  ไม่มีรูป
+</div>
 
-  });
+`
+  }
 
-  document
-    .getElementById(
-      "items"
-    )
-    .innerHTML =
+  <div class="checkout-product-main">
+
+    <h3>
+      ${escapeHtml(
+        item.name ||
+        item.product_name ||
+        "สินค้า"
+      )}
+    </h3>
+
+    ${
+      optionHtml
+        ? `
+
+<div class="checkout-option-list">
+  ${optionHtml}
+</div>
+
+`
+        : ""
+    }
+
+    <div class="checkout-product-meta">
+
+      ${qty.toLocaleString("th-TH")}
+      ชิ้น
+      ×
+      ฿${price.toLocaleString("th-TH")}
+
+    </div>
+
+  </div>
+
+  <div class="checkout-product-total">
+
+    <span>
+      รวม
+    </span>
+
+    <strong>
+      ฿${lineTotal.toLocaleString("th-TH")}
+    </strong>
+
+  </div>
+
+</article>
+
+`;
+
+    }
+  );
+
+  itemsBox.innerHTML =
     html;
 
-  document
-    .getElementById(
-      "total"
-    )
-    .textContent =
-    `รวม ${total.toLocaleString()} บาท`;
+  totalBox.textContent =
+    `฿${total.toLocaleString("th-TH")}`;
+
+  if(subtotalBox){
+
+    subtotalBox.textContent =
+      `฿${total.toLocaleString("th-TH")}`;
+
+  }
+
+  if(countBox){
+
+    countBox.textContent =
+      `${totalQty.toLocaleString("th-TH")} ชิ้น`;
+
+  }
+
+  const summaryCount =
+    document.getElementById(
+      "checkoutItemCountSummary"
+    );
+
+  if(summaryCount){
+
+    summaryCount.textContent =
+      `${totalQty.toLocaleString("th-TH")} ชิ้น`;
+
+  }
+
+  updateCheckoutPaymentState();
 
 }
-  
+
 function escapeHtml(
   value
 ){
@@ -3634,15 +4456,33 @@ function collectCheckoutGiftSelections(){
 }
 
 
+let checkoutSubmitting = false;
+
 function goPayment(){
+
+  if(checkoutSubmitting){
+    return;
+  }
 
   const addressData =
     window.checkoutAddress;
 
+  if(!cart.length){
+
+    showCheckoutMessage(
+      "ไม่มีสินค้าในรายการสั่งซื้อ",
+      true
+    );
+
+    return;
+
+  }
+
   if(!addressData){
 
-    alert(
-      "กรุณาเลือกที่อยู่จัดส่งก่อน"
+    showCheckoutMessage(
+      "กรุณาเลือกที่อยู่จัดส่งก่อน",
+      true
     );
 
     return;
@@ -3657,8 +4497,9 @@ function goPayment(){
     !addressData.postcode
   ){
 
-    alert(
-      "ข้อมูลที่อยู่จัดส่งไม่ครบ กรุณาเลือกหรือแก้ไขที่อยู่ใหม่"
+    showCheckoutMessage(
+      "ข้อมูลที่อยู่จัดส่งไม่ครบ กรุณาเลือกหรือแก้ไขที่อยู่ใหม่",
+      true
     );
 
     return;
@@ -3671,44 +4512,285 @@ function goPayment(){
     return;
   }
 
-  const gifts =
-    collectCheckoutGiftSelections();
+  checkoutSubmitting = true;
+  setCheckoutLoading(true);
 
-  const checkoutData = {
+  try{
 
-    ...addressData,
+    const gifts =
+      collectCheckoutGiftSelections();
 
-    email:
-      addressData.email ||
-      customer.email ||
-      "",
+    const checkoutData = {
 
-    gifts:
-      gifts
+      ...addressData,
 
-  };
+      email:
+        addressData.email ||
+        customer.email ||
+        "",
 
-  console.log(
-    "CHECKOUT GIFTS:",
-    gifts
-  );
+      gifts:
+        gifts
 
-  window.checkoutAddress =
-    checkoutData;
+    };
 
-  localStorage.setItem(
-    "checkoutAddress",
-    JSON.stringify(
-      checkoutData
+    window.checkoutAddress =
+      checkoutData;
+
+    localStorage.setItem(
+      "checkoutAddress",
+      JSON.stringify(
+        checkoutData
+      )
+    );
+
+    window.location.href =
+      "payment.html";
+
+  }catch(error){
+
+    console.error(
+      "goPayment error:",
+      error
+    );
+
+    checkoutSubmitting = false;
+    setCheckoutLoading(false);
+
+    showCheckoutMessage(
+      error.message ||
+      "เตรียมข้อมูลชำระเงินไม่สำเร็จ",
+      true
+    );
+
+  }
+
+}
+
+
+function setCheckoutLoading(
+  loading
+){
+
+  const button =
+    document.getElementById(
+      "checkoutPaymentButton"
+    );
+
+  if(!button){
+    return;
+  }
+
+  button.disabled =
+    Boolean(loading);
+
+  button.textContent =
+    loading
+      ? "⏳ กำลังดำเนินการ..."
+      : "ไปชำระเงิน";
+
+}
+
+
+function updateCheckoutPaymentState(){
+
+  const button =
+    document.getElementById(
+      "checkoutPaymentButton"
+    );
+
+  if(!button){
+    return;
+  }
+
+  const canContinue =
+    cart.length > 0 &&
+    Boolean(
+      window.checkoutAddress
+    );
+
+  button.disabled =
+    !canContinue ||
+    checkoutSubmitting;
+
+}
+
+
+function updateCheckoutCartCount(){
+
+  let normalCart = [];
+
+  try{
+
+    const stored =
+      JSON.parse(
+        localStorage.getItem(
+          "cart"
+        ) || "[]"
+      );
+
+    normalCart =
+      Array.isArray(stored)
+        ? stored
+        : [];
+
+  }catch(error){
+
+    normalCart = [];
+
+  }
+
+  const count =
+    normalCart.reduce(
+      (sum,item)=>
+        sum +
+        Number(item.qty || 0),
+      0
+    );
+
+  const box =
+    document.getElementById(
+      "checkoutCartCount"
+    );
+
+  if(box){
+
+    box.textContent =
+      count > 99
+        ? "99+"
+        : String(count);
+
+  }
+
+}
+
+
+function getCheckoutStoredValue(
+  key,
+  fallback
+){
+
+  try{
+
+    const raw =
+      localStorage.getItem(key);
+
+    if(raw === null){
+
+      return fallback;
+
+    }
+
+    return JSON.parse(raw);
+
+  }catch(error){
+
+    console.warn(
+      "อ่าน localStorage ไม่สำเร็จ:",
+      key,
+      error
+    );
+
+    return fallback;
+
+  }
+
+}
+
+
+function normalizeCheckoutBoolean(
+  value
+){
+
+  return (
+    value === true ||
+    value === 1 ||
+    [
+      "true",
+      "yes",
+      "1",
+      "default",
+      "active"
+    ].includes(
+      String(
+        value || ""
+      )
+        .trim()
+        .toLowerCase()
     )
   );
 
-  window.location.href =
-    "payment.html";
+}
+
+
+let checkoutMessageTimer = null;
+
+function showCheckoutMessage(
+  message,
+  error
+){
+
+  const box =
+    document.getElementById(
+      "checkoutMessage"
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.textContent =
+    String(message || "");
+
+  box.classList.toggle(
+    "error",
+    Boolean(error)
+  );
+
+  box.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    checkoutMessageTimer
+  );
+
+  checkoutMessageTimer =
+    setTimeout(
+      ()=>{
+
+        box.classList.remove(
+          "show"
+        );
+
+      },
+      2600
+    );
+
+}
+
+
+function goCheckoutBack(){
+
+  if(
+    document.referrer &&
+    document.referrer !==
+    window.location.href
+  ){
+
+    history.back();
+
+  }else{
+
+    window.location.href =
+      "cart.html";
+
+  }
 
 }
 
 </script>
 
 </body>
+
 </html>
