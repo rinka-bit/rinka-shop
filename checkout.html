@@ -1832,12 +1832,53 @@ async function fetchCheckoutGiftAction(
     }
   );
 
-  const response =
-    await fetch(
-      API +
-      "?" +
-      query.toString()
+  const controller =
+    new AbortController();
+
+  const timeoutId =
+    setTimeout(
+      ()=>controller.abort(),
+      12000
     );
+
+  let response;
+
+  try{
+
+    response =
+      await fetch(
+        API +
+        "?" +
+        query.toString(),
+        {
+          signal:
+            controller.signal
+        }
+      );
+
+  }catch(error){
+
+    if(
+      error &&
+      error.name ===
+      "AbortError"
+    ){
+
+      throw new Error(
+        "โหลดข้อมูลของแถมนานเกินไป กรุณาลองใหม่"
+      );
+
+    }
+
+    throw error;
+
+  }finally{
+
+    clearTimeout(
+      timeoutId
+    );
+
+  }
 
   if(!response.ok){
 
@@ -1965,10 +2006,7 @@ async function loadGifts(){
     const [
       campaigns,
       rules,
-      items,
-      characters,
-      exclusions,
-      collections
+      items
     ] =
       await Promise.all([
 
@@ -1998,7 +2036,12 @@ async function loadGifts(){
             "items",
             "gifts"
           ]
-        ),
+        )
+
+      ]);
+
+    const optionalResults =
+      await Promise.allSettled([
 
         fetchCheckoutGiftActionFallback(
           [
@@ -2026,20 +2069,46 @@ async function loadGifts(){
           [
             "collections"
           ]
-        ).catch(
-          error => {
-
-            console.warn(
-              "โหลด Collections ไม่สำเร็จ ใช้ข้อมูลจาก Cart แทน",
-              error
-            );
-
-            return [];
-
-          }
         )
 
       ]);
+
+    const characters =
+      optionalResults[0].status ===
+      "fulfilled"
+        ? optionalResults[0].value
+        : [];
+
+    const exclusions =
+      optionalResults[1].status ===
+      "fulfilled"
+        ? optionalResults[1].value
+        : [];
+
+    const collections =
+      optionalResults[2].status ===
+      "fulfilled"
+        ? optionalResults[2].value
+        : [];
+
+    optionalResults.forEach(
+      (result,index)=>{
+
+        if(
+          result.status ===
+          "rejected"
+        ){
+
+          console.warn(
+            "Optional Gift API failed:",
+            index,
+            result.reason
+          );
+
+        }
+
+      }
+    );
 
 
     console.log(
@@ -2227,7 +2296,9 @@ async function loadGifts(){
 
 <div class="gift-error">
 
+<b>
 โหลดข้อมูลของแถมไม่สำเร็จ
+</b>
 
 <br>
 
@@ -2235,6 +2306,14 @@ ${escapeHtml(
   error.message ||
   String(error)
 )}
+
+<br><br>
+
+<button
+type="button"
+onclick="loadGifts()">
+ลองโหลดของแถมใหม่
+</button>
 
 </div>
 
