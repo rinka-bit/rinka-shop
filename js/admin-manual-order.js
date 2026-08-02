@@ -3234,9 +3234,10 @@ async function submitManualOrder(){
       "success"
     );
 
-    alert(
-      "สร้างออเดอร์สำเร็จ\n" +
-      result.order_id
+    setManualMessage(
+      "สร้างออเดอร์สำเร็จ เลขที่ " +
+      result.order_id,
+      "success"
     );
 
     renderManualOrderManager();
