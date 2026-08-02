@@ -41,13 +41,13 @@ const sessionToken=String(customer.session_token||localStorage.getItem("session_
 const params=new URLSearchParams(location.search);
 const statusFilter=params.get("status")||"";
 const FILTERS=[
-["","ทั้งหมด"],["pending","รอจัดการ"],["china_arrived","ถึงโกดังจีน"],["shipping_to_th","กำลังมาไทย"],["ready_to_ship","เตรียมจัดส่ง"],["shipped","จัดส่งแล้ว"]
+["","ทั้งหมด"],["pending","กดสั่งสินค้าแล้ว"],["china_arrived","ถึงโกดังจีน"],["shipping_to_th","กำลังมาไทย"],["ready_to_ship","เตรียมจัดส่ง"],["shipped","จัดส่งแล้ว"]
 ];
 document.addEventListener("DOMContentLoaded",()=>{renderFilters();loadOrders()});
 function renderFilters(){
  document.getElementById("filterBar").innerHTML=FILTERS.map(([v,t])=>`<a class="filter-chip ${v===statusFilter?"active":""}" href="orders.html${v?`?status=${encodeURIComponent(v)}`:""}">${t}</a>`).join("");
 }
-function statusText(s){return {pending:"รอจัดการ",china_arrived:"ถึงโกดังจีนแล้ว",shipping_to_th:"กำลังมาไทย",ready_to_ship:"เตรียมจัดส่ง",shipped:"จัดส่งแล้ว"}[s]||s||"-"}
+function statusText(s){return {pending:"กดสั่งสินค้าแล้ว",china_arrived:"ถึงโกดังจีนแล้ว",shipping_to_th:"กำลังมาไทย",ready_to_ship:"เตรียมจัดส่ง",shipped:"จัดส่งแล้ว"}[s]||s||"-"}
 function statusClass(s){return s==="pending"?"b-pending":s==="ready_to_ship"?"b-ready":s==="shipped"?"b-shipped":"b-progress"}
 async function loadOrders(){
  const box=document.getElementById("orderList");
