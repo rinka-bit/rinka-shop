@@ -1,491 +1,70 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>
-เปลี่ยนที่อยู่จัดส่ง
-</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ขอเปลี่ยนที่อยู่ | Rinka Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-body{
-font-family:Arial,sans-serif;
-max-width:800px;
-margin:auto;
-padding:20px;
-}
-
-h1{
-
-color:#4a6fa5;
-
-}
-
-input,
-textarea{
-
-width:100%;
-
-padding:12px;
-
-box-sizing:border-box;
-
-margin-bottom:12px;
-
-border:1px solid #ddd;
-
-border-radius:10px;
-
-}
-
-button{
-
-padding:12px 20px;
-
-border:none;
-
-border-radius:10px;
-
-background:#7dcfff;
-
-color:white;
-
-font-weight:700;
-
-cursor:pointer;
-
-}
-
-.page-header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:16px 24px;
-
-background:#fff;
-
-position:sticky;
-
-top:0;
-
-z-index:100;
-
-box-shadow:
-0 3px 10px
-rgba(0,0,0,.05);
-
-}
-
-.icon-btn{
-
-width:44px !important;
-height:44px !important;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-border:none !important;
-background:#ffffff !important;
-color:#4a6fa5 !important;
-
-font-size:32px !important;
-line-height:1;
-
-padding:0 !important;
-
-cursor:pointer;
-
-position:relative;
-z-index:101;
-
-}
-
-.cart-btn{
-
-position:relative;
-
-font-size:28px;
-
-text-decoration:none;
-
-width:auto !important;
-
-}
-
-#cartCount{
-
-position:absolute;
-
-top:-8px;
-
-right:-8px;
-
-background:#ff5c7a;
-
-color:white;
-
-font-size:12px;
-
-padding:2px 6px;
-
-border-radius:20px;
-
-}
-
-.overlay{
-
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.35);
-
-z-index:999;
-
-opacity:1;
-
-transition:.25s;
-
-}
-
-.overlay.hidden{
-
-opacity:0;
-
-pointer-events:none;
-
-}
-
-.side-menu{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:280px;
-
-max-width:80%;
-
-height:100vh;
-
-background:#fff;
-
-z-index:1000;
-
-box-shadow:0 0 30px rgba(0,0,0,.15);
-
-transform:translateX(-100%);
-
-transition:.3s ease;
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-.side-menu.open{
-
-transform:translateX(0);
-
-}
-
-.menu-header{
-
-padding:24px;
-
-border-bottom:1px solid #eee;
-
-}
-
-.side-menu a{
-
-padding:18px 24px;
-
-font-size:16px;
-
-font-weight:600;
-
-text-decoration:none;
-
-color:#333;
-
-}
-
-.side-menu a:hover{
-
-background:#f7f9ff;
-
-}
-
-.back-btn{
-margin:16px 0;
-padding:10px 16px;
-border:none;
-border-radius:999px;
-background:#e0f2fe;
-color:#2563eb;
-font-weight:700;
-cursor:pointer;
-}
-  
+:root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--text:#334155;--muted:#64748b;--border:#dbe7f1;--danger:#be123c}
+*{box-sizing:border-box}body{margin:0;font-family:'Kodchasan',sans-serif;color:var(--text);background:linear-gradient(180deg,#fbfdff,var(--bg))}
+button,input,textarea,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.topbar button,.topbar a{width:46px;height:46px;border:none;border-radius:999px;background:#fff;color:var(--text);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:21px;box-shadow:0 4px 14px rgba(71,85,105,.1)}.topbar h1{margin:0;flex:1;text-align:center;font-size:20px;color:#3f6078}
+.container{width:min(760px,100%);margin:auto;padding:20px 16px 46px}.card{padding:20px;border:1px solid var(--border);border-radius:21px;background:#fff;box-shadow:0 8px 25px rgba(86,142,178,.08)}.card h2{margin:0;color:#355a73}.note{margin:8px 0 18px;color:var(--muted);line-height:1.65}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:13px}.field.full{grid-column:1/-1}.field label{font-weight:700;color:#45677e}.field input,.field textarea{width:100%;padding:11px 13px;border:1px solid #d7e3ec;border-radius:13px;outline:none}.field input:focus,.field textarea:focus{border-color:var(--pd);box-shadow:0 0 0 3px rgba(125,207,255,.16)}
+.error{min-height:18px;color:var(--danger);font-size:11px}.submit{width:100%;min-height:50px;border:none;border-radius:999px;background:linear-gradient(135deg,#7dcfff,#57b8ed);color:#fff;font-weight:700}.message{margin-bottom:14px;padding:12px 14px;border-radius:14px;background:#fff1f2;border:1px solid #fecaca;color:#9f1239}.message.success{background:#ecfdf5;border-color:#86efac;color:#166534}.hidden{display:none!important}
+@media(max-width:600px){.topbar{min-height:64px;padding:9px 11px}.topbar h1{font-size:17px}.container{padding:14px 10px 36px}.card{padding:15px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
 </style>
-
 </head>
-
 <body>
-
-<header class="page-header">
-
-<button
-id="menuButton"
-class="icon-btn">
-
-☰
-
-</button>
-
-<h1 id="pageTitle">
-
-เปลี่ยนที่อยู่
-
-</h1>
-
-<a
-href="cart.html"
-class="cart-btn">
-
-🛒
-
-<span id="cartCount">
-
-0
-
-</span>
-
-</a>
-
-</header>
-
-<div
-id="overlay"
-class="overlay hidden">
+<header class="topbar"><button type="button" onclick="goBack()" aria-label="กลับ">←</button><h1>เปลี่ยนที่อยู่</h1><a href="account.html" aria-label="บัญชี">👤</a></header>
+<main class="container">
+<section class="card"><h2>📍 ขอเปลี่ยนที่อยู่จัดส่ง</h2><p class="note">ใช้สำหรับออเดอร์ที่สร้างแล้ว ร้านจะตรวจสอบคำขอก่อนแก้ไขข้อมูลจัดส่ง</p>
+<div id="message" class="message hidden"></div>
+<div class="grid">
+<div class="field"><label for="orderId">เลขออเดอร์ *</label><input id="orderId" autocomplete="off"><span id="orderIdError" class="error"></span></div>
+<div class="field"><label for="customerName">ชื่อผู้สั่ง *</label><input id="customerName" autocomplete="name"><span id="customerNameError" class="error"></span></div>
+<div class="field"><label for="phone">เบอร์โทรศัพท์</label><input id="phone" inputmode="tel" autocomplete="tel"><span id="phoneError" class="error"></span></div>
+<div class="field"><label for="social">Twitter / X</label><input id="social" placeholder="@username"><span class="error"></span></div>
+<div class="field full"><label for="address">ที่อยู่ใหม่ *</label><textarea id="address" rows="6" placeholder="บ้านเลขที่ ถนน ตำบล/แขวง อำเภอ/เขต จังหวัด รหัสไปรษณีย์"></textarea><span id="addressError" class="error"></span></div>
 </div>
-
-<aside
-id="sideMenu"
-class="side-menu">
-
-<div class="menu-header">
-
-<h2>
-Rinka Shop
-</h2>
-
-</div>
-
-<a href="home.html">🏠 หน้าแรก</a>
-<a href="browse.html">🛍️ สินค้าทั้งหมด</a>
-<a href="categories.html">🏷️ หมวดสินค้า</a>
-<a href="lookup.html">📦 เช็กออเดอร์</a>
-<a href="change-address.html">📍 เปลี่ยนที่อยู่</a>
-<a href="account.html">👤 บัญชีของฉัน</a>
-<a href="cart.html">🛒 ตะกร้า</a>
-<a href="https://x.com/prewithrinka">📞 ติดต่อร้าน</a>
-
-</aside>
-  
-<h1>
-📍 ขอเปลี่ยนที่อยู่จัดส่ง
-</h1>
-
-<input
-id="orderId"
-placeholder="เลขออเดอร์">
-
-<input
-id="customerName"
-placeholder="ชื่อผู้สั่ง">
-
-<input
-id="phone"
-placeholder="เบอร์โทรศัพท์">
-
-<input
-id="social"
-placeholder="@Twitter / X">
-
-<textarea
-id="address"
-rows="5"
-placeholder="กรอกที่อยู่ใหม่">
-</textarea>
-
-<button
-onclick="submitRequest()">
-
-ส่งคำขอเปลี่ยนที่อยู่
-
-</button>
-
+<button id="submitButton" class="submit" type="button" onclick="submitRequest()">ส่งคำขอเปลี่ยนที่อยู่</button>
+</section>
+</main>
 <script>
-
-const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
-
+const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+const customer=safeJson(localStorage.getItem("customer"),{});
+const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
+let submitting=false;
+document.addEventListener("DOMContentLoaded",()=>{
+ if(!sessionToken){location.href="login.html";return}
+ const q=new URLSearchParams(location.search);document.getElementById("orderId").value=q.get("id")||q.get("order_id")||"";
+ document.getElementById("customerName").value=customer.username||customer.customer_name||"";
+ document.getElementById("social").value=customer.twitter||customer.social||"";
+});
 async function submitRequest(){
-
-  const payload = {
-
-    order_id:
-      document.getElementById(
-        "orderId"
-      ).value.trim(),
-
-    customer_name:
-      document.getElementById(
-        "customerName"
-      ).value.trim(),
-
-    phone:
-      document.getElementById(
-        "phone"
-      ).value.trim(),
-
-    social:
-      document.getElementById(
-        "social"
-      ).value.trim(),
-
-    address:
-      document.getElementById(
-        "address"
-      ).value.trim()
-
-  };
-
-  if(
-    !payload.order_id ||
-    !payload.customer_name ||
-    !payload.address
-  ){
-
-    alert(
-      "กรุณากรอกข้อมูลให้ครบ"
-    );
-
-    return;
-
-  }
-
-  try{
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      "action",
-      "changeAddress"
-    );
-
-    formData.append(
-      "payload",
-      JSON.stringify(payload)
-    );
-
-    const response =
-      await fetch(
-        API,
-        {
-          method:"POST",
-          body:formData
-        }
-      );
-
-    const result =
-      await response.json();
-
-    if(result.success){
-
-      alert(
-        "ส่งคำขอเรียบร้อย"
-      );
-
-      location.reload();
-
-    }else{
-
-      alert(
-        result.error ||
-        "เกิดข้อผิดพลาด"
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"
-    );
-
-  }
-
+ if(submitting)return;clearErrors();
+ const payload={session_token:sessionToken,order_id:value("orderId"),customer_name:value("customerName"),phone:value("phone"),social:value("social"),address:value("address")};
+ let ok=true;if(!payload.order_id){fieldError("orderId","กรุณากรอกเลขออเดอร์");ok=false}if(!payload.customer_name){fieldError("customerName","กรุณากรอกชื่อผู้สั่ง");ok=false}if(!payload.address){fieldError("address","กรุณากรอกที่อยู่ใหม่");ok=false}
+ if(payload.phone&&!/^[0-9+\-\s]{8,20}$/.test(payload.phone)){fieldError("phone","รูปแบบเบอร์โทรไม่ถูกต้อง");ok=false}if(!ok)return;
+ submitting=true;setLoading(true);
+ try{
+  const fd=new FormData();fd.append("action","changeAddress");fd.append("payload",JSON.stringify(payload));
+  const res=await fetch(API,{method:"POST",body:fd});if(!res.ok)throw new Error("HTTP "+res.status);
+  const data=await res.json();if(!data.success)throw new Error(data.error||"ส่งคำขอไม่สำเร็จ");
+  showMessage("ส่งคำขอเรียบร้อยแล้ว ร้านจะตรวจสอบและอัปเดตสถานะให้ค่ะ",true);
+  document.getElementById("address").value="";
+ }catch(err){console.error(err);showMessage(err.message||"ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้",false)}
+ finally{submitting=false;setLoading(false)}
 }
-
-function updateCartCount(){
-
-const cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const count =
-
-cart.reduce(
-
-(sum,item)=>
-
-sum +
-Number(item.qty || 0),
-
-0
-
-);
-
-const cartCount =
-document.getElementById(
-"cartCount"
-);
-
-if(cartCount){
-
-cartCount.textContent =
-count;
-
-}
-
-}
-
+function setLoading(v){const b=document.getElementById("submitButton");b.disabled=v;b.textContent=v?"กำลังส่งคำขอ...":"ส่งคำขอเปลี่ยนที่อยู่"}
+function showMessage(t,s){const b=document.getElementById("message");b.textContent=t;b.className="message"+(s?" success":"")}
+function value(id){return document.getElementById(id).value.trim()}function fieldError(id,t){document.getElementById(id+"Error").textContent=t;document.getElementById(id).focus()}
+function clearErrors(){["orderId","customerName","phone","address"].forEach(id=>document.getElementById(id+"Error").textContent="");document.getElementById("message").classList.add("hidden")}
+function goBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="account.html"}
+function safeJson(v,f){try{return JSON.parse(v||"")}catch(e){return f}}
 </script>
-
-<script src="menu.js"></script>
-  
 </body>
-
 </html>
