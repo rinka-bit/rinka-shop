@@ -1,422 +1,63 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1">
-
-<title>
-Category
-</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>หมวดสินค้า | Rinka Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-body{
-
-font-family:
-'Kodchasan',
-sans-serif;
-
-background:#f6fbff;
-
-padding:20px;
-
-}
-
-h1{
-
-color:#4a6fa5;
-
-}
-
-#productCount{
-
-color:#6b7280;
-
-margin-bottom:20px;
-
-}
-
-.product-grid{
-
-display:grid;
-
-grid-template-columns:
-repeat(
-auto-fill,
-minmax(
-220px,
-1fr
-)
-);
-
-gap:20px;
-
-}
-
-.card{
-
-background:white;
-
-border-radius:20px;
-
-overflow:hidden;
-
-cursor:pointer;
-
-box-shadow:
-0 3px 12px
-rgba(
-125,
-207,
-255,
-0.15
-);
-
-transition:.2s;
-
-}
-
-.card:hover{
-
-transform:
-translateY(-4px);
-
-}
-
-.card img{
-
-width:100%;
-
-height:220px;
-
-object-fit:cover;
-
-}
-
-.card-body{
-
-padding:15px;
-
-}
-
-.badge-new{
-
-display:inline-block;
-
-padding:4px 10px;
-
-background:#d9f2ff;
-
-color:#2563eb;
-
-font-size:12px;
-
-font-weight:700;
-
-border-radius:999px;
-
-margin-bottom:5px;
-
-}
-
-.badge-preorder{
-
-display:inline-block;
-
-padding:4px 10px;
-
-background:#e0f2fe;
-
-color:#0284c7;
-
-font-size:12px;
-
-font-weight:700;
-
-border-radius:999px;
-
-margin-left:5px;
-
-}
-
-.navbar{
-
-display:flex;
-
-flex-wrap:wrap;
-
-gap:12px;
-
-padding:15px 20px;
-
-margin-bottom:25px;
-
-background:white;
-
-border-radius:20px;
-
-box-shadow:
-0 3px 15px
-rgba(
-125,
-207,
-255,
-0.15
-);
-
-}
-
-.navbar a{
-
-text-decoration:none;
-
-font-weight:700;
-
-color:#4a6fa5;
-
-}
-
-.navbar a:hover{
-
-color:#2563eb;
-
-}
-
+:root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--text:#334155;--muted:#64748b;--border:#dbe7f1}
+*{box-sizing:border-box}body{margin:0;font-family:'Kodchasan',sans-serif;color:var(--text);background:linear-gradient(180deg,#fbfdff,var(--bg))}
+button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.topbar button,.topbar a{width:46px;height:46px;border:none;border-radius:999px;background:#fff;color:var(--text);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:21px;box-shadow:0 4px 14px rgba(71,85,105,.1)}.topbar h1{margin:0;flex:1;text-align:center;font-size:20px;color:#3f6078}
+.cart{position:relative}.count{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#ff5c7a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.container{width:min(1180px,100%);margin:auto;padding:20px 16px 46px}.hero{padding:20px;border:1px solid var(--border);border-radius:21px;background:linear-gradient(135deg,#f3fbff,#fff);box-shadow:0 9px 28px rgba(86,142,178,.09);margin-bottom:16px}.hero h2{margin:0;color:#355a73}.hero p{margin:8px 0 0;color:var(--muted)}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;padding:12px;border:1px solid var(--border);border-radius:17px;background:#fff}.search{position:relative;flex:1}.search input{width:100%;min-height:45px;padding:10px 40px 10px 13px;border:1px solid #d7e3ec;border-radius:13px;outline:none}.search input:focus{border-color:var(--pd);box-shadow:0 0 0 3px rgba(125,207,255,.16)}.search button{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:none;border-radius:999px;background:#eef5f9;color:#526b7c}.result-count{color:var(--muted);font-size:13px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.card{overflow:hidden;border:1px solid var(--border);border-radius:18px;background:#fff;box-shadow:0 7px 22px rgba(86,142,178,.07);cursor:pointer;transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(86,142,178,.13)}.image{position:relative;aspect-ratio:1/1;background:#edf7fc;overflow:hidden}.image img{width:100%;height:100%;object-fit:cover;display:block;transition:.3s}.card:hover .image img{transform:scale(1.04)}.badges{position:absolute;top:9px;left:9px;right:9px;display:flex;justify-content:space-between;gap:7px}.badge{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:700}.new{background:#e0f2fe;color:#075985}.pre{background:#ffedd5;color:#9a3412}.stock{background:#dcfce7;color:#166534}.sale{background:#ffe4e6;color:#9f1239;margin-left:auto}.body{padding:12px}.body h3{margin:0;min-height:42px;font-size:14px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.fandom{margin-top:6px;color:var(--muted);font-size:12px}.price{margin-top:10px;font-size:18px;font-weight:700;color:#347fb4}.sale-price{color:#e84a68}.old{margin-left:6px;color:#94a3b8;font-size:12px;text-decoration:line-through}
+.state{min-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;border:1px solid var(--border);border-radius:20px;background:#fff}.state p{margin:0;color:var(--muted)}.state button,.state a{border:none;border-radius:999px;padding:10px 16px;background:var(--p);color:#fff;text-decoration:none;font-weight:700}.spinner{width:36px;height:36px;border:4px solid #dff2fc;border-top-color:var(--pd);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.hidden{display:none!important}
+@media(min-width:720px){.grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}}@media(max-width:600px){.topbar{min-height:64px;padding:9px 11px}.topbar h1{font-size:17px}.container{padding:14px 10px 36px}.hero{padding:17px}.toolbar{align-items:stretch;flex-direction:column}.result-count{padding-left:3px}}
 </style>
-
 </head>
-
 <body>
-
-<div class="navbar">
-
-<a href="home.html">
-🏠 หน้าแรก
-</a>
-
-<a href="categories.html">
-🏷️ หมวดสินค้า
-</a>
-
-<a href="lookup.html">
-📦 เช็กออเดอร์
-</a>
-
-<a href="change-address.html">
-📍 เปลี่ยนที่อยู่
-</a>
-
-<a
-href="cart.html"
-id="cartLink">
-
-🛒 ตะกร้า (0)
-
-</a>
-
-<a href="https://x.com/prewithrinka">
-📞 ติดต่อร้าน
-</a>
-
-</div>
-
-<h1 id="categoryTitle">
-Loading...
-</h1>
-
-<p id="productCount">
-</p>
-
-<div
-id="products"
-class="product-grid">
-</div>
-
+<header class="topbar"><button type="button" onclick="goBack()">←</button><h1 id="topTitle">หมวดสินค้า</h1><a href="cart.html" class="cart">🛒<span id="cartCount" class="count">0</span></a></header>
+<main class="container">
+<section class="hero"><h2 id="categoryTitle">🏷️ กำลังโหลดหมวดสินค้า</h2><p id="categoryDescription">กำลังเตรียมรายการสินค้าให้ค่ะ</p></section>
+<div class="toolbar"><div class="search"><input id="categorySearch" type="search" placeholder="ค้นหาในหมวดนี้..." autocomplete="off"><button type="button" onclick="clearSearch()">✕</button></div><div id="productCount" class="result-count">0 รายการ</div></div>
+<section id="products" class="state"><div class="spinner"></div><h2>กำลังโหลดสินค้า</h2><p>รอสักครู่นะคะ</p></section>
+</main>
 <script>
-
-const API =
-
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
-
-const category =
-
-new URLSearchParams(
-window.location.search
-).get("name");
-
-loadProducts();
-
+const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+const category=new URLSearchParams(location.search).get("name")||"";
+let categoryProducts=[];
+document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("categorySearch").addEventListener("input",filterCategoryProducts);loadProducts()});
 async function loadProducts(){
-
-  try{
-
-    const response =
-      await fetch(API);
-
-    const result =
-      await response.json();
-
-    const products =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(result.products)
-          ? result.products
-          : [];
-
-    const filtered =
-      products.filter(
-        product =>
-          product.main_category ===
-          category
-      );
-
-    document
-      .getElementById(
-        "categoryTitle"
-      )
-      .textContent =
-      `🏷️ ${category || "ไม่พบหมวดสินค้า"}`;
-
-    document
-      .getElementById(
-        "productCount"
-      )
-      .textContent =
-      `${filtered.length} รายการ`;
-
-    document
-      .getElementById(
-        "products"
-      )
-      .innerHTML =
-      filtered
-        .map(createCard)
-        .join("");
-
-  }catch(error){
-
-    console.error(
-      "โหลดสินค้าไม่สำเร็จ",
-      error
-    );
-
-    document
-      .getElementById(
-        "productCount"
-      )
-      .textContent =
-      "โหลดสินค้าไม่สำเร็จ";
-
-  }
-
+ const box=document.getElementById("products");
+ if(!category){renderState("ไม่พบหมวดสินค้า","ลิงก์นี้ไม่สมบูรณ์");return}
+ try{
+  const r=await fetch(API);if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(d&&d.success===false)throw new Error(d.error||"โหลดสินค้าไม่สำเร็จ");
+  const rows=Array.isArray(d)?d:Array.isArray(d.products)?d.products:[];categoryProducts=rows.filter(p=>String(p.main_category||"")===category);
+  document.getElementById("categoryTitle").textContent="🏷️ "+category;document.getElementById("topTitle").textContent=category;document.getElementById("categoryDescription").textContent="สินค้าทั้งหมดในหมวด "+category;document.title=category+" | Rinka Shop";
+  renderProducts(categoryProducts);
+ }catch(e){console.error(e);renderState("โหลดสินค้าไม่สำเร็จ",e.message||String(e),true)}
 }
-
-  function createCard(product){
-
-  const price =
-    Number(
-      product.final_price ??
-      product.price ??
-      0
-    );
-
-  return `
-
-    <div
-    class="card"
-    onclick="
-      window.location.href=
-      'product.html?id=${product.product_id}'
-    ">
-
-      <img
-      src="${product.image || ""}"
-      alt="${product.name || ""}">
-
-      <div class="card-body">
-
-        ${
-          product.new_arrival
-          ? `
-            <div class="badge-new">
-              NEW
-            </div>
-          `
-          : ""
-        }
-
-        ${
-          product.product_type ===
-          "preorder"
-          ? `
-            <div class="badge-preorder">
-              PREORDER
-            </div>
-          `
-          : ""
-        }
-
-        <h3>
-          ${product.name || "-"}
-        </h3>
-
-        <p>
-          ฿${price}
-        </p>
-
-      </div>
-
-    </div>
-
-  `;
-
+function filterCategoryProducts(){const q=document.getElementById("categorySearch").value.trim().toLowerCase();if(!q){renderProducts(categoryProducts);return}renderProducts(categoryProducts.filter(p=>[p.name,p.fandom,p.description,p.sub_category,p.search_keywords].join(" ").toLowerCase().includes(q)))}
+function clearSearch(){document.getElementById("categorySearch").value="";renderProducts(categoryProducts)}
+function renderProducts(rows){
+ const box=document.getElementById("products");document.getElementById("productCount").textContent=rows.length.toLocaleString("th-TH")+" รายการ";
+ if(!rows.length){renderState("ไม่พบสินค้า",document.getElementById("categorySearch").value?"ลองเปลี่ยนคำค้นดูนะคะ":"ยังไม่มีสินค้าในหมวดนี้");return}
+ box.className="grid";box.innerHTML=rows.map(productCard).join("");
 }
-
-function updateCartCount(){
-
-const cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const count =
-
-cart.reduce(
-
-(sum,item)=>
-
-sum +
-Number(item.qty || 0),
-
-0
-
-);
-
-const cartLink =
-
-document.getElementById(
-"cartLink"
-);
-
-if(cartLink){
-
-cartLink.textContent =
-
-`🛒 ตะกร้า (${count})`;
-
+function productCard(p){
+ const price=Number(p.final_price??p.price??0),old=Number(p.old_price??p.price??0),onSale=bool(p.on_sale),type=String(p.product_type||"preorder").toLowerCase(),url="product.html?id="+encodeURIComponent(p.product_id||"");
+ return `<article class="card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)"><div class="image">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name||"")}" loading="lazy">`:'<div style="height:100%;display:flex;align-items:center;justify-content:center">ไม่มีรูป</div>'}<div class="badges"><span class="badge ${type==="instock"?"stock":"pre"}">${type==="instock"?"พร้อมส่ง":"PREORDER"}</span>${onSale?'<span class="badge sale">SALE</span>':bool(p.new_arrival)?'<span class="badge new">NEW</span>':""}</div></div><div class="body"><h3>${esc(p.name||"-")}</h3>${p.fandom?`<div class="fandom">${esc(p.fandom)}</div>`:""}<div class="price ${onSale?"sale-price":""}">฿${price.toLocaleString("th-TH")}${onSale?`<span class="old">฿${old.toLocaleString("th-TH")}</span>`:""}</div></div></article>`;
 }
-
-}
-
+function renderState(t,m,retry){const b=document.getElementById("products");b.className="state";b.innerHTML=`<div style="font-size:48px">${retry?"⚠️":"📦"}</div><h2>${esc(t)}</h2><p>${esc(m)}</p>${retry?'<button onclick="loadProducts()">ลองใหม่</button>':'<a href="categories.html">ดูหมวดสินค้า</a>'}`}
+function cardKey(e,el){if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click()}}
+function goBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="categories.html"}
+function updateCartCount(){let c=[];try{const x=JSON.parse(localStorage.getItem("cart")||"[]");c=Array.isArray(x)?x:[]}catch(e){}const n=c.reduce((s,i)=>s+Number(i.qty||0),0);document.getElementById("cartCount").textContent=n>99?"99+":String(n)}
+function bool(v){return v===true||v===1||["true","yes","1","active"].includes(String(v||"").toLowerCase())}function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
-
 </body>
 </html>
