@@ -1,243 +1,84 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>สินค้า | Rinka Shop</title>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="browse.css">
-
-<link
-href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
-rel="stylesheet">
-
+<link rel="stylesheet" href="browse.css?v=20260802-1">
 </head>
-
 <body>
-
 <header class="page-header">
-
-<button
-id="menuButton"
-class="icon-btn">
-
-☰
-
-</button>
-
-<h1 id="pageTitle">
-
-สินค้า
-
-</h1>
-
-<a
-href="cart.html"
-class="cart-btn">
-
-🛒
-
-<span id="cartCount">
-
-0
-
-</span>
-
-</a>
-
+  <button id="menuButton" class="icon-btn" type="button" aria-label="เปิดเมนู">☰</button>
+  <h1 id="pageTitle">สินค้า</h1>
+  <a href="cart.html" class="cart-btn" aria-label="เปิดตะกร้า">🛒<span id="cartCount">0</span></a>
 </header>
-
-<div
-id="overlay"
-class="overlay hidden">
-</div>
-
-<aside
-id="sideMenu"
-class="side-menu">
-
-<div class="menu-header">
-
-<h2>
-
-Rinka Shop
-
-</h2>
-
-</div>
-
-<a href="home.html">
-
-🏠 หน้าแรก
-
-</a>
-
-<a href="browse.html">
-
-🛍️ สินค้าทั้งหมด
-
-</a>
-
-<a href="categories.html">
-
-📦 หมวดสินค้า
-
-</a>
-
-<a href="account.html">
-
-👤 บัญชีของฉัน
-
-</a>
-
-<a href="lookup.html">
-
-📄 เช็กออเดอร์
-
-</a>
-
-<a href="cart.html">
-
-🛒 ตะกร้า
-
-</a>
-
+<div id="overlay" class="overlay hidden"></div>
+<aside id="sideMenu" class="side-menu">
+  <div class="menu-header"><h2>Rinka Shop</h2></div>
+  <a href="home.html">🏠 หน้าแรก</a>
+  <a href="browse.html">🛍️ สินค้าทั้งหมด</a>
+  <a href="categories.html">📦 หมวดสินค้า</a>
+  <a href="account.html">👤 บัญชีของฉัน</a>
+  <a href="lookup.html">📄 เช็กออเดอร์</a>
+  <a href="cart.html">🛒 ตะกร้า</a>
 </aside>
 
-<div class="browse-container">
+<main class="browse-container">
+  <nav id="breadcrumb" class="breadcrumb" aria-label="breadcrumb">
+    <a href="home.html">หน้าแรก</a><span>›</span><span>สินค้า</span>
+  </nav>
 
-<nav
-id="breadcrumb"
-class="breadcrumb">
+  <section class="browse-heading">
+    <div>
+      <h2 id="browseTitle">สินค้า</h2>
+      <p id="browseDescription">กำลังโหลดสินค้า...</p>
+    </div>
+    <div id="resultCount" class="result-count" aria-live="polite"></div>
+  </section>
 
-หน้าแรก >
-สินค้า
+  <section class="browse-toolbar" aria-label="เครื่องมือค้นหาและเรียงสินค้า">
+    <div class="search-wrap">
+      <span class="search-icon">🔎</span>
+      <input type="search" id="searchInput" placeholder="ค้นหาชื่อสินค้า แฟนด้อม หรือหมวดหมู่" autocomplete="off">
+      <button id="clearSearchButton" class="clear-search hidden" type="button" aria-label="ล้างคำค้น">✕</button>
+    </div>
 
-</nav>
+    <select id="sortSelect" aria-label="เรียงสินค้า">
+      <option value="newest">ใหม่ล่าสุด</option>
+      <option value="price_low">ราคา ต่ำ → สูง</option>
+      <option value="price_high">ราคา สูง → ต่ำ</option>
+      <option value="name">ชื่อสินค้า</option>
+    </select>
 
+    <button id="resetFilterButton" class="secondary-btn hidden" type="button">↻ ล้างตัวกรอง</button>
+  </section>
 
-<div class="browse-top">
+  <div id="activeFilter" class="active-filter hidden"></div>
+  <div id="statusMessage" class="status-message hidden" role="alert"></div>
 
-<div>
+  <section id="loading" class="loading" aria-live="polite">
+    <div class="loading-spinner"></div>
+    <strong>กำลังโหลดสินค้า...</strong>
+    <span>รอสักครู่นะคะ</span>
+  </section>
 
-<h2 id="browseTitle">
+  <section id="productGrid" class="product-grid" aria-live="polite"></section>
 
-สินค้า
-
-</h2>
-
-<p id="browseDescription">
-
-กำลังโหลด...
-
-</p>
-
-</div>
-
-</div>
-
-
-<div class="browse-toolbar">
-
-<input
-
-type="search"
-
-id="searchInput"
-
-placeholder="ค้นหาสินค้า...">
-
-<select id="sortSelect">
-
-<option value="newest">
-
-ใหม่ล่าสุด
-
-</option>
-
-<option value="price_low">
-
-ราคา ต่ำ → สูง
-
-</option>
-
-<option value="price_high">
-
-ราคา สูง → ต่ำ
-
-</option>
-
-<option value="name">
-
-ชื่อสินค้า
-
-</option>
-
-</select>
-
-</div>
-
-
-<div
-
-id="loading"
-
-class="loading">
-
-กำลังโหลดสินค้า...
-
-</div>
-
-
-<div
-
-id="productGrid"
-
-class="product-grid">
-
-</div>
-
-
-<div
-
-id="emptyState"
-
-class="empty-state hidden">
-
-<div class="cat">
-
-(=^･ω･^=)
-
-</div>
-
-<h3>
-
-ไม่พบสินค้า
-
-</h3>
-
-<p>
-
-ลองเปลี่ยนคำค้นดูนะ
-
-</p>
-
-</div>
-
-</div>
+  <section id="emptyState" class="empty-state hidden">
+    <div class="cat">(=^･ω･^=)</div>
+    <h3>ไม่พบสินค้า</h3>
+    <p id="emptyDescription">ลองเปลี่ยนคำค้นหรือล้างตัวกรองดูนะคะ</p>
+    <button id="emptyResetButton" class="primary-btn" type="button">ดูสินค้าทั้งหมด</button>
+  </section>
+</main>
 
 <script src="app.js"></script>
 <script src="components.js"></script>
 <script src="menu.js"></script>
-<script src="browse.js"></script>
-
+<script src="browse.js?v=20260802-1"></script>
 </body>
-
 </html>
