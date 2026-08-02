@@ -1,541 +1,58 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1">
-
-<title>
-หมวดสินค้า
-</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>หมวดสินค้า | Rinka Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-body{
-
-font-family:
-'Kodchasan',
-sans-serif;
-
-background:#f6fbff;
-
-padding:20px;
-
-}
-
-h1{
-
-color:#4a6fa5;
-
-margin-bottom:20px;
-
-}
-
-.category-grid{
-
-display:grid;
-
-grid-template-columns:
-repeat(
-auto-fill,
-minmax(
-220px,
-1fr
-)
-);
-
-gap:20px;
-
-}
-
-.category-card{
-
-background:white;
-
-padding:25px;
-
-border-radius:20px;
-
-cursor:pointer;
-
-text-align:center;
-
-box-shadow:
-0 3px 15px
-rgba(
-125,
-207,
-255,
-0.15
-);
-
-transition:.2s;
-
-}
-
-.category-card:hover{
-
-transform:
-translateY(-4px);
-
-}
-
-.category-card h2{
-
-margin:0;
-
-color:#4a6fa5;
-
-}
-
-.category-card p{
-
-margin-top:10px;
-
-color:#6b7280;
-
-font-size:14px;
-
-}
-
-.navbar{
-
-display:flex;
-
-flex-wrap:wrap;
-
-gap:12px;
-
-padding:15px 20px;
-
-margin-bottom:25px;
-
-background:white;
-
-border-radius:20px;
-
-box-shadow:
-0 3px 15px
-rgba(
-125,
-207,
-255,
-0.15
-);
-
-}
-
-.navbar a{
-
-text-decoration:none;
-
-font-weight:700;
-
-color:#4a6fa5;
-
-}
-
-.navbar a:hover{
-
-color:#2563eb;
-
-}
-
-.page-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:16px 24px;
-
-background:#fff;
-
-position:sticky;
-
-top:0;
-
-z-index:100;
-
-box-shadow:
-0 3px 10px
-rgba(0,0,0,.05);
-
-}
-
-.icon-btn{
-
-width:auto !important;
-
-border:none;
-
-background:none;
-
-font-size:32px;
-
-padding:0;
-
-cursor:pointer;
-
-}
-
-.cart-btn{
-
-position:relative;
-
-font-size:28px;
-
-text-decoration:none;
-
-width:auto !important;
-
-}
-
-#cartCount{
-
-position:absolute;
-
-top:-8px;
-
-right:-8px;
-
-background:#ff5c7a;
-
-color:white;
-
-font-size:12px;
-
-padding:2px 6px;
-
-border-radius:20px;
-
-}
-
-.overlay{
-
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.35);
-
-z-index:999;
-
-opacity:1;
-
-transition:.25s;
-
-}
-
-.overlay.hidden{
-
-opacity:0;
-
-pointer-events:none;
-
-}
-
-.side-menu{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:280px;
-
-max-width:80%;
-
-height:100vh;
-
-background:#fff;
-
-z-index:1000;
-
-box-shadow:0 0 30px rgba(0,0,0,.15);
-
-transform:translateX(-100%);
-
-transition:.3s ease;
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-.side-menu.open{
-
-transform:translateX(0);
-
-}
-
-.menu-header{
-
-padding:24px;
-
-border-bottom:1px solid #eee;
-
-}
-
-.side-menu a{
-
-padding:18px 24px;
-
-font-size:16px;
-
-font-weight:600;
-
-text-decoration:none;
-
-color:#333;
-
-}
-
-.side-menu a:hover{
-
-background:#f7f9ff;
-
-}
-  
+:root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--text:#334155;--muted:#64748b;--border:#dbe7f1}
+*{box-sizing:border-box}body{margin:0;font-family:'Kodchasan',sans-serif;color:var(--text);background:linear-gradient(180deg,#fbfdff,var(--bg))}
+button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.topbar button,.topbar a{width:46px;height:46px;border:none;border-radius:999px;background:#fff;color:var(--text);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:21px;box-shadow:0 4px 14px rgba(71,85,105,.1)}.topbar h1{margin:0;flex:1;text-align:center;font-size:20px;color:#3f6078}.cart{position:relative}.count{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#ff5c7a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.container{width:min(1100px,100%);margin:auto;padding:20px 16px 46px}.hero{padding:22px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(135deg,#f3fbff,#fff);box-shadow:0 9px 28px rgba(86,142,178,.09);margin-bottom:16px}.hero h2{margin:0;color:#355a73;font-size:25px}.hero p{margin:8px 0 0;color:var(--muted);line-height:1.6}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;padding:12px;border:1px solid var(--border);border-radius:17px;background:#fff}.toolbar input{flex:1;min-height:45px;padding:10px 13px;border:1px solid #d7e3ec;border-radius:13px;outline:none}.toolbar input:focus{border-color:var(--pd);box-shadow:0 0 0 3px rgba(125,207,255,.16)}.result-count{color:var(--muted);font-size:13px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.category-card{min-height:150px;display:flex;flex-direction:column;justify-content:space-between;padding:18px;border:1px solid var(--border);border-radius:19px;background:#fff;box-shadow:0 7px 22px rgba(86,142,178,.07);cursor:pointer;transition:.2s;position:relative;overflow:hidden}.category-card::after{content:"🏷️";position:absolute;right:12px;bottom:5px;font-size:46px;opacity:.08}.category-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(86,142,178,.13)}.category-icon{width:45px;height:45px;border-radius:14px;background:#edf8fe;display:flex;align-items:center;justify-content:center;font-size:22px}.category-card h3{margin:14px 0 0;color:#355a73;font-size:17px;overflow-wrap:anywhere}.category-card p{margin:7px 0 0;color:var(--muted);font-size:13px}.category-arrow{align-self:flex-end;color:#6fa4c4;font-size:22px}
+.state{min-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;border:1px solid var(--border);border-radius:20px;background:#fff}.state p{margin:0;color:var(--muted)}.state button{border:none;border-radius:999px;padding:10px 16px;background:var(--p);color:#fff;font-weight:700}.spinner{width:36px;height:36px;border:4px solid #dff2fc;border-top-color:var(--pd);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.35);opacity:1;transition:.25s}.overlay.hidden{opacity:0;pointer-events:none}.side-menu{position:fixed;top:0;left:0;z-index:1000;width:280px;max-width:82%;height:100vh;display:flex;flex-direction:column;background:#fff;box-shadow:0 0 30px rgba(0,0,0,.15);transform:translateX(-100%);transition:.3s}.side-menu.open{transform:translateX(0)}.menu-header{padding:24px;border-bottom:1px solid #eee}.side-menu a{padding:18px 24px;color:#333;text-decoration:none;font-size:16px;font-weight:600}.side-menu a:hover{background:#f7f9ff}
+@media(min-width:720px){.grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}}@media(max-width:600px){.topbar{min-height:64px;padding:9px 11px}.topbar h1{font-size:17px}.container{padding:14px 10px 36px}.hero{padding:18px}.toolbar{align-items:stretch;flex-direction:column}.result-count{padding-left:3px}.category-card{min-height:135px;padding:15px}}
 </style>
-
 </head>
-
 <body>
-
-<header class="page-header">
-
-<button
-id="menuButton"
-class="icon-btn">
-
-☰
-
-</button>
-
-<h1 id="pageTitle">
-
-หมวดสินค้า
-
-</h1>
-
-<a
-href="cart.html"
-class="cart-btn">
-
-🛒
-
-<span id="cartCount">
-
-0
-
-</span>
-
-</a>
-
-</header>
-
-<div
-id="overlay"
-class="overlay hidden">
-</div>
-
-<aside
-id="sideMenu"
-class="side-menu">
-
-<div class="menu-header">
-
-<h2>
-
-Rinka Shop
-
-</h2>
-
-</div>
-
-<a href="home.html">
-🏠 หน้าแรก
-</a>
-
-<a href="browse.html">
-🛍️ สินค้าทั้งหมด
-</a>
-
-<a href="categories.html">
-🏷️ หมวดสินค้า
-</a>
-
-<a href="lookup.html">
-📦 เช็กออเดอร์
-</a>
-
-<a href="change-address.html">
-📍 เปลี่ยนที่อยู่
-</a>
-
-<a href="account.html">
-👤 บัญชีของฉัน
-</a>
-
-<a href="cart.html">
-🛒 ตะกร้า
-</a>
-
-<a href="https://x.com/prewithrinka">
-📞 ติดต่อร้าน
-</a>
-
-</aside>
-
-<div
-id="categories"
-class="category-grid">
-</div>
-
+<header class="topbar"><button id="menuButton" type="button">☰</button><h1>หมวดสินค้า</h1><a href="cart.html" class="cart">🛒<span id="cartCount" class="count">0</span></a></header>
+<div id="overlay" class="overlay hidden"></div>
+<aside id="sideMenu" class="side-menu"><div class="menu-header"><h2>Rinka Shop</h2></div><a href="home.html">🏠 หน้าแรก</a><a href="browse.html">🛍️ สินค้าทั้งหมด</a><a href="categories.html">🏷️ หมวดสินค้า</a><a href="lookup.html">📦 เช็กออเดอร์</a><a href="change-address.html">📍 เปลี่ยนที่อยู่</a><a href="account.html">👤 บัญชีของฉัน</a><a href="cart.html">🛒 ตะกร้า</a><a href="https://x.com/prewithrinka" target="_blank" rel="noopener noreferrer">📞 ติดต่อร้าน</a></aside>
+<main class="container">
+<section class="hero"><h2>🏷️ หมวดสินค้า</h2><p>เลือกหมวดที่สนใจเพื่อดูสินค้าทั้งหมดในหมวดนั้น</p></section>
+<div class="toolbar"><input id="categorySearch" type="search" placeholder="ค้นหาหมวดสินค้า..." autocomplete="off"><div id="categoryCount" class="result-count">0 หมวด</div></div>
+<section id="categories" class="state"><div class="spinner"></div><h2>กำลังโหลดหมวดสินค้า</h2><p>รอสักครู่นะคะ</p></section>
+</main>
 <script>
-
-const API =
-
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
-
-loadCategories();
-
+const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+let allCategories=[];
+document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("categorySearch").addEventListener("input",filterCategories);loadCategories()});
 async function loadCategories(){
-
-  try{
-
-    const response =
-      await fetch(API);
-
-    const result =
-      await response.json();
-
-    const products =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(result.products)
-          ? result.products
-          : [];
-
-    const categories = [
-      ...new Set(
-        products
-          .map(
-            product =>
-              product.main_category
-          )
-          .filter(Boolean)
-      )
-    ];
-
-    document
-      .getElementById(
-        "categories"
-      )
-      .innerHTML =
-
-      categories.map(category=>{
-
-        const count =
-          products.filter(
-            product =>
-              product.main_category ===
-              category
-          ).length;
-
-        return `
-
-          <div
-          class="category-card"
-          onclick="
-            window.location.href=
-            'browse.html?type=main_category&value=${encodeURIComponent(category)}'
-          ">
-
-            <h2>
-              ${category}
-            </h2>
-
-            <p>
-              ${count} รายการ
-            </p>
-
-          </div>
-
-        `;
-
-      }).join("");
-
-  }catch(error){
-
-    console.error(
-      "โหลดหมวดสินค้าไม่สำเร็จ",
-      error
-    );
-
-    document
-      .getElementById(
-        "categories"
-      )
-      .innerHTML = `
-        <p>
-          โหลดหมวดสินค้าไม่สำเร็จ
-        </p>
-      `;
-
-  }
-
+ try{
+  const r=await fetch(API);if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(d&&d.success===false)throw new Error(d.error||"โหลดหมวดสินค้าไม่สำเร็จ");
+  const products=Array.isArray(d)?d:Array.isArray(d.products)?d.products:[];
+  const map=new Map();products.forEach(p=>{const c=String(p.main_category||"").trim();if(c)map.set(c,(map.get(c)||0)+1)});
+  allCategories=[...map.entries()].map(([name,count])=>({name,count})).sort((a,b)=>a.name.localeCompare(b.name,"th"));
+  renderCategories(allCategories);
+ }catch(e){console.error(e);renderState("โหลดหมวดสินค้าไม่สำเร็จ",e.message||String(e),true)}
 }
-
-function updateCartCount(){
-
-const cart =
-
-JSON.parse(
-localStorage.getItem(
-"cart"
-) || "[]"
-);
-
-const count =
-
-cart.reduce(
-
-(sum,item)=>
-
-sum +
-Number(item.qty || 0),
-
-0
-
-);
-
-const cartCount =
-document.getElementById(
-"cartCount"
-);
-
-if(cartCount){
-
-cartCount.textContent =
-count;
-
+function filterCategories(){const q=document.getElementById("categorySearch").value.trim().toLowerCase();renderCategories(!q?allCategories:allCategories.filter(c=>c.name.toLowerCase().includes(q)))}
+function renderCategories(rows){
+ const box=document.getElementById("categories");document.getElementById("categoryCount").textContent=rows.length.toLocaleString("th-TH")+" หมวด";
+ if(!rows.length){renderState("ไม่พบหมวดสินค้า",document.getElementById("categorySearch").value?"ลองเปลี่ยนคำค้นดูนะคะ":"ยังไม่มีหมวดสินค้า");return}
+ box.className="grid";box.innerHTML=rows.map(c=>{const url="category.html?name="+encodeURIComponent(c.name);return `<article class="category-card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)"><div><div class="category-icon">🏷️</div><h3>${esc(c.name)}</h3><p>${c.count.toLocaleString("th-TH")} รายการ</p></div><div class="category-arrow">›</div></article>`}).join("");
 }
-}
-  
+function renderState(t,m,retry){const b=document.getElementById("categories");b.className="state";b.innerHTML=`<div style="font-size:48px">${retry?"⚠️":"🏷️"}</div><h2>${esc(t)}</h2><p>${esc(m)}</p>${retry?'<button onclick="loadCategories()">ลองใหม่</button>':""}`}
+function cardKey(e,el){if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click()}}
+function updateCartCount(){let c=[];try{const x=JSON.parse(localStorage.getItem("cart")||"[]");c=Array.isArray(x)?x:[]}catch(e){}const n=c.reduce((s,i)=>s+Number(i.qty||0),0);document.getElementById("cartCount").textContent=n>99?"99+":String(n)}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
-
 <script src="menu.js"></script>
-  
 </body>
-
 </html>
