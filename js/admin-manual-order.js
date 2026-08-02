@@ -33,45 +33,72 @@ function renderManualOrderManager(){
   if(!root)return;
   root.innerHTML=`
   <style>
-  .mo-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin-bottom:16px}
-  .mo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .mo-full{grid-column:1/-1}.mo-products{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
-  .mo-product{border:1px solid #e5e7eb;border-radius:12px;padding:10px;cursor:pointer}.mo-product:hover{border-color:#7dcfff}
-  .mo-row{display:flex;justify-content:space-between;gap:10px;align-items:center}.mo-item{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin-top:8px}
-  .mo-total{font-size:26px;font-weight:800;color:#2563eb}.mo-gift{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:10px;margin-top:8px}
-  .mo-modal{position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:99999;padding:20px;overflow:auto}
+  .mo-shell{max-width:1180px;margin:0 auto}
+  .mo-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 8px 24px rgba(15,23,42,.05)}
+  .mo-card h3{margin:0 0 16px;font-size:18px;color:#0f172a;display:flex;align-items:center;gap:8px}
+  .mo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .mo-full{grid-column:1/-1}
+  .mo-products{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+  .mo-product{border:1px solid #e2e8f0;border-radius:16px;padding:12px;cursor:pointer;background:#fff;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;display:flex;gap:12px;align-items:flex-start;min-height:104px}
+  .mo-product:hover{border-color:#38bdf8;transform:translateY(-2px);box-shadow:0 10px 24px rgba(14,165,233,.12)}
+  .mo-product-thumb{width:76px;height:76px;border-radius:12px;object-fit:cover;background:#f1f5f9;flex:0 0 auto;border:1px solid #e2e8f0}
+  .mo-product-thumb-empty{display:grid;place-items:center;font-size:26px;color:#94a3b8}
+  .mo-product-body{min-width:0;flex:1}
+  .mo-product-name{font-weight:800;color:#0f172a;line-height:1.35;word-break:break-word}
+  .mo-product-price{font-weight:800;color:#2563eb;margin-top:7px}
+  .mo-product-meta{font-size:12px;color:#64748b;margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+  .mo-row{display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .mo-item{border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin-top:10px;background:#fff}
+  .mo-item-title{font-weight:800;color:#0f172a}
+  .mo-item-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .mo-badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid #dbeafe}
+  .mo-badge-green{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
+  .mo-badge-slate{background:#f8fafc;color:#475569;border-color:#e2e8f0}
+  .mo-cart-actions{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .mo-qty{min-width:34px;text-align:center;font-weight:800}
+  .mo-icon-btn{width:36px;height:36px;padding:0;display:grid;place-items:center;border-radius:10px}
+  .mo-danger{background:#ef4444}.mo-secondary{background:#64748b}.mo-success-btn{background:#10b981}
+  .mo-total-box{margin-top:16px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#eff6ff,#f8fbff);border:1px solid #bfdbfe}
+  .mo-total{font-size:28px;font-weight:900;color:#1d4ed8}
+  .mo-gift{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:16px;padding:14px;margin-top:10px}
+  .mo-modal{position:fixed;inset:0;background:rgba(15,23,42,.62);z-index:99999;padding:20px;overflow:auto;backdrop-filter:blur(3px)}
   .mo-modal.hidden{display:none}
-  .mo-modal-card{max-width:650px;margin:40px auto;background:white;border-radius:18px;padding:18px}
-  .mo-modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+  .mo-modal-card{max-width:720px;margin:36px auto;background:white;border-radius:22px;padding:22px;box-shadow:0 28px 70px rgba(15,23,42,.28)}
+  .mo-modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
   .mo-option-group{margin-bottom:16px}
   .mo-option-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-  .mo-option-choice{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid #dbeafe;border-radius:999px}
+  .mo-option-choice{display:flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid #dbeafe;border-radius:999px;background:#fff;cursor:pointer}
+  .mo-option-choice:has(input:checked){background:#eff6ff;border-color:#60a5fa;color:#1d4ed8}
   .mo-option-choice input{width:auto}
-  .mo-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
-  .mo-product-image{width:120px;height:120px;object-fit:cover;border-radius:14px;background:#f1f5f9}
-  .mo-empty{padding:14px;background:#f8fafc;border-radius:12px;color:#64748b}
-  .mo-gift-rule{margin-top:10px;padding-top:10px;border-top:1px solid #dcfce7}
-  .mo-gift-choice{display:flex;align-items:flex-start;gap:10px;margin-top:8px;padding:8px;border-radius:10px;background:#fff}
+  .mo-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+  .mo-product-image{width:140px;height:140px;object-fit:cover;border-radius:16px;background:#f1f5f9;border:1px solid #e2e8f0}
+  .mo-empty{padding:24px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px;color:#64748b;text-align:center;line-height:1.65}
+  .mo-empty-icon{font-size:34px;display:block;margin-bottom:6px}
+  .mo-selected-customer{padding:14px 16px;border-radius:16px;background:#ecfeff;border:1px solid #a5f3fc;color:#155e75;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .mo-selected-customer.hidden{display:none}
+  .mo-customer-result{padding:14px;margin-bottom:10px;border:1px solid #dbeafe;background:#eff6ff;border-radius:14px}
+  .mo-customer-result:hover{border-color:#60a5fa}
+  .mo-gift-rule{margin-top:12px;padding-top:12px;border-top:1px solid #dcfce7}
+  .mo-gift-choice{display:flex;align-items:flex-start;gap:10px;margin-top:8px;padding:10px;border-radius:12px;background:#fff;border:1px solid #dcfce7}
   .mo-gift-choice input{width:auto;margin-top:4px}
-  .mo-gift-character{margin-top:8px}
-  .mo-gift-character select{margin-top:5px}
-  .mo-gift-count{font-size:12px;color:#166534;font-weight:700}
-  .mo-preview-section{border-top:1px solid #e5e7eb;padding-top:12px;margin-top:12px}
-  .mo-preview-item{padding:10px 0;border-bottom:1px solid #f1f5f9}
-  .mo-preview-total{font-size:24px;font-weight:800;color:#2563eb}
+  .mo-gift-character{margin-top:8px}.mo-gift-character select{margin-top:5px}
+  .mo-gift-count{font-size:12px;color:#166534;font-weight:800;background:#dcfce7;border-radius:999px;padding:4px 8px}
+  .mo-preview-section{border-top:1px solid #e5e7eb;padding-top:16px;margin-top:16px}
+  .mo-preview-section h4{margin:0 0 12px;color:#0f172a}
+  .mo-preview-item{padding:12px 0;border-bottom:1px solid #f1f5f9}
+  .mo-preview-total{font-size:26px;font-weight:900;color:#2563eb}
   .mo-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .mo-preview-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .mo-preview-panel{padding:14px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;line-height:1.65}
+  .mo-preview-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;flex-wrap:wrap}
   .mo-notice{padding:12px 14px;border-radius:12px;margin:12px 0;line-height:1.55}
-  .mo-notice.hidden{display:none}
-  .mo-error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
-  .mo-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
-  .mo-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
-  .mo-slip-preview{margin-top:10px;padding:12px;border:1px solid #dbeafe;border-radius:12px;background:#f8fafc}
-  .mo-slip-preview img{display:block;max-width:220px;max-height:220px;object-fit:contain;border-radius:10px;margin-top:8px;background:#fff}
-  .mo-button-loading{opacity:.7;cursor:not-allowed}
-  button:disabled{opacity:.6;cursor:not-allowed}
-  @media(max-width:800px){.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}.mo-preview-grid{grid-template-columns:1fr}.mo-modal{padding:10px}.mo-modal-card{margin:10px auto}.mo-preview-actions button{width:100%}}
+  .mo-notice.hidden{display:none}.mo-error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}.mo-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}.mo-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+  .mo-slip-preview{margin-top:10px;padding:12px;border:1px solid #dbeafe;border-radius:12px;background:#f8fafc}.mo-slip-preview img{display:block;max-width:220px;max-height:220px;object-fit:contain;border-radius:10px;margin-top:8px;background:#fff}
+  .mo-button-loading{opacity:.7;cursor:not-allowed}button:disabled{opacity:.6;cursor:not-allowed}
+  .mo-submit-wrap{position:sticky;bottom:12px;z-index:20;padding:12px;border-radius:18px;background:rgba(248,251,255,.92);backdrop-filter:blur(8px);border:1px solid #dbeafe;box-shadow:0 12px 30px rgba(15,23,42,.12)}
+  .mo-submit-wrap button{width:100%;font-size:16px;padding:14px}
+  @media(max-width:800px){.mo-shell{max-width:none}.mo-card{padding:16px;border-radius:16px}.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}.mo-preview-grid{grid-template-columns:1fr}.mo-modal{padding:8px}.mo-modal-card{margin:8px auto;padding:16px}.mo-preview-actions button,.mo-modal-actions button{width:100%}.mo-row{align-items:flex-start}.mo-product{min-height:unset}.mo-selected-customer{align-items:flex-start;flex-direction:column}.mo-submit-wrap{bottom:6px}}
   </style>
+  <div class="mo-shell">
   <div class="mo-card">
 
 <h3>
@@ -98,6 +125,7 @@ placeholder="อีเมล / แอค X / เบอร์โทร"
 >
 
 <button
+id="mo_customer_search_btn"
 type="button"
 style="
 width:auto;
@@ -117,6 +145,8 @@ id="mo_customer_result"
 class="mo-full"
 ></div>
 
+<div id="mo_selected_customer" class="mo-selected-customer hidden mo-full"></div>
+
 <label>
 แอค X
 
@@ -132,6 +162,7 @@ placeholder="@username"
 <input
 id="mo_email"
 type="email"
+oninput="syncManualSelectedCustomer()"
 >
 </label>
 
@@ -159,8 +190,8 @@ id="mo_name"
   <label>ประเภท<select id="mo_type" onchange="filterManualProducts()"><option value="preorder">พรีออเดอร์</option><option value="instock">พร้อมส่ง</option></select></label>
   <label>Collection<select id="mo_collection" onchange="filterManualProducts()"><option value="">ทั้งหมด</option></select></label>
   <label class="mo-full">ค้นหา<input id="mo_search" oninput="filterManualProducts()"></label>
-  </div><div id="mo_products" class="mo-products" style="margin-top:12px">กำลังโหลด...</div></div>
-  <div class="mo-card"><h3>📦 รายการในออเดอร์</h3><div id="mo_cart"></div><div class="mo-row" style="margin-top:14px"><b>ยอดรวม</b><div id="mo_total" class="mo-total">฿0</div></div></div>
+  </div><div id="mo_products" class="mo-products" style="margin-top:14px"><div class="mo-empty"><span class="mo-empty-icon">⏳</span>กำลังโหลดสินค้า...</div></div></div>
+  <div class="mo-card"><h3>📦 รายการในออเดอร์</h3><div id="mo_cart"></div><div class="mo-total-box mo-row"><b>ยอดรวมออเดอร์</b><div id="mo_total" class="mo-total">฿0</div></div></div>
   <div class="mo-card"><h3>🎁 ของแถม</h3><div id="mo_gifts">ระบบจะคำนวณหลังเพิ่มสินค้า</div></div>
   <div class="mo-card"><h3>📍 ที่อยู่</h3><div class="mo-grid">
   <label class="mo-full">ที่อยู่<textarea id="mo_address" rows="3"></textarea></label>
@@ -175,7 +206,7 @@ id="mo_name"
   <label class="mo-full">หมายเหตุ<textarea id="mo_note" rows="2"></textarea></label>
   </div></div>
   <div id="mo_message" class="mo-notice hidden" role="alert"></div>
-  <button type="button" id="mo_submit" onclick="openManualOrderPreview()">🔎 ตรวจสอบออเดอร์</button>
+  <div class="mo-submit-wrap"><button type="button" id="mo_submit" onclick="openManualOrderPreview()">🔎 ตรวจสอบออเดอร์ก่อนบันทึก</button></div>
 
   <div
   id="mo_product_modal"
@@ -548,15 +579,7 @@ color:#64748b;
 
             return `
 
-<div
-style="
-padding:14px;
-margin-bottom:10px;
-border:1px solid #dbeafe;
-background:#eff6ff;
-border-radius:12px;
-"
->
+<div class="mo-customer-result">
 
 <div
 style="
@@ -763,6 +786,17 @@ function useManualCustomer(
     customer.postcode || ""
   );
 
+  renderManualSelectedCustomer();
+
+  const resultBox =
+    document.getElementById(
+      "mo_customer_result"
+    );
+
+  if(resultBox){
+    resultBox.innerHTML = "";
+  }
+
 }
 
 
@@ -782,6 +816,107 @@ function setManualField(
     element.value =
       value || "";
 
+  }
+
+}
+
+
+function renderManualSelectedCustomer(){
+
+  const box =
+    document.getElementById(
+      "mo_selected_customer"
+    );
+
+  if(!box){
+    return;
+  }
+
+  const customer =
+    ManualOrder.selectedCustomer;
+
+  if(!customer){
+    box.innerHTML = "";
+    box.classList.add("hidden");
+    return;
+  }
+
+  box.innerHTML = `
+
+<div>
+  <div style="font-weight:900;">✓ กำลังใช้ข้อมูลลูกค้าเดิม</div>
+  <div style="margin-top:4px;">
+    ${moEsc(customer.customer_name || customer.receiver || customer.email || "-")}
+  </div>
+  <div style="font-size:13px;margin-top:2px;opacity:.85;">
+    ${moEsc(customer.email || "")}
+  </div>
+</div>
+
+<button
+type="button"
+class="mo-secondary"
+style="width:auto;white-space:nowrap;"
+onclick="clearManualSelectedCustomer()"
+>
+เปลี่ยนลูกค้า
+</button>
+
+`;
+
+  box.classList.remove("hidden");
+
+}
+
+function clearManualSelectedCustomer(){
+
+  ManualOrder.selectedCustomer = null;
+  renderManualSelectedCustomer();
+
+  const resultBox =
+    document.getElementById(
+      "mo_customer_result"
+    );
+
+  if(resultBox){
+    resultBox.innerHTML = "";
+  }
+
+  const searchInput =
+    document.getElementById(
+      "mo_customer_search"
+    );
+
+  if(searchInput){
+    searchInput.focus();
+  }
+
+}
+
+function syncManualSelectedCustomer(){
+
+  const customer =
+    ManualOrder.selectedCustomer;
+
+  if(!customer){
+    return;
+  }
+
+  const currentEmail =
+    moVal("mo_email")
+      .toLowerCase();
+
+  const selectedEmail =
+    String(customer.email || "")
+      .trim()
+      .toLowerCase();
+
+  if(
+    selectedEmail &&
+    currentEmail !== selectedEmail
+  ){
+    ManualOrder.selectedCustomer = null;
+    renderManualSelectedCustomer();
   }
 
 }
@@ -879,39 +1014,32 @@ function filterManualProducts(){
 
 <div
 class="mo-product"
-onclick="
-openManualProductModal(
-'${moEsc(
-  product.product_id
-)}'
-)
-"
+onclick="openManualProductModal('${moEsc(product.product_id)}')"
 >
 
-<b>
-${moEsc(
-  product.name
-)}
-</b>
+${
+  product.image
+    ? `<img class="mo-product-thumb" src="${moEsc(product.image)}" alt="">`
+    : `<div class="mo-product-thumb mo-product-thumb-empty">🛍️</div>`
+}
 
-<div>
-฿${moPrice(
-  product
-).toLocaleString()}
+<div class="mo-product-body">
+  <div class="mo-product-name">${moEsc(product.name)}</div>
+  <div class="mo-product-price">฿${moPrice(product).toLocaleString("th-TH")}</div>
+  <div class="mo-product-meta">
+    ${product.fandom ? `<span class="mo-badge mo-badge-slate">${moEsc(product.fandom)}</span>` : ""}
+    <span class="mo-badge ${String(product.product_type || "preorder").toLowerCase() === "instock" ? "mo-badge-green" : ""}">
+      ${String(product.product_type || "preorder").toLowerCase() === "instock" ? "พร้อมส่ง" : "พรีออเดอร์"}
+    </span>
+  </div>
 </div>
-
-<small>
-${moEsc(
-  product.fandom || ""
-)}
-</small>
 
 </div>
 
 `
         ).join("")
 
-      : "ไม่พบสินค้า";
+      : `<div class="mo-empty" style="grid-column:1/-1;"><span class="mo-empty-icon">🔎</span>ไม่พบสินค้าที่ตรงกับตัวกรอง</div>`;
 
 }
 
@@ -1530,10 +1658,101 @@ function handleManualProductModalBackdrop(
 
 }
 function renderManualCart(){
-  const box=document.getElementById('mo_cart');
-  box.innerHTML=ManualOrder.cart.length?ManualOrder.cart.map((x,i)=>`<div class="mo-item"><div class="mo-row"><div><b>${moEsc(x.name)}</b><div>${moEsc(Object.values(x.selected_options||{}).join(', '))}</div></div><b>฿${(x.price*x.qty+x.crate_fee).toLocaleString()}</b></div><div style="margin-top:8px"><button onclick="moQty(${i},-1)">−</button> ${x.qty} <button onclick="moQty(${i},1)">+</button> <button onclick="moRemove(${i})" style="background:#ef4444">ลบ</button></div></div>`).join(''):'ยังไม่มีสินค้า';
-  document.getElementById('mo_total').textContent='฿'+moSubtotal().toLocaleString();
+
+  const box =
+    document.getElementById(
+      "mo_cart"
+    );
+
+  if(!box){
+    return;
+  }
+
+  if(!ManualOrder.cart.length){
+
+    box.innerHTML = `
+      <div class="mo-empty">
+        <span class="mo-empty-icon">📦</span>
+        ยังไม่มีสินค้าในออเดอร์<br>
+        เลือกสินค้าจากส่วนด้านบนเพื่อเริ่มสร้างออเดอร์
+      </div>
+    `;
+
+  }else{
+
+    box.innerHTML =
+      ManualOrder.cart
+        .map((item,index)=>{
+
+          const optionBadges =
+            Object.entries(
+              item.selected_options || {}
+            )
+              .map(([key,value])=>`
+                <span class="mo-badge">
+                  ${moEsc(key)}: ${moEsc(Array.isArray(value) ? value.join(", ") : value)}
+                </span>
+              `)
+              .join("");
+
+          const lineTotal =
+            Number(item.price || 0) *
+            Number(item.qty || 0) +
+            Number(item.crate_fee || 0);
+
+          return `
+
+<div class="mo-item">
+  <div class="mo-row">
+    <div style="min-width:0;">
+      <div class="mo-item-title">${moEsc(item.name)}</div>
+      <div class="mo-item-meta">
+        ${optionBadges}
+        <span class="mo-badge mo-badge-slate">จำนวน ${Number(item.qty || 0)}</span>
+        ${String(item.crate_selected || "").toLowerCase() === "yes"
+          ? `<span class="mo-badge mo-badge-green">📦 ตีลัง +฿${Number(item.crate_fee || 0).toLocaleString("th-TH")}</span>`
+          : ""}
+      </div>
+      <div style="font-size:13px;color:#64748b;margin-top:8px;">
+        ฿${Number(item.price || 0).toLocaleString("th-TH")} ต่อชิ้น
+      </div>
+    </div>
+    <div style="font-weight:900;color:#1d4ed8;white-space:nowrap;">
+      ฿${lineTotal.toLocaleString("th-TH")}
+    </div>
+  </div>
+
+  <div class="mo-cart-actions">
+    <button type="button" class="mo-icon-btn mo-secondary" onclick="moQty(${index},-1)">−</button>
+    <span class="mo-qty">${Number(item.qty || 0)}</span>
+    <button type="button" class="mo-icon-btn" onclick="moQty(${index},1)">＋</button>
+    <button type="button" class="mo-danger" style="margin-left:auto;" onclick="moRemove(${index})">ลบสินค้า</button>
+  </div>
+</div>
+
+`;
+
+        })
+        .join("");
+
+  }
+
+  const totalBox =
+    document.getElementById(
+      "mo_total"
+    );
+
+  if(totalBox){
+    totalBox.textContent =
+      "฿" +
+      moSubtotal().toLocaleString(
+        "th-TH",
+        {maximumFractionDigits:2}
+      );
+  }
+
 }
+
 function moQty(i,d){ManualOrder.cart[i].qty=Math.max(1,ManualOrder.cart[i].qty+d);renderManualCart();renderManualGifts()}
 function moRemove(i){ManualOrder.cart.splice(i,1);ManualOrder.gifts=[];renderManualCart();renderManualGifts()}
 function moSubtotal(){return ManualOrder.cart.reduce((s,x)=>s+x.price*x.qty+Number(x.crate_fee||0),0)}
@@ -1722,8 +1941,12 @@ function renderManualGifts(){
 
   if(!ManualOrder.cart.length){
 
-    box.innerHTML =
-      "ระบบจะคำนวณหลังเพิ่มสินค้า";
+    box.innerHTML = `
+      <div class="mo-empty">
+        <span class="mo-empty-icon">🎁</span>
+        ระบบจะคำนวณสิทธิ์ของแถมหลังเพิ่มสินค้า
+      </div>
+    `;
 
     ManualOrder.gifts = [];
 
@@ -1735,8 +1958,12 @@ function renderManualGifts(){
 
   if(!eligible.length){
 
-    box.innerHTML =
-      "ยังไม่มีของแถมที่ผ่านเงื่อนไข";
+    box.innerHTML = `
+      <div class="mo-empty">
+        <span class="mo-empty-icon">🎁</span>
+        ยังไม่มีของแถมที่ผ่านเงื่อนไขของออเดอร์นี้
+      </div>
+    `;
 
     ManualOrder.gifts = [];
 
@@ -2693,9 +2920,9 @@ ${moEsc(
 
 <div class="mo-preview-grid">
 
-  <div>
+  <div class="mo-preview-panel">
 
-    <b>ลูกค้า</b>
+    <b>👤 ลูกค้า</b>
 
     <div>
       ${moEsc(
@@ -2731,9 +2958,9 @@ ${moEsc(
 
   </div>
 
-  <div>
+  <div class="mo-preview-panel">
 
-    <b>การชำระเงิน</b>
+    <b>💳 การชำระเงิน</b>
 
     <div>
       ${moEsc(
