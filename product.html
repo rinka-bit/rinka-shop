@@ -661,6 +661,199 @@ button:disabled{
 
 }
 
+
+.gallery{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:flex;
+  flex-direction:column;
+  background:rgba(5,10,18,.97);
+  color:#fff;
+  overscroll-behavior:contain;
+}
+
+.gallery.hidden{
+  display:none;
+}
+
+.gallery-top{
+  position:absolute;
+  top:14px;
+  left:14px;
+  right:14px;
+  z-index:4;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  pointer-events:none;
+}
+
+.gallery-count{
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(255,255,255,.13);
+  font-size:13px;
+  font-weight:700;
+  backdrop-filter:blur(8px);
+}
+
+.gallery-close{
+  width:46px;
+  height:46px;
+  border:none;
+  border-radius:999px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+  font-size:23px;
+  pointer-events:auto;
+  backdrop-filter:blur(8px);
+}
+
+.gallery-stage{
+  position:relative;
+  flex:1;
+  min-height:0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  touch-action:none;
+  user-select:none;
+}
+
+.gallery-image-wrap{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform-origin:center center;
+  will-change:transform;
+}
+
+#galleryImage{
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  display:block;
+  object-fit:contain;
+  pointer-events:none;
+  -webkit-user-drag:none;
+  user-select:none;
+}
+
+.gallery-prev,
+.gallery-next{
+  position:absolute;
+  top:50%;
+  z-index:3;
+  width:50px;
+  height:50px;
+  border:none;
+  border-radius:999px;
+  transform:translateY(-50%);
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:25px;
+  backdrop-filter:blur(8px);
+}
+
+.gallery-prev{
+  left:15px;
+}
+
+.gallery-next{
+  right:15px;
+}
+
+.gallery-prev:disabled,
+.gallery-next:disabled{
+  display:none;
+}
+
+.gallery-hint{
+  position:absolute;
+  left:50%;
+  bottom:92px;
+  z-index:2;
+  transform:translateX(-50%);
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.45);
+  color:rgba(255,255,255,.88);
+  font-size:11px;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+.gallery-thumbs{
+  flex:0 0 auto;
+  display:flex;
+  justify-content:flex-start;
+  gap:9px;
+  width:100%;
+  padding:11px 14px max(14px,env(safe-area-inset-bottom));
+  overflow-x:auto;
+  background:rgba(0,0,0,.28);
+  scrollbar-width:thin;
+}
+
+.gallery-thumb{
+  flex:0 0 68px;
+  width:68px;
+  height:68px;
+  padding:0;
+  border:2px solid transparent;
+  border-radius:11px;
+  overflow:hidden;
+  background:#15202d;
+  opacity:.58;
+}
+
+.gallery-thumb.active{
+  border-color:#7dcfff;
+  opacity:1;
+}
+
+.gallery-thumb img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+@media(max-width:700px){
+
+  .gallery-prev,
+  .gallery-next{
+    width:42px;
+    height:42px;
+    font-size:21px;
+  }
+
+  .gallery-prev{
+    left:8px;
+  }
+
+  .gallery-next{
+    right:8px;
+  }
+
+  .gallery-hint{
+    bottom:84px;
+  }
+
+  .gallery-thumb{
+    flex-basis:58px;
+    width:58px;
+    height:58px;
+  }
+
+}
+
 </style>
 
 </head>
@@ -730,6 +923,17 @@ const productId =
 window.optionQty = {};
 window.currentProduct = null;
 window.productActionLoading = false;
+
+let galleryImages = [];
+let galleryIndex = 0;
+let galleryScale = 1;
+let galleryTranslateX = 0;
+let galleryTranslateY = 0;
+let galleryPointerStartX = 0;
+let galleryPointerStartY = 0;
+let galleryLastTapTime = 0;
+let galleryTouchDistance = 0;
+let galleryTouchStartScale = 1;
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -927,6 +1131,11 @@ function renderProduct(product){
           product.image3,
           product.image4
         ].filter(Boolean);
+
+  galleryImages =
+    [...images];
+
+  galleryIndex = 0;
 
   const mainImage =
     images[0] || "";
@@ -1229,6 +1438,8 @@ flex-shrink:0;
 
 <img
 id="mainImage"
+onclick="openGallery()"
+style="cursor:zoom-in;"
 src="${escapeProductAttribute(mainImage)}"
 alt="${escapeProductAttribute(product.name || "")}">
 
@@ -1518,6 +1729,12 @@ function changeMainProductImage(
       );
 
     });
+
+  galleryIndex =
+    Math.max(
+      0,
+      Number(index) || 0
+    );
 
 }
 
@@ -2338,7 +2555,873 @@ function goProductBack(){
 
 }
 
+function openGallery(){
+
+  if(!galleryImages.length){
+    return;
+  }
+
+  const mainImage =
+    document.getElementById(
+      "mainImage"
+    );
+
+  if(mainImage){
+
+    const currentSrc =
+      String(
+        mainImage.src || ""
+      );
+
+    const matchedIndex =
+      galleryImages.findIndex(
+        image=>
+          currentSrc ===
+          new URL(
+            image,
+            window.location.href
+          ).href
+      );
+
+    if(matchedIndex >= 0){
+
+      galleryIndex =
+        matchedIndex;
+
+    }
+
+  }
+
+  resetGalleryZoom();
+  renderGallery();
+
+  document
+    .getElementById(
+      "galleryModal"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+  document.body.style.overflow =
+    "hidden";
+
+  bindGalleryGestures();
+
+}
+
+
+function closeGallery(){
+
+  const modal =
+    document.getElementById(
+      "galleryModal"
+    );
+
+  if(modal){
+
+    modal.classList.add(
+      "hidden"
+    );
+
+  }
+
+  document.body.style.overflow =
+    "";
+
+  resetGalleryZoom();
+
+}
+
+
+function renderGallery(){
+
+  if(!galleryImages.length){
+    closeGallery();
+    return;
+  }
+
+  galleryIndex =
+    (
+      galleryIndex +
+      galleryImages.length
+    ) %
+    galleryImages.length;
+
+  const image =
+    document.getElementById(
+      "galleryImage"
+    );
+
+  const count =
+    document.getElementById(
+      "galleryCount"
+    );
+
+  const thumbs =
+    document.getElementById(
+      "galleryThumbs"
+    );
+
+  const previousButton =
+    document.getElementById(
+      "galleryPrevButton"
+    );
+
+  const nextButton =
+    document.getElementById(
+      "galleryNextButton"
+    );
+
+  if(image){
+
+    image.src =
+      galleryImages[
+        galleryIndex
+      ];
+
+    image.alt =
+      (
+        window.currentProduct?.name ||
+        "รูปสินค้า"
+      ) +
+      " รูปที่ " +
+      (
+        galleryIndex + 1
+      );
+
+  }
+
+  if(count){
+
+    count.textContent =
+      (
+        galleryIndex + 1
+      ) +
+      " / " +
+      galleryImages.length;
+
+  }
+
+  if(previousButton){
+
+    previousButton.disabled =
+      galleryImages.length <= 1;
+
+  }
+
+  if(nextButton){
+
+    nextButton.disabled =
+      galleryImages.length <= 1;
+
+  }
+
+  if(thumbs){
+
+    thumbs.innerHTML =
+      galleryImages
+        .map(
+          (src,index)=>`
+
+<button
+type="button"
+class="gallery-thumb ${
+  index === galleryIndex
+    ? "active"
+    : ""
+}"
+onclick="selectGalleryImage(${index})"
+aria-label="ดูรูปที่ ${index + 1}">
+
+<img
+src="${escapeProductAttribute(src)}"
+alt="รูปย่อที่ ${index + 1}"
+draggable="false">
+
+</button>
+
+`
+        )
+        .join("");
+
+    const activeThumb =
+      thumbs.querySelector(
+        ".gallery-thumb.active"
+      );
+
+    activeThumb?.scrollIntoView({
+      behavior:"smooth",
+      block:"nearest",
+      inline:"center"
+    });
+
+  }
+
+  applyGalleryTransform();
+
+}
+
+
+function selectGalleryImage(
+  index
+){
+
+  galleryIndex =
+    Number(index) || 0;
+
+  resetGalleryZoom();
+  renderGallery();
+
+  changeMainProductImage(
+    galleryImages[
+      galleryIndex
+    ],
+    galleryIndex
+  );
+
+}
+
+
+function galleryPrev(){
+
+  if(
+    galleryImages.length <= 1
+  ){
+    return;
+  }
+
+  galleryIndex =
+    (
+      galleryIndex -
+      1 +
+      galleryImages.length
+    ) %
+    galleryImages.length;
+
+  resetGalleryZoom();
+  renderGallery();
+
+  changeMainProductImage(
+    galleryImages[
+      galleryIndex
+    ],
+    galleryIndex
+  );
+
+}
+
+
+function galleryNext(){
+
+  if(
+    galleryImages.length <= 1
+  ){
+    return;
+  }
+
+  galleryIndex =
+    (
+      galleryIndex +
+      1
+    ) %
+    galleryImages.length;
+
+  resetGalleryZoom();
+  renderGallery();
+
+  changeMainProductImage(
+    galleryImages[
+      galleryIndex
+    ],
+    galleryIndex
+  );
+
+}
+
+
+function resetGalleryZoom(){
+
+  galleryScale = 1;
+  galleryTranslateX = 0;
+  galleryTranslateY = 0;
+  galleryTouchDistance = 0;
+  galleryTouchStartScale = 1;
+
+  applyGalleryTransform();
+
+}
+
+
+function applyGalleryTransform(){
+
+  const wrap =
+    document.getElementById(
+      "galleryImageWrap"
+    );
+
+  if(!wrap){
+    return;
+  }
+
+  if(galleryScale <= 1){
+
+    galleryTranslateX = 0;
+    galleryTranslateY = 0;
+
+  }
+
+  wrap.style.transform =
+    `translate3d(${galleryTranslateX}px,${galleryTranslateY}px,0) scale(${galleryScale})`;
+
+}
+
+
+function bindGalleryGestures(){
+
+  const stage =
+    document.getElementById(
+      "galleryStage"
+    );
+
+  if(
+    !stage ||
+    stage.dataset.galleryBound ===
+    "true"
+  ){
+    return;
+  }
+
+  stage.dataset.galleryBound =
+    "true";
+
+  stage.addEventListener(
+    "touchstart",
+    handleGalleryTouchStart,
+    {
+      passive:false
+    }
+  );
+
+  stage.addEventListener(
+    "touchmove",
+    handleGalleryTouchMove,
+    {
+      passive:false
+    }
+  );
+
+  stage.addEventListener(
+    "touchend",
+    handleGalleryTouchEnd,
+    {
+      passive:false
+    }
+  );
+
+  stage.addEventListener(
+    "mousedown",
+    handleGalleryMouseDown
+  );
+
+  stage.addEventListener(
+    "wheel",
+    handleGalleryWheel,
+    {
+      passive:false
+    }
+  );
+
+  stage.addEventListener(
+    "dblclick",
+    toggleGalleryZoom
+  );
+
+}
+
+
+function handleGalleryTouchStart(
+  event
+){
+
+  if(
+    event.touches.length === 2
+  ){
+
+    event.preventDefault();
+
+    galleryTouchDistance =
+      getGalleryTouchDistance(
+        event.touches
+      );
+
+    galleryTouchStartScale =
+      galleryScale;
+
+    return;
+
+  }
+
+  if(
+    event.touches.length !== 1
+  ){
+    return;
+  }
+
+  galleryPointerStartX =
+    event.touches[0].clientX;
+
+  galleryPointerStartY =
+    event.touches[0].clientY;
+
+  const now =
+    Date.now();
+
+  if(
+    now -
+    galleryLastTapTime <
+    300
+  ){
+
+    event.preventDefault();
+    toggleGalleryZoom();
+    galleryLastTapTime = 0;
+
+  }else{
+
+    galleryLastTapTime =
+      now;
+
+  }
+
+}
+
+
+function handleGalleryTouchMove(
+  event
+){
+
+  if(
+    event.touches.length === 2
+  ){
+
+    event.preventDefault();
+
+    const distance =
+      getGalleryTouchDistance(
+        event.touches
+      );
+
+    if(
+      galleryTouchDistance > 0
+    ){
+
+      galleryScale =
+        clampGalleryScale(
+          galleryTouchStartScale *
+          (
+            distance /
+            galleryTouchDistance
+          )
+        );
+
+      applyGalleryTransform();
+
+    }
+
+    return;
+
+  }
+
+  if(
+    event.touches.length !== 1
+  ){
+    return;
+  }
+
+  const currentX =
+    event.touches[0].clientX;
+
+  const currentY =
+    event.touches[0].clientY;
+
+  const deltaX =
+    currentX -
+    galleryPointerStartX;
+
+  const deltaY =
+    currentY -
+    galleryPointerStartY;
+
+  if(
+    galleryScale > 1
+  ){
+
+    event.preventDefault();
+
+    galleryTranslateX +=
+      deltaX;
+
+    galleryTranslateY +=
+      deltaY;
+
+    applyGalleryTransform();
+
+    galleryPointerStartX =
+      currentX;
+
+    galleryPointerStartY =
+      currentY;
+
+  }
+
+}
+
+
+function handleGalleryTouchEnd(
+  event
+){
+
+  if(
+    galleryScale > 1
+  ){
+    return;
+  }
+
+  const touch =
+    event.changedTouches &&
+    event.changedTouches[0];
+
+  if(!touch){
+    return;
+  }
+
+  const deltaX =
+    touch.clientX -
+    galleryPointerStartX;
+
+  const deltaY =
+    touch.clientY -
+    galleryPointerStartY;
+
+  if(
+    Math.abs(deltaX) > 55 &&
+    Math.abs(deltaX) >
+    Math.abs(deltaY)
+  ){
+
+    if(deltaX < 0){
+
+      galleryNext();
+
+    }else{
+
+      galleryPrev();
+
+    }
+
+  }
+
+}
+
+
+function handleGalleryMouseDown(
+  event
+){
+
+  if(
+    event.button !== 0
+  ){
+    return;
+  }
+
+  galleryPointerStartX =
+    event.clientX;
+
+  galleryPointerStartY =
+    event.clientY;
+
+  const startTranslateX =
+    galleryTranslateX;
+
+  const startTranslateY =
+    galleryTranslateY;
+
+  function move(
+    moveEvent
+  ){
+
+    if(
+      galleryScale <= 1
+    ){
+      return;
+    }
+
+    galleryTranslateX =
+      startTranslateX +
+      (
+        moveEvent.clientX -
+        galleryPointerStartX
+      );
+
+    galleryTranslateY =
+      startTranslateY +
+      (
+        moveEvent.clientY -
+        galleryPointerStartY
+      );
+
+    applyGalleryTransform();
+
+  }
+
+  function up(
+    upEvent
+  ){
+
+    document.removeEventListener(
+      "mousemove",
+      move
+    );
+
+    document.removeEventListener(
+      "mouseup",
+      up
+    );
+
+    if(
+      galleryScale <= 1
+    ){
+
+      const deltaX =
+        upEvent.clientX -
+        galleryPointerStartX;
+
+      const deltaY =
+        upEvent.clientY -
+        galleryPointerStartY;
+
+      if(
+        Math.abs(deltaX) > 70 &&
+        Math.abs(deltaX) >
+        Math.abs(deltaY)
+      ){
+
+        if(deltaX < 0){
+
+          galleryNext();
+
+        }else{
+
+          galleryPrev();
+
+        }
+
+      }
+
+    }
+
+  }
+
+  document.addEventListener(
+    "mousemove",
+    move
+  );
+
+  document.addEventListener(
+    "mouseup",
+    up
+  );
+
+}
+
+
+function handleGalleryWheel(
+  event
+){
+
+  event.preventDefault();
+
+  const direction =
+    event.deltaY < 0
+      ? .2
+      : -.2;
+
+  galleryScale =
+    clampGalleryScale(
+      galleryScale +
+      direction
+    );
+
+  applyGalleryTransform();
+
+}
+
+
+function toggleGalleryZoom(){
+
+  if(galleryScale > 1){
+
+    resetGalleryZoom();
+
+  }else{
+
+    galleryScale = 2;
+    applyGalleryTransform();
+
+  }
+
+}
+
+
+function getGalleryTouchDistance(
+  touches
+){
+
+  const deltaX =
+    touches[0].clientX -
+    touches[1].clientX;
+
+  const deltaY =
+    touches[0].clientY -
+    touches[1].clientY;
+
+  return Math.hypot(
+    deltaX,
+    deltaY
+  );
+
+}
+
+
+function clampGalleryScale(
+  value
+){
+
+  return Math.min(
+    4,
+    Math.max(
+      1,
+      Number(value) || 1
+    )
+  );
+
+}
+
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    const modal =
+      document.getElementById(
+        "galleryModal"
+      );
+
+    if(
+      !modal ||
+      modal.classList.contains(
+        "hidden"
+      )
+    ){
+      return;
+    }
+
+    if(event.key === "Escape"){
+
+      closeGallery();
+
+    }else if(
+      event.key === "ArrowLeft"
+    ){
+
+      galleryPrev();
+
+    }else if(
+      event.key === "ArrowRight"
+    ){
+
+      galleryNext();
+
+    }
+
+  }
+);
+
+
 </script>
+
+<div
+id="galleryModal"
+class="gallery hidden"
+role="dialog"
+aria-modal="true"
+aria-label="แกลเลอรีรูปสินค้า">
+
+<div class="gallery-top">
+
+<div
+id="galleryCount"
+class="gallery-count">
+1 / 1
+</div>
+
+<button
+type="button"
+class="gallery-close"
+onclick="closeGallery()"
+aria-label="ปิดแกลเลอรี">
+✕
+</button>
+
+</div>
+
+<div
+id="galleryStage"
+class="gallery-stage">
+
+<button
+id="galleryPrevButton"
+type="button"
+class="gallery-prev"
+onclick="galleryPrev()"
+aria-label="รูปก่อนหน้า">
+❮
+</button>
+
+<div
+id="galleryImageWrap"
+class="gallery-image-wrap">
+
+<img
+id="galleryImage"
+draggable="false"
+alt="รูปสินค้าแบบขยาย">
+
+</div>
+
+<button
+id="galleryNextButton"
+type="button"
+class="gallery-next"
+onclick="galleryNext()"
+aria-label="รูปถัดไป">
+❯
+</button>
+
+<div class="gallery-hint">
+ปัดเพื่อเปลี่ยนรูป • แตะสองครั้งหรือจีบเพื่อซูม
+</div>
+
+</div>
+
+<div
+id="galleryThumbs"
+class="gallery-thumbs"
+aria-label="รูปย่อสินค้า">
+</div>
+
+</div>
 
 </body>
 
