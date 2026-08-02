@@ -397,6 +397,13 @@ onclick="showAdminTab('manual_order')">
 🧾 สร้างออเดอร์
 </button>
 
+<button
+class="nav-btn"
+id="nav_legacy_orders"
+onclick="showAdminTab('legacy_orders')">
+📚 นำเข้าออเดอร์เก่า
+</button>
+
 
 <hr>
 
@@ -503,6 +510,11 @@ class="hidden">
 <section id="tab_manual_order" class="hidden">
   <h1 class="section-title">🧾 สร้างออเดอร์ให้ลูกค้า</h1>
   <div id="manualOrderManager">กำลังโหลด...</div>
+</section>
+
+<section id="tab_legacy_orders" class="hidden">
+  <h1 class="section-title">📚 นำเข้าออเดอร์ลูกค้าเก่า</h1>
+  <div id="legacyOrderManager">กำลังโหลด...</div>
 </section>
 
 </main>
@@ -736,7 +748,7 @@ style="display:none;"
 
 <script src="js/admin-utils.js"></script>
 
-<script src="js/admin-dashboard.js?v=20260802-2"></script>
+<script src="js/admin-dashboard.js"></script>
 
 <script src="js/admin-products.js"></script>
 <script src="js/admin-collections.js"></script>
@@ -746,8 +758,9 @@ style="display:none;"
 <script src="js/admin-orders.js"></script>
 <script src="js/admin-address.js"></script>
 
-<script src="./js/admin-manual-order.js?v=20260802-3"></script>
+<script src="./js/admin-manual-order.js?v=20260802-1"></script>
 <script src="./js/admin.js?v=20260801-1"></script>
+<script src="./js/admin-legacy-orders.js?v=20260802-1"></script>
 
 </body>
 </html>
