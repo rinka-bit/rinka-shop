@@ -1,310 +1,76 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>
-ศูนย์ช่วยเหลือ | Rinka Shop
-</title>
-
+<title>ศูนย์ช่วยเหลือ | Rinka Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-
-body{
-font-family:Arial,sans-serif;
-background:#f8fbff;
-max-width:850px;
-margin:auto;
-padding:20px;
-color:#334155;
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
-
-.topbar a,
-.topbar button{
-width:44px;
-height:44px;
-border:none;
-border-radius:999px;
-background:white;
-display:flex;
-align-items:center;
-justify-content:center;
-text-decoration:none;
-font-size:20px;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-cursor:pointer;
-}
-
-.card{
-background:white;
-border-radius:18px;
-padding:20px;
-margin-bottom:16px;
-box-shadow:0 2px 10px rgba(0,0,0,.05);
-border:1px solid #e5eefc;
-}
-
-h1{
-color:#2563eb;
-}
-
-h2{
-font-size:20px;
-margin-bottom:10px;
-color:#1e40af;
-}
-
-p,
-li{
-line-height:1.8;
-}
-
-.badge{
-display:inline-block;
-padding:5px 10px;
-border-radius:999px;
-background:#dbeafe;
-color:#1e40af;
-font-size:13px;
-font-weight:700;
-margin-bottom:8px;
-}
-
-.warning{
-background:#fff7ed;
-border:1px solid #fed7aa;
-}
-
-.success{
-background:#ecfdf5;
-border:1px solid #86efac;
-}
-
-a{
-color:#2563eb;
-font-weight:700;
-}
-
+.help-page{width:min(900px,100%);margin:auto;padding:22px 16px 48px}.help-hero{padding:22px;border:1px solid var(--rk-border);border-radius:22px;background:linear-gradient(135deg,#f3fbff,#fff);box-shadow:var(--rk-shadow);margin-bottom:16px}.help-hero h2{margin:0;color:#355a73;font-size:26px}.help-hero p{margin:8px 0 0;color:var(--rk-muted);line-height:1.65}
+.help-toolbar{position:sticky;top:78px;z-index:30;padding:12px;border:1px solid var(--rk-border);border-radius:17px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);box-shadow:0 7px 20px rgba(86,142,178,.07);margin-bottom:15px}.help-toolbar input{width:100%;min-height:46px;padding:11px 13px;border:1px solid #d7e3ec;border-radius:13px;outline:none}.help-toolbar input:focus{border-color:var(--rk-primary-dark);box-shadow:0 0 0 3px rgba(125,207,255,.16)}
+.help-list{display:grid;gap:11px}.faq{border:1px solid var(--rk-border);border-radius:18px;background:#fff;box-shadow:0 7px 20px rgba(86,142,178,.06);overflow:hidden}.faq button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border:none;background:#fff;color:var(--rk-text);text-align:left;font-weight:700}.faq button:hover{background:#f8fcff}.faq-tag{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eaf6ff;color:#3476a2;font-size:11px;margin-right:8px}.faq-arrow{font-size:20px;color:#7a9bb0;transition:.2s}.faq.open .faq-arrow{transform:rotate(90deg)}.faq-content{display:none;padding:0 16px 17px;color:#526777;line-height:1.8}.faq.open .faq-content{display:block}.faq-content ul,.faq-content ol{padding-left:22px}.help-empty{min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;border:1px solid var(--rk-border);border-radius:18px;background:#fff}.help-contact{margin-top:18px;padding:20px;border:1px solid #86efac;border-radius:20px;background:#ecfdf5}.help-contact h2{margin:0;color:#166534}.help-contact p{line-height:1.7}.help-contact-links{display:flex;flex-wrap:wrap;gap:9px}.help-contact a{display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff;color:#166534;text-decoration:none;font-weight:700}
+@media(max-width:600px){.help-page{padding:14px 10px 36px}.help-hero{padding:18px}.help-toolbar{top:70px}.faq button{padding:14px}.faq-tag{display:block;width:max-content;margin:0 0 7px}}
 </style>
-
 </head>
-
 <body>
-
-<div class="topbar">
-
-<button onclick="history.back()">
-←
-</button>
-
-<a href="home.html">
-🏠
-</a>
-
-</div>
-
-<h1>
-🛟 ศูนย์ช่วยเหลือ
-</h1>
-
-<p style="color:#64748b;">
-รวมคำถามที่พบบ่อย วิธีสั่งซื้อ และข้อมูลการใช้งาน Rinka Shop
-</p>
-
-<div class="card">
-
-<span class="badge">
-วิธีสั่งซื้อ
-</span>
-
-<h2>
-สั่งซื้อสินค้ากับ Rinka Shop ยังไง?
-</h2>
-
-<ol>
-<li>เลือกสินค้าที่ต้องการ</li>
-<li>เลือกตัวเลือกสินค้า เช่น ตัวละคร / แบบ / จำนวน</li>
-<li>เพิ่มลงตะกร้า หรือกดซื้อทันที</li>
-<li>กรอกข้อมูลจัดส่ง</li>
-<li>ชำระเงินรอบแรกและอัปโหลดสลิป</li>
-<li>รอร้านกดสั่งสินค้าและอัปเดตสถานะ</li>
-</ol>
-
-</div>
-
-<div class="card">
-
-<span class="badge">
-สถานะออเดอร์
-</span>
-
-<h2>
-สถานะออเดอร์มีอะไรบ้าง?
-</h2>
-
-<ul>
-<li><b>รอจัดการ</b> — ร้านได้รับออเดอร์แล้ว</li>
-<li><b>ถึงโกดังจีนแล้ว</b> — สินค้าถึงโกดังจีนแล้ว</li>
-<li><b>กำลังมาไทย</b> — สินค้ากำลังขนส่งมายังประเทศไทย</li>
-<li><b>เตรียมจัดส่ง</b> — สินค้าถึงไทยแล้ว กรุณายืนยันที่อยู่ / ชำระค่าส่ง</li>
-<li><b>จัดส่งแล้ว</b> — ร้านจัดส่งสินค้าให้แล้ว</li>
-</ul>
-
-</div>
-
-<div class="card">
-
-<span class="badge">
-การชำระเงิน
-</span>
-
-<h2>
-ต้องชำระเงินกี่รอบ?
-</h2>
-
-<p>
-โดยทั่วไปจะมี 2 รอบ:
-</p>
-
-<ul>
-<li><b>รอบแรก</b> ชำระค่าสินค้า</li>
-<li><b>รอบสอง</b> ชำระค่านำเข้าและค่าส่งในไทย หลังสินค้าถึงไทย</li>
-</ul>
-
-</div>
-
-<div class="card">
-
-<span class="badge">
-ค่าส่งรอบสอง
-</span>
-
-<h2>
-ค่านำเข้า / ค่าส่งในไทยคืออะไร?
-</h2>
-
-<p>
-หลังสินค้าถึงประเทศไทย ร้านจะแจ้งยอดค่านำเข้าและค่าส่งในไทยให้ลูกค้าชำระผ่านหน้าออเดอร์หรืออีเมลแจ้งเตือน
-</p>
-
-<p>
-ลูกค้าสามารถกดปุ่ม
-<b>ยืนยันที่อยู่ / ชำระค่าส่ง</b>
-ในหน้าออเดอร์ได้เลย
-</p>
-
-</div>
-
-<div class="card">
-
-<span class="badge">
-รอส่งรวม
-</span>
-
-<h2>
-รอส่งรวมคืออะไร?
-</h2>
-
-<p>
-หากลูกค้ามีหลายออเดอร์ และต้องการรอรวมส่งพร้อมกัน สามารถเลือก
-<b>รอส่งรวม</b>
-ในหน้าชำระค่าส่งได้
-</p>
-
-<p>
-เมื่อพร้อมจัดส่ง สามารถกลับมาชำระค่าส่งภายหลังได้
-</p>
-
-</div>
-
-<div class="card">
-
-<span class="badge">
-ที่อยู่จัดส่ง
-</span>
-
-<h2>
-เปลี่ยนที่อยู่ได้ไหม?
-</h2>
-
-<p>
-สามารถเปลี่ยนที่อยู่ได้ก่อนร้านจัดส่งสินค้า หากออเดอร์ยังไม่ถูกจัดส่ง สามารถส่งคำขอเปลี่ยนที่อยู่ผ่านหน้า
-<b>เปลี่ยนที่อยู่</b>
-หรือแจ้งร้านโดยตรง
-</p>
-
-</div>
-
-<div class="card warning">
-
-<span class="badge">
-ข้อควรรู้
-</span>
-
-<h2>
-สามารถยกเลิกออเดอร์ได้ไหม?
-</h2>
-
-<p>
-หากร้านกดสั่งสินค้ากับร้านค้าจีนแล้ว อาจไม่สามารถยกเลิกออเดอร์ได้ ขึ้นอยู่กับสถานะสินค้าและเงื่อนไขของร้านต้นทาง
-</p>
-
-<p>
-กรณีต้องการเปลี่ยนหรือยกเลิก กรุณาติดต่อร้านให้เร็วที่สุด
-</p>
-
-</div>
-
-<div class="card">
-
-<span class="badge">
-ติดตามสถานะ
-</span>
-
-<h2>
-ติดตามออเดอร์ได้ที่ไหน?
-</h2>
-
-<p>
-ลูกค้าสามารถตรวจสอบสถานะได้ที่หน้า
-<a href="lookup.html">
-เช็กออเดอร์
-</a>
-โดยกรอกเลขออเดอร์ที่ได้รับหลังชำระเงิน
-</p>
-
-</div>
-
-<div class="card success">
-
-<h2>
-ยังมีคำถามเพิ่มเติม?
-</h2>
-
-<p>
-สามารถติดต่อร้านได้ที่:
-<a href="https://x.com/prewithrinka">
-@prewithrinka
-</a>
-
-หรือ
-
-<a href="https://x.com/rinka_sakha2">
-@rinka_sakha2
-</a>
-</p>
-
-</div>
-
+<header class="rk-page-header">
+<button id="menuButton" class="rk-icon-button" type="button" aria-label="เปิดเมนู">☰</button>
+<h1>ศูนย์ช่วยเหลือ</h1>
+<a href="home.html" class="rk-icon-link" aria-label="หน้าแรก">🏠</a>
+</header>
+<div id="overlay" class="rk-overlay hidden"></div>
+<aside id="sideMenu" class="rk-side-menu">
+<div class="rk-menu-header"><h2>Rinka Shop</h2></div>
+<a href="home.html">🏠 หน้าแรก</a><a href="browse.html">🛍️ สินค้าทั้งหมด</a><a href="categories.html">🏷️ หมวดสินค้า</a><a href="lookup.html">📦 เช็กออเดอร์</a><a href="change-address.html">📍 เปลี่ยนที่อยู่</a><a href="account.html">👤 บัญชีของฉัน</a><a href="cart.html">🛒 ตะกร้า</a>
+</aside>
+<main class="help-page">
+<section class="help-hero"><h2>🛟 ศูนย์ช่วยเหลือ</h2><p>รวมวิธีสั่งซื้อ การชำระเงิน การติดตามออเดอร์ และคำถามที่พบบ่อย</p></section>
+<div class="help-toolbar"><input id="helpSearch" type="search" placeholder="ค้นหาคำถาม เช่น ค่าส่ง เปลี่ยนที่อยู่..." autocomplete="off"></div>
+<section id="faqList" class="help-list">
+<article class="faq" data-search="วิธีสั่งซื้อ ตะกร้า ชำระเงิน">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">วิธีสั่งซื้อ</span>สั่งซื้อสินค้ากับ Rinka Shop ยังไง?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><ol><li>เลือกสินค้าที่ต้องการ</li><li>เลือกแบบ ตัวละคร และจำนวน</li><li>เพิ่มลงตะกร้าหรือกดซื้อทันที</li><li>เลือกที่อยู่จัดส่ง</li><li>ตรวจสอบของแถมและรายการสินค้า</li><li>ชำระเงินรอบแรกและแนบสลิป</li></ol></div>
+</article>
+<article class="faq" data-search="สถานะออเดอร์ pending china arrived shipping ready shipped">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">สถานะออเดอร์</span>สถานะออเดอร์มีอะไรบ้าง?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><ul><li><b>รอจัดการ</b> — ร้านได้รับออเดอร์แล้ว</li><li><b>ถึงโกดังจีนแล้ว</b> — สินค้าถึงโกดังจีน</li><li><b>กำลังมาไทย</b> — สินค้าอยู่ระหว่างขนส่งมายังไทย</li><li><b>เตรียมจัดส่ง</b> — กรุณายืนยันที่อยู่และชำระค่าส่ง</li><li><b>จัดส่งแล้ว</b> — ร้านส่งสินค้าเรียบร้อยแล้ว</li></ul></div>
+</article>
+<article class="faq" data-search="ชำระเงิน กี่รอบ ค่าสินค้า ค่านำเข้า ค่าส่ง">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">การชำระเงิน</span>ต้องชำระเงินกี่รอบ?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><p>โดยทั่วไปมี 2 รอบ ได้แก่ รอบแรกชำระค่าสินค้า และรอบสองชำระค่านำเข้ากับค่าส่งในไทยหลังสินค้าถึงไทย</p></div>
+</article>
+<article class="faq" data-search="ค่านำเข้า ค่าส่งรอบสอง ไทย">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">ค่าส่งรอบสอง</span>ค่านำเข้าและค่าส่งในไทยคืออะไร?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><p>เมื่อสินค้าถึงไทย ร้านจะแจ้งยอดผ่านหน้าออเดอร์และอีเมล ลูกค้าสามารถกดปุ่มยืนยันที่อยู่ / ชำระค่าส่งจากหน้าออเดอร์ได้</p></div>
+</article>
+<article class="faq" data-search="รอส่งรวม รวมออเดอร์">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">รอส่งรวม</span>รอส่งรวมคืออะไร?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><p>ใช้เมื่อลูกค้ามีหลายออเดอร์และต้องการรอรวมส่งพร้อมกัน สามารถกลับมาชำระค่าส่งเมื่อพร้อมจัดส่งได้</p></div>
+</article>
+<article class="faq" data-search="เปลี่ยนที่อยู่ จัดส่ง">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">ที่อยู่จัดส่ง</span>เปลี่ยนที่อยู่ได้ไหม?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><p>เปลี่ยนได้ก่อนร้านจัดส่งสินค้า โดยส่งคำขอผ่านหน้า <a href="change-address.html">เปลี่ยนที่อยู่</a> หรือแจ้งร้านโดยตรง</p></div>
+</article>
+<article class="faq" data-search="ยกเลิกออเดอร์ คืนเงิน">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">ข้อควรรู้</span>สามารถยกเลิกออเดอร์ได้ไหม?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><p>หากร้านกดสั่งสินค้ากับร้านค้าจีนแล้ว อาจไม่สามารถยกเลิกได้ ขึ้นอยู่กับสถานะสินค้าและเงื่อนไขร้านต้นทาง กรุณาติดต่อร้านให้เร็วที่สุด</p></div>
+</article>
+<article class="faq" data-search="ติดตามออเดอร์ เช็กออเดอร์">
+<button type="button" onclick="toggleFaq(this)"><span><span class="faq-tag">ติดตามสถานะ</span>ติดตามออเดอร์ได้ที่ไหน?</span><span class="faq-arrow">›</span></button>
+<div class="faq-content"><p>สมาชิกดูได้จากหน้า <a href="orders.html">รายการออเดอร์</a> หรือค้นหาผ่านหน้า <a href="lookup.html">เช็กออเดอร์</a></p></div>
+</article>
+</section>
+<div id="helpEmpty" class="help-empty hidden"><div style="font-size:48px">🔍</div><h2>ไม่พบคำถาม</h2><p>ลองใช้คำค้นอื่น หรือติดต่อร้านได้เลยค่ะ</p></div>
+<section class="help-contact"><h2>ยังมีคำถามเพิ่มเติม?</h2><p>ติดต่อร้านผ่าน Twitter / X</p><div class="help-contact-links"><a href="https://x.com/prewithrinka" target="_blank" rel="noopener noreferrer">@prewithrinka</a><a href="https://x.com/rinka_sakha2" target="_blank" rel="noopener noreferrer">@rinka_sakha2</a></div></section>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{document.getElementById("helpSearch").addEventListener("input",filterFaq)});
+function toggleFaq(button){button.closest(".faq").classList.toggle("open")}
+function filterFaq(){const q=document.getElementById("helpSearch").value.trim().toLowerCase();let shown=0;document.querySelectorAll(".faq").forEach(item=>{const text=(item.textContent+" "+item.dataset.search).toLowerCase();const show=!q||text.includes(q);item.classList.toggle("hidden",!show);if(show)shown++});document.getElementById("helpEmpty").classList.toggle("hidden",shown>0)}
+</script>
+<script src="menu.js"></script>
 </body>
-
 </html>
