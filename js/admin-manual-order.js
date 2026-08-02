@@ -60,8 +60,17 @@ function renderManualOrderManager(){
   .mo-preview-item{padding:10px 0;border-bottom:1px solid #f1f5f9}
   .mo-preview-total{font-size:24px;font-weight:800;color:#2563eb}
   .mo-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .mo-preview-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
-  @media(max-width:800px){.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}}
+  .mo-preview-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .mo-notice{padding:12px 14px;border-radius:12px;margin:12px 0;line-height:1.55}
+  .mo-notice.hidden{display:none}
+  .mo-error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+  .mo-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+  .mo-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+  .mo-slip-preview{margin-top:10px;padding:12px;border:1px solid #dbeafe;border-radius:12px;background:#f8fafc}
+  .mo-slip-preview img{display:block;max-width:220px;max-height:220px;object-fit:contain;border-radius:10px;margin-top:8px;background:#fff}
+  .mo-button-loading{opacity:.7;cursor:not-allowed}
+  button:disabled{opacity:.6;cursor:not-allowed}
+  @media(max-width:800px){.mo-grid{grid-template-columns:1fr}.mo-full{grid-column:auto}.mo-preview-grid{grid-template-columns:1fr}.mo-modal{padding:10px}.mo-modal-card{margin:10px auto}.mo-preview-actions button{width:100%}}
   </style>
   <div class="mo-card">
 
@@ -161,10 +170,12 @@ id="mo_name"
   <div class="mo-card"><h3>💳 การชำระเงิน</h3><div class="mo-grid">
   <label>ช่องทาง<select id="mo_method"><option value="credit_card_qr">QR บัตรเครดิต</option><option value="bank_transfer">บัญชีธนาคาร</option></select></label>
   <label>สถานะ<select id="mo_paystatus"><option value="paid">ชำระแล้ว</option><option value="pending_verification">รอตรวจสอบ</option><option value="unpaid">ยังไม่ชำระ</option></select></label>
-  <label class="mo-full">แนบสลิป<input id="mo_slip" type="file" accept="image/*"></label>
+  <label class="mo-full">แนบสลิป<input id="mo_slip" type="file" accept="image/png,image/jpeg,image/webp" onchange="handleManualSlipChange()"></label>
+  <div id="mo_slip_preview" class="mo-slip-preview hidden mo-full"></div>
   <label class="mo-full">หมายเหตุ<textarea id="mo_note" rows="2"></textarea></label>
   </div></div>
-  <button id="mo_submit" onclick="openManualOrderPreview()">🔎 ตรวจสอบออเดอร์</button>
+  <div id="mo_message" class="mo-notice hidden" role="alert"></div>
+  <button type="button" id="mo_submit" onclick="openManualOrderPreview()">🔎 ตรวจสอบออเดอร์</button>
 
   <div
   id="mo_product_modal"
@@ -232,15 +243,115 @@ id="mo_name"
 }
 
 async function loadManualOrderData(){
-  const [p,c,gc,gr,gi,ch,ex]=await Promise.all([
-    moGet('adminProducts'),moGet('adminCollections'),moGet('getGiftCampaigns'),moGet('getGiftRules'),moGet('getGiftItems'),moGet('getGiftCharacters'),moGet('getGiftCampaignExclusions')
-  ]);
-  ManualOrder.products=moArray(p,'products');ManualOrder.collections=moArray(c,'collections');
-  ManualOrder.campaigns=moArray(gc,'campaigns');ManualOrder.rules=moArray(gr,'rules');ManualOrder.items=moArray(gi,'items','gifts');
-  ManualOrder.characters=moArray(ch,'characters');ManualOrder.exclusions=moArray(ex,'exclusions');
-  document.getElementById('mo_collection').innerHTML='<option value="">ทั้งหมด</option>'+ManualOrder.collections.map(x=>`<option value="${moEsc(x.collection_id)}">${moEsc(x.name)}</option>`).join('');
-  filterManualProducts();renderManualCart();renderManualGifts();
+
+  const productBox =
+    document.getElementById(
+      "mo_products"
+    );
+
+  try{
+
+    setManualMessage(
+      "กำลังโหลดข้อมูลสินค้าและของแถม...",
+      "info"
+    );
+
+    const [
+      p,
+      c,
+      gc,
+      gr,
+      gi,
+      ch,
+      ex
+    ] = await Promise.all([
+
+      moGet("adminProducts"),
+      moGet("adminCollections"),
+      moGet("getGiftCampaigns"),
+      moGet("getGiftRules"),
+      moGet("getGiftItems"),
+      moGet("getGiftCharacters"),
+      moGet("getGiftCampaignExclusions")
+
+    ]);
+
+    ManualOrder.products =
+      moArray(p,"products");
+
+    ManualOrder.collections =
+      moArray(c,"collections");
+
+    ManualOrder.campaigns =
+      moArray(gc,"campaigns");
+
+    ManualOrder.rules =
+      moArray(gr,"rules");
+
+    ManualOrder.items =
+      moArray(gi,"items","gifts");
+
+    ManualOrder.characters =
+      moArray(ch,"characters");
+
+    ManualOrder.exclusions =
+      moArray(ex,"exclusions");
+
+    const collectionSelect =
+      document.getElementById(
+        "mo_collection"
+      );
+
+    if(collectionSelect){
+
+      collectionSelect.innerHTML =
+        '<option value="">ทั้งหมด</option>' +
+        ManualOrder.collections
+          .map(
+            collection=>
+              `<option value="${moEsc(collection.collection_id)}">${moEsc(collection.name)}</option>`
+          )
+          .join("");
+
+    }
+
+    clearManualMessage();
+    filterManualProducts();
+    renderManualCart();
+    renderManualGifts();
+
+  }catch(error){
+
+    console.error(
+      "loadManualOrderData error:",
+      error
+    );
+
+    if(productBox){
+
+      productBox.innerHTML = `
+
+<div class="mo-notice mo-error mo-full">
+  โหลดข้อมูลไม่สำเร็จ<br>
+  ${moEsc(error.message || String(error))}
+  <br><br>
+  <button type="button" onclick="loadManualOrderData()">ลองใหม่</button>
+</div>
+
+`;
+
+    }
+
+    setManualMessage(
+      "โหลดข้อมูล Manual Order ไม่สำเร็จ: " +
+      (error.message || String(error)),
+      "error"
+    );
+
+  }
+
 }
+
 async function moGet(action){
 
   const separator =
@@ -2262,95 +2373,70 @@ function getManualGiftDisplayRows(){
 
 function validateManualOrderForm(){
 
-  const name =
-    moVal(
-      "mo_name"
-    );
+  clearManualMessage();
 
-  const email =
-    moVal(
-      "mo_email"
-    );
-
-  const phone =
-    moVal(
-      "mo_phone"
-    );
-
-  const address =
-    moVal(
-      "mo_address"
-    );
-
-  const province =
-    moVal(
-      "mo_province"
-    );
-
-  const postcode =
-    moVal(
-      "mo_postcode"
-    );
+  const name = moVal("mo_name");
+  const email = moVal("mo_email");
+  const phone = moVal("mo_phone");
+  const address = moVal("mo_address");
+  const subdistrict = moVal("mo_subdistrict");
+  const district = moVal("mo_district");
+  const province = moVal("mo_province");
+  const postcode = moVal("mo_postcode");
 
   const status =
-    document
-      .getElementById(
-        "mo_paystatus"
-      )
-      ?.value || "unpaid";
+    document.getElementById(
+      "mo_paystatus"
+    )?.value || "unpaid";
 
   const slip =
-    document
-      .getElementById(
-        "mo_slip"
-      )
-      ?.files?.[0];
+    document.getElementById(
+      "mo_slip"
+    )?.files?.[0];
 
-  if(
-    !name ||
-    !email ||
-    !phone
-  ){
+  if(!name){
+    throw new Error("กรุณากรอกชื่อผู้รับ");
+  }
 
-    throw new Error(
-      "กรุณากรอกชื่อ อีเมล และเบอร์โทรให้ครบ"
-    );
-
+  if(!email){
+    throw new Error("กรุณากรอกอีเมล");
   }
 
   if(
-    !ManualOrder.cart.length
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   ){
+    throw new Error("รูปแบบอีเมลไม่ถูกต้อง");
+  }
 
-    throw new Error(
-      "กรุณาเพิ่มสินค้าอย่างน้อย 1 รายการ"
-    );
+  if(!phone){
+    throw new Error("กรุณากรอกเบอร์โทร");
+  }
 
+  if(!ManualOrder.cart.length){
+    throw new Error("กรุณาเพิ่มสินค้าอย่างน้อย 1 รายการ");
   }
 
   if(
     !address ||
+    !subdistrict ||
+    !district ||
     !province ||
     !postcode
   ){
-
     throw new Error(
-      "กรุณากรอกที่อยู่ จังหวัด และรหัสไปรษณีย์"
+      "กรุณากรอกที่อยู่ ตำบล/แขวง อำเภอ/เขต จังหวัด และรหัสไปรษณีย์ให้ครบ"
     );
-
   }
 
-  if(
-    status === "paid" &&
-    !slip
-  ){
-
-    throw new Error(
-      "สถานะชำระแล้วต้องแนบสลิป"
-    );
-
+  if(!/^\d{5}$/.test(postcode)){
+    throw new Error("รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก");
   }
 
+  if(status === "paid" && !slip){
+    throw new Error("สถานะชำระแล้วต้องแนบสลิป");
+  }
+
+  validateManualSlipFile(slip);
   validateManualGiftSelections();
 
   return true;
@@ -2665,6 +2751,8 @@ ${moEsc(
 
 </div>
 
+${getManualSlipPreviewHtml()}
+
 <div class="mo-preview-section">
 
   <h4>
@@ -2714,6 +2802,7 @@ border-top:2px solid #dbeafe;
   </button>
 
   <button
+  id="mo_confirm_submit"
   type="button"
   onclick="submitManualOrder()"
   >
@@ -2778,54 +2867,389 @@ async function submitManualOrder(){
   }
 
   try{
-
     validateManualOrderForm();
+  }catch(error){
+    showManualError(error);
+    return;
+  }
+
+  const confirmed = window.confirm(
+    "ยืนยันสร้างออเดอร์นี้หรือไม่?\n\nหลังยืนยัน ระบบจะบันทึกออเดอร์ลง Google Sheets และอาจส่งอีเมลให้ลูกค้า"
+  );
+
+  if(!confirmed){
+    return;
+  }
+
+  const slipInput =
+    document.getElementById(
+      "mo_slip"
+    );
+
+  const slip =
+    slipInput?.files?.[0] || null;
+
+  const status =
+    document.getElementById(
+      "mo_paystatus"
+    )?.value || "unpaid";
+
+  setManualLoading(true);
+  setManualMessage(
+    "กำลังสร้างออเดอร์ กรุณาอย่าปิดหน้านี้...",
+    "info"
+  );
+
+  try{
+
+    const payload = {
+
+      customer_id:
+        ManualOrder.selectedCustomer
+          ? ManualOrder.selectedCustomer.customer_id || ""
+          : "",
+
+      customer_name: moVal("mo_name"),
+      email: moVal("mo_email"),
+      phone: moVal("mo_phone"),
+      social: moVal("mo_social"),
+
+      items: ManualOrder.cart,
+      gifts: ManualOrder.gifts,
+
+      address:{
+        receiver: moVal("mo_name"),
+        email: moVal("mo_email"),
+        phone: moVal("mo_phone"),
+        address: moVal("mo_address"),
+        subdistrict: moVal("mo_subdistrict"),
+        district: moVal("mo_district"),
+        province: moVal("mo_province"),
+        postcode: moVal("mo_postcode")
+      },
+
+      payment:{
+        method:
+          document.getElementById(
+            "mo_method"
+          )?.value || "bank_transfer",
+        status: status,
+        amount: moSubtotal(),
+        slip_base64:
+          slip
+            ? await moFile(slip)
+            : ""
+      },
+
+      order_source: "admin",
+      admin_note: moVal("mo_note")
+
+    };
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "payload",
+      JSON.stringify(payload)
+    );
+
+    const response =
+      await fetch(
+        API + "?action=adminManualOrder",
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    if(!response.ok){
+      throw new Error(
+        "HTTP " + response.status
+      );
+    }
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+      throw new Error(
+        result.error ||
+        "สร้างออเดอร์ไม่สำเร็จ"
+      );
+    }
+
+    closeManualOrderPreview();
+
+    setManualMessage(
+      "สร้างออเดอร์สำเร็จ เลขที่ " +
+      result.order_id,
+      "success"
+    );
+
+    alert(
+      "สร้างออเดอร์สำเร็จ\n" +
+      result.order_id
+    );
+
+    renderManualOrderManager();
+
+    if(
+      typeof loadOrders ===
+      "function"
+    ){
+      loadOrders();
+    }
 
   }catch(error){
 
-    alert(
-      error.message ||
-      String(error)
+    console.error(
+      "submitManualOrder error:",
+      error
     );
 
-    return;
+    showManualError(error);
+
+  }finally{
+
+    setManualLoading(false);
 
   }
 
-  const slip =
-    document
-      .getElementById(
-        "mo_slip"
-      )
-      .files[0];
-
-  const status =
-    document
-      .getElementById(
-        "mo_paystatus"
-      )
-      .value;
-
-  const payload={
-
-  customer_id:
-    ManualOrder.selectedCustomer
-      ? ManualOrder.selectedCustomer.customer_id || ""
-      : "",
-
-  customer_name:
-    moVal(
-      "mo_name"
-    ),
-
-  email:
-    moVal(
-      "mo_email"
-    ),
-  phone:moVal('mo_phone'),social:moVal('mo_social'),items:ManualOrder.cart,gifts:ManualOrder.gifts,address:{receiver:moVal('mo_name'),email:moVal('mo_email'),phone:moVal('mo_phone'),address:moVal('mo_address'),subdistrict:moVal('mo_subdistrict'),district:moVal('mo_district'),province:moVal('mo_province'),postcode:moVal('mo_postcode')},payment:{method:document.getElementById('mo_method').value,status,amount:moSubtotal(),slip_base64:slip?await moFile(slip):''},order_source:'admin',admin_note:moVal('mo_note')};
-  ManualOrder.loading=true;document.getElementById('mo_submit').disabled=true;
-  try{const fd=new FormData();fd.append('payload',JSON.stringify(payload));const r=await fetch(API+'?action=adminManualOrder',{method:'POST',body:fd});const j=await r.json();if(!j.success)throw new Error(j.error||'สร้างออเดอร์ไม่สำเร็จ');alert('สร้างออเดอร์สำเร็จ '+j.order_id);closeManualOrderPreview();renderManualOrderManager();if(typeof loadOrders==='function')loadOrders()}catch(e){alert(e.message)}finally{ManualOrder.loading=false;const b=document.getElementById('mo_submit');if(b)b.disabled=false}
 }
+
+function setManualLoading(loading){
+
+  ManualOrder.loading =
+    Boolean(loading);
+
+  const buttons = [
+    document.getElementById("mo_submit"),
+    document.getElementById("mo_confirm_submit")
+  ].filter(Boolean);
+
+  buttons.forEach(button=>{
+
+    button.disabled =
+      ManualOrder.loading;
+
+    button.classList.toggle(
+      "mo-button-loading",
+      ManualOrder.loading
+    );
+
+  });
+
+  const confirmButton =
+    document.getElementById(
+      "mo_confirm_submit"
+    );
+
+  if(confirmButton){
+
+    confirmButton.textContent =
+      ManualOrder.loading
+        ? "⏳ กำลังสร้างออเดอร์..."
+        : "✅ ยืนยันสร้างออเดอร์";
+
+  }
+
+}
+
+function setManualMessage(message,type){
+
+  const box =
+    document.getElementById(
+      "mo_message"
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.className =
+    "mo-notice mo-" +
+    (type || "info");
+
+  box.textContent =
+    String(message || "");
+
+  box.classList.remove(
+    "hidden"
+  );
+
+}
+
+function clearManualMessage(){
+
+  const box =
+    document.getElementById(
+      "mo_message"
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.textContent = "";
+  box.className =
+    "mo-notice hidden";
+
+}
+
+function showManualError(error){
+
+  const message =
+    error && error.message
+      ? error.message
+      : String(error || "เกิดข้อผิดพลาด");
+
+  setManualMessage(
+    message,
+    "error"
+  );
+
+  alert(message);
+
+}
+
+function validateManualSlipFile(file){
+
+  if(!file){
+    return true;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if(
+    file.type &&
+    !allowedTypes.includes(file.type)
+  ){
+    throw new Error(
+      "รองรับสลิปเฉพาะไฟล์ JPG, PNG หรือ WEBP"
+    );
+  }
+
+  const maxBytes =
+    8 * 1024 * 1024;
+
+  if(file.size > maxBytes){
+    throw new Error(
+      "ไฟล์สลิปต้องมีขนาดไม่เกิน 8 MB"
+    );
+  }
+
+  return true;
+
+}
+
+function handleManualSlipChange(){
+
+  const input =
+    document.getElementById(
+      "mo_slip"
+    );
+
+  const box =
+    document.getElementById(
+      "mo_slip_preview"
+    );
+
+  if(!box){
+    return;
+  }
+
+  const file =
+    input?.files?.[0];
+
+  if(!file){
+    box.innerHTML = "";
+    box.classList.add("hidden");
+    return;
+  }
+
+  try{
+    validateManualSlipFile(file);
+  }catch(error){
+    if(input){
+      input.value = "";
+    }
+    box.innerHTML = "";
+    box.classList.add("hidden");
+    showManualError(error);
+    return;
+  }
+
+  const url =
+    URL.createObjectURL(file);
+
+  box.innerHTML = `
+    <b>ตัวอย่างสลิป</b>
+    <div style="font-size:13px;color:#64748b;margin-top:4px;">
+      ${moEsc(file.name)} • ${formatManualFileSize(file.size)}
+    </div>
+    <img src="${moEsc(url)}" alt="ตัวอย่างสลิป">
+  `;
+
+  box.classList.remove("hidden");
+
+}
+
+function getManualSlipPreviewHtml(){
+
+  const file =
+    document.getElementById(
+      "mo_slip"
+    )?.files?.[0];
+
+  if(!file){
+    return "";
+  }
+
+  const url =
+    URL.createObjectURL(file);
+
+  return `
+
+<div class="mo-preview-section">
+  <h4>🧾 สลิปที่แนบ</h4>
+  <div style="font-size:13px;color:#64748b;">
+    ${moEsc(file.name)} • ${formatManualFileSize(file.size)}
+  </div>
+  <img
+    src="${moEsc(url)}"
+    alt="ตัวอย่างสลิป"
+    style="max-width:240px;max-height:240px;object-fit:contain;border-radius:12px;margin-top:10px;border:1px solid #e5e7eb;"
+  >
+</div>
+
+`;
+
+}
+
+function formatManualFileSize(bytes){
+
+  const size =
+    Number(bytes || 0);
+
+  if(size < 1024){
+    return size + " B";
+  }
+
+  if(size < 1024 * 1024){
+    return (size / 1024).toFixed(1) + " KB";
+  }
+
+  return (
+    size / 1024 / 1024
+  ).toFixed(1) + " MB";
+
+}
+
 function moVal(id){return document.getElementById(id)?.value.trim()||''}
 function moFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(new Error('อ่านสลิปไม่สำเร็จ'));r.readAsDataURL(f)})}
 
