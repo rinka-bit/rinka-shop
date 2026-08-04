@@ -1157,17 +1157,32 @@ async function loadDefaultAddress(){
 
       if(sessionToken){
 
-        query.set(
-          "session_token",
-          sessionToken
-        );
+  query.set(
+    "action",
+    "customerAddresses"
+  );
 
-      const response =
-        await fetch(
-          API +
-          "?" +
-          query.toString()
-        );
+  query.set(
+    "session_token",
+    sessionToken
+  );
+
+}else if(customer.email){
+
+  // รองรับ Backend เก่า
+  query.set(
+    "email",
+    customer.email
+  );
+
+}
+
+const response =
+  await fetch(
+    API +
+    "?" +
+    query.toString()
+  );
 
       if(!response.ok){
 
