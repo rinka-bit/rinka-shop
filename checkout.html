@@ -2994,28 +2994,16 @@ function buildEligibleGiftCampaigns(){
   const result = [];
 
   const campaigns =
-    Array.isArray(
-      checkoutGiftState.campaigns
-    )
-      ? checkoutGiftState.campaigns
-      : [];
+    checkoutGiftState.campaigns || [];
 
   const rules =
-    Array.isArray(
-      checkoutGiftState.rules
-    )
-      ? checkoutGiftState.rules
-      : [];
+    checkoutGiftState.rules || [];
 
   const giftItems =
-    Array.isArray(
-      checkoutGiftState.items
-    )
-      ? checkoutGiftState.items
-      : [];
+    checkoutGiftState.items || [];
 
   campaigns.forEach(
-    campaign => {
+    campaign=>{
 
       const campaignId =
         normalizeGiftId(
@@ -3026,41 +3014,20 @@ function buildEligibleGiftCampaigns(){
         return;
       }
 
-      /*
-      1. หาสินค้าในตะกร้าที่เข้าเงื่อนไข Campaign
-      */
-
       const eligibleCartItems =
         getCampaignEligibleCartItems(
           campaign
         );
 
       if(!eligibleCartItems.length){
-
-        console.log(
-          "Campaign ไม่มีสินค้าเข้าเงื่อนไข:",
-          campaignId
-        );
-
         return;
-
       }
-
-      /*
-      2. คำนวณยอดที่เข้าเงื่อนไข
-      */
 
       const eligibleTotal =
         eligibleCartItems.reduce(
-          (
-            sum,
-            item
-          ) =>
-
+          (sum,item)=>
             sum +
-            getCartItemTotal(
-              item
-            ),
+            getCartItemTotal(item),
           0
         );
 
@@ -3070,301 +3037,140 @@ function buildEligibleGiftCampaigns(){
         ) ||
         eligibleTotal <= 0
       ){
-
         return;
-
       }
 
       /*
-      3. Rule ทั้งหมดของ Campaign
+      Rule ทั้งหมดที่ยอดถึง
       */
 
-      const campaignRules =
+      const matchedRules =
         rules
           .filter(
-            rule =>
+            rule=>
 
               normalizeGiftId(
                 rule.campaign_id
               ) ===
               campaignId
           )
+          .filter(
+            rule=>
+
+              eligibleTotal >=
+              Number(
+                rule.min_amount || 0
+              )
+          )
           .sort(
-            (
-              firstRule,
-              secondRule
-            ) =>
+            (a,b)=>
 
               Number(
-                firstRule.min_amount || 0
+                a.min_amount || 0
               ) -
 
               Number(
-                secondRule.min_amount || 0
+                b.min_amount || 0
               )
           );
 
-      const campaignRuleMap = {};
-
-      campaignRules.forEach(
-        rule => {
-
-          const ruleId =
-            normalizeGiftId(
-              rule.rule_id
-            );
-
-          if(ruleId){
-
-            campaignRuleMap[
-              ruleId
-            ] =
-              rule;
-
-          }
-
-        }
-      );
-
-      /*
-      4. Rule ที่ยอดลูกค้าถึง
-      */
-
-      const matchedRules =
-        campaignRules.filter(
-          rule => {
-
-            const minAmount =
-              Number(
-                rule.min_amount || 0
-              );
-
-            return (
-              Number.isFinite(
-                minAmount
-              ) &&
-              eligibleTotal >=
-              minAmount
-            );
-
-          }
-        );
-
       if(!matchedRules.length){
-
-        console.log(
-          "ยอดยังไม่ถึง Rule:",
-          campaignId,
-          eligibleTotal
-        );
-
         return;
-
       }
 
       /*
-      5. สร้างกลุ่มสิทธิ์
-
-      - สิทธิ์ของ Rule ตัวเอง
-      - สิทธิ์เพิ่มเติมจาก rewards[]
+      ใช้ Rule สูงสุดเป็นจำนวนสิทธิ์รวม
       */
 
-      const selectionGroups = [];
+      const highestRule =
+        matchedRules[
+          matchedRules.length - 1
+        ];
 
-      matchedRules.forEach(
-        entitlementRule => {
+      const maxSelect =
+        Math.max(
+          1,
+          Math.floor(
+            Number(
+              highestRule.max_select || 1
+            )
+          )
+        );
 
-          const entitlementRuleId =
+      const matchedRuleIds =
+        new Set(
+          matchedRules.map(
+            rule=>
+              normalizeGiftId(
+                rule.rule_id
+              )
+          )
+        );
+
+      /*
+      รวม Gift Item ของทุก Rule ที่ปลดล็อก
+      และตัดรายการซ้ำ
+      */
+
+      const itemMap = {};
+
+      giftItems.forEach(
+        item=>{
+
+          const itemRuleId =
             normalizeGiftId(
-              entitlementRule.rule_id
+              item.rule_id
             );
 
-          /*
-          5.1 สิทธิ์ปกติของ Rule ตัวเอง
-
-          ตัวอย่าง:
-          ยอด 1,200 เลือกของเทียร์ 1,200 ได้ 1 ชิ้น
-          */
-
-          const ownGroup =
-            buildCheckoutGiftSelectionGroup({
-
-              entitlementRule:
-                entitlementRule,
-
-              sourceRule:
-                entitlementRule,
-
-              maxSelect:
-                Math.max(
-                  1,
-                  Number(
-                    entitlementRule.max_select ||
-                    1
-                  )
-                ),
-
-              giftItems:
-                giftItems,
-
-              inherited:
-                false
-
-            });
-
-          if(ownGroup){
-
-            selectionGroups.push(
-              ownGroup
-            );
-
-          }else{
-
-            console.warn(
-              "Rule ไม่มี Gift Item ของตัวเอง:",
-              entitlementRuleId
-            );
-
-          }
-
-          /*
-          5.2 สิทธิ์เพิ่มจากเทียร์ก่อนหน้า
-          */
-
-          const rewardMode =
-            normalizeCheckoutGiftRewardMode(
-              entitlementRule.reward_mode
+          const giftItemId =
+            normalizeGiftId(
+              item.gift_item_id
             );
 
           if(
-            rewardMode !==
-            "custom"
+            !matchedRuleIds.has(
+              itemRuleId
+            ) ||
+            !giftItemId
           ){
-
             return;
-
           }
 
-          const rewards =
-            Array.isArray(
-              entitlementRule.rewards
-            )
-              ? entitlementRule.rewards
-              : [];
+          if(
+            !itemMap[
+              giftItemId
+            ]
+          ){
 
-          rewards.forEach(
-            reward => {
+            itemMap[
+              giftItemId
+            ] = item;
 
-              if(
-                !normalizeGiftBoolean(
-                  reward.active === undefined
-                    ? true
-                    : reward.active
-                )
-              ){
-
-                return;
-
-              }
-
-              const sourceRuleId =
-                normalizeGiftId(
-                  reward.source_rule_id
-                );
-
-              const rewardQuantity =
-                Math.floor(
-                  Number(
-                    reward.quantity || 0
-                  )
-                );
-
-              if(
-                !sourceRuleId ||
-                rewardQuantity < 1
-              ){
-
-                return;
-
-              }
-
-              const sourceRule =
-                campaignRuleMap[
-                  sourceRuleId
-                ];
-
-              if(!sourceRule){
-
-                console.warn(
-                  "ไม่พบ Source Rule:",
-                  {
-                    entitlement_rule_id:
-                      entitlementRuleId,
-
-                    source_rule_id:
-                      sourceRuleId
-                  }
-                );
-
-                return;
-
-              }
-
-              const inheritedGroup =
-                buildCheckoutGiftSelectionGroup({
-
-                  entitlementRule:
-                    entitlementRule,
-
-                  sourceRule:
-                    sourceRule,
-
-                  maxSelect:
-                    rewardQuantity,
-
-                  giftItems:
-                    giftItems,
-
-                  inherited:
-                    true
-
-                });
-
-              if(inheritedGroup){
-
-                selectionGroups.push(
-                  inheritedGroup
-                );
-
-              }else{
-
-                console.warn(
-                  "Source Rule ไม่มี Gift Item:",
-                  sourceRuleId
-                );
-
-              }
-
-            }
-          );
+          }
 
         }
       );
 
-      if(!selectionGroups.length){
+      const availableItems =
+        Object
+          .values(
+            itemMap
+          )
+          .sort(
+            (a,b)=>
 
-        console.warn(
-          "พบ Rule แต่ไม่มีกลุ่มสิทธิ์ที่แสดงได้:",
-          campaignId
-        );
+              Number(
+                a.sort_order || 0
+              ) -
 
+              Number(
+                b.sort_order || 0
+              )
+          );
+
+      if(!availableItems.length){
         return;
-
       }
-
-      /*
-      6. ส่งข้อมูลให้ Renderer
-      */
 
       result.push({
 
@@ -3379,12 +3185,20 @@ function buildEligibleGiftCampaigns(){
         eligible_total:
           eligibleTotal,
 
-        /*
-        ใช้ชื่อ rules เดิมเพื่อให้ Renderer เดิมทำงานต่อได้
-        แต่ข้างในเป็น Selection Group แล้ว
-        */
-        rules:
-          selectionGroups
+        highest_rule:
+          highestRule,
+
+        matched_rules:
+          matchedRules,
+
+        max_select:
+          Math.min(
+            maxSelect,
+            availableItems.length
+          ),
+
+        items:
+          availableItems
 
       });
 
@@ -3484,6 +3298,49 @@ function getGiftItemSelectionQty(
 
 }
 
+ function getSimpleGiftCampaignSelection(
+  campaignId
+){
+
+  const key =
+    "campaign::" +
+    normalizeGiftId(
+      campaignId
+    );
+
+  if(
+    !checkoutGiftState
+      .selections[
+        key
+      ]
+  ){
+
+    checkoutGiftState
+      .selections[
+        key
+      ] = {};
+
+  }
+
+  return checkoutGiftState
+    .selections[
+      key
+    ];
+
+}
+
+
+function getSimpleGiftSelectedCount(
+  campaignId
+){
+
+  return Object.keys(
+    getSimpleGiftCampaignSelection(
+      campaignId
+    )
+  ).length;
+
+} 
 
 function getGiftRuleSelectedCount(
   ruleId
@@ -3513,7 +3370,6 @@ function getGiftRuleSelectedCount(
 
 }
 
-
 function renderCheckoutGiftEngine(){
 
   const giftSection =
@@ -3542,43 +3398,41 @@ function renderCheckoutGiftEngine(){
     return;
   }
 
-  let html = `
-
-<h2 style="margin-top:24px;">
-🎁 ของแถมที่ได้รับสิทธิ์
-</h2>
-
-`;
+  let html = "";
 
   campaigns.forEach(
-    campaign => {
+    campaign=>{
 
-      const scopeText =
-        String(
-          campaign.eligibility_scope ||
-          "collection_only"
-        ) === "fandom_all"
-          ? "คำนวณจากสินค้าทั้ง Fandom"
-          : "คำนวณจาก Collection นี้";
+      const maxSelect =
+        Math.max(
+          1,
+          Number(
+            campaign.max_select || 1
+          )
+        );
 
       html += `
 
-<div class="gift-campaign-card">
+<div
+class="gift-campaign-card"
+data-simple-gift-campaign="${escapeHtml(
+  campaign.campaign_id
+)}"
+>
 
 <h3 class="gift-campaign-title">
+
 ${escapeHtml(
   campaign.campaign_name ||
-  "Gift Campaign"
+  "ของแถม"
 )}
+
 </h3>
 
 <div class="gift-campaign-meta">
 
-${escapeHtml(scopeText)}
+ยอดรวมที่เข้าเงื่อนไข
 
-<br>
-
-ยอดที่นำมาคำนวณ:
 <b>
 ฿${Number(
   campaign.eligible_total || 0
@@ -3590,17 +3444,38 @@ ${escapeHtml(scopeText)}
 )}
 </b>
 
+<br>
+
+ได้รับของแถม
+
+<b>
+${maxSelect}
+ชิ้น
+</b>
+
+<br>
+
+<span
+data-simple-gift-count="${escapeHtml(
+  campaign.campaign_id
+)}"
+>
+
+เลือกแล้ว 0 / ${maxSelect} ชิ้น
+
+</span>
+
 </div>
 
 `;
 
-      campaign.rules.forEach(
-        rule => {
+      campaign.items.forEach(
+        item=>{
 
           html +=
-            renderCheckoutGiftRule(
+            renderSimpleCheckoutGiftItem(
               campaign,
-              rule
+              item
             );
 
         }
@@ -3618,7 +3493,10 @@ ${escapeHtml(scopeText)}
   html += `
 
 <div class="gift-summary-note">
-สามารถเว้นของแถมไว้ไม่เลือกได้ แต่จำนวนที่เลือกต้องไม่เกินสิทธิ์ของแต่ละ Rule
+
+ของแถมแต่ละรายการเลือกได้อย่างละ 1 ชิ้น
+และสามารถเว้นไว้ไม่เลือกได้
+
 </div>
 
 `;
@@ -3626,7 +3504,527 @@ ${escapeHtml(scopeText)}
   giftSection.innerHTML =
     html;
 
-  refreshAllGiftRuleUI();
+}
+
+  function renderSimpleCheckoutGiftItem(
+  campaign,
+  item
+){
+
+  const campaignId =
+    normalizeGiftId(
+      campaign.campaign_id
+    );
+
+  const giftItemId =
+    normalizeGiftId(
+      item.gift_item_id
+    );
+
+  const image =
+    String(
+      item.gift_image || ""
+    ).trim();
+
+  const hasCharacter =
+    normalizeGiftBoolean(
+      item.has_character
+    );
+
+  return `
+
+<div
+class="gift-item-row"
+data-simple-gift-row="${escapeHtml(
+  campaignId +
+  "::" +
+  giftItemId
+)}"
+>
+
+${
+  image
+    ? `
+
+<img
+class="gift-item-image"
+src="${escapeHtml(image)}"
+alt=""
+loading="lazy"
+onerror="this.style.visibility='hidden'"
+>
+
+`
+    : `
+
+<div class="gift-item-image"></div>
+
+`
+}
+
+<div class="gift-item-main">
+
+<div class="gift-item-name">
+
+${escapeHtml(
+  item.gift_name ||
+  "ของแถม"
+)}
+
+</div>
+
+${
+  hasCharacter
+    ? `
+
+<div
+class="gift-character-box"
+data-simple-character-box="${escapeHtml(
+  campaignId +
+  "::" +
+  giftItemId
+)}"
+>
+</div>
+
+`
+    : ""
+}
+
+</div>
+
+<div class="gift-item-actions">
+
+<input
+type="checkbox"
+data-simple-gift-campaign-id="${escapeHtml(
+  campaignId
+)}"
+data-simple-gift-item-id="${escapeHtml(
+  giftItemId
+)}"
+onchange="toggleSimpleCheckoutGift(this)"
+>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+  function findSimpleGiftCampaign(
+  campaignId
+){
+
+  const targetId =
+    normalizeGiftId(
+      campaignId
+    );
+
+  return (
+    checkoutGiftState
+      .eligibleCampaigns
+      .find(
+        campaign=>
+
+          normalizeGiftId(
+            campaign.campaign_id
+          ) ===
+          targetId
+      ) ||
+    null
+  );
+
+}
+
+
+function findSimpleGiftItem(
+  campaign,
+  giftItemId
+){
+
+  if(!campaign){
+    return null;
+  }
+
+  const targetId =
+    normalizeGiftId(
+      giftItemId
+    );
+
+  return (
+    campaign.items.find(
+      item=>
+
+        normalizeGiftId(
+          item.gift_item_id
+        ) ===
+        targetId
+    ) ||
+    null
+  );
+
+}
+
+
+function toggleSimpleCheckoutGift(
+  checkbox
+){
+
+  const campaignId =
+    normalizeGiftId(
+      checkbox.dataset
+        .simpleGiftCampaignId
+    );
+
+  const giftItemId =
+    normalizeGiftId(
+      checkbox.dataset
+        .simpleGiftItemId
+    );
+
+  const campaign =
+    findSimpleGiftCampaign(
+      campaignId
+    );
+
+  if(!campaign){
+
+    checkbox.checked = false;
+
+    return;
+  }
+
+  const item =
+    findSimpleGiftItem(
+      campaign,
+      giftItemId
+    );
+
+  if(!item){
+
+    checkbox.checked = false;
+
+    return;
+  }
+
+  const selection =
+    getSimpleGiftCampaignSelection(
+      campaignId
+    );
+
+  const maxSelect =
+    Math.max(
+      1,
+      Number(
+        campaign.max_select || 1
+      )
+    );
+
+  if(checkbox.checked){
+
+    if(
+      Object.keys(
+        selection
+      ).length >=
+      maxSelect
+    ){
+
+      checkbox.checked = false;
+
+      alert(
+        `เลือกของแถมได้สูงสุด ${maxSelect} ชิ้น`
+      );
+
+      return;
+    }
+
+    selection[
+      giftItemId
+    ] = {
+
+      gift_item_id:
+        giftItemId,
+
+      character_id:
+        ""
+
+    };
+
+  }else{
+
+    delete selection[
+      giftItemId
+    ];
+
+  }
+
+  refreshSimpleGiftItemUI(
+    campaign,
+    item
+  );
+
+  refreshSimpleGiftCampaignCount(
+    campaign
+  );
+
+}
+
+
+function refreshSimpleGiftCampaignCount(
+  campaign
+){
+
+  const campaignId =
+    normalizeGiftId(
+      campaign.campaign_id
+    );
+
+  const count =
+    getSimpleGiftSelectedCount(
+      campaignId
+    );
+
+  const maxSelect =
+    Math.max(
+      1,
+      Number(
+        campaign.max_select || 1
+      )
+    );
+
+  const box =
+    document.querySelector(
+      `[data-simple-gift-count="${CSS.escape(
+        campaignId
+      )}"]`
+    );
+
+  if(box){
+
+    box.textContent =
+      `เลือกแล้ว ${count} / ${maxSelect} ชิ้น`;
+
+  }
+
+}
+
+
+function refreshSimpleGiftItemUI(
+  campaign,
+  item
+){
+
+  const campaignId =
+    normalizeGiftId(
+      campaign.campaign_id
+    );
+
+  const giftItemId =
+    normalizeGiftId(
+      item.gift_item_id
+    );
+
+  const selection =
+    getSimpleGiftCampaignSelection(
+      campaignId
+    );
+
+  const selected =
+    Boolean(
+      selection[
+        giftItemId
+      ]
+    );
+
+  const row =
+    document.querySelector(
+      `[data-simple-gift-row="${CSS.escape(
+        campaignId +
+        "::" +
+        giftItemId
+      )}"]`
+    );
+
+  if(row){
+
+    row.classList.toggle(
+      "selected",
+      selected
+    );
+
+  }
+
+  const characterBox =
+    document.querySelector(
+      `[data-simple-character-box="${CSS.escape(
+        campaignId +
+        "::" +
+        giftItemId
+      )}"]`
+    );
+
+  if(!characterBox){
+    return;
+  }
+
+  if(!selected){
+
+    characterBox.innerHTML = "";
+
+    return;
+  }
+
+  const characters =
+    getCharactersForGiftItem(
+      giftItemId
+    );
+
+  if(!characters.length){
+
+    characterBox.innerHTML = `
+
+<div
+style="
+margin-top:8px;
+font-size:12px;
+color:#be123c;
+"
+>
+ยังไม่มีตัวละครให้เลือก
+</div>
+
+`;
+
+    return;
+  }
+
+  const selectedCharacterId =
+    normalizeGiftId(
+      selection[
+        giftItemId
+      ].character_id
+    );
+
+  characterBox.innerHTML = `
+
+<div class="gift-character-title">
+เลือกตัวละคร
+</div>
+
+<div class="gift-char-list">
+
+${characters.map(
+  character=>{
+
+    const characterId =
+      normalizeGiftId(
+        character.character_id
+      );
+
+    const characterImage =
+      String(
+        character.character_image ||
+        character.image ||
+        ""
+      ).trim();
+
+    return `
+
+<label class="gift-char-item">
+
+<input
+type="radio"
+name="simple-gift-character-${escapeHtml(
+  campaignId +
+  "-" +
+  giftItemId
+)}"
+value="${escapeHtml(
+  characterId
+)}"
+${
+  selectedCharacterId ===
+  characterId
+    ? " checked"
+    : ""
+}
+onchange="
+selectSimpleGiftCharacter(
+'${escapeJsValue(campaignId)}',
+'${escapeJsValue(giftItemId)}',
+this.value
+)
+"
+>
+
+${
+  characterImage
+    ? `
+
+<img
+class="gift-char-image"
+src="${escapeHtml(
+  characterImage
+)}"
+alt=""
+>
+
+`
+    : ""
+}
+
+<span>
+
+${escapeHtml(
+  character.character_name ||
+  characterId
+)}
+
+</span>
+
+</label>
+
+`;
+
+  }
+).join("")}
+
+</div>
+
+`;
+
+}
+
+
+function selectSimpleGiftCharacter(
+  campaignId,
+  giftItemId,
+  characterId
+){
+
+  const selection =
+    getSimpleGiftCampaignSelection(
+      campaignId
+    );
+
+  const itemSelection =
+    selection[
+      normalizeGiftId(
+        giftItemId
+      )
+    ];
+
+  if(!itemSelection){
+    return;
+  }
+
+  itemSelection.character_id =
+    normalizeGiftId(
+      characterId
+    );
 
 }
 
@@ -4662,7 +5060,6 @@ function selectCheckoutGiftCharacter(
 
 }
 
-
 function validateCheckoutGiftSelections(){
 
   for(
@@ -4671,190 +5068,78 @@ function validateCheckoutGiftSelections(){
       .eligibleCampaigns
   ){
 
-    for(
-      const rule
-      of campaign.rules
+    const campaignId =
+      normalizeGiftId(
+        campaign.campaign_id
+      );
+
+    const selection =
+      getSimpleGiftCampaignSelection(
+        campaignId
+      );
+
+    const selectedIds =
+      Object.keys(
+        selection
+      );
+
+    const maxSelect =
+      Math.max(
+        1,
+        Number(
+          campaign.max_select || 1
+        )
+      );
+
+    if(
+      selectedIds.length >
+      maxSelect
     ){
 
-      const selectedCount =
-        getGiftRuleSelectedCount(
-          rule.rule_id
+      alert(
+        `เลือกของแถมได้สูงสุด ${maxSelect} ชิ้น`
+      );
+
+      return false;
+    }
+
+    for(
+      const giftItemId
+      of selectedIds
+    ){
+
+      const item =
+        findSimpleGiftItem(
+          campaign,
+          giftItemId
         );
 
-      const maxSelect =
-        Math.max(
-          1,
-          Number(
-            rule.max_select || 1
-          )
-        );
+      if(!item){
+        continue;
+      }
 
       if(
-        selectedCount > maxSelect
+        !normalizeGiftBoolean(
+          item.has_character
+        )
       ){
+        continue;
+      }
+
+      const characterId =
+        normalizeGiftId(
+          selection[
+            giftItemId
+          ].character_id
+        );
+
+      if(!characterId){
 
         alert(
-          `ของแถม ${rule.rule_name || ""} เลือกได้สูงสุด ${maxSelect} ชิ้น`
+          `กรุณาเลือกตัวละครของ ${item.gift_name || "ของแถม"}`
         );
 
         return false;
-      }
-
-      const ruleSelection =
-        getGiftRuleSelection(
-          rule.rule_id
-        );
-
-      for(
-        const [
-          giftItemId,
-          selection
-        ]
-        of Object.entries(
-          ruleSelection
-        )
-      ){
-
-        const item =
-          findGiftItemInRule(
-            rule,
-            giftItemId
-          );
-
-        if(!item){
-          continue;
-        }
-
-        const qty =
-          Math.max(
-            0,
-            Number(
-              selection.qty || 0
-            )
-          );
-
-        if(
-          !normalizeGiftBoolean(
-            item.has_character
-          )
-        ){
-          continue;
-        }
-
-        const characters =
-          getCharactersForGiftItem(
-            giftItemId
-          );
-
-        if(!characters.length){
-
-          alert(
-            `ของแถม ${item.gift_name || ""} เปิดให้เลือกตัวละคร แต่ยังไม่มี Character ที่ใช้งานได้`
-          );
-
-          return false;
-        }
-
-        const selectedCharacters =
-          Array.isArray(
-            selection.characters
-          )
-            ? selection.characters
-            : [];
-
-        for(
-          let index = 0;
-          index < qty;
-          index++
-        ){
-
-          if(
-            !normalizeGiftId(
-              selectedCharacters[
-                index
-              ]
-            )
-          ){
-
-            alert(
-              `กรุณาเลือกตัวละครของ ${item.gift_name || "ของแถม"} ชิ้นที่ ${index + 1}`
-            );
-
-            return false;
-          }
-
-        }
-
-        const maxSameCharacter =
-          Math.max(
-            1,
-            Number(
-              item.max_same_character || 1
-            )
-          );
-
-        const counts = {};
-
-        selectedCharacters
-          .slice(
-            0,
-            qty
-          )
-          .forEach(
-            characterId => {
-
-              const normalizedId =
-                normalizeGiftId(
-                  characterId
-                );
-
-              counts[
-                normalizedId
-              ] =
-                (
-                  counts[
-                    normalizedId
-                  ] || 0
-                ) + 1;
-
-            }
-          );
-
-        for(
-          const [
-            characterId,
-            count
-          ]
-          of Object.entries(
-            counts
-          )
-        ){
-
-          if(
-            count >
-            maxSameCharacter
-          ){
-
-            const character =
-              characters.find(
-                item =>
-
-                  normalizeGiftId(
-                    item.character_id
-                  ) ===
-                  characterId
-
-              );
-
-            alert(
-              `${character ? character.character_name : "ตัวละครเดียวกัน"} เลือกซ้ำได้สูงสุด ${maxSameCharacter} ชิ้น`
-            );
-
-            return false;
-          }
-
-        }
-
       }
 
     }
@@ -4872,179 +5157,117 @@ function collectCheckoutGiftSelections(){
   checkoutGiftState
     .eligibleCampaigns
     .forEach(
-      campaign => {
+      campaign=>{
 
-        campaign.rules.forEach(
-          rule => {
+        const campaignId =
+          normalizeGiftId(
+            campaign.campaign_id
+          );
 
-            /*
-            rule.rule_id อาจเป็น Selection ID เสมือน
-            ใช้สำหรับเก็บ State ใน Checkout เท่านั้น
-            */
+        const selection =
+          getSimpleGiftCampaignSelection(
+            campaignId
+          );
 
-            const selectionRuleId =
+        const entitlementRule =
+          campaign.highest_rule ||
+          {};
+
+        Object.entries(
+          selection
+        ).forEach(
+          ([
+            giftItemId,
+            selected
+          ])=>{
+
+            const item =
+              findSimpleGiftItem(
+                campaign,
+                giftItemId
+              );
+
+            if(!item){
+              return;
+            }
+
+            const characterId =
               normalizeGiftId(
-                rule.rule_id
+                selected.character_id
               );
 
-            /*
-            rule_id จริงที่ Gift Item สังกัด
-            */
-
-            const sourceRuleId =
-              normalizeGiftId(
-                rule.source_rule_id ||
-                rule.rule_id
+            const characters =
+              getCharactersForGiftItem(
+                giftItemId
               );
 
-            /*
-            Rule ที่เป็นผู้มอบสิทธิ์
-            */
+            const character =
+              characters.find(
+                row=>
 
-            const entitlementRuleId =
-              normalizeGiftId(
-                rule.entitlement_rule_id ||
-                sourceRuleId
+                  normalizeGiftId(
+                    row.character_id
+                  ) ===
+                  characterId
               );
 
-            const ruleSelection =
-              getGiftRuleSelection(
-                selectionRuleId
-              );
+            gifts.push({
 
-            Object.entries(
-              ruleSelection
-            ).forEach(
-              ([
-                giftItemId,
-                selection
-              ]) => {
+              campaign_id:
+                campaignId,
 
-                const item =
-                  findGiftItemInRule(
-                    rule,
-                    giftItemId
-                  );
+              campaign_name:
+                campaign.campaign_name ||
+                "",
 
-                if(!item){
-                  return;
-                }
+              /*
+              Rule จริงที่ Gift Item อยู่
+              */
+              rule_id:
+                normalizeGiftId(
+                  item.rule_id
+                ),
 
-                const qty =
-                  Math.max(
-                    0,
-                    Math.floor(
-                      Number(
-                        selection.qty || 0
-                      )
-                    )
-                  );
+              /*
+              Rule สูงสุดที่มอบจำนวนสิทธิ์รวม
+              */
+              entitlement_rule_id:
+                normalizeGiftId(
+                  entitlementRule.rule_id
+                ),
 
-                const characters =
-                  getCharactersForGiftItem(
-                    giftItemId
-                  );
+              temporary_simple_gift:
+                true,
 
-                for(
-                  let index = 0;
-                  index < qty;
-                  index++
-                ){
+              gift_item_id:
+                normalizeGiftId(
+                  item.gift_item_id
+                ),
 
-                  const characterId =
-                    normalizeGiftId(
-                      selection.characters &&
-                      selection.characters[
-                        index
-                      ]
-                    );
+              gift_id:
+                normalizeGiftId(
+                  item.gift_item_id
+                ),
 
-                  const character =
-                    characters.find(
-                      row =>
+              gift_name:
+                item.gift_name ||
+                "",
 
-                        normalizeGiftId(
-                          row.character_id
-                        ) ===
-                        characterId
-                    );
+              character_id:
+                characterId,
 
-                  gifts.push({
+              character_name:
+                character
+                  ? character.character_name ||
+                    ""
+                  : "",
 
-                    campaign_id:
-                      normalizeGiftId(
-                        campaign.campaign_id
-                      ),
+              collection_id:
+                normalizeGiftId(
+                  campaign.collection_id
+                )
 
-                    campaign_name:
-                      campaign.campaign_name ||
-                      "",
-
-                    /*
-                    ส่ง Rule ต้นทางจริง
-                    เพื่อให้ Gift Item กับ Rule ตรงกัน
-                    */
-                    rule_id:
-                      sourceRuleId,
-
-                    rule_name:
-                      rule.source_rule_name ||
-                      rule.rule_name ||
-                      "",
-
-                    tier_name:
-                      rule.source_rule_name ||
-                      rule.rule_name ||
-                      "",
-
-                    /*
-                    ข้อมูลเสริมสำหรับตรวจสอบว่า
-                    สิทธิ์นี้มาจาก Rule ไหน
-                    */
-                    entitlement_rule_id:
-                      entitlementRuleId,
-
-                    entitlement_rule_name:
-                      rule.entitlement_rule_name ||
-                      "",
-
-                    selection_rule_id:
-                      selectionRuleId,
-
-                    inherited_reward:
-                      Boolean(
-                        rule.inherited
-                      ),
-
-                    gift_item_id:
-                      giftItemId,
-
-                    gift_id:
-                      giftItemId,
-
-                    gift_name:
-                      item.gift_name ||
-                      "",
-
-                    character_id:
-                      characterId,
-
-                    character_name:
-                      character
-                        ? character.character_name || ""
-                        : "",
-
-                    collection_id:
-                      normalizeGiftId(
-                        campaign.collection_id
-                      )
-
-                  });
-
-                }
-
-              }
-            );
+            });
 
           }
         );
@@ -5055,7 +5278,7 @@ function collectCheckoutGiftSelections(){
   return gifts;
 
 }
-
+  
 function goPayment(){
 
   if(checkoutSubmitting){
