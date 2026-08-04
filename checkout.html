@@ -2748,22 +2748,282 @@ function campaignHasRequiredItem(
 
 }
 
+function normalizeCheckoutGiftRewardMode(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .trim()
+    .toLowerCase() === "custom"
+      ? "custom"
+      : "normal";
+
+}
+
+
+function createCheckoutGiftSelectionRuleId(
+  entitlementRuleId,
+  sourceRuleId
+){
+
+  const entitlementId =
+    normalizeGiftId(
+      entitlementRuleId
+    );
+
+  const sourceId =
+    normalizeGiftId(
+      sourceRuleId
+    );
+
+  if(
+    entitlementId ===
+    sourceId
+  ){
+
+    return entitlementId;
+
+  }
+
+  return (
+    entitlementId +
+    "__SOURCE__" +
+    sourceId
+  );
+
+}
+
+
+function getCheckoutGiftRuleItems(
+  sourceRuleId,
+  giftItems
+){
+
+  const normalizedSourceRuleId =
+    normalizeGiftId(
+      sourceRuleId
+    );
+
+  return (
+    Array.isArray(giftItems)
+      ? giftItems
+      : []
+  )
+    .filter(
+      item =>
+
+        normalizeGiftId(
+          item.rule_id
+        ) ===
+        normalizedSourceRuleId
+    )
+    .sort(
+      (
+        firstItem,
+        secondItem
+      ) =>
+
+        Number(
+          firstItem.sort_order || 0
+        ) -
+
+        Number(
+          secondItem.sort_order || 0
+        )
+    );
+
+}
+
+
+function buildCheckoutGiftSelectionGroup({
+  entitlementRule,
+  sourceRule,
+  maxSelect,
+  giftItems,
+  inherited
+}){
+
+  if(
+    !entitlementRule ||
+    !sourceRule
+  ){
+
+    return null;
+
+  }
+
+  const entitlementRuleId =
+    normalizeGiftId(
+      entitlementRule.rule_id
+    );
+
+  const sourceRuleId =
+    normalizeGiftId(
+      sourceRule.rule_id
+    );
+
+  const selectionRuleId =
+    createCheckoutGiftSelectionRuleId(
+      entitlementRuleId,
+      sourceRuleId
+    );
+
+  const items =
+    getCheckoutGiftRuleItems(
+      sourceRuleId,
+      giftItems
+    );
+
+  if(!items.length){
+
+    return null;
+
+  }
+
+  const entitlementRuleName =
+    String(
+      entitlementRule.rule_name ||
+      entitlementRuleId
+    ).trim();
+
+  const sourceRuleName =
+    String(
+      sourceRule.rule_name ||
+      sourceRuleId
+    ).trim();
+
+  const isInherited =
+    Boolean(inherited);
+
+  return {
+
+    /*
+    rule_id ใช้เป็น ID ของกลุ่มการเลือกในหน้า Checkout
+    อาจเป็น ID เสมือนเมื่อเป็นสิทธิ์จากเทียร์ก่อนหน้า
+    */
+    ...sourceRule,
+
+    rule_id:
+      selectionRuleId,
+
+    selection_rule_id:
+      selectionRuleId,
+
+    /*
+    Rule ที่เป็นเจ้าของสิทธิ์
+    เช่น ยอด 1,200 เป็นผู้มอบสิทธิ์ยอด 600 เพิ่ม 2 ชิ้น
+    */
+    entitlement_rule_id:
+      entitlementRuleId,
+
+    entitlement_rule_name:
+      entitlementRuleName,
+
+    entitlement_min_amount:
+      Number(
+        entitlementRule.min_amount || 0
+      ),
+
+    /*
+    Rule ต้นทางของ Gift Item
+    */
+    source_rule_id:
+      sourceRuleId,
+
+    source_rule_name:
+      sourceRuleName,
+
+    source_min_amount:
+      Number(
+        sourceRule.min_amount || 0
+      ),
+
+    max_select:
+      Math.max(
+        1,
+        Math.floor(
+          Number(
+            maxSelect || 1
+          )
+        )
+      ),
+
+    /*
+    ใช้เงื่อนไขเลือกซ้ำของ Rule ต้นทาง
+    เพราะ Gift Item มาจาก Rule ต้นทาง
+    */
+    allow_duplicate:
+      sourceRule.allow_duplicate,
+
+    reward_mode:
+      normalizeCheckoutGiftRewardMode(
+        entitlementRule.reward_mode
+      ),
+
+    reward_description:
+      String(
+        entitlementRule.reward_description ||
+        ""
+      ).trim(),
+
+    inherited:
+      isInherited,
+
+    rule_name:
+      isInherited
+        ? (
+            sourceRuleName +
+            " — สิทธิ์เพิ่มจาก " +
+            entitlementRuleName
+          )
+        : sourceRuleName,
+
+    display_description:
+      isInherited
+        ? (
+            "สิทธิ์จาก " +
+            entitlementRuleName +
+            " ให้เลือกของแถมจาก " +
+            sourceRuleName
+          )
+        : "",
+
+    items:
+      items
+
+  };
+
+}
+  
 function buildEligibleGiftCampaigns(){
 
   const result = [];
 
   const campaigns =
-    checkoutGiftState.campaigns || [];
+    Array.isArray(
+      checkoutGiftState.campaigns
+    )
+      ? checkoutGiftState.campaigns
+      : [];
 
   const rules =
-    checkoutGiftState.rules || [];
+    Array.isArray(
+      checkoutGiftState.rules
+    )
+      ? checkoutGiftState.rules
+      : [];
 
   const giftItems =
-    checkoutGiftState.items || [];
-
+    Array.isArray(
+      checkoutGiftState.items
+    )
+      ? checkoutGiftState.items
+      : [];
 
   campaigns.forEach(
-    campaign=>{
+    campaign => {
 
       const campaignId =
         normalizeGiftId(
@@ -2771,16 +3031,11 @@ function buildEligibleGiftCampaigns(){
         );
 
       if(!campaignId){
-
         return;
-
       }
 
-
       /*
-      =========================================
-      1. หาสินค้าที่ Campaign นี้ใช้คำนวณ
-      =========================================
+      1. หาสินค้าในตะกร้าที่เข้าเงื่อนไข Campaign
       */
 
       const eligibleCartItems =
@@ -2788,10 +3043,7 @@ function buildEligibleGiftCampaigns(){
           campaign
         );
 
-
-      if(
-        eligibleCartItems.length===0
-      ){
+      if(!eligibleCartItems.length){
 
         console.log(
           "Campaign ไม่มีสินค้าเข้าเงื่อนไข:",
@@ -2802,11 +3054,8 @@ function buildEligibleGiftCampaigns(){
 
       }
 
-
       /*
-      =========================================
-      2. คำนวณยอดที่ใช้รับของแถม
-      =========================================
+      2. คำนวณยอดที่เข้าเงื่อนไข
       */
 
       const eligibleTotal =
@@ -2814,7 +3063,8 @@ function buildEligibleGiftCampaigns(){
           (
             sum,
             item
-          )=>
+          ) =>
+
             sum +
             getCartItemTotal(
               item
@@ -2822,73 +3072,93 @@ function buildEligibleGiftCampaigns(){
           0
         );
 
-
       if(
         !Number.isFinite(
           eligibleTotal
         ) ||
-        eligibleTotal<=0
+        eligibleTotal <= 0
       ){
 
         return;
 
       }
 
-
       /*
-      =========================================
-      3. หา Rule ที่อยู่ใน Campaign
-         และยอดถึงเงื่อนไข
-      =========================================
+      3. Rule ทั้งหมดของ Campaign
       */
 
-      const matchedRules =
+      const campaignRules =
         rules
           .filter(
-            rule=>
+            rule =>
 
               normalizeGiftId(
                 rule.campaign_id
               ) ===
               campaignId
-
-          )
-          .filter(
-            rule=>{
-
-              const minAmount =
-                Number(
-                  rule.min_amount || 0
-                );
-
-              return (
-                Number.isFinite(
-                  minAmount
-                ) &&
-                eligibleTotal >=
-                minAmount
-              );
-
-            }
           )
           .sort(
             (
-              a,
-              b
-            )=>
+              firstRule,
+              secondRule
+            ) =>
 
               Number(
-                a.min_amount || 0
+                firstRule.min_amount || 0
               ) -
+
               Number(
-                b.min_amount || 0
+                secondRule.min_amount || 0
               )
           );
 
+      const campaignRuleMap = {};
 
-      if(
-        matchedRules.length===0
-      ){
+      campaignRules.forEach(
+        rule => {
+
+          const ruleId =
+            normalizeGiftId(
+              rule.rule_id
+            );
+
+          if(ruleId){
+
+            campaignRuleMap[
+              ruleId
+            ] =
+              rule;
+
+          }
+
+        }
+      );
+
+      /*
+      4. Rule ที่ยอดลูกค้าถึง
+      */
+
+      const matchedRules =
+        campaignRules.filter(
+          rule => {
+
+            const minAmount =
+              Number(
+                rule.min_amount || 0
+              );
+
+            return (
+              Number.isFinite(
+                minAmount
+              ) &&
+              eligibleTotal >=
+              minAmount
+            );
+
+          }
+        );
+
+      if(!matchedRules.length){
 
         console.log(
           "ยอดยังไม่ถึง Rule:",
@@ -2900,75 +3170,199 @@ function buildEligibleGiftCampaigns(){
 
       }
 
-
       /*
-      =========================================
-      4. เชื่อม Gift Item ด้วย rule_id
+      5. สร้างกลุ่มสิทธิ์
 
-      GiftItems ไม่มี campaign_id
-      =========================================
+      - สิทธิ์ของ Rule ตัวเอง
+      - สิทธิ์เพิ่มเติมจาก rewards[]
       */
 
-      const preparedRules =
-        matchedRules
-          .map(
-            rule=>{
+      const selectionGroups = [];
 
-              const ruleId =
+      matchedRules.forEach(
+        entitlementRule => {
+
+          const entitlementRuleId =
+            normalizeGiftId(
+              entitlementRule.rule_id
+            );
+
+          /*
+          5.1 สิทธิ์ปกติของ Rule ตัวเอง
+
+          ตัวอย่าง:
+          ยอด 1,200 เลือกของเทียร์ 1,200 ได้ 1 ชิ้น
+          */
+
+          const ownGroup =
+            buildCheckoutGiftSelectionGroup({
+
+              entitlementRule:
+                entitlementRule,
+
+              sourceRule:
+                entitlementRule,
+
+              maxSelect:
+                Math.max(
+                  1,
+                  Number(
+                    entitlementRule.max_select ||
+                    1
+                  )
+                ),
+
+              giftItems:
+                giftItems,
+
+              inherited:
+                false
+
+            });
+
+          if(ownGroup){
+
+            selectionGroups.push(
+              ownGroup
+            );
+
+          }else{
+
+            console.warn(
+              "Rule ไม่มี Gift Item ของตัวเอง:",
+              entitlementRuleId
+            );
+
+          }
+
+          /*
+          5.2 สิทธิ์เพิ่มจากเทียร์ก่อนหน้า
+          */
+
+          const rewardMode =
+            normalizeCheckoutGiftRewardMode(
+              entitlementRule.reward_mode
+            );
+
+          if(
+            rewardMode !==
+            "custom"
+          ){
+
+            return;
+
+          }
+
+          const rewards =
+            Array.isArray(
+              entitlementRule.rewards
+            )
+              ? entitlementRule.rewards
+              : [];
+
+          rewards.forEach(
+            reward => {
+
+              if(
+                !normalizeGiftBoolean(
+                  reward.active === undefined
+                    ? true
+                    : reward.active
+                )
+              ){
+
+                return;
+
+              }
+
+              const sourceRuleId =
                 normalizeGiftId(
-                  rule.rule_id
+                  reward.source_rule_id
                 );
 
-
-              const ruleItems =
-                giftItems
-                  .filter(
-                    item=>
-
-                      normalizeGiftId(
-                        item.rule_id
-                      ) ===
-                      ruleId
-
+              const rewardQuantity =
+                Math.floor(
+                  Number(
+                    reward.quantity || 0
                   )
-                  .sort(
-                    (
-                      a,
-                      b
-                    )=>
+                );
 
-                      Number(
-                        a.sort_order || 0
-                      ) -
-                      Number(
-                        b.sort_order || 0
-                      )
-                  );
+              if(
+                !sourceRuleId ||
+                rewardQuantity < 1
+              ){
 
+                return;
 
-              return {
+              }
 
-                ...rule,
+              const sourceRule =
+                campaignRuleMap[
+                  sourceRuleId
+                ];
 
-                items:
-                  ruleItems
+              if(!sourceRule){
 
-              };
+                console.warn(
+                  "ไม่พบ Source Rule:",
+                  {
+                    entitlement_rule_id:
+                      entitlementRuleId,
+
+                    source_rule_id:
+                      sourceRuleId
+                  }
+                );
+
+                return;
+
+              }
+
+              const inheritedGroup =
+                buildCheckoutGiftSelectionGroup({
+
+                  entitlementRule:
+                    entitlementRule,
+
+                  sourceRule:
+                    sourceRule,
+
+                  maxSelect:
+                    rewardQuantity,
+
+                  giftItems:
+                    giftItems,
+
+                  inherited:
+                    true
+
+                });
+
+              if(inheritedGroup){
+
+                selectionGroups.push(
+                  inheritedGroup
+                );
+
+              }else{
+
+                console.warn(
+                  "Source Rule ไม่มี Gift Item:",
+                  sourceRuleId
+                );
+
+              }
 
             }
-          )
-          .filter(
-            rule=>
-              rule.items.length>0
           );
 
+        }
+      );
 
-      if(
-        preparedRules.length===0
-      ){
+      if(!selectionGroups.length){
 
         console.warn(
-          "พบ Rule แต่ไม่มี Gift Item ที่เชื่อมด้วย rule_id:",
+          "พบ Rule แต่ไม่มีกลุ่มสิทธิ์ที่แสดงได้:",
           campaignId
         );
 
@@ -2976,11 +3370,8 @@ function buildEligibleGiftCampaigns(){
 
       }
 
-
       /*
-      =========================================
-      5. ส่งโครงสร้างที่ Renderer ใช้งาน
-      =========================================
+      6. ส่งข้อมูลให้ Renderer
       */
 
       result.push({
@@ -2996,14 +3387,17 @@ function buildEligibleGiftCampaigns(){
         eligible_total:
           eligibleTotal,
 
+        /*
+        ใช้ชื่อ rules เดิมเพื่อให้ Renderer เดิมทำงานต่อได้
+        แต่ข้างในเป็น Selection Group แล้ว
+        */
         rules:
-          preparedRules
+          selectionGroups
 
       });
 
     }
   );
-
 
   return result;
 
@@ -3244,7 +3638,6 @@ ${escapeHtml(scopeText)}
 
 }
 
-
 function renderCheckoutGiftRule(
   campaign,
   rule
@@ -3253,8 +3646,10 @@ function renderCheckoutGiftRule(
   const maxSelect =
     Math.max(
       1,
-      Number(
-        rule.max_select || 1
+      Math.floor(
+        Number(
+          rule.max_select || 1
+        )
       )
     );
 
@@ -3262,6 +3657,23 @@ function renderCheckoutGiftRule(
     normalizeGiftBoolean(
       rule.allow_duplicate
     );
+
+  const inherited =
+    Boolean(
+      rule.inherited
+    );
+
+  const description =
+    String(
+      rule.display_description ||
+      ""
+    ).trim();
+
+  const rewardDescription =
+    String(
+      rule.reward_description ||
+      ""
+    ).trim();
 
   let html = `
 
@@ -3283,10 +3695,18 @@ data-gift-duplicate="${
 <div>
 
 <div class="gift-rule-name">
+
+${
+  inherited
+    ? "🔁 "
+    : ""
+}
+
 ${escapeHtml(
   rule.rule_name ||
   "Gift Rule"
 )}
+
 </div>
 
 <div
@@ -3294,25 +3714,81 @@ style="
 font-size:13px;
 color:#64748b;
 margin-top:4px;
+line-height:1.7;
 "
 >
+
+${
+  inherited
+    ? `
+
+${escapeHtml(
+  description
+)}
+
+<br>
+
+เลือกได้สูงสุด
+<b>${maxSelect}</b>
+ชิ้น
+
+`
+    : `
+
 ซื้อครบ
 ฿${Number(
-  rule.min_amount || 0
+  rule.source_min_amount ??
+  rule.min_amount ??
+  0
 ).toLocaleString(
   "th-TH",
   {
     maximumFractionDigits:2
   }
 )}
+
 •
-เลือกได้สูงสุด ${maxSelect} ชิ้น
+เลือกได้สูงสุด
+${maxSelect}
+ชิ้น
+
+`
+}
+
 ${
   allowDuplicate
     ? " • เลือกรายการเดิมซ้ำได้"
     : ""
 }
+
 </div>
+
+${
+  inherited &&
+  rewardDescription
+    ? `
+
+<div
+style="
+margin-top:8px;
+padding:9px 11px;
+border-radius:10px;
+background:#f0f9ff;
+color:#486b82;
+font-size:12px;
+line-height:1.65;
+"
+>
+
+${escapeHtml(
+  rewardDescription
+)}
+
+</div>
+
+`
+    : ""
+}
 
 </div>
 
@@ -3322,7 +3798,9 @@ data-gift-count-for="${escapeHtml(
   rule.rule_id || ""
 )}"
 >
+
 เลือกแล้ว 0 / ${maxSelect}
+
 </div>
 
 </div>
@@ -3352,7 +3830,6 @@ data-gift-count-for="${escapeHtml(
   return html;
 
 }
-
 
 function renderCheckoutGiftItem(
   campaign,
@@ -4396,7 +4873,6 @@ function validateCheckoutGiftSelections(){
 
 }
 
-
 function collectCheckoutGiftSelections(){
 
   const gifts = [];
@@ -4409,9 +4885,39 @@ function collectCheckoutGiftSelections(){
         campaign.rules.forEach(
           rule => {
 
+            /*
+            rule.rule_id อาจเป็น Selection ID เสมือน
+            ใช้สำหรับเก็บ State ใน Checkout เท่านั้น
+            */
+
+            const selectionRuleId =
+              normalizeGiftId(
+                rule.rule_id
+              );
+
+            /*
+            rule_id จริงที่ Gift Item สังกัด
+            */
+
+            const sourceRuleId =
+              normalizeGiftId(
+                rule.source_rule_id ||
+                rule.rule_id
+              );
+
+            /*
+            Rule ที่เป็นผู้มอบสิทธิ์
+            */
+
+            const entitlementRuleId =
+              normalizeGiftId(
+                rule.entitlement_rule_id ||
+                sourceRuleId
+              );
+
             const ruleSelection =
               getGiftRuleSelection(
-                rule.rule_id
+                selectionRuleId
               );
 
             Object.entries(
@@ -4435,8 +4941,10 @@ function collectCheckoutGiftSelections(){
                 const qty =
                   Math.max(
                     0,
-                    Number(
-                      selection.qty || 0
+                    Math.floor(
+                      Number(
+                        selection.qty || 0
+                      )
                     )
                   );
 
@@ -4467,7 +4975,6 @@ function collectCheckoutGiftSelections(){
                           row.character_id
                         ) ===
                         characterId
-
                     );
 
                   gifts.push({
@@ -4481,18 +4988,41 @@ function collectCheckoutGiftSelections(){
                       campaign.campaign_name ||
                       "",
 
+                    /*
+                    ส่ง Rule ต้นทางจริง
+                    เพื่อให้ Gift Item กับ Rule ตรงกัน
+                    */
                     rule_id:
-                      normalizeGiftId(
-                        rule.rule_id
-                      ),
+                      sourceRuleId,
 
                     rule_name:
+                      rule.source_rule_name ||
                       rule.rule_name ||
                       "",
 
                     tier_name:
+                      rule.source_rule_name ||
                       rule.rule_name ||
                       "",
+
+                    /*
+                    ข้อมูลเสริมสำหรับตรวจสอบว่า
+                    สิทธิ์นี้มาจาก Rule ไหน
+                    */
+                    entitlement_rule_id:
+                      entitlementRuleId,
+
+                    entitlement_rule_name:
+                      rule.entitlement_rule_name ||
+                      "",
+
+                    selection_rule_id:
+                      selectionRuleId,
+
+                    inherited_reward:
+                      Boolean(
+                        rule.inherited
+                      ),
 
                     gift_item_id:
                       giftItemId,
@@ -4533,9 +5063,6 @@ function collectCheckoutGiftSelections(){
   return gifts;
 
 }
-
-
-let checkoutSubmitting = false;
 
 function goPayment(){
 
