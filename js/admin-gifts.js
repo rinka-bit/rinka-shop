@@ -826,7 +826,6 @@ function renderGiftRuleNode(
             item.rule_id || ""
           ) ===
           ruleId
-
       ),
 
       "gift_name"
@@ -843,6 +842,121 @@ function renderGiftRuleNode(
     adminGiftOpenNodes.has(
       nodeKey
     );
+
+  const rewardMode =
+    normalizeAdminGiftRewardMode(
+      rule.reward_mode
+    );
+
+  const rewards =
+    Array.isArray(
+      rule.rewards
+    )
+      ? rule.rewards
+      : [];
+
+  const rewardDescription =
+    String(
+      rule.reward_description || ""
+    ).trim();
+
+  const rewardSummaryHtml =
+    rewardMode === "custom"
+      ? `
+
+<div
+style="
+margin-top:8px;
+padding:10px 12px;
+border:1px solid #d7ebf7;
+border-radius:12px;
+background:#f5fbff;
+color:#486b82;
+font-size:13px;
+line-height:1.7;
+"
+>
+
+<div
+style="
+font-weight:700;
+color:#3476a2;
+margin-bottom:5px;
+"
+>
+🔁 รวมสิทธิ์จากเทียร์ก่อนหน้า
+</div>
+
+${
+  rewards.length
+    ? rewards
+        .map(
+          reward => `
+
+<div>
+• ${escapeHtml(
+  reward.source_rule_name ||
+  reward.source_rule_id ||
+  "ไม่พบชื่อ Rule"
+)}
+จำนวน
+<b>${Math.max(
+  1,
+  Number(
+    reward.quantity || 1
+  )
+)}</b>
+ชิ้น
+</div>
+
+`
+        )
+        .join("")
+    : `
+
+<div style="color:#b45309;">
+ยังไม่ได้กำหนดเทียร์ก่อนหน้า
+</div>
+
+`
+}
+
+${
+  rewardDescription
+    ? `
+
+<div
+style="
+margin-top:7px;
+padding-top:7px;
+border-top:1px dashed #cbdde8;
+"
+>
+${escapeHtml(
+  rewardDescription
+)}
+</div>
+
+`
+    : ""
+}
+
+</div>
+
+`
+      : `
+
+<div
+style="
+margin-top:7px;
+color:#64748b;
+font-size:12px;
+"
+>
+📌 สิทธิ์แบบธรรมดาตามขั้น
+</div>
+
+`;
 
   return `
 
@@ -898,7 +1012,7 @@ ${formatGiftAdminMoney(
 
 &nbsp; • &nbsp;
 
-เลือกได้:
+ของแถมเทียร์นี้:
 
 ${Number(
   rule.max_select || 1
@@ -925,6 +1039,8 @@ ${renderGiftStatusBadge(
 )}
 
 </div>
+
+${rewardSummaryHtml}
 
 </div>
 
@@ -1013,7 +1129,6 @@ ${
 `;
 
 }
-
 
 function renderGiftItemNode(
   item
