@@ -5357,20 +5357,19 @@ function goPayment(){
     const gifts =
       collectCheckoutGiftSelections();
 
-    const checkoutData = {
+   const checkoutData = {
 
-      ...addressData,
+  ...addressData,
 
-      email:
-        addressData.email ||
-        customer.email ||
-        "",
+  email:
+    addressData.email ||
+    customer.email ||
+    "",
 
-      gifts:
-        gifts
+  gifts:
+    gifts
 
-    };
-
+};
     window.checkoutAddress =
       checkoutData;
 
