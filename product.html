@@ -1229,12 +1229,6 @@ function renderProduct(product){
           const soldOut =
             stock <= 0;
 
-          const image =
-            option.character_image ||
-            option.image ||
-            product.image ||
-            "";
-
           const addPrice =
             Number(
               option.additional_price || 0
@@ -1245,31 +1239,6 @@ function renderProduct(product){
 <div
 class="option-row ${soldOut ? "soldout" : ""}"
 id="optionRow_${optionId}">
-
-  ${
-    image
-      ? `
-
-<img
-src="${escapeProductAttribute(image)}"
-alt="${escapeProductAttribute(option.option_value || "")}"
-loading="lazy">
-
-`
-      : `
-
-<div
-style="
-width:52px;
-height:52px;
-border-radius:10px;
-background:#eef7fc;
-flex-shrink:0;
-">
-</div>
-
-`
-  }
 
   <div class="option-info">
 
