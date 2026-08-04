@@ -2521,7 +2521,6 @@ function updatePaymentCartCount(){
 
 }
 
-
 function showPaymentSuccess(
   orderId
 ){
@@ -2539,58 +2538,26 @@ function showPaymentSuccess(
 
 <div>
 
-<div class="payment-success-icon">
+  <div class="payment-success-icon">
+    ✓
+  </div>
 
-  ✓
+  <h2>
+    แจ้งชำระเงินเรียบร้อย
+  </h2>
 
-</div>
+  <p>
+    เลขออเดอร์
+    <b>
+      ${escapePaymentHtml(orderId)}
+    </b>
+  </p>
 
-<h2>
-
-  แจ้งชำระเงินเรียบร้อย
-
-</h2>
-
-<p>
-
-  เลขออเดอร์
-
-  <b>
-
-    ${escapePaymentHtml(orderId)}
-
-  </b>
-
-</p>
-
-<p>
-
-  กำลังเปิดหน้าคำสั่งซื้อ...
-
-</p>
+  <p>
+    กำลังเปิดหน้าคำสั่งซื้อ...
+  </p>
 
 </div>
-
-`;
-
-<div class="payment-success-icon">
-  ✓
-</div>
-
-<h2>
-  แจ้งชำระเงินเรียบร้อย
-</h2>
-
-<p>
-  เลขออเดอร์
-  <b>
-    ${escapePaymentHtml(orderId)}
-  </b>
-</p>
-
-<p>
-  กำลังเปิดหน้าคำสั่งซื้อ...
-</p>
 
 `;
 
@@ -2599,7 +2566,6 @@ function showPaymentSuccess(
   );
 
 }
-
 
 function showPaymentToast(
   message,
