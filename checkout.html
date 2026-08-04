@@ -961,16 +961,25 @@ const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
 const customer =
-JSON.parse(
-  localStorage.getItem(
-    "customer"
-  ) || "{}"
-);
+  JSON.parse(
+    localStorage.getItem(
+      "customer"
+    ) || "{}"
+  );
 
-if(!customer.email){
+const checkoutSessionToken =
+  String(
+    localStorage.getItem(
+      "session_token"
+    ) ||
+    customer.session_token ||
+    ""
+  ).trim();
 
-  window.location =
-  "login.html";
+if(!checkoutSessionToken){
+
+  window.location.href =
+    "login.html";
 
 }
   
@@ -1136,12 +1145,8 @@ async function loadDefaultAddress(){
     if(!selectedAddress){
 
       const sessionToken =
-        localStorage.getItem(
-          "session_token"
-        ) ||
-        customer.session_token ||
-        "";
-
+  checkoutSessionToken;
+      
       const query =
         new URLSearchParams();
 
@@ -1156,19 +1161,6 @@ async function loadDefaultAddress(){
           "session_token",
           sessionToken
         );
-
-      }else if(customer.email){
-
-        /*
-        รองรับ Backend เวอร์ชันเก่าชั่วคราว
-        */
-
-        query.set(
-          "email",
-          customer.email
-        );
-
-      }
 
       const response =
         await fetch(
