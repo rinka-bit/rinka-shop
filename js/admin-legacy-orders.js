@@ -2168,11 +2168,11 @@ ${legacyHtml(
 <button
 type="button"
 style="width:auto;"
-onclick="selectLegacyCustomer(${index},${JSON.stringify(mode)})">
-เลือก
-</button>
+onclick='selectLegacyCustomer(${index},${JSON.stringify(mode)})'>
 
-</div>
+เลือก
+
+</button>
 
 `
         )
