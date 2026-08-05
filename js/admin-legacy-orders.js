@@ -392,40 +392,53 @@ function renderLegacyOrderManager(){
 
 <div>
 
-<label class="legacy-label legacy-required">
+<label class="legacy-label">
 ชื่อแอค / ชื่อลูกค้า
 </label>
 
 <input
 id="legacyCustomerName"
 type="text"
-placeholder="@username หรือชื่อลูกค้า">
+placeholder="ระบบจะดึงจากบัญชีลูกค้าอัตโนมัติ"
+readonly>
 
 </div>
 
 <div>
 
 <label class="legacy-label">
-อีเมล (ไม่บังคับ)
+อีเมล
 </label>
 
 <input
 id="legacyEmail"
 type="email"
-placeholder="example@email.com">
+placeholder="ระบบจะดึงจากบัญชีลูกค้าอัตโนมัติ"
+readonly>
 
 </div>
 
-<div>
+<div class="legacy-full">
 
-<label class="legacy-label">
-Social / X (ไม่บังคับ)
+<label class="legacy-label legacy-required">
+X / Twitter ของลูกค้า
 </label>
 
 <input
 id="legacySocial"
 type="text"
-placeholder="@username">
+placeholder="@username หรือ https://x.com/username">
+
+<p
+style="
+margin:7px 0 0;
+font-size:12px;
+color:#64748b;
+line-height:1.6;
+"
+>
+ระบบจะค้นหาบัญชีลูกค้าจาก X/Twitter และผูกออเดอร์ให้อัตโนมัติ
+</p>
 
 </div>
 
@@ -473,50 +486,6 @@ placeholder="เช่น Genshin รอบเดือนกรกฎาคม"
 </select>
 
 </div>
-
-<div>
-
-<label class="legacy-label">
-ผูกกับบัญชีตอนนี้
-</label>
-
-<button
-type="button"
-class="legacy-secondary"
-onclick="openLegacyCustomerPickerForNewOrder()">
-🔗 ค้นหาบัญชีลูกค้า
-</button>
-
-<div
-id="legacySelectedCustomer"
-class="legacy-selected-customer"
-style="display:none;">
-</div>
-
-</div>
-
-</div>
-
-<div
-id="legacyNewOrderCustomerPicker"
-class="legacy-link-panel"
-style="display:none;">
-
-<h3>ค้นหาบัญชีลูกค้า</h3>
-
-<div style="display:flex;gap:8px;">
-
-<input
-id="legacyNewOrderCustomerKeyword"
-type="text"
-placeholder="ค้นหาชื่อ อีเมล หรือ X">
-
-<button
-type="button"
-style="width:auto;"
-onclick="searchLegacyCustomer('new')">
-ค้นหา
-</button>
 
 </div>
 
@@ -1603,9 +1572,9 @@ ${legacyGiftRows.length.toLocaleString("th-TH")} ชิ้น
 
 function collectLegacyOrderPayload(){
 
-  const customerName =
+  const social =
     document.getElementById(
-      "legacyCustomerName"
+      "legacySocial"
     )
       .value
       .trim();
@@ -1617,10 +1586,10 @@ function collectLegacyOrderPayload(){
       .value
       .trim();
 
-  if(!customerName){
+  if(!social){
 
     throw new Error(
-      "กรุณากรอกชื่อแอคหรือชื่อลูกค้า"
+      "กรุณากรอก X / Twitter ของลูกค้า"
     );
 
   }
@@ -1757,28 +1726,13 @@ function collectLegacyOrderPayload(){
 
   return {
 
-    customer_name:
-      customerName,
-
-    email:
-      document.getElementById(
-        "legacyEmail"
-      )
-        .value
-        .trim(),
+    /*
+    Backend จะค้นบัญชีและเติม
+    customer_name, email, customer_id ให้เอง
+    */
 
     social:
-      document.getElementById(
-        "legacySocial"
-      )
-        .value
-        .trim(),
-
-    customer_id:
-      legacySelectedCustomer
-        ? legacySelectedCustomer.customer_id ||
-          ""
-        : "",
+      social,
 
     preorder_round:
       preorderRound,
@@ -1838,7 +1792,6 @@ function collectLegacyOrderPayload(){
   };
 
 }
-
 
 async function saveLegacyOrder(){
 
