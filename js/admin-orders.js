@@ -931,6 +931,11 @@ id="feeBox_${escapeAdminOrderHtml(
 style="display:none;"
 >
 
+${renderAdminArrivalItems(
+  orderId,
+  order.items
+)}
+
 <div
 class="card"
 style="
@@ -1270,6 +1275,208 @@ ${quantity} ชิ้น
 
 }
 
+function renderAdminArrivalItems(
+  orderId,
+  items
+){
+
+  if(
+    !Array.isArray(items) ||
+    items.length === 0
+  ){
+
+    return `
+
+<div
+style="
+padding:12px;
+border:1px dashed #cbd5e1;
+border-radius:12px;
+color:#64748b;
+"
+>
+ไม่พบรายการสินค้า
+</div>
+
+`;
+
+  }
+
+
+  let html = `
+
+<div
+style="
+margin-bottom:16px;
+padding:14px;
+border:1px solid #dbeafe;
+border-radius:14px;
+background:#ffffff;
+"
+>
+
+<h4
+style="
+margin:0 0 6px;
+"
+>
+📦 สินค้าที่ถึงไทยแล้ว
+</h4>
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+margin-bottom:12px;
+"
+>
+ติ๊กเฉพาะรายการที่ถึงไทยในรอบนี้
+และระบุจำนวนที่ถึงแล้ว
+</div>
+
+`;
+
+
+  items.forEach(
+    (
+      item,
+      index
+    ) => {
+
+      const name =
+        String(
+          item.product_name ||
+          item.name ||
+          "สินค้า"
+        ).trim();
+
+      const quantity =
+        Math.max(
+          1,
+          Math.floor(
+            Number(
+              item.quantity ??
+              item.qty ??
+              1
+            )
+          )
+        );
+
+      const arrivedQty =
+        Math.max(
+          0,
+          Math.min(
+            quantity,
+            Math.floor(
+              Number(
+                item.arrived_th_qty ||
+                0
+              )
+            )
+          )
+        );
+
+      const checked =
+        arrivedQty > 0;
+
+
+      html += `
+
+<div
+style="
+display:grid;
+grid-template-columns:auto minmax(0,1fr) 110px;
+gap:10px;
+align-items:center;
+padding:11px 0;
+border-bottom:1px solid #e5e7eb;
+"
+>
+
+<input
+type="checkbox"
+id="arrivalCheck_${escapeAdminOrderHtml(orderId)}_${index}"
+${checked ? "checked" : ""}
+onchange="
+toggleAdminArrivalItem(
+  '${escapeAdminOrderJs(orderId)}',
+  ${index},
+  ${quantity}
+)
+"
+style="
+width:auto;
+"
+>
+
+<div>
+
+<div
+style="
+font-weight:700;
+word-break:break-word;
+"
+>
+${escapeAdminOrderHtml(name)}
+</div>
+
+<div
+style="
+font-size:12px;
+color:#64748b;
+margin-top:3px;
+"
+>
+สั่งทั้งหมด ${quantity} ชิ้น
+</div>
+
+</div>
+
+<div>
+
+<input
+type="number"
+id="arrivalQty_${escapeAdminOrderHtml(orderId)}_${index}"
+min="0"
+max="${quantity}"
+step="1"
+value="${arrivedQty}"
+${checked ? "" : "disabled"}
+style="
+width:100%;
+"
+>
+
+<div
+style="
+font-size:11px;
+color:#64748b;
+text-align:center;
+margin-top:3px;
+"
+>
+/ ${quantity}
+</div>
+
+</div>
+
+</div>
+
+`;
+
+    }
+  );
+
+
+  html += `
+
+</div>
+
+`;
+
+  return html;
+
+}
 
 /*
 =========================================
@@ -1490,6 +1697,186 @@ function groupAdminOrderGifts(
 
 }
 
+function toggleAdminArrivalItem(
+  orderId,
+  index,
+  maxQty
+){
+
+  const checkbox =
+    document.getElementById(
+      "arrivalCheck_" +
+      orderId +
+      "_" +
+      index
+    );
+
+  const qtyInput =
+    document.getElementById(
+      "arrivalQty_" +
+      orderId +
+      "_" +
+      index
+    );
+
+  if(
+    !checkbox ||
+    !qtyInput
+  ){
+
+    return;
+
+  }
+
+
+  qtyInput.disabled =
+    !checkbox.checked;
+
+
+  if(checkbox.checked){
+
+    let currentQty =
+      Number(
+        qtyInput.value || 0
+      );
+
+    if(
+      currentQty <= 0
+    ){
+
+      currentQty = 1;
+
+    }
+
+    qtyInput.value =
+      Math.min(
+        Number(maxQty) || 1,
+        currentQty
+      );
+
+  }else{
+
+    qtyInput.value =
+      0;
+
+  }
+
+}
+
+function getAdminArrivalItems(
+  orderId
+){
+
+  const order =
+    adminOrdersCache.find(
+      item =>
+
+        String(
+          item.order_id || ""
+        ).trim() ===
+        String(
+          orderId || ""
+        ).trim()
+    );
+
+
+  if(
+    !order ||
+    !Array.isArray(
+      order.items
+    )
+  ){
+
+    return [];
+
+  }
+
+
+  return order.items.map(
+    (
+      item,
+      index
+    ) => {
+
+      const checkbox =
+        document.getElementById(
+          "arrivalCheck_" +
+          orderId +
+          "_" +
+          index
+        );
+
+      const qtyInput =
+        document.getElementById(
+          "arrivalQty_" +
+          orderId +
+          "_" +
+          index
+        );
+
+
+      const quantity =
+        Math.max(
+          1,
+          Math.floor(
+            Number(
+              item.quantity ??
+              item.qty ??
+              1
+            )
+          )
+        );
+
+
+      let arrivedQty = 0;
+
+
+      if(
+        checkbox &&
+        checkbox.checked
+      ){
+
+        arrivedQty =
+          Math.floor(
+            Number(
+              qtyInput?.value || 0
+            )
+          );
+
+      }
+
+
+      if(
+        arrivedQty < 0 ||
+        arrivedQty > quantity
+      ){
+
+        throw new Error(
+          "จำนวนสินค้าที่ถึงไทยไม่ถูกต้อง: " +
+          (
+            item.product_name ||
+            item.name ||
+            "สินค้า"
+          )
+        );
+
+      }
+
+
+      return {
+
+        item_index:
+          index,
+
+        arrived_th_qty:
+          arrivedQty
+
+      };
+
+    }
+  );
+
+}
 
 /*
 =========================================
@@ -1607,6 +1994,53 @@ async function updateOrderStatus(
     status ===
     "ready_to_ship"
   ){
+
+   try{
+
+  payload.arrival_items =
+    getAdminArrivalItems(
+      orderId
+    );
+
+}catch(error){
+
+  alert(
+    error.message ||
+    "ข้อมูลสินค้าที่ถึงไทยไม่ถูกต้อง"
+  );
+
+  return;
+
+}
+
+
+const totalArrivedQty =
+  payload.arrival_items.reduce(
+    (
+      sum,
+      item
+    ) =>
+
+      sum +
+      Number(
+        item.arrived_th_qty || 0
+      ),
+
+    0
+  );
+
+
+if(
+  totalArrivedQty <= 0
+){
+
+  alert(
+    "กรุณาติ๊กสินค้าที่ถึงไทยอย่างน้อย 1 ชิ้น"
+  );
+
+  return;
+
+}
 
     payload.import_fee_round2 =
       Number(
