@@ -151,30 +151,449 @@ function statusClass(s){
 
 }
  
- async function loadOrders(){
- const box=document.getElementById("orderList");
- if(!sessionToken&&!customer.email){location.href="login.html";return}
- document.getElementById("pageTitle").textContent=statusFilter?statusText(statusFilter):"รายการออเดอร์ทั้งหมด";
- try{
-  const q=new URLSearchParams({action:"customerOrders"});
-  if(sessionToken) q.set("session_token",sessionToken); else q.set("email",customer.email||"");
-  const res=await fetch(API+"?"+q.toString());
-  if(!res.ok) throw new Error("HTTP "+res.status);
-  const data=await res.json();
-  if(data&&data.success===false) throw new Error(data.error||"โหลดออเดอร์ไม่สำเร็จ");
-  const orders=Array.isArray(data)?data:Array.isArray(data.orders)?data.orders:[];
-  const rows=statusFilter?orders.filter(o=>String(o.status||"")===statusFilter):orders;
-  if(!rows.length){
-   box.className="state";
-   box.innerHTML=`<div style="font-size:50px">📦</div><h2>ยังไม่มีออเดอร์</h2><p>${statusFilter?"ยังไม่มีออเดอร์ในสถานะนี้":"เมื่อสั่งซื้อแล้ว ออเดอร์จะแสดงที่นี่"}</p><a href="browse.html">เลือกซื้อสินค้า</a>`;
-   return;
+async function loadOrders(){
+
+  const box =
+    document.getElementById(
+      "orderList"
+    );
+
+
+  if(
+    !sessionToken &&
+    !customer.email
+  ){
+
+    location.href =
+      "login.html";
+
+    return;
+
   }
-  box.className="order-list";
-  box.innerHTML=rows.map(orderCard).join("");
- }catch(err){
-  console.error(err);box.className="state";box.innerHTML=`<div style="font-size:50px">⚠️</div><h2>โหลดออเดอร์ไม่สำเร็จ</h2><p>${esc(err.message||String(err))}</p><button onclick="loadOrders()">ลองใหม่</button>`;
- }
+
+
+  document
+    .getElementById(
+      "pageTitle"
+    )
+    .textContent =
+      statusFilter
+        ? statusText(
+            statusFilter
+          )
+        : "รายการออเดอร์ทั้งหมด";
+
+
+  try{
+
+    /*
+    =========================================
+    โหลดออเดอร์ระบบใหม่
+    =========================================
+    */
+
+    const newQuery =
+      new URLSearchParams({
+
+        action:
+          "customerOrders"
+
+      });
+
+
+    if(sessionToken){
+
+      newQuery.set(
+        "session_token",
+        sessionToken
+      );
+
+    }else{
+
+      newQuery.set(
+        "email",
+        customer.email || ""
+      );
+
+    }
+
+
+    /*
+    =========================================
+    โหลดออเดอร์เก่า
+
+    Legacy ต้องใช้ session เท่านั้น
+    =========================================
+    */
+
+    const requests = [
+
+      fetch(
+        API +
+        "?" +
+        newQuery.toString()
+      )
+
+    ];
+
+
+    if(sessionToken){
+
+      const legacyQuery =
+        new URLSearchParams({
+
+          action:
+            "legacyOrders",
+
+          session_token:
+            sessionToken
+
+        });
+
+
+      requests.push(
+
+        fetch(
+          API +
+          "?" +
+          legacyQuery.toString()
+        )
+
+      );
+
+    }
+
+
+    const responses =
+      await Promise.all(
+        requests
+      );
+
+
+    /*
+    =========================================
+    ระบบใหม่
+    =========================================
+    */
+
+    const newResponse =
+      responses[0];
+
+
+    if(!newResponse.ok){
+
+      throw new Error(
+        "HTTP " +
+        newResponse.status
+      );
+
+    }
+
+
+    const newData =
+      await newResponse.json();
+
+
+    if(
+      newData &&
+      newData.success === false
+    ){
+
+      throw new Error(
+        newData.error ||
+        "โหลดออเดอร์ไม่สำเร็จ"
+      );
+
+    }
+
+
+    const newOrders =
+      Array.isArray(
+        newData
+      )
+        ? newData
+        : (
+            Array.isArray(
+              newData.orders
+            )
+              ? newData.orders
+              : []
+          );
+
+
+    /*
+    =========================================
+    ระบบเก่า
+    =========================================
+    */
+
+    let legacyOrders = [];
+
+
+    if(
+      sessionToken &&
+      responses[1]
+    ){
+
+      try{
+
+        if(
+          responses[1].ok
+        ){
+
+          const legacyData =
+            await responses[1].json();
+
+
+          if(
+            legacyData &&
+            legacyData.success === true &&
+            Array.isArray(
+              legacyData.orders
+            )
+          ){
+
+            legacyOrders =
+              legacyData.orders;
+
+          }
+
+        }
+
+      }catch(error){
+
+        /*
+        ถ้า legacy โหลดไม่ได้
+        ยังให้ระบบใหม่ใช้งานได้ตามปกติ
+        */
+
+        console.warn(
+          "Legacy orders load failed:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /*
+    =========================================
+    STATUS FILTER
+
+    Filter สถานะใช้กับระบบใหม่เท่านั้น
+    =========================================
+    */
+
+    const filteredNewOrders =
+      statusFilter
+
+        ? newOrders.filter(
+            order =>
+              String(
+                order.status || ""
+              ) ===
+              statusFilter
+          )
+
+        : newOrders;
+
+
+    /*
+    ถ้ามี status filter
+    ไม่เอา Legacy มาแสดง
+    */
+
+    const visibleLegacyOrders =
+      statusFilter
+        ? []
+        : legacyOrders;
+
+
+    /*
+    =========================================
+    EMPTY
+    =========================================
+    */
+
+    if(
+      filteredNewOrders.length === 0 &&
+      visibleLegacyOrders.length === 0
+    ){
+
+      box.className =
+        "state";
+
+
+      box.innerHTML = `
+
+        <div
+          style="
+            font-size:50px;
+          "
+        >
+          📦
+        </div>
+
+        <h2>
+          ยังไม่มีออเดอร์
+        </h2>
+
+        <p>
+          ${
+            statusFilter
+              ? "ยังไม่มีออเดอร์ในสถานะนี้"
+              : "เมื่อสั่งซื้อแล้ว ออเดอร์จะแสดงที่นี่"
+          }
+        </p>
+
+        <a href="browse.html">
+          เลือกซื้อสินค้า
+        </a>
+
+      `;
+
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    RENDER
+    =========================================
+    */
+
+    box.className =
+      "order-list";
+
+
+    let html = "";
+
+
+    /*
+    ระบบใหม่
+    */
+
+    if(
+      filteredNewOrders.length > 0
+    ){
+
+      html +=
+        filteredNewOrders
+          .map(
+            orderCard
+          )
+          .join("");
+
+    }
+
+
+    /*
+    Legacy
+    */
+
+    if(
+      visibleLegacyOrders.length > 0
+    ){
+
+      html += `
+
+        <div
+          style="
+            margin:
+              10px 2px 0;
+            padding-top:14px;
+            border-top:
+              1px solid
+              var(--border);
+          "
+        >
+
+          <div
+            style="
+              font-size:16px;
+              font-weight:700;
+              color:#3f6078;
+            "
+          >
+            🗃️ ออเดอร์จากระบบเก่า
+          </div>
+
+          <div
+            style="
+              margin-top:3px;
+              color:var(--muted);
+              font-size:11px;
+            "
+          >
+            รายการจากระบบสั่งซื้อเดิมของร้าน
+          </div>
+
+        </div>
+
+      `;
+
+
+      html +=
+        visibleLegacyOrders
+          .map(
+            legacyOrderCard
+          )
+          .join("");
+
+    }
+
+
+    box.innerHTML =
+      html;
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    box.className =
+      "state";
+
+
+    box.innerHTML = `
+
+      <div
+        style="
+          font-size:50px;
+        "
+      >
+        ⚠️
+      </div>
+
+      <h2>
+        โหลดออเดอร์ไม่สำเร็จ
+      </h2>
+
+      <p>
+        ${esc(
+          error.message ||
+          String(error)
+        )}
+      </p>
+
+      <button
+        onclick="loadOrders()"
+      >
+        ลองใหม่
+      </button>
+
+    `;
+
+  }
+
 }
+  
 function orderCard(o){
  const date=o.created_at?new Date(o.created_at).toLocaleDateString("th-TH",{year:"numeric",month:"short",day:"numeric"}):"-";
  const url="order.html?id="+encodeURIComponent(o.order_id||"");
@@ -183,6 +602,215 @@ function orderCard(o){
  <div class="order-main"><div class="order-id">${esc(o.order_id||"-")}</div><div class="order-name">${esc(o.preview_name||"รายการสินค้า")}</div><div class="order-meta">${Number(o.item_count||0).toLocaleString("th-TH")} รายการ</div></div>
  <div class="order-side"><div><div class="order-total">฿${Number(o.total||0).toLocaleString("th-TH")}</div><div class="order-date">${date}</div></div><span class="badge ${statusClass(o.status)}">${statusText(o.status)}</span></div></article>`;
 }
+
+function legacyOrderCard(
+  order
+){
+
+  const legacyId =
+    String(
+      order.legacy_id || ""
+    );
+
+
+  const name =
+    String(
+      order.product_name ||
+      "รายการสินค้า"
+    );
+
+
+  const image =
+    String(
+      order.image || ""
+    );
+
+
+  const fandom =
+    String(
+      order.fandom || ""
+    );
+
+
+  const status =
+    String(
+      order.status || ""
+    );
+
+
+  const qty =
+    Math.max(
+      0,
+      Number(
+        order.qty || 0
+      )
+    );
+
+
+  const remaining =
+    Number(
+      order.remaining || 0
+    );
+
+
+  const paid =
+    Number(
+      order.paid || 0
+    );
+
+
+  const url =
+    "legacy-order.html?id=" +
+    encodeURIComponent(
+      legacyId
+    );
+
+
+  return `
+
+    <article
+      class="order-card"
+      tabindex="0"
+      role="link"
+      onclick='location.href=${JSON.stringify(
+        url
+      )}'
+      onkeydown="cardKey(event,this)"
+    >
+
+      ${
+        image
+
+          ? `
+
+            <img
+              class="order-image"
+              src="${attr(image)}"
+              alt="${attr(name)}"
+              loading="lazy"
+            >
+
+          `
+
+          : `
+
+            <div
+              class="order-image"
+              style="
+                display:flex;
+                align-items:center;
+                justify-content:center;
+              "
+            >
+              📦
+            </div>
+
+          `
+      }
+
+
+      <div class="order-main">
+
+        <div class="order-id">
+
+          <span
+            style="
+              display:inline-block;
+              padding:4px 7px;
+              margin-right:5px;
+              border-radius:999px;
+              background:#f5f3ff;
+              color:#6d28d9;
+              font-size:9px;
+              vertical-align:middle;
+            "
+          >
+            ออเดอร์เก่า
+          </span>
+
+          ${esc(
+            fandom ||
+            "ระบบเดิม"
+          )}
+
+        </div>
+
+
+        <div class="order-name">
+          ${esc(name)}
+        </div>
+
+
+        <div class="order-meta">
+
+          ${qty.toLocaleString(
+            "th-TH"
+          )} ชิ้น
+
+          ${
+            status
+              ? " • " +
+                esc(status)
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="order-side">
+
+        <div>
+
+          <div class="order-total">
+
+            ${
+              remaining > 0
+
+                ? "คงเหลือ ฿" +
+                  remaining.toLocaleString(
+                    "th-TH",
+                    {
+                      maximumFractionDigits:2
+                    }
+                  )
+
+                : "ชำระ ฿" +
+                  paid.toLocaleString(
+                    "th-TH",
+                    {
+                      maximumFractionDigits:2
+                    }
+                  )
+            }
+
+          </div>
+
+          <div class="order-date">
+            ระบบเดิม
+          </div>
+
+        </div>
+
+
+        <span
+          class="badge b-progress"
+        >
+          ${esc(
+            status ||
+            "ออเดอร์เก่า"
+          )}
+        </span>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+  
 function cardKey(e,el){if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click()}}
 function goOrdersBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="account.html"}
 function safeJson(v,f){try{return JSON.parse(v||"")}catch(e){return f}}
