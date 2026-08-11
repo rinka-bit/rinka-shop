@@ -339,33 +339,235 @@ ${x[1]} ${x[2]}
     shipments.length > 0
   ){
 
+    /*
+    =========================================
+    แยก "รอส่งรวม"
+    =========================================
+    */
+
+    const waitingCombine =
+      shipments.filter(
+        shipment =>
+          String(
+            shipment.status || ""
+          )
+            .trim()
+            .toLowerCase() ===
+          "waiting_combine"
+      );
+
+
+    /*
+    =========================================
+    รอบจัดส่งจริง
+
+    waiting_combine ไม่นับเป็นรอบจัดส่ง
+    =========================================
+    */
+
+    const realShipments =
+      shipments.filter(
+        shipment =>
+          String(
+            shipment.status || ""
+          )
+            .trim()
+            .toLowerCase() !==
+          "waiting_combine"
+      );
+
+
+    /*
+    =========================================
+    Shipment ที่ส่งแล้ว
+
+    เลขรอบอิงจาก realShipments เท่านั้น
+    =========================================
+    */
+
     const shipped =
-  shipments
-    .map(
-      (
-        shipment,
-        originalIndex
-      ) => ({
-        ...shipment,
+      realShipments
+        .map(
+          (
+            shipment,
+            index
+          ) => ({
 
-        shipment_round:
-          originalIndex + 1
+            ...shipment,
 
-      })
-    )
-    .filter(
-      shipment =>
-        String(
-          shipment.status || ""
-        ) === "shipped"
-    );
+            shipment_round:
+              index + 1
 
+          })
+        )
+        .filter(
+          shipment =>
+            String(
+              shipment.status || ""
+            )
+              .trim()
+              .toLowerCase() ===
+            "shipped"
+        );
+
+
+    let html = "";
+
+
+    /*
+    =========================================
+    สินค้าที่กำลังรอส่งรวม
+    =========================================
+    */
+
+    if(
+      waitingCombine.length > 0
+    ){
+
+      html += `
+
+        <div class="card">
+
+          <h2>
+            🕒 รอส่งรวม
+          </h2>
+
+          <div
+            style="
+              padding:12px;
+              border:1px solid #fde68a;
+              border-radius:13px;
+              background:#fffbeb;
+              color:#92400e;
+              line-height:1.7;
+            "
+          >
+
+            <strong>
+              📦 มีสินค้ากำลังรอรวมจัดส่ง
+            </strong>
+
+            <div
+              style="
+                margin-top:5px;
+                font-size:12px;
+              "
+            >
+              สินค้ารายการนี้จะถูกรวมกับสินค้าที่ถึงไทยในรอบถัดไป
+            </div>
+
+          </div>
+
+
+          ${waitingCombine
+            .map(
+              shipment => {
+
+                const items =
+                  Array.isArray(
+                    shipment.items
+                  )
+                    ? shipment.items
+                    : [];
+
+
+                if(
+                  items.length === 0
+                ){
+
+                  return "";
+
+                }
+
+
+                return `
+
+                  <div
+                    style="
+                      margin-top:12px;
+                      padding-top:10px;
+                      border-top:1px solid #edf2f6;
+                    "
+                  >
+
+                    ${items
+                      .map(
+                        item => {
+
+                          const name =
+                            String(
+                              item.name ||
+                              item.product_name ||
+                              "สินค้า"
+                            );
+
+
+                          const qty =
+                            Math.max(
+                              0,
+                              Number(
+                                item.qty ??
+                                item.quantity ??
+                                0
+                              )
+                            );
+
+
+                          return `
+
+                            <div
+                              style="
+                                display:flex;
+                                justify-content:space-between;
+                                gap:10px;
+                                padding:5px 0;
+                                font-size:13px;
+                              "
+                            >
+
+                              <span>
+                                ${esc(name)}
+                              </span>
+
+                              <strong>
+                                × ${qty}
+                              </strong>
+
+                            </div>
+
+                          `;
+
+                        }
+                      )
+                      .join("")}
+
+                  </div>
+
+                `;
+
+              }
+            )
+            .join("")}
+
+        </div>
+
+      `;
+
+    }
+
+
+    /*
+    =========================================
+    TRACKING
+    =========================================
+    */
 
     if(
       shipped.length === 0
     ){
 
-      return `
+      html += `
+
         <div class="card">
 
           <h2>
@@ -382,17 +584,23 @@ ${x[1]} ${x[2]}
           </div>
 
         </div>
+
       `;
+
+
+      return html;
 
     }
 
 
-    return `
+    html += `
+
       <div class="card">
 
         <h2>
           📮 การจัดส่ง
         </h2>
+
 
         ${shipped
           .map(
@@ -406,15 +614,118 @@ ${x[1]} ${x[2]}
                   shipment.courier || ""
                 );
 
+
               const tracking =
                 String(
                   shipment.tracking_no || ""
                 );
 
+
               const shipmentId =
                 String(
                   shipment.shipment_id || ""
                 );
+
+
+              const items =
+                Array.isArray(
+                  shipment.items
+                )
+                  ? shipment.items
+                  : [];
+
+
+              /*
+              =====================================
+              รายการสินค้าในรอบที่จัดส่ง
+              =====================================
+              */
+
+              let itemsHtml = "";
+
+
+              if(items.length){
+
+                itemsHtml = `
+
+                  <div
+                    style="
+                      margin-top:12px;
+                      padding:10px 12px;
+                      border:1px solid #dcfce7;
+                      border-radius:11px;
+                      background:#f0fdf4;
+                    "
+                  >
+
+                    <div
+                      style="
+                        margin-bottom:7px;
+                        color:#166534;
+                        font-size:12px;
+                        font-weight:700;
+                      "
+                    >
+                      📦 สินค้าที่จัดส่งในรอบนี้
+                    </div>
+
+
+                    ${items
+                      .map(
+                        item => {
+
+                          const name =
+                            String(
+                              item.name ||
+                              item.product_name ||
+                              "สินค้า"
+                            );
+
+
+                          const qty =
+                            Math.max(
+                              0,
+                              Number(
+                                item.qty ??
+                                item.quantity ??
+                                0
+                              )
+                            );
+
+
+                          return `
+
+                            <div
+                              style="
+                                display:flex;
+                                justify-content:space-between;
+                                gap:10px;
+                                padding:5px 0;
+                                font-size:13px;
+                              "
+                            >
+
+                              <span>
+                                ${esc(name)}
+                              </span>
+
+                              <strong>
+                                × ${qty}
+                              </strong>
+
+                            </div>
+
+                          `;
+
+                        }
+                      )
+                      .join("")}
+
+                  </div>
+
+                `;
+
+              }
 
 
               return `
@@ -441,11 +752,12 @@ ${x[1]} ${x[2]}
                     "
                   >
 
-                   <strong>
-  📦 รอบจัดส่ง ${
-    shipment.shipment_round
-  }
-</strong>
+                    <strong>
+                      📦 รอบจัดส่ง ${
+                        shipment.shipment_round
+                      }
+                    </strong>
+
 
                     <span
                       class="badge paid"
@@ -459,6 +771,7 @@ ${x[1]} ${x[2]}
                   ${
                     shipmentId
                       ? `
+
                         <div
                           style="
                             margin-top:5px;
@@ -470,9 +783,13 @@ ${x[1]} ${x[2]}
                             shipmentId
                           )}
                         </div>
+
                       `
                       : ""
                   }
+
+
+                  ${itemsHtml}
 
 
                   <div
@@ -484,6 +801,7 @@ ${x[1]} ${x[2]}
                   >
                     บริษัทขนส่ง
                   </div>
+
 
                   <div
                     style="
@@ -506,6 +824,7 @@ ${x[1]} ${x[2]}
                   >
                     เลขพัสดุ
                   </div>
+
 
                   <div
                     style="
@@ -535,6 +854,7 @@ ${x[1]} ${x[2]}
                           คัดลอกเลขพัสดุ
                         </button>
 
+
                         <button
                           class="action"
                           onclick='openTracking(
@@ -562,7 +882,11 @@ ${x[1]} ${x[2]}
           .join("")}
 
       </div>
+
     `;
+
+
+    return html;
 
   }
 
@@ -578,6 +902,7 @@ ${x[1]} ${x[2]}
       order.tracking_no || ""
     );
 
+
   const oldCourier =
     String(
       order.courier || ""
@@ -585,11 +910,13 @@ ${x[1]} ${x[2]}
 
 
   return `
+
     <div class="card">
 
       <h2>
         📮 เลขพัสดุ
       </h2>
+
 
       <div
         style="
@@ -602,6 +929,7 @@ ${x[1]} ${x[2]}
           "ยังไม่มีเลขพัสดุ"
         )}
       </div>
+
 
       ${
         oldTracking
@@ -617,6 +945,7 @@ ${x[1]} ${x[2]}
             >
               คัดลอกเลขพัสดุ
             </button>
+
 
             <button
               class="action"
@@ -637,6 +966,7 @@ ${x[1]} ${x[2]}
       }
 
     </div>
+
   `;
 
 }
