@@ -2485,12 +2485,14 @@ function renderOrderShipmentsAdmin(
     return;
   }
 
+
   if(
     !Array.isArray(shipments) ||
     shipments.length === 0
   ){
 
     box.innerHTML = `
+
       <div
         style="
           padding:12px;
@@ -2500,87 +2502,181 @@ function renderOrderShipmentsAdmin(
           font-size:13px;
         "
       >
-        📭 ยังไม่มีรอบจัดส่งสำหรับออเดอร์นี้
+        📭 ยังไม่มีข้อมูลการจัดส่งสำหรับออเดอร์นี้
       </div>
+
     `;
 
     return;
+
   }
 
 
-  let html = `
+  /*
+  =========================================
+  แยก Shipment ที่ "รอส่งรวม"
+  ออกจากรอบจัดส่งจริง
+  =========================================
+  */
 
-    <div
-      style="
-        padding:14px;
-        border:1px solid #dbeafe;
-        border-radius:14px;
-        background:#f8fbff;
-      "
-    >
+  const waitingShipments =
+    shipments.filter(
+      shipment => {
 
-      <h4
-        style="
-          margin:0 0 12px;
-        "
-      >
-        📦 รอบจัดส่ง
-      </h4>
+        const status =
+          String(
+            shipment.status || ""
+          )
+            .trim()
+            .toLowerCase();
 
-  `;
+        return (
+          status ===
+          "waiting_combine"
+        );
+
+      }
+    );
 
 
-  shipments.forEach(
-    (
-      shipment,
-      index
-    ) => {
+  const realShipments =
+    shipments.filter(
+      shipment => {
+
+        const status =
+          String(
+            shipment.status || ""
+          )
+            .trim()
+            .toLowerCase();
+
+        return (
+          status !==
+          "waiting_combine"
+        );
+
+      }
+    );
+
+
+  let html = "";
+
+
+  /*
+  =========================================
+  WAITING COMBINE
+  ไม่ถือเป็น "รอบจัดส่ง"
+  =========================================
+  */
+
+  waitingShipments.forEach(
+    shipment => {
 
       const shipmentId =
         String(
           shipment.shipment_id || ""
         ).trim();
 
-      const status =
-        String(
-          shipment.status ||
-          "pending"
-        ).trim();
 
-      const courier =
-        String(
-          shipment.courier || ""
-        ).trim();
+      const items =
+        Array.isArray(
+          shipment.items
+        )
+          ? shipment.items
+          : [];
 
-      const trackingNo =
-        String(
-          shipment.tracking_no || ""
-        ).trim();
 
-      const importFee =
-        Number(
-          shipment.import_fee || 0
-        );
+      let itemsHtml = "";
 
-      const domesticFee =
-        Number(
-          shipment.domestic_shipping_fee ||
-          0
-        );
 
-      const isShipped =
-        status === "shipped";
+      if(items.length){
+
+        itemsHtml = `
+
+          <div
+            style="
+              margin-top:12px;
+              padding-top:10px;
+              border-top:1px solid #fde68a;
+            "
+          >
+
+            <div
+              style="
+                font-size:12px;
+                font-weight:700;
+                color:#92400e;
+                margin-bottom:7px;
+              "
+            >
+              📦 สินค้าที่กำลังรอส่งรวม
+            </div>
+
+            ${items.map(
+              item => {
+
+                const name =
+                  String(
+                    item.name ||
+                    item.product_name ||
+                    "สินค้า"
+                  ).trim();
+
+                const qty =
+                  Math.max(
+                    0,
+                    Number(
+                      item.qty ??
+                      item.quantity ??
+                      0
+                    )
+                  );
+
+                return `
+
+                  <div
+                    style="
+                      display:flex;
+                      justify-content:space-between;
+                      gap:10px;
+                      padding:5px 0;
+                      font-size:13px;
+                    "
+                  >
+
+                    <span>
+                      ${escapeAdminOrderHtml(
+                        name
+                      )}
+                    </span>
+
+                    <b>
+                      × ${qty}
+                    </b>
+
+                  </div>
+
+                `;
+
+              }
+            ).join("")}
+
+          </div>
+
+        `;
+
+      }
 
 
       html += `
 
         <div
           style="
+            margin-bottom:14px;
             padding:14px;
-            margin-bottom:10px;
-            border:1px solid #e5e7eb;
-            border-radius:12px;
-            background:#ffffff;
+            border:1px solid #fde68a;
+            border-radius:14px;
+            background:#fffbeb;
           "
         >
 
@@ -2596,14 +2692,18 @@ function renderOrderShipmentsAdmin(
 
             <div>
 
-              <b>
-                รอบจัดส่ง ${index + 1}
+              <b
+                style="
+                  color:#92400e;
+                "
+              >
+                🕒 รอส่งรวม
               </b>
 
               <div
                 style="
                   margin-top:4px;
-                  color:#64748b;
+                  color:#a16207;
                   font-size:12px;
                 "
               >
@@ -2614,186 +2714,40 @@ function renderOrderShipmentsAdmin(
 
             </div>
 
+
             <span
               style="
                 display:inline-block;
                 padding:5px 9px;
                 border-radius:999px;
+                background:#fef3c7;
+                color:#92400e;
                 font-size:11px;
                 font-weight:700;
-                background:${
-                  isShipped
-                    ? "#dcfce7"
-                    : "#fef3c7"
-                };
-                color:${
-                  isShipped
-                    ? "#166534"
-                    : "#92400e"
-                };
               "
             >
-
-              ${
-                isShipped
-                  ? "จัดส่งแล้ว"
-                  : "รอจัดส่ง"
-              }
-
+              ลูกค้าเลือกรอส่งรวม
             </span>
 
           </div>
 
 
+          ${itemsHtml}
+
+
           <div
             style="
-              margin-top:12px;
-              display:grid;
-              grid-template-columns:
-                repeat(
-                  auto-fit,
-                  minmax(150px,1fr)
-                );
-              gap:8px;
-              font-size:13px;
+              margin-top:10px;
+              padding:9px 10px;
+              border-radius:10px;
+              background:#ffffff;
+              color:#92400e;
+              font-size:12px;
             "
           >
-
-            <div>
-              <b>ค่านำเข้า</b>
-              <br>
-              ฿${importFee.toLocaleString(
-                "th-TH",
-                {
-                  maximumFractionDigits:2
-                }
-              )}
-            </div>
-
-            <div>
-              <b>ค่าส่งในไทย</b>
-              <br>
-              ฿${domesticFee.toLocaleString(
-                "th-TH",
-                {
-                  maximumFractionDigits:2
-                }
-              )}
-            </div>
-
+            รายการนี้ยังไม่ถือเป็นรอบจัดส่ง
+            และยังไม่ต้องกรอกเลขพัสดุ
           </div>
-
-
-          ${
-            isShipped
-              ? `
-
-                <div
-                  style="
-                    margin-top:12px;
-                    padding:10px;
-                    border-radius:10px;
-                    background:#f0fdf4;
-                    font-size:13px;
-                  "
-                >
-
-                  <b>
-                    🚚 ${escapeAdminOrderHtml(
-                      courier || "-"
-                    )}
-                  </b>
-
-                  <div
-                    style="
-                      margin-top:4px;
-                    "
-                  >
-                    เลขพัสดุ:
-                    ${escapeAdminOrderHtml(
-                      trackingNo || "-"
-                    )}
-                  </div>
-
-                </div>
-
-              `
-              : `
-
-                <div
-                  style="
-                    margin-top:14px;
-                  "
-                >
-
-                  <label>
-                    บริษัทขนส่ง
-                  </label>
-
-                  <input
-                    id="shipmentCourier_${escapeAdminOrderHtml(
-                      shipmentId
-                    )}"
-                    value="${escapeAdminOrderHtml(
-                      courier
-                    )}"
-                    placeholder="เช่น Flash Express"
-                  >
-
-                  <br><br>
-
-                  <label>
-                    เลขพัสดุ
-                  </label>
-
-                  <input
-                    id="shipmentTracking_${escapeAdminOrderHtml(
-                      shipmentId
-                    )}"
-                    value="${escapeAdminOrderHtml(
-                      trackingNo
-                    )}"
-                    placeholder="เลขพัสดุ"
-                  >
-
-                  <br><br>
-
-                  <button
-                    type="button"
-                    id="shipShipmentBtn_${escapeAdminOrderHtml(
-                      shipmentId
-                    )}"
-                    onclick="
-                      shipShipmentAdmin(
-                        '${escapeAdminOrderJs(
-                          orderId
-                        )}',
-                        '${escapeAdminOrderJs(
-                          shipmentId
-                        )}'
-                      )
-                    "
-                  >
-                    🚚 บันทึกการจัดส่ง
-                  </button>
-
-                  <div
-                    id="shipShipmentLoading_${escapeAdminOrderHtml(
-                      shipmentId
-                    )}"
-                    class="loading-text"
-                    style="
-                      display:none;
-                      margin-top:8px;
-                    "
-                  >
-                    ⏳ กำลังบันทึก...
-                  </div>
-
-                </div>
-
-              `
-          }
 
         </div>
 
@@ -2803,18 +2757,596 @@ function renderOrderShipmentsAdmin(
   );
 
 
-  html += `
+  /*
+  =========================================
+  REAL SHIPMENTS
+  =========================================
+  */
 
-    </div>
+  if(realShipments.length){
 
-  `;
+    html += `
 
+      <div
+        style="
+          padding:14px;
+          border:1px solid #dbeafe;
+          border-radius:14px;
+          background:#f8fbff;
+        "
+      >
+
+        <h4
+          style="
+            margin:0 0 12px;
+          "
+        >
+          📦 รอบจัดส่ง
+        </h4>
+
+    `;
+
+
+    realShipments.forEach(
+      (
+        shipment,
+        index
+      ) => {
+
+        const shipmentId =
+          String(
+            shipment.shipment_id || ""
+          ).trim();
+
+
+        const status =
+          String(
+            shipment.status || ""
+          )
+            .trim()
+            .toLowerCase();
+
+
+        const paymentStatus =
+          String(
+            shipment.payment_status || ""
+          )
+            .trim()
+            .toLowerCase();
+
+
+        const shippingMethod =
+          String(
+            shipment.shipping_method || ""
+          )
+            .trim()
+            .toLowerCase();
+
+
+        const courier =
+          String(
+            shipment.courier || ""
+          ).trim();
+
+
+        const trackingNo =
+          String(
+            shipment.tracking_no || ""
+          ).trim();
+
+
+        const importFee =
+          Number(
+            shipment.import_fee || 0
+          );
+
+
+        const domesticFee =
+          Number(
+            shipment.domestic_shipping_fee ||
+            0
+          );
+
+
+        const total =
+          Number(
+            shipment.total ??
+            (
+              importFee +
+              domesticFee
+            )
+          );
+
+
+        const items =
+          Array.isArray(
+            shipment.items
+          )
+            ? shipment.items
+            : [];
+
+
+        const isShipped =
+          status ===
+          "shipped";
+
+
+        /*
+        จะกรอก Tracking ได้เมื่อ
+
+        - ลูกค้าชำระแล้ว
+        - เลือกส่งเลย
+        - และยังไม่ได้ shipped
+        */
+
+        const canShip =
+          !isShipped &&
+          paymentStatus === "paid" &&
+          shippingMethod === "ship_now";
+
+
+        /*
+        ข้อความสถานะ
+        */
+
+        let statusText =
+          "รอดำเนินการ";
+
+
+        let badgeBackground =
+          "#fef3c7";
+
+
+        let badgeColor =
+          "#92400e";
+
+
+        if(isShipped){
+
+          statusText =
+            "จัดส่งแล้ว";
+
+          badgeBackground =
+            "#dcfce7";
+
+          badgeColor =
+            "#166534";
+
+        }else if(canShip){
+
+          statusText =
+            "พร้อมจัดส่ง";
+
+          badgeBackground =
+            "#dbeafe";
+
+          badgeColor =
+            "#1d4ed8";
+
+        }else if(
+          paymentStatus ===
+          "unpaid"
+        ){
+
+          statusText =
+            "รอลูกค้าชำระค่าส่ง";
+
+        }else if(
+          paymentStatus ===
+          "paid"
+        ){
+
+          statusText =
+            "ชำระค่าส่งแล้ว";
+
+          badgeBackground =
+            "#dbeafe";
+
+          badgeColor =
+            "#1d4ed8";
+
+        }
+
+
+        /*
+        =====================================
+        ITEMS
+        =====================================
+        */
+
+        let itemsHtml = "";
+
+
+        if(items.length){
+
+          itemsHtml = `
+
+            <div
+              style="
+                margin-top:12px;
+                padding:10px 12px;
+                border:1px solid #dcfce7;
+                border-radius:10px;
+                background:#f0fdf4;
+              "
+            >
+
+              <div
+                style="
+                  margin-bottom:7px;
+                  font-size:12px;
+                  font-weight:700;
+                  color:#166534;
+                "
+              >
+                📦 สินค้าในรอบนี้
+              </div>
+
+
+              ${items.map(
+                item => {
+
+                  const name =
+                    String(
+                      item.name ||
+                      item.product_name ||
+                      "สินค้า"
+                    ).trim();
+
+
+                  const qty =
+                    Math.max(
+                      0,
+                      Number(
+                        item.qty ??
+                        item.quantity ??
+                        0
+                      )
+                    );
+
+
+                  return `
+
+                    <div
+                      style="
+                        display:flex;
+                        justify-content:space-between;
+                        gap:10px;
+                        padding:5px 0;
+                        font-size:13px;
+                      "
+                    >
+
+                      <span>
+                        ${escapeAdminOrderHtml(
+                          name
+                        )}
+                      </span>
+
+                      <b>
+                        × ${qty}
+                      </b>
+
+                    </div>
+
+                  `;
+
+                }
+              ).join("")}
+
+            </div>
+
+          `;
+
+        }
+
+
+        /*
+        =====================================
+        CARD
+        =====================================
+        */
+
+        html += `
+
+          <div
+            style="
+              padding:14px;
+              margin-bottom:10px;
+              border:1px solid #e5e7eb;
+              border-radius:12px;
+              background:#ffffff;
+            "
+          >
+
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                gap:10px;
+                flex-wrap:wrap;
+              "
+            >
+
+              <div>
+
+                <b>
+                  รอบจัดส่ง ${index + 1}
+                </b>
+
+                <div
+                  style="
+                    margin-top:4px;
+                    color:#64748b;
+                    font-size:12px;
+                  "
+                >
+                  ${escapeAdminOrderHtml(
+                    shipmentId
+                  )}
+                </div>
+
+              </div>
+
+
+              <span
+                style="
+                  display:inline-block;
+                  padding:5px 9px;
+                  border-radius:999px;
+                  font-size:11px;
+                  font-weight:700;
+                  background:${badgeBackground};
+                  color:${badgeColor};
+                "
+              >
+                ${statusText}
+              </span>
+
+            </div>
+
+
+            ${itemsHtml}
+
+
+            <div
+              style="
+                margin-top:12px;
+                display:grid;
+                grid-template-columns:
+                  repeat(
+                    auto-fit,
+                    minmax(140px,1fr)
+                  );
+                gap:8px;
+                font-size:13px;
+              "
+            >
+
+              <div>
+
+                <b>
+                  ค่านำเข้า
+                </b>
+
+                <br>
+
+                ฿${importFee.toLocaleString(
+                  "th-TH",
+                  {
+                    maximumFractionDigits:2
+                  }
+                )}
+
+              </div>
+
+
+              <div>
+
+                <b>
+                  ค่าส่งในไทย
+                </b>
+
+                <br>
+
+                ฿${domesticFee.toLocaleString(
+                  "th-TH",
+                  {
+                    maximumFractionDigits:2
+                  }
+                )}
+
+              </div>
+
+
+              <div>
+
+                <b>
+                  รวม
+                </b>
+
+                <br>
+
+                ฿${total.toLocaleString(
+                  "th-TH",
+                  {
+                    maximumFractionDigits:2
+                  }
+                )}
+
+              </div>
+
+            </div>
+
+
+            ${
+              isShipped
+
+                ? `
+
+                  <div
+                    style="
+                      margin-top:12px;
+                      padding:10px;
+                      border-radius:10px;
+                      background:#f0fdf4;
+                      font-size:13px;
+                    "
+                  >
+
+                    <b>
+                      🚚 ${escapeAdminOrderHtml(
+                        courier || "-"
+                      )}
+                    </b>
+
+                    <div
+                      style="
+                        margin-top:4px;
+                      "
+                    >
+                      เลขพัสดุ:
+                      ${escapeAdminOrderHtml(
+                        trackingNo || "-"
+                      )}
+                    </div>
+
+                  </div>
+
+                `
+
+                : canShip
+
+                  ? `
+
+                    <div
+                      style="
+                        margin-top:14px;
+                      "
+                    >
+
+                      <label>
+                        บริษัทขนส่ง
+                      </label>
+
+                      <input
+                        id="shipmentCourier_${escapeAdminOrderHtml(
+                          shipmentId
+                        )}"
+                        value="${escapeAdminOrderHtml(
+                          courier
+                        )}"
+                        placeholder="เช่น Flash Express"
+                      >
+
+                      <br><br>
+
+                      <label>
+                        เลขพัสดุ
+                      </label>
+
+                      <input
+                        id="shipmentTracking_${escapeAdminOrderHtml(
+                          shipmentId
+                        )}"
+                        value="${escapeAdminOrderHtml(
+                          trackingNo
+                        )}"
+                        placeholder="เลขพัสดุ"
+                      >
+
+                      <br><br>
+
+                      <button
+                        type="button"
+                        id="shipShipmentBtn_${escapeAdminOrderHtml(
+                          shipmentId
+                        )}"
+                        onclick="
+                          shipShipmentAdmin(
+                            '${escapeAdminOrderJs(
+                              orderId
+                            )}',
+                            '${escapeAdminOrderJs(
+                              shipmentId
+                            )}'
+                          )
+                        "
+                      >
+                        🚚 บันทึกการจัดส่ง
+                      </button>
+
+                      <div
+                        id="shipShipmentLoading_${escapeAdminOrderHtml(
+                          shipmentId
+                        )}"
+                        class="loading-text"
+                        style="
+                          display:none;
+                          margin-top:8px;
+                        "
+                      >
+                        ⏳ กำลังบันทึก...
+                      </div>
+
+                    </div>
+
+                  `
+
+                  : `
+
+                    <div
+                      style="
+                        margin-top:12px;
+                        padding:10px;
+                        border-radius:10px;
+                        background:#f8fafc;
+                        color:#64748b;
+                        font-size:12px;
+                      "
+                    >
+                      ${
+                        paymentStatus ===
+                        "unpaid"
+
+                          ? "⏳ รอลูกค้าชำระค่าส่งก่อน"
+
+                          : "⏳ ยังไม่พร้อมบันทึกเลขพัสดุ"
+                      }
+                    </div>
+
+                  `
+            }
+
+          </div>
+
+        `;
+
+      }
+    );
+
+
+    html += `
+
+      </div>
+
+    `;
+
+  }
+
+
+  /*
+  =========================================
+  ถ้ามีแต่ waiting_combine
+  จะไม่สร้างหัวข้อ "รอบจัดส่ง"
+  =========================================
+  */
 
   box.innerHTML =
     html;
 
 }
-
 
 /*
 =========================================
