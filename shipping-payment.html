@@ -146,72 +146,139 @@ async function loadShippingInfo(){
 
   }
 
+shippingInfo =
+  result;
 
-  shippingInfo =
-    result;
+
+const orderInfoBox =
+  document.getElementById(
+    "orderInfo"
+  );
+
+orderInfoBox.className = "";
+
+orderInfoBox.innerHTML = `
+
+<div
+  style="
+    display:grid;
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(180px,1fr)
+      );
+    gap:12px;
+  "
+>
+
+  <div>
+    <div
+      style="
+        color:#64748b;
+        font-size:12px;
+      "
+    >
+      เลขออเดอร์
+    </div>
+
+    <strong>
+      ${escapeShippingHtml(
+        result.order_id
+      )}
+    </strong>
+  </div>
 
 
-  document
-    .getElementById(
-      "orderInfo"
-    )
-    .innerHTML = `
+  ${
+    result.shipment_id
+      ? `
 
-<p>
-เลขออเดอร์:
-<b>
-${escapeShippingHtml(
-  result.order_id
-)}
-</b>
-</p>
+        <div>
 
-${
-  result.shipment_id
-    ? `
+          <div
+            style="
+              color:#64748b;
+              font-size:12px;
+            "
+          >
+            รอบจัดส่ง
+          </div>
 
-<p>
-รอบจัดส่ง:
-<b>
-${escapeShippingHtml(
-  result.shipment_id
-)}
-</b>
-</p>
+          <strong>
+            ${escapeShippingHtml(
+              result.shipment_id
+            )}
+          </strong>
 
-`
-    : ""
-}
+        </div>
 
-<p>
-ชื่อ:
-${escapeShippingHtml(
-  result.customer_name ||
-  "-"
-)}
-</p>
+      `
+      : ""
+  }
 
-<p>
-อีเมล:
-${escapeShippingHtml(
-  result.email ||
-  "-"
-)}
-</p>
+
+  <div>
+
+    <div
+      style="
+        color:#64748b;
+        font-size:12px;
+      "
+    >
+      ชื่อ
+    </div>
+
+    <strong>
+      ${escapeShippingHtml(
+        result.customer_name ||
+        "-"
+      )}
+    </strong>
+
+  </div>
+
+
+  <div>
+
+    <div
+      style="
+        color:#64748b;
+        font-size:12px;
+      "
+    >
+      อีเมล
+    </div>
+
+    <strong
+      style="
+        overflow-wrap:anywhere;
+      "
+    >
+      ${escapeShippingHtml(
+        result.email ||
+        "-"
+      )}
+    </strong>
+
+  </div>
+
+</div>
+
 
 <button
-type="button"
-onclick="
-window.location.href=
-'order.html?id=${encodeURIComponent(
-  result.order_id
-)}'
-">
-ดูรายการสินค้าในออเดอร์
+  type="button"
+  class="secondary"
+  onclick="
+    window.location.href=
+    'order.html?id=${encodeURIComponent(
+      result.order_id
+    )}'
+  "
+>
+  ดูรายการสินค้าในออเดอร์
 </button>
 
 `;
-
 
   renderFee();
 
