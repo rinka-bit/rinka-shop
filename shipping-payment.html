@@ -31,6 +31,15 @@ button,input,a{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cu
 <div class="layout">
 <section>
 <div class="card"><h2>📦 ข้อมูลออเดอร์</h2><div id="orderInfo" class="state"><span class="spinner"></span>กำลังโหลดออเดอร์...</div></div>
+<div class="card">
+  <h2>✅ สินค้าที่ถึงไทยในรอบนี้</h2>
+  <div id="shipmentItems">
+    <div class="state">
+      <span class="spinner"></span>
+      กำลังโหลดรายการสินค้า...
+    </div>
+  </div>
+</div>
 <div class="card"><h2>เลือกวิธีจัดส่ง</h2><div class="option-grid"><label class="option-card"><input type="radio" name="shippingMethod" value="ship_now" checked onchange="toggleMethod()">จัดส่งเลย</label><label class="option-card"><input type="radio" name="shippingMethod" value="combine_later" onchange="toggleMethod()">รอส่งรวม</label></div></div>
 <div id="shipNowBox">
 <div class="card"><h2>📍 ที่อยู่จัดส่ง</h2><div id="selectedAddress" class="state"><span class="spinner"></span>กำลังโหลดที่อยู่...</div><button class="secondary" onclick="goAddressBook()">เปลี่ยนที่อยู่</button></div>
@@ -149,7 +158,79 @@ async function loadShippingInfo(){
 shippingInfo =
   result;
 
+const shipmentItems =
+  Array.isArray(
+    result.items
+  )
+    ? result.items
+    : [];
 
+const shipmentItemsBox =
+  document.getElementById(
+    "shipmentItems"
+  );
+
+if(shipmentItemsBox){
+
+  shipmentItemsBox.innerHTML =
+    shipmentItems.length
+      ? shipmentItems
+          .map(
+            item => `
+
+              <div
+                style="
+                  padding:12px;
+                  margin-bottom:8px;
+                  border:1px solid #bbf7d0;
+                  border-radius:12px;
+                  background:#f0fdf4;
+                "
+              >
+
+                <div
+                  style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:12px;
+                  "
+                >
+
+                  <strong>
+                    ${escapeShippingHtml(
+                      item.name ||
+                      "สินค้า"
+                    )}
+                  </strong>
+
+                  <strong>
+                    × ${Number(
+                      item.qty || 0
+                    )}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            `
+          )
+          .join("")
+      : `
+          <div
+            style="
+              padding:12px;
+              border-radius:12px;
+              background:#f8fafc;
+              color:#64748b;
+            "
+          >
+            ไม่พบรายการสินค้าในรอบจัดส่งนี้
+          </div>
+        `;
+
+}
+  
 const orderInfoBox =
   document.getElementById(
     "orderInfo"
