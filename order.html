@@ -340,12 +340,25 @@ ${x[1]} ${x[2]}
   ){
 
     const shipped =
-      shipments.filter(
-        shipment =>
-          String(
-            shipment.status || ""
-          ) === "shipped"
-      );
+  shipments
+    .map(
+      (
+        shipment,
+        originalIndex
+      ) => ({
+        ...shipment,
+
+        shipment_round:
+          originalIndex + 1
+
+      })
+    )
+    .filter(
+      shipment =>
+        String(
+          shipment.status || ""
+        ) === "shipped"
+    );
 
 
     if(
@@ -428,11 +441,11 @@ ${x[1]} ${x[2]}
                     "
                   >
 
-                    <strong>
-                      📦 รอบจัดส่ง ${
-                        index + 1
-                      }
-                    </strong>
+                   <strong>
+  📦 รอบจัดส่ง ${
+    shipment.shipment_round
+  }
+</strong>
 
                     <span
                       class="badge paid"
