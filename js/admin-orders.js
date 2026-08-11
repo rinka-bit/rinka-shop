@@ -1,10 +1,12 @@
-/*
+ /*
 =========================================
 RINKA ADMIN — ORDER MANAGER
 =========================================
 */
 
 let adminOrdersCache = [];
+let adminOrderStatusFilter =
+  "pending_order";
 
 
 /*
@@ -398,18 +400,222 @@ function renderAdminOrders(){
   }
 
 
+  const statusGroups = [
+
+    {
+      value:"pending_order",
+      label:"รอกดสั่งสินค้า"
+    },
+
+    {
+      value:"pending",
+      label:"กดสั่งสินค้าแล้ว"
+    },
+
+    {
+      value:"china_arrived",
+      label:"ถึงโกดังจีน"
+    },
+
+    {
+      value:"shipping_to_th",
+      label:"กำลังมาไทย"
+    },
+
+    {
+      value:"ready_to_ship",
+      label:"เตรียมจัดส่ง"
+    },
+
+    {
+      value:"shipped",
+      label:"จัดส่งแล้ว"
+    }
+
+  ];
+
+
+  /*
+  =====================================
+  STATUS COUNTS
+  =====================================
+  */
+
+  const statusCounts = {};
+
+  statusGroups.forEach(
+    group => {
+
+      statusCounts[
+        group.value
+      ] =
+        adminOrdersCache.filter(
+          order =>
+
+            String(
+              order.status ||
+              "pending"
+            ).trim() ===
+            group.value
+        ).length;
+
+    }
+  );
+
+
+  /*
+  =====================================
+  FILTER BUTTONS
+  =====================================
+  */
+
+  const filterHtml = `
+
+<div
+class="card"
+style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+align-items:center;
+"
+>
+
+${statusGroups
+  .map(
+    group => {
+
+      const active =
+        adminOrderStatusFilter ===
+        group.value;
+
+      return `
+
+<button
+type="button"
+onclick="
+setAdminOrderStatusFilter(
+  '${group.value}'
+)
+"
+style="
+width:auto;
+background:${
+  active
+    ? "#2563eb"
+    : "#e2e8f0"
+};
+color:${
+  active
+    ? "#ffffff"
+    : "#334155"
+};
+"
+>
+
+${group.label}
+
+(${statusCounts[
+  group.value
+] || 0})
+
+</button>
+
+`;
+
+    }
+  )
+  .join("")}
+
+</div>
+
+`;
+
+
+  /*
+  =====================================
+  FILTER ORDERS
+  =====================================
+  */
+
+  const filteredOrders =
+    adminOrdersCache.filter(
+      order => {
+
+        const status =
+          String(
+            order.status ||
+            "pending"
+          ).trim();
+
+        return (
+          status ===
+          adminOrderStatusFilter
+        );
+
+      }
+    );
+
+
+  let ordersHtml = "";
+
+
+  if(
+    filteredOrders.length === 0
+  ){
+
+    const currentGroup =
+      statusGroups.find(
+        group =>
+          group.value ===
+          adminOrderStatusFilter
+      );
+
+    ordersHtml = `
+
+<div class="card">
+
+ยังไม่มีออเดอร์ในสถานะ
+
+<b>
+${escapeAdminOrderHtml(
+  currentGroup
+    ? currentGroup.label
+    : adminOrderStatusFilter
+)}
+</b>
+
+</div>
+
+`;
+
+  }else{
+
+    ordersHtml =
+      filteredOrders
+        .map(
+          order =>
+            renderOrderCard(
+              order
+            )
+        )
+        .join("");
+
+  }
+
+
   box.innerHTML =
-    adminOrdersCache
-      .map(
-        order =>
-          renderOrderCard(
-            order
-          )
-      )
-      .join("");
+    filterHtml +
+    ordersHtml;
 
 
-  adminOrdersCache.forEach(
+  /*
+  =====================================
+  INITIALIZE STATUS SELECTS
+  =====================================
+  */
+
+  filteredOrders.forEach(
     order => {
 
       const orderId =
@@ -417,13 +623,11 @@ function renderAdminOrders(){
           order.order_id || ""
         ).trim();
 
-
       const select =
         document.getElementById(
           "status_" +
           orderId
         );
-
 
       if(select){
 
@@ -442,6 +646,18 @@ function renderAdminOrders(){
 
 }
 
+function setAdminOrderStatusFilter(
+  status
+){
+
+  adminOrderStatusFilter =
+    String(
+      status || ""
+    ).trim();
+
+  renderAdminOrders();
+
+}
 
 /*
 =========================================
@@ -681,8 +897,28 @@ toggleOrderFields(
 "
 >
 
+<option value="pending_order">
+รอกดสั่งสินค้า
+</option>
+
 <option value="pending">
-รอจัดการ
+กดสั่งสินค้าแล้ว
+</option>
+
+<option value="china_arrived">
+สินค้าถึงโกดังจีน
+</option>
+
+<option value="shipping_to_th">
+กำลังมาไทย
+</option>
+
+<option value="ready_to_ship">
+เตรียมจัดส่ง
+</option>
+
+<option value="shipped">
+จัดส่งแล้ว
 </option>
 
 <option value="china_arrived">
