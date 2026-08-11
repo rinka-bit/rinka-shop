@@ -454,7 +454,7 @@ function renderAdminOrders(){
 
             String(
               order.status ||
-              "pending"
+"pending_order"
             ).trim() ===
             group.value
         ).length;
@@ -543,10 +543,10 @@ ${group.label}
       order => {
 
         const status =
-          String(
-            order.status ||
-            "pending"
-          ).trim();
+  String(
+    order.status ||
+    "pending_order"
+  ).trim();
 
         return (
           status ===
@@ -632,8 +632,8 @@ ${escapeAdminOrderHtml(
       if(select){
 
         select.value =
-          order.status ||
-          "pending";
+  order.status ||
+  "pending_order";
 
         toggleOrderFields(
           orderId
@@ -674,12 +674,11 @@ function renderOrderCard(
       order.order_id || ""
     ).trim();
 
-
   const status =
-    String(
-      order.status ||
-      "pending"
-    ).trim();
+  String(
+    order.status ||
+    "pending_order"
+  ).trim();
 
 
   const customerName =
@@ -907,22 +906,6 @@ toggleOrderFields(
 
 <option value="china_arrived">
 สินค้าถึงโกดังจีน
-</option>
-
-<option value="shipping_to_th">
-กำลังมาไทย
-</option>
-
-<option value="ready_to_ship">
-เตรียมจัดส่ง
-</option>
-
-<option value="shipped">
-จัดส่งแล้ว
-</option>
-
-<option value="china_arrived">
-ถึงโกดังจีนแล้ว
 </option>
 
 <option value="shipping_to_th">
