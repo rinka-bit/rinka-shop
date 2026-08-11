@@ -102,7 +102,6 @@ const domestic =
  <div class="card"><h2>🛍️ รายการสินค้า</h2>${items.length?items.map(itemHtml).join(""):'<p>ไม่มีรายการสินค้า</p>'}</div>
  ${gifts.length?`<div class="card"><h2>🎁 ของแถม</h2>${gifts.map(giftHtml).join("")}</div>`:""}
  </section><aside class="side"><div class="card"><h2>🚚 การจัดส่ง</h2>
- <div class="side-row"><span>ขนส่ง</span><strong>${esc(o.courier||"-")}</strong></div><div class="side-row"><span>สถานะจัดส่ง</span><strong>${esc(o.shipping_status||"-")}</strong></div>
  <div class="side-row"><span>ค่านำเข้า</span><strong>฿${importFee.toLocaleString("th-TH")}</strong></div><div class="side-row"><span>ค่าส่งในไทย</span><strong>฿${domestic.toLocaleString("th-TH")}</strong></div><div class="side-row side-total"><span>รวมค่าส่ง</span><strong>฿${shippingTotal.toLocaleString("th-TH")}</strong></div>
 ${
   pendingShipmentId
@@ -135,6 +134,10 @@ ${shipmentTrackingHtml(
   o
 )}
 
+</aside>
+</div>
+`;
+
 }
 function itemHtml(i){const opts=i.selected_options||i.selected_option||{};const q=Number(i.qty||i.quantity||0);const unit=Number(i.price||i.unit_price||0);const total=Number(i.final_price)>0?Number(i.final_price):unit*q;return `<article class="item">${i.image?`<img src="${attr(i.image)}" alt="${attr(i.name||i.product_name||"")}">`:'<div class="ph">📦</div>'}<div><h3>${esc(i.name||i.product_name||"-")}</h3><div class="opts">${Object.entries(opts).map(([k,v])=>`<span class="opt">${esc(k)}: ${esc(Array.isArray(v)?v.join(", "):v)}</span>`).join("")}</div><div class="item-meta">${q} ชิ้น × ฿${unit.toLocaleString("th-TH")}</div></div><div class="item-total">฿${total.toLocaleString("th-TH")}</div></article>`}
 function giftHtml(g){return `<div class="gift">${g.gift_image?`<img src="${attr(g.gift_image)}" alt="${attr(g.gift_name||"")}">`:'<div class="ph">🎁</div>'}<div><strong>${esc(g.gift_name||"-")}</strong>${g.character_name?`<div style="margin-top:4px;color:var(--muted);font-size:12px">ตัวละคร: ${esc(g.character_name)}</div>`:""}</div></div>`}
@@ -166,7 +169,31 @@ function statusText(s){
   }[s] || s || "-";
 
 }
-function statusBadge(s){const c=s==="pending"?"pending":s==="ready_to_ship"?"ready":s==="shipped"?"paid":"progress";return `<span class="badge ${c}">${statusText(s)}</span>`}
+function statusBadge(s){
+
+  const c =
+    s === "pending_order"
+      ? "pending"
+
+      : s === "pending"
+        ? "progress"
+
+        : s === "ready_to_ship"
+          ? "ready"
+
+          : s === "shipped" ||
+            s === "completed"
+            ? "paid"
+
+            : "progress";
+
+  return `
+    <span class="badge ${c}">
+      ${statusText(s)}
+    </span>
+  `;
+
+}
 function shippingBadge(s){if(s==="paid")return '<span class="badge paid">ชำระค่าส่งแล้ว</span>';if(s==="combine_later")return '<span class="badge progress">รอส่งรวม</span>';return '<span class="badge pending">รอชำระค่าส่ง</span>'}
 function messageHtml(s){
 
@@ -193,9 +220,9 @@ function messageHtml(s){
     ],
 
     ready_to_ship:[
-      "m-ready",
-      "📬 สินค้าถึงไทยแล้ว กรุณายืนยันที่อยู่และชำระค่าส่ง"
-    ],
+  "m-ready",
+  "📬 มีสินค้าถึงไทยและพร้อมดำเนินการจัดส่ง กรุณาตรวจสอบรอบรายละเอียดด้านล่าง"
+],
 
     shipped:[
       "m-done",
