@@ -45,15 +45,39 @@ button,input,a{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cu
 <div id="toast" class="toast"></div>
 <div id="loadingOverlay" class="overlay"><div class="overlay-card"><div class="truck">🚚</div><h3>กำลังบันทึกข้อมูลจัดส่ง</h3><p>กรุณาอย่าปิดหน้านี้</p></div></div>
 <script>
-const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const API =
+  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
 const orderId =
-  params.get("id");
+  params.get("id") || "";
 
 const shipmentId =
-  params.get("shipment_id");
-const customer=safeJson(localStorage.getItem("customer"),{});
-const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
-let shippingInfo=null,selectedAddress=null,banks=[],submitting=false;
+  params.get("shipment_id") || "";
+
+const customer =
+  safeJson(
+    localStorage.getItem("customer"),
+    {}
+  );
+
+const sessionToken =
+  String(
+    customer.session_token ||
+    localStorage.getItem("session_token") ||
+    ""
+  ).trim();
+
+let shippingInfo = null;
+let selectedAddress = null;
+let banks = [];
+let submitting = false;
+  
 document.addEventListener("DOMContentLoaded",()=>{if(!sessionToken){location.href="login.html";return}document.getElementById("slip").addEventListener("change",previewSlip);loadPage()});
 async function loadPage(){try{await loadShippingInfo();await Promise.all([loadDefaultAddress(),loadBanks()]);toggleMethod();updateSubmit()}catch(e){console.error(e);toast(e.message||"โหลดข้อมูลไม่สำเร็จ",true)}}
 async function loadShippingInfo(){
@@ -238,68 +262,317 @@ function goAddressBook(){
  function previewSlip(){const f=document.getElementById("slip").files[0],box=document.getElementById("slipPreview");if(!f){box.classList.add("hidden");updateSubmit();return}try{validateFile(f)}catch(e){document.getElementById("slip").value="";box.classList.add("hidden");toast(e.message,true);updateSubmit();return}const u=URL.createObjectURL(f);box.innerHTML=`<img src="${u}" alt="สลิป"><div><b>${esc(f.name)}</b><p style="color:var(--muted);font-size:12px">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;box.classList.remove("hidden");updateSubmit()}
 function validateFile(f){if(!["image/jpeg","image/png","image/webp"].includes(f.type))throw new Error("รองรับเฉพาะ JPG, PNG หรือ WEBP");if(f.size>8*1024*1024)throw new Error("ไฟล์ต้องไม่เกิน 8 MB")}
 function updateSubmit(){const b=document.getElementById("submitShippingBtn"),m=document.querySelector('input[name="shippingMethod"]:checked')?.value,total=Number(shippingInfo?.import_fee||0)+Number(shippingInfo?.domestic_shipping_fee||0),file=document.getElementById("slip")?.files?.[0];b.disabled=submitting||!shippingInfo||!m||(m==="ship_now"&&(!selectedAddress||!banks.length||(total>0&&!file)))}
+
 async function submitShippingPayment(){
- if(submitting)return;const method=document.querySelector('input[name="shippingMethod"]:checked')?.value;if(!method){toast("กรุณาเลือกวิธีจัดส่ง",true);return}
- const i=Number(shippingInfo.import_fee||0),d=Number(shippingInfo.domestic_shipping_fee||0),total=i+d;let slipBase64="";
- if(method==="ship_now"){if(!selectedAddress){toast("กรุณาเลือกที่อยู่จัดส่ง",true);return}const f=document.getElementById("slip").files[0];if(total>0&&!f){toast("กรุณาแนบสลิป",true);return}if(f){validateFile(f);slipBase64=await fileToBase64(f)}}
- submitting=true;updateSubmit();document.getElementById("loadingOverlay").style.display="flex";
- try{
+
+  if(submitting){
+    return;
+  }
+
+  const method =
+    document.querySelector(
+      'input[name="shippingMethod"]:checked'
+    )?.value;
+
+  if(!method){
+
+    toast(
+      "กรุณาเลือกวิธีจัดส่ง",
+      true
+    );
+
+    return;
+
+  }
+
+  if(!shippingInfo){
+
+    toast(
+      "ยังโหลดข้อมูลการจัดส่งไม่สำเร็จ",
+      true
+    );
+
+    return;
+
+  }
+
+  const importFee =
+    Number(
+      shippingInfo.import_fee || 0
+    );
+
+  const domesticFee =
+    Number(
+      shippingInfo.domestic_shipping_fee || 0
+    );
+
+  const total =
+    importFee +
+    domesticFee;
+
+  let slipBase64 = "";
+
+  /*
+  ================================
+  จัดส่งเลย
+  ================================
+  */
+
+  if(
+    method ===
+    "ship_now"
+  ){
+
+    if(!selectedAddress){
+
+      toast(
+        "กรุณาเลือกที่อยู่จัดส่ง",
+        true
+      );
+
+      return;
+
+    }
+
+    const file =
+      document
+        .getElementById(
+          "slip"
+        )
+        .files[0];
+
+    if(
+      total > 0 &&
+      !file
+    ){
+
+      toast(
+        "กรุณาแนบสลิป",
+        true
+      );
+
+      return;
+
+    }
+
+    if(file){
+
+      try{
+
+        validateFile(
+          file
+        );
+
+        slipBase64 =
+          await fileToBase64(
+            file
+          );
+
+      }catch(error){
+
+        toast(
+          error.message ||
+          "ไฟล์สลิปไม่ถูกต้อง",
+          true
+        );
+
+        return;
+
+      }
+
+    }
+
+  }
+
+
+  /*
+  ================================
+  Shipment ID
+  ================================
+  */
+
+  const targetShipmentId =
+    String(
+      shippingInfo.shipment_id ||
+      shipmentId ||
+      ""
+    ).trim();
+
+  if(!targetShipmentId){
+
+    toast(
+      "ไม่พบ Shipment ID กรุณาเปิดจากออเดอร์อีกครั้ง",
+      true
+    );
+
+    return;
+
+  }
+
+
+  /*
+  ================================
+  Payload
+  ================================
+  */
+
   const payload = {
 
-  order_id:
-    orderId,
+    order_id:
+      orderId,
 
-  shipment_id:
-    shippingInfo.shipment_id ||
-    shipmentId ||
-    "",
+    shipment_id:
+      targetShipmentId,
 
-  customer_email:
-    customer.email ||
-    shippingInfo.email,
+    customer_email:
+      customer.email ||
+      shippingInfo.email ||
+      "",
 
-  shipping_method:
-    method,
+    shipping_method:
+      method,
 
-  import_fee:
-    importFee,
+    import_fee:
+      importFee,
 
-  domestic_shipping_fee:
-    domesticFee,
+    domestic_shipping_fee:
+      domesticFee,
 
-  total:
-    method === "ship_now"
-      ? total
-      : 0,
+    total:
+      method === "ship_now"
+        ? total
+        : 0,
 
-  confirmed_address:
-    method === "ship_now"
-      ? JSON.stringify(
-          selectedAddress
-        )
-      : "",
+    confirmed_address:
+      method === "ship_now"
+        ? JSON.stringify(
+            selectedAddress
+          )
+        : "",
 
-  slip_base64:
-    slipBase64
+    slip_base64:
+      slipBase64
 
-};
-  if(
-  !payload.shipment_id
-){
+  };
 
-  alert(
-    "ไม่พบ Shipment ID กรุณาเปิดลิงก์จากอีเมลแจ้งจัดส่งอีกครั้ง"
-  );
 
-  resetSubmitButton();
+  /*
+  ================================
+  Submit
+  ================================
+  */
 
-  return;
+  submitting = true;
+
+  updateSubmit();
+
+  document
+    .getElementById(
+      "loadingOverlay"
+    )
+    .style.display =
+      "flex";
+
+  try{
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "action",
+      "saveShippingPayment"
+    );
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
+    const response =
+      await fetch(
+        API,
+        {
+          method:
+            "POST",
+
+          body:
+            formData
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(!result.success){
+
+      throw new Error(
+        result.error ||
+        "ไม่สามารถบันทึกข้อมูลได้"
+      );
+
+    }
+
+    localStorage.removeItem(
+      "selectedShippingAddress"
+    );
+
+    toast(
+      method === "combine_later"
+        ? "บันทึกรอส่งรวมเรียบร้อยแล้ว"
+        : "ยืนยันการจัดส่งเรียบร้อยแล้ว"
+    );
+
+    setTimeout(
+      ()=>{
+
+        location.href =
+          "order.html?id=" +
+          encodeURIComponent(
+            orderId
+          );
+
+      },
+      700
+    );
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    toast(
+      error.message ||
+      "เกิดข้อผิดพลาด",
+      true
+    );
+
+    submitting = false;
+
+    document
+      .getElementById(
+        "loadingOverlay"
+      )
+      .style.display =
+        "none";
+
+    updateSubmit();
+
+  }
 
 }
-  const fd=new FormData();fd.append("action","saveShippingPayment");fd.append("payload",JSON.stringify(payload));const r=await fetch(API,{method:"POST",body:fd});if(!r.ok)throw new Error("HTTP "+r.status);const data=await r.json();if(!data.success)throw new Error(data.error||"ไม่สามารถบันทึกข้อมูลได้");
-  localStorage.removeItem("selectedShippingAddress");toast("ยืนยันเรียบร้อยแล้ว");setTimeout(()=>location.href="order.html?id="+encodeURIComponent(orderId),700)
- }catch(e){console.error(e);toast(e.message||"เกิดข้อผิดพลาด",true);submitting=false;document.getElementById("loadingOverlay").style.display="none";updateSubmit()}
-}
+  
 function fileToBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)})}
 function goBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="orders.html"}
 let timer;function toast(t,e){const b=document.getElementById("toast");b.textContent=t;b.classList.toggle("error",!!e);b.classList.add("show");clearTimeout(timer);timer=setTimeout(()=>b.classList.remove("show"),2200)}
