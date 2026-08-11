@@ -150,7 +150,78 @@ function statusClass(s){
   return "b-progress";
 
 }
- 
+
+  function legacyStatusCode(
+  status
+){
+
+  const value =
+    String(
+      status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const map = {
+
+    "รอกดสั่งสินค้า":
+      "pending_order",
+
+    "กดสั่งสินค้าแล้ว":
+      "pending",
+
+    "ถึงโกดังจีน":
+      "china_arrived",
+
+    "ถึงโกดังจีนแล้ว":
+      "china_arrived",
+
+    "กำลังมาไทย":
+      "shipping_to_th",
+
+    "เตรียมจัดส่ง":
+      "ready_to_ship",
+
+    "จัดส่งแล้ว":
+      "shipped",
+
+    "เสร็จสิ้น":
+      "completed"
+
+  };
+
+
+  /*
+  เผื่อชีตเก่าเก็บ code อยู่แล้ว
+  */
+
+  if(
+    [
+      "pending_order",
+      "pending",
+      "china_arrived",
+      "shipping_to_th",
+      "ready_to_ship",
+      "shipped",
+      "completed"
+    ].includes(
+      value
+    )
+  ){
+
+    return value;
+
+  }
+
+
+  return (
+    map[value] ||
+    ""
+  );
+
+}
+  
 async function loadOrders(){
 
   const box =
@@ -404,12 +475,19 @@ async function loadOrders(){
     ไม่เอา Legacy มาแสดง
     */
 
-    const visibleLegacyOrders =
-      statusFilter
-        ? []
-        : legacyOrders;
+   const visibleLegacyOrders =
+  statusFilter
 
+    ? legacyOrders.filter(
+        order =>
+          legacyStatusCode(
+            order.status
+          ) ===
+          statusFilter
+      )
 
+    : legacyOrders;
+    
     /*
     =========================================
     EMPTY
