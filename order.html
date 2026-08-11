@@ -54,7 +54,43 @@ async function loadOrder(){
 }
 function renderOrder(o){
  const items=Array.isArray(o.items)?o.items:[]; const gifts=Array.isArray(o.gifts)?o.gifts:[];
- const importFee=Number(o.import_fee_round2??o.import_fee??0); const domestic=Number(o.domestic_shipping_fee||0);
+ const pendingShipment =
+  o.pending_shipment &&
+  typeof o.pending_shipment ===
+  "object"
+    ? o.pending_shipment
+    : null;
+
+
+const pendingShipmentId =
+  String(
+    o.pending_shipment_id ||
+    pendingShipment?.shipment_id ||
+    ""
+  ).trim();
+ const importFee =
+  pendingShipment
+    ? Number(
+        pendingShipment.import_fee ||
+        0
+      )
+    : Number(
+        o.import_fee_round2 ??
+        o.import_fee ??
+        0
+      );
+
+
+const domestic =
+  pendingShipment
+    ? Number(
+        pendingShipment.domestic_shipping_fee ||
+        0
+      )
+    : Number(
+        o.domestic_shipping_fee ||
+        0
+      );
  const shippingTotal=importFee+domestic;
  document.getElementById("orderBox").className="";
  document.getElementById("orderBox").innerHTML=`<div class="grid"><section>
@@ -66,7 +102,31 @@ function renderOrder(o){
  </section><aside class="side"><div class="card"><h2>🚚 การจัดส่ง</h2>
  <div class="side-row"><span>ขนส่ง</span><strong>${esc(o.courier||"-")}</strong></div><div class="side-row"><span>สถานะจัดส่ง</span><strong>${esc(o.shipping_status||"-")}</strong></div>
  <div class="side-row"><span>ค่านำเข้า</span><strong>฿${importFee.toLocaleString("th-TH")}</strong></div><div class="side-row"><span>ค่าส่งในไทย</span><strong>฿${domestic.toLocaleString("th-TH")}</strong></div><div class="side-row side-total"><span>รวมค่าส่ง</span><strong>฿${shippingTotal.toLocaleString("th-TH")}</strong></div>
- ${o.status==="ready_to_ship"&&String(o.shipping_payment_status||"unpaid")==="unpaid"?`<button class="action" onclick='location.href=${JSON.stringify("shipping-payment.html?id="+encodeURIComponent(o.order_id||""))}'>ยืนยันที่อยู่ / ชำระค่าส่ง</button>`:""}
+${
+  pendingShipmentId
+    ? `
+
+<button
+class="action"
+onclick='location.href=${
+  JSON.stringify(
+    "shipping-payment.html?id=" +
+    encodeURIComponent(
+      o.order_id || ""
+    ) +
+    "&shipment_id=" +
+    encodeURIComponent(
+      pendingShipmentId
+    )
+  )
+}'
+>
+ยืนยันที่อยู่ / ชำระค่าส่ง
+</button>
+
+`
+    : ""
+}
  </div><div class="card"><h2>📮 เลขพัสดุ</h2><div style="font-weight:700;overflow-wrap:anywhere">${esc(o.tracking_no||"ยังไม่มีเลขพัสดุ")}</div>
  ${o.tracking_no?`<button class="action secondary" onclick='copyText(${JSON.stringify(String(o.tracking_no))})'>คัดลอกเลขพัสดุ</button><button class="action" onclick='openTracking(${JSON.stringify(String(o.courier||""))},${JSON.stringify(String(o.tracking_no))})'>ติดตามพัสดุ</button>`:""}</div></aside></div>`;
 }
