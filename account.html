@@ -1586,13 +1586,14 @@ style="grid-column:1/-1;">
 
     const counts = {
 
-      pending:0,
-      china_arrived:0,
-      shipping_to_th:0,
-      ready_to_ship:0,
-      shipped:0
+  pending_order:0,
+  pending:0,
+  china_arrived:0,
+  shipping_to_th:0,
+  ready_to_ship:0,
+  shipped:0
 
-    };
+};
 
     orders.forEach(
       order=>{
@@ -1620,42 +1621,49 @@ style="grid-column:1/-1;">
 
     grid.innerHTML = [
 
-      createAccountOrderSummary(
-        "pending",
-        "📦",
-        "กดสั่งสินค้าแล้ว",
-        counts.pending
-      ),
+  createAccountOrderSummary(
+    "pending_order",
+    "🕒",
+    "รอกดสั่งสินค้า",
+    counts.pending_order
+  ),
 
-      createAccountOrderSummary(
-        "china_arrived",
-        "🏭",
-        "ถึงโกดังจีน",
-        counts.china_arrived
-      ),
+  createAccountOrderSummary(
+    "pending",
+    "📦",
+    "กดสั่งสินค้าแล้ว",
+    counts.pending
+  ),
 
-      createAccountOrderSummary(
-        "shipping_to_th",
-        "🚚",
-        "กำลังมาไทย",
-        counts.shipping_to_th
-      ),
+  createAccountOrderSummary(
+    "china_arrived",
+    "🏭",
+    "ถึงโกดังจีน",
+    counts.china_arrived
+  ),
 
-      createAccountOrderSummary(
-        "ready_to_ship",
-        "📬",
-        "เตรียมจัดส่ง",
-        counts.ready_to_ship
-      ),
+  createAccountOrderSummary(
+    "shipping_to_th",
+    "🚚",
+    "กำลังมาไทย",
+    counts.shipping_to_th
+  ),
 
-      createAccountOrderSummary(
-        "shipped",
-        "✅",
-        "จัดส่งแล้ว",
-        counts.shipped
-      ),
+  createAccountOrderSummary(
+    "ready_to_ship",
+    "📬",
+    "เตรียมจัดส่ง",
+    counts.ready_to_ship
+  ),
 
-      `
+  createAccountOrderSummary(
+    "shipped",
+    "✅",
+    "จัดส่งแล้ว",
+    counts.shipped
+  ),
+
+  `
 
 <div
 class="order-summary-card"
@@ -1677,7 +1685,7 @@ onclick="window.location.href='orders.html'">
 
 `
 
-    ].join("");
+].join("");
 
   }catch(error){
 
