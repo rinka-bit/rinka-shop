@@ -54,14 +54,18 @@ async function loadOrder(){
 }
 function renderOrder(o){
  const items=Array.isArray(o.items)?o.items:[]; const gifts=Array.isArray(o.gifts)?o.gifts:[];
+ const shipments =
+  Array.isArray(
+    o.shipments
+  )
+    ? o.shipments
+    : [];
  const pendingShipment =
   o.pending_shipment &&
   typeof o.pending_shipment ===
   "object"
     ? o.pending_shipment
     : null;
-
-
 const pendingShipmentId =
   String(
     o.pending_shipment_id ||
@@ -79,8 +83,6 @@ const pendingShipmentId =
         o.import_fee ??
         0
       );
-
-
 const domestic =
   pendingShipment
     ? Number(
@@ -127,8 +129,12 @@ onclick='location.href=${
 `
     : ""
 }
- </div><div class="card"><h2>📮 เลขพัสดุ</h2><div style="font-weight:700;overflow-wrap:anywhere">${esc(o.tracking_no||"ยังไม่มีเลขพัสดุ")}</div>
- ${o.tracking_no?`<button class="action secondary" onclick='copyText(${JSON.stringify(String(o.tracking_no))})'>คัดลอกเลขพัสดุ</button><button class="action" onclick='openTracking(${JSON.stringify(String(o.courier||""))},${JSON.stringify(String(o.tracking_no))})'>ติดตามพัสดุ</button>`:""}</div></aside></div>`;
+
+${shipmentTrackingHtml(
+  shipments,
+  o
+)}
+
 }
 function itemHtml(i){const opts=i.selected_options||i.selected_option||{};const q=Number(i.qty||i.quantity||0);const unit=Number(i.price||i.unit_price||0);const total=Number(i.final_price)>0?Number(i.final_price):unit*q;return `<article class="item">${i.image?`<img src="${attr(i.image)}" alt="${attr(i.name||i.product_name||"")}">`:'<div class="ph">📦</div>'}<div><h3>${esc(i.name||i.product_name||"-")}</h3><div class="opts">${Object.entries(opts).map(([k,v])=>`<span class="opt">${esc(k)}: ${esc(Array.isArray(v)?v.join(", "):v)}</span>`).join("")}</div><div class="item-meta">${q} ชิ้น × ฿${unit.toLocaleString("th-TH")}</div></div><div class="item-total">฿${total.toLocaleString("th-TH")}</div></article>`}
 function giftHtml(g){return `<div class="gift">${g.gift_image?`<img src="${attr(g.gift_image)}" alt="${attr(g.gift_name||"")}">`:'<div class="ph">🎁</div>'}<div><strong>${esc(g.gift_name||"-")}</strong>${g.character_name?`<div style="margin-top:4px;color:var(--muted);font-size:12px">ตัวละคร: ${esc(g.character_name)}</div>`:""}</div></div>`}
@@ -287,6 +293,311 @@ ${x[1]} ${x[2]}
 `
     )
     .join("");
+
+}
+
+ function shipmentTrackingHtml(
+  shipments,
+  order
+){
+
+  /*
+  =========================================
+  ระบบ Shipment ใหม่
+  =========================================
+  */
+
+  if(
+    Array.isArray(shipments) &&
+    shipments.length > 0
+  ){
+
+    const shipped =
+      shipments.filter(
+        shipment =>
+          String(
+            shipment.status || ""
+          ) === "shipped"
+      );
+
+
+    if(
+      shipped.length === 0
+    ){
+
+      return `
+        <div class="card">
+
+          <h2>
+            📮 การจัดส่ง
+          </h2>
+
+          <div
+            style="
+              color:var(--muted);
+              line-height:1.7;
+            "
+          >
+            ยังไม่มีเลขพัสดุ
+          </div>
+
+        </div>
+      `;
+
+    }
+
+
+    return `
+      <div class="card">
+
+        <h2>
+          📮 การจัดส่ง
+        </h2>
+
+        ${shipped
+          .map(
+            (
+              shipment,
+              index
+            ) => {
+
+              const courier =
+                String(
+                  shipment.courier || ""
+                );
+
+              const tracking =
+                String(
+                  shipment.tracking_no || ""
+                );
+
+              const shipmentId =
+                String(
+                  shipment.shipment_id || ""
+                );
+
+
+              return `
+
+                <div
+                  style="
+                    padding:12px 0;
+                    ${
+                      index <
+                      shipped.length - 1
+                        ? "border-bottom:1px solid #edf2f6;"
+                        : ""
+                    }
+                  "
+                >
+
+                  <div
+                    style="
+                      display:flex;
+                      justify-content:space-between;
+                      gap:10px;
+                      align-items:center;
+                      flex-wrap:wrap;
+                    "
+                  >
+
+                    <strong>
+                      📦 รอบจัดส่ง ${
+                        index + 1
+                      }
+                    </strong>
+
+                    <span
+                      class="badge paid"
+                    >
+                      จัดส่งแล้ว
+                    </span>
+
+                  </div>
+
+
+                  ${
+                    shipmentId
+                      ? `
+                        <div
+                          style="
+                            margin-top:5px;
+                            color:var(--muted);
+                            font-size:11px;
+                          "
+                        >
+                          ${esc(
+                            shipmentId
+                          )}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  <div
+                    style="
+                      margin-top:12px;
+                      color:var(--muted);
+                      font-size:12px;
+                    "
+                  >
+                    บริษัทขนส่ง
+                  </div>
+
+                  <div
+                    style="
+                      margin-top:3px;
+                      font-weight:700;
+                    "
+                  >
+                    ${esc(
+                      courier || "-"
+                    )}
+                  </div>
+
+
+                  <div
+                    style="
+                      margin-top:10px;
+                      color:var(--muted);
+                      font-size:12px;
+                    "
+                  >
+                    เลขพัสดุ
+                  </div>
+
+                  <div
+                    style="
+                      margin-top:3px;
+                      font-weight:700;
+                      overflow-wrap:anywhere;
+                    "
+                  >
+                    ${esc(
+                      tracking || "-"
+                    )}
+                  </div>
+
+
+                  ${
+                    tracking
+                      ? `
+
+                        <button
+                          class="action secondary"
+                          onclick='copyText(
+                            ${JSON.stringify(
+                              tracking
+                            )}
+                          )'
+                        >
+                          คัดลอกเลขพัสดุ
+                        </button>
+
+                        <button
+                          class="action"
+                          onclick='openTracking(
+                            ${JSON.stringify(
+                              courier
+                            )},
+                            ${JSON.stringify(
+                              tracking
+                            )}
+                          )'
+                        >
+                          ติดตามพัสดุ
+                        </button>
+
+                      `
+                      : ""
+                  }
+
+                </div>
+
+              `;
+
+            }
+          )
+          .join("")}
+
+      </div>
+    `;
+
+  }
+
+
+  /*
+  =========================================
+  FALLBACK ระบบเก่า
+  =========================================
+  */
+
+  const oldTracking =
+    String(
+      order.tracking_no || ""
+    );
+
+  const oldCourier =
+    String(
+      order.courier || ""
+    );
+
+
+  return `
+    <div class="card">
+
+      <h2>
+        📮 เลขพัสดุ
+      </h2>
+
+      <div
+        style="
+          font-weight:700;
+          overflow-wrap:anywhere;
+        "
+      >
+        ${esc(
+          oldTracking ||
+          "ยังไม่มีเลขพัสดุ"
+        )}
+      </div>
+
+      ${
+        oldTracking
+          ? `
+
+            <button
+              class="action secondary"
+              onclick='copyText(
+                ${JSON.stringify(
+                  oldTracking
+                )}
+              )'
+            >
+              คัดลอกเลขพัสดุ
+            </button>
+
+            <button
+              class="action"
+              onclick='openTracking(
+                ${JSON.stringify(
+                  oldCourier
+                )},
+                ${JSON.stringify(
+                  oldTracking
+                )}
+              )'
+            >
+              ติดตามพัสดุ
+            </button>
+
+          `
+          : ""
+      }
+
+    </div>
+  `;
 
 }
  
