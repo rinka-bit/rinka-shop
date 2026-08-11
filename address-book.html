@@ -34,7 +34,15 @@ const customer=safeJson(localStorage.getItem("customer"),{});
 const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
 const params=new URLSearchParams(location.search);
 const selectType=params.get("select")||"";
-const orderId=params.get("order_id")||params.get("id")||"";
+const orderId =
+  params.get("order_id") ||
+  params.get("id") ||
+  "";
+
+const shipmentId =
+  params.get("shipment_id") ||
+  "";
+
 let addressesData=[];
 document.addEventListener("DOMContentLoaded",()=>{if(!sessionToken){location.replace("login.html");return}loadAddresses()});
 async function loadAddresses(){
@@ -58,13 +66,140 @@ function addressHtml(a){
  <div class="line"><span>📞</span><span>${esc(a.phone||"-")}</span></div><div class="line"><span>📍</span><span>${esc([a.address,a.subdistrict,a.district,a.province,a.postcode].filter(Boolean).join(" "))}</span></div>
  <div class="actions"><button class="card-button" onclick='editAddress(${JSON.stringify(id)})'>✏️ แก้ไข</button>${selectType?`<button class="card-button select-button" onclick='useAddressById(${JSON.stringify(id)})'>✅ ใช้ที่อยู่นี้</button>`:""}</div></article>`;
 }
-function editAddress(id){const q=new URLSearchParams({id});if(selectType)q.set("return_select",selectType);if(orderId)q.set("order_id",orderId);location.href="address.html?"+q.toString()}
-function goAddAddress(){const q=new URLSearchParams();if(selectType)q.set("return_select",selectType);if(orderId)q.set("order_id",orderId);location.href="address.html"+(q.toString()?"?"+q.toString():"")}
-function useAddressById(id){
- const a=addressesData.find(x=>String(x.address_id||"")===String(id));if(!a){console.error("ไม่พบข้อมูลที่อยู่");loadAddresses();return}
- if(selectType==="shipping"){localStorage.setItem("selectedShippingAddress",JSON.stringify(a));location.href="shipping-payment.html?id="+encodeURIComponent(orderId);return}
- localStorage.setItem("selectedCheckoutAddress",JSON.stringify(a));location.href="checkout.html";
+
+ function editAddress(id){
+
+  const q =
+    new URLSearchParams({
+      id
+    });
+
+  if(selectType){
+    q.set(
+      "return_select",
+      selectType
+    );
+  }
+
+  if(orderId){
+    q.set(
+      "order_id",
+      orderId
+    );
+  }
+
+  if(shipmentId){
+    q.set(
+      "shipment_id",
+      shipmentId
+    );
+  }
+
+  location.href =
+    "address.html?" +
+    q.toString();
 }
+ 
+function goAddAddress(){
+
+  const q =
+    new URLSearchParams();
+
+  if(selectType){
+    q.set(
+      "return_select",
+      selectType
+    );
+  }
+
+  if(orderId){
+    q.set(
+      "order_id",
+      orderId
+    );
+  }
+
+  if(shipmentId){
+    q.set(
+      "shipment_id",
+      shipmentId
+    );
+  }
+
+  location.href =
+    "address.html" +
+    (
+      q.toString()
+        ? "?" + q.toString()
+        : ""
+    );
+}
+ 
+function useAddressById(id){
+
+  const a =
+    addressesData.find(
+      x =>
+        String(
+          x.address_id || ""
+        ) ===
+        String(id)
+    );
+
+  if(!a){
+
+    console.error(
+      "ไม่พบข้อมูลที่อยู่"
+    );
+
+    loadAddresses();
+
+    return;
+  }
+
+  if(
+    selectType ===
+    "shipping"
+  ){
+
+    localStorage.setItem(
+      "selectedShippingAddress",
+      JSON.stringify(a)
+    );
+
+    const q =
+      new URLSearchParams();
+
+    if(orderId){
+      q.set(
+        "id",
+        orderId
+      );
+    }
+
+    if(shipmentId){
+      q.set(
+        "shipment_id",
+        shipmentId
+      );
+    }
+
+    location.href =
+      "shipping-payment.html?" +
+      q.toString();
+
+    return;
+  }
+
+  localStorage.setItem(
+    "selectedCheckoutAddress",
+    JSON.stringify(a)
+  );
+
+  location.href =
+    "checkout.html";
+}
+ 
 function goAddressBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="account.html"}
 function bool(v){return v===true||v===1||["true","yes","1","default"].includes(String(v||"").toLowerCase())}
 function safeJson(v,f){try{return JSON.parse(v||"")}catch(e){return f}}
