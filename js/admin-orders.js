@@ -2022,48 +2022,6 @@ if(
 
   }
 
-
-  if(
-    status ===
-    "shipped"
-  ){
-
-    payload.courier =
-      document
-        .getElementById(
-          "courier_" +
-          orderId
-        )
-        ?.value
-        .trim() || "";
-
-
-    payload.tracking_no =
-      document
-        .getElementById(
-          "tracking_" +
-          orderId
-        )
-        ?.value
-        .trim() || "";
-
-
-    if(
-      !payload.courier ||
-      !payload.tracking_no
-    ){
-
-      alert(
-        "กรุณากรอกขนส่งและเลขพัสดุ"
-      );
-
-      return;
-
-    }
-
-  }
-
-
   const button =
     document.getElementById(
       "updateOrderBtn_" +
