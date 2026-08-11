@@ -40,16 +40,118 @@ const customer=safeJson(localStorage.getItem("customer"),{});
 const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
 const params=new URLSearchParams(location.search);
 const statusFilter=params.get("status")||"";
-const FILTERS=[
-["","ทั้งหมด"],["pending","กดสั่งสินค้าแล้ว"],["china_arrived","ถึงโกดังจีน"],["shipping_to_th","กำลังมาไทย"],["ready_to_ship","เตรียมจัดส่ง"],["shipped","จัดส่งแล้ว"]
+const FILTERS = [
+
+  [
+    "",
+    "ทั้งหมด"
+  ],
+
+  [
+    "pending_order",
+    "รอกดสั่งสินค้า"
+  ],
+
+  [
+    "pending",
+    "กดสั่งสินค้าแล้ว"
+  ],
+
+  [
+    "china_arrived",
+    "ถึงโกดังจีน"
+  ],
+
+  [
+    "shipping_to_th",
+    "กำลังมาไทย"
+  ],
+
+  [
+    "ready_to_ship",
+    "เตรียมจัดส่ง"
+  ],
+
+  [
+    "shipped",
+    "จัดส่งแล้ว"
+  ]
+
 ];
 document.addEventListener("DOMContentLoaded",()=>{renderFilters();loadOrders()});
 function renderFilters(){
  document.getElementById("filterBar").innerHTML=FILTERS.map(([v,t])=>`<a class="filter-chip ${v===statusFilter?"active":""}" href="orders.html${v?`?status=${encodeURIComponent(v)}`:""}">${t}</a>`).join("");
 }
-function statusText(s){return {pending:"กดสั่งสินค้าแล้ว",china_arrived:"ถึงโกดังจีนแล้ว",shipping_to_th:"กำลังมาไทย",ready_to_ship:"เตรียมจัดส่ง",shipped:"จัดส่งแล้ว"}[s]||s||"-"}
-function statusClass(s){return s==="pending"?"b-pending":s==="ready_to_ship"?"b-ready":s==="shipped"?"b-shipped":"b-progress"}
-async function loadOrders(){
+
+ function statusText(s){
+
+  return {
+
+    pending_order:
+      "รอกดสั่งสินค้า",
+
+    pending:
+      "กดสั่งสินค้าแล้ว",
+
+    china_arrived:
+      "ถึงโกดังจีนแล้ว",
+
+    shipping_to_th:
+      "กำลังมาไทย",
+
+    ready_to_ship:
+      "เตรียมจัดส่ง",
+
+    shipped:
+      "จัดส่งแล้ว",
+
+    completed:
+      "เสร็จสิ้น"
+
+  }[s] || s || "-";
+
+}
+ 
+function statusClass(s){
+
+  if(
+    s === "pending_order"
+  ){
+
+    return "b-pending";
+
+  }
+
+  if(
+    s === "pending"
+  ){
+
+    return "b-progress";
+
+  }
+
+  if(
+    s === "ready_to_ship"
+  ){
+
+    return "b-ready";
+
+  }
+
+  if(
+    s === "shipped" ||
+    s === "completed"
+  ){
+
+    return "b-shipped";
+
+  }
+
+  return "b-progress";
+
+}
+ 
+ async function loadOrders(){
  const box=document.getElementById("orderList");
  if(!sessionToken&&!customer.email){location.href="login.html";return}
  document.getElementById("pageTitle").textContent=statusFilter?statusText(statusFilter):"รายการออเดอร์ทั้งหมด";
