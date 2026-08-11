@@ -1211,7 +1211,20 @@ function redirectAfterAddressSave(){
       "order_id"
     ) || "";
 
-  if(from === "register"){
+  const shipmentId =
+    params.get(
+      "shipment_id"
+    ) || "";
+
+
+  /*
+  มาจากหน้าลงทะเบียน
+  */
+
+  if(
+    from ===
+    "register"
+  ){
 
     window.location.replace(
       "account.html"
@@ -1221,7 +1234,15 @@ function redirectAfterAddressSave(){
 
   }
 
-  if(returnSelect === "checkout"){
+
+  /*
+  กลับไปเลือกที่อยู่ Checkout
+  */
+
+  if(
+    returnSelect ===
+    "checkout"
+  ){
 
     window.location.replace(
       "address-book.html?select=checkout"
@@ -1231,7 +1252,15 @@ function redirectAfterAddressSave(){
 
   }
 
-  if(returnSelect === "shipping"){
+
+  /*
+  กลับไปเลือกที่อยู่สำหรับชำระค่าส่ง
+  */
+
+  if(
+    returnSelect ===
+    "shipping"
+  ){
 
     const query =
       new URLSearchParams();
@@ -1240,6 +1269,7 @@ function redirectAfterAddressSave(){
       "select",
       "shipping"
     );
+
 
     if(orderId){
 
@@ -1250,6 +1280,17 @@ function redirectAfterAddressSave(){
 
     }
 
+
+    if(shipmentId){
+
+      query.set(
+        "shipment_id",
+        shipmentId
+      );
+
+    }
+
+
     window.location.replace(
       "address-book.html?" +
       query.toString()
@@ -1259,12 +1300,17 @@ function redirectAfterAddressSave(){
 
   }
 
+
+  /*
+  เปิดหน้าที่อยู่ตามปกติ
+  */
+
   window.location.replace(
     "address-book.html"
   );
 
 }
-
+  
 function setAddressFieldError(
   id,
   message
