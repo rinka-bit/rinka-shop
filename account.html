@@ -1545,85 +1545,196 @@ async function loadOrders(){
       "accountOrderError"
     );
 
+
   grid.innerHTML = `
 
-<div
-class="account-loading"
-style="grid-column:1/-1;">
-กำลังโหลดข้อมูลออเดอร์...
-</div>
+    <div
+      class="account-loading"
+      style="grid-column:1/-1;"
+    >
+      กำลังโหลดข้อมูลออเดอร์...
+    </div>
 
-`;
+  `;
+
 
   errorBox.classList.add(
     "hidden"
   );
 
+
   try{
 
-    const query =
+    /*
+    =========================================
+    โหลดออเดอร์ระบบใหม่ + ระบบเก่า
+    =========================================
+    */
+
+    const newQuery =
       new URLSearchParams();
 
-    query.set(
+    newQuery.set(
       "action",
       "customerOrders"
     );
 
-    query.set(
+    newQuery.set(
       "session_token",
       sessionToken
     );
 
-    const response =
-      await fetch(
-        API +
-        "?" +
-        query.toString()
-      );
 
-    if(!response.ok){
+    const legacyQuery =
+      new URLSearchParams();
+
+    legacyQuery.set(
+      "action",
+      "legacyOrders"
+    );
+
+    legacyQuery.set(
+      "session_token",
+      sessionToken
+    );
+
+
+    const [
+      newResponse,
+      legacyResponse
+    ] =
+      await Promise.all([
+
+        fetch(
+          API +
+          "?" +
+          newQuery.toString()
+        ),
+
+        fetch(
+          API +
+          "?" +
+          legacyQuery.toString()
+        )
+
+      ]);
+
+
+    /*
+    =========================================
+    ระบบใหม่
+    =========================================
+    */
+
+    if(!newResponse.ok){
 
       throw new Error(
         "HTTP " +
-        response.status
+        newResponse.status
       );
 
     }
 
-    const result =
-      await response.json();
+
+    const newResult =
+      await newResponse.json();
+
 
     if(
-      result &&
-      result.success === false
+      newResult &&
+      newResult.success === false
     ){
 
       throw new Error(
-        result.error ||
+        newResult.error ||
         "โหลดออเดอร์ไม่สำเร็จ"
       );
 
     }
 
+
     const orders =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(
-            result.orders
+      Array.isArray(
+        newResult
+      )
+        ? newResult
+        : (
+            Array.isArray(
+              newResult.orders
+            )
+              ? newResult.orders
+              : []
+          );
+
+
+    /*
+    =========================================
+    ระบบเก่า
+
+    ถ้า Legacy มีปัญหา
+    ยังให้หน้า Account ใช้งานระบบใหม่ได้
+    =========================================
+    */
+
+    let legacyOrders = [];
+
+
+    try{
+
+      if(
+        legacyResponse.ok
+      ){
+
+        const legacyResult =
+          await legacyResponse.json();
+
+
+        if(
+          legacyResult &&
+          legacyResult.success === true &&
+          Array.isArray(
+            legacyResult.orders
           )
-            ? result.orders
-            : [];
+        ){
+
+          legacyOrders =
+            legacyResult.orders;
+
+        }
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "Legacy orders load failed:",
+        error
+      );
+
+    }
+
+
+    /*
+    =========================================
+    COUNTS
+    =========================================
+    */
 
     const counts = {
 
-  pending_order:0,
-  pending:0,
-  china_arrived:0,
-  shipping_to_th:0,
-  ready_to_ship:0,
-  shipped:0
+      pending_order:0,
+      pending:0,
+      china_arrived:0,
+      shipping_to_th:0,
+      ready_to_ship:0,
+      shipped:0
 
-};
+    };
+
+
+    /*
+    ระบบใหม่
+    */
 
     orders.forEach(
       order=>{
@@ -1632,6 +1743,7 @@ style="grid-column:1/-1;">
           String(
             order.status || ""
           ).trim();
+
 
         if(
           Object.prototype
@@ -1649,73 +1761,120 @@ style="grid-column:1/-1;">
       }
     );
 
+
+    /*
+    =========================================
+    ระบบเก่า
+
+    แปลงสถานะภาษาไทย
+    → status code ระบบใหม่
+    =========================================
+    */
+
+    legacyOrders.forEach(
+      order=>{
+
+        const status =
+          legacyAccountStatusCode(
+            order.status
+          );
+
+
+        if(
+          Object.prototype
+            .hasOwnProperty
+            .call(
+              counts,
+              status
+            )
+        ){
+
+          counts[status]++;
+
+        }
+
+      }
+    );
+
+
+    /*
+    =========================================
+    RENDER
+    =========================================
+    */
+
     grid.innerHTML = [
 
-  createAccountOrderSummary(
-    "pending_order",
-    "🕒",
-    "รอกดสั่งสินค้า",
-    counts.pending_order
-  ),
+      createAccountOrderSummary(
+        "pending_order",
+        "🕒",
+        "รอกดสั่งสินค้า",
+        counts.pending_order
+      ),
 
-  createAccountOrderSummary(
-    "pending",
-    "📦",
-    "กดสั่งสินค้าแล้ว",
-    counts.pending
-  ),
+      createAccountOrderSummary(
+        "pending",
+        "📦",
+        "กดสั่งสินค้าแล้ว",
+        counts.pending
+      ),
 
-  createAccountOrderSummary(
-    "china_arrived",
-    "🏭",
-    "ถึงโกดังจีน",
-    counts.china_arrived
-  ),
+      createAccountOrderSummary(
+        "china_arrived",
+        "🏭",
+        "ถึงโกดังจีน",
+        counts.china_arrived
+      ),
 
-  createAccountOrderSummary(
-    "shipping_to_th",
-    "🚚",
-    "กำลังมาไทย",
-    counts.shipping_to_th
-  ),
+      createAccountOrderSummary(
+        "shipping_to_th",
+        "🚚",
+        "กำลังมาไทย",
+        counts.shipping_to_th
+      ),
 
-  createAccountOrderSummary(
-    "ready_to_ship",
-    "📬",
-    "เตรียมจัดส่ง",
-    counts.ready_to_ship
-  ),
+      createAccountOrderSummary(
+        "ready_to_ship",
+        "📬",
+        "เตรียมจัดส่ง",
+        counts.ready_to_ship
+      ),
 
-  createAccountOrderSummary(
-    "shipped",
-    "✅",
-    "จัดส่งแล้ว",
-    counts.shipped
-  ),
+      createAccountOrderSummary(
+        "shipped",
+        "✅",
+        "จัดส่งแล้ว",
+        counts.shipped
+      ),
 
-  `
+      `
 
-<div
-class="order-summary-card"
-onclick="window.location.href='orders.html'">
+        <div
+          class="order-summary-card"
+          onclick="window.location.href='orders.html'"
+        >
 
-  <div class="order-summary-icon">
-    📚
-  </div>
+          <div class="order-summary-icon">
+            📚
+          </div>
 
-  <div class="order-summary-label">
-    ออเดอร์ทั้งหมด
-  </div>
+          <div class="order-summary-label">
+            ออเดอร์ทั้งหมด
+          </div>
 
-  <div class="order-summary-count">
-    ${orders.length}
-  </div>
+          <div class="order-summary-count">
+            ${
+              orders.length +
+              legacyOrders.length
+            }
+          </div>
 
-</div>
+        </div>
 
-`
+      `
 
-].join("");
+    ].join("");
+
 
   }catch(error){
 
@@ -1724,28 +1883,32 @@ onclick="window.location.href='orders.html'">
       error
     );
 
+
     grid.innerHTML = "";
+
 
     errorBox.innerHTML = `
 
-โหลดข้อมูลออเดอร์ไม่สำเร็จ
+      โหลดข้อมูลออเดอร์ไม่สำเร็จ
 
-<br>
+      <br>
 
-${escapeAccountHtml(
-  error.message ||
-  String(error)
-)}
+      ${escapeAccountHtml(
+        error.message ||
+        String(error)
+      )}
 
-<br>
+      <br>
 
-<button
-type="button"
-onclick="loadOrders()">
-ลองใหม่
-</button>
+      <button
+        type="button"
+        onclick="loadOrders()"
+      >
+        ลองใหม่
+      </button>
 
-`;
+    `;
+
 
     errorBox.classList.remove(
       "hidden"
@@ -1755,6 +1918,77 @@ onclick="loadOrders()">
 
 }
 
+function legacyAccountStatusCode(
+  status
+){
+
+  const value =
+    String(
+      status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const map = {
+
+    "รอกดสั่งสินค้า":
+      "pending_order",
+
+    "กดสั่งสินค้าแล้ว":
+      "pending",
+
+    "ถึงโกดังจีน":
+      "china_arrived",
+
+    "ถึงโกดังจีนแล้ว":
+      "china_arrived",
+
+    "กำลังมาไทย":
+      "shipping_to_th",
+
+    "เตรียมจัดส่ง":
+      "ready_to_ship",
+
+    "จัดส่งแล้ว":
+      "shipped",
+
+    "เสร็จสิ้น":
+      "completed"
+
+  };
+
+
+  /*
+  เผื่อข้อมูลเก่าใช้ status code อยู่แล้ว
+  */
+
+  if(
+    [
+      "pending_order",
+      "pending",
+      "china_arrived",
+      "shipping_to_th",
+      "ready_to_ship",
+      "shipped",
+      "completed"
+    ].includes(
+      value
+    )
+  ){
+
+    return value;
+
+  }
+
+
+  return (
+    map[value] ||
+    ""
+  );
+
+}  
+  
 function createAccountOrderSummary(
   status,
   icon,
