@@ -615,34 +615,38 @@ ${escapeAdminOrderHtml(
   =====================================
   */
 
-  filteredOrders.forEach(
-    order => {
+ filteredOrders.forEach(
+  order => {
 
-      const orderId =
-        String(
-          order.order_id || ""
-        ).trim();
+    const orderId =
+      String(
+        order.order_id || ""
+      ).trim();
 
-      const select =
-        document.getElementById(
-          "status_" +
-          orderId
-        );
+    const select =
+      document.getElementById(
+        "status_" +
+        orderId
+      );
 
-      if(select){
+    if(select){
 
-        select.value =
-  order.status ||
-  "pending_order";
+      select.value =
+        order.status ||
+        "pending_order";
 
-        toggleOrderFields(
-          orderId
-        );
-
-      }
+      toggleOrderFields(
+        orderId
+      );
 
     }
-  );
+
+    loadOrderShipmentsForAdmin(
+      orderId
+    );
+
+  }
+);
 
 }
 
@@ -1078,6 +1082,18 @@ class="loading-text"
 style="display:none;"
 >
 ⏳ กำลังอัปเดต...
+</div>
+
+<div
+id="shipmentBox_${escapeAdminOrderHtml(
+  orderId
+)}"
+style="
+margin-top:16px;
+padding-top:16px;
+border-top:1px solid #e5e7eb;
+"
+>
 </div>
 
 </div>
@@ -2459,3 +2475,676 @@ function escapeAdminOrderJs(
     );
 
 }
+
+/*
+=========================================
+ADMIN — ORDER SHIPMENTS
+=========================================
+*/
+
+async function loadOrderShipmentsForAdmin(
+  orderId
+){
+
+  const box =
+    document.getElementById(
+      "shipmentBox_" +
+      orderId
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.innerHTML = `
+    <div
+      style="
+        color:#64748b;
+        font-size:13px;
+      "
+    >
+      ⏳ กำลังโหลดรอบจัดส่ง...
+    </div>
+  `;
+
+  try{
+
+    const response =
+      await fetch(
+        API +
+        "?action=orderShipments" +
+        "&order_id=" +
+        encodeURIComponent(
+          orderId
+        )
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        "โหลดรอบจัดส่งไม่สำเร็จ"
+      );
+
+    }
+
+    const shipments =
+      Array.isArray(
+        result.shipments
+      )
+        ? result.shipments
+        : Array.isArray(result)
+          ? result
+          : [];
+
+    renderOrderShipmentsAdmin(
+      orderId,
+      shipments
+    );
+
+  }catch(error){
+
+    console.error(
+      "loadOrderShipmentsForAdmin error:",
+      orderId,
+      error
+    );
+
+    box.innerHTML = `
+      <div
+        style="
+          padding:12px;
+          border:1px solid #fecdd3;
+          border-radius:12px;
+          background:#fff1f2;
+          color:#be123c;
+          font-size:13px;
+        "
+      >
+        ⚠️ โหลดข้อมูลรอบจัดส่งไม่สำเร็จ
+      </div>
+    `;
+
+  }
+
+}
+
+
+/*
+=========================================
+RENDER SHIPMENTS
+=========================================
+*/
+
+function renderOrderShipmentsAdmin(
+  orderId,
+  shipments
+){
+
+  const box =
+    document.getElementById(
+      "shipmentBox_" +
+      orderId
+    );
+
+  if(!box){
+    return;
+  }
+
+  if(
+    !Array.isArray(shipments) ||
+    shipments.length === 0
+  ){
+
+    box.innerHTML = `
+      <div
+        style="
+          padding:12px;
+          border:1px dashed #cbd5e1;
+          border-radius:12px;
+          color:#64748b;
+          font-size:13px;
+        "
+      >
+        📭 ยังไม่มีรอบจัดส่งสำหรับออเดอร์นี้
+      </div>
+    `;
+
+    return;
+  }
+
+
+  let html = `
+
+    <div
+      style="
+        padding:14px;
+        border:1px solid #dbeafe;
+        border-radius:14px;
+        background:#f8fbff;
+      "
+    >
+
+      <h4
+        style="
+          margin:0 0 12px;
+        "
+      >
+        📦 รอบจัดส่ง
+      </h4>
+
+  `;
+
+
+  shipments.forEach(
+    (
+      shipment,
+      index
+    ) => {
+
+      const shipmentId =
+        String(
+          shipment.shipment_id || ""
+        ).trim();
+
+      const status =
+        String(
+          shipment.status ||
+          "pending"
+        ).trim();
+
+      const courier =
+        String(
+          shipment.courier || ""
+        ).trim();
+
+      const trackingNo =
+        String(
+          shipment.tracking_no || ""
+        ).trim();
+
+      const importFee =
+        Number(
+          shipment.import_fee || 0
+        );
+
+      const domesticFee =
+        Number(
+          shipment.domestic_shipping_fee ||
+          0
+        );
+
+      const isShipped =
+        status === "shipped";
+
+
+      html += `
+
+        <div
+          style="
+            padding:14px;
+            margin-bottom:10px;
+            border:1px solid #e5e7eb;
+            border-radius:12px;
+            background:#ffffff;
+          "
+        >
+
+          <div
+            style="
+              display:flex;
+              justify-content:space-between;
+              align-items:flex-start;
+              gap:10px;
+              flex-wrap:wrap;
+            "
+          >
+
+            <div>
+
+              <b>
+                รอบจัดส่ง ${index + 1}
+              </b>
+
+              <div
+                style="
+                  margin-top:4px;
+                  color:#64748b;
+                  font-size:12px;
+                "
+              >
+                ${escapeAdminOrderHtml(
+                  shipmentId
+                )}
+              </div>
+
+            </div>
+
+            <span
+              style="
+                display:inline-block;
+                padding:5px 9px;
+                border-radius:999px;
+                font-size:11px;
+                font-weight:700;
+                background:${
+                  isShipped
+                    ? "#dcfce7"
+                    : "#fef3c7"
+                };
+                color:${
+                  isShipped
+                    ? "#166534"
+                    : "#92400e"
+                };
+              "
+            >
+
+              ${
+                isShipped
+                  ? "จัดส่งแล้ว"
+                  : "รอจัดส่ง"
+              }
+
+            </span>
+
+          </div>
+
+
+          <div
+            style="
+              margin-top:12px;
+              display:grid;
+              grid-template-columns:
+                repeat(
+                  auto-fit,
+                  minmax(150px,1fr)
+                );
+              gap:8px;
+              font-size:13px;
+            "
+          >
+
+            <div>
+              <b>ค่านำเข้า</b>
+              <br>
+              ฿${importFee.toLocaleString(
+                "th-TH",
+                {
+                  maximumFractionDigits:2
+                }
+              )}
+            </div>
+
+            <div>
+              <b>ค่าส่งในไทย</b>
+              <br>
+              ฿${domesticFee.toLocaleString(
+                "th-TH",
+                {
+                  maximumFractionDigits:2
+                }
+              )}
+            </div>
+
+          </div>
+
+
+          ${
+            isShipped
+              ? `
+
+                <div
+                  style="
+                    margin-top:12px;
+                    padding:10px;
+                    border-radius:10px;
+                    background:#f0fdf4;
+                    font-size:13px;
+                  "
+                >
+
+                  <b>
+                    🚚 ${escapeAdminOrderHtml(
+                      courier || "-"
+                    )}
+                  </b>
+
+                  <div
+                    style="
+                      margin-top:4px;
+                    "
+                  >
+                    เลขพัสดุ:
+                    ${escapeAdminOrderHtml(
+                      trackingNo || "-"
+                    )}
+                  </div>
+
+                </div>
+
+              `
+              : `
+
+                <div
+                  style="
+                    margin-top:14px;
+                  "
+                >
+
+                  <label>
+                    บริษัทขนส่ง
+                  </label>
+
+                  <input
+                    id="shipmentCourier_${escapeAdminOrderHtml(
+                      shipmentId
+                    )}"
+                    value="${escapeAdminOrderHtml(
+                      courier
+                    )}"
+                    placeholder="เช่น Flash Express"
+                  >
+
+                  <br><br>
+
+                  <label>
+                    เลขพัสดุ
+                  </label>
+
+                  <input
+                    id="shipmentTracking_${escapeAdminOrderHtml(
+                      shipmentId
+                    )}"
+                    value="${escapeAdminOrderHtml(
+                      trackingNo
+                    )}"
+                    placeholder="เลขพัสดุ"
+                  >
+
+                  <br><br>
+
+                  <button
+                    type="button"
+                    id="shipShipmentBtn_${escapeAdminOrderHtml(
+                      shipmentId
+                    )}"
+                    onclick="
+                      shipShipmentAdmin(
+                        '${escapeAdminOrderJs(
+                          orderId
+                        )}',
+                        '${escapeAdminOrderJs(
+                          shipmentId
+                        )}'
+                      )
+                    "
+                  >
+                    🚚 บันทึกการจัดส่ง
+                  </button>
+
+                  <div
+                    id="shipShipmentLoading_${escapeAdminOrderHtml(
+                      shipmentId
+                    )}"
+                    class="loading-text"
+                    style="
+                      display:none;
+                      margin-top:8px;
+                    "
+                  >
+                    ⏳ กำลังบันทึก...
+                  </div>
+
+                </div>
+
+              `
+          }
+
+        </div>
+
+      `;
+
+    }
+  );
+
+
+  html += `
+
+    </div>
+
+  `;
+
+
+  box.innerHTML =
+    html;
+
+}
+
+
+/*
+=========================================
+SHIP ONE SHIPMENT
+=========================================
+*/
+
+async function shipShipmentAdmin(
+  orderId,
+  shipmentId
+){
+
+  const courierInput =
+    document.getElementById(
+      "shipmentCourier_" +
+      shipmentId
+    );
+
+  const trackingInput =
+    document.getElementById(
+      "shipmentTracking_" +
+      shipmentId
+    );
+
+
+  const courier =
+    String(
+      courierInput?.value || ""
+    ).trim();
+
+  const trackingNo =
+    String(
+      trackingInput?.value || ""
+    ).trim();
+
+
+  if(!courier){
+
+    alert(
+      "กรุณากรอกบริษัทขนส่ง"
+    );
+
+    courierInput?.focus();
+
+    return;
+
+  }
+
+
+  if(!trackingNo){
+
+    alert(
+      "กรุณากรอกเลขพัสดุ"
+    );
+
+    trackingInput?.focus();
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "shipShipmentBtn_" +
+      shipmentId
+    );
+
+  const loading =
+    document.getElementById(
+      "shipShipmentLoading_" +
+      shipmentId
+    );
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+  }
+
+
+  if(loading){
+
+    loading.style.display =
+      "block";
+
+  }
+
+
+  try{
+
+    const payload = {
+
+      order_id:
+        orderId,
+
+      shipment_id:
+        shipmentId,
+
+      courier:
+        courier,
+
+      tracking_no:
+        trackingNo
+
+    };
+
+
+    const formData =
+      new FormData();
+
+
+    formData.append(
+      "payload",
+      JSON.stringify(
+        payload
+      )
+    );
+
+
+    const response =
+      await fetch(
+
+        API +
+        "?action=shipOrderShipment",
+
+        {
+
+          method:
+            "POST",
+
+          body:
+            formData
+
+        }
+
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        result?.message ||
+        "บันทึกการจัดส่งไม่สำเร็จ"
+      );
+
+    }
+
+
+    alert(
+      "บันทึกการจัดส่งเรียบร้อยแล้ว"
+    );
+
+
+    await loadOrders();
+
+
+  }catch(error){
+
+    console.error(
+      "shipShipmentAdmin error:",
+      error
+    );
+
+
+    alert(
+      error.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+    }
+
+
+    if(loading){
+
+      loading.style.display =
+        "none";
+
+    }
+
+  }
+
+}
+
