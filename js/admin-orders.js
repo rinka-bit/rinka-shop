@@ -1000,64 +1000,6 @@ placeholder="ค่าส่งในไทย"
 
 </div>
 
-<div
-id="trackingBox_${escapeAdminOrderHtml(
-  orderId
-)}"
-style="display:none;"
->
-
-<div
-class="card"
-style="
-background:#f8fbff;
-box-shadow:none;
-margin-bottom:12px;
-"
->
-
-<h4
-style="
-margin-top:0;
-"
->
-🚚 ข้อมูลจัดส่ง
-</h4>
-
-<label>
-บริษัทขนส่ง
-</label>
-
-<input
-id="courier_${escapeAdminOrderHtml(
-  orderId
-)}"
-value="${escapeAdminOrderHtml(
-  order.courier || ""
-)}"
-placeholder="เช่น Flash Express"
->
-
-<br><br>
-
-<label>
-เลขพัสดุ
-</label>
-
-<input
-id="tracking_${escapeAdminOrderHtml(
-  orderId
-)}"
-value="${escapeAdminOrderHtml(
-  order.tracking_no || ""
-)}"
-placeholder="เลขพัสดุ"
->
-
-</div>
-
-</div>
-
 <button
 id="updateOrderBtn_${escapeAdminOrderHtml(
   orderId
@@ -1926,32 +1868,11 @@ function toggleOrderFields(
       orderId
     );
 
-
-  const trackingBox =
-    document.getElementById(
-      "trackingBox_" +
-      orderId
-    );
-
-
   if(feeBox){
 
     feeBox.style.display =
       status ===
       "ready_to_ship"
-
-        ? "block"
-
-        : "none";
-
-  }
-
-
-  if(trackingBox){
-
-    trackingBox.style.display =
-      status ===
-      "shipped"
 
         ? "block"
 
