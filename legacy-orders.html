@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>
+ออเดอร์เก่า | Rinka Shop
+</title>
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+>
+
+<style>
+
+:root{
+
+  --p:#7dcfff;
+  --pd:#4ba5db;
+
+  --bg:#f6fbff;
+  --card:#ffffff;
+
+  --text:#334155;
+  --muted:#64748b;
+
+  --border:#dbe7f1;
+
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+
+  margin:0;
+
+  font-family:
+    'Kodchasan',
+    sans-serif;
+
+  color:
+    var(--text);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fbfdff,
+      var(--bg)
+    );
+
+}
+
+button,
+a{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/*
+=========================================
+TOPBAR
+=========================================
+*/
+
+.topbar{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:100;
+
+  min-height:68px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    11px 16px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .94
+    );
+
+  border-bottom:
+    1px solid var(--border);
+
+  backdrop-filter:
+    blur(10px);
+
+}
+
+.topbar button,
+.topbar a{
+
+  width:46px;
+  height:46px;
+
+  border:none;
+
+  border-radius:
+    999px;
+
+  background:#fff;
+
+  color:
+    var(--text);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-decoration:none;
+
+  font-size:21px;
+
+  box-shadow:
+    0 4px 14px
+    rgba(
+      71,
+      85,
+      105,
+      .1
+    );
+
+}
+
+.topbar h1{
+
+  margin:0;
+
+  flex:1;
+
+  text-align:center;
+
+  font-size:20px;
+
+  color:#3f6078;
+
+}
+
+
+/*
+=========================================
+LAYOUT
+=========================================
+*/
+
+.container{
+
+  width:
+    min(
+      900px,
+      100%
+    );
+
+  margin:auto;
+
+  padding:
+    20px 16px 50px;
+
+}
+
+
+/*
+=========================================
+HERO
+=========================================
+*/
+
+.hero{
+
+  padding:20px;
+
+  margin-bottom:16px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:21px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f3fbff,
+      #fff
+    );
+
+  box-shadow:
+    0 9px 28px
+    rgba(
+      86,
+      142,
+      178,
+      .09
+    );
+
+}
+
+.hero h2{
+
+  margin:0;
+
+  color:#355a73;
+
+}
+
+.hero p{
+
+  margin:
+    8px 0 0;
+
+  color:
+    var(--muted);
+
+  line-height:1.7;
+
+}
+
+
+/*
+=========================================
+SUMMARY
+=========================================
+*/
+
+.summary{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+
+  margin-bottom:15px;
+
+  padding:
+    12px 15px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:15px;
+
+  background:#fff;
+
+}
+
+.summary-title{
+
+  font-size:13px;
+
+  color:
+    var(--muted);
+
+}
+
+.summary-count{
+
+  font-size:18px;
+
+  font-weight:700;
+
+  color:#287caf;
+
+}
+
+
+/*
+=========================================
+FANDOM
+=========================================
+*/
+
+.fandom-section{
+
+  margin-bottom:18px;
+
+}
+
+.fandom-title{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:10px;
+
+  margin:
+    0 0 9px;
+
+  padding:
+    0 3px;
+
+}
+
+.fandom-title h2{
+
+  margin:0;
+
+  font-size:17px;
+
+  color:#3f6078;
+
+}
+
+.fandom-count{
+
+  padding:
+    5px 9px;
+
+  border-radius:999px;
+
+  background:#e9f7ff;
+
+  color:#2f7ca9;
+
+  font-size:11px;
+
+  font-weight:700;
+
+}
+
+
+/*
+=========================================
+ORDER CARD
+=========================================
+*/
+
+.order-list{
+
+  display:grid;
+
+  gap:11px;
+
+}
+
+.legacy-card{
+
+  display:grid;
+
+  grid-template-columns:
+    94px
+    minmax(0,1fr);
+
+  gap:14px;
+
+  padding:14px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:18px;
+
+  background:#fff;
+
+  box-shadow:
+    0 7px 22px
+    rgba(
+      86,
+      142,
+      178,
+      .07
+    );
+
+}
+
+.product-image{
+
+  width:94px;
+
+  height:94px;
+
+  border-radius:14px;
+
+  object-fit:cover;
+
+  background:#edf7fc;
+
+}
+
+.image-placeholder{
+
+  width:94px;
+
+  height:94px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:14px;
+
+  background:#edf7fc;
+
+  font-size:32px;
+
+}
+
+.product-main{
+
+  min-width:0;
+
+}
+
+.product-name{
+
+  font-size:15px;
+
+  font-weight:700;
+
+  line-height:1.55;
+
+}
+
+.product-meta{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:6px;
+
+  margin-top:7px;
+
+}
+
+.badge{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  padding:
+    5px 8px;
+
+  border-radius:999px;
+
+  font-size:10px;
+
+  font-weight:700;
+
+}
+
+.badge.qty{
+
+  background:#eff6ff;
+
+  color:#1d4ed8;
+
+}
+
+.badge.payment{
+
+  background:#f5f3ff;
+
+  color:#6d28d9;
+
+}
+
+.badge.status{
+
+  background:#ecfdf5;
+
+  color:#166534;
+
+}
+
+
+/*
+=========================================
+DETAIL
+=========================================
+*/
+
+.details{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
+  gap:
+    8px 12px;
+
+  margin-top:12px;
+
+  padding-top:11px;
+
+  border-top:
+    1px solid #edf2f6;
+
+}
+
+.detail{
+
+  min-width:0;
+
+}
+
+.detail-label{
+
+  color:
+    var(--muted);
+
+  font-size:10px;
+
+}
+
+.detail-value{
+
+  margin-top:2px;
+
+  font-size:12px;
+
+  font-weight:600;
+
+  overflow-wrap:anywhere;
+
+}
+
+.remaining{
+
+  color:#be123c;
+
+}
+
+.paid{
+
+  color:#166534;
+
+}
+
+
+/*
+=========================================
+STATE
+=========================================
+*/
+
+.state{
+
+  min-height:360px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:10px;
+
+  padding:25px;
+
+  text-align:center;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:21px;
+
+  background:#fff;
+
+}
+
+.state h2{
+
+  margin:
+    5px 0 0;
+
+}
+
+.state p{
+
+  margin:0;
+
+  color:
+    var(--muted);
+
+  line-height:1.7;
+
+}
+
+.state button,
+.state a{
+
+  margin-top:4px;
+
+  padding:
+    10px 17px;
+
+  border:none;
+
+  border-radius:999px;
+
+  background:
+    var(--p);
+
+  color:#fff;
+
+  text-decoration:none;
+
+  font-weight:700;
+
+}
+
+.spinner{
+
+  width:36px;
+
+  height:36px;
+
+  border:
+    4px solid
+    #dff2fc;
+
+  border-top-color:
+    var(--pd);
+
+  border-radius:50%;
+
+  animation:
+    spin .8s linear infinite;
+
+}
+
+@keyframes spin{
+
+  to{
+    transform:
+      rotate(360deg);
+  }
+
+}
+
+
+/*
+=========================================
+MOBILE
+=========================================
+*/
+
+@media(
+  max-width:600px
+){
+
+  .topbar{
+
+    min-height:64px;
+
+    padding:
+      9px 11px;
+
+  }
+
+  .topbar h1{
+
+    font-size:17px;
+
+  }
+
+  .container{
+
+    padding:
+      14px 10px 36px;
+
+  }
+
+  .hero{
+
+    padding:16px;
+
+  }
+
+  .legacy-card{
+
+    grid-template-columns:
+      76px
+      minmax(0,1fr);
+
+    gap:11px;
+
+    padding:12px;
+
+  }
+
+  .product-image,
+  .image-placeholder{
+
+    width:76px;
+    height:76px;
+
+  }
+
+  .details{
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+  <button
+    type="button"
+    onclick="goBack()"
+    aria-label="กลับ"
+  >
+    ←
+  </button>
+
+
+  <h1>
+    ออเดอร์เก่า
+  </h1>
+
+
+  <a
+    href="account.html"
+    aria-label="บัญชี"
+  >
+    👤
+  </a>
+
+</header>
+
+
+<main class="container">
+
+
+  <section class="hero">
+
+    <h2>
+      🗃️ ออเดอร์จากระบบเก่า
+    </h2>
+
+    <p>
+      รายการสั่งซื้อจากระบบเดิมของร้าน
+      จะแสดงจากแอค X (Twitter)
+      ที่เชื่อมกับบัญชีของคุณ
+    </p>
+
+  </section>
+
+
+  <section
+    id="legacyContent"
+    class="state"
+  >
+
+    <div class="spinner"></div>
+
+    <h2>
+      กำลังโหลดออเดอร์
+    </h2>
+
+    <p>
+      กำลังค้นหารายการจากระบบเก่า...
+    </p>
+
+  </section>
+
+
+</main>
+
+
+<script>
+
+
+const API =
+  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+
+
+const customer =
+  safeJson(
+    localStorage.getItem(
+      "customer"
+    ),
+    {}
+  );
+
+
+const sessionToken =
+  String(
+    customer.session_token ||
+    localStorage.getItem(
+      "session_token"
+    ) ||
+    ""
+  ).trim();
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    if(!sessionToken){
+
+      location.replace(
+        "login.html"
+      );
+
+      return;
+
+    }
+
+    loadLegacyOrders();
+
+  }
+);
+
+
+/*
+=========================================
+LOAD
+=========================================
+*/
+
+async function loadLegacyOrders(){
+
+  const box =
+    document.getElementById(
+      "legacyContent"
+    );
+
+
+  box.className =
+    "state";
+
+
+  box.innerHTML = `
+
+    <div class="spinner"></div>
+
+    <h2>
+      กำลังโหลดออเดอร์
+    </h2>
+
+    <p>
+      กำลังค้นหารายการจากระบบเก่า...
+    </p>
+
+  `;
+
+
+  try{
+
+    const query =
+      new URLSearchParams({
+
+        action:
+          "legacyOrders",
+
+        session_token:
+          sessionToken
+
+      });
+
+
+    const response =
+      await fetch(
+        API +
+        "?" +
+        query.toString()
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result &&
+        (
+          result.error ||
+          result.message
+        )
+          ? (
+              result.error ||
+              result.message
+            )
+          : "โหลดออเดอร์เก่าไม่สำเร็จ"
+      );
+
+    }
+
+
+    const orders =
+      Array.isArray(
+        result.orders
+      )
+        ? result.orders
+        : [];
+
+
+    renderLegacyOrders(
+      orders
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    box.className =
+      "state";
+
+
+    box.innerHTML = `
+
+      <div
+        style="
+          font-size:50px;
+        "
+      >
+        ⚠️
+      </div>
+
+      <h2>
+        โหลดออเดอร์ไม่สำเร็จ
+      </h2>
+
+      <p>
+        ${esc(
+          error.message ||
+          String(error)
+        )}
+      </p>
+
+      <button
+        type="button"
+        onclick="loadLegacyOrders()"
+      >
+        ลองใหม่
+      </button>
+
+    `;
+
+  }
+
+}
+
+
+/*
+=========================================
+RENDER
+=========================================
+*/
+
+function renderLegacyOrders(
+  orders
+){
+
+  const box =
+    document.getElementById(
+      "legacyContent"
+    );
+
+
+  if(
+    !Array.isArray(orders) ||
+    orders.length === 0
+  ){
+
+    box.className =
+      "state";
+
+
+    box.innerHTML = `
+
+      <div
+        style="
+          font-size:52px;
+        "
+      >
+        🗃️
+      </div>
+
+      <h2>
+        ไม่พบออเดอร์เก่า
+      </h2>
+
+      <p>
+        ไม่พบรายการสั่งซื้อเดิม
+        ที่ตรงกับแอค X (Twitter)
+        ของบัญชีนี้
+      </p>
+
+      <a href="account.html">
+        กลับหน้าบัญชี
+      </a>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  GROUP BY FANDOM
+  =========================================
+  */
+
+  const groups = {};
+
+
+  orders.forEach(
+    order => {
+
+      const fandom =
+        String(
+          order.fandom ||
+          "อื่น ๆ"
+        ).trim() ||
+        "อื่น ๆ";
+
+
+      if(!groups[fandom]){
+
+        groups[fandom] = [];
+
+      }
+
+
+      groups[
+        fandom
+      ].push(
+        order
+      );
+
+    }
+  );
+
+
+  /*
+  =========================================
+  HTML
+  =========================================
+  */
+
+  let html = `
+
+    <div class="summary">
+
+      <div>
+
+        <div class="summary-title">
+          รายการที่พบ
+        </div>
+
+        <div class="summary-count">
+          ${orders.length.toLocaleString(
+            "th-TH"
+          )} รายการ
+        </div>
+
+      </div>
+
+      <div
+        style="
+          font-size:28px;
+        "
+      >
+        📦
+      </div>
+
+    </div>
+
+  `;
+
+
+  Object.entries(
+    groups
+  ).forEach(
+    (
+      [
+        fandom,
+        items
+      ]
+    ) => {
+
+      html += `
+
+        <section class="fandom-section">
+
+          <div class="fandom-title">
+
+            <h2>
+              ${esc(fandom)}
+            </h2>
+
+            <span class="fandom-count">
+              ${items.length} รายการ
+            </span>
+
+          </div>
+
+
+          <div class="order-list">
+
+            ${items
+              .map(
+                legacyOrderCard
+              )
+              .join("")}
+
+          </div>
+
+        </section>
+
+      `;
+
+    }
+  );
+
+
+  box.className = "";
+
+  box.innerHTML =
+    html;
+
+}
+
+
+/*
+=========================================
+CARD
+=========================================
+*/
+
+function legacyOrderCard(
+  order
+){
+
+  const image =
+    String(
+      order.image || ""
+    ).trim();
+
+
+  const name =
+    String(
+      order.product_name ||
+      "สินค้า"
+    ).trim();
+
+
+  const qty =
+    Math.max(
+      0,
+      Number(
+        order.qty || 0
+      )
+    );
+
+
+  const paid =
+    Number(
+      order.paid || 0
+    );
+
+
+  const remaining =
+    Number(
+      order.remaining || 0
+    );
+
+
+  const importFee =
+    Number(
+      order.import_fee || 0
+    );
+
+
+  const domesticFee =
+    Number(
+      order.domestic_shipping_fee ||
+      0
+    );
+
+
+  const paymentType =
+    String(
+      order.payment_type || ""
+    ).trim();
+
+
+  const status =
+    String(
+      order.status || ""
+    ).trim();
+
+
+  const shippingDate =
+    String(
+      order.shop_shipping_date ||
+      ""
+    ).trim();
+
+
+  return `
+
+    <article class="legacy-card">
+
+
+      ${
+        image
+
+          ? `
+
+            <img
+              class="product-image"
+              src="${attr(image)}"
+              alt="${attr(name)}"
+              loading="lazy"
+              onerror="
+                this.style.display='none';
+                this.nextElementSibling.style.display='flex';
+              "
+            >
+
+            <div
+              class="image-placeholder"
+              style="
+                display:none;
+              "
+            >
+              📦
+            </div>
+
+          `
+
+          : `
+
+            <div
+              class="image-placeholder"
+            >
+              📦
+            </div>
+
+          `
+      }
+
+
+      <div class="product-main">
+
+
+        <div class="product-name">
+          ${esc(name)}
+        </div>
+
+
+        <div class="product-meta">
+
+          <span class="badge qty">
+            × ${qty}
+          </span>
+
+
+          ${
+            paymentType
+              ? `
+
+                <span class="badge payment">
+                  ${esc(
+                    paymentType
+                  )}
+                </span>
+
+              `
+              : ""
+          }
+
+
+          ${
+            status
+              ? `
+
+                <span class="badge status">
+                  ${esc(
+                    status
+                  )}
+                </span>
+
+              `
+              : ""
+          }
+
+        </div>
+
+
+        <div class="details">
+
+
+          <div class="detail">
+
+            <div class="detail-label">
+              ชำระแล้ว
+            </div>
+
+            <div class="detail-value paid">
+              ฿${money(paid)}
+            </div>
+
+          </div>
+
+
+          <div class="detail">
+
+            <div class="detail-label">
+              คงเหลือ
+            </div>
+
+            <div
+              class="
+                detail-value
+                ${
+                  remaining > 0
+                    ? "remaining"
+                    : ""
+                }
+              "
+            >
+              ฿${money(
+                remaining
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="detail">
+
+            <div class="detail-label">
+              ค่านำเข้า
+            </div>
+
+            <div class="detail-value">
+              ${
+                importFee
+                  ? "฿" +
+                    money(
+                      importFee
+                    )
+                  : "-"
+              }
+            </div>
+
+          </div>
+
+
+          <div class="detail">
+
+            <div class="detail-label">
+              ค่าส่งในไทย
+            </div>
+
+            <div class="detail-value">
+              ${
+                domesticFee
+                  ? "฿" +
+                    money(
+                      domesticFee
+                    )
+                  : "-"
+              }
+            </div>
+
+          </div>
+
+
+          <div class="detail">
+
+            <div class="detail-label">
+              วันที่ร้านจัดส่ง
+            </div>
+
+            <div class="detail-value">
+              ${esc(
+                shippingDate ||
+                "-"
+              )}
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </article>
+
+  `;
+
+}
+
+
+/*
+=========================================
+HELPERS
+=========================================
+*/
+
+function money(
+  value
+){
+
+  return Number(
+    value || 0
+  ).toLocaleString(
+    "th-TH",
+    {
+      minimumFractionDigits:0,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+function goBack(){
+
+  if(
+    document.referrer &&
+    document.referrer !==
+    location.href
+  ){
+
+    history.back();
+
+  }else{
+
+    location.href =
+      "account.html";
+
+  }
+
+}
+
+
+function safeJson(
+  value,
+  fallback
+){
+
+  try{
+
+    return JSON.parse(
+      value || ""
+    );
+
+  }catch(error){
+
+    return fallback;
+
+  }
+
+}
+
+
+function esc(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+function attr(
+  value
+){
+
+  return esc(
+    value
+  );
+
+}
+
+
+</script>
+
+</body>
+
+</html>
