@@ -46,16 +46,151 @@ button,input,a{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cu
 <div id="loadingOverlay" class="overlay"><div class="overlay-card"><div class="truck">🚚</div><h3>กำลังบันทึกข้อมูลจัดส่ง</h3><p>กรุณาอย่าปิดหน้านี้</p></div></div>
 <script>
 const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
-const orderId=new URLSearchParams(location.search).get("id");
+const orderId =
+  params.get("id");
+
+const shipmentId =
+  params.get("shipment_id");
 const customer=safeJson(localStorage.getItem("customer"),{});
 const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
 let shippingInfo=null,selectedAddress=null,banks=[],submitting=false;
 document.addEventListener("DOMContentLoaded",()=>{if(!sessionToken){location.href="login.html";return}document.getElementById("slip").addEventListener("change",previewSlip);loadPage()});
 async function loadPage(){try{await loadShippingInfo();await Promise.all([loadDefaultAddress(),loadBanks()]);toggleMethod();updateSubmit()}catch(e){console.error(e);toast(e.message||"โหลดข้อมูลไม่สำเร็จ",true)}}
 async function loadShippingInfo(){
- if(!orderId)throw new Error("ไม่พบเลขออเดอร์");
- const q=new URLSearchParams({action:"shippingInfo",order_id:orderId,session_token:sessionToken});const r=await fetch(API+"?"+q.toString());if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(!d.success)throw new Error(d.error||"ไม่พบข้อมูลออเดอร์");shippingInfo=d;
- document.getElementById("orderInfo").className="";document.getElementById("orderInfo").innerHTML=`<div><b>${esc(d.order_id)}</b></div><div style="margin-top:6px;color:var(--muted)">${esc(d.customer_name||"-")} • ${esc(d.email||"-")}</div><button class="secondary" onclick='location.href=${JSON.stringify("order.html?id="+encodeURIComponent(d.order_id||""))}'>ดูรายละเอียดออเดอร์</button>`;renderFee()
+
+  if(!orderId){
+
+    document
+      .getElementById(
+        "orderInfo"
+      )
+      .innerHTML =
+        "ไม่พบเลขออเดอร์";
+
+    return;
+
+  }
+
+  const query =
+    new URLSearchParams({
+
+      action:
+        "shippingInfo",
+
+      order_id:
+        orderId
+
+    });
+
+
+  if(shipmentId){
+
+    query.set(
+      "shipment_id",
+      shipmentId
+    );
+
+  }
+
+
+  const response =
+    await fetch(
+      API +
+      "?" +
+      query.toString()
+    );
+
+
+  const result =
+    await response.json();
+
+
+  if(!result.success){
+
+    document
+      .getElementById(
+        "orderInfo"
+      )
+      .innerHTML =
+        escapeShippingHtml(
+          result.message ||
+          result.error ||
+          "ไม่พบข้อมูลการจัดส่ง"
+        );
+
+    return;
+
+  }
+
+
+  shippingInfo =
+    result;
+
+
+  document
+    .getElementById(
+      "orderInfo"
+    )
+    .innerHTML = `
+
+<p>
+เลขออเดอร์:
+<b>
+${escapeShippingHtml(
+  result.order_id
+)}
+</b>
+</p>
+
+${
+  result.shipment_id
+    ? `
+
+<p>
+รอบจัดส่ง:
+<b>
+${escapeShippingHtml(
+  result.shipment_id
+)}
+</b>
+</p>
+
+`
+    : ""
+}
+
+<p>
+ชื่อ:
+${escapeShippingHtml(
+  result.customer_name ||
+  "-"
+)}
+</p>
+
+<p>
+อีเมล:
+${escapeShippingHtml(
+  result.email ||
+  "-"
+)}
+</p>
+
+<button
+type="button"
+onclick="
+window.location.href=
+'order.html?id=${encodeURIComponent(
+  result.order_id
+)}'
+">
+ดูรายการสินค้าในออเดอร์
+</button>
+
+`;
+
+
+  renderFee();
+
 }
 function renderFee(){const i=Number(shippingInfo?.import_fee||0),d=Number(shippingInfo?.domestic_shipping_fee||0),t=i+d;document.getElementById("feeDetail").innerHTML=`<div class="fee-row"><span>ค่านำเข้า</span><strong>฿${i.toLocaleString("th-TH")}</strong></div><div class="fee-row"><span>ค่าส่งในไทย</span><strong>฿${d.toLocaleString("th-TH")}</strong></div><div class="fee-row fee-total"><span>ยอดรวม</span><strong>฿${t.toLocaleString("th-TH")}</strong></div>`}
 async function loadDefaultAddress(){
@@ -72,8 +207,35 @@ async function loadBanks(){
 }
 function showBank(id){const b=banks.find(x=>String(x.account_id||"")===String(id))||banks[Number(id)];if(!b)return;document.getElementById("bankDetail").innerHTML=`<div class="bank-detail"><h3>${esc(b.bank_name||"")}</h3>${b.account_name?`<p>${esc(b.account_name)}</p>`:""}${b.account_number?`<p>เลขบัญชี <b>${esc(b.account_number)}</b></p>`:""}${b.qr_image?`<img class="qr" src="${esc(b.qr_image)}" alt="QR">`:""}</div>`}
 function toggleMethod(){const m=document.querySelector('input[name="shippingMethod"]:checked')?.value;document.getElementById("shipNowBox").classList.toggle("hidden",m!=="ship_now");document.getElementById("combineBox").classList.toggle("hidden",m!=="combine_later");updateSubmit()}
-function goAddressBook(){location.href="address-book.html?select=shipping&order_id="+encodeURIComponent(orderId||"")}
-function previewSlip(){const f=document.getElementById("slip").files[0],box=document.getElementById("slipPreview");if(!f){box.classList.add("hidden");updateSubmit();return}try{validateFile(f)}catch(e){document.getElementById("slip").value="";box.classList.add("hidden");toast(e.message,true);updateSubmit();return}const u=URL.createObjectURL(f);box.innerHTML=`<img src="${u}" alt="สลิป"><div><b>${esc(f.name)}</b><p style="color:var(--muted);font-size:12px">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;box.classList.remove("hidden");updateSubmit()}
+function goAddressBook(){
+
+  let url =
+    "address-book.html?select=shipping&order_id=" +
+    encodeURIComponent(
+      orderId
+    );
+
+
+  if(
+    shippingInfo?.shipment_id ||
+    shipmentId
+  ){
+
+    url +=
+      "&shipment_id=" +
+      encodeURIComponent(
+        shippingInfo?.shipment_id ||
+        shipmentId
+      );
+
+  }
+
+
+  window.location.href =
+    url;
+
+}
+ function previewSlip(){const f=document.getElementById("slip").files[0],box=document.getElementById("slipPreview");if(!f){box.classList.add("hidden");updateSubmit();return}try{validateFile(f)}catch(e){document.getElementById("slip").value="";box.classList.add("hidden");toast(e.message,true);updateSubmit();return}const u=URL.createObjectURL(f);box.innerHTML=`<img src="${u}" alt="สลิป"><div><b>${esc(f.name)}</b><p style="color:var(--muted);font-size:12px">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;box.classList.remove("hidden");updateSubmit()}
 function validateFile(f){if(!["image/jpeg","image/png","image/webp"].includes(f.type))throw new Error("รองรับเฉพาะ JPG, PNG หรือ WEBP");if(f.size>8*1024*1024)throw new Error("ไฟล์ต้องไม่เกิน 8 MB")}
 function updateSubmit(){const b=document.getElementById("submitShippingBtn"),m=document.querySelector('input[name="shippingMethod"]:checked')?.value,total=Number(shippingInfo?.import_fee||0)+Number(shippingInfo?.domestic_shipping_fee||0),file=document.getElementById("slip")?.files?.[0];b.disabled=submitting||!shippingInfo||!m||(m==="ship_now"&&(!selectedAddress||!banks.length||(total>0&&!file)))}
 async function submitShippingPayment(){
@@ -82,7 +244,58 @@ async function submitShippingPayment(){
  if(method==="ship_now"){if(!selectedAddress){toast("กรุณาเลือกที่อยู่จัดส่ง",true);return}const f=document.getElementById("slip").files[0];if(total>0&&!f){toast("กรุณาแนบสลิป",true);return}if(f){validateFile(f);slipBase64=await fileToBase64(f)}}
  submitting=true;updateSubmit();document.getElementById("loadingOverlay").style.display="flex";
  try{
-  const payload={session_token:sessionToken,order_id:orderId,customer_email:customer.email||shippingInfo.email,shipping_method:method,import_fee:i,domestic_shipping_fee:d,total:method==="ship_now"?total:0,confirmed_address:method==="ship_now"?JSON.stringify(selectedAddress):"",slip_base64:slipBase64};
+  const payload = {
+
+  order_id:
+    orderId,
+
+  shipment_id:
+    shippingInfo.shipment_id ||
+    shipmentId ||
+    "",
+
+  customer_email:
+    customer.email ||
+    shippingInfo.email,
+
+  shipping_method:
+    method,
+
+  import_fee:
+    importFee,
+
+  domestic_shipping_fee:
+    domesticFee,
+
+  total:
+    method === "ship_now"
+      ? total
+      : 0,
+
+  confirmed_address:
+    method === "ship_now"
+      ? JSON.stringify(
+          selectedAddress
+        )
+      : "",
+
+  slip_base64:
+    slipBase64
+
+};
+  if(
+  !payload.shipment_id
+){
+
+  alert(
+    "ไม่พบ Shipment ID กรุณาเปิดลิงก์จากอีเมลแจ้งจัดส่งอีกครั้ง"
+  );
+
+  resetSubmitButton();
+
+  return;
+
+}
   const fd=new FormData();fd.append("action","saveShippingPayment");fd.append("payload",JSON.stringify(payload));const r=await fetch(API,{method:"POST",body:fd});if(!r.ok)throw new Error("HTTP "+r.status);const data=await r.json();if(!data.success)throw new Error(data.error||"ไม่สามารถบันทึกข้อมูลได้");
   localStorage.removeItem("selectedShippingAddress");toast("ยืนยันเรียบร้อยแล้ว");setTimeout(()=>location.href="order.html?id="+encodeURIComponent(orderId),700)
  }catch(e){console.error(e);toast(e.message||"เกิดข้อผิดพลาด",true);submitting=false;document.getElementById("loadingOverlay").style.display="none";updateSubmit()}
@@ -91,6 +304,35 @@ function fileToBase64(f){return new Promise((res,rej)=>{const r=new FileReader()
 function goBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="orders.html"}
 let timer;function toast(t,e){const b=document.getElementById("toast");b.textContent=t;b.classList.toggle("error",!!e);b.classList.add("show");clearTimeout(timer);timer=setTimeout(()=>b.classList.remove("show"),2200)}
 function bool(v){return v===true||v===1||["true","yes","1","default"].includes(String(v||"").toLowerCase())}function safeJson(v,f){try{return JSON.parse(v||"")}catch(e){return f}}function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function escapeShippingHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
 </script>
 </body>
 </html>
