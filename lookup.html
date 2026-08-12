@@ -780,7 +780,6 @@ async function searchOrders(){
 
   clearLookupMessage();
 
-
   const social =
     normalizeLookupSocial(
       document
@@ -820,6 +819,12 @@ async function searchOrders(){
     );
 
 
+  const countBox =
+    document.getElementById(
+      "resultCount"
+    );
+
+
   resultSection.classList.remove(
     "hidden"
   );
@@ -836,7 +841,7 @@ async function searchOrders(){
       </h2>
 
       <p>
-        กำลังตรวจสอบทั้งออเดอร์ปัจจุบันและออเดอร์เก่า
+        กำลังโหลดข้อมูลออเดอร์...
       </p>
 
     </div>
@@ -844,11 +849,7 @@ async function searchOrders(){
   `;
 
 
-  document
-    .getElementById(
-      "resultCount"
-    )
-    .textContent =
+  countBox.textContent =
     "กำลังค้นหา...";
 
 
@@ -857,11 +858,17 @@ async function searchOrders(){
   );
 
 
+  lookupAllOrders = [];
+
+  lookupStatusFilter = "";
+
+
   try{
 
     /*
     =========================================
-    ระบบใหม่
+    STEP 1
+    โหลดออเดอร์ระบบใหม่ก่อน
     =========================================
     */
 
@@ -877,11 +884,66 @@ async function searchOrders(){
       });
 
 
+    let newOrders = [];
+
+
+    try{
+
+      const newResponse =
+        await fetch(
+          API +
+          "?" +
+          newQuery.toString()
+        );
+
+
+      newOrders =
+        await parseLookupResponse(
+          newResponse,
+          "new"
+        );
+
+
+    }catch(error){
+
+      console.warn(
+        "New orders lookup failed:",
+        error
+      );
+
+    }
+
+
+    /*
+    เอาระบบใหม่ขึ้นหน้าจอก่อน
+    ไม่ต้องรอ Legacy
+    */
+
+    lookupAllOrders =
+      Array.isArray(
+        newOrders
+      )
+        ? newOrders
+        : [];
+
+
+    prepareLookupOrders();
+
+
     /*
     =========================================
-    ระบบเก่า
+    STEP 2
+    โหลด Legacy ต่อ
     =========================================
     */
+
+    countBox.textContent =
+      lookupAllOrders.length
+        .toLocaleString(
+          "th-TH"
+        ) +
+      " รายการ • กำลังโหลดออเดอร์เก่า...";
+
 
     const legacyQuery =
       new URLSearchParams({
@@ -895,200 +957,114 @@ async function searchOrders(){
       });
 
 
+    let legacyOrders = [];
+
+
     /*
-    ยิงสองระบบพร้อมกัน
+    Legacy retry ได้ 1 ครั้ง
+    กรณี Google redirect 404 ชั่วคราว
     */
 
-    const results =
-      await Promise.allSettled([
+    for(
+      let attempt = 1;
+      attempt <= 2;
+      attempt++
+    ){
 
-        fetch(
-          API +
-          "?" +
-          newQuery.toString()
-        ).then(
-          response =>
-            parseLookupResponse(
-              response,
-              "new"
-            )
-        ),
+      try{
 
-        fetch(
-          API +
-          "?" +
-          legacyQuery.toString()
-        ).then(
-          response =>
-            parseLookupResponse(
-              response,
-              "legacy"
-            )
+        const legacyResponse =
+          await fetch(
+            API +
+            "?" +
+            legacyQuery.toString() +
+            "&_t=" +
+            Date.now()
+          );
+
+
+        legacyOrders =
+          await parseLookupResponse(
+            legacyResponse,
+            "legacy"
+          );
+
+
+        /*
+        สำเร็จแล้ว
+        ออกจาก loop
+        */
+
+        break;
+
+
+      }catch(error){
+
+        console.warn(
+          "Legacy lookup attempt " +
+          attempt +
+          " failed:",
+          error
+        );
+
+
+        if(
+          attempt === 2
+        ){
+
+          /*
+          ระบบใหม่ยังใช้งานได้
+          จึงไม่ throw ทั้งหน้า
+          */
+
+          showLookupMessage(
+            "โหลดออเดอร์เก่าไม่สำเร็จ กรุณากดค้นหาอีกครั้ง"
+          );
+
+        }else{
+
+          /*
+          เว้นนิดก่อน retry
+          */
+
+          await new Promise(
+            resolve =>
+              setTimeout(
+                resolve,
+                800
+              )
+          );
+
+        }
+
+      }
+
+    }
+
+
+    /*
+    =========================================
+    COMBINE
+    =========================================
+    */
+
+    lookupAllOrders =
+      dedupeLookupOrders([
+
+        ...lookupAllOrders,
+
+        ...(
+          Array.isArray(
+            legacyOrders
+          )
+            ? legacyOrders
+            : []
         )
 
       ]);
 
 
-    let combinedOrders = [];
-
-    let successCount = 0;
-
-    let firstError = null;
-
-
-    results.forEach(
-      result => {
-
-        if(
-          result.status ===
-          "fulfilled"
-        ){
-
-          successCount++;
-
-          if(
-            Array.isArray(
-              result.value
-            )
-          ){
-
-            combinedOrders.push(
-              ...result.value
-            );
-
-          }
-
-        }else{
-
-          console.warn(
-            "Lookup request failed:",
-            result.reason
-          );
-
-          if(!firstError){
-
-            firstError =
-              result.reason;
-
-          }
-
-        }
-
-      }
-    );
-
-
-    if(
-      successCount === 0
-    ){
-
-      throw (
-        firstError ||
-        new Error(
-          "ค้นหาออเดอร์ไม่สำเร็จ"
-        )
-      );
-
-    }
-
-
-    combinedOrders =
-      dedupeLookupOrders(
-        combinedOrders
-      );
-
-
-    /*
-    Normalize status ไว้สำหรับ filter
-    */
-
-    combinedOrders =
-      combinedOrders.map(
-        order => ({
-
-          ...order,
-
-          lookup_status:
-            order.legacy === true
-              ? legacyLookupStatusCode(
-                  order.status
-                )
-              : normalizeLookupStatus(
-                  order.status
-                )
-
-        })
-      );
-
-
-    /*
-    ระบบใหม่อยู่ก่อน
-    Legacy อยู่ต่อท้าย
-
-    ภายในระบบใหม่เรียงใหม่ → เก่า
-    */
-
-    combinedOrders.sort(
-      (
-        a,
-        b
-      ) => {
-
-        const aLegacy =
-          a.legacy === true;
-
-        const bLegacy =
-          b.legacy === true;
-
-
-        if(
-          aLegacy !==
-          bLegacy
-        ){
-
-          return aLegacy
-            ? 1
-            : -1;
-
-        }
-
-
-        const aTime =
-          new Date(
-            a.created_at || 0
-          ).getTime() || 0;
-
-
-        const bTime =
-          new Date(
-            b.created_at || 0
-          ).getTime() || 0;
-
-
-        return (
-          bTime -
-          aTime
-        );
-
-      }
-    );
-
-
-    lookupAllOrders =
-      combinedOrders;
-
-
-    /*
-    ทุกครั้งที่ค้นใหม่
-    กลับไป "ทั้งหมด"
-    */
-
-    lookupStatusFilter = "";
-
-
-    renderLookupFilters();
-
-    renderFilteredLookupOrders();
+    prepareLookupOrders();
 
 
   }catch(error){
@@ -1136,11 +1112,7 @@ async function searchOrders(){
     `;
 
 
-    document
-      .getElementById(
-        "resultCount"
-      )
-      .textContent =
+    countBox.textContent =
       "0 รายการ";
 
 
@@ -1151,6 +1123,79 @@ async function searchOrders(){
     );
 
   }
+
+}
+
+  function prepareLookupOrders(){
+
+  lookupAllOrders =
+    lookupAllOrders.map(
+      order => ({
+
+        ...order,
+
+        lookup_status:
+          order.legacy === true
+            ? legacyLookupStatusCode(
+                order.status
+              )
+            : normalizeLookupStatus(
+                order.status
+              )
+
+      })
+    );
+
+
+  lookupAllOrders.sort(
+    (
+      a,
+      b
+    ) => {
+
+      const aLegacy =
+        a.legacy === true;
+
+      const bLegacy =
+        b.legacy === true;
+
+
+      if(
+        aLegacy !==
+        bLegacy
+      ){
+
+        return aLegacy
+          ? 1
+          : -1;
+
+      }
+
+
+      const aTime =
+        new Date(
+          a.created_at || 0
+        ).getTime() || 0;
+
+
+      const bTime =
+        new Date(
+          b.created_at || 0
+        ).getTime() || 0;
+
+
+      return (
+        bTime -
+        aTime
+      );
+
+    }
+  );
+
+
+  renderLookupFilters();
+
+  renderFilteredLookupOrders();
 
 }
   
