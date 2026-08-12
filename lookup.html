@@ -470,6 +470,44 @@ button:disabled{
   display:none !important;
 }
 
+.lookup-filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin:0 0 14px;
+  padding:2px 0 7px;
+  scrollbar-width:thin;
+}
+
+.lookup-filter-chip{
+  flex:0 0 auto;
+  padding:8px 12px;
+  border:1px solid var(--lookup-border);
+  border-radius:999px;
+  background:#fff;
+  color:#557287;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.18s;
+}
+
+.lookup-filter-chip:hover{
+  border-color:#9bdcff;
+  background:#f5fbff;
+}
+
+.lookup-filter-chip.active{
+  border-color:#7dcfff;
+  background:#e9f7ff;
+  color:#287caf;
+}
+
+.lookup-filter-chip .filter-count{
+  margin-left:3px;
+  opacity:.72;
+}
+  
 @media(max-width:650px){
 
   .page-header{
@@ -607,73 +645,55 @@ rel="noopener noreferrer">
 </h2>
 
 <p>
-กรอกอีเมลหรือแอค Twitter/X ที่ใช้สั่งซื้อ ระบบจะแสดงรายการออเดอร์ที่ค้นพบ
+  กรอกแอค Twitter/X ที่ใช้สั่งซื้อ ระบบจะแสดงออเดอร์ทั้งหมดของแอคนี้ ทั้งออเดอร์ปัจจุบันและออเดอร์เก่า
 </p>
 
 </section>
 
 <section class="lookup-card">
 
-<div class="lookup-methods">
+  <div class="lookup-methods">
 
-<div class="lookup-field">
+    <div class="lookup-field">
 
-<label for="email">
-📧 อีเมล
-</label>
+      <label for="social">
+        🐦 Twitter / X
+      </label>
 
-<input
-id="email"
-type="email"
-placeholder="name@example.com"
-autocomplete="email">
+      <input
+        id="social"
+        type="text"
+        placeholder="@username"
+        autocomplete="off">
 
-<small>
-ใช้อีเมลที่กรอกตอนสั่งซื้อ
-</small>
+      <small>
+        กรอกแอค Twitter/X ที่ใช้สั่งซื้อ ใส่ @ หรือไม่ใส่ก็ได้
+      </small>
 
-</div>
+    </div>
 
-<div class="lookup-field">
+  </div>
 
-<label for="social">
-🐦 Twitter / X
-</label>
+  <div
+    id="lookupMessage"
+    class="lookup-message hidden">
+  </div>
 
-<input
-id="social"
-type="text"
-placeholder="@username"
-autocomplete="off">
+  <div class="lookup-actions">
 
-<small>
-ใส่ @ หรือไม่ใส่ก็ได้
-</small>
+    <div class="lookup-hint">
+      ระบบจะค้นหาทั้งออเดอร์ปัจจุบันและออเดอร์เก่า
+    </div>
 
-</div>
+    <button
+      id="searchButton"
+      class="lookup-button"
+      type="button"
+      onclick="searchOrders()">
+      ค้นหาออเดอร์
+    </button>
 
-</div>
-
-<div
-id="lookupMessage"
-class="lookup-message hidden">
-</div>
-
-<div class="lookup-actions">
-
-<div class="lookup-hint">
-กรอกอย่างใดอย่างหนึ่งก็ได้
-</div>
-
-<button
-id="searchButton"
-class="lookup-button"
-type="button"
-onclick="searchOrders()">
-ค้นหาออเดอร์
-</button>
-
-</div>
+  </div>
 
 </section>
 
@@ -711,42 +731,46 @@ const API =
 
 let lookupLoading = false;
 
+let lookupAllOrders = [];
+
+let lookupStatusFilter = "";
+
 document.addEventListener(
   "DOMContentLoaded",
   ()=>{
 
     updateCartCount();
 
-    [
-      "email",
-      "social"
-    ].forEach(
-      id=>{
+    const socialInput =
+      document.getElementById(
+        "social"
+      );
 
-        const input =
-          document.getElementById(id);
+    socialInput.addEventListener(
+      "keydown",
+      event=>{
 
-        input.addEventListener(
-          "keydown",
-          event=>{
+        if(
+          event.key ===
+          "Enter"
+        ){
 
-            if(event.key === "Enter"){
+          event.preventDefault();
 
-              event.preventDefault();
-              searchOrders();
+          searchOrders();
 
-            }
-
-          }
-        );
-
-        input.addEventListener(
-          "input",
-          clearLookupMessage
-        );
+        }
 
       }
     );
+
+    socialInput.addEventListener(
+      "input",
+      clearLookupMessage
+    );
+
+  }
+);
 
   }
 );
@@ -757,18 +781,7 @@ async function searchOrders(){
     return;
   }
 
-
   clearLookupMessage();
-
-
-  const email =
-    document
-      .getElementById(
-        "email"
-      )
-      .value
-      .trim()
-      .toLowerCase();
 
 
   const social =
@@ -781,40 +794,15 @@ async function searchOrders(){
     );
 
 
-  if(
-    !email &&
-    !social
-  ){
+  if(!social){
 
     showLookupMessage(
-      "กรุณากรอกอีเมลหรือ Twitter/X"
+      "กรุณากรอก Twitter / X"
     );
 
     document
       .getElementById(
-        "email"
-      )
-      .focus();
-
-    return;
-
-  }
-
-
-  if(
-    email &&
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      email
-    )
-  ){
-
-    showLookupMessage(
-      "รูปแบบอีเมลไม่ถูกต้อง"
-    );
-
-    document
-      .getElementById(
-        "email"
+        "social"
       )
       .focus();
 
@@ -851,12 +839,20 @@ async function searchOrders(){
       </h2>
 
       <p>
-        กำลังตรวจสอบทั้งออเดอร์ใหม่และออเดอร์เก่า
+        กำลังตรวจสอบทั้งออเดอร์ปัจจุบันและออเดอร์เก่า
       </p>
 
     </div>
 
   `;
+
+
+  document
+    .getElementById(
+      "resultCount"
+    )
+    .textContent =
+    "กำลังค้นหา...";
 
 
   setLookupLoading(
@@ -868,129 +864,77 @@ async function searchOrders(){
 
     /*
     =========================================
-    สร้าง request ทั้งหมดที่ต้องค้น
+    ระบบใหม่
     =========================================
     */
 
-    const requests = [];
+    const newQuery =
+      new URLSearchParams({
+
+        action:
+          "ordersBySocial",
+
+        social:
+          social
+
+      });
 
 
     /*
-    ระบบใหม่ — Email
+    =========================================
+    ระบบเก่า
+    =========================================
     */
 
-    if(email){
+    const legacyQuery =
+      new URLSearchParams({
 
-      const query =
-        new URLSearchParams({
-          action:
-            "ordersByEmail",
+        action:
+          "legacyOrdersBySocial",
 
-          email:
-            email
-        });
+        social:
+          social
 
-
-      requests.push(
-        fetch(
-          API +
-          "?" +
-          query.toString()
-        )
-          .then(
-            response =>
-              parseLookupResponse(
-                response,
-                "new"
-              )
-          )
-      );
-
-    }
+      });
 
 
     /*
-    ระบบใหม่ — Twitter/X
+    ยิงสองระบบพร้อมกัน
     */
 
-    if(social){
+    const results =
+      await Promise.allSettled([
 
-      const query =
-        new URLSearchParams({
-          action:
-            "ordersBySocial",
-
-          social:
-            social
-        });
-
-
-      requests.push(
         fetch(
           API +
           "?" +
-          query.toString()
-        )
-          .then(
-            response =>
-              parseLookupResponse(
-                response,
-                "new"
-              )
-          )
-      );
+          newQuery.toString()
+        ).then(
+          response =>
+            parseLookupResponse(
+              response,
+              "new"
+            )
+        ),
 
-
-      /*
-      ระบบเก่า — Twitter/X
-
-      Legacy ไม่มี Email
-      จึงค้นด้วย Social เท่านั้น
-      */
-
-      const legacyQuery =
-        new URLSearchParams({
-          action:
-            "legacyOrdersBySocial",
-
-          social:
-            social
-        });
-
-
-      requests.push(
         fetch(
           API +
           "?" +
           legacyQuery.toString()
+        ).then(
+          response =>
+            parseLookupResponse(
+              response,
+              "legacy"
+            )
         )
-          .then(
-            response =>
-              parseLookupResponse(
-                response,
-                "legacy"
-              )
-          )
-      );
 
-    }
-
-
-    /*
-    =========================================
-    ยิงพร้อมกัน
-    =========================================
-    */
-
-    const results =
-      await Promise.allSettled(
-        requests
-      );
+      ]);
 
 
     let combinedOrders = [];
 
-    let successfulRequests = 0;
+    let successCount = 0;
 
     let firstError = null;
 
@@ -1003,8 +947,7 @@ async function searchOrders(){
           "fulfilled"
         ){
 
-          successfulRequests++;
-
+          successCount++;
 
           if(
             Array.isArray(
@@ -1025,7 +968,6 @@ async function searchOrders(){
             result.reason
           );
 
-
           if(!firstError){
 
             firstError =
@@ -1039,17 +981,8 @@ async function searchOrders(){
     );
 
 
-    /*
-    ถ้าพังทุก request
-    ค่อยถือว่าค้นหาไม่สำเร็จ
-
-    แต่ถ้า Legacy พังอย่างเดียว
-    ระบบใหม่ยังแสดงได้
-    */
-
     if(
-      requests.length &&
-      successfulRequests === 0
+      successCount === 0
     ){
 
       throw (
@@ -1062,12 +995,6 @@ async function searchOrders(){
     }
 
 
-    /*
-    =========================================
-    DEDUPE
-    =========================================
-    */
-
     combinedOrders =
       dedupeLookupOrders(
         combinedOrders
@@ -1075,15 +1002,33 @@ async function searchOrders(){
 
 
     /*
-    =========================================
-    SORT
+    Normalize status ไว้สำหรับ filter
+    */
 
-    ระบบใหม่ที่มี created_at
-    เรียงใหม่ → เก่า
+    combinedOrders =
+      combinedOrders.map(
+        order => ({
 
-    Legacy ไม่มีวันที่สร้างออเดอร์แน่นอน
-    จึงไม่บังคับเรียงจากวันที่ปลอม
-    =========================================
+          ...order,
+
+          lookup_status:
+            order.legacy === true
+              ? legacyLookupStatusCode(
+                  order.status
+                )
+              : normalizeLookupStatus(
+                  order.status
+                )
+
+        })
+      );
+
+
+    /*
+    ระบบใหม่อยู่ก่อน
+    Legacy อยู่ต่อท้าย
+
+    ภายในระบบใหม่เรียงใหม่ → เก่า
     */
 
     combinedOrders.sort(
@@ -1132,9 +1077,21 @@ async function searchOrders(){
     );
 
 
-    renderLookupOrders(
-      combinedOrders
-    );
+    lookupAllOrders =
+      combinedOrders;
+
+
+    /*
+    ทุกครั้งที่ค้นใหม่
+    กลับไป "ทั้งหมด"
+    */
+
+    lookupStatusFilter = "";
+
+
+    renderLookupFilters();
+
+    renderFilteredLookupOrders();
 
 
   }catch(error){
@@ -1143,6 +1100,11 @@ async function searchOrders(){
       "searchOrders error:",
       error
     );
+
+
+    lookupAllOrders = [];
+
+    lookupStatusFilter = "";
 
 
     resultBox.innerHTML = `
@@ -1168,8 +1130,7 @@ async function searchOrders(){
 
         <button
           type="button"
-          onclick="searchOrders()"
-        >
+          onclick="searchOrders()">
           ลองใหม่
         </button>
 
@@ -1195,7 +1156,7 @@ async function searchOrders(){
   }
 
 }
-
+  
   async function parseLookupResponse(
   response,
   source
@@ -1342,7 +1303,253 @@ function dedupeLookupOrders(
 
 }
 
-  
+function normalizeLookupStatus(
+  status
+){
+
+  const value =
+    String(
+      status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const map = {
+
+    "รอกดสั่งสินค้า":
+      "pending_order",
+
+    "กดสั่งสินค้าแล้ว":
+      "pending",
+
+    "ถึงโกดังจีน":
+      "china_arrived",
+
+    "ถึงโกดังจีนแล้ว":
+      "china_arrived",
+
+    "กำลังมาไทย":
+      "shipping_to_th",
+
+    "เตรียมจัดส่ง":
+      "ready_to_ship",
+
+    "จัดส่งแล้ว":
+      "shipped",
+
+    "เสร็จสิ้น":
+      "completed"
+
+  };
+
+
+  if(
+    [
+      "pending_order",
+      "pending",
+      "china_arrived",
+      "shipping_to_th",
+      "ready_to_ship",
+      "shipped",
+      "completed"
+    ].includes(
+      value
+    )
+  ){
+
+    return value;
+
+  }
+
+
+  return (
+    map[value] ||
+    value
+  );
+
+}
+
+
+function getLookupFilterDefinitions(){
+
+  return [
+
+    [
+      "",
+      "ทั้งหมด"
+    ],
+
+    [
+      "pending_order",
+      "รอกดสั่งสินค้า"
+    ],
+
+    [
+      "pending",
+      "กดสั่งสินค้าแล้ว"
+    ],
+
+    [
+      "china_arrived",
+      "ถึงโกดังจีน"
+    ],
+
+    [
+      "shipping_to_th",
+      "กำลังมาไทย"
+    ],
+
+    [
+      "ready_to_ship",
+      "เตรียมจัดส่ง"
+    ],
+
+    [
+      "shipped",
+      "จัดส่งแล้ว"
+    ],
+
+    [
+      "completed",
+      "เสร็จสิ้น"
+    ]
+
+  ];
+
+}
+
+
+function renderLookupFilters(){
+
+  let filterBox =
+    document.getElementById(
+      "lookupFilters"
+    );
+
+
+  if(!filterBox){
+
+    filterBox =
+      document.createElement(
+        "div"
+      );
+
+    filterBox.id =
+      "lookupFilters";
+
+    filterBox.className =
+      "lookup-filters";
+
+
+    const resultHeading =
+      document.querySelector(
+        ".lookup-result-heading"
+      );
+
+
+    resultHeading.insertAdjacentElement(
+      "afterend",
+      filterBox
+    );
+
+  }
+
+
+  const definitions =
+    getLookupFilterDefinitions();
+
+
+  filterBox.innerHTML =
+    definitions.map(
+      (
+        [
+          value,
+          label
+        ]
+      ) => {
+
+        const count =
+          value
+            ? lookupAllOrders.filter(
+                order =>
+                  order.lookup_status ===
+                  value
+              ).length
+            : lookupAllOrders.length;
+
+
+        return `
+
+          <button
+            type="button"
+            class="lookup-filter-chip ${
+              lookupStatusFilter ===
+              value
+                ? "active"
+                : ""
+            }"
+            onclick="setLookupStatusFilter(
+              '${escapeLookupAttribute(
+                value
+              )}'
+            )">
+
+            ${escapeLookupHtml(
+              label
+            )}
+
+            <span class="filter-count">
+              ${count.toLocaleString(
+                "th-TH"
+              )}
+            </span>
+
+          </button>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+
+function setLookupStatusFilter(
+  status
+){
+
+  lookupStatusFilter =
+    String(
+      status || ""
+    );
+
+
+  renderLookupFilters();
+
+  renderFilteredLookupOrders();
+
+}
+
+
+function renderFilteredLookupOrders(){
+
+  const orders =
+    lookupStatusFilter
+      ? lookupAllOrders.filter(
+          order =>
+            order.lookup_status ===
+            lookupStatusFilter
+        )
+      : lookupAllOrders;
+
+
+  renderLookupOrders(
+    orders
+  );
+
+}  
 
 function renderLookupOrders(
   orders
@@ -1377,9 +1584,10 @@ function renderLookupOrders(
     ไม่พบออเดอร์
   </h2>
 
-  <p>
-    ตรวจสอบอีเมลหรือแอค Twitter/X แล้วลองอีกครั้ง
-  </p>
+ <p>
+  ไม่พบออเดอร์ กรุณาตรวจสอบแอค Twitter/X แล้วลองอีกครั้ง
+  หากมีการเปลี่ยนแปลงแอคTwitter กรุณาแจ้งทาง DM @prewithrinka
+</p>
 
 </div>
 
