@@ -757,7 +757,9 @@ async function searchOrders(){
     return;
   }
 
+
   clearLookupMessage();
+
 
   const email =
     document
@@ -765,7 +767,9 @@ async function searchOrders(){
         "email"
       )
       .value
-      .trim();
+      .trim()
+      .toLowerCase();
+
 
   const social =
     normalizeLookupSocial(
@@ -774,8 +778,8 @@ async function searchOrders(){
           "social"
         )
         .value
-        .trim()
     );
+
 
   if(
     !email &&
@@ -795,6 +799,7 @@ async function searchOrders(){
     return;
 
   }
+
 
   if(
     email &&
@@ -817,114 +822,320 @@ async function searchOrders(){
 
   }
 
+
   const resultSection =
     document.getElementById(
       "resultSection"
     );
+
 
   const resultBox =
     document.getElementById(
       "result"
     );
 
+
   resultSection.classList.remove(
     "hidden"
   );
 
+
   resultBox.innerHTML = `
 
-<div class="lookup-state">
+    <div class="lookup-state">
 
-  <div class="lookup-spinner"></div>
+      <div class="lookup-spinner"></div>
 
-  <h2>
-    กำลังค้นหาออเดอร์
-  </h2>
+      <h2>
+        กำลังค้นหาออเดอร์
+      </h2>
 
-  <p>
-    รอสักครู่นะคะ
-  </p>
+      <p>
+        กำลังตรวจสอบทั้งออเดอร์ใหม่และออเดอร์เก่า
+      </p>
 
-</div>
+    </div>
 
-`;
+  `;
 
-  setLookupLoading(true);
+
+  setLookupLoading(
+    true
+  );
+
 
   try{
 
-    const query =
-      new URLSearchParams();
+    /*
+    =========================================
+    สร้าง request ทั้งหมดที่ต้องค้น
+    =========================================
+    */
+
+    const requests = [];
+
+
+    /*
+    ระบบใหม่ — Email
+    */
 
     if(email){
 
-      query.set(
-        "action",
-        "ordersByEmail"
-      );
+      const query =
+        new URLSearchParams({
+          action:
+            "ordersByEmail",
 
-      query.set(
-        "email",
-        email
-      );
+          email:
+            email
+        });
 
-    }else{
 
-      query.set(
-        "action",
-        "ordersBySocial"
-      );
-
-      query.set(
-        "social",
-        social
-      );
-
-    }
-
-    const response =
-      await fetch(
-        API +
-        "?" +
-        query.toString()
-      );
-
-    if(!response.ok){
-
-      throw new Error(
-        "HTTP " +
-        response.status
+      requests.push(
+        fetch(
+          API +
+          "?" +
+          query.toString()
+        )
+          .then(
+            response =>
+              parseLookupResponse(
+                response,
+                "new"
+              )
+          )
       );
 
     }
 
-    const result =
-      await response.json();
+
+    /*
+    ระบบใหม่ — Twitter/X
+    */
+
+    if(social){
+
+      const query =
+        new URLSearchParams({
+          action:
+            "ordersBySocial",
+
+          social:
+            social
+        });
+
+
+      requests.push(
+        fetch(
+          API +
+          "?" +
+          query.toString()
+        )
+          .then(
+            response =>
+              parseLookupResponse(
+                response,
+                "new"
+              )
+          )
+      );
+
+
+      /*
+      ระบบเก่า — Twitter/X
+
+      Legacy ไม่มี Email
+      จึงค้นด้วย Social เท่านั้น
+      */
+
+      const legacyQuery =
+        new URLSearchParams({
+          action:
+            "legacyOrdersBySocial",
+
+          social:
+            social
+        });
+
+
+      requests.push(
+        fetch(
+          API +
+          "?" +
+          legacyQuery.toString()
+        )
+          .then(
+            response =>
+              parseLookupResponse(
+                response,
+                "legacy"
+              )
+          )
+      );
+
+    }
+
+
+    /*
+    =========================================
+    ยิงพร้อมกัน
+    =========================================
+    */
+
+    const results =
+      await Promise.allSettled(
+        requests
+      );
+
+
+    let combinedOrders = [];
+
+    let successfulRequests = 0;
+
+    let firstError = null;
+
+
+    results.forEach(
+      result => {
+
+        if(
+          result.status ===
+          "fulfilled"
+        ){
+
+          successfulRequests++;
+
+
+          if(
+            Array.isArray(
+              result.value
+            )
+          ){
+
+            combinedOrders.push(
+              ...result.value
+            );
+
+          }
+
+        }else{
+
+          console.warn(
+            "Lookup request failed:",
+            result.reason
+          );
+
+
+          if(!firstError){
+
+            firstError =
+              result.reason;
+
+          }
+
+        }
+
+      }
+    );
+
+
+    /*
+    ถ้าพังทุก request
+    ค่อยถือว่าค้นหาไม่สำเร็จ
+
+    แต่ถ้า Legacy พังอย่างเดียว
+    ระบบใหม่ยังแสดงได้
+    */
 
     if(
-      result &&
-      result.success === false
+      requests.length &&
+      successfulRequests === 0
     ){
 
-      throw new Error(
-        result.error ||
-        "ค้นหาออเดอร์ไม่สำเร็จ"
+      throw (
+        firstError ||
+        new Error(
+          "ค้นหาออเดอร์ไม่สำเร็จ"
+        )
       );
 
     }
 
-    const orders =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(
-            result.orders
-          )
-            ? result.orders
-            : [];
+
+    /*
+    =========================================
+    DEDUPE
+    =========================================
+    */
+
+    combinedOrders =
+      dedupeLookupOrders(
+        combinedOrders
+      );
+
+
+    /*
+    =========================================
+    SORT
+
+    ระบบใหม่ที่มี created_at
+    เรียงใหม่ → เก่า
+
+    Legacy ไม่มีวันที่สร้างออเดอร์แน่นอน
+    จึงไม่บังคับเรียงจากวันที่ปลอม
+    =========================================
+    */
+
+    combinedOrders.sort(
+      (
+        a,
+        b
+      ) => {
+
+        const aLegacy =
+          a.legacy === true;
+
+        const bLegacy =
+          b.legacy === true;
+
+
+        if(
+          aLegacy !==
+          bLegacy
+        ){
+
+          return aLegacy
+            ? 1
+            : -1;
+
+        }
+
+
+        const aTime =
+          new Date(
+            a.created_at || 0
+          ).getTime() || 0;
+
+
+        const bTime =
+          new Date(
+            b.created_at || 0
+          ).getTime() || 0;
+
+
+        return (
+          bTime -
+          aTime
+        );
+
+      }
+    );
+
 
     renderLookupOrders(
-      orders
+      combinedOrders
     );
+
 
   }catch(error){
 
@@ -933,34 +1144,39 @@ async function searchOrders(){
       error
     );
 
+
     resultBox.innerHTML = `
 
-<div class="lookup-state">
+      <div class="lookup-state">
 
-  <div class="lookup-state-icon">
-    ⚠️
-  </div>
+        <div class="lookup-state-icon">
+          ⚠️
+        </div>
 
-  <h2>
-    ค้นหาออเดอร์ไม่สำเร็จ
-  </h2>
+        <h2>
+          ค้นหาออเดอร์ไม่สำเร็จ
+        </h2>
 
-  <p>
-    ${escapeLookupHtml(
-      error.message ||
-      String(error)
-    )}
-  </p>
+        <p>
+          ${
+            escapeLookupHtml(
+              error.message ||
+              String(error)
+            )
+          }
+        </p>
 
-  <button
-  type="button"
-  onclick="searchOrders()">
-    ลองใหม่
-  </button>
+        <button
+          type="button"
+          onclick="searchOrders()"
+        >
+          ลองใหม่
+        </button>
 
-</div>
+      </div>
 
-`;
+    `;
+
 
     document
       .getElementById(
@@ -969,13 +1185,164 @@ async function searchOrders(){
       .textContent =
       "0 รายการ";
 
+
   }finally{
 
-    setLookupLoading(false);
+    setLookupLoading(
+      false
+    );
 
   }
 
 }
+
+  async function parseLookupResponse(
+  response,
+  source
+){
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status
+    );
+
+  }
+
+
+  const result =
+    await response.json();
+
+
+  if(
+    result &&
+    result.success === false
+  ){
+
+    throw new Error(
+      result.error ||
+      "ค้นหาออเดอร์ไม่สำเร็จ"
+    );
+
+  }
+
+
+  const orders =
+    Array.isArray(result)
+      ? result
+      : (
+          Array.isArray(
+            result.orders
+          )
+            ? result.orders
+            : []
+        );
+
+
+  return orders.map(
+    order => ({
+
+      ...order,
+
+      legacy:
+        source ===
+        "legacy"
+          ? true
+          : Boolean(
+              order.legacy
+            )
+
+    })
+  );
+
+}
+
+
+function dedupeLookupOrders(
+  orders
+){
+
+  const seen =
+    new Set();
+
+
+  return orders.filter(
+    order => {
+
+      let key = "";
+
+
+      /*
+      ระบบเก่า
+      */
+
+      if(
+        order.legacy === true
+      ){
+
+        key =
+          "legacy:" +
+          String(
+            order.legacy_id ||
+            (
+              String(
+                order.source_sheet ||
+                order.fandom ||
+                ""
+              ) +
+              ":" +
+              String(
+                order.source_row ||
+                ""
+              )
+            )
+          );
+
+      }
+
+
+      /*
+      ระบบใหม่
+      */
+
+      else{
+
+        key =
+          "new:" +
+          String(
+            order.order_id ||
+            ""
+          ).trim();
+
+      }
+
+
+      if(
+        !key ||
+        seen.has(
+          key
+        )
+      ){
+
+        return false;
+
+      }
+
+
+      seen.add(
+        key
+      );
+
+
+      return true;
+
+    }
+  );
+
+}
+
+  
 
 function renderLookupOrders(
   orders
@@ -1033,11 +1400,173 @@ function createLookupOrderCard(
   order
 ){
 
+  const isLegacy =
+    order.legacy === true;
+
+
+  /*
+  =========================================
+  LEGACY
+  =========================================
+  */
+
+  if(isLegacy){
+
+    const legacyId =
+      String(
+        order.legacy_id ||
+        ""
+      );
+
+
+    const detailUrl =
+      "legacy-order.html?id=" +
+      encodeURIComponent(
+        legacyId
+      );
+
+
+    const productName =
+      String(
+        order.product_name ||
+        "รายการสินค้า"
+      );
+
+
+    const qty =
+      Number(
+        order.qty || 0
+      );
+
+
+    const paid =
+      Number(
+        order.paid || 0
+      );
+
+
+    const remaining =
+      Number(
+        order.remaining || 0
+      );
+
+
+    return `
+
+      <article class="lookup-order-card">
+
+        <div>
+
+          <div class="lookup-order-id">
+            ${escapeLookupHtml(
+              productName
+            )}
+          </div>
+
+          <div class="lookup-order-date">
+            ${escapeLookupHtml(
+              order.fandom ||
+              order.source_sheet ||
+              "ออเดอร์เก่า"
+            )}
+            ${
+              qty > 0
+                ? " • " +
+                  qty.toLocaleString(
+                    "th-TH"
+                  ) +
+                  " ชิ้น"
+                : ""
+            }
+          </div>
+
+          <div class="lookup-order-meta">
+
+            <span
+              class="lookup-badge ${
+                getLookupStatusClass(
+                  legacyLookupStatusCode(
+                    order.status
+                  )
+                )
+              }"
+            >
+              ${
+                escapeLookupHtml(
+                  getLookupStatusText(
+                    legacyLookupStatusCode(
+                      order.status
+                    )
+                  )
+                )
+              }
+            </span>
+
+            <span
+              class="lookup-badge ${
+                remaining <= 0
+                  ? "badge-paid"
+                  : "badge-unpaid"
+              }"
+            >
+              ${
+                remaining <= 0
+                  ? "ชำระครบแล้ว"
+                  : "มียอดคงเหลือ"
+              }
+            </span>
+
+            <span
+              class="lookup-badge badge-progress"
+            >
+              ออเดอร์เก่า
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="lookup-order-side">
+
+          <div class="lookup-order-total">
+
+            ฿${paid.toLocaleString(
+              "th-TH"
+            )}
+
+          </div>
+
+          <a
+            href="${escapeLookupAttribute(
+              detailUrl
+            )}"
+            class="lookup-detail-link"
+          >
+            ดูรายละเอียด
+          </a>
+
+        </div>
+
+      </article>
+
+    `;
+
+  }
+
+
+  /*
+  =========================================
+  NEW ORDER
+  =========================================
+  */
+
   const orderId =
     String(
       order.order_id ||
       ""
     );
+
 
   const detailUrl =
     "order.html?id=" +
@@ -1045,85 +1574,99 @@ function createLookupOrderCard(
       orderId
     );
 
+
   const createdDate =
     formatLookupDate(
       order.created_at
     );
 
+
   return `
 
-<article class="lookup-order-card">
+    <article class="lookup-order-card">
 
-  <div>
+      <div>
 
-    <div class="lookup-order-id">
-      ${escapeLookupHtml(
-        orderId ||
-        "-"
-      )}
-    </div>
+        <div class="lookup-order-id">
+          ${escapeLookupHtml(
+            orderId ||
+            "-"
+          )}
+        </div>
 
-    <div class="lookup-order-date">
-      ${escapeLookupHtml(
-        createdDate
-      )}
-    </div>
+        <div class="lookup-order-date">
+          ${escapeLookupHtml(
+            createdDate
+          )}
+        </div>
 
-    <div class="lookup-order-meta">
+        <div class="lookup-order-meta">
 
-      <span
-      class="lookup-badge ${getLookupStatusClass(order.status)}">
-        ${escapeLookupHtml(
-          getLookupStatusText(
-            order.status
-          )
-        )}
-      </span>
+          <span
+            class="lookup-badge ${
+              getLookupStatusClass(
+                order.status
+              )
+            }"
+          >
+            ${
+              escapeLookupHtml(
+                getLookupStatusText(
+                  order.status
+                )
+              )
+            }
+          </span>
 
-      <span
-      class="lookup-badge ${
-        order.payment_status ===
-        "paid"
-          ? "badge-paid"
-          : "badge-unpaid"
-      }">
+          <span
+            class="lookup-badge ${
+              order.payment_status ===
+              "paid"
+                ? "badge-paid"
+                : "badge-unpaid"
+            }"
+          >
 
-        ${
-          order.payment_status ===
-          "paid"
-            ? "ชำระเงินแล้ว"
-            : "รอชำระเงิน"
-        }
+            ${
+              order.payment_status ===
+              "paid"
+                ? "ชำระเงินแล้ว"
+                : "รอชำระเงิน"
+            }
 
-      </span>
+          </span>
 
-    </div>
+        </div>
 
-  </div>
+      </div>
 
-  <div class="lookup-order-side">
 
-    <div class="lookup-order-total">
+      <div class="lookup-order-side">
 
-      ฿${Number(
-        order.total || 0
-      ).toLocaleString(
-        "th-TH"
-      )}
+        <div class="lookup-order-total">
 
-    </div>
+          ฿${Number(
+            order.total || 0
+          ).toLocaleString(
+            "th-TH"
+          )}
 
-    <a
-    href="${escapeLookupAttribute(detailUrl)}"
-    class="lookup-detail-link">
-      ดูรายละเอียด
-    </a>
+        </div>
 
-  </div>
+        <a
+          href="${escapeLookupAttribute(
+            detailUrl
+          )}"
+          class="lookup-detail-link"
+        >
+          ดูรายละเอียด
+        </a>
 
-</article>
+      </div>
 
-`;
+    </article>
+
+  `;
 
 }
 
@@ -1193,18 +1736,89 @@ function normalizeLookupSocial(
     .replace(
       /^@+/,
       ""
-    );
+    )
+    .toLowerCase();
 
 }
 
+ function legacyLookupStatusCode(
+  status
+){
+
+  const value =
+    String(
+      status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const map = {
+
+    "รอกดสั่งสินค้า":
+      "pending_order",
+
+    "กดสั่งสินค้าแล้ว":
+      "pending",
+
+    "ถึงโกดังจีน":
+      "china_arrived",
+
+    "ถึงโกดังจีนแล้ว":
+      "china_arrived",
+
+    "กำลังมาไทย":
+      "shipping_to_th",
+
+    "เตรียมจัดส่ง":
+      "ready_to_ship",
+
+    "จัดส่งแล้ว":
+      "shipped",
+
+    "เสร็จสิ้น":
+      "completed"
+
+  };
+
+
+  if(
+    [
+      "pending_order",
+      "pending",
+      "china_arrived",
+      "shipping_to_th",
+      "ready_to_ship",
+      "shipped",
+      "completed"
+    ].includes(
+      value
+    )
+  ){
+
+    return value;
+
+  }
+
+
+  return (
+    map[value] ||
+    ""
+  );
+
+} 
+  
 function getLookupStatusText(
   status
 ){
 
   return {
 
-    pending:
-      "รอจัดการ",
+    pending_order:
+  "รอกดสั่งสินค้า",
+
+pending:
+  "กดสั่งสินค้าแล้ว",
 
     china_arrived:
       "ถึงโกดังจีนแล้ว",
@@ -1216,7 +1830,10 @@ function getLookupStatusText(
       "เตรียมจัดส่ง",
 
     shipped:
-      "จัดส่งแล้ว"
+      "จัดส่งแล้ว",
+
+    completed:
+  "เสร็จสิ้น"
 
   }[
     String(
