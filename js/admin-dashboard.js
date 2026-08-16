@@ -1,53 +1,35 @@
 async function loadStats(){
 
-  const response =
-    await fetch(API + "?action=stats");
+  try{
 
-  const stats =
-    await response.json();
+    const response =
+      await fetch(
+        API +
+        "?action=stats"
+      );
 
-  document.getElementById("stats").innerHTML = `
-    <div class="grid">
 
-      <div class="card">
-      📦<br>${stats.totalOrders} ออเดอร์
-      </div>
+    const stats =
+      await response.json();
 
-      <div class="card">
-      💰<br>${stats.totalSales} บาท
-      </div>
 
-      <div class="card">
-      🚚<br>${stats.pendingShipping} รอส่ง
-      </div>
+    renderDashboardStats(
+      stats || {}
+    );
 
-      <div class="card">
-      📍<br>${stats.pendingAddress} คำขอ
-      </div>
 
-      <div class="card">
-      💸<br>${stats.todaySales} บาท<br>วันนี้
-      </div>
+  }catch(error){
 
-      <div class="card">
-      📅<br>${stats.monthSales} บาท<br>เดือนนี้
-      </div>
+    console.error(
+      "loadStats error:",
+      error
+    );
 
-    </div>
-  `;
+  }
 
 }
 
 async function loadTopProducts(){
-
-  const container =
-    document.getElementById(
-      "topProducts"
-    );
-
-  if(!container){
-    return;
-  }
 
   try{
 
@@ -57,144 +39,31 @@ async function loadTopProducts(){
         "?action=topProducts"
       );
 
+
     const result =
       await response.json();
 
-    const products =
+
+    renderTopProducts(
       Array.isArray(
         result.products
       )
         ? result.products
-        : [];
+        : []
+    );
 
-    let html = `
 
-      <div class="card">
-
-        <h2>
-          🏆 สินค้าขายดีที่สุด
-        </h2>
-
-    `;
-
-    if(
-      products.length === 0
-    ){
-
-      html += `
-
-        <p
-        style="
-        color:#777;
-        ">
-          ยังไม่มีข้อมูลสินค้า
-        </p>
-
-      `;
-
-    }
-    else{
-
-      products.forEach(
-        (
-          product,
-          index
-        ) => {
-
-          const productName =
-            String(
-              product.name || ""
-            );
-
-          const qty =
-            Number(
-              product.qty || 0
-            );
-
-          html += `
-
-            <p
-            style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:10px;
-            ">
-
-              <span>
-
-                ${index + 1}.
-
-                ${escapeHtml(
-                  productName || "-"
-                )}
-
-                (${qty.toLocaleString()} ชิ้น)
-
-              </span>
-
-              <button
-              type="button"
-              style="
-              width:auto;
-              padding:5px 10px;
-              font-size:13px;
-              "
-              onclick="
-              openProductSearch(
-                '${escapeJsString(
-                  productName
-                )}'
-              )
-              "
-              >
-                เปิดสินค้า
-              </button>
-
-            </p>
-
-          `;
-
-        }
-      );
-
-    }
-
-    html += `
-
-      </div>
-
-    `;
-
-    container.innerHTML =
-      html;
-
-  }
-  catch(error){
+  }catch(error){
 
     console.error(
       "loadTopProducts error:",
       error
     );
 
-    container.innerHTML = `
 
-      <div class="card">
-
-        <h2>
-          🏆 สินค้าขายดีที่สุด
-        </h2>
-
-        <p
-        style="
-        color:#d9534f;
-        ">
-          โหลดข้อมูลไม่สำเร็จ
-        </p>
-
-      </div>
-
-    `;
+    renderTopProducts(
+      []
+    );
 
   }
 
@@ -202,156 +71,39 @@ async function loadTopProducts(){
 
 async function loadTopFandoms(){
 
-  const container =
-    document.getElementById(
-      "topFandoms"
-    );
-
-  if(!container){
-
-    return;
-
-  }
-
   try{
 
     const response =
       await fetch(
-        API + "?action=topFandoms"
+        API +
+        "?action=topFandoms"
       );
+
 
     const result =
       await response.json();
 
-    const fandoms =
+
+    renderTopFandoms(
       Array.isArray(
         result.fandoms
       )
         ? result.fandoms
-        : [];
+        : []
+    );
 
-    let html = `
-      <div class="card">
 
-        <h2>
-          🌟 Fandom ยอดนิยม
-        </h2>
-    `;
-
-    if(
-      fandoms.length === 0
-    ){
-
-      html += `
-
-        <p
-        style="
-        color:#777;
-        ">
-          ยังไม่มีข้อมูล Fandom
-        </p>
-
-      `;
-
-    }
-    else{
-
-      fandoms.forEach(
-        (
-          fandom,
-          index
-        ) => {
-
-          const fandomName =
-            fandom.fandom ||
-            fandom.name ||
-            "";
-
-          const qty =
-            fandom.qty ||
-            fandom.quantity ||
-            0;
-
-          html += `
-
-            <p
-            style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:10px;
-            ">
-
-              <span>
-
-                ${index + 1}.
-
-                ${escapeHtml(
-                  fandomName
-                )}
-
-                (${qty} ชิ้น)
-
-              </span>
-
-              <button
-              style="
-              width:auto;
-              padding:5px 10px;
-              font-size:13px;
-              "
-              onclick="
-              openProductSearch(
-                '${escapeJsString(
-                  fandomName
-                )}'
-              )
-              ">
-                เปิดสินค้า
-              </button>
-
-            </p>
-
-          `;
-
-        }
-      );
-
-    }
-
-    html += `
-      </div>
-    `;
-
-    container.innerHTML =
-      html;
-
-  }
-  catch(error){
+  }catch(error){
 
     console.error(
       "loadTopFandoms error:",
       error
     );
 
-    container.innerHTML = `
 
-      <div class="card">
-
-        <h2>
-          🌟 Fandom ยอดนิยม
-        </h2>
-
-        <p
-        style="
-        color:#d9534f;
-        ">
-          โหลดข้อมูลไม่สำเร็จ
-        </p>
-
-      </div>
-
-    `;
+    renderTopFandoms(
+      []
+    );
 
   }
 
@@ -393,6 +145,372 @@ async function loadTopFandoms(){
       });
 
   });
+
+}
+
+function renderDashboardStats(
+  stats
+){
+
+  const container =
+    document.getElementById(
+      "stats"
+    );
+
+
+  if(!container){
+    return;
+  }
+
+
+  container.innerHTML = `
+
+<div class="grid">
+
+  <div class="card">
+  📦<br>
+  ${Number(
+    stats.totalOrders || 0
+  ).toLocaleString("th-TH")}
+  ออเดอร์
+  </div>
+
+  <div class="card">
+  💰<br>
+  ${Number(
+    stats.totalSales || 0
+  ).toLocaleString(
+    "th-TH",
+    {
+      maximumFractionDigits:2
+    }
+  )}
+  บาท
+  </div>
+
+  <div class="card">
+  🚚<br>
+  ${Number(
+    stats.pendingShipping || 0
+  ).toLocaleString("th-TH")}
+  รอส่ง
+  </div>
+
+  <div class="card">
+  📍<br>
+  ${Number(
+    stats.pendingAddress || 0
+  ).toLocaleString("th-TH")}
+  คำขอ
+  </div>
+
+  <div class="card">
+  💸<br>
+  ${Number(
+    stats.todaySales || 0
+  ).toLocaleString(
+    "th-TH",
+    {
+      maximumFractionDigits:2
+    }
+  )}
+  บาท
+  <br>
+  วันนี้
+  </div>
+
+  <div class="card">
+  📅<br>
+  ${Number(
+    stats.monthSales || 0
+  ).toLocaleString(
+    "th-TH",
+    {
+      maximumFractionDigits:2
+    }
+  )}
+  บาท
+  <br>
+  เดือนนี้
+  </div>
+
+</div>
+
+`;
+
+}
+
+function renderTopProducts(
+  products
+){
+
+  const container =
+    document.getElementById(
+      "topProducts"
+    );
+
+
+  if(!container){
+    return;
+  }
+
+
+  const list =
+    Array.isArray(
+      products
+    )
+      ? products
+      : [];
+
+
+  let html = `
+
+<div class="card">
+
+  <h2>
+    🏆 สินค้าขายดีที่สุด
+  </h2>
+
+`;
+
+
+  if(
+    list.length === 0
+  ){
+
+    html += `
+
+<p
+style="
+color:#777;
+"
+>
+ยังไม่มีข้อมูลสินค้า
+</p>
+
+`;
+
+  }else{
+
+    list.forEach(
+      (
+        product,
+        index
+      ) => {
+
+        const productName =
+          String(
+            product.name || ""
+          );
+
+
+        const qty =
+          Number(
+            product.qty || 0
+          );
+
+
+        html += `
+
+<p
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+"
+>
+
+  <span>
+
+    ${index + 1}.
+
+    ${escapeHtml(
+      productName || "-"
+    )}
+
+    (${qty.toLocaleString(
+      "th-TH"
+    )} ชิ้น)
+
+  </span>
+
+  <button
+  type="button"
+  style="
+  width:auto;
+  padding:5px 10px;
+  font-size:13px;
+  "
+  onclick="
+  openProductSearch(
+    '${escapeJsString(
+      productName
+    )}'
+  )
+  "
+  >
+    เปิดสินค้า
+  </button>
+
+</p>
+
+`;
+
+      }
+    );
+
+  }
+
+
+  html += `
+
+</div>
+
+`;
+
+
+  container.innerHTML =
+    html;
+
+}
+
+function renderTopFandoms(
+  fandoms
+){
+
+  const container =
+    document.getElementById(
+      "topFandoms"
+    );
+
+
+  if(!container){
+    return;
+  }
+
+
+  const list =
+    Array.isArray(
+      fandoms
+    )
+      ? fandoms
+      : [];
+
+
+  let html = `
+
+<div class="card">
+
+  <h2>
+    🌟 Fandom ยอดนิยม
+  </h2>
+
+`;
+
+
+  if(
+    list.length === 0
+  ){
+
+    html += `
+
+<p
+style="
+color:#777;
+"
+>
+ยังไม่มีข้อมูล Fandom
+</p>
+
+`;
+
+  }else{
+
+    list.forEach(
+      (
+        fandom,
+        index
+      ) => {
+
+        const fandomName =
+          String(
+            fandom.fandom ||
+            fandom.name ||
+            ""
+          );
+
+
+        const qty =
+          Number(
+            fandom.qty ||
+            fandom.quantity ||
+            0
+          );
+
+
+        html += `
+
+<p
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+"
+>
+
+  <span>
+
+    ${index + 1}.
+
+    ${escapeHtml(
+      fandomName || "-"
+    )}
+
+    (${qty.toLocaleString(
+      "th-TH"
+    )} ชิ้น)
+
+  </span>
+
+  <button
+  type="button"
+  style="
+  width:auto;
+  padding:5px 10px;
+  font-size:13px;
+  "
+  onclick="
+  openProductSearch(
+    '${escapeJsString(
+      fandomName
+    )}'
+  )
+  "
+  >
+    เปิดสินค้า
+  </button>
+
+</p>
+
+`;
+
+      }
+    );
+
+  }
+
+
+  html += `
+
+</div>
+
+`;
+
+
+  container.innerHTML =
+    html;
 
 }
 
