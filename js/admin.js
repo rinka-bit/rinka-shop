@@ -4,22 +4,74 @@ const API =
 var adminProducts = [];
 var adminCollections = [];
 
+const adminLoadedTabs = {
+
+  dashboard:false,
+
+  products:false,
+
+  options:false,
+
+  orders:false,
+
+  shipped_orders:false,
+
+  address:false,
+
+  collections:false,
+
+  gifts:false,
+
+  manual_order:false
+
+};
+
 function login(){
 
   const password =
-    document.getElementById("adminPassword").value;
+    document.getElementById(
+      "adminPassword"
+    ).value;
 
-  if(password === "Rin@Saeh13579"){
 
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("adminContent").style.display = "block";
+  if(
+    password ===
+    "Rin@Saeh13579"
+  ){
 
-    sessionStorage.setItem("adminLoggedIn","true");
+    document
+      .getElementById(
+        "loginBox"
+      )
+      .style.display =
+      "none";
 
-    loadAdminData();
+
+    document
+      .getElementById(
+        "adminContent"
+      )
+      .style.display =
+      "block";
+
+
+    sessionStorage.setItem(
+      "adminLoggedIn",
+      "true"
+    );
+
+
+    showAdminTab(
+      "dashboard"
+    );
+
 
   }else{
-    alert("รหัสผ่านไม่ถูกต้อง");
+
+    alert(
+      "รหัสผ่านไม่ถูกต้อง"
+    );
+
   }
 
 }
@@ -29,41 +81,63 @@ function logout(){
   location.reload();
 }
 
-if(sessionStorage.getItem("adminLoggedIn") === "true"){
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("adminContent").style.display = "block";
-  loadAdminData();
+if(
+  sessionStorage.getItem(
+    "adminLoggedIn"
+  ) === "true"
+){
+
+  document
+    .getElementById(
+      "loginBox"
+    )
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById(
+      "adminContent"
+    )
+    .style.display =
+    "block";
+
+
+  showAdminTab(
+    "dashboard"
+  );
+
 }
 
 function showAdminTab(
   tab
 ){
 
- const tabs = [
+  const tabs = [
 
-  "dashboard",
+    "dashboard",
 
-  "products",
+    "products",
 
-  "options",
+    "options",
 
-  "orders",
+    "orders",
 
-  "shipped_orders",
+    "shipped_orders",
 
-  "address",
+    "address",
 
-  "collections",
+    "collections",
 
-  "gifts",
+    "gifts",
 
-  "manual_order"
+    "manual_order"
 
-];
+  ];
 
 
   tabs.forEach(
-    name=>{
+    name => {
 
       const section =
         document.getElementById(
@@ -102,18 +176,337 @@ function showAdminTab(
   );
 
 
+  loadAdminTabData(
+    tab
+  )
+    .catch(
+      error => {
+
+        console.error(
+          "เปิดแท็บไม่สำเร็จ:",
+          tab,
+          error
+        );
+
+      }
+    );
+
+}
+
+async function loadAdminTabData(
+  tab
+){
+
+  /*
+  ถ้าโหลดแล้ว
+  ไม่โหลดซ้ำ
+  */
+
   if(
-    tab === "gifts"
+    adminLoadedTabs[
+      tab
+    ]
   ){
 
-    renderGiftManager();
-
-    loadGiftCampaigns();
+    return;
 
   }
 
-if(
-  tab === "manual_order"
+
+  try{
+
+    /*
+    =========================================
+    DASHBOARD
+    =========================================
+    */
+
+    if(
+      tab ===
+      "dashboard"
+    ){
+
+      await loadDashboardData();
+
+      adminLoadedTabs.dashboard =
+        true;
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    PRODUCTS
+    =========================================
+    */
+
+    if(
+      tab ===
+      "products"
+    ){
+
+      renderProductManager();
+
+      await loadAdminProducts();
+
+      adminLoadedTabs.products =
+        true;
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    COLLECTIONS
+    =========================================
+    */
+
+    if(
+      tab ===
+      "collections"
+    ){
+
+      renderCollectionManager();
+
+      await loadAdminCollections();
+
+      adminLoadedTabs.collections =
+        true;
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    OPTIONS
+    =========================================
+    */
+
+    if(
+      tab ===
+      "options"
+    ){
+
+      /*
+      Option Manager อาจต้องใช้
+      product list / collection list
+      */
+
+      if(
+        !adminLoadedTabs.products
+      ){
+
+        await loadAdminProducts();
+
+        adminLoadedTabs.products =
+          true;
+
+      }
+
+
+      if(
+        !adminLoadedTabs.collections
+      ){
+
+        await loadAdminCollections();
+
+        adminLoadedTabs.collections =
+          true;
+
+      }
+
+
+      renderOptionManager();
+
+      adminLoadedTabs.options =
+        true;
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    ORDERS
+    =========================================
+    */
+
+    if(
+      tab ===
+      "orders"
+    ){
+
+      await loadOrders();
+
+      adminLoadedTabs.orders =
+        true;
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    SHIPPED ARCHIVE
+    =========================================
+    */
+
+    if(
+  tab ===
+  "shipped_orders"
+){
+
+  /*
+  Archive ใช้ข้อมูลจาก
+  adminOrderBaseCache
+  */
+
+  if(
+    !adminLoadedTabs.orders
+  ){
+
+    await loadOrders();
+
+
+    adminLoadedTabs.orders =
+      true;
+
+  }
+
+
+  if(
+    typeof renderAdminShippedOrders !==
+    "function"
+  ){
+
+    const box =
+      document.getElementById(
+        "shippedOrders"
+      );
+
+
+    if(box){
+
+      box.innerHTML = `
+
+<div
+style="
+padding:16px;
+background:#fef2f2;
+border:1px solid #fecaca;
+border-radius:12px;
+color:#991b1b;
+"
+>
+
+ไม่สามารถเปิดหน้าออเดอร์ที่จัดส่งแล้วได้
+
+<br><br>
+
+ไม่พบฟังก์ชัน
+<b>renderAdminShippedOrders()</b>
+
+</div>
+
+`;
+
+    }
+
+
+    throw new Error(
+      "ไม่พบ renderAdminShippedOrders()"
+    );
+
+  }
+
+
+  renderAdminShippedOrders();
+
+
+  adminLoadedTabs.shipped_orders =
+    true;
+
+
+  return;
+
+}
+
+    /*
+    =========================================
+    ADDRESS
+    =========================================
+    */
+
+    if(
+      tab ===
+      "address"
+    ){
+
+      await loadAddressRequests();
+
+      adminLoadedTabs.address =
+        true;
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    GIFTS
+    =========================================
+    */
+
+    if(
+      tab ===
+      "gifts"
+    ){
+
+      renderGiftManager();
+
+      await loadGiftCampaigns();
+
+      adminLoadedTabs.gifts =
+        true;
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    MANUAL ORDER
+    =========================================
+    */
+
+    if(
+      tab ===
+      "manual_order"
+    ){
+
+      if(
+        typeof renderManualOrderManager ===
+        "function"
+      ){
+
+        renderManualOrderManager();
+
+      }
+
+
+     if(
+  tab ===
+  "manual_order"
 ){
 
   const manager =
@@ -123,18 +516,9 @@ if(
 
 
   if(
-    typeof renderManualOrderManager ===
+    typeof renderManualOrderManager !==
     "function"
   ){
-
-    renderManualOrderManager();
-
-  }else{
-
-    console.error(
-      "โหลด admin-manual-order.js ไม่สำเร็จ หรือไฟล์มี Syntax Error"
-    );
-
 
     if(manager){
 
@@ -168,67 +552,44 @@ color:#991b1b;
 
     }
 
-  }
 
-}
-
-if(
-  tab === "shipped_orders"
-){
-
-  if(
-    typeof renderAdminShippedOrders ===
-    "function"
-  ){
-
-    renderAdminShippedOrders();
-
-  }else{
-
-    console.error(
-      "ไม่พบฟังก์ชัน renderAdminShippedOrders()"
+    throw new Error(
+      "ไม่พบ renderManualOrderManager()"
     );
 
-    const box =
-      document.getElementById(
-        "shippedOrders"
-      );
-
-    if(box){
-
-      box.innerHTML = `
-
-<div
-style="
-padding:16px;
-background:#fef2f2;
-border:1px solid #fecaca;
-border-radius:12px;
-color:#991b1b;
-"
->
-
-ไม่สามารถเปิดหน้าออเดอร์ที่จัดส่งแล้วได้
-
-<br><br>
-
-ไม่พบฟังก์ชัน
-<b>renderAdminShippedOrders()</b>
-
-<br>
-
-กรุณาตรวจไฟล์
-<b>js/admin-orders.js</b>
-
-</div>
-
-`;
-
-    }
-
   }
 
+
+  renderManualOrderManager();
+
+
+  adminLoadedTabs.manual_order =
+    true;
+
+
+  return;
+
 }
+
+
+  }catch(error){
+
+    console.error(
+      "loadAdminTabData error:",
+      tab,
+      error
+    );
+
+
+    /*
+    ถ้า error
+    อย่า mark loaded
+    เพื่อให้กดใหม่แล้ว retry ได้
+    */
+
+    throw error;
+
+  }
 
 }
 
@@ -236,24 +597,9 @@ async function loadAdminData(){
 
   try{
 
-    loadDashboardData();
-
-    loadOrders();
-
-    loadAddressRequests();
-
-
-    renderProductManager();
-
-    renderOptionManager();
-
-    renderCollectionManager();
-
-
-    await loadAdminProducts();
-
-    await loadAdminCollections();
-
+    await loadAdminTabData(
+      "dashboard"
+    );
 
   }catch(error){
 
@@ -263,5 +609,66 @@ async function loadAdminData(){
     );
 
   }
+
+}
+
+async function reloadAdminTab(
+  tab
+){
+
+  /*
+  Archive พึ่ง Orders cache
+  ดังนั้น refresh Archive
+  ต้อง reload Orders จริงด้วย
+  */
+
+  if(
+    tab ===
+    "shipped_orders"
+  ){
+
+    adminLoadedTabs.orders =
+      false;
+
+
+    adminLoadedTabs.shipped_orders =
+      false;
+
+
+    await loadOrders();
+
+
+    adminLoadedTabs.orders =
+      true;
+
+
+    if(
+      typeof renderAdminShippedOrders ===
+      "function"
+    ){
+
+      renderAdminShippedOrders();
+
+    }
+
+
+    adminLoadedTabs.shipped_orders =
+      true;
+
+
+    return;
+
+  }
+
+
+  adminLoadedTabs[
+    tab
+  ] =
+    false;
+
+
+  await loadAdminTabData(
+    tab
+  );
 
 }
