@@ -146,96 +146,507 @@ async function fetchJson(url,label){
 }
 
 async function loadHome(){
-  showLoadingSkeleton("featuredProducts");
-  showLoadingSkeleton("newProducts");
-  showLoadingSkeleton("collectionCards");
-  document.getElementById("fandomList").innerHTML = stateHtml("⏳","กำลังโหลดแฟนด้อม","");
-  setHomeMessage("กำลังโหลดสินค้าล่าสุด...","info");
 
-  try{
-    const result = await fetchJson(API,"โหลดสินค้า");
-    const products = Array.isArray(result)
-      ? result
-      : Array.isArray(result.products)
-        ? result.products
-        : [];
+  showLoadingSkeleton(
+    "featuredProducts"
+  );
 
-    window.allProducts = [...products];
+  showLoadingSkeleton(
+    "newProducts"
+  );
 
-    products.sort((a,b)=>
-      Number(b.sort_order || 0) - Number(a.sort_order || 0)
+  showLoadingSkeleton(
+    "collectionCards"
+  );
+
+
+  document
+    .getElementById(
+      "fandomList"
+    )
+    .innerHTML =
+      stateHtml(
+        "⏳",
+        "กำลังโหลดแฟนด้อม",
+        ""
+      );
+
+
+  setHomeMessage(
+    "กำลังโหลดข้อมูลหน้าหลัก...",
+    "info"
+  );
+
+
+  const productPromise =
+    fetchJson(
+      BASE_API +
+      "?action=productCards",
+      "โหลดสินค้า"
     );
 
-    loadFeatured(products);
-    loadNewArrivals(products);
-    loadFandoms(products);
-    setHomeMessage("","info");
-  }catch(error){
-    console.error("loadHome error",error);
-    const retry = `<button type="button" onclick="loadHome()">ลองโหลดใหม่</button>`;
-    document.getElementById("featuredProducts").innerHTML = stateHtml("⚠️","โหลดสินค้าไม่สำเร็จ",error.message,retry);
-    document.getElementById("newProducts").innerHTML = stateHtml("⚠️","โหลดสินค้าไม่สำเร็จ",error.message,retry);
-    document.getElementById("fandomList").innerHTML = stateHtml("⚠️","โหลดแฟนด้อมไม่สำเร็จ",error.message,retry);
-    setHomeMessage("โหลดข้อมูลหน้าหลักไม่สำเร็จ กรุณาลองใหม่อีกครั้ง","error");
+
+  const collectionPromise =
+    fetchJson(
+      BASE_API +
+      "?action=collections",
+      "โหลดรอบพรีออเดอร์"
+    );
+
+
+  const [
+    productResult,
+    collectionResult
+  ] =
+    await Promise.allSettled([
+
+      productPromise,
+
+      collectionPromise
+
+    ]);
+
+
+  /*
+  =====================================
+  PRODUCTS
+  =====================================
+  */
+
+  if(
+    productResult.status ===
+    "fulfilled"
+  ){
+
+    const result =
+      productResult.value;
+
+
+    const products =
+      Array.isArray(
+        result
+      )
+        ? result
+
+        : Array.isArray(
+            result.products
+          )
+          ? result.products
+          : [];
+
+
+    window.allProducts =
+      [
+        ...products
+      ];
+
+
+    products.sort(
+      (
+        a,
+        b
+      ) =>
+
+        Number(
+          b.sort_order || 0
+        )
+        -
+        Number(
+          a.sort_order || 0
+        )
+    );
+
+
+    loadFeatured(
+      products
+    );
+
+
+    loadNewArrivals(
+      products
+    );
+
+
+    loadFandoms(
+      products
+    );
+
+  }else{
+
+    const error =
+      productResult.reason;
+
+
+    console.error(
+      "loadHome products error",
+      error
+    );
+
+
+    const retry = `
+
+<button
+type="button"
+onclick="loadHome()"
+>
+ลองโหลดใหม่
+</button>
+
+`;
+
+
+    document
+      .getElementById(
+        "featuredProducts"
+      )
+      .innerHTML =
+        stateHtml(
+          "⚠️",
+          "โหลดสินค้าไม่สำเร็จ",
+          error?.message || "",
+          retry
+        );
+
+
+    document
+      .getElementById(
+        "newProducts"
+      )
+      .innerHTML =
+        stateHtml(
+          "⚠️",
+          "โหลดสินค้าไม่สำเร็จ",
+          error?.message || "",
+          retry
+        );
+
+
+    document
+      .getElementById(
+        "fandomList"
+      )
+      .innerHTML =
+        stateHtml(
+          "⚠️",
+          "โหลดแฟนด้อมไม่สำเร็จ",
+          error?.message || "",
+          retry
+        );
+
   }
 
-  await loadCollections();
+
+  /*
+  =====================================
+  COLLECTIONS
+  =====================================
+  */
+
+  if(
+    collectionResult.status ===
+    "fulfilled"
+  ){
+
+    renderHomeCollections(
+      collectionResult.value
+    );
+
+  }else{
+
+    const error =
+      collectionResult.reason;
+
+
+    console.error(
+      "loadHome collections error",
+      error
+    );
+
+
+    document
+      .getElementById(
+        "collectionCards"
+      )
+      .innerHTML =
+        stateHtml(
+          "⚠️",
+          "โหลดรอบพรีออเดอร์ไม่สำเร็จ",
+          error?.message || "",
+          `
+<button
+type="button"
+onclick="loadHome()"
+>
+ลองโหลดใหม่
+</button>
+`
+        );
+
+  }
+
+
+  if(
+    productResult.status ===
+      "fulfilled" &&
+    collectionResult.status ===
+      "fulfilled"
+  ){
+
+    setHomeMessage(
+      "",
+      "info"
+    );
+
+  }else{
+
+    setHomeMessage(
+      "ข้อมูลบางส่วนโหลดไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+      "error"
+    );
+
+  }
+
 }
 
-async function loadCollections(){
-  try{
-    const result = await fetchJson(BASE_API + "?action=collections","โหลดรอบพรีออเดอร์");
-    const collections = Array.isArray(result)
+function renderHomeCollections(
+  result
+){
+
+  const collections =
+    Array.isArray(
+      result
+    )
       ? result
-      : Array.isArray(result.collections)
+
+      : Array.isArray(
+          result.collections
+        )
         ? result.collections
         : [];
 
-    const activeCollections = collections.filter(collection=>{
-      if(collection.active === undefined && collection.status === undefined){
-        return true;
+
+  const activeCollections =
+    collections.filter(
+      collection => {
+
+        if(
+          collection.active ===
+            undefined &&
+          collection.status ===
+            undefined
+        ){
+
+          return true;
+
+        }
+
+
+        return (
+          homeBool(
+            collection.active
+          )
+          ||
+          [
+            "active",
+            "open",
+            "เปิด"
+          ].includes(
+            String(
+              collection.status || ""
+            )
+              .trim()
+              .toLowerCase()
+          )
+        );
+
       }
-      return homeBool(collection.active) ||
-        ["active","open","เปิด"].includes(String(collection.status || "").trim().toLowerCase());
-    });
-
-    const box = document.getElementById("collectionCards");
-
-    if(!activeCollections.length){
-      box.innerHTML = stateHtml("📦","ยังไม่มีรอบพรีออเดอร์ที่เปิดอยู่","กลับมาเช็กอีกครั้งเร็ว ๆ นี้");
-      return;
-    }
-
-    box.innerHTML = activeCollections.map(collection=>{
-      const deadlineText = getDeadlineText(collection.preorder_deadline);
-      const id = encodeURIComponent(String(collection.collection_id || ""));
-      const url = `collection.html?id=${id}`;
-
-      return `
-        <div class="collection-card" role="link" tabindex="0"
-          onclick="window.location.href='${url}'"
-          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='${url}'}">
-          <img src="${homeEscape(collection.image || collection.banner_image || "")}" loading="lazy" alt="${homeEscape(collection.name || "รอบพรีออเดอร์")}">
-          <div class="collection-content">
-            <div class="collection-badge-preorder">PREORDER</div>
-            <h3>${homeEscape(collection.name || "")}</h3>
-            <p>${homeEscape(collection.fandom || "")}</p>
-            ${collection.description ? `<p class="collection-description">${homeEscape(collection.description)}</p>` : ""}
-            <p class="collection-count">${Number(collection.product_count || 0).toLocaleString("th-TH")} รายการ</p>
-            ${deadlineText ? `<div class="deadline-badge">${homeEscape(deadlineText)}</div>` : ""}
-          </div>
-        </div>
-      `;
-    }).join("");
-  }catch(error){
-    console.error("loadCollections error",error);
-    document.getElementById("collectionCards").innerHTML = stateHtml(
-      "⚠️",
-      "โหลดรอบพรีออเดอร์ไม่สำเร็จ",
-      error.message,
-      '<button type="button" onclick="loadCollections()">ลองโหลดใหม่</button>'
     );
+
+
+  const box =
+    document.getElementById(
+      "collectionCards"
+    );
+
+
+  if(
+    !activeCollections.length
+  ){
+
+    box.innerHTML =
+      stateHtml(
+        "📦",
+        "ยังไม่มีรอบพรีออเดอร์ที่เปิดอยู่",
+        "กลับมาเช็กอีกครั้งเร็ว ๆ นี้"
+      );
+
+    return;
+
   }
+
+
+  box.innerHTML =
+    activeCollections
+      .map(
+        collection => {
+
+          const deadlineText =
+            getDeadlineText(
+              collection.preorder_deadline
+            );
+
+
+          const id =
+            encodeURIComponent(
+              String(
+                collection.collection_id ||
+                ""
+              )
+            );
+
+
+          const url =
+            `collection.html?id=${id}`;
+
+
+          return `
+
+<div
+class="collection-card"
+role="link"
+tabindex="0"
+onclick="window.location.href='${url}'"
+onkeydown="
+if(
+  event.key==='Enter' ||
+  event.key===' '
+){
+  event.preventDefault();
+  window.location.href='${url}';
+}
+"
+>
+
+<img
+src="${homeEscape(
+  collection.image ||
+  collection.banner_image ||
+  ""
+)}"
+loading="lazy"
+alt="${homeEscape(
+  collection.name ||
+  "รอบพรีออเดอร์"
+)}"
+>
+
+<div class="collection-content">
+
+<div class="collection-badge-preorder">
+PREORDER
+</div>
+
+<h3>
+${homeEscape(
+  collection.name || ""
+)}
+</h3>
+
+<p>
+${homeEscape(
+  collection.fandom || ""
+)}
+</p>
+
+${
+  collection.description
+    ? `
+<p class="collection-description">
+${homeEscape(
+  collection.description
+)}
+</p>
+`
+    : ""
+}
+
+<p class="collection-count">
+${Number(
+  collection.product_count || 0
+).toLocaleString("th-TH")}
+รายการ
+</p>
+
+${
+  deadlineText
+    ? `
+<div class="deadline-badge">
+${homeEscape(
+  deadlineText
+)}
+</div>
+`
+    : ""
+}
+
+</div>
+
+</div>
+
+`;
+
+        }
+      )
+      .join("");
+
+}
+
+async function loadCollections(){
+
+  try{
+
+    const result =
+      await fetchJson(
+        BASE_API +
+        "?action=collections",
+        "โหลดรอบพรีออเดอร์"
+      );
+
+
+    renderHomeCollections(
+      result
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "loadCollections error",
+      error
+    );
+
+
+    document
+      .getElementById(
+        "collectionCards"
+      )
+      .innerHTML =
+        stateHtml(
+          "⚠️",
+          "โหลดรอบพรีออเดอร์ไม่สำเร็จ",
+          error.message,
+          `
+<button
+type="button"
+onclick="loadCollections()"
+>
+ลองโหลดใหม่
+</button>
+`
+        );
+
+  }
+
 }
 
 function getDeadlineText(deadline){
@@ -310,21 +721,115 @@ function loadNewArrivals(products){
     : stateHtml("⭐","ยังไม่มีสินค้าใหม่","สินค้าใหม่ล่าสุดจะแสดงที่นี่");
 }
 
-function loadFandoms(products){
-  const fandoms = [...new Set(products.map(product=>String(product.fandom || "").trim()).filter(Boolean))]
-    .sort((a,b)=>a.localeCompare(b,"th"));
+function loadFandoms(
+  products
+){
 
-  const box = document.getElementById("fandomList");
-  if(!fandoms.length){
-    box.innerHTML = stateHtml("🎮","ยังไม่มี Fandom","แฟนด้อมของสินค้าจะแสดงที่นี่");
+  const fandomCounts =
+    new Map();
+
+
+  products.forEach(
+    product => {
+
+      const fandom =
+        String(
+          product.fandom || ""
+        ).trim();
+
+
+      if(!fandom){
+        return;
+      }
+
+
+      fandomCounts.set(
+        fandom,
+        (
+          fandomCounts.get(
+            fandom
+          ) || 0
+        ) + 1
+      );
+
+    }
+  );
+
+
+  const fandoms =
+    Array.from(
+      fandomCounts.keys()
+    )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          a.localeCompare(
+            b,
+            "th"
+          )
+      );
+
+
+  const box =
+    document.getElementById(
+      "fandomList"
+    );
+
+
+  if(
+    !fandoms.length
+  ){
+
+    box.innerHTML =
+      stateHtml(
+        "🎮",
+        "ยังไม่มี Fandom",
+        "แฟนด้อมของสินค้าจะแสดงที่นี่"
+      );
+
     return;
+
   }
 
-  box.innerHTML = fandoms.map(fandom=>{
-    const count = products.filter(product=>String(product.fandom || "").trim() === fandom).length;
-    const url = `browse.html?type=fandom&value=${encodeURIComponent(fandom)}`;
-    return `<button type="button" class="fandom-btn" onclick="window.location.href='${url}'">${homeEscape(fandom)} (${count})</button>`;
-  }).join("");
+
+  box.innerHTML =
+    fandoms
+      .map(
+        fandom => {
+
+          const count =
+            fandomCounts.get(
+              fandom
+            ) || 0;
+
+
+          const url =
+            `browse.html?type=fandom&value=${encodeURIComponent(
+              fandom
+            )}`;
+
+
+          return `
+
+<button
+type="button"
+class="fandom-btn"
+onclick="window.location.href='${url}'"
+>
+${homeEscape(
+  fandom
+)}
+(${count})
+</button>
+
+`;
+
+        }
+      )
+      .join("");
+
 }
 
 function updateCartCount(){
