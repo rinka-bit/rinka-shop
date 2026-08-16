@@ -5,8 +5,27 @@ RINKA ADMIN — ORDER MANAGER
 */
 
 let adminOrdersCache = [];
+
+let adminOrderBaseCache = [];
+
 let adminOrderStatusFilter =
   "pending_order";
+
+
+let adminShippedDateFilter =
+  "30";
+
+
+let adminShippedSearch =
+  "";
+
+
+let adminShippedCustomStart =
+  "";
+
+
+let adminShippedCustomEnd =
+  "";
 
 
 /*
@@ -22,17 +41,19 @@ async function loadOrders(){
       "orders"
     );
 
-  if(!box){
-    return;
-  }
 
-  box.innerHTML = `
+  if(box){
+
+    box.innerHTML = `
 
 <div class="card">
 ⏳ กำลังโหลดออเดอร์...
 </div>
 
 `;
+
+  }
+
 
   try{
 
@@ -41,6 +62,7 @@ async function loadOrders(){
         API +
         "?action=orders"
       );
+
 
     if(!response.ok){
 
@@ -51,8 +73,10 @@ async function loadOrders(){
 
     }
 
+
     const result =
       await response.json();
+
 
     const rawOrders =
       Array.isArray(
@@ -61,21 +85,27 @@ async function loadOrders(){
         ? [
             ...result.orders
           ].reverse()
-        : Array.isArray(result)
+
+        : Array.isArray(
+            result
+          )
           ? [
               ...result
             ].reverse()
+
           : [];
 
 
     /*
     =====================================
-    แสดงเฉพาะออเดอร์ที่ชำระแล้ว
-    และยังไม่ Completed
+    BASE CACHE
+
+    เก็บ Paid Orders ทั้งหมด
+    รวม shipped / completed
     =====================================
     */
 
-    const visibleOrders =
+    adminOrderBaseCache =
       rawOrders.filter(
         order => {
 
@@ -85,14 +115,7 @@ async function loadOrders(){
             )
               .trim()
               .toLowerCase() ===
-              "paid" &&
-
-            String(
-              order.status || ""
-            )
-              .trim()
-              .toLowerCase() !==
-              "completed"
+            "paid"
           );
 
         }
@@ -101,16 +124,35 @@ async function loadOrders(){
 
     /*
     =====================================
-    โหลดรายละเอียดเพิ่มเติม
+    ACTIVE ORDER MANAGER
 
-    ถ้า action=orders ยังไม่มี
-    items / gifts จะโหลดเป็นรายออเดอร์
+    - completed ไม่แสดง
+    - shipped:
+        ถ้ายังไม่เกิน 3 วัน
+        ยังแสดงใน Order Manager
+    =====================================
+    */
+
+    const activeOrders =
+      adminOrderBaseCache.filter(
+        order =>
+          isAdminActiveOrder(
+            order
+          )
+      );
+
+
+    /*
+    โหลด Detail เฉพาะ Active Orders
+
+    ป้องกัน Archive เก่าหลายร้อยออเดอร์
+    ยิง getOrder ทีละใบตอนเปิด Admin
     =====================================
     */
 
     adminOrdersCache =
       await Promise.all(
-        visibleOrders.map(
+        activeOrders.map(
           order =>
             loadAdminOrderDetail(
               order
@@ -121,6 +163,32 @@ async function loadOrders(){
 
     renderAdminOrders();
 
+
+    /*
+    ถ้าหน้า Archive เปิดอยู่
+    ให้อัปเดตหน้า Archive ด้วย
+    */
+
+    const shippedTab =
+      document.getElementById(
+        "tab_shipped_orders"
+      );
+
+
+    if(
+      shippedTab &&
+      !shippedTab.classList.contains(
+        "hidden"
+      ) &&
+      typeof renderAdminShippedOrders ===
+        "function"
+    ){
+
+      renderAdminShippedOrders();
+
+    }
+
+
   }catch(error){
 
     console.error(
@@ -128,7 +196,10 @@ async function loadOrders(){
       error
     );
 
-    box.innerHTML = `
+
+    if(box){
+
+      box.innerHTML = `
 
 <div
 class="card"
@@ -161,10 +232,212 @@ onclick="loadOrders()"
 
 `;
 
+    }
+
+
+    const shippedBox =
+      document.getElementById(
+        "shippedOrders"
+      );
+
+
+    if(shippedBox){
+
+      shippedBox.innerHTML = `
+
+<div
+class="card"
+style="
+background:#fff1f2;
+border-color:#fecdd3;
+color:#be123c;
+"
+>
+
+โหลดออเดอร์ที่จัดส่งแล้วไม่สำเร็จ
+
+</div>
+
+`;
+
+    }
+
   }
 
 }
 
+/*
+=========================================
+ACTIVE / ARCHIVED ORDER HELPERS
+=========================================
+*/
+
+function getAdminOrderShippedTime(
+  order
+){
+
+  if(
+    !order ||
+    !order.shipped_at
+  ){
+
+    return null;
+
+  }
+
+
+  const date =
+    new Date(
+      order.shipped_at
+    );
+
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return null;
+
+  }
+
+
+  return date;
+
+}
+
+
+function isAdminShippedOlderThanDays(
+  order,
+  days
+){
+
+  const shippedDate =
+    getAdminOrderShippedTime(
+      order
+    );
+
+
+  if(!shippedDate){
+
+    return false;
+
+  }
+
+
+  const age =
+    Date.now() -
+    shippedDate.getTime();
+
+
+  return (
+    age >
+    Number(days) *
+    24 *
+    60 *
+    60 *
+    1000
+  );
+
+}
+
+
+function isAdminActiveOrder(
+  order
+){
+
+  const status =
+    String(
+      order?.status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  /*
+  Completed เข้า Archive เสมอ
+  */
+
+  if(
+    status ===
+    "completed"
+  ){
+
+    return false;
+
+  }
+
+
+  /*
+  Shipped เกิน 3 วัน
+  เข้า Archive
+  */
+
+  if(
+    status ===
+      "shipped" &&
+    isAdminShippedOlderThanDays(
+      order,
+      3
+    )
+  ){
+
+    return false;
+
+  }
+
+
+  /*
+  สถานะอื่นทั้งหมด
+  + shipped ภายใน 3 วัน
+  อยู่หน้า Order Manager
+  */
+
+  return true;
+
+}
+
+
+function isAdminArchivedOrder(
+  order
+){
+
+  const status =
+    String(
+      order?.status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if(
+    status ===
+    "completed"
+  ){
+
+    return true;
+
+  }
+
+
+  if(
+    status ===
+      "shipped" &&
+    isAdminShippedOlderThanDays(
+      order,
+      3
+    )
+  ){
+
+    return true;
+
+  }
+
+
+  return false;
+
+}
 
 /*
 =========================================
