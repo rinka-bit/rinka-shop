@@ -148,21 +148,23 @@ class="mo-full"
 <div id="mo_selected_customer" class="mo-selected-customer hidden mo-full"></div>
 
 <label>
-แอค X
+แอค X / Twitter *
 
 <input
 id="mo_social"
 placeholder="@username"
+autocomplete="off"
+oninput="handleManualTwitterInput()"
 >
 </label>
 
 <label>
-อีเมล *
+อีเมล
 
 <input
 id="mo_email"
 type="email"
-oninput="syncManualSelectedCustomer()"
+placeholder="ไม่บังคับ"
 >
 </label>
 
@@ -799,6 +801,54 @@ function useManualCustomer(
 
 }
 
+function normalizeManualTwitter(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .trim()
+    .replace(/^@+/, "")
+    .toLowerCase();
+
+}
+
+
+function handleManualTwitterInput(){
+
+  const currentTwitter =
+    normalizeManualTwitter(
+      moVal(
+        "mo_social"
+      )
+    );
+
+  const selectedTwitter =
+    normalizeManualTwitter(
+      ManualOrder
+        .selectedCustomer
+        ?.social ||
+      ""
+    );
+
+  /*
+  ถ้าเคยเลือกลูกค้าเดิม
+  แต่แก้ Twitter เป็นคนอื่น
+  ต้องไม่ส่ง customer_id เก่าติดไป
+  */
+  if(
+    ManualOrder.selectedCustomer &&
+    currentTwitter !==
+      selectedTwitter
+  ){
+
+    ManualOrder.selectedCustomer =
+      null;
+
+  }
+
+}
 
 function setManualField(
   id,
@@ -3109,158 +3159,349 @@ function handleManualPreviewBackdrop(
 
 async function submitManualOrder(){
 
-  if(ManualOrder.loading){
+  if(
+    ManualOrder.loading
+  ){
     return;
   }
 
-  try{
-    validateManualOrderForm();
-  }catch(error){
-    showManualError(error);
-    return;
-  }
+  const name =
+    moVal(
+      "mo_name"
+    );
 
-  const confirmed = window.confirm(
-    "ยืนยันสร้างออเดอร์นี้หรือไม่?\n\nหลังยืนยัน ระบบจะบันทึกออเดอร์ลง Google Sheets และอาจส่งอีเมลให้ลูกค้า"
-  );
+  const email =
+    moVal(
+      "mo_email"
+    );
 
-  if(!confirmed){
-    return;
-  }
+  const phone =
+    moVal(
+      "mo_phone"
+    );
 
-  const slipInput =
-    document.getElementById(
-      "mo_slip"
+  const social =
+    normalizeManualTwitter(
+      moVal(
+        "mo_social"
+      )
     );
 
   const slip =
-    slipInput?.files?.[0] || null;
+    document
+      .getElementById(
+        "mo_slip"
+      )
+      .files[0];
 
   const status =
-    document.getElementById(
-      "mo_paystatus"
-    )?.value || "unpaid";
+    document
+      .getElementById(
+        "mo_paystatus"
+      )
+      .value;
 
-  setManualLoading(true);
-  setManualMessage(
-    "กำลังสร้างออเดอร์ กรุณาอย่าปิดหน้านี้...",
-    "info"
-  );
+
+  if(!name){
+
+    alert(
+      "กรุณากรอกชื่อผู้รับ"
+    );
+
+    return;
+
+  }
+
+
+  if(!social){
+
+    alert(
+      "กรุณากรอกแอค X / Twitter"
+    );
+
+    document
+      .getElementById(
+        "mo_social"
+      )
+      ?.focus();
+
+    return;
+
+  }
+
+
+  if(!phone){
+
+    alert(
+      "กรุณากรอกเบอร์โทร"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      .test(
+        email
+      )
+  ){
+
+    alert(
+      "รูปแบบอีเมลไม่ถูกต้อง"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !ManualOrder.cart.length
+  ){
+
+    alert(
+      "เพิ่มสินค้าอย่างน้อย 1 รายการ"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    status === "paid" &&
+    !slip
+  ){
+
+    alert(
+      "สถานะชำระแล้วต้องแนบสลิป"
+    );
+
+    return;
+
+  }
+
+
+  const payload = {
+
+    /*
+    ส่งไว้ได้ แต่ backend
+    จะตรวจ Twitter ซ้ำอีกครั้ง
+    และเป็นคนตัดสิน customer_id จริง
+    */
+    customer_id:
+      ManualOrder.selectedCustomer
+        ? (
+            ManualOrder
+              .selectedCustomer
+              .customer_id ||
+            ""
+          )
+        : "",
+
+    customer_name:
+      name,
+
+    email:
+      email,
+
+    phone:
+      phone,
+
+    social:
+      social,
+
+    items:
+      ManualOrder.cart,
+
+    gifts:
+      ManualOrder.gifts,
+
+    address:{
+
+      receiver:
+        name,
+
+      email:
+        email,
+
+      phone:
+        phone,
+
+      address:
+        moVal(
+          "mo_address"
+        ),
+
+      subdistrict:
+        moVal(
+          "mo_subdistrict"
+        ),
+
+      district:
+        moVal(
+          "mo_district"
+        ),
+
+      province:
+        moVal(
+          "mo_province"
+        ),
+
+      postcode:
+        moVal(
+          "mo_postcode"
+        )
+
+    },
+
+    payment:{
+
+      method:
+        document
+          .getElementById(
+            "mo_method"
+          )
+          .value,
+
+      status:
+        status,
+
+      amount:
+        moSubtotal(),
+
+      slip_base64:
+        slip
+          ? await moFile(
+              slip
+            )
+          : ""
+
+    },
+
+    order_source:
+      "admin",
+
+    admin_note:
+      moVal(
+        "mo_note"
+      )
+
+  };
+
+
+  ManualOrder.loading =
+    true;
+
+  document
+    .getElementById(
+      "mo_submit"
+    )
+    .disabled =
+      true;
+
 
   try{
-
-    const payload = {
-
-      customer_id:
-        ManualOrder.selectedCustomer
-          ? ManualOrder.selectedCustomer.customer_id || ""
-          : "",
-
-      customer_name: moVal("mo_name"),
-      email: moVal("mo_email"),
-      phone: moVal("mo_phone"),
-      social: moVal("mo_social"),
-
-      items: ManualOrder.cart,
-      gifts: ManualOrder.gifts,
-
-      address:{
-        receiver: moVal("mo_name"),
-        email: moVal("mo_email"),
-        phone: moVal("mo_phone"),
-        address: moVal("mo_address"),
-        subdistrict: moVal("mo_subdistrict"),
-        district: moVal("mo_district"),
-        province: moVal("mo_province"),
-        postcode: moVal("mo_postcode")
-      },
-
-      payment:{
-        method:
-          document.getElementById(
-            "mo_method"
-          )?.value || "bank_transfer",
-        status: status,
-        amount: moSubtotal(),
-        slip_base64:
-          slip
-            ? await moFile(slip)
-            : ""
-      },
-
-      order_source: "admin",
-      admin_note: moVal("mo_note")
-
-    };
 
     const formData =
       new FormData();
 
     formData.append(
       "payload",
-      JSON.stringify(payload)
+      JSON.stringify(
+        payload
+      )
     );
 
     const response =
       await fetch(
-        API + "?action=adminManualOrder",
+        API +
+        "?action=adminManualOrder",
         {
           method:"POST",
           body:formData
         }
       );
 
-    if(!response.ok){
-      throw new Error(
-        "HTTP " + response.status
-      );
-    }
-
     const result =
       await response.json();
 
-    if(!result.success){
+
+    if(
+      !result.success
+    ){
+
       throw new Error(
         result.error ||
         "สร้างออเดอร์ไม่สำเร็จ"
       );
+
     }
 
-    closeManualOrderPreview();
 
-    setManualMessage(
-      "สร้างออเดอร์สำเร็จ เลขที่ " +
-      result.order_id,
-      "success"
+    let message =
+      "สร้างออเดอร์สำเร็จ " +
+      result.order_id;
+
+
+    if(
+      result.customer_linked
+    ){
+
+      message +=
+        "\n\nเชื่อมกับบัญชีลูกค้าเดิมแล้ว";
+
+    }else{
+
+      message +=
+        "\n\nยังไม่มีบัญชีลูกค้า ระบบบันทึกด้วย Twitter ไว้ก่อน";
+
+    }
+
+
+    alert(
+      message
     );
 
-    setManualMessage(
-      "สร้างออเดอร์สำเร็จ เลขที่ " +
-      result.order_id,
-      "success"
-    );
 
     renderManualOrderManager();
+
 
     if(
       typeof loadOrders ===
       "function"
     ){
+
       loadOrders();
+
     }
 
   }catch(error){
 
-    console.error(
-      "submitManualOrder error:",
-      error
+    alert(
+      error.message
     );
-
-    showManualError(error);
 
   }finally{
 
-    setManualLoading(false);
+    ManualOrder.loading =
+      false;
+
+    const button =
+      document
+        .getElementById(
+          "mo_submit"
+        );
+
+    if(button){
+
+      button.disabled =
+        false;
+
+    }
 
   }
 
