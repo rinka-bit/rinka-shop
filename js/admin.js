@@ -39,25 +39,27 @@ function showAdminTab(
   tab
 ){
 
-  const tabs = [
+ const tabs = [
 
-    "dashboard",
+  "dashboard",
 
-    "products",
+  "products",
 
-    "options",
+  "options",
 
-    "orders",
+  "orders",
 
-    "address",
+  "shipped_orders",
 
-    "collections",
+  "address",
 
-    "gifts",
+  "collections",
 
-    "manual_order"
+  "gifts",
 
-  ];
+  "manual_order"
+
+];
 
 
   tabs.forEach(
@@ -159,6 +161,64 @@ color:#991b1b;
 
 กรุณาตรวจไฟล์
 <b>js/admin-manual-order.js</b>
+
+</div>
+
+`;
+
+    }
+
+  }
+
+}
+
+if(
+  tab === "shipped_orders"
+){
+
+  if(
+    typeof renderAdminShippedOrders ===
+    "function"
+  ){
+
+    renderAdminShippedOrders();
+
+  }else{
+
+    console.error(
+      "ไม่พบฟังก์ชัน renderAdminShippedOrders()"
+    );
+
+    const box =
+      document.getElementById(
+        "shippedOrders"
+      );
+
+    if(box){
+
+      box.innerHTML = `
+
+<div
+style="
+padding:16px;
+background:#fef2f2;
+border:1px solid #fecaca;
+border-radius:12px;
+color:#991b1b;
+"
+>
+
+ไม่สามารถเปิดหน้าออเดอร์ที่จัดส่งแล้วได้
+
+<br><br>
+
+ไม่พบฟังก์ชัน
+<b>renderAdminShippedOrders()</b>
+
+<br>
+
+กรุณาตรวจไฟล์
+<b>js/admin-orders.js</b>
 
 </div>
 
