@@ -371,6 +371,13 @@ onclick="showAdminTab('orders')">
 
 <button
 class="nav-btn"
+id="nav_shipped_orders"
+onclick="showAdminTab('shipped_orders')">
+✅ ออเดอร์ที่จัดส่งแล้ว
+</button>
+
+<button
+class="nav-btn"
 id="nav_address"
 onclick="showAdminTab('address')">
 📍 คำขอเปลี่ยนที่อยู่
@@ -464,6 +471,18 @@ class="hidden">
 </h1>
 
 <div id="orders"></div>
+
+</section>
+
+<section
+id="tab_shipped_orders"
+class="hidden">
+
+<h1 class="section-title">
+✅ ออเดอร์ที่จัดส่งแล้ว
+</h1>
+
+<div id="shippedOrders"></div>
 
 </section>
 
