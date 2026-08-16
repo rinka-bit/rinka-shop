@@ -957,6 +957,138 @@ let selectedBankId = "";
 let paymentSubmitting = false;
 let paymentToastTimer = null;
 
+
+/*
+=========================================
+REQUEST / IDEMPOTENCY
+=========================================
+*/
+
+const PAYMENT_REQUEST_TIMEOUT =
+  45000;
+
+
+function getPaymentRequestId(){
+
+  const storageKey =
+    "rinka_checkout_request_id";
+
+
+  let requestId =
+    sessionStorage.getItem(
+      storageKey
+    );
+
+
+  if(requestId){
+
+    return requestId;
+
+  }
+
+
+  if(
+    window.crypto &&
+    typeof crypto.randomUUID ===
+    "function"
+  ){
+
+    requestId =
+      crypto.randomUUID();
+
+  }else{
+
+    requestId =
+      "REQ-" +
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .slice(2,10);
+
+  }
+
+
+  sessionStorage.setItem(
+    storageKey,
+    requestId
+  );
+
+
+  return requestId;
+
+}
+
+
+function clearPaymentRequestId(){
+
+  sessionStorage.removeItem(
+    "rinka_checkout_request_id"
+  );
+
+}
+
+
+async function paymentFetch(
+  url,
+  options = {},
+  timeout =
+    PAYMENT_REQUEST_TIMEOUT
+){
+
+  const controller =
+    new AbortController();
+
+
+  const timer =
+    setTimeout(
+      ()=>{
+        controller.abort();
+      },
+      timeout
+    );
+
+
+  try{
+
+    return await fetch(
+      url,
+      {
+        ...options,
+
+        signal:
+          controller.signal
+      }
+    );
+
+  }catch(error){
+
+    if(
+      error &&
+      error.name ===
+      "AbortError"
+    ){
+
+      throw new Error(
+        "การเชื่อมต่อใช้เวลานานกว่าปกติ กรุณารอสักครู่แล้วลองอีกครั้ง"
+      );
+
+    }
+
+
+    throw error;
+
+
+  }finally{
+
+    clearTimeout(
+      timer
+    );
+
+  }
+
+}
+
 document.addEventListener(
   "DOMContentLoaded",
   ()=>{
@@ -1642,39 +1774,46 @@ async function submitOrder(){
 
     }
 
-    const payload = {
+   const requestId =
+  getPaymentRequestId();
 
-      customer_name:
-        address.receiver || "",
 
-      email:
-        address.email || "",
+const payload = {
 
-      phone:
-        String(
-          address.phone || ""
-        ),
+  request_id:
+    requestId,
 
-      social:
-        address.social || "",
+  customer_name:
+    address.receiver || "",
 
-      subtotal:
-        calculatedTotal,
+  email:
+    address.email || "",
 
-      total:
-        calculatedTotal,
+  phone:
+    String(
+      address.phone || ""
+    ),
 
-      items:
-        cart,
+  social:
+    address.social || "",
 
-      gifts:
-        Array.isArray(
-          address.gifts
-        )
-          ? address.gifts
-          : []
+  subtotal:
+    calculatedTotal,
 
-    };
+  total:
+    calculatedTotal,
+
+  items:
+    cart,
+
+  gifts:
+    Array.isArray(
+      address.gifts
+    )
+      ? address.gifts
+      : []
+
+};
 
     /*
     สร้างออเดอร์
@@ -1695,17 +1834,17 @@ async function submitOrder(){
       )
     );
 
-    const response =
-      await fetch(
-        API,
-        {
-          method:
-            "POST",
+   const response =
+  await paymentFetch(
+    API,
+    {
+      method:
+        "POST",
 
-          body:
-            formData
-        }
-      );
+      body:
+        formData
+    }
+  );
 
     if(!response.ok){
 
@@ -1781,33 +1920,37 @@ async function submitOrder(){
       "payment"
     );
 
-    paymentForm.append(
-      "payload",
-      JSON.stringify({
+   paymentForm.append(
+  "payload",
+  JSON.stringify({
 
-        order_id:
-          orderId,
+    request_id:
+      requestId +
+      "-PAYMENT",
 
-        amount:
-          paymentAmount,
+    order_id:
+      orderId,
 
-        slip_base64:
-          base64
+    amount:
+      paymentAmount,
 
-      })
-    );
+    slip_base64:
+      base64
 
-    const paymentResponse =
-      await fetch(
-        API,
-        {
-          method:
-            "POST",
+  })
+);
 
-          body:
-            paymentForm
-        }
-      );
+   const paymentResponse =
+  await paymentFetch(
+    API,
+    {
+      method:
+        "POST",
+
+      body:
+        paymentForm
+    }
+  );
 
     if(!paymentResponse.ok){
 
@@ -1834,6 +1977,8 @@ async function submitOrder(){
       );
 
     }
+
+    clearPaymentRequestId();
 
     showPaymentSuccess(
       orderId
