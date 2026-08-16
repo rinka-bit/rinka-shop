@@ -1540,6 +1540,7 @@ async function loadOrders(){
       "orderSummaryGrid"
     );
 
+
   const errorBox =
     document.getElementById(
       "accountOrderError"
@@ -1548,14 +1549,14 @@ async function loadOrders(){
 
   grid.innerHTML = `
 
-    <div
-      class="account-loading"
-      style="grid-column:1/-1;"
-    >
-      กำลังโหลดข้อมูลออเดอร์...
-    </div>
+<div
+class="account-loading"
+style="grid-column:1/-1;"
+>
+กำลังโหลดข้อมูลออเดอร์...
+</div>
 
-  `;
+`;
 
 
   errorBox.classList.add(
@@ -1565,243 +1566,97 @@ async function loadOrders(){
 
   try{
 
-    /*
-    =========================================
-    โหลดออเดอร์ระบบใหม่ + ระบบเก่า
-    =========================================
-    */
-
-    const newQuery =
+    const query =
       new URLSearchParams();
 
-    newQuery.set(
+
+    query.set(
       "action",
-      "customerOrders"
+      "accountOrderSummary"
     );
 
-    newQuery.set(
+
+    query.set(
       "session_token",
       sessionToken
     );
 
 
-    const legacyQuery =
-      new URLSearchParams();
-
-    legacyQuery.set(
-      "action",
-      "legacyOrders"
-    );
-
-    legacyQuery.set(
-      "session_token",
-      sessionToken
-    );
+    const response =
+      await fetch(
+        API +
+        "?" +
+        query.toString()
+      );
 
 
-    const [
-      newResponse,
-      legacyResponse
-    ] =
-      await Promise.all([
-
-        fetch(
-          API +
-          "?" +
-          newQuery.toString()
-        ),
-
-        fetch(
-          API +
-          "?" +
-          legacyQuery.toString()
-        )
-
-      ]);
-
-
-    /*
-    =========================================
-    ระบบใหม่
-    =========================================
-    */
-
-    if(!newResponse.ok){
+    if(!response.ok){
 
       throw new Error(
         "HTTP " +
-        newResponse.status
+        response.status
       );
 
     }
 
 
-    const newResult =
-      await newResponse.json();
+    const result =
+      await response.json();
 
 
     if(
-      newResult &&
-      newResult.success === false
+      !result ||
+      result.success !== true
     ){
 
       throw new Error(
-        newResult.error ||
-        "โหลดออเดอร์ไม่สำเร็จ"
+        result?.error ||
+        "โหลดข้อมูลออเดอร์ไม่สำเร็จ"
       );
 
     }
 
-
-    const orders =
-      Array.isArray(
-        newResult
-      )
-        ? newResult
-        : (
-            Array.isArray(
-              newResult.orders
-            )
-              ? newResult.orders
-              : []
-          );
-
-
-    /*
-    =========================================
-    ระบบเก่า
-
-    ถ้า Legacy มีปัญหา
-    ยังให้หน้า Account ใช้งานระบบใหม่ได้
-    =========================================
-    */
-
-    let legacyOrders = [];
-
-
-    try{
-
-      if(
-        legacyResponse.ok
-      ){
-
-        const legacyResult =
-          await legacyResponse.json();
-
-
-        if(
-          legacyResult &&
-          legacyResult.success === true &&
-          Array.isArray(
-            legacyResult.orders
-          )
-        ){
-
-          legacyOrders =
-            legacyResult.orders;
-
-        }
-
-      }
-
-    }catch(error){
-
-      console.warn(
-        "Legacy orders load failed:",
-        error
-      );
-
-    }
-
-
-    /*
-    =========================================
-    COUNTS
-    =========================================
-    */
 
     const counts = {
 
-      pending_order:0,
-      pending:0,
-      china_arrived:0,
-      shipping_to_th:0,
-      ready_to_ship:0,
-      shipped:0
+      pending_order:
+        Number(
+          result.counts?.pending_order ||
+          0
+        ),
+
+      pending:
+        Number(
+          result.counts?.pending ||
+          0
+        ),
+
+      china_arrived:
+        Number(
+          result.counts?.china_arrived ||
+          0
+        ),
+
+      shipping_to_th:
+        Number(
+          result.counts?.shipping_to_th ||
+          0
+        ),
+
+      ready_to_ship:
+        Number(
+          result.counts?.ready_to_ship ||
+          0
+        ),
+
+      shipped:
+        Number(
+          result.counts?.shipped ||
+          0
+        )
 
     };
 
-
-    /*
-    ระบบใหม่
-    */
-
-    orders.forEach(
-      order=>{
-
-        const status =
-          String(
-            order.status || ""
-          ).trim();
-
-
-        if(
-          Object.prototype
-            .hasOwnProperty
-            .call(
-              counts,
-              status
-            )
-        ){
-
-          counts[status]++;
-
-        }
-
-      }
-    );
-
-
-    /*
-    =========================================
-    ระบบเก่า
-
-    แปลงสถานะภาษาไทย
-    → status code ระบบใหม่
-    =========================================
-    */
-
-    legacyOrders.forEach(
-      order=>{
-
-        const status =
-          legacyAccountStatusCode(
-            order.status
-          );
-
-
-        if(
-          Object.prototype
-            .hasOwnProperty
-            .call(
-              counts,
-              status
-            )
-        ){
-
-          counts[status]++;
-
-        }
-
-      }
-    );
-
-
-    /*
-    =========================================
-    RENDER
-    =========================================
-    */
 
     grid.innerHTML = [
 
@@ -1849,31 +1704,48 @@ async function loadOrders(){
 
       `
 
-        <div
-          class="order-summary-card"
-          onclick="window.location.href='orders.html'"
-        >
+<div
+class="order-summary-card"
+onclick="window.location.href='orders.html'"
+>
 
-          <div class="order-summary-icon">
-            📚
-          </div>
+<div class="order-summary-icon">
+📚
+</div>
 
-          <div class="order-summary-label">
-            ออเดอร์ทั้งหมด
-          </div>
+<div class="order-summary-label">
+ออเดอร์ทั้งหมด
+</div>
 
-          <div class="order-summary-count">
-            ${
-              orders.length +
-              legacyOrders.length
-            }
-          </div>
+<div class="order-summary-count">
+${Number(
+  result.total || 0
+)}
+</div>
 
-        </div>
+</div>
 
-      `
+`
 
     ].join("");
+
+
+    /*
+    Legacy มีปัญหา
+    แต่ระบบใหม่โหลดได้:
+    ไม่ทำให้หน้า Account พัง
+    */
+
+    if(
+      result.legacy_warning
+    ){
+
+      console.warn(
+        "Legacy summary warning:",
+        result.legacy_warning
+      );
+
+    }
 
 
   }catch(error){
@@ -1884,30 +1756,31 @@ async function loadOrders(){
     );
 
 
-    grid.innerHTML = "";
+    grid.innerHTML =
+      "";
 
 
     errorBox.innerHTML = `
 
-      โหลดข้อมูลออเดอร์ไม่สำเร็จ
+โหลดข้อมูลออเดอร์ไม่สำเร็จ
 
-      <br>
+<br>
 
-      ${escapeAccountHtml(
-        error.message ||
-        String(error)
-      )}
+${escapeAccountHtml(
+  error.message ||
+  String(error)
+)}
 
-      <br>
+<br>
 
-      <button
-        type="button"
-        onclick="loadOrders()"
-      >
-        ลองใหม่
-      </button>
+<button
+type="button"
+onclick="loadOrders()"
+>
+ลองใหม่
+</button>
 
-    `;
+`;
 
 
     errorBox.classList.remove(
@@ -1917,77 +1790,6 @@ async function loadOrders(){
   }
 
 }
-
-function legacyAccountStatusCode(
-  status
-){
-
-  const value =
-    String(
-      status || ""
-    )
-      .trim()
-      .toLowerCase();
-
-
-  const map = {
-
-    "รอกดสั่งสินค้า":
-      "pending_order",
-
-    "กดสั่งสินค้าแล้ว":
-      "pending",
-
-    "ถึงโกดังจีน":
-      "china_arrived",
-
-    "ถึงโกดังจีนแล้ว":
-      "china_arrived",
-
-    "กำลังมาไทย":
-      "shipping_to_th",
-
-    "เตรียมจัดส่ง":
-      "ready_to_ship",
-
-    "จัดส่งแล้ว":
-      "shipped",
-
-    "เสร็จสิ้น":
-      "completed"
-
-  };
-
-
-  /*
-  เผื่อข้อมูลเก่าใช้ status code อยู่แล้ว
-  */
-
-  if(
-    [
-      "pending_order",
-      "pending",
-      "china_arrived",
-      "shipping_to_th",
-      "ready_to_ship",
-      "shipped",
-      "completed"
-    ].includes(
-      value
-    )
-  ){
-
-    return value;
-
-  }
-
-
-  return (
-    map[value] ||
-    ""
-  );
-
-}  
   
 function createAccountOrderSummary(
   status,
