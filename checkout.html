@@ -1972,6 +1972,90 @@ async function fetchCheckoutGiftActionFallback(
 
 }
 
+async function loadCheckoutGiftData(){
+
+  const response =
+    await fetch(
+      API +
+      "?action=checkoutGiftData"
+    );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "โหลดข้อมูลของแถมไม่สำเร็จ HTTP " +
+      response.status
+    );
+
+  }
+
+
+  const result =
+    await response.json();
+
+
+  if(
+    !result ||
+    result.success === false
+  ){
+
+    throw new Error(
+      result?.error ||
+      "โหลดข้อมูลของแถมไม่สำเร็จ"
+    );
+
+  }
+
+
+  return {
+
+    campaigns:
+      Array.isArray(
+        result.campaigns
+      )
+        ? result.campaigns
+        : [],
+
+    rules:
+      Array.isArray(
+        result.rules
+      )
+        ? result.rules
+        : [],
+
+    items:
+      Array.isArray(
+        result.items
+      )
+        ? result.items
+        : [],
+
+    characters:
+      Array.isArray(
+        result.characters
+      )
+        ? result.characters
+        : [],
+
+    exclusions:
+      Array.isArray(
+        result.exclusions
+      )
+        ? result.exclusions
+        : [],
+
+    collections:
+      Array.isArray(
+        result.collections
+      )
+        ? result.collections
+        : []
+
+  };
+
+}
+
 async function loadGifts(){
 
   const giftSection =
@@ -2001,52 +2085,32 @@ async function loadGifts(){
 
   try{
 
-    console.log(
-      "========== GIFT DEBUG START =========="
-    );
-
-    console.log(
-      "CART:",
-      cart
-    );
+    const giftData =
+  await loadCheckoutGiftData();
 
 
-    const [
-      campaigns,
-      rules,
-      items
-    ] =
-      await Promise.all([
+const campaigns =
+  giftData.campaigns;
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftCampaigns"
-          ],
-          [
-            "campaigns"
-          ]
-        ),
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftRules"
-          ],
-          [
-            "rules"
-          ]
-        ),
+const rules =
+  giftData.rules;
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftItems"
-          ],
-          [
-            "items",
-            "gifts"
-          ]
-        )
 
-      ]);
+const items =
+  giftData.items;
+
+
+const characters =
+  giftData.characters;
+
+
+const exclusions =
+  giftData.exclusions;
+
+
+const collections =
+  giftData.collections;
 
     const optionalResults =
       await Promise.allSettled([
@@ -2068,16 +2132,6 @@ async function loadGifts(){
             "exclusions"
           ]
         ),
-
-        fetchCheckoutGiftActionFallback(
-          [
-            "getCollections",
-            "collections"
-          ],
-          [
-            "collections"
-          ]
-        )
 
       ]);
 
@@ -2117,39 +2171,7 @@ async function loadGifts(){
 
       }
     );
-
-
-    console.log(
-      "RAW CAMPAIGNS:",
-      campaigns
-    );
-
-    console.log(
-      "RAW RULES:",
-      rules
-    );
-
-    console.log(
-      "RAW ITEMS:",
-      items
-    );
-
-    console.log(
-      "RAW CHARACTERS:",
-      characters
-    );
-
-    console.log(
-      "RAW EXCLUSIONS:",
-      exclusions
-    );
-
-    console.log(
-      "RAW COLLECTIONS:",
-      collections
-    );
-
-
+    
     checkoutGiftState.campaigns =
       campaigns.filter(
         campaign =>
