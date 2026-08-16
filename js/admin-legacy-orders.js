@@ -20,17 +20,18 @@
 
         const knownTabs = [
 
-          "dashboard",
-          "products",
-          "options",
-          "orders",
-          "address",
-          "collections",
-          "gifts",
-          "manual_order",
-          "legacy_orders"
+  "dashboard",
+  "products",
+  "options",
+  "orders",
+  "shipped_orders",
+  "address",
+  "collections",
+  "gifts",
+  "manual_order",
+  "legacy_orders"
 
-        ];
+];
 
         knownTabs.forEach(
           name=>{
@@ -477,10 +478,6 @@ placeholder="เช่น Genshin รอบเดือนกรกฎาคม"
 
 <option value="ready_to_ship">
 เตรียมจัดส่ง
-</option>
-
-<option value="shipped">
-จัดส่งแล้ว
 </option>
 
 </select>
