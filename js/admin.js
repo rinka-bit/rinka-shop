@@ -236,20 +236,12 @@ async function loadAdminData(){
 
   try{
 
-    loadStats();
-
-    loadTopProducts();
-
-    loadTopFandoms();
+    loadDashboardData();
 
     loadOrders();
 
     loadAddressRequests();
 
-
-    /*
-    สร้างหน้าต่าง Manager ก่อนโหลดข้อมูล
-    */
 
     renderProductManager();
 
@@ -258,19 +250,10 @@ async function loadAdminData(){
     renderCollectionManager();
 
 
-    /*
-    แล้วค่อยโหลดข้อมูล
-    */
-
     await loadAdminProducts();
 
     await loadAdminCollections();
 
-
-    /*
-    Manual Order ยังไม่ต้อง render ตอนเปิด Admin
-    จะ render เมื่อกดแท็บเท่านั้น
-    */
 
   }catch(error){
 
