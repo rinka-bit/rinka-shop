@@ -1028,78 +1028,128 @@ function clearPaymentRequestId(){
 
 }
 
-
 async function paymentFetch(
   url,
   options = {},
   timeout =
-    PAYMENT_REQUEST_TIMEOUT
+    PAYMENT_REQUEST_TIMEOUT,
+  retryCount = 1
 ){
 
-  const controller =
-    new AbortController();
+  let lastError = null;
 
 
-  const timer =
-    setTimeout(
-      ()=>{
-        controller.abort();
-      },
-      timeout
-    );
+  for(
+    let attempt = 0;
+    attempt <= retryCount;
+    attempt++
+  ){
+
+    const controller =
+      new AbortController();
 
 
-  try{
+    const timer =
+      setTimeout(
+        ()=>{
+          controller.abort();
+        },
+        timeout
+      );
 
-    return await fetch(
-      url,
-      {
-        ...options,
 
-        signal:
-          controller.signal
+    try{
+
+      const response =
+        await fetch(
+          url,
+          {
+            ...options,
+
+            signal:
+              controller.signal
+          }
+        );
+
+
+      /*
+      Retry เฉพาะ server error
+
+      4xx ไม่ retry เพราะเป็น request
+      ที่มีปัญหาจริง
+      */
+
+      if(
+        response.status >= 500 &&
+        attempt < retryCount
+      ){
+
+        lastError =
+          new Error(
+            "HTTP " +
+            response.status
+          );
+
+
+        continue;
+
       }
-    );
 
-  }catch(error){
 
-    if(
-      error &&
-      error.name ===
-      "AbortError"
-    ){
+      return response;
 
-      throw new Error(
-        "การเชื่อมต่อใช้เวลานานกว่าปกติ กรุณารอสักครู่แล้วลองอีกครั้ง"
+
+    }catch(error){
+
+      lastError =
+        error;
+
+
+      /*
+      retry ได้เฉพาะเมื่อยังเหลือ attempt
+      */
+
+      if(
+        attempt >= retryCount
+      ){
+
+        if(
+          error &&
+          error.name ===
+          "AbortError"
+        ){
+
+          throw new Error(
+            "การเชื่อมต่อใช้เวลานานกว่าปกติ กรุณาลองอีกครั้ง"
+          );
+
+        }
+
+
+        throw error;
+
+      }
+
+
+    }finally{
+
+      clearTimeout(
+        timer
       );
 
     }
 
-
-    throw error;
-
-
-  }finally{
-
-    clearTimeout(
-      timer
-    );
-
   }
+
+
+  throw (
+    lastError ||
+    new Error(
+      "ไม่สามารถเชื่อมต่อระบบได้"
+    )
+  );
 
 }
-
-document.addEventListener(
-  "DOMContentLoaded",
-  ()=>{
-
-    renderPaymentSummary();
-    updatePaymentCartCount();
-    bindSlipInput();
-    loadBanks();
-
-  }
-);
 
 async function loadBanks(){
 
