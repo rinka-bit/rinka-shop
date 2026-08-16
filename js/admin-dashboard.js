@@ -396,3 +396,102 @@ async function loadTopFandoms(){
 
 }
 
+async function loadDashboardData(){
+
+  try{
+
+    const response =
+      await fetch(
+        API +
+        "?action=adminDashboard"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "โหลด Dashboard ไม่สำเร็จ"
+      );
+
+    }
+
+
+    /*
+    =========================================
+    STATS
+    =========================================
+    */
+
+    const stats =
+      result.stats || {};
+
+
+    renderDashboardStats(
+      stats
+    );
+
+
+    /*
+    =========================================
+    TOP PRODUCTS
+    =========================================
+    */
+
+    renderTopProducts(
+      Array.isArray(
+        result.topProducts
+      )
+        ? result.topProducts
+        : []
+    );
+
+
+    /*
+    =========================================
+    TOP FANDOMS
+    =========================================
+    */
+
+    renderTopFandoms(
+      Array.isArray(
+        result.topFandoms
+      )
+        ? result.topFandoms
+        : []
+    );
+
+
+    console.log(
+      "ADMIN DASHBOARD PROFILE:",
+      result.performance || {}
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "loadDashboardData error:",
+      error
+    );
+
+  }
+
+}
