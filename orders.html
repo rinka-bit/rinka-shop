@@ -676,7 +676,13 @@ function orderCard(o){
  const date=o.created_at?new Date(o.created_at).toLocaleDateString("th-TH",{year:"numeric",month:"short",day:"numeric"}):"-";
  const url="order.html?id="+encodeURIComponent(o.order_id||"");
  return `<article class="order-card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)">
- ${o.preview_image?`<img class="order-image" src="${attr(o.preview_image)}" alt="${attr(o.preview_name||"")}">`:`<div class="order-image" style="display:flex;align-items:center;justify-content:center">📦</div>`}
+${o.preview_image
+  ? `<img
+      class="order-image"
+      src="${attr(o.preview_image)}"
+      alt="${attr(o.preview_name||"")}"
+      loading="lazy"
+    >`:`<div class="order-image" style="display:flex;align-items:center;justify-content:center">📦</div>`}
  <div class="order-main"><div class="order-id">${esc(o.order_id||"-")}</div><div class="order-name">${esc(o.preview_name||"รายการสินค้า")}</div><div class="order-meta">${Number(o.item_count||0).toLocaleString("th-TH")} รายการ</div></div>
  <div class="order-side"><div><div class="order-total">฿${Number(o.total||0).toLocaleString("th-TH")}</div><div class="order-date">${date}</div></div><span class="badge ${statusClass(o.status)}">${statusText(o.status)}</span></div></article>`;
 }
