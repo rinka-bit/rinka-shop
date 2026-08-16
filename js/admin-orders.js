@@ -3832,3 +3832,1228 @@ async function shipShipmentAdmin(
 
 }
 
+/*
+=========================================
+ADMIN — SHIPPED ORDER ARCHIVE
+=========================================
+*/
+
+function getAdminArchiveOrderTime(
+  order
+){
+
+  if(!order){
+    return null;
+  }
+
+
+  /*
+  ใช้ shipped_at เป็นหลัก
+
+  ออเดอร์เก่าที่ shipped/completed
+  ก่อนเพิ่ม shipped_at:
+  fallback created_at ชั่วคราว
+  เพื่อไม่ให้หายจาก Archive
+  */
+
+  const rawValue =
+    order.shipped_at ||
+    order.created_at ||
+    "";
+
+
+  if(!rawValue){
+    return null;
+  }
+
+
+  const date =
+    new Date(
+      rawValue
+    );
+
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return null;
+
+  }
+
+
+  return date;
+
+}
+
+
+function normalizeAdminArchiveSearch(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .trim()
+    .replace(/^@+/, "")
+    .toLowerCase();
+
+}
+
+
+function matchesAdminArchiveSearch(
+  order
+){
+
+  const keyword =
+    normalizeAdminArchiveSearch(
+      adminShippedSearch
+    );
+
+
+  if(!keyword){
+
+    return true;
+
+  }
+
+
+  const values = [
+
+    order.order_id,
+
+    order.customer_name,
+
+    order.email,
+
+    order.phone,
+
+    order.social,
+
+    order.courier,
+
+    order.tracking_no
+
+  ];
+
+
+  return values.some(
+    value => {
+
+      return (
+        normalizeAdminArchiveSearch(
+          value
+        )
+          .includes(
+            keyword
+          )
+      );
+
+    }
+  );
+
+}
+
+
+function matchesAdminArchiveDate(
+  order
+){
+
+  if(
+    adminShippedDateFilter ===
+    "all"
+  ){
+
+    return true;
+
+  }
+
+
+  const date =
+    getAdminArchiveOrderTime(
+      order
+    );
+
+
+  if(!date){
+
+    return false;
+
+  }
+
+
+  const timestamp =
+    date.getTime();
+
+
+  const now =
+    new Date();
+
+
+  /*
+  =====================================
+  TODAY
+  =====================================
+  */
+
+  if(
+    adminShippedDateFilter ===
+    "today"
+  ){
+
+    return (
+      date.getFullYear() ===
+        now.getFullYear() &&
+
+      date.getMonth() ===
+        now.getMonth() &&
+
+      date.getDate() ===
+        now.getDate()
+    );
+
+  }
+
+
+  /*
+  =====================================
+  LAST 7 / 30 DAYS
+  =====================================
+  */
+
+  if(
+    adminShippedDateFilter ===
+      "7" ||
+    adminShippedDateFilter ===
+      "30"
+  ){
+
+    const days =
+      Number(
+        adminShippedDateFilter
+      );
+
+
+    const start =
+      new Date();
+
+
+    start.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+
+    start.setDate(
+      start.getDate() -
+      (
+        days - 1
+      )
+    );
+
+
+    return (
+      timestamp >=
+      start.getTime()
+    );
+
+  }
+
+
+  /*
+  =====================================
+  CUSTOM
+  =====================================
+  */
+
+  if(
+    adminShippedDateFilter ===
+    "custom"
+  ){
+
+    if(
+      adminShippedCustomStart
+    ){
+
+      const start =
+        new Date(
+          adminShippedCustomStart +
+          "T00:00:00"
+        );
+
+
+      if(
+        timestamp <
+        start.getTime()
+      ){
+
+        return false;
+
+      }
+
+    }
+
+
+    if(
+      adminShippedCustomEnd
+    ){
+
+      const end =
+        new Date(
+          adminShippedCustomEnd +
+          "T23:59:59.999"
+        );
+
+
+      if(
+        timestamp >
+        end.getTime()
+      ){
+
+        return false;
+
+      }
+
+    }
+
+
+    return true;
+
+  }
+
+
+  return true;
+
+}
+
+
+/*
+=========================================
+RENDER ARCHIVE
+=========================================
+*/
+
+function renderAdminShippedOrders(){
+
+  const box =
+    document.getElementById(
+      "shippedOrders"
+    );
+
+
+  if(!box){
+    return;
+  }
+
+
+  /*
+  ยังโหลด Orders ไม่เสร็จ
+  */
+
+  if(
+    !Array.isArray(
+      adminOrderBaseCache
+    )
+  ){
+
+    box.innerHTML = `
+
+<div class="card">
+⏳ กำลังโหลดออเดอร์...
+</div>
+
+`;
+
+    return;
+
+  }
+
+
+  const archivedOrders =
+    adminOrderBaseCache
+      .filter(
+        order =>
+          isAdminArchivedOrder(
+            order
+          )
+      );
+
+
+  const shippedCount =
+    archivedOrders.filter(
+      order =>
+
+        String(
+          order.status || ""
+        )
+          .trim()
+          .toLowerCase() ===
+        "shipped"
+
+    ).length;
+
+
+  const completedCount =
+    archivedOrders.filter(
+      order =>
+
+        String(
+          order.status || ""
+        )
+          .trim()
+          .toLowerCase() ===
+        "completed"
+
+    ).length;
+
+
+  const filteredOrders =
+    archivedOrders
+      .filter(
+        order =>
+          matchesAdminArchiveSearch(
+            order
+          )
+      )
+      .filter(
+        order =>
+          matchesAdminArchiveDate(
+            order
+          )
+      )
+      .sort(
+        (
+          first,
+          second
+        ) => {
+
+          const firstDate =
+            getAdminArchiveOrderTime(
+              first
+            );
+
+          const secondDate =
+            getAdminArchiveOrderTime(
+              second
+            );
+
+
+          return (
+            (
+              secondDate
+                ? secondDate.getTime()
+                : 0
+            )
+            -
+            (
+              firstDate
+                ? firstDate.getTime()
+                : 0
+            )
+          );
+
+        }
+      );
+
+
+  box.innerHTML = `
+
+<div
+class="card"
+>
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:16px;
+"
+>
+
+<div>
+
+<h3
+style="
+margin:0 0 5px;
+"
+>
+📦 ประวัติออเดอร์ที่จัดส่งแล้ว
+</h3>
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+"
+>
+ออเดอร์ที่ส่งเกิน 3 วัน และออเดอร์ Completed
+</div>
+
+</div>
+
+
+<button
+type="button"
+onclick="loadOrders()"
+style="
+width:auto;
+background:#64748b;
+"
+>
+🔄 รีเฟรช
+</button>
+
+</div>
+
+
+<div
+class="grid"
+style="
+margin-bottom:16px;
+"
+>
+
+<div
+style="
+padding:12px;
+border:1px solid #dbeafe;
+border-radius:12px;
+background:#f8fbff;
+"
+>
+
+<div
+style="
+font-size:12px;
+color:#64748b;
+"
+>
+จัดส่งแล้ว
+</div>
+
+<div
+style="
+font-size:22px;
+font-weight:700;
+"
+>
+${shippedCount}
+</div>
+
+</div>
+
+
+<div
+style="
+padding:12px;
+border:1px solid #dcfce7;
+border-radius:12px;
+background:#f0fdf4;
+"
+>
+
+<div
+style="
+font-size:12px;
+color:#64748b;
+"
+>
+Completed
+</div>
+
+<div
+style="
+font-size:22px;
+font-weight:700;
+"
+>
+${completedCount}
+</div>
+
+</div>
+
+</div>
+
+
+<div
+style="
+display:grid;
+grid-template-columns:
+minmax(220px,2fr)
+minmax(160px,1fr);
+gap:12px;
+margin-bottom:12px;
+"
+>
+
+<div>
+
+<label>
+ค้นหา
+</label>
+
+<input
+id="adminShippedSearchInput"
+value="${escapeAdminOrderHtml(
+  adminShippedSearch
+)}"
+placeholder="Order ID / Twitter / Tracking / ชื่อลูกค้า"
+oninput="
+setAdminShippedSearch(
+  this.value
+)
+"
+>
+
+</div>
+
+
+<div>
+
+<label>
+ช่วงเวลา
+</label>
+
+<select
+id="adminShippedDateFilter"
+onchange="
+setAdminShippedDateFilter(
+  this.value
+)
+"
+>
+
+<option
+value="today"
+${
+  adminShippedDateFilter ===
+    "today"
+    ? "selected"
+    : ""
+}
+>
+วันนี้
+</option>
+
+<option
+value="7"
+${
+  adminShippedDateFilter ===
+    "7"
+    ? "selected"
+    : ""
+}
+>
+7 วันล่าสุด
+</option>
+
+<option
+value="30"
+${
+  adminShippedDateFilter ===
+    "30"
+    ? "selected"
+    : ""
+}
+>
+30 วันล่าสุด
+</option>
+
+<option
+value="all"
+${
+  adminShippedDateFilter ===
+    "all"
+    ? "selected"
+    : ""
+}
+>
+ทั้งหมด
+</option>
+
+<option
+value="custom"
+${
+  adminShippedDateFilter ===
+    "custom"
+    ? "selected"
+    : ""
+}
+>
+กำหนดเอง
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+${
+  adminShippedDateFilter ===
+  "custom"
+
+    ? `
+
+<div
+style="
+display:grid;
+grid-template-columns:
+repeat(2,minmax(160px,1fr));
+gap:12px;
+margin-bottom:14px;
+"
+>
+
+<div>
+
+<label>
+จากวันที่
+</label>
+
+<input
+type="date"
+value="${escapeAdminOrderHtml(
+  adminShippedCustomStart
+)}"
+onchange="
+setAdminShippedCustomStart(
+  this.value
+)
+"
+>
+
+</div>
+
+
+<div>
+
+<label>
+ถึงวันที่
+</label>
+
+<input
+type="date"
+value="${escapeAdminOrderHtml(
+  adminShippedCustomEnd
+)}"
+onchange="
+setAdminShippedCustomEnd(
+  this.value
+)
+"
+>
+
+</div>
+
+</div>
+
+`
+
+    : ""
+}
+
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+"
+>
+
+แสดง
+<b>
+${filteredOrders.length}
+</b>
+จาก
+<b>
+${archivedOrders.length}
+</b>
+ออเดอร์
+
+</div>
+
+</div>
+
+
+<div>
+
+${
+  filteredOrders.length
+
+    ? filteredOrders
+        .map(
+          order =>
+            renderAdminShippedOrderCard(
+              order
+            )
+        )
+        .join("")
+
+    : `
+
+<div class="card">
+
+<div
+style="
+text-align:center;
+padding:22px;
+color:#64748b;
+"
+>
+
+📭 ไม่พบออเดอร์ที่ตรงกับเงื่อนไข
+
+</div>
+
+</div>
+
+`
+}
+
+</div>
+
+`;
+
+}
+
+function setAdminShippedSearch(
+  value
+){
+
+  adminShippedSearch =
+    String(
+      value || ""
+    );
+
+
+  renderAdminShippedOrders();
+
+
+  /*
+  คืน focus ให้ช่องค้นหา
+  หลัง render ใหม่
+  */
+
+  const input =
+    document.getElementById(
+      "adminShippedSearchInput"
+    );
+
+
+  if(input){
+
+    input.focus();
+
+    const length =
+      input.value.length;
+
+    input.setSelectionRange(
+      length,
+      length
+    );
+
+  }
+
+}
+
+
+function setAdminShippedDateFilter(
+  value
+){
+
+  adminShippedDateFilter =
+    String(
+      value || "30"
+    );
+
+
+  renderAdminShippedOrders();
+
+}
+
+
+function setAdminShippedCustomStart(
+  value
+){
+
+  adminShippedCustomStart =
+    String(
+      value || ""
+    );
+
+
+  renderAdminShippedOrders();
+
+}
+
+
+function setAdminShippedCustomEnd(
+  value
+){
+
+  adminShippedCustomEnd =
+    String(
+      value || ""
+    );
+
+
+  renderAdminShippedOrders();
+
+}
+
+/*
+=========================================
+ARCHIVE ORDER CARD
+=========================================
+*/
+
+function renderAdminShippedOrderCard(
+  order
+){
+
+  const orderId =
+    String(
+      order.order_id || ""
+    ).trim();
+
+
+  const status =
+    String(
+      order.status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const customerName =
+    String(
+      order.customer_name || "-"
+    ).trim();
+
+
+  const socialRaw =
+    String(
+      order.social || ""
+    ).trim();
+
+
+  const social =
+    socialRaw
+      ? (
+          "@" +
+          socialRaw
+            .replace(/^@+/, "")
+        )
+      : "-";
+
+
+  const courier =
+    String(
+      order.courier || "-"
+    ).trim();
+
+
+  const trackingNo =
+    String(
+      order.tracking_no || "-"
+    ).trim();
+
+
+  const total =
+    Number(
+      order.total || 0
+    );
+
+
+  const archiveDate =
+    getAdminArchiveOrderTime(
+      order
+    );
+
+
+  const archiveDateText =
+    archiveDate
+      ? formatAdminOrderDate(
+          archiveDate
+        )
+      : "-";
+
+
+  const hasRealShippedAt =
+    Boolean(
+      order.shipped_at
+    );
+
+
+  const statusHtml =
+    status ===
+    "completed"
+
+      ? `
+
+<span
+style="
+display:inline-block;
+padding:5px 9px;
+border-radius:999px;
+background:#dcfce7;
+color:#166534;
+font-size:12px;
+font-weight:700;
+"
+>
+✅ Completed
+</span>
+
+`
+
+      : `
+
+<span
+style="
+display:inline-block;
+padding:5px 9px;
+border-radius:999px;
+background:#dbeafe;
+color:#1d4ed8;
+font-size:12px;
+font-weight:700;
+"
+>
+🚚 จัดส่งแล้ว
+</span>
+
+`;
+
+
+  return `
+
+<div
+class="order-card"
+style="
+margin-bottom:14px;
+"
+>
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+flex-wrap:wrap;
+"
+>
+
+<div>
+
+<h3
+style="
+margin:0 0 6px;
+"
+>
+
+📦
+${escapeAdminOrderHtml(
+  orderId
+)}
+
+</h3>
+
+${statusHtml}
+
+</div>
+
+
+<div
+style="
+font-size:20px;
+font-weight:700;
+color:#2563eb;
+"
+>
+
+฿${total.toLocaleString(
+  "th-TH",
+  {
+    maximumFractionDigits:2
+  }
+)}
+
+</div>
+
+</div>
+
+
+<hr
+style="
+border:none;
+border-top:1px solid #e5e7eb;
+margin:14px 0;
+"
+>
+
+
+<div
+class="grid"
+style="
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+"
+>
+
+
+<div>
+
+<b>
+👤 ลูกค้า
+</b>
+
+<div
+style="
+margin-top:4px;
+"
+>
+${escapeAdminOrderHtml(
+  customerName
+)}
+</div>
+
+</div>
+
+
+<div>
+
+<b>
+💬 Twitter / X
+</b>
+
+<div
+style="
+margin-top:4px;
+"
+>
+${escapeAdminOrderHtml(
+  social
+)}
+</div>
+
+</div>
+
+
+<div>
+
+<b>
+🚚 บริษัทขนส่ง
+</b>
+
+<div
+style="
+margin-top:4px;
+"
+>
+${escapeAdminOrderHtml(
+  courier
+)}
+</div>
+
+</div>
+
+
+<div>
+
+<b>
+🔎 Tracking
+</b>
+
+<div
+style="
+margin-top:4px;
+word-break:break-all;
+"
+>
+${escapeAdminOrderHtml(
+  trackingNo
+)}
+</div>
+
+</div>
+
+
+<div>
+
+<b>
+📅 วันที่จัดส่ง
+</b>
+
+<div
+style="
+margin-top:4px;
+"
+>
+
+${escapeAdminOrderHtml(
+  archiveDateText
+)}
+
+</div>
+
+${
+  !hasRealShippedAt
+
+    ? `
+
+<div
+style="
+margin-top:3px;
+font-size:11px;
+color:#94a3b8;
+"
+>
+ข้อมูลเก่า — ใช้วันที่สร้างออเดอร์ชั่วคราว
+</div>
+
+`
+
+    : ""
+}
+
+</div>
+
+
+<div>
+
+<b>
+📧 อีเมล
+</b>
+
+<div
+style="
+margin-top:4px;
+word-break:break-word;
+"
+>
+${escapeAdminOrderHtml(
+  order.email || "-"
+)}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
