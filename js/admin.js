@@ -249,16 +249,21 @@ async function loadAdminTabData(
     }
 
 
-    /*
-    =========================================
-    PRODUCTS
-    =========================================
-    */
+   /*
+=========================================
+PRODUCTS
+=========================================
+*/
 
- if(
+if(
   tab ===
   "products"
 ){
+
+  /*
+  Product Manager ใช้ Collections
+  ทั้งหน้าเพิ่มสินค้า + filter
+  */
 
   if(
     !Array.isArray(
@@ -294,7 +299,6 @@ async function loadAdminTabData(
   return;
 
 }
-
     /*
     =========================================
     COLLECTIONS
