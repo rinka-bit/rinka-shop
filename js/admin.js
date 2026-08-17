@@ -179,6 +179,15 @@ function showAdminTab(
   loadAdminTabData(
     tab
   )
+
+    if(
+  window.innerWidth <= 700
+){
+
+  closeAdminSidebar();
+
+}
+      
     .catch(
       error => {
 
@@ -665,5 +674,51 @@ async function reloadAdminTab(
   await loadAdminTabData(
     tab
   );
+
+}
+
+function toggleAdminSidebar(){
+
+  const sidebar =
+    document.getElementById(
+      "adminSidebar"
+    );
+
+  const overlay =
+    document.getElementById(
+      "adminSidebarOverlay"
+    );
+
+
+  sidebar?.classList.toggle(
+    "open"
+  );
+
+
+  overlay?.classList.toggle(
+    "show"
+  );
+
+}
+
+
+function closeAdminSidebar(){
+
+  document
+    .getElementById(
+      "adminSidebar"
+    )
+    ?.classList.remove(
+      "open"
+    );
+
+
+  document
+    .getElementById(
+      "adminSidebarOverlay"
+    )
+    ?.classList.remove(
+      "show"
+    );
 
 }
