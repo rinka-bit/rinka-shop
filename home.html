@@ -668,6 +668,38 @@ function getDeadlineText(deadline){
 function createProductCard(product){
   const price = Number(product.final_price ?? product.price ?? 0);
   const oldPrice = Number(product.old_price ?? product.price ?? 0);
+  const priceMode =
+  String(
+    product.price_mode ||
+    "fixed"
+  );
+
+
+const minPrice =
+  Number(
+    product.min_price ??
+    price
+  );
+
+
+const maxPrice =
+  Number(
+    product.max_price ??
+    minPrice
+  );
+
+
+const priceRangeHtml =
+  priceMode === "option"
+    ? (
+        minPrice === maxPrice
+          ? `฿${minPrice.toLocaleString("th-TH")}`
+          : (
+              `฿${minPrice.toLocaleString("th-TH")}` +
+              `–฿${maxPrice.toLocaleString("th-TH")}`
+            )
+      )
+    : "";
   const deadlineText = getDeadlineText(product.preorder_deadline);
   const productId = encodeURIComponent(String(product.product_id || ""));
   const url = `product.html?id=${productId}`;
@@ -686,12 +718,33 @@ function createProductCard(product){
       <div class="card-body">
         <h3>${homeEscape(product.name || "")}</h3>
         <p class="fandom">${homeEscape(product.fandom || "")}</p>
-        <div class="price-box">
-          ${homeBool(product.on_sale)
-            ? `<div class="sale-price">฿${price.toLocaleString("th-TH")}</div><div class="old-price">฿${oldPrice.toLocaleString("th-TH")}</div>`
-            : `<div class="normal-price">฿${price.toLocaleString("th-TH")}</div>`
-          }
+      <div class="price-box">
+
+  ${
+    priceMode === "option"
+      ? `
+        <div class="normal-price">
+          ${priceRangeHtml}
         </div>
+      `
+      : homeBool(product.on_sale)
+        ? `
+          <div class="sale-price">
+            ฿${price.toLocaleString("th-TH")}
+          </div>
+
+          <div class="old-price">
+            ฿${oldPrice.toLocaleString("th-TH")}
+          </div>
+        `
+        : `
+          <div class="normal-price">
+            ฿${price.toLocaleString("th-TH")}
+          </div>
+        `
+  }
+
+</div>
         ${deadlineText ? `<div class="deadline">${homeEscape(deadlineText)}</div>` : ""}
       </div>
     </div>
