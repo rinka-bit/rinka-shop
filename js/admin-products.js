@@ -16,13 +16,49 @@ function renderProductManager(){
 </div>
 
 <div>
+<label>รูปแบบราคา</label>
+
+<select
+id="p_price_mode"
+onchange="updateCreateProductPricingUI()"
+>
+<option value="fixed">
+ราคาเดียว
+</option>
+
+<option value="option">
+หลายราคา ตามตัวเลือก
+</option>
+</select>
+
+</div>
+
+
+<div
+id="p_fixed_price_fields"
+style="
+display:contents;
+"
+>
+
+<div>
 <label>ราคา</label>
-<input id="p_price" type="number" placeholder="ราคา">
+<input
+id="p_price"
+type="number"
+min="0"
+step="0.01"
+placeholder="ราคา">
 </div>
 
 <div>
 <label>ราคาลด</label>
-<input id="p_sale_price" type="number" placeholder="ราคาลด">
+<input
+id="p_sale_price"
+type="number"
+min="0"
+step="0.01"
+placeholder="ราคาลด">
 </div>
 
 <div>
@@ -37,6 +73,31 @@ type="date">
 <input
 id="p_sale_end"
 type="date">
+</div>
+
+</div>
+
+
+<div
+id="p_option_price_notice"
+class="full"
+style="
+display:none;
+padding:12px 14px;
+border-radius:12px;
+background:#f5f3ff;
+color:#6d28d9;
+"
+>
+
+💡 สินค้านี้ใช้ราคาตามตัวเลือก
+
+<br>
+
+หลังสร้างสินค้าแล้ว
+ให้ไปกำหนดราคาแต่ละตัวเลือกใน
+<b>Product Options</b>
+
 </div>
 
 <div>
@@ -236,179 +297,689 @@ onchange="renderAdminProductList()">
 
 }
 
-async function saveProductFromAdmin(){
-  const btn =
-    document.getElementById("saveProductBtn");
+function updateCreateProductPricingUI(){
 
-  const loading =
-    document.getElementById("saveProductLoading");
+  const mode =
+    document
+      .getElementById(
+        "p_price_mode"
+      )
+      ?.value ||
+    "fixed";
 
-  const payload = {
-    name: document.getElementById("p_name").value,
-    price: Number(document.getElementById("p_price").value || 0),
-    sale_price: Number(document.getElementById("p_sale_price").value || 0),
-    sale_start:
-  document.getElementById(
-    "p_sale_start"
-  ).value,
 
-sale_end:
-  document.getElementById(
-    "p_sale_end"
-  ).value,
-    main_category: document.getElementById("p_main_category").value,
-    fandom: document.getElementById("p_fandom").value,
-    sub_category: document.getElementById("p_sub_category").value,
-    round:
-  document.getElementById(
-    "p_round"
-  ).value,
+  const fixedFields =
+    document.getElementById(
+      "p_fixed_price_fields"
+    );
 
-collection_id:
-  document.getElementById(
-    "p_collection_id"
-  ).value,
-    description: document.getElementById("p_description").value,
-    product_type: document.getElementById("p_product_type").value,
-    stock: Number(document.getElementById("p_stock").value || 0),
-    preorder_deadline: document.getElementById("p_preorder_deadline").value,
-    estimated_arrival: document.getElementById("p_estimated_arrival").value,
-    featured: document.getElementById("p_featured").checked ? "yes" : "",
-    new_arrival: document.getElementById("p_new_arrival").checked ? "yes" : "",
-    status: "active"
-  };
 
-  if(!payload.name){
-    alert("กรุณากรอกชื่อสินค้า");
-    return;
-  }
+  const optionNotice =
+    document.getElementById(
+      "p_option_price_notice"
+    );
 
-  if(!payload.price){
-    alert("กรุณากรอกราคา");
-    return;
-  }
 
   if(
-  payload.sale_price > 0 &&
-  (
-    !payload.sale_start ||
-    !payload.sale_end
-  )
-){
-  alert(
-    "กรุณากรอกวันเริ่มและวันสิ้นสุดลดราคา"
-  );
-  return;
+    mode === "option"
+  ){
+
+    if(fixedFields){
+      fixedFields.style.display =
+        "none";
+    }
+
+    if(optionNotice){
+      optionNotice.style.display =
+        "block";
+    }
+
+  }else{
+
+    if(fixedFields){
+      fixedFields.style.display =
+        "contents";
+    }
+
+    if(optionNotice){
+      optionNotice.style.display =
+        "none";
+    }
+
+  }
+
 }
 
-if(
-  payload.sale_start &&
-  payload.sale_end &&
-  payload.sale_start >
-  payload.sale_end
-){
-  alert(
-    "วันเริ่มลดราคาต้องไม่เกินวันสิ้นสุด"
-  );
-  return;
-}
+async function saveProductFromAdmin(){
+
+  const btn =
+    document.getElementById(
+      "saveProductBtn"
+    );
+
+
+  const loading =
+    document.getElementById(
+      "saveProductLoading"
+    );
+
+
+  /*
+  =========================================
+  PRICE MODE
+  =========================================
+  */
+
+  const priceMode =
+    document
+      .getElementById(
+        "p_price_mode"
+      )
+      ?.value ||
+    "fixed";
+
+
+  /*
+  =========================================
+  PAYLOAD
+  =========================================
+  */
+
+  const payload = {
+
+    name:
+      document
+        .getElementById(
+          "p_name"
+        )
+        .value
+        .trim(),
+
+
+    price_mode:
+      priceMode,
+
+
+    /*
+    fixed = ใช้ Products.price
+
+    option = ราคาจริงจะกำหนด
+    ใน Product Options
+    */
+
+    price:
+      priceMode === "fixed"
+        ? Number(
+            document
+              .getElementById(
+                "p_price"
+              )
+              .value || 0
+          )
+        : 0,
+
+
+    /*
+    Sale ใช้เฉพาะ fixed mode
+    */
+
+    sale_price:
+      priceMode === "fixed"
+        ? Number(
+            document
+              .getElementById(
+                "p_sale_price"
+              )
+              .value || 0
+          )
+        : 0,
+
+
+    sale_start:
+      priceMode === "fixed"
+        ? document
+            .getElementById(
+              "p_sale_start"
+            )
+            .value
+        : "",
+
+
+    sale_end:
+      priceMode === "fixed"
+        ? document
+            .getElementById(
+              "p_sale_end"
+            )
+            .value
+        : "",
+
+
+    main_category:
+      document
+        .getElementById(
+          "p_main_category"
+        )
+        .value
+        .trim(),
+
+
+    fandom:
+      document
+        .getElementById(
+          "p_fandom"
+        )
+        .value
+        .trim(),
+
+
+    sub_category:
+      document
+        .getElementById(
+          "p_sub_category"
+        )
+        .value
+        .trim(),
+
+
+    round:
+      document
+        .getElementById(
+          "p_round"
+        )
+        .value
+        .trim(),
+
+
+    collection_id:
+      document
+        .getElementById(
+          "p_collection_id"
+        )
+        .value,
+
+
+    description:
+      document
+        .getElementById(
+          "p_description"
+        )
+        .value,
+
+
+    product_type:
+      document
+        .getElementById(
+          "p_product_type"
+        )
+        .value,
+
+
+    stock:
+      Number(
+        document
+          .getElementById(
+            "p_stock"
+          )
+          .value || 0
+      ),
+
+
+    preorder_deadline:
+      document
+        .getElementById(
+          "p_preorder_deadline"
+        )
+        .value,
+
+
+    estimated_arrival:
+      document
+        .getElementById(
+          "p_estimated_arrival"
+        )
+        .value
+        .trim(),
+
+
+    featured:
+      document
+        .getElementById(
+          "p_featured"
+        )
+        .checked
+          ? "yes"
+          : "",
+
+
+    new_arrival:
+      document
+        .getElementById(
+          "p_new_arrival"
+        )
+        .checked
+          ? "yes"
+          : "",
+
+
+    status:
+      "active"
+
+  };
+
+
+  /*
+  =========================================
+  VALIDATION — NAME
+  =========================================
+  */
+
+  if(
+    !payload.name
+  ){
+
+    alert(
+      "กรุณากรอกชื่อสินค้า"
+    );
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  VALIDATION — FIXED PRICE
+  =========================================
+  */
+
+  if(
+    payload.price_mode ===
+      "fixed" &&
+    (
+      !Number.isFinite(
+        payload.price
+      ) ||
+      payload.price <= 0
+    )
+  ){
+
+    alert(
+      "กรุณากรอกราคา"
+    );
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  VALIDATION — STOCK
+  =========================================
+  */
+
+  if(
+    !Number.isFinite(
+      payload.stock
+    ) ||
+    payload.stock < 0
+  ){
+
+    alert(
+      "จำนวนสต็อกต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
+    );
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  VALIDATION — SALE
+  =========================================
+  */
+
+  if(
+    payload.price_mode ===
+      "fixed" &&
+    payload.sale_price > 0 &&
+    (
+      !payload.sale_start ||
+      !payload.sale_end
+    )
+  ){
+
+    alert(
+      "กรุณากรอกวันเริ่มและวันสิ้นสุดลดราคา"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    payload.price_mode ===
+      "fixed" &&
+    payload.sale_start &&
+    payload.sale_end &&
+    payload.sale_start >
+      payload.sale_end
+  ){
+
+    alert(
+      "วันเริ่มลดราคาต้องไม่เกินวันสิ้นสุด"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    payload.price_mode ===
+      "fixed" &&
+    (
+      !Number.isFinite(
+        payload.sale_price
+      ) ||
+      payload.sale_price < 0
+    )
+  ){
+
+    alert(
+      "ราคาลดต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
+    );
+
+    return;
+
+  }
+
+
+  /*
+  ราคาลดไม่ควรเท่ากับ
+  หรือมากกว่าราคาปกติ
+  */
+
+  if(
+    payload.price_mode ===
+      "fixed" &&
+    payload.sale_price > 0 &&
+    payload.sale_price >=
+      payload.price
+  ){
+
+    alert(
+      "ราคาลดต้องน้อยกว่าราคาปกติ"
+    );
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  IMAGE FILES
+  =========================================
+  */
 
   const imageFile =
-  document.getElementById("p_image_file").files[0];
+    document
+      .getElementById(
+        "p_image_file"
+      )
+      .files[0];
 
-const image2File =
-  document.getElementById("p_image2_file").files[0];
 
-const image3File =
-  document.getElementById("p_image3_file").files[0];
+  const image2File =
+    document
+      .getElementById(
+        "p_image2_file"
+      )
+      .files[0];
 
-const image4File =
-  document.getElementById("p_image4_file").files[0];
 
-if(imageFile){
-  payload.image_base64 =
-    await fileToBase64(imageFile);
-}
+  const image3File =
+    document
+      .getElementById(
+        "p_image3_file"
+      )
+      .files[0];
 
-if(image2File){
-  payload.image2_base64 =
-    await fileToBase64(image2File);
-}
 
-if(image3File){
-  payload.image3_base64 =
-    await fileToBase64(image3File);
-}
+  const image4File =
+    document
+      .getElementById(
+        "p_image4_file"
+      )
+      .files[0];
 
-if(image4File){
-  payload.image4_base64 =
-    await fileToBase64(image4File);
-}
 
-  btn.disabled = true;
-  btn.textContent = "กำลังบันทึก...";
-  loading.style.display = "block";
+  /*
+  =========================================
+  LOCK UI
+  =========================================
+  */
+
+  if(btn){
+
+    btn.disabled =
+      true;
+
+    btn.textContent =
+      "กำลังบันทึก...";
+
+  }
+
+
+  if(loading){
+
+    loading.style.display =
+      "block";
+
+  }
+
 
   try{
 
+    /*
+    =========================================
+    CONVERT IMAGES
+
+    ทำหลัง validation
+    จะได้ไม่เสียเวลาแปลงรูป
+    ถ้าฟอร์มไม่ผ่าน
+    =========================================
+    */
+
+    if(imageFile){
+
+      payload.image_base64 =
+        await fileToBase64(
+          imageFile
+        );
+
+    }
+
+
+    if(image2File){
+
+      payload.image2_base64 =
+        await fileToBase64(
+          image2File
+        );
+
+    }
+
+
+    if(image3File){
+
+      payload.image3_base64 =
+        await fileToBase64(
+          image3File
+        );
+
+    }
+
+
+    if(image4File){
+
+      payload.image4_base64 =
+        await fileToBase64(
+          image4File
+        );
+
+    }
+
+
+    /*
+    =========================================
+    REQUEST
+    =========================================
+    */
+
     const formData =
       new FormData();
+
 
     formData.append(
       "action",
       "saveProduct"
     );
 
+
     formData.append(
       "payload",
-      JSON.stringify(payload)
+      JSON.stringify(
+        payload
+      )
     );
+
 
     const response =
       await fetch(
         API,
         {
-          method:"POST",
-          body:formData
+
+          method:
+            "POST",
+
+          body:
+            formData
+
         }
       );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
 
     const result =
       await response.json();
 
+
+    if(
+      !result ||
+      result.success !==
+        true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "เพิ่มสินค้าไม่สำเร็จ"
+      );
+
+    }
+
+
+    /*
+    =========================================
+    SUCCESS
+    =========================================
+    */
+
     alert(
-      result.success
-        ? "เพิ่มสินค้าแล้ว: " + result.product_id
-        : result.error || "เพิ่มสินค้าไม่สำเร็จ"
+      "เพิ่มสินค้าแล้ว: " +
+      result.product_id
     );
-if(result.success){
 
-  renderProductManager();
 
-  await loadAdminProducts();
+    /*
+    reset form
+    */
 
-}
+    renderProductManager();
+
+
+    /*
+    โหลดรายการใหม่
+    */
+
+    await loadAdminProducts();
+
 
   }catch(error){
 
-    console.error(error);
-    alert("เกิดข้อผิดพลาด กรุณาลองใหม่");
+    console.error(
+      "saveProductFromAdmin error:",
+      error
+    );
+
+
+    alert(
+      error?.message ||
+      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+    );
+
 
   }finally{
 
+    /*
+    renderProductManager()
+    อาจสร้างปุ่มใหม่ไปแล้ว
+    จึงต้องหา element ใหม่
+    */
+
     const newBtn =
-      document.getElementById("saveProductBtn");
+      document.getElementById(
+        "saveProductBtn"
+      );
+
 
     const newLoading =
-      document.getElementById("saveProductLoading");
+      document.getElementById(
+        "saveProductLoading"
+      );
+
 
     if(newBtn){
-      newBtn.disabled = false;
-      newBtn.textContent = "บันทึกสินค้า";
+
+      newBtn.disabled =
+        false;
+
+      newBtn.textContent =
+        "บันทึกสินค้า";
+
     }
 
+
     if(newLoading){
-      newLoading.style.display = "none";
+
+      newLoading.style.display =
+        "none";
+
     }
 
   }
@@ -647,7 +1218,12 @@ ${getProductOptionCount(product)}
 </p>
 
 <p>
-💰 <b>${product.price || 0}</b> บาท
+💰
+${
+  product.price_mode === "option"
+    ? `<b>ราคาตามตัวเลือก</b>`
+    : `<b>${product.price || 0}</b> บาท`
+}
 </p>
 
 <p>
@@ -831,10 +1407,64 @@ value="${escapeHtml(product.name || "")}">
 </div>
 
 <div>
+
+<label>รูปแบบราคา</label>
+
+<select
+id="e_price_mode"
+onchange="updateEditProductPricingUI()"
+>
+
+<option
+value="fixed"
+${
+  (
+    product.price_mode ||
+    "fixed"
+  ) === "fixed"
+    ? "selected"
+    : ""
+}
+>
+ราคาเดียว
+</option>
+
+<option
+value="option"
+${
+  product.price_mode ===
+  "option"
+    ? "selected"
+    : ""
+}
+>
+หลายราคา ตามตัวเลือก
+</option>
+
+</select>
+
+</div>
+
+
+<div
+id="e_fixed_price_fields"
+style="
+display:
+${
+  product.price_mode === "option"
+    ? "none"
+    : "contents"
+};
+"
+>
+
+<div>
 <label>ราคา</label>
 <input
 id="e_price"
 type="number"
+min="0"
+step="0.01"
 value="${product.price || 0}">
 </div>
 
@@ -843,6 +1473,8 @@ value="${product.price || 0}">
 <input
 id="e_sale_price"
 type="number"
+min="0"
+step="0.01"
 value="${product.sale_price || 0}">
 </div>
 
@@ -864,6 +1496,31 @@ type="date"
 value="${formatDateInput(
   product.sale_end
 )}">
+</div>
+
+</div>
+
+
+<div
+id="e_option_price_notice"
+class="full"
+style="
+display:
+${
+  product.price_mode === "option"
+    ? "block"
+    : "none"
+};
+padding:12px 14px;
+border-radius:12px;
+background:#f5f3ff;
+color:#6d28d9;
+"
+>
+
+💡 ราคาของสินค้านี้กำหนดจาก
+Product Options
+
 </div>
 
 <div>
@@ -1043,6 +1700,59 @@ ${isCheckedValue(product.new_arrival) ? "checked" : ""}>
 
 }
 
+function updateEditProductPricingUI(){
+
+  const mode =
+    document
+      .getElementById(
+        "e_price_mode"
+      )
+      ?.value ||
+    "fixed";
+
+
+  const fixedFields =
+    document.getElementById(
+      "e_fixed_price_fields"
+    );
+
+
+  const optionNotice =
+    document.getElementById(
+      "e_option_price_notice"
+    );
+
+
+  if(
+    mode === "option"
+  ){
+
+    if(fixedFields){
+      fixedFields.style.display =
+        "none";
+    }
+
+    if(optionNotice){
+      optionNotice.style.display =
+        "block";
+    }
+
+  }else{
+
+    if(fixedFields){
+      fixedFields.style.display =
+        "contents";
+    }
+
+    if(optionNotice){
+      optionNotice.style.display =
+        "none";
+    }
+
+  }
+
+}
+
 function closeEditProductModal(){
 
   document
@@ -1063,6 +1773,14 @@ async function submitProductEdit(){
       "updateProductLoading"
     );
 
+  const priceMode =
+  document
+    .getElementById(
+      "e_price_mode"
+    )
+    ?.value ||
+  "fixed";
+
   const payload = {
 
     product_id:
@@ -1076,32 +1794,47 @@ async function submitProductEdit(){
       ).value.trim(),
 
     price:
-      Number(
-        document.getElementById(
-          "e_price"
-        ).value || 0
-      ),
+  priceMode === "fixed"
+    ? Number(
+        document
+          .getElementById(
+            "e_price"
+          )
+          .value || 0
+      )
+    : 0,
+
+    price_mode:
+  priceMode,
 
     sale_price:
-      Number(
-        document.getElementById(
-          "e_sale_price"
-        ).value || 0
-      ),
+  priceMode === "fixed"
+    ? Number(
+        document
+          .getElementById(
+            "e_sale_price"
+          )
+          .value || 0
+      )
+    : 0,
 
     sale_start:
-  document
-    .getElementById(
-      "e_sale_start"
-    )
-    .value,
+  priceMode === "fixed"
+    ? document
+        .getElementById(
+          "e_sale_start"
+        )
+        .value
+    : "",
 
 sale_end:
-  document
-    .getElementById(
-      "e_sale_end"
-    )
-    .value,
+  priceMode === "fixed"
+    ? document
+        .getElementById(
+          "e_sale_end"
+        )
+        .value
+    : "",
 
     main_category:
       document.getElementById(
@@ -1178,10 +1911,24 @@ sale_end:
     return;
   }
 
-  if(!payload.price){
-    alert("กรุณากรอกราคา");
-    return;
-  }
+ if(
+  payload.price_mode ===
+    "fixed" &&
+  (
+    !Number.isFinite(
+      payload.price
+    ) ||
+    payload.price <= 0
+  )
+){
+
+  alert(
+    "กรุณากรอกราคา"
+  );
+
+  return;
+
+}
 
   if(
   payload.sale_price > 0 &&
