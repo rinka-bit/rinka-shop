@@ -1160,22 +1160,48 @@ function createCollectionProductCard(
   product
 ){
 
-  const price =
-    getCollectionProductPrice(
-      product
-    );
+  const priceMode =
+  String(
+    product.price_mode ||
+    "fixed"
+  )
+    .trim()
+    .toLowerCase();
 
-  const oldPrice =
-    Number(
-      product.old_price ??
-      product.price ??
-      0
-    );
 
-  const onSale =
-    normalizeCollectionBool(
-      product.on_sale
-    );
+const price =
+  getCollectionProductPrice(
+    product
+  );
+
+
+const minPrice =
+  Number(
+    product.min_price ??
+    price
+  );
+
+
+const maxPrice =
+  Number(
+    product.max_price ??
+    minPrice
+  );
+
+
+const oldPrice =
+  Number(
+    product.old_price ??
+    product.price ??
+    0
+  );
+
+
+const onSale =
+  priceMode !== "option" &&
+  normalizeCollectionBool(
+    product.on_sale
+  );
 
   const type =
     String(
@@ -1281,31 +1307,65 @@ loading="lazy">
         : ""
     }
 
-    <div class="collection-price-box">
+  <div class="collection-price-box">
 
-      ${
-        onSale
-          ? `
+  ${
+    priceMode === "option"
+      ? `
+
+<div class="collection-normal-price">
+
+  ${
+    minPrice > 0 ||
+    maxPrice > 0
+      ? (
+          minPrice === maxPrice
+            ? `฿${minPrice.toLocaleString(
+                "th-TH"
+              )}`
+            : (
+                `฿${minPrice.toLocaleString(
+                  "th-TH"
+                )}` +
+                `–฿${maxPrice.toLocaleString(
+                  "th-TH"
+                )}`
+              )
+        )
+      : "รอกำหนดราคา"
+  }
+
+</div>
+
+`
+      : onSale
+        ? `
 
 <div class="collection-sale-price">
-  ฿${price.toLocaleString("th-TH")}
+  ฿${price.toLocaleString(
+    "th-TH"
+  )}
 </div>
 
 <div class="collection-old-price">
-  ฿${oldPrice.toLocaleString("th-TH")}
+  ฿${oldPrice.toLocaleString(
+    "th-TH"
+  )}
 </div>
 
 `
-          : `
+        : `
 
 <div class="collection-normal-price">
-  ฿${price.toLocaleString("th-TH")}
+  ฿${price.toLocaleString(
+    "th-TH"
+  )}
 </div>
 
 `
-      }
+  }
 
-    </div>
+</div>
 
     ${
       deadline.text &&
