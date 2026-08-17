@@ -294,8 +294,8 @@ async function loadAdminTabData(
     ){
 
       /*
-      Option Manager อาจต้องใช้
-      product list / collection list
+      Option Manager ต้องใช้
+      Products + Collections
       */
 
       if(
@@ -324,8 +324,10 @@ async function loadAdminTabData(
 
       renderOptionManager();
 
+
       adminLoadedTabs.options =
         true;
+
 
       return;
 
@@ -345,8 +347,10 @@ async function loadAdminTabData(
 
       await loadOrders();
 
+
       adminLoadedTabs.orders =
         true;
+
 
       return;
 
@@ -360,42 +364,42 @@ async function loadAdminTabData(
     */
 
     if(
-  tab ===
-  "shipped_orders"
-){
+      tab ===
+      "shipped_orders"
+    ){
 
-  /*
-  Archive ใช้ข้อมูลจาก
-  adminOrderBaseCache
-  */
+      /*
+      Archive ใช้ข้อมูลจาก
+      adminOrderBaseCache
+      */
 
-  if(
-    !adminLoadedTabs.orders
-  ){
+      if(
+        !adminLoadedTabs.orders
+      ){
 
-    await loadOrders();
-
-
-    adminLoadedTabs.orders =
-      true;
-
-  }
+        await loadOrders();
 
 
-  if(
-    typeof renderAdminShippedOrders !==
-    "function"
-  ){
+        adminLoadedTabs.orders =
+          true;
 
-    const box =
-      document.getElementById(
-        "shippedOrders"
-      );
+      }
 
 
-    if(box){
+      if(
+        typeof renderAdminShippedOrders !==
+        "function"
+      ){
 
-      box.innerHTML = `
+        const box =
+          document.getElementById(
+            "shippedOrders"
+          );
+
+
+        if(box){
+
+          box.innerHTML = `
 
 <div
 style="
@@ -418,26 +422,27 @@ color:#991b1b;
 
 `;
 
+        }
+
+
+        throw new Error(
+          "ไม่พบ renderAdminShippedOrders()"
+        );
+
+      }
+
+
+      renderAdminShippedOrders();
+
+
+      adminLoadedTabs.shipped_orders =
+        true;
+
+
+      return;
+
     }
 
-
-    throw new Error(
-      "ไม่พบ renderAdminShippedOrders()"
-    );
-
-  }
-
-
-  renderAdminShippedOrders();
-
-
-  adminLoadedTabs.shipped_orders =
-    true;
-
-
-  return;
-
-}
 
     /*
     =========================================
@@ -452,8 +457,10 @@ color:#991b1b;
 
       await loadAddressRequests();
 
+
       adminLoadedTabs.address =
         true;
+
 
       return;
 
@@ -473,10 +480,13 @@ color:#991b1b;
 
       renderGiftManager();
 
+
       await loadGiftCampaigns();
+
 
       adminLoadedTabs.gifts =
         true;
+
 
       return;
 
@@ -494,35 +504,20 @@ color:#991b1b;
       "manual_order"
     ){
 
+      const manager =
+        document.getElementById(
+          "manualOrderManager"
+        );
+
+
       if(
-        typeof renderManualOrderManager ===
+        typeof renderManualOrderManager !==
         "function"
       ){
 
-        renderManualOrderManager();
+        if(manager){
 
-      }
-
-
-     if(
-  tab ===
-  "manual_order"
-){
-
-  const manager =
-    document.getElementById(
-      "manualOrderManager"
-    );
-
-
-  if(
-    typeof renderManualOrderManager !==
-    "function"
-  ){
-
-    if(manager){
-
-      manager.innerHTML = `
+          manager.innerHTML = `
 
 <div
 style="
@@ -550,26 +545,26 @@ color:#991b1b;
 
 `;
 
+        }
+
+
+        throw new Error(
+          "ไม่พบ renderManualOrderManager()"
+        );
+
+      }
+
+
+      renderManualOrderManager();
+
+
+      adminLoadedTabs.manual_order =
+        true;
+
+
+      return;
+
     }
-
-
-    throw new Error(
-      "ไม่พบ renderManualOrderManager()"
-    );
-
-  }
-
-
-  renderManualOrderManager();
-
-
-  adminLoadedTabs.manual_order =
-    true;
-
-
-  return;
-
-}
 
 
   }catch(error){
