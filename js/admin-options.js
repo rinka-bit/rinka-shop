@@ -1,7 +1,17 @@
 let adminProductOptions = [];
 
 let selectedOptionProductId = "";
-let editingOptionId = "";
+
+let editingOptionGroupName = "";
+
+let optionDraftRows = [];
+
+
+/*
+=========================================================
+OPTION MANAGER
+=========================================================
+*/
 
 function renderOptionManager(){
 
@@ -10,218 +20,464 @@ function renderOptionManager(){
       "optionManager"
     );
 
+
   if(!box){
     return;
   }
+
+
+  const selectedProduct =
+    adminProducts.find(
+      product =>
+        String(
+          product.product_id
+        ) ===
+        String(
+          selectedOptionProductId
+        )
+    );
+
+
+  const selectedCollectionId =
+    selectedProduct
+      ? String(
+          selectedProduct.collection_id ||
+          ""
+        )
+      : "";
+
 
   box.innerHTML = `
 
 <div class="card">
 
-<h2>
-➕ เพิ่มตัวเลือกสินค้า
-</h2>
+  <h2>
+    🎛️ Product Options
+  </h2>
 
-<div class="product-form">
+  <p
+  style="
+  color:#64748b;
+  margin-top:-5px;
+  "
+  >
+    เพิ่มหรือแก้ไขตัวเลือกหลายรายการ
+    แล้วบันทึกทั้งหมดพร้อมกัน
+  </p>
 
-<div class="full">
 
-<label>
-เลือกสินค้า
-</label>
+  <div class="product-form">
 
-<select
-id="optionProductSelect"
-onchange="
-handleOptionProductChange()
-">
+    <div>
 
-<option value="">
--- เลือกสินค้า --
-</option>
+      <label>
+        Collection
+      </label>
 
-${adminProducts
-  .map(product=>`
+      <select
+      id="optionCollectionSelect"
+      onchange="handleOptionCollectionChange()"
+      >
+
+        <option value="">
+          -- ทุก Collection --
+        </option>
+
+        ${
+          adminCollections
+            .map(
+              collection => `
 
 <option
 value="${escapeHtml(
-  product.product_id
-)}">
+  collection.collection_id || ""
+)}"
+>
 
 ${escapeHtml(
-  product.name || "-"
+  collection.name ||
+  collection.collection_id ||
+  "-"
 )}
 
-(${escapeHtml(
-  product.product_id
-)})
-
 </option>
 
-`)
-  .join("")}
+`
+            )
+            .join("")
+        }
 
-</select>
+      </select>
 
-</div>
+    </div>
 
-<div>
 
-<label>
-ชื่อกลุ่มตัวเลือก
-</label>
+    <div>
 
-<input
-id="o_option_name"
-placeholder="เช่น ตัวละคร / แบบ / สี">
+      <label>
+        สินค้า
+      </label>
 
-</div>
+      <select
+      id="optionProductSelect"
+      onchange="handleOptionProductChange()"
+      >
+      </select>
 
-<div>
+    </div>
 
-<label>
-ชื่อตัวเลือก
-</label>
+  </div>
 
-<input
-id="o_option_value"
-placeholder="เช่น Phainon / สีขาว / แบบ A">
 
-</div>
-
-<div>
-
-<label>
-ราคาเพิ่ม
-</label>
-
-<input
-id="o_additional_price"
-type="number"
-min="0"
-value="0">
+  <div
+  id="optionProductInfo"
+  style="
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#f8fafc;
+  color:#475569;
+  "
+  >
+    กรุณาเลือกสินค้า
+  </div>
 
 </div>
 
-<div>
-
-<label>
-จำนวน Stock
-</label>
-
-<input
-id="o_stock"
-type="number"
-min="0"
-value="0">
-
-</div>
-
-<div>
-
-<label>
-ประเภทการเลือก
-</label>
-
-<select
-id="o_selection_type">
-
-<option value="multiple">
-เลือกหลายรายการได้
-</option>
-
-<option value="single">
-เลือกได้รายการเดียว
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-<br>
-
-<div style="
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-">
-
-<button
-id="saveOptionBtn"
-onclick="submitProductOption()">
-💾 บันทึกตัวเลือก
-</button>
-
-<button
-id="cancelOptionEditBtn"
-class="hidden"
-style="background:#64748b;"
-onclick="cancelOptionEdit()">
-ยกเลิกการแก้ไข
-</button>
-
-</div>
 
 <div
-id="saveOptionLoading"
-class="loading-text"
-style="display:none;">
-⏳ กำลังบันทึกตัวเลือก...
-</div>
+class="card"
+id="optionBatchEditor"
+>
+
+  <div
+  style="
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  "
+  >
+
+    <h2
+    style="margin:0;"
+    >
+      ✏️ จัดการกลุ่มตัวเลือก
+    </h2>
+
+    <button
+    type="button"
+    onclick="startNewOptionGroup()"
+    style="
+    width:auto;
+    "
+    >
+      ＋ กลุ่มใหม่
+    </button>
+
+  </div>
+
+
+  <div
+  id="optionBatchEmpty"
+  style="
+  margin-top:18px;
+  color:#64748b;
+  "
+  >
+
+    เลือกสินค้าก่อน
+    แล้วเริ่มสร้างกลุ่มตัวเลือก
+
+  </div>
+
+
+  <div
+  id="optionBatchForm"
+  style="
+  display:none;
+  margin-top:18px;
+  "
+  >
+
+    <div class="product-form">
+
+      <div>
+
+        <label>
+          ชื่อกลุ่มตัวเลือก
+        </label>
+
+        <input
+        id="o_group_name"
+        placeholder="เช่น ตัวละคร / รูปแบบ / สี"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          ประเภทการเลือก
+        </label>
+
+        <select
+        id="o_group_selection_type"
+        >
+
+          <option value="single">
+            เลือกได้รายการเดียว
+          </option>
+
+          <option value="multiple">
+            เลือกหลายรายการได้
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div
+    id="optionGroupEditNotice"
+    style="
+    display:none;
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:10px;
+    background:#fff7ed;
+    color:#9a3412;
+    "
+    >
+
+      กำลังแก้ไขกลุ่มเดิม
+      ชื่อกลุ่มจะถูกล็อกไว้เพื่อป้องกันการสร้างกลุ่มซ้ำ
+
+    </div>
+
+
+    <hr
+    style="
+    margin:20px 0;
+    border:none;
+    border-top:1px solid #e2e8f0;
+    "
+    >
+
+
+    <div
+    style="
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    "
+    >
+
+      <h3
+      style="margin:0;"
+      >
+        ตัวเลือกในกลุ่ม
+      </h3>
+
+      <button
+      type="button"
+      onclick="addOptionDraftRow()"
+      style="
+      width:auto;
+      "
+      >
+        ＋ เพิ่มตัวเลือก
+      </button>
+
+    </div>
+
+
+    <div
+    id="optionDraftList"
+    style="
+    margin-top:15px;
+    "
+    >
+    </div>
+
+
+    <div
+    style="
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+    "
+    >
+
+      <button
+      id="saveOptionBatchBtn"
+      type="button"
+      onclick="saveProductOptionsBatchFromAdmin()"
+      >
+        💾 บันทึกทั้งหมด
+      </button>
+
+
+      <button
+      type="button"
+      onclick="resetOptionBatchForm()"
+      style="
+      background:#64748b;
+      "
+      >
+        ยกเลิก
+      </button>
+
+    </div>
+
+
+    <div
+    id="saveOptionBatchLoading"
+    class="loading-text"
+    style="
+    display:none;
+    margin-top:12px;
+    "
+    >
+      ⏳ กำลังบันทึกตัวเลือก...
+    </div>
+
+  </div>
 
 </div>
+
 
 <div class="card">
 
-<div
-style="
-margin-bottom:18px;
-">
+  <div
+  style="
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  "
+  >
 
-<button
-type="button"
-onclick="backToProductManager()"
-style="
-background:#64748b;
-">
+    <div>
 
-⬅ กลับไปหน้าสินค้า
+      <h2
+      style="
+      margin:0 0 5px;
+      "
+      >
+        📋 กลุ่มตัวเลือกของสินค้า
+      </h2>
 
-</button>
+      <div
+      id="currentOptionProduct"
+      style="
+      font-weight:700;
+      color:#2563eb;
+      "
+      >
+        ยังไม่ได้เลือกสินค้า
+      </div>
 
-</div>
+    </div>
 
-<h2>
 
-📋 ตัวเลือกของสินค้า
+    <button
+    type="button"
+    onclick="backToProductManager()"
+    style="
+    width:auto;
+    background:#64748b;
+    "
+    >
+      ⬅ กลับไปหน้าสินค้า
+    </button>
 
-</h2>
+  </div>
 
-<p
-id="currentOptionProduct"
-style="
-font-weight:700;
-color:#2563eb;
-margin-top:-6px;
-">
 
-ยังไม่ได้เลือกสินค้า
-
-</p>
-
-<div id="adminOptionList">
-
-กรุณาเลือกสินค้าก่อน
-
-</div>
+  <div
+  id="adminOptionList"
+  style="
+  margin-top:18px;
+  "
+  >
+    กรุณาเลือกสินค้าก่อน
+  </div>
 
 </div>
 
 `;
 
+
+  /*
+  =========================================
+  PRESELECT COLLECTION
+  =========================================
+  */
+
+  const collectionSelect =
+    document.getElementById(
+      "optionCollectionSelect"
+    );
+
+
+  if(collectionSelect){
+
+    collectionSelect.value =
+      selectedCollectionId;
+
+  }
+
+
+  refreshOptionProductSelect();
+
+
+  /*
+  ถ้ามี selected product
+  มาจากปุ่ม Product Manager
+  */
+
+  if(
+    selectedOptionProductId
+  ){
+
+    const productSelect =
+      document.getElementById(
+        "optionProductSelect"
+      );
+
+
+    if(productSelect){
+
+      productSelect.value =
+        selectedOptionProductId;
+
+    }
+
+
+    updateOptionProductInfo();
+
+
+    loadAdminProductOptions();
+
+  }
+
 }
+
+
+/*
+=========================================================
+COLLECTION / PRODUCT SELECT
+=========================================================
+*/
 
 function refreshOptionProductSelect(){
 
@@ -230,13 +486,48 @@ function refreshOptionProductSelect(){
       "optionProductSelect"
     );
 
+
   if(!select){
     return;
   }
 
+
+  const collectionId =
+    document
+      .getElementById(
+        "optionCollectionSelect"
+      )
+      ?.value ||
+    "";
+
+
   const previousValue =
     selectedOptionProductId ||
     select.value;
+
+
+  const products =
+    adminProducts.filter(
+      product => {
+
+        if(!collectionId){
+          return true;
+        }
+
+
+        return (
+          String(
+            product.collection_id ||
+            ""
+          ) ===
+          String(
+            collectionId
+          )
+        );
+
+      }
+    );
+
 
   select.innerHTML = `
 
@@ -244,13 +535,16 @@ function refreshOptionProductSelect(){
 -- เลือกสินค้า --
 </option>
 
-${adminProducts
-  .map(product=>`
+${
+  products
+    .map(
+      product => `
 
 <option
 value="${escapeHtml(
   product.product_id
-)}">
+)}"
+>
 
 ${escapeHtml(
   product.name || "-"
@@ -262,19 +556,73 @@ ${escapeHtml(
 
 </option>
 
-`)
-  .join("")}
+`
+    )
+    .join("")
+}
 
 `;
 
-  if(previousValue){
+
+  if(
+    previousValue &&
+    products.some(
+      product =>
+        String(
+          product.product_id
+        ) ===
+        String(
+          previousValue
+        )
+    )
+  ){
 
     select.value =
       previousValue;
 
+  }else{
+
+    selectedOptionProductId =
+      "";
+
   }
 
 }
+
+
+function handleOptionCollectionChange(){
+
+  selectedOptionProductId =
+    "";
+
+
+  adminProductOptions = [];
+
+
+  resetOptionBatchForm();
+
+
+  refreshOptionProductSelect();
+
+
+  updateOptionProductInfo();
+
+
+  const list =
+    document.getElementById(
+      "adminOptionList"
+    );
+
+
+  if(list){
+
+    list.innerHTML =
+      "กรุณาเลือกสินค้าก่อน";
+
+  }
+
+}
+
 
 async function handleOptionProductChange(){
 
@@ -283,47 +631,169 @@ async function handleOptionProductChange(){
       "optionProductSelect"
     );
 
+
   selectedOptionProductId =
-    select?.value || "";
+    select?.value ||
+    "";
 
-  const product =
-  adminProducts.find(
-    p=>
-    String(p.product_id)===
-    String(selectedOptionProductId)
-  );
 
-document
-.getElementById(
-"currentOptionProduct"
-)
-.textContent =
-product
-? product.name
-: "ยังไม่ได้เลือกสินค้า";
+  adminProductOptions = [];
 
-  editingOptionId = "";
 
-  resetOptionForm();
+  resetOptionBatchForm();
 
-  if(!selectedOptionProductId){
 
-    adminProductOptions = [];
+  updateOptionProductInfo();
 
-    document
-      .getElementById(
+
+  if(
+    !selectedOptionProductId
+  ){
+
+    const box =
+      document.getElementById(
         "adminOptionList"
-      )
-      .innerHTML =
-      "กรุณาเลือกสินค้าก่อน";
+      );
+
+
+    if(box){
+
+      box.innerHTML =
+        "กรุณาเลือกสินค้าก่อน";
+
+    }
+
 
     return;
 
   }
 
+
   await loadAdminProductOptions();
 
 }
+
+
+function getSelectedOptionProduct(){
+
+  return (
+    adminProducts.find(
+      product =>
+        String(
+          product.product_id
+        ) ===
+        String(
+          selectedOptionProductId
+        )
+    ) ||
+    null
+  );
+
+}
+
+
+function updateOptionProductInfo(){
+
+  const product =
+    getSelectedOptionProduct();
+
+
+  const currentProduct =
+    document.getElementById(
+      "currentOptionProduct"
+    );
+
+
+  const info =
+    document.getElementById(
+      "optionProductInfo"
+    );
+
+
+  if(currentProduct){
+
+    currentProduct.textContent =
+      product
+        ? (
+            product.name ||
+            product.product_id
+          )
+        : "ยังไม่ได้เลือกสินค้า";
+
+  }
+
+
+  if(!info){
+    return;
+  }
+
+
+  if(!product){
+
+    info.innerHTML =
+      "กรุณาเลือกสินค้า";
+
+    return;
+
+  }
+
+
+  const priceMode =
+    String(
+      product.price_mode ||
+      "fixed"
+    );
+
+
+  info.innerHTML = `
+
+<b>
+${escapeHtml(
+  product.name || "-"
+)}
+</b>
+
+<br>
+
+รูปแบบราคา:
+<b>
+${
+  priceMode === "option"
+    ? "หลายราคาตามตัวเลือก"
+    : "ราคาเดียว"
+}
+</b>
+
+${
+  priceMode === "fixed"
+    ? `
+<br>
+ราคาสินค้า:
+<b>
+${Number(
+  product.price || 0
+).toLocaleString("th-TH")}
+บาท
+</b>
+`
+    : `
+<br>
+<span style="color:#7c3aed;">
+💡 กรุณากำหนดราคาที่แต่ละ Option
+</span>
+`
+}
+
+`;
+
+}
+
+
+/*
+=========================================================
+LOAD OPTIONS
+=========================================================
+*/
 
 async function loadAdminProductOptions(){
 
@@ -332,65 +802,94 @@ async function loadAdminProductOptions(){
       "adminOptionList"
     );
 
+
   if(
     !box ||
     !selectedOptionProductId
   ){
+
     return;
+
   }
+
 
   box.innerHTML =
     "⏳ กำลังโหลดตัวเลือก...";
+
 
   try{
 
     const response =
       await fetch(
-
         API +
-
         "?action=adminProductOptions" +
-
         "&product_id=" +
-
         encodeURIComponent(
           selectedOptionProductId
         )
-
       );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
 
     const result =
       await response.json();
 
-    if(!result.success){
 
-      box.textContent =
-        result.error ||
-        "โหลดตัวเลือกไม่สำเร็จ";
+    if(
+      !result ||
+      result.success !== true
+    ){
 
-      return;
+      throw new Error(
+        result?.error ||
+        "โหลดตัวเลือกไม่สำเร็จ"
+      );
 
     }
 
+
     adminProductOptions =
-  Array.isArray(
-    result.options
-  )
-    ? result.options
-    : [];
+      Array.isArray(
+        result.options
+      )
+        ? result.options
+        : [];
+
 
     renderAdminProductOptions();
 
+
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "loadAdminProductOptions error:",
+      error
+    );
+
 
     box.textContent =
+      error?.message ||
       "โหลดตัวเลือกไม่สำเร็จ";
 
   }
 
 }
+
+
+/*
+=========================================================
+RENDER EXISTING GROUPS
+=========================================================
+*/
 
 function renderAdminProductOptions(){
 
@@ -399,148 +898,310 @@ function renderAdminProductOptions(){
       "adminOptionList"
     );
 
+
   if(!box){
     return;
   }
+
 
   if(
     !adminProductOptions.length
   ){
 
-    box.innerHTML =
-      "สินค้านี้ยังไม่มีตัวเลือก";
+    box.innerHTML = `
+
+<div
+style="
+padding:16px;
+border-radius:12px;
+background:#f8fafc;
+color:#64748b;
+"
+>
+
+สินค้านี้ยังไม่มีตัวเลือก
+
+<br><br>
+
+<button
+type="button"
+onclick="startNewOptionGroup()"
+style="width:auto;"
+>
+＋ สร้างกลุ่มตัวเลือก
+</button>
+
+</div>
+
+`;
 
     return;
 
   }
 
+
   const grouped = {};
+
 
   adminProductOptions.forEach(
     option => {
 
-      const group =
-        option.option_name ||
-        "ไม่ระบุกลุ่ม";
+      const groupName =
+        String(
+          option.option_name ||
+          "ไม่ระบุกลุ่ม"
+        );
 
-      if(!grouped[group]){
 
-        grouped[group] = [];
+      if(
+        !grouped[
+          groupName
+        ]
+      ){
+
+        grouped[
+          groupName
+        ] = [];
 
       }
 
-      grouped[group].push(
+
+      grouped[
+        groupName
+      ].push(
         option
       );
 
     }
   );
 
+
   let html = "";
 
-  Object.keys(grouped)
-    .forEach(groupName=>{
 
-      html += `
+  Object
+    .entries(
+      grouped
+    )
+    .forEach(
+      (
+        [
+          groupName,
+          options
+        ]
+      ) => {
+
+        options.sort(
+          (
+            first,
+            second
+          ) =>
+            Number(
+              first.sort_order || 0
+            )
+            -
+            Number(
+              second.sort_order || 0
+            )
+        );
+
+
+        const selectionType =
+          options[0]
+            ?.selection_type ||
+          "single";
+
+
+        html += `
+
+<div
+class="card"
+style="
+margin-bottom:16px;
+border:1px solid #e2e8f0;
+"
+>
 
 <div
 style="
-margin-bottom:22px;
-">
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+flex-wrap:wrap;
+"
+>
+
+<div>
 
 <h3
 style="
-margin:0 0 10px;
-">
-
+margin:0 0 4px;
+"
+>
 ${escapeHtml(
   groupName
 )}
-
 </h3>
 
-<div class="grid">
-
-`;
-
-      grouped[groupName]
-        .forEach(option=>{
-
-          html += `
-
-<div class="card">
-
-<h3
+<div
 style="
-margin-top:0;
-">
+font-size:13px;
+color:#64748b;
+"
+>
 
-${escapeHtml(
-  option.option_value || "-"
-)}
-
-</h3>
-
-<p>
-🆔
-${escapeHtml(
-  option.option_id || "-"
-)}
-</p>
-
-<p>
-💰 ราคาเพิ่ม:
-${Number(
-  option.additional_price || 0
-).toLocaleString()}
-บาท
-</p>
-
-<p>
-📦 Stock:
-${Number(
-  option.stock || 0
-).toLocaleString()}
-</p>
-
-<p>
-🎛️
 ${
-  option.selection_type ===
-  "single"
-    ? "เลือกได้รายการเดียว"
-    : "เลือกหลายรายการได้"
+  selectionType === "multiple"
+    ? "เลือกหลายรายการได้"
+    : "เลือกได้รายการเดียว"
 }
-</p>
 
-<div style="
+• ${options.length} ตัวเลือก
+
+</div>
+
+</div>
+
+
+<div
+style="
 display:flex;
 gap:8px;
 flex-wrap:wrap;
-">
+"
+>
 
 <button
+type="button"
 onclick="
-editProductOption(
+editOptionGroup(
   '${escapeJsString(
-    option.option_id
+    groupName
   )}'
 )
-">
-✏️ แก้ไข
+"
+style="width:auto;"
+>
+✏️ แก้ไขกลุ่ม
 </button>
 
 <button
-style="background:#ef4444;"
+type="button"
 onclick="
-removeProductOption(
+deleteOptionGroup(
   '${escapeJsString(
-    option.option_id
+    groupName
   )}'
 )
-">
-🗑️ ลบ
+"
+style="
+width:auto;
+background:#ef4444;
+"
+>
+🗑️ ลบกลุ่ม
 </button>
+
+</div>
+
+</div>
+
+
+<div
+style="
+display:grid;
+grid-template-columns:
+repeat(
+  auto-fill,
+  minmax(180px,1fr)
+);
+gap:10px;
+margin-top:14px;
+"
+>
+
+${
+  options
+    .map(
+      option => `
+
+<div
+style="
+padding:12px;
+border:1px solid #e2e8f0;
+border-radius:12px;
+background:#fff;
+"
+>
+
+${
+  option.image
+    ? `
+
+<img
+src="${escapeHtml(
+  option.image
+)}"
+alt=""
+style="
+width:100%;
+height:120px;
+object-fit:cover;
+border-radius:9px;
+margin-bottom:9px;
+"
+>
+
+`
+    : ""
+}
+
+<b>
+${escapeHtml(
+  option.option_value || "-"
+)}
+</b>
+
+<div
+style="
+margin-top:6px;
+font-size:13px;
+color:#64748b;
+"
+>
+
+${
+  getSelectedOptionProduct()
+    ?.price_mode === "option"
+    ? `
+ราคา:
+<b>
+${Number(
+  option.price ?? 0
+).toLocaleString("th-TH")}
+บาท
+</b>
+<br>
+`
+    : ""
+}
+
+Stock:
+<b>
+${Number(
+  option.stock || 0
+).toLocaleString("th-TH")}
+</b>
+
+</div>
+
+</div>
+
+`
+    )
+    .join("")
+}
 
 </div>
 
@@ -548,88 +1209,1006 @@ removeProductOption(
 
 `;
 
-        });
+      }
+    );
 
-      html += `
 
-</div>
-
-</div>
-
-`;
-
-    });
-
-  box.innerHTML = html;
+  box.innerHTML =
+    html;
 
 }
 
 
-async function submitProductOption(){
+/*
+=========================================================
+START / EDIT GROUP
+=========================================================
+*/
 
-  const productId =
-    document
-      .getElementById(
-        "optionProductSelect"
-      )
-      .value;
+function startNewOptionGroup(){
 
-  const payload = {
+  if(
+    !selectedOptionProductId
+  ){
 
-    product_id:
-      productId,
+    alert(
+      "กรุณาเลือกสินค้าก่อน"
+    );
 
-    option_name:
-      document
-        .getElementById(
-          "o_option_name"
-        )
-        .value
-        .trim(),
-
-    option_value:
-      document
-        .getElementById(
-          "o_option_value"
-        )
-        .value
-        .trim(),
-
-    additional_price:
-      Number(
-        document
-          .getElementById(
-            "o_additional_price"
-          )
-          .value || 0
-      ),
-
-    stock:
-      Number(
-        document
-          .getElementById(
-            "o_stock"
-          )
-          .value || 0
-      ),
-
-    selection_type:
-      document
-        .getElementById(
-          "o_selection_type"
-        )
-        .value
-
-  };
-
-  if(editingOptionId){
-
-    payload.option_id =
-      editingOptionId;
+    return;
 
   }
 
-  if(!payload.product_id){
+
+  editingOptionGroupName =
+    "";
+
+
+  optionDraftRows = [];
+
+
+  const form =
+    document.getElementById(
+      "optionBatchForm"
+    );
+
+
+  const empty =
+    document.getElementById(
+      "optionBatchEmpty"
+    );
+
+
+  if(form){
+
+    form.style.display =
+      "block";
+
+  }
+
+
+  if(empty){
+
+    empty.style.display =
+      "none";
+
+  }
+
+
+  const nameInput =
+    document.getElementById(
+      "o_group_name"
+    );
+
+
+  if(nameInput){
+
+    nameInput.value =
+      "";
+
+    nameInput.readOnly =
+      false;
+
+  }
+
+
+  const selection =
+    document.getElementById(
+      "o_group_selection_type"
+    );
+
+
+  if(selection){
+
+    selection.value =
+      "single";
+
+  }
+
+
+  const notice =
+    document.getElementById(
+      "optionGroupEditNotice"
+    );
+
+
+  if(notice){
+
+    notice.style.display =
+      "none";
+
+  }
+
+
+  addOptionDraftRow();
+
+
+  nameInput?.focus();
+
+}
+
+
+function editOptionGroup(
+  groupName
+){
+
+  if(
+    !selectedOptionProductId
+  ){
+
+    return;
+
+  }
+
+
+  syncOptionDraftFromDom();
+
+
+  const options =
+    adminProductOptions
+      .filter(
+        option =>
+          String(
+            option.option_name ||
+            ""
+          ) ===
+          String(
+            groupName
+          )
+      )
+      .sort(
+        (
+          first,
+          second
+        ) =>
+          Number(
+            first.sort_order || 0
+          )
+          -
+          Number(
+            second.sort_order || 0
+          )
+      );
+
+
+  if(
+    !options.length
+  ){
+
+    alert(
+      "ไม่พบกลุ่มตัวเลือก"
+    );
+
+    return;
+
+  }
+
+
+  editingOptionGroupName =
+    groupName;
+
+
+  optionDraftRows =
+    options.map(
+      (
+        option,
+        index
+      ) => ({
+
+        option_id:
+          option.option_id || "",
+
+        option_value:
+          option.option_value || "",
+
+        price:
+          option.price ?? 0,
+
+        stock:
+          Number(
+            option.stock || 0
+          ),
+
+        image:
+          option.image || "",
+
+        image_base64:
+          "",
+
+        sort_order:
+          Number(
+            option.sort_order ??
+            index
+          )
+
+      })
+    );
+
+
+  document
+    .getElementById(
+      "optionBatchForm"
+    )
+    .style.display =
+    "block";
+
+
+  document
+    .getElementById(
+      "optionBatchEmpty"
+    )
+    .style.display =
+    "none";
+
+
+  const nameInput =
+    document.getElementById(
+      "o_group_name"
+    );
+
+
+  nameInput.value =
+    groupName;
+
+
+  /*
+  ตอนนี้ Backend Batch replace ด้วย
+  product_id + option_name
+
+  จึงยังไม่ให้ rename group เดิม
+  */
+
+  nameInput.readOnly =
+    true;
+
+
+  document
+    .getElementById(
+      "o_group_selection_type"
+    )
+    .value =
+    options[0]
+      .selection_type ||
+    "single";
+
+
+  document
+    .getElementById(
+      "optionGroupEditNotice"
+    )
+    .style.display =
+    "block";
+
+
+  renderOptionDraftRows();
+
+
+  document
+    .getElementById(
+      "optionBatchEditor"
+    )
+    ?.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+}
+
+
+/*
+=========================================================
+DRAFT ROWS
+=========================================================
+*/
+
+function addOptionDraftRow(){
+
+  syncOptionDraftFromDom();
+
+
+  optionDraftRows.push({
+
+    option_id:"",
+
+    option_value:"",
+
+    price:0,
+
+    stock:0,
+
+    image:"",
+
+    image_base64:"",
+
+    sort_order:
+      optionDraftRows.length
+
+  });
+
+
+  renderOptionDraftRows();
+
+}
+
+
+function removeOptionDraftRow(
+  index
+){
+
+  syncOptionDraftFromDom();
+
+
+  if(
+    optionDraftRows.length <= 1
+  ){
+
+    alert(
+      "ต้องมีตัวเลือกอย่างน้อย 1 รายการ"
+    );
+
+    return;
+
+  }
+
+
+  optionDraftRows.splice(
+    index,
+    1
+  );
+
+
+  normalizeOptionDraftSort();
+
+
+  renderOptionDraftRows();
+
+}
+
+
+function moveOptionDraftRow(
+  index,
+  direction
+){
+
+  syncOptionDraftFromDom();
+
+
+  const target =
+    index +
+    direction;
+
+
+  if(
+    target < 0 ||
+    target >=
+      optionDraftRows.length
+  ){
+
+    return;
+
+  }
+
+
+  const temp =
+    optionDraftRows[
+      index
+    ];
+
+
+  optionDraftRows[
+    index
+  ] =
+    optionDraftRows[
+      target
+    ];
+
+
+  optionDraftRows[
+    target
+  ] =
+    temp;
+
+
+  normalizeOptionDraftSort();
+
+
+  renderOptionDraftRows();
+
+}
+
+
+function normalizeOptionDraftSort(){
+
+  optionDraftRows.forEach(
+    (
+      option,
+      index
+    ) => {
+
+      option.sort_order =
+        index;
+
+    }
+  );
+
+}
+
+
+function syncOptionDraftFromDom(){
+
+  if(
+    !optionDraftRows.length
+  ){
+
+    return;
+
+  }
+
+
+  optionDraftRows.forEach(
+    (
+      option,
+      index
+    ) => {
+
+      const valueInput =
+        document.getElementById(
+          "option_value_" +
+          index
+        );
+
+
+      const priceInput =
+        document.getElementById(
+          "option_price_" +
+          index
+        );
+
+
+      const stockInput =
+        document.getElementById(
+          "option_stock_" +
+          index
+        );
+
+
+      if(valueInput){
+
+        option.option_value =
+          valueInput.value;
+
+      }
+
+
+      if(priceInput){
+
+        option.price =
+          Number(
+            priceInput.value ||
+            0
+          );
+
+      }
+
+
+      if(stockInput){
+
+        option.stock =
+          Number(
+            stockInput.value ||
+            0
+          );
+
+      }
+
+    }
+  );
+
+}
+
+
+function renderOptionDraftRows(){
+
+  const box =
+    document.getElementById(
+      "optionDraftList"
+    );
+
+
+  if(!box){
+    return;
+  }
+
+
+  const product =
+    getSelectedOptionProduct();
+
+
+  const priceMode =
+    String(
+      product?.price_mode ||
+      "fixed"
+    );
+
+
+  box.innerHTML =
+    optionDraftRows
+      .map(
+        (
+          option,
+          index
+        ) => `
+
+<div
+style="
+padding:15px;
+margin-bottom:12px;
+border:1px solid #e2e8f0;
+border-radius:14px;
+background:#fff;
+"
+>
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:12px;
+"
+>
+
+<b>
+ตัวเลือก ${index + 1}
+</b>
+
+
+<div
+style="
+display:flex;
+gap:5px;
+"
+>
+
+<button
+type="button"
+onclick="
+moveOptionDraftRow(
+  ${index},
+  -1
+)
+"
+style="
+width:auto;
+padding:5px 9px;
+"
+>
+↑
+</button>
+
+<button
+type="button"
+onclick="
+moveOptionDraftRow(
+  ${index},
+  1
+)
+"
+style="
+width:auto;
+padding:5px 9px;
+"
+>
+↓
+</button>
+
+<button
+type="button"
+onclick="
+removeOptionDraftRow(
+  ${index}
+)
+"
+style="
+width:auto;
+padding:5px 9px;
+background:#ef4444;
+"
+>
+×
+</button>
+
+</div>
+
+</div>
+
+
+<div
+class="product-form"
+>
+
+<div>
+
+<label>
+ชื่อตัวเลือก
+</label>
+
+<input
+id="option_value_${index}"
+value="${escapeHtml(
+  option.option_value || ""
+)}"
+placeholder="เช่น Phainon / สุ่ม / ยก Box"
+>
+
+</div>
+
+
+${
+  priceMode === "option"
+    ? `
+
+<div>
+
+<label>
+ราคา
+</label>
+
+<input
+id="option_price_${index}"
+type="number"
+min="0"
+step="0.01"
+value="${Number(
+  option.price ?? 0
+)}"
+>
+
+</div>
+
+`
+    : `
+
+<div>
+
+<label>
+ราคา
+</label>
+
+<div
+style="
+padding:10px 12px;
+border-radius:9px;
+background:#f8fafc;
+color:#64748b;
+"
+>
+
+ใช้ราคาสินค้า
+${Number(
+  product?.price || 0
+).toLocaleString("th-TH")}
+บาท
+
+</div>
+
+</div>
+
+`
+}
+
+
+<div>
+
+<label>
+Stock
+</label>
+
+<input
+id="option_stock_${index}"
+type="number"
+min="0"
+step="1"
+value="${Number(
+  option.stock || 0
+)}"
+>
+
+</div>
+
+
+<div>
+
+<label>
+รูปตัวเลือก
+</label>
+
+<input
+type="file"
+accept="image/png,image/jpeg,image/jpg,image/webp"
+onchange="
+handleOptionImageChange(
+  ${index},
+  this
+)
+"
+>
+
+</div>
+
+</div>
+
+
+<div
+id="option_image_preview_${index}"
+style="
+margin-top:12px;
+"
+>
+
+${
+  option.image_base64 ||
+  option.image
+    ? `
+
+<img
+src="${
+  option.image_base64 ||
+  option.image
+}"
+alt=""
+style="
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:12px;
+border:1px solid #e2e8f0;
+"
+>
+
+<button
+type="button"
+onclick="
+removeOptionDraftImage(
+  ${index}
+)
+"
+style="
+width:auto;
+margin-left:8px;
+background:#64748b;
+"
+>
+ลบรูป
+</button>
+
+`
+    : `
+<span
+style="
+font-size:13px;
+color:#94a3b8;
+"
+>
+ยังไม่มีรูป
+</span>
+`
+}
+
+</div>
+
+</div>
+
+`
+      )
+      .join("");
+
+}
+
+
+/*
+=========================================================
+OPTION IMAGE
+=========================================================
+*/
+
+async function optionFileToBase64(
+  file
+){
+
+  if(
+    typeof fileToBase64 ===
+    "function"
+  ){
+
+    return await fileToBase64(
+      file
+    );
+
+  }
+
+
+  return await new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        () =>
+          resolve(
+            reader.result
+          );
+
+
+      reader.onerror =
+        () =>
+          reject(
+            new Error(
+              "อ่านไฟล์รูปไม่สำเร็จ"
+            )
+          );
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+async function handleOptionImageChange(
+  index,
+  input
+){
+
+  const file =
+    input?.files?.[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  try{
+
+    const base64 =
+      await optionFileToBase64(
+        file
+      );
+
+
+    if(
+      !optionDraftRows[
+        index
+      ]
+    ){
+
+      return;
+
+    }
+
+
+    optionDraftRows[
+      index
+    ].image_base64 =
+      base64;
+
+
+    const preview =
+      document.getElementById(
+        "option_image_preview_" +
+        index
+      );
+
+
+    if(preview){
+
+      preview.innerHTML = `
+
+<img
+src="${base64}"
+alt=""
+style="
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:12px;
+border:1px solid #e2e8f0;
+"
+>
+
+<button
+type="button"
+onclick="
+removeOptionDraftImage(
+  ${index}
+)
+"
+style="
+width:auto;
+margin-left:8px;
+background:#64748b;
+"
+>
+ลบรูป
+</button>
+
+`;
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "handleOptionImageChange:",
+      error
+    );
+
+
+    alert(
+      error?.message ||
+      "อ่านรูปไม่สำเร็จ"
+    );
+
+  }
+
+}
+
+
+function removeOptionDraftImage(
+  index
+){
+
+  if(
+    !optionDraftRows[
+      index
+    ]
+  ){
+
+    return;
+
+  }
+
+
+  optionDraftRows[
+    index
+  ].image =
+    "";
+
+
+  optionDraftRows[
+    index
+  ].image_base64 =
+    "";
+
+
+  renderOptionDraftRows();
+
+}
+
+
+/*
+=========================================================
+SAVE BATCH
+=========================================================
+*/
+
+async function saveProductOptionsBatchFromAdmin(){
+
+  if(
+    !selectedOptionProductId
+  ){
 
     alert(
       "กรุณาเลือกสินค้า"
@@ -639,7 +2218,30 @@ async function submitProductOption(){
 
   }
 
-  if(!payload.option_name){
+
+  syncOptionDraftFromDom();
+
+
+  const groupName =
+    document
+      .getElementById(
+        "o_group_name"
+      )
+      ?.value
+      .trim() ||
+    "";
+
+
+  const selectionType =
+    document
+      .getElementById(
+        "o_group_selection_type"
+      )
+      ?.value ||
+    "single";
+
+
+  if(!groupName){
 
     alert(
       "กรุณากรอกชื่อกลุ่มตัวเลือก"
@@ -649,83 +2251,257 @@ async function submitProductOption(){
 
   }
 
-  if(!payload.option_value){
+
+  if(
+    !optionDraftRows.length
+  ){
 
     alert(
-      "กรุณากรอกชื่อตัวเลือก"
+      "กรุณาเพิ่มตัวเลือก"
     );
 
     return;
 
   }
 
+
+  const product =
+    getSelectedOptionProduct();
+
+
+  const priceMode =
+    String(
+      product?.price_mode ||
+      "fixed"
+    );
+
+
+  for(
+    let index = 0;
+    index <
+      optionDraftRows.length;
+    index++
+  ){
+
+    const option =
+      optionDraftRows[
+        index
+      ];
+
+
+    option.option_value =
+      String(
+        option.option_value ||
+        ""
+      ).trim();
+
+
+    if(
+      !option.option_value
+    ){
+
+      alert(
+        "กรุณากรอกชื่อตัวเลือก " +
+        (
+          index + 1
+        )
+      );
+
+      return;
+
+    }
+
+
+    if(
+      !Number.isInteger(
+        Number(
+          option.stock
+        )
+      ) ||
+      Number(
+        option.stock
+      ) < 0
+    ){
+
+      alert(
+        "Stock ของตัวเลือก " +
+        (
+          index + 1
+        ) +
+        " ต้องเป็นจำนวนเต็มตั้งแต่ 0 ขึ้นไป"
+      );
+
+      return;
+
+    }
+
+
+    if(
+      priceMode ===
+        "option" &&
+      (
+        !Number.isFinite(
+          Number(
+            option.price
+          )
+        ) ||
+        Number(
+          option.price
+        ) < 0
+      )
+    ){
+
+      alert(
+        "ราคาของตัวเลือก " +
+        (
+          index + 1
+        ) +
+        " ไม่ถูกต้อง"
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+  duplicate ในหน้า Admin
+  */
+
+  const names =
+    optionDraftRows.map(
+      option =>
+        String(
+          option.option_value
+        )
+          .trim()
+          .toLowerCase()
+    );
+
+
   if(
-  !Number.isFinite(
-    payload.additional_price
-  ) ||
-  payload.additional_price < 0
-){
+    new Set(
+      names
+    ).size !==
+    names.length
+  ){
 
-  alert(
-    "ราคาเพิ่มต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
-  );
+    alert(
+      "มีชื่อตัวเลือกซ้ำกันในกลุ่ม"
+    );
 
-  return;
+    return;
 
-}
+  }
 
-if(
-  !Number.isInteger(
-    payload.stock
-  ) ||
-  payload.stock < 0
-){
 
-  alert(
-    "จำนวน Stock ต้องเป็นจำนวนเต็มตั้งแต่ 0 ขึ้นไป"
-  );
+  const payload = {
 
-  return;
+    product_id:
+      selectedOptionProductId,
 
-}
+    option_name:
+      groupName,
+
+    selection_type:
+      selectionType,
+
+    options:
+      optionDraftRows.map(
+        (
+          option,
+          index
+        ) => ({
+
+          option_id:
+            option.option_id ||
+            "",
+
+          option_value:
+            option.option_value,
+
+          price:
+            priceMode ===
+              "option"
+              ? Number(
+                  option.price
+                )
+              : 0,
+
+          stock:
+            Number(
+              option.stock
+            ),
+
+          image:
+            option.image ||
+            "",
+
+          image_base64:
+            option.image_base64 ||
+            "",
+
+          sort_order:
+            index
+
+        })
+      )
+
+  };
+
 
   const btn =
     document.getElementById(
-      "saveOptionBtn"
+      "saveOptionBatchBtn"
     );
+
 
   const loading =
     document.getElementById(
-      "saveOptionLoading"
+      "saveOptionBatchLoading"
     );
 
-  btn.disabled = true;
 
-  btn.textContent =
-    "กำลังบันทึก...";
+  if(btn){
 
-  loading.style.display =
-    "block";
+    btn.disabled =
+      true;
+
+    btn.textContent =
+      "กำลังบันทึก...";
+
+  }
+
+
+  if(loading){
+
+    loading.style.display =
+      "block";
+
+  }
+
 
   try{
-
-    const action =
-      editingOptionId
-        ? "updateProductOption"
-        : "saveProductOption";
 
     const formData =
       new FormData();
 
+
     formData.append(
       "action",
-      action
+      "saveProductOptionsBatch"
     );
+
 
     formData.append(
       "payload",
-      JSON.stringify(payload)
+      JSON.stringify(
+        payload
+      )
     );
+
 
     const response =
       await fetch(
@@ -736,417 +2512,508 @@ if(
         }
       );
 
-    const result =
-      await response.json();
 
-    if(!result.success){
+    if(!response.ok){
 
-      alert(
-        result.error ||
-        "บันทึกตัวเลือกไม่สำเร็จ"
+      throw new Error(
+        "HTTP " +
+        response.status
       );
-
-      return;
 
     }
 
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "บันทึกตัวเลือกไม่สำเร็จ"
+      );
+
+    }
+
+
     alert(
-      editingOptionId
-        ? "แก้ไขตัวเลือกแล้ว"
-        : "เพิ่มตัวเลือกแล้ว"
+      "บันทึกตัวเลือกแล้ว " +
+      Number(
+        result.saved_count ||
+        payload.options.length
+      ) +
+      " รายการ"
     );
 
-    editingOptionId = "";
 
-    resetOptionForm();
+    editingOptionGroupName =
+      "";
+
+
+    optionDraftRows = [];
+
+
+    resetOptionBatchForm();
+
 
     await loadAdminProductOptions();
 
+
+    /*
+    refresh Product Manager
+    เพื่อให้จำนวน option/search อัปเดต
+    */
+
     await loadAdminProducts();
+
 
     refreshOptionProductSelect();
 
+
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "saveProductOptionsBatchFromAdmin:",
+      error
+    );
+
 
     alert(
+      error?.message ||
       "เกิดข้อผิดพลาด กรุณาลองใหม่"
     );
 
+
   }finally{
 
-    btn.disabled = false;
+    const currentBtn =
+      document.getElementById(
+        "saveOptionBatchBtn"
+      );
 
-    btn.textContent =
-      editingOptionId
-        ? "💾 บันทึกการแก้ไข"
-        : "💾 บันทึกตัวเลือก";
 
-    loading.style.display =
+    const currentLoading =
+      document.getElementById(
+        "saveOptionBatchLoading"
+      );
+
+
+    if(currentBtn){
+
+      currentBtn.disabled =
+        false;
+
+      currentBtn.textContent =
+        "💾 บันทึกทั้งหมด";
+
+    }
+
+
+    if(currentLoading){
+
+      currentLoading.style.display =
+        "none";
+
+    }
+
+  }
+
+}
+
+
+/*
+=========================================================
+RESET
+=========================================================
+*/
+
+function resetOptionBatchForm(){
+
+  editingOptionGroupName =
+    "";
+
+
+  optionDraftRows = [];
+
+
+  const form =
+    document.getElementById(
+      "optionBatchForm"
+    );
+
+
+  const empty =
+    document.getElementById(
+      "optionBatchEmpty"
+    );
+
+
+  if(form){
+
+    form.style.display =
+      "none";
+
+  }
+
+
+  if(empty){
+
+    empty.style.display =
+      selectedOptionProductId
+        ? "block"
+        : "block";
+
+
+    empty.textContent =
+      selectedOptionProductId
+        ? "กด “กลุ่มใหม่” หรือเลือกแก้ไขกลุ่มด้านล่าง"
+        : "เลือกสินค้าก่อน แล้วเริ่มสร้างกลุ่มตัวเลือก";
+
+  }
+
+
+  const name =
+    document.getElementById(
+      "o_group_name"
+    );
+
+
+  if(name){
+
+    name.value =
+      "";
+
+    name.readOnly =
+      false;
+
+  }
+
+
+  const notice =
+    document.getElementById(
+      "optionGroupEditNotice"
+    );
+
+
+  if(notice){
+
+    notice.style.display =
       "none";
 
   }
 
 }
 
-function editProductOption(
-  optionId
+
+/*
+=========================================================
+DELETE WHOLE GROUP
+=========================================================
+*/
+
+async function deleteOptionGroup(
+  groupName
 ){
 
-  const option =
-    adminProductOptions.find(
-      item =>
+  const options =
+    adminProductOptions.filter(
+      option =>
         String(
-          item.option_id
+          option.option_name ||
+          ""
         ) ===
-        String(optionId)
+        String(
+          groupName
+        )
     );
 
-  if(!option){
 
-    alert(
-      "ไม่พบข้อมูลตัวเลือก"
-    );
+  if(
+    !options.length
+  ){
 
     return;
 
   }
 
-  editingOptionId =
-    option.option_id;
-
-  document
-    .getElementById(
-      "o_option_name"
-    )
-    .value =
-    option.option_name || "";
-
-  document
-    .getElementById(
-      "o_option_value"
-    )
-    .value =
-    option.option_value || "";
-
-  document
-    .getElementById(
-      "o_additional_price"
-    )
-    .value =
-    Number(
-      option.additional_price || 0
-    );
-
-  document
-    .getElementById(
-      "o_stock"
-    )
-    .value =
-    Number(
-      option.stock || 0
-    );
-
-  document
-    .getElementById(
-      "o_selection_type"
-    )
-    .value =
-    option.selection_type ||
-    "multiple";
-
-  document
-    .getElementById(
-      "saveOptionBtn"
-    )
-    .textContent =
-    "💾 บันทึกการแก้ไข";
-
-  document
-    .getElementById(
-      "cancelOptionEditBtn"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-  document
-    .getElementById(
-      "o_option_name"
-    )
-    .scrollIntoView({
-      behavior:"smooth",
-      block:"center"
-    });
-
-}
-
-function cancelOptionEdit(){
-
-  editingOptionId = "";
-
-  resetOptionForm();
-
-}
-
-function resetOptionForm(){
-
-  const nameInput =
-    document.getElementById(
-      "o_option_name"
-    );
-
-  if(!nameInput){
-    return;
-  }
-
-  nameInput.value = "";
-
-  document
-    .getElementById(
-      "o_option_value"
-    )
-    .value = "";
-
-  document
-    .getElementById(
-      "o_additional_price"
-    )
-    .value = 0;
-
-  document
-    .getElementById(
-      "o_stock"
-    )
-    .value = 0;
-
-  document
-    .getElementById(
-      "o_selection_type"
-    )
-    .value =
-    "multiple";
-
-  document
-    .getElementById(
-      "saveOptionBtn"
-    )
-    .textContent =
-    "💾 บันทึกตัวเลือก";
-
-  document
-    .getElementById(
-      "cancelOptionEditBtn"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-}
-
-  async function removeProductOption(
-  optionId
-){
-
-  const option =
-    adminProductOptions.find(
-      item =>
-        String(
-          item.option_id
-        ) ===
-        String(optionId)
-    );
-
-  const optionName =
-    option
-      ? option.option_value
-      : optionId;
 
   const ok =
     confirm(
-      "ต้องการลบตัวเลือก \"" +
-      optionName +
-      "\" ใช่ไหม?"
+      "ต้องการลบกลุ่ม \"" +
+      groupName +
+      "\" ทั้ง " +
+      options.length +
+      " ตัวเลือกใช่ไหม?"
     );
+
 
   if(!ok){
     return;
   }
 
+
   try{
 
-    const formData =
-      new FormData();
+    /*
+    endpoint delete เดิมลบทีละ option
+    ใช้ชั่วคราวจนกว่าจะมี delete batch
+    */
 
-    formData.append(
-      "action",
-      "deleteProductOption"
-    );
-
-    formData.append(
-      "payload",
-      JSON.stringify({
-        option_id:optionId
-      })
-    );
-
-    const response =
-      await fetch(
-        API,
-        {
-          method:"POST",
-          body:formData
-        }
-      );
-
-    const result =
-      await response.json();
-
-    if(!result.success){
-
-      alert(
-        result.error ||
-        "ลบตัวเลือกไม่สำเร็จ"
-      );
-
-      return;
-
-    }
-
-    alert(
-      "ลบตัวเลือกแล้ว"
-    );
-
-    if(
-      editingOptionId ===
-      optionId
+    for(
+      const option of options
     ){
 
-      editingOptionId = "";
+      const formData =
+        new FormData();
 
-      resetOptionForm();
+
+      formData.append(
+        "action",
+        "deleteProductOption"
+      );
+
+
+      formData.append(
+        "payload",
+        JSON.stringify({
+          option_id:
+            option.option_id
+        })
+      );
+
+
+      const response =
+        await fetch(
+          API,
+          {
+            method:"POST",
+            body:formData
+          }
+        );
+
+
+      const result =
+        await response.json();
+
+
+      if(
+        !result ||
+        result.success !== true
+      ){
+
+        throw new Error(
+          result?.error ||
+          "ลบตัวเลือกไม่สำเร็จ"
+        );
+
+      }
 
     }
+
+
+    alert(
+      "ลบกลุ่มตัวเลือกแล้ว"
+    );
+
+
+    resetOptionBatchForm();
+
 
     await loadAdminProductOptions();
 
+
     await loadAdminProducts();
+
 
     refreshOptionProductSelect();
 
+
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "deleteOptionGroup:",
+      error
+    );
+
 
     alert(
-      "เกิดข้อผิดพลาด กรุณาลองใหม่"
+      error?.message ||
+      "ลบกลุ่มตัวเลือกไม่สำเร็จ"
     );
 
   }
 
 }
+
+
+/*
+=========================================================
+OPEN FROM PRODUCT MANAGER
+=========================================================
+*/
 
 async function openProductOptions(
   productId
 ){
 
-  showAdminTab("options");
-
   selectedOptionProductId =
-    String(productId || "");
-    
-  highlightedProductId =
-  selectedOptionProductId;
-
-  const select =
-    document.getElementById(
-      "optionProductSelect"
+    String(
+      productId || ""
     );
 
-  if(select){
 
-    select.value =
+  if(
+    typeof highlightedProductId !==
+    "undefined"
+  ){
+
+    highlightedProductId =
       selectedOptionProductId;
 
   }
 
-  const product =
-  adminProducts.find(
-    item =>
-      String(
-        item.product_id
-      ) ===
-      String(
-        selectedOptionProductId
-      )
+
+  showAdminTab(
+    "options"
   );
 
-const currentProduct =
-  document.getElementById(
-    "currentOptionProduct"
-  );
 
-if(currentProduct){
+  /*
+  Product Manager ถูกโหลดอยู่แล้ว
+  จึงหา product ได้ทันที
+  */
 
-  currentProduct.textContent =
-    product
-      ? product.name || "-"
-      : "ยังไม่ได้เลือกสินค้า";
+  requestAnimationFrame(
+    async () => {
 
-}
-
-  await loadAdminProductOptions();
-
-  requestAnimationFrame(()=>{
-
-    const manager =
-      document.getElementById(
-        "optionManager"
-      );
-
-    if(manager){
-
-      manager.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
-
-    }
-
-  });
-
-}
-
-function backToProductManager(){
-
-  showAdminTab("products");
-
-  if(selectedOptionProductId){
-
-    filterProductsByCollection("");
-
-    requestAnimationFrame(()=>{
-
-      const keyword =
-        document.getElementById(
-          "productSearch"
+      const product =
+        adminProducts.find(
+          item =>
+            String(
+              item.product_id
+            ) ===
+            String(
+              selectedOptionProductId
+            )
         );
 
-      if(keyword){
 
-        keyword.value =
-          selectedOptionProductId;
+      const collectionSelect =
+        document.getElementById(
+          "optionCollectionSelect"
+        );
 
-        renderAdminProductList();
+
+      if(
+        collectionSelect &&
+        product
+      ){
+
+        collectionSelect.value =
+          String(
+            product.collection_id ||
+            ""
+          );
 
       }
 
-    });
+
+      refreshOptionProductSelect();
+
+
+      const select =
+        document.getElementById(
+          "optionProductSelect"
+        );
+
+
+      if(select){
+
+        select.value =
+          selectedOptionProductId;
+
+      }
+
+
+      updateOptionProductInfo();
+
+
+      await loadAdminProductOptions();
+
+
+      document
+        .getElementById(
+          "optionManager"
+        )
+        ?.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+    }
+  );
+
+}
+
+
+/*
+=========================================================
+BACK TO PRODUCT MANAGER
+=========================================================
+*/
+
+function backToProductManager(){
+
+  showAdminTab(
+    "products"
+  );
+
+
+  if(
+    selectedOptionProductId
+  ){
+
+    filterProductsByCollection(
+      ""
+    );
+
+
+    requestAnimationFrame(
+      () => {
+
+        const keyword =
+          document.getElementById(
+            "productSearch"
+          );
+
+
+        if(keyword){
+
+          keyword.value =
+            selectedOptionProductId;
+
+
+          renderAdminProductList();
+
+        }
+
+      }
+    );
 
   }
 
 }
+
+
+/*
+=========================================================
+OPTION COUNT
+=========================================================
+*/
 
 function getProductOptionCount(
   product
@@ -1154,12 +3021,15 @@ function getProductOptionCount(
 
   if(
     product.options &&
-    Array.isArray(product.options)
+    Array.isArray(
+      product.options
+    )
   ){
 
     return product.options.length;
 
   }
+
 
   return 0;
 
