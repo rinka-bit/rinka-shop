@@ -255,15 +255,10 @@ async function loadAdminTabData(
     =========================================
     */
 
-  if(
+ if(
   tab ===
   "products"
 ){
-
-  /*
-  Product Manager ใช้ Collections
-  ทั้งหน้าเพิ่มสินค้า + filter
-  */
 
   if(
     !Array.isArray(
@@ -277,10 +272,19 @@ async function loadAdminTabData(
   }
 
 
+  if(
+    !Array.isArray(
+      adminProducts
+    ) ||
+    adminProducts.length === 0
+  ){
+
+    await loadAdminProducts();
+
+  }
+
+
   renderProductManager();
-
-
-  await loadAdminProducts();
 
 
   adminLoadedTabs.products =
