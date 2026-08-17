@@ -602,6 +602,50 @@ color:#991b1b;
 
     }
 
+    /*
+=========================================
+LEGACY ORDERS
+=========================================
+*/
+
+if(
+  tab ===
+  "legacy_orders"
+){
+
+  if(
+    typeof renderLegacyOrderManager !==
+    "function"
+  ){
+
+    throw new Error(
+      "ไม่พบ renderLegacyOrderManager()"
+    );
+
+  }
+
+
+  renderLegacyOrderManager();
+
+
+  if(
+    typeof loadLegacyUnlinkedOrders ===
+    "function"
+  ){
+
+    await loadLegacyUnlinkedOrders();
+
+  }
+
+
+  adminLoadedTabs.legacy_orders =
+    true;
+
+
+  return;
+
+}
+
 
   }catch(error){
 
