@@ -22,7 +22,9 @@ const adminLoadedTabs = {
 
   gifts:false,
 
-  manual_order:false
+  manual_order:false,
+
+  legacy_orders:false
 
 };
 
@@ -131,7 +133,9 @@ function showAdminTab(
 
     "gifts",
 
-    "manual_order"
+    "manual_order",
+
+    "legacy_orders"
 
   ];
 
@@ -179,15 +183,6 @@ function showAdminTab(
   loadAdminTabData(
     tab
   )
-
-    if(
-  window.innerWidth <= 700
-){
-
-  closeAdminSidebar();
-
-}
-      
     .catch(
       error => {
 
@@ -199,6 +194,15 @@ function showAdminTab(
 
       }
     );
+
+
+  if(
+    window.innerWidth <= 700
+  ){
+
+    closeAdminSidebar();
+
+  }
 
 }
 
@@ -251,7 +255,7 @@ async function loadAdminTabData(
     =========================================
     */
 
-    if(
+  if(
   tab ===
   "products"
 ){
@@ -262,7 +266,6 @@ async function loadAdminTabData(
   */
 
   if(
-    !adminLoadedTabs.collections ||
     !Array.isArray(
       adminCollections
     ) ||
@@ -270,9 +273,6 @@ async function loadAdminTabData(
   ){
 
     await loadAdminCollections();
-
-    adminLoadedTabs.collections =
-      true;
 
   }
 
@@ -291,28 +291,30 @@ async function loadAdminTabData(
 
 }
 
-
     /*
     =========================================
     COLLECTIONS
     =========================================
     */
 
-    if(
-      tab ===
-      "collections"
-    ){
+   if(
+  tab ===
+  "collections"
+){
 
-      renderCollectionManager();
+  renderCollectionManager();
 
-      await loadAdminCollections();
 
-      adminLoadedTabs.collections =
-        true;
+  await loadAdminCollections();
 
-      return;
 
-    }
+  adminLoadedTabs.collections =
+    true;
+
+
+  return;
+
+}
 
 
     /*
@@ -321,13 +323,19 @@ async function loadAdminTabData(
     =========================================
     */
 
-  if(
+if(
   tab ===
   "options"
 ){
 
+  /*
+  Options ต้องใช้ข้อมูล
+  Products + Collections
+  แต่ไม่ถือว่าแท็บเหล่านั้นโหลดแล้ว
+  */
+
+
   if(
-    !adminLoadedTabs.products ||
     !Array.isArray(
       adminProducts
     ) ||
@@ -336,14 +344,10 @@ async function loadAdminTabData(
 
     await loadAdminProducts();
 
-    adminLoadedTabs.products =
-      true;
-
   }
 
 
   if(
-    !adminLoadedTabs.collections ||
     !Array.isArray(
       adminCollections
     ) ||
@@ -351,9 +355,6 @@ async function loadAdminTabData(
   ){
 
     await loadAdminCollections();
-
-    adminLoadedTabs.collections =
-      true;
 
   }
 
@@ -368,7 +369,6 @@ async function loadAdminTabData(
   return;
 
 }
-
 
     /*
     =========================================
