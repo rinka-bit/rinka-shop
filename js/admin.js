@@ -197,12 +197,12 @@ function showAdminTab(
 
 
   if(
-    window.innerWidth <= 700
-  ){
+  window.innerWidth <= 900
+){
 
-    closeAdminSidebar();
+  closeAdminSidebar();
 
-  }
+}
 
 }
 
