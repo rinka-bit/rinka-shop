@@ -1161,6 +1161,28 @@ function renderProduct(product){
       0
     );
 
+  const priceMode =
+  String(
+    product.price_mode ||
+    "fixed"
+  )
+    .trim()
+    .toLowerCase();
+
+
+const minPrice =
+  Number(
+    product.min_price ??
+    unitPrice
+  );
+
+
+const maxPrice =
+  Number(
+    product.max_price ??
+    minPrice
+  );
+
   const optionGroups = {};
 
   (
@@ -1195,6 +1217,17 @@ function renderProduct(product){
   ).forEach(
     ([group,options])=>{
 
+  const groupSelectionType =
+  String(
+    options[0]?.selection_type ||
+    "single"
+  )
+    .trim()
+    .toLowerCase() ===
+    "multiple"
+      ? "multiple"
+      : "single";
+
       optionsHtml += `
 
 <div class="option-section">
@@ -1206,8 +1239,12 @@ function renderProduct(product){
     </span>
 
     <small>
-      เลือกจำนวนที่ต้องการ
-    </small>
+  ${
+    groupSelectionType === "multiple"
+      ? "เลือกได้หลายรายการ"
+      : "เลือกได้ 1 รายการ"
+  }
+</small>
 
   </div>
 
@@ -1238,16 +1275,97 @@ function renderProduct(product){
           const soldOut =
             stock <= 0;
 
-          const addPrice =
-            Number(
-              option.additional_price || 0
-            );
+          const optionPrice =
+  getProductOptionUnitPrice(
+    product,
+    option
+  );
+
+
+const selectionType =
+  String(
+    option.selection_type ||
+    "single"
+  )
+    .trim()
+    .toLowerCase() ===
+    "multiple"
+      ? "multiple"
+      : "single";
+
+
+const optionImage =
+  String(
+    option.image || ""
+  ).trim();
+
+
+/*
+เก็บข้อมูล Option ตั้งแต่ render
+เพื่อให้ single/multiple ทำงานได้
+โดยไม่ต้องรอจนกดครั้งแรก
+*/
+
+window.optionQty[
+  optionId
+] = {
+
+  option_id:
+    option.option_id ||
+    rawOptionId,
+
+  group:
+    group,
+
+  value:
+    String(
+      option.option_value || ""
+    ),
+
+  price:
+    optionPrice,
+
+  stock:
+    stock,
+
+  selection_type:
+    selectionType,
+
+  image:
+    optionImage,
+
+  qty:
+    0
+
+};
 
           optionsHtml += `
 
 <div
 class="option-row ${soldOut ? "soldout" : ""}"
 id="optionRow_${optionId}">
+
+${
+  optionImage
+    ? `
+
+<img
+src="${escapeProductAttribute(
+  optionImage
+)}"
+alt="${escapeProductAttribute(
+  option.option_value || ""
+)}"
+loading="lazy"
+style="cursor:pointer;"
+onclick='showProductOptionImage(
+  ${JSON.stringify(optionImage)}
+)'
+>
+
+`
+    : ""
+}
 
   <div class="option-info">
 
@@ -1258,15 +1376,21 @@ id="optionRow_${optionId}">
       )}
     </div>
 
-    <div class="option-price">
+   ${
+  priceMode === "option"
+    ? `
 
-      ${
-        addPrice > 0
-          ? `เพิ่ม ฿${addPrice.toLocaleString("th-TH")}`
-          : "ไม่เพิ่มราคา"
-      }
+<div class="option-price">
 
-    </div>
+  ฿${optionPrice.toLocaleString(
+    "th-TH"
+  )}
+
+</div>
+
+`
+    : ""
+}
 
     ${
       !soldOut
@@ -1298,7 +1422,10 @@ id="optionRow_${optionId}">
   <button
   type="button"
   aria-label="ลดจำนวน ${escapeProductAttribute(option.option_value || "")}"
-  onclick='changeOptionQty(${JSON.stringify(optionId)},${JSON.stringify(group)},${JSON.stringify(String(option.option_value || ""))},${addPrice},${stock},-1)'>
+  onclick='changeOptionQty(
+    ${JSON.stringify(optionId)},
+    -1
+  )'>
     −
   </button>
 
@@ -1309,7 +1436,10 @@ id="optionRow_${optionId}">
   <button
   type="button"
   aria-label="เพิ่มจำนวน ${escapeProductAttribute(option.option_value || "")}"
-  onclick='changeOptionQty(${JSON.stringify(optionId)},${JSON.stringify(group)},${JSON.stringify(String(option.option_value || ""))},${addPrice},${stock},1)'>
+  onclick='changeOptionQty(
+    ${JSON.stringify(optionId)},
+    1
+  )'>
     +
   </button>
 
@@ -1492,31 +1622,78 @@ aria-label="ดูรูปที่ ${index + 1}">
           : ""
       }
 
-      <div class="price-panel">
+      <div
+class="price-panel"
+id="productPricePanel"
+>
 
-        ${
-          normalizeProductBool(
-            product.on_sale
-          )
-            ? `
+       ${
+  priceMode === "option"
+    ? `
+
+<div class="normal-price">
+
+  ${
+    minPrice > 0 ||
+    maxPrice > 0
+      ? (
+          minPrice === maxPrice
+            ? `฿${minPrice.toLocaleString(
+                "th-TH"
+              )}`
+            : (
+                `฿${minPrice.toLocaleString(
+                  "th-TH"
+                )}` +
+                `–฿${maxPrice.toLocaleString(
+                  "th-TH"
+                )}`
+              )
+        )
+      : "รอกำหนดราคา"
+  }
+
+</div>
+
+<div
+style="
+margin-top:5px;
+font-size:12px;
+color:#64748b;
+"
+>
+เลือกรูปแบบด้านล่างเพื่อดูราคา
+</div>
+
+`
+    : normalizeProductBool(
+        product.on_sale
+      )
+      ? `
 
 <div class="old-price">
-  ฿${oldPrice.toLocaleString("th-TH")}
+  ฿${oldPrice.toLocaleString(
+    "th-TH"
+  )}
 </div>
 
 <div class="sale-price">
-  ฿${unitPrice.toLocaleString("th-TH")}
+  ฿${unitPrice.toLocaleString(
+    "th-TH"
+  )}
 </div>
 
 `
-            : `
+      : `
 
 <div class="normal-price">
-  ฿${unitPrice.toLocaleString("th-TH")}
+  ฿${unitPrice.toLocaleString(
+    "th-TH"
+  )}
 </div>
 
 `
-        }
+}
 
       </div>
 
@@ -1716,64 +1893,215 @@ function changeMainProductImage(
 
 }
 
-function changeOptionQty(
-  optionId,
-  group,
-  value,
-  addPrice,
-  stock,
-  change
+function showProductOptionImage(
+  image
 ){
 
-  if(
-    !window.optionQty[
-      optionId
-    ]
-  ){
+  const imageUrl =
+    String(
+      image || ""
+    ).trim();
 
-    window.optionQty[
-      optionId
-    ] = {
 
-      group:
-        group,
+  if(!imageUrl){
 
-      value:
-        value,
-
-      additional_price:
-        Number(
-          addPrice || 0
-        ),
-
-      stock:
-        Number(
-          stock || 0
-        ),
-
-      qty:
-        0
-
-    };
+    return;
 
   }
+
+
+  const main =
+    document.getElementById(
+      "mainImage"
+    );
+
+
+  if(main){
+
+    main.style.opacity =
+      ".45";
+
+
+    main.src =
+      imageUrl;
+
+
+    requestAnimationFrame(
+      () => {
+
+        main.style.opacity =
+          "1";
+
+      }
+    );
+
+  }
+
+
+  /*
+  Option image ต้องเปิด Gallery ใหญ่ได้ด้วย
+  */
+
+  let index =
+    galleryImages.findIndex(
+      item =>
+        String(item) ===
+        imageUrl
+    );
+
+
+  if(index < 0){
+
+    galleryImages.push(
+      imageUrl
+    );
+
+
+    index =
+      galleryImages.length -
+      1;
+
+  }
+
+
+  galleryIndex =
+    index;
+
+
+  /*
+  รูปนี้ไม่ใช่ thumbnail หลัก
+  จึงยกเลิก active ของ thumbnail เดิม
+  */
+
+  document
+    .querySelectorAll(
+      "[data-product-thumb]"
+    )
+    .forEach(
+      button => {
+
+        button.classList.remove(
+          "active"
+        );
+
+      }
+    );
+
+}
+
+function changeOptionQty(
+  optionId,
+  change
+){
 
   const option =
     window.optionQty[
       optionId
     ];
 
+
+  if(!option){
+
+    return;
+
+  }
+
+
   let nextQty =
     Number(
       option.qty || 0
     ) +
-    Number(change || 0);
+    Number(
+      change || 0
+    );
+
 
   nextQty =
     Math.max(
       0,
       nextQty
     );
+
+
+  /*
+  =========================================
+  SINGLE SELECTION
+
+  เลือก Option ใหม่ใน group เดียวกัน
+  → reset ตัวอื่นเป็น 0
+
+  แต่ Option ตัวเดิมเพิ่มจำนวน > 1 ได้
+  =========================================
+  */
+
+  if(
+    option.selection_type ===
+      "single" &&
+    Number(change) > 0 &&
+    Number(option.qty || 0) === 0
+  ){
+
+    Object
+      .entries(
+        window.optionQty || {}
+      )
+      .forEach(
+        (
+          [
+            otherId,
+            otherOption
+          ]
+        ) => {
+
+          if(
+            otherId ===
+              optionId ||
+            otherOption.group !==
+              option.group
+          ){
+
+            return;
+
+          }
+
+
+          otherOption.qty =
+            0;
+
+
+          const otherQtyBox =
+            document.getElementById(
+              `optionQty_${otherId}`
+            );
+
+
+          if(otherQtyBox){
+
+            otherQtyBox.textContent =
+              "0";
+
+          }
+
+
+          document
+            .getElementById(
+              `optionRow_${otherId}`
+            )
+            ?.classList.remove(
+              "selected"
+            );
+
+        }
+      );
+
+  }
+
+
+  /*
+  =========================================
+  STOCK LIMIT
+  =========================================
+  */
 
   if(
     option.stock > 0 &&
@@ -1783,6 +2111,7 @@ function changeOptionQty(
     nextQty =
       option.stock;
 
+
     showProductToast(
       `เลือกได้สูงสุด ${option.stock} ชิ้น`,
       true
@@ -1790,13 +2119,16 @@ function changeOptionQty(
 
   }
 
+
   option.qty =
     nextQty;
+
 
   const qtyBox =
     document.getElementById(
       `optionQty_${optionId}`
     );
+
 
   if(qtyBox){
 
@@ -1805,10 +2137,12 @@ function changeOptionQty(
 
   }
 
+
   const row =
     document.getElementById(
       `optionRow_${optionId}`
     );
+
 
   if(row){
 
@@ -1818,6 +2152,24 @@ function changeOptionQty(
     );
 
   }
+
+
+  /*
+  เลือก Option ที่มีรูป
+  → เปลี่ยนรูปหลัก
+  */
+
+  if(
+    nextQty > 0 &&
+    option.image
+  ){
+
+    showProductOptionImage(
+      option.image
+    );
+
+  }
+
 
   updateSelectionSummary();
 
@@ -1862,12 +2214,16 @@ function updateSelectionSummary(){
       "selectionSummary"
     );
 
+
   if(
     !box ||
     !window.currentProduct
   ){
+
     return;
+
   }
+
 
   const options =
     Array.isArray(
@@ -1876,7 +2232,16 @@ function updateSelectionSummary(){
       ? window.currentProduct.options
       : [];
 
-  if(options.length === 0){
+
+  /*
+  =========================================
+  NO OPTIONS
+  =========================================
+  */
+
+  if(
+    options.length === 0
+  ){
 
     const qty =
       Number(
@@ -1885,10 +2250,12 @@ function updateSelectionSummary(){
         )?.value || 1
       );
 
+
     const total =
       getProductPrice(
         window.currentProduct
       ) * qty;
+
 
     box.innerHTML = `
 
@@ -1897,60 +2264,90 @@ function updateSelectionSummary(){
 ชิ้น
 •
 รวม
-<b>฿${total.toLocaleString("th-TH")}</b>
+<b>
+฿${total.toLocaleString(
+  "th-TH"
+)}
+</b>
 
 `;
+
 
     box.classList.remove(
       "hidden"
     );
 
+
     return;
 
   }
+
+
+  /*
+  =========================================
+  OPTIONS
+  =========================================
+  */
 
   const selected =
     getSelectedOptionItems();
 
-  if(!selected.length){
+
+  if(
+    !selected.length
+  ){
 
     box.innerHTML =
       "กรุณาเลือกตัวเลือกและจำนวนที่ต้องการ";
+
 
     box.classList.remove(
       "hidden"
     );
 
+
+    updateSelectedProductPricePanel(
+      []
+    );
+
+
     return;
 
   }
 
-  const basePrice =
-    getProductPrice(
-      window.currentProduct
-    );
 
   const totalQty =
     selected.reduce(
-      (sum,item)=>
+      (
+        sum,
+        item
+      ) =>
         sum +
-        Number(item.qty || 0),
+        Number(
+          item.qty || 0
+        ),
       0
     );
 
+
   const totalPrice =
     selected.reduce(
-      (sum,item)=>
+      (
+        sum,
+        item
+      ) =>
         sum +
         (
-          basePrice +
           Number(
-            item.additional_price || 0
+            item.price || 0
+          ) *
+          Number(
+            item.qty || 0
           )
-        ) *
-        Number(item.qty || 0),
+        ),
       0
     );
+
 
   box.innerHTML = `
 
@@ -1959,13 +2356,173 @@ function updateSelectionSummary(){
 ชิ้น
 •
 รวม
-<b>฿${totalPrice.toLocaleString("th-TH")}</b>
+<b>
+฿${totalPrice.toLocaleString(
+  "th-TH"
+)}
+</b>
 
 `;
+
 
   box.classList.remove(
     "hidden"
   );
+
+
+  updateSelectedProductPricePanel(
+    selected
+  );
+
+}
+
+function updateSelectedProductPricePanel(
+  selected
+){
+
+  const product =
+    window.currentProduct;
+
+
+  const panel =
+    document.getElementById(
+      "productPricePanel"
+    );
+
+
+  if(
+    !product ||
+    !panel
+  ){
+
+    return;
+
+  }
+
+
+  const priceMode =
+    String(
+      product.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if(
+    priceMode !== "option"
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !Array.isArray(
+      selected
+    ) ||
+    selected.length === 0
+  ){
+
+    const min =
+      Number(
+        product.min_price || 0
+      );
+
+
+    const max =
+      Number(
+        product.max_price ??
+        min
+      );
+
+
+    panel.innerHTML = `
+
+<div class="normal-price">
+
+${
+  min > 0 || max > 0
+    ? (
+        min === max
+          ? `฿${min.toLocaleString(
+              "th-TH"
+            )}`
+          : (
+              `฿${min.toLocaleString(
+                "th-TH"
+              )}` +
+              `–฿${max.toLocaleString(
+                "th-TH"
+              )}`
+            )
+      )
+    : "รอกำหนดราคา"
+}
+
+</div>
+
+<div
+style="
+margin-top:5px;
+font-size:12px;
+color:#64748b;
+"
+>
+เลือกรูปแบบด้านล่างเพื่อดูราคา
+</div>
+
+`;
+
+    return;
+
+  }
+
+
+  const prices =
+    selected.map(
+      item =>
+        Number(
+          item.price || 0
+        )
+    );
+
+
+  const min =
+    Math.min(
+      ...prices
+    );
+
+
+  const max =
+    Math.max(
+      ...prices
+    );
+
+
+  panel.innerHTML = `
+
+<div class="normal-price">
+
+${
+  min === max
+    ? `฿${min.toLocaleString(
+        "th-TH"
+      )}`
+    : (
+        `฿${min.toLocaleString(
+          "th-TH"
+        )}` +
+        `–฿${max.toLocaleString(
+          "th-TH"
+        )}`
+      )
+}
+
+</div>
+
+`;
 
 }
 
@@ -1986,7 +2543,9 @@ function getSelectedOptionItems(){
 
 function buildProductCartItems(){
 
-  if(!window.currentProduct){
+  if(
+    !window.currentProduct
+  ){
 
     throw new Error(
       "ยังโหลดข้อมูลสินค้าไม่เสร็จ"
@@ -1994,19 +2553,37 @@ function buildProductCartItems(){
 
   }
 
+
+  const product =
+    window.currentProduct;
+
+
   const options =
     Array.isArray(
-      window.currentProduct.options
+      product.options
     )
-      ? window.currentProduct.options
+      ? product.options
       : [];
 
-  const basePrice =
-    getProductPrice(
-      window.currentProduct
-    );
 
-  if(options.length === 0){
+  const priceMode =
+    String(
+      product.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  /*
+  =========================================
+  PRODUCT WITHOUT OPTIONS
+  =========================================
+  */
+
+  if(
+    options.length === 0
+  ){
 
     const qty =
       Math.max(
@@ -2018,19 +2595,26 @@ function buildProductCartItems(){
         )
       );
 
+
+    const unitPrice =
+      getProductPrice(
+        product
+      );
+
+
     return [{
 
-      ...window.currentProduct,
+      ...product,
 
       collection_id:
-        window.currentProduct.collection_id ||
+        product.collection_id ||
         "",
 
       price:
-        basePrice,
+        unitPrice,
 
       final_price:
-        basePrice,
+        unitPrice,
 
       selected_options:{},
 
@@ -2041,10 +2625,20 @@ function buildProductCartItems(){
 
   }
 
+
+  /*
+  =========================================
+  PRODUCT WITH OPTIONS
+  =========================================
+  */
+
   const selected =
     getSelectedOptionItems();
 
-  if(!selected.length){
+
+  if(
+    !selected.length
+  ){
 
     throw new Error(
       "กรุณาเลือกตัวเลือกสินค้าอย่างน้อย 1 รายการ"
@@ -2052,21 +2646,34 @@ function buildProductCartItems(){
 
   }
 
+
   return selected.map(
-    option=>{
+    option => {
+
+      /*
+      fixed:
+      ทุก Option ใช้ราคาสินค้า
+
+      option:
+      ใช้ราคาจริงจาก ProductOptions.price
+      */
 
       const unitPrice =
-        basePrice +
-        Number(
-          option.additional_price || 0
-        );
+        priceMode === "option"
+          ? Number(
+              option.price || 0
+            )
+          : getProductPrice(
+              product
+            );
+
 
       return {
 
-        ...window.currentProduct,
+        ...product,
 
         collection_id:
-          window.currentProduct.collection_id ||
+          product.collection_id ||
           "",
 
         price:
@@ -2075,11 +2682,19 @@ function buildProductCartItems(){
         final_price:
           unitPrice,
 
+        option_id:
+          option.option_id ||
+          "",
+
         option_group:
           option.group,
 
         option_value:
           option.value,
+
+        option_image:
+          option.image ||
+          "",
 
         selected_options:{
           [option.group]:
@@ -2087,7 +2702,9 @@ function buildProductCartItems(){
         },
 
         qty:
-          Number(option.qty || 0)
+          Number(
+            option.qty || 0
+          )
 
       };
 
@@ -2095,7 +2712,7 @@ function buildProductCartItems(){
   );
 
 }
-
+  
 function addToCart(){
 
   if(window.productActionLoading){
@@ -2372,6 +2989,99 @@ function stableProductOptions(
         },
         {}
       )
+  );
+
+}
+
+function getProductOptionUnitPrice(
+  product,
+  option
+){
+
+  const priceMode =
+    String(
+      product?.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  /*
+  Fixed price
+  */
+
+  if(
+    priceMode !== "option"
+  ){
+
+    return getProductPrice(
+      product
+    );
+
+  }
+
+
+  /*
+  V2
+  */
+
+  if(
+    option?.price !== null &&
+    option?.price !== undefined &&
+    option?.price !== ""
+  ){
+
+    const price =
+      Number(
+        option.price
+      );
+
+
+    if(
+      Number.isFinite(
+        price
+      )
+    ){
+
+      return price;
+
+    }
+
+  }
+
+
+  /*
+  Compatibility ชั่วคราว
+  สำหรับข้อมูลเก่า
+  */
+
+  const base =
+    Number(
+      product?.base_price ??
+      product?.price ??
+      0
+    );
+
+
+  const additional =
+    Number(
+      option?.additional_price ||
+      0
+    );
+
+
+  return (
+    Number.isFinite(base)
+      ? base
+      : 0
+  ) +
+  (
+    Number.isFinite(
+      additional
+    )
+      ? additional
+      : 0
   );
 
 }
