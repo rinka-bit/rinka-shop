@@ -161,22 +161,101 @@ function searchProducts(products, keyword){
   });
 }
 
-function sortProducts(products){
-  const sort = document.getElementById("sortSelect")?.value || "newest";
+function sortProducts(
+  products
+){
+
+  const sort =
+    document
+      .getElementById(
+        "sortSelect"
+      )
+      ?.value ||
+    "newest";
+
 
   switch(sort){
-    case "price_low": products.sort((a,b)=>getProductPrice(a)-getProductPrice(b)); break;
-    case "price_high": products.sort((a,b)=>getProductPrice(b)-getProductPrice(a)); break;
-    case "name": products.sort((a,b)=>String(a.name || "").localeCompare(String(b.name || ""),"th")); break;
+
+    case "price_low":
+
+      products.sort(
+        (a,b) =>
+          getProductMinPrice(a) -
+          getProductMinPrice(b)
+      );
+
+      break;
+
+
+    case "price_high":
+
+      products.sort(
+        (a,b) =>
+          getProductMaxPrice(b) -
+          getProductMaxPrice(a)
+      );
+
+      break;
+
+
+    case "name":
+
+      products.sort(
+        (a,b) =>
+          String(
+            a.name || ""
+          )
+            .localeCompare(
+              String(
+                b.name || ""
+              ),
+              "th"
+            )
+      );
+
+      break;
+
+
     default:
-      products.sort((a,b)=>{
-        const sortOrder = Number(b.sort_order || 0)-Number(a.sort_order || 0);
-        if(sortOrder !== 0) return sortOrder;
-        return String(b.product_id || "").localeCompare(String(a.product_id || ""));
-      });
+
+      products.sort(
+        (a,b) => {
+
+          const sortOrder =
+            Number(
+              b.sort_order || 0
+            ) -
+            Number(
+              a.sort_order || 0
+            );
+
+
+          if(
+            sortOrder !== 0
+          ){
+
+            return sortOrder;
+
+          }
+
+
+          return String(
+            b.product_id || ""
+          )
+            .localeCompare(
+              String(
+                a.product_id || ""
+              )
+            );
+
+        }
+      );
+
   }
 
+
   return products;
+
 }
 
 function renderProducts(products){
@@ -201,39 +280,314 @@ function renderProducts(products){
   grid.innerHTML = products.map(createBrowseProductCard).join("");
 }
 
-function createBrowseProductCard(product){
-  const productId = escapeHtml(product.product_id || "");
-  const name = escapeHtml(product.name || "สินค้า");
-  const fandom = escapeHtml(product.fandom || "");
-  const image = escapeHtml(product.image || "");
-  const price = getProductPrice(product);
-  const oldPrice = Number(product.old_price ?? product.price ?? 0);
-  const deadlineText = getDeadlineText(product.preorder_deadline);
-  const onSale = isTruthy(product.on_sale) || (Number(product.sale_price || 0) > 0 && oldPrice > price);
-  const isNew = isTruthy(product.new_arrival);
-  const isPreorder = String(product.product_type || "preorder").toLowerCase() === "preorder";
+function createBrowseProductCard(
+  product
+){
+
+  const productId =
+    escapeHtml(
+      product.product_id || ""
+    );
+
+
+  const name =
+    escapeHtml(
+      product.name ||
+      "สินค้า"
+    );
+
+
+  const fandom =
+    escapeHtml(
+      product.fandom || ""
+    );
+
+
+  const image =
+    escapeHtml(
+      product.image || ""
+    );
+
+
+  const priceMode =
+    String(
+      product.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const price =
+    getProductPrice(
+      product
+    );
+
+
+  const minPrice =
+    getProductMinPrice(
+      product
+    );
+
+
+  const maxPrice =
+    getProductMaxPrice(
+      product
+    );
+
+
+  const oldPrice =
+    Number(
+      product.old_price ??
+      product.price ??
+      0
+    );
+
+
+  const deadlineText =
+    getDeadlineText(
+      product.preorder_deadline
+    );
+
+
+  /*
+  Option pricing
+  ไม่ใช้ sale badge ของ Products
+  */
+
+  const onSale =
+    priceMode === "fixed" &&
+    (
+      isTruthy(
+        product.on_sale
+      ) ||
+      (
+        Number(
+          product.sale_price || 0
+        ) > 0 &&
+        oldPrice > price
+      )
+    );
+
+
+  const isNew =
+    isTruthy(
+      product.new_arrival
+    );
+
+
+  const isPreorder =
+    String(
+      product.product_type ||
+      "preorder"
+    )
+      .toLowerCase() ===
+    "preorder";
+
+
+  /*
+  =========================================
+  PRICE HTML
+  =========================================
+  */
+
+  let priceHtml = "";
+
+
+  if(
+    priceMode === "option"
+  ){
+
+    if(
+      minPrice > 0 ||
+      maxPrice > 0
+    ){
+
+      if(
+        minPrice !==
+        maxPrice
+      ){
+
+        priceHtml = `
+
+<span class="normal-price">
+  ฿${minPrice.toLocaleString("th-TH")}
+  –
+  ฿${maxPrice.toLocaleString("th-TH")}
+</span>
+
+`;
+
+      }else{
+
+        priceHtml = `
+
+<span class="normal-price">
+  ฿${minPrice.toLocaleString("th-TH")}
+</span>
+
+`;
+
+      }
+
+    }else{
+
+      priceHtml = `
+
+<span class="normal-price">
+  รอกำหนดราคา
+</span>
+
+`;
+
+    }
+
+  }
+  else if(
+    onSale
+  ){
+
+    priceHtml = `
+
+<span class="sale-price">
+  ฿${price.toLocaleString("th-TH")}
+</span>
+
+<span class="old-price">
+  ฿${oldPrice.toLocaleString("th-TH")}
+</span>
+
+`;
+
+  }
+  else{
+
+    priceHtml = `
+
+<span class="normal-price">
+  ฿${price.toLocaleString("th-TH")}
+</span>
+
+`;
+
+  }
+
 
   return `
-    <article class="card" tabindex="0" role="link"
-      onclick="openBrowseProduct('${escapeJs(product.product_id || "")}')"
-      onkeydown="handleBrowseCardKey(event,'${escapeJs(product.product_id || "")}')">
-      <div class="image-box">
-        <img src="${image}" alt="${name}" loading="lazy" onerror="this.style.opacity='.18'">
-        ${isNew ? '<div class="badge-new">NEW</div>' : ''}
-        ${onSale ? '<div class="badge-sale">SALE</div>' : ''}
-        <div class="${isPreorder ? 'badge-preorder' : 'badge-stock'}">${isPreorder ? 'PREORDER' : 'พร้อมส่ง'}</div>
-      </div>
-      <div class="card-body">
-        <h3>${name}</h3>
-        ${fandom ? `<p class="fandom">${fandom}</p>` : ''}
-        <div class="price-box">
-          ${onSale
-            ? `<span class="sale-price">฿${price.toLocaleString('th-TH')}</span><span class="old-price">฿${oldPrice.toLocaleString('th-TH')}</span>`
-            : `<span class="normal-price">฿${price.toLocaleString('th-TH')}</span>`}
-        </div>
-        ${deadlineText ? `<div class="deadline">${escapeHtml(deadlineText)}</div>` : ''}
-      </div>
-    </article>`;
+
+<article
+class="card"
+tabindex="0"
+role="link"
+
+onclick="
+openBrowseProduct(
+  '${escapeJs(
+    product.product_id || ""
+  )}'
+)
+"
+
+onkeydown="
+handleBrowseCardKey(
+  event,
+  '${escapeJs(
+    product.product_id || ""
+  )}'
+)
+"
+>
+
+  <div class="image-box">
+
+    <img
+    src="${image}"
+    alt="${name}"
+    loading="lazy"
+    onerror="
+    this.style.opacity='.18'
+    "
+    >
+
+    ${
+      isNew
+        ? `
+          <div class="badge-new">
+            NEW
+          </div>
+        `
+        : ""
+    }
+
+    ${
+      onSale
+        ? `
+          <div class="badge-sale">
+            SALE
+          </div>
+        `
+        : ""
+    }
+
+    <div
+    class="${
+      isPreorder
+        ? "badge-preorder"
+        : "badge-stock"
+    }"
+    >
+      ${
+        isPreorder
+          ? "PREORDER"
+          : "พร้อมส่ง"
+      }
+    </div>
+
+  </div>
+
+
+  <div class="card-body">
+
+    <h3>
+      ${name}
+    </h3>
+
+    ${
+      fandom
+        ? `
+          <p class="fandom">
+            ${fandom}
+          </p>
+        `
+        : ""
+    }
+
+
+    <div class="price-box">
+
+      ${priceHtml}
+
+    </div>
+
+
+    ${
+      deadlineText
+        ? `
+          <div class="deadline">
+            ${escapeHtml(
+              deadlineText
+            )}
+          </div>
+        `
+        : ""
+    }
+
+  </div>
+
+</article>
+
+`;
+
 }
 
 function getDeadlineText(deadline){
@@ -302,7 +656,144 @@ function setBrowseStatus(html){ const box=document.getElementById("statusMessage
 function clearBrowseStatus(){ const box=document.getElementById("statusMessage"); box.innerHTML=""; box.classList.add("hidden"); }
 function openBrowseProduct(id){ window.location.href = "product.html?id=" + encodeURIComponent(id); }
 function handleBrowseCardKey(event,id){ if(event.key === "Enter" || event.key === " "){ event.preventDefault(); openBrowseProduct(id); } }
-function getProductPrice(product){ const value=Number(product.final_price ?? product.sale_price ?? product.price ?? 0); return Number.isFinite(value)?value:0; }
+
+function getProductPrice(
+  product
+){
+
+  const priceMode =
+    String(
+      product.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if(
+    priceMode === "option"
+  ){
+
+    return getProductMinPrice(
+      product
+    );
+
+  }
+
+
+  const value =
+    Number(
+      product.final_price ??
+      product.sale_price ??
+      product.price ??
+      0
+    );
+
+
+  return Number.isFinite(
+    value
+  )
+    ? value
+    : 0;
+
+}
+
+
+function getProductMinPrice(
+  product
+){
+
+  const priceMode =
+    String(
+      product.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if(
+    priceMode !== "option"
+  ){
+
+    const value =
+      Number(
+        product.final_price ??
+        product.sale_price ??
+        product.price ??
+        0
+      );
+
+
+    return Number.isFinite(
+      value
+    )
+      ? value
+      : 0;
+
+  }
+
+
+  const value =
+    Number(
+      product.min_price ??
+      product.final_price ??
+      product.price ??
+      0
+    );
+
+
+  return Number.isFinite(
+    value
+  )
+    ? value
+    : 0;
+
+}
+
+
+function getProductMaxPrice(
+  product
+){
+
+  const priceMode =
+    String(
+      product.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if(
+    priceMode !== "option"
+  ){
+
+    return getProductMinPrice(
+      product
+    );
+
+  }
+
+
+  const value =
+    Number(
+      product.max_price ??
+      product.min_price ??
+      product.final_price ??
+      product.price ??
+      0
+    );
+
+
+  return Number.isFinite(
+    value
+  )
+    ? value
+    : 0;
+
+}
+
 function sameText(a,b){ return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase(); }
 function isTruthy(value){ return value===true || value===1 || ["true","yes","1","active"].includes(String(value || "").trim().toLowerCase()); }
 function escapeHtml(value){ return String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
