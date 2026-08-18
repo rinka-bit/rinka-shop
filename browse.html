@@ -15,7 +15,15 @@
 <header class="page-header">
   <button id="menuButton" class="icon-btn" type="button" aria-label="เปิดเมนู">☰</button>
   <h1 id="pageTitle">สินค้า</h1>
-  <a href="cart.html" class="cart-btn" aria-label="เปิดตะกร้า">🛒<span id="cartCount">0</span></a>
+ <button
+type="button"
+class="cart-btn"
+onclick="openCartDrawer()"
+aria-label="เปิดตะกร้า"
+>
+  🛒
+  <span id="cartCount">0</span>
+</button>
 </header>
 <div id="overlay" class="overlay hidden"></div>
 <aside id="sideMenu" class="side-menu">
