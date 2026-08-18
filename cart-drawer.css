@@ -611,3 +611,11 @@ MOBILE
 }
   
 }
+
+.cart-drawer{
+  overscroll-behavior:contain;
+}
+
+.cart-drawer-body{
+  -webkit-overflow-scrolling:touch;
+}
