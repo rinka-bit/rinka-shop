@@ -2929,7 +2929,55 @@ function escapePaymentAttribute(
 
 }
 
+/*
+=========================================
+INIT PAYMENT PAGE
+=========================================
+*/
 
+async function initPaymentPage(){
+
+  renderPaymentSummary();
+
+  updatePaymentCartCount();
+
+  bindSlipInput();
+
+  updatePaymentButtonState();
+
+
+  try{
+
+    await loadBanks();
+
+  }catch(error){
+
+    console.error(
+      "initPaymentPage loadBanks error:",
+      error
+    );
+
+  }
+
+}
+
+
+if(
+  document.readyState ===
+  "loading"
+){
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initPaymentPage
+  );
+
+}else{
+
+  initPaymentPage();
+
+}
+  
 function goPaymentBack(){
 
   if(
@@ -2948,6 +2996,7 @@ function goPaymentBack(){
   }
 
 }
+  
 
 </script>
 
