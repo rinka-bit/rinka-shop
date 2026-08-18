@@ -1529,17 +1529,17 @@ async function fetchAdminCurrentOrderDetail(
 }
 
 async function fetchAdminLegacyOrderDetail(
-  legacyId
+  orderId
 ){
 
   const response =
     await fetch(
 
       API +
-      "?action=legacyOrder" +
-      "&legacy_id=" +
+      "?action=adminLegacyOrderDetail" +
+      "&order_id=" +
       encodeURIComponent(
-        legacyId
+        orderId
       )
 
     );
@@ -1560,12 +1560,12 @@ async function fetchAdminLegacyOrderDetail(
 
 
   if(
-    result &&
-    result.success === false
+    !result ||
+    result.success !== true
   ){
 
     throw new Error(
-      result.error ||
+      result?.error ||
       "โหลด Legacy Order ไม่สำเร็จ"
     );
 
@@ -1574,7 +1574,6 @@ async function fetchAdminLegacyOrderDetail(
 
   return (
     result.order ||
-    result.legacy_order ||
     result
   );
 
@@ -1754,6 +1753,14 @@ function renderAdminCustomerOrderItem(
     );
 
 
+  const image =
+    String(
+      item.option_image ||
+      item.image ||
+      ""
+    ).trim();
+
+
   const selectedOptions =
     item.selected_options &&
     typeof item.selected_options ===
@@ -1786,6 +1793,11 @@ function renderAdminCustomerOrderItem(
 
 <div
 style="
+display:grid;
+grid-template-columns:
+  ${image ? "64px" : "1px"}
+  minmax(0,1fr);
+gap:${image ? "10px" : "0"};
 padding:10px;
 border:1px solid #e2e8f0;
 border-radius:10px;
@@ -1793,21 +1805,46 @@ background:#fff;
 "
 >
 
-  <div
-  style="
-  font-size:13px;
-  font-weight:700;
-  "
-  >
-    ${escapeAdminLookupHtml(
-      name
-    )}
-  </div>
-
-
   ${
-    optionText
+    image
       ? `
+
+<img
+src="${escapeAdminLookupHtml(
+  image
+)}"
+alt=""
+style="
+width:64px;
+height:64px;
+object-fit:cover;
+border-radius:9px;
+background:#eef7fc;
+"
+>
+
+`
+      : "<div></div>"
+  }
+
+
+  <div>
+
+    <div
+    style="
+    font-size:13px;
+    font-weight:700;
+    "
+    >
+      ${escapeAdminLookupHtml(
+        name
+      )}
+    </div>
+
+
+    ${
+      optionText
+        ? `
 
 <div
 style="
@@ -1820,34 +1857,33 @@ color:#64748b;
 </div>
 
 `
-      : ""
-  }
+        : ""
+    }
 
 
-  <div
-  style="
-  margin-top:6px;
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  font-size:11px;
-  color:#64748b;
-  "
-  >
+    <div
+    style="
+    margin-top:6px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    font-size:11px;
+    color:#64748b;
+    "
+    >
 
-    <span>
-      จำนวน
-      <b>${qty}</b>
-    </span>
+      <span>
+        จำนวน
+        <b>${qty}</b>
+      </span>
 
-
-    ${
-      Number.isFinite(price) &&
-      price > 0
-        ? `
+      ${
+        Number.isFinite(price) &&
+        price >= 0
+          ? `
 
 <span>
-  ราคา
+  ราคาต่อชิ้น
   <b>
     ฿${price.toLocaleString(
       "th-TH"
@@ -1856,8 +1892,10 @@ color:#64748b;
 </span>
 
 `
-        : ""
-    }
+          : ""
+      }
+
+    </div>
 
   </div>
 
