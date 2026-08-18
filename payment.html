@@ -1721,6 +1721,11 @@ async function submitOrder(){
 
   try{
 
+    localStorage.setItem(
+  "payment_debug_stage",
+  "submit_started"
+);
+
     validatePaymentSlip(
       slip.files[0]
     );
@@ -1908,6 +1913,24 @@ const payload = {
    const result =
   await response.json();
 
+    localStorage.setItem(
+  "payment_debug_stage",
+  "order_created"
+);
+
+localStorage.setItem(
+  "last_order_performance",
+  JSON.stringify(
+    result.performance || {}
+  )
+);
+
+localStorage.setItem(
+  "last_order_response",
+  JSON.stringify(
+    result || {}
+  )
+);
 
 sessionStorage.setItem(
   "last_order_performance",
@@ -2023,7 +2046,25 @@ if(!result.success){
    const paymentResult =
   await paymentResponse.json();
 
+localStorage.setItem(
+  "payment_debug_stage",
+  "payment_saved"
+);
 
+localStorage.setItem(
+  "last_payment_performance",
+  JSON.stringify(
+    paymentResult.performance || {}
+  )
+);
+
+localStorage.setItem(
+  "last_payment_response",
+  JSON.stringify(
+    paymentResult || {}
+  )
+);
+    
 sessionStorage.setItem(
   "last_payment_performance",
   JSON.stringify(
