@@ -645,3 +645,64 @@ body::before{
   z-index:2;
 }
 }
+
+@media(max-width:640px){
+
+  .page-header{
+    min-height:62px;
+    padding:9px 12px;
+  }
+
+  .page-header h1{
+    font-size:18px;
+  }
+
+  .hero-banner{
+    min-height:290px;
+    margin:
+      10px
+      10px
+      20px;
+  }
+
+  .hero-content{
+    padding:20px 16px;
+  }
+
+  .hero-content h1{
+    font-size:25px;
+  }
+
+  .hero-content p{
+    font-size:12px;
+    line-height:1.6;
+  }
+
+  .section{
+    margin-top:22px;
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .section-heading{
+    margin-bottom:10px;
+  }
+
+  .section-heading h2{
+    font-size:17px;
+  }
+
+  .section-link{
+    font-size:11px;
+  }
+
+  .product-grid-home{
+    gap:10px;
+  }
+
+  .home-card,
+  .collection-card{
+    border-radius:15px;
+  }
+
+}
