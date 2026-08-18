@@ -1905,17 +1905,26 @@ const payload = {
 
     }
 
-    const result =
-      await response.json();
+   const result =
+  await response.json();
 
-    if(!result.success){
 
-      throw new Error(
-        result.error ||
-        "สร้างออเดอร์ไม่สำเร็จ"
-      );
+sessionStorage.setItem(
+  "last_order_performance",
+  JSON.stringify(
+    result.performance || {}
+  )
+);
 
-    }
+
+if(!result.success){
+
+  throw new Error(
+    result.error ||
+    "สร้างออเดอร์ไม่สำเร็จ"
+  );
+
+}
 
     const orderId =
       String(
@@ -2011,8 +2020,16 @@ const payload = {
 
     }
 
-    const paymentResult =
+   const paymentResult =
   await paymentResponse.json();
+
+
+sessionStorage.setItem(
+  "last_payment_performance",
+  JSON.stringify(
+    paymentResult.performance || {}
+  )
+);
 
 
 console.log(
