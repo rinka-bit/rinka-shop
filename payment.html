@@ -2012,12 +2012,25 @@ const payload = {
     }
 
     const paymentResult =
-      await paymentResponse.json();
+  await paymentResponse.json();
 
-    console.log("Payment Payload",{
-    order_id:result.order_id,
-    amount:paymentAmount
-});
+
+console.log(
+  "PAYMENT PERFORMANCE",
+  paymentResult.performance
+);
+
+
+console.log(
+  "Payment Payload",
+  {
+    order_id:
+      result.order_id,
+
+    amount:
+      paymentAmount
+  }
+);
 
     if(!paymentResult.success){
 
