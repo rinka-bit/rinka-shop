@@ -2119,92 +2119,56 @@ async function loadGifts(){
 
   try{
 
-    const giftData =
+  const giftData =
   await loadCheckoutGiftData();
 
 
 const campaigns =
-  giftData.campaigns;
+  Array.isArray(
+    giftData.campaigns
+  )
+    ? giftData.campaigns
+    : [];
 
 
 const rules =
-  giftData.rules;
+  Array.isArray(
+    giftData.rules
+  )
+    ? giftData.rules
+    : [];
 
 
 const items =
-  giftData.items;
+  Array.isArray(
+    giftData.items
+  )
+    ? giftData.items
+    : [];
 
 
 const characters =
-  giftData.characters;
+  Array.isArray(
+    giftData.characters
+  )
+    ? giftData.characters
+    : [];
 
 
 const exclusions =
-  giftData.exclusions;
+  Array.isArray(
+    giftData.exclusions
+  )
+    ? giftData.exclusions
+    : [];
 
 
 const collections =
-  giftData.collections;
-
-    const optionalResults =
-      await Promise.allSettled([
-
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftCharacters"
-          ],
-          [
-            "characters"
-          ]
-        ),
-
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftCampaignExclusions"
-          ],
-          [
-            "exclusions"
-          ]
-        ),
-
-      ]);
-
-    const characters =
-      optionalResults[0].status ===
-      "fulfilled"
-        ? optionalResults[0].value
-        : [];
-
-    const exclusions =
-      optionalResults[1].status ===
-      "fulfilled"
-        ? optionalResults[1].value
-        : [];
-
-    const collections =
-      optionalResults[2].status ===
-      "fulfilled"
-        ? optionalResults[2].value
-        : [];
-
-    optionalResults.forEach(
-      (result,index)=>{
-
-        if(
-          result.status ===
-          "rejected"
-        ){
-
-          console.warn(
-            "Optional Gift API failed:",
-            index,
-            result.reason
-          );
-
-        }
-
-      }
-    );
+  Array.isArray(
+    giftData.collections
+  )
+    ? giftData.collections
+    : [];
     
     checkoutGiftState.campaigns =
       campaigns.filter(
