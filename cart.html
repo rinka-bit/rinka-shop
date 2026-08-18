@@ -557,6 +557,43 @@ button:disabled{
 
 }
 
+  @media(max-width:640px){
+
+  .cart-page{
+    padding:
+      14px
+      10px
+      110px;
+  }
+
+  .cart-layout{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .cart-item{
+    grid-template-columns:
+      auto
+      82px
+      minmax(0,1fr);
+
+    gap:10px;
+    padding:11px;
+    border-radius:15px;
+  }
+
+  .cart-image,
+  .cart-image-placeholder{
+    width:82px;
+    height:82px;
+  }
+
+  .cart-toolbar{
+    padding:10px 11px;
+  }
+
+}
+
 </style>
 
 </head>
