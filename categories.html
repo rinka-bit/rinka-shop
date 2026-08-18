@@ -7,7 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
+<link rel="stylesheet" href="cart-drawer.css">
+ <style>
 :root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--text:#334155;--muted:#64748b;--border:#dbe7f1}
 *{box-sizing:border-box}body{margin:0;font-family:'Kodchasan',sans-serif;color:var(--text);background:linear-gradient(180deg,#fbfdff,var(--bg))}
 button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
@@ -21,7 +22,16 @@ button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height
 </style>
 </head>
 <body>
-<header class="topbar"><button id="menuButton" type="button">☰</button><h1>หมวดสินค้า</h1><a href="cart.html" class="cart">🛒<span id="cartCount" class="count">0</span></a></header>
+<header class="topbar"><button id="menuButton" type="button">☰</button><h1>หมวดสินค้า</h1><button
+type="button"
+class="cart"
+onclick="openCartDrawer()"
+aria-label="เปิดตะกร้าสินค้า"
+>
+  🛒
+  <span id="cartCount" class="count">0</span>
+</button>
+</header>
 <div id="overlay" class="overlay hidden"></div>
 <aside id="sideMenu" class="side-menu"><div class="menu-header"><h2>Rinka Shop</h2></div><a href="home.html">🏠 หน้าแรก</a><a href="browse.html">🛍️ สินค้าทั้งหมด</a><a href="categories.html">🏷️ หมวดสินค้า</a><a href="lookup.html">📦 เช็กออเดอร์</a><a href="change-address.html">📍 เปลี่ยนที่อยู่</a><a href="account.html">👤 บัญชีของฉัน</a><a href="cart.html">🛒 ตะกร้า</a><a href="https://x.com/prewithrinka" target="_blank" rel="noopener noreferrer">📞 ติดต่อร้าน</a></aside>
 <main class="container">
@@ -54,5 +64,6 @@ function updateCartCount(){let c=[];try{const x=JSON.parse(localStorage.getItem(
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
 <script src="menu.js"></script>
+<script src="cart-drawer.js"></script>
 </body>
 </html>
