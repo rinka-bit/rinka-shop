@@ -2847,23 +2847,15 @@ function addToCart(){
     newItems.forEach(
       newItem=>{
 
-        const found =
-          cart.find(
-            item=>
-              String(
-                item.product_id || ""
-              ) ===
-              String(
-                newItem.product_id || ""
-              ) &&
-              stableProductOptions(
-                item.selected_options || {}
-              ) ===
-              stableProductOptions(
-                newItem.selected_options || {}
-              )
-          );
-
+       const found =
+  cart.find(
+    item =>
+      isSameProductCartItem(
+        item,
+        newItem
+      )
+  );
+        
         if(found){
 
           found.qty =
@@ -3101,6 +3093,93 @@ function stableProductOptions(
         {}
       )
   );
+
+}
+
+function isSameProductCartItem(
+  first,
+  second
+){
+
+  if(
+    !first ||
+    !second
+  ){
+
+    return false;
+
+  }
+
+
+  const firstProductId =
+    String(
+      first.product_id || ""
+    ).trim();
+
+
+  const secondProductId =
+    String(
+      second.product_id || ""
+    ).trim();
+
+
+  if(
+    !firstProductId ||
+    firstProductId !==
+      secondProductId
+  ){
+
+    return false;
+
+  }
+
+
+  const firstOptionId =
+    String(
+      first.option_id || ""
+    ).trim();
+
+
+  const secondOptionId =
+    String(
+      second.option_id || ""
+    ).trim();
+
+
+  /*
+  =========================================
+  V2
+
+  ถ้ามี option_id ฝั่งใดฝั่งหนึ่ง
+  ต้องเทียบ option_id โดยตรง
+  =========================================
+  */
+
+  if(
+    firstOptionId ||
+    secondOptionId
+  ){
+
+    return (
+      firstOptionId !== "" &&
+      secondOptionId !== "" &&
+      firstOptionId ===
+        secondOptionId
+    );
+
+  }
+
+
+  /*
+  =========================================
+  PRODUCT WITHOUT OPTIONS
+
+  product_id เดียวกัน
+  → ถือเป็น item เดียวกัน
+  =========================================
+  */
+
+  return true;
 
 }
 
