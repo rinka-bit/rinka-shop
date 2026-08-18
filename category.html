@@ -7,7 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
+<link rel="stylesheet" href="cart-drawer.css">
+ <style>
 :root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--text:#334155;--muted:#64748b;--border:#dbe7f1}
 *{box-sizing:border-box}body{margin:0;font-family:'Kodchasan',sans-serif;color:var(--text);background:linear-gradient(180deg,#fbfdff,var(--bg))}
 button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
@@ -21,7 +22,17 @@ button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height
 </style>
 </head>
 <body>
-<header class="topbar"><button type="button" onclick="goBack()">←</button><h1 id="topTitle">หมวดสินค้า</h1><a href="cart.html" class="cart">🛒<span id="cartCount" class="count">0</span></a></header>
+<header class="topbar"><button type="button" onclick="goBack()">←</button><h1 id="topTitle">หมวดสินค้า</h1>
+<button
+type="button"
+class="cart"
+onclick="openCartDrawer()"
+aria-label="เปิดตะกร้าสินค้า"
+>
+  🛒
+  <span id="cartCount" class="count">0</span>
+</button>
+</header>
 <main class="container">
 <section class="hero"><h2 id="categoryTitle">🏷️ กำลังโหลดหมวดสินค้า</h2><p id="categoryDescription">กำลังเตรียมรายการสินค้าให้ค่ะ</p></section>
 <div class="toolbar"><div class="search"><input id="categorySearch" type="search" placeholder="ค้นหาในหมวดนี้..." autocomplete="off"><button type="button" onclick="clearSearch()">✕</button></div><div id="productCount" class="result-count">0 รายการ</div></div>
@@ -50,8 +61,264 @@ function renderProducts(rows){
  box.className="grid";box.innerHTML=rows.map(productCard).join("");
 }
 function productCard(p){
- const price=Number(p.final_price??p.price??0),old=Number(p.old_price??p.price??0),onSale=bool(p.on_sale),type=String(p.product_type||"preorder").toLowerCase(),url="product.html?id="+encodeURIComponent(p.product_id||"");
- return `<article class="card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)"><div class="image">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name||"")}" loading="lazy">`:'<div style="height:100%;display:flex;align-items:center;justify-content:center">ไม่มีรูป</div>'}<div class="badges"><span class="badge ${type==="instock"?"stock":"pre"}">${type==="instock"?"พร้อมส่ง":"PREORDER"}</span>${onSale?'<span class="badge sale">SALE</span>':bool(p.new_arrival)?'<span class="badge new">NEW</span>':""}</div></div><div class="body"><h3>${esc(p.name||"-")}</h3>${p.fandom?`<div class="fandom">${esc(p.fandom)}</div>`:""}<div class="price ${onSale?"sale-price":""}">฿${price.toLocaleString("th-TH")}${onSale?`<span class="old">฿${old.toLocaleString("th-TH")}</span>`:""}</div></div></article>`;
+
+  const priceMode =
+    String(
+      p.price_mode ||
+      "fixed"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const price =
+    Number(
+      p.final_price ??
+      p.price ??
+      0
+    );
+
+
+  const minPrice =
+    Number(
+      p.min_price ??
+      price
+    );
+
+
+  const maxPrice =
+    Number(
+      p.max_price ??
+      minPrice
+    );
+
+
+  const old =
+    Number(
+      p.old_price ??
+      p.price ??
+      0
+    );
+
+
+  const onSale =
+    priceMode !== "option" &&
+    bool(
+      p.on_sale
+    );
+
+
+  const type =
+    String(
+      p.product_type ||
+      "preorder"
+    )
+      .toLowerCase();
+
+
+  const url =
+    "product.html?id=" +
+    encodeURIComponent(
+      p.product_id ||
+      ""
+    );
+
+
+  let priceHtml = "";
+
+
+  if(
+    priceMode ===
+    "option"
+  ){
+
+    priceHtml = `
+
+<div class="price">
+
+  ${
+    minPrice > 0 ||
+    maxPrice > 0
+      ? (
+          minPrice ===
+          maxPrice
+            ? `฿${minPrice.toLocaleString(
+                "th-TH"
+              )}`
+            : (
+                `฿${minPrice.toLocaleString(
+                  "th-TH"
+                )}` +
+                `–฿${maxPrice.toLocaleString(
+                  "th-TH"
+                )}`
+              )
+        )
+      : "รอกำหนดราคา"
+  }
+
+</div>
+
+`;
+
+  }else if(
+    onSale
+  ){
+
+    priceHtml = `
+
+<div class="price sale-price">
+
+  ฿${price.toLocaleString(
+    "th-TH"
+  )}
+
+  <span class="old">
+    ฿${old.toLocaleString(
+      "th-TH"
+    )}
+  </span>
+
+</div>
+
+`;
+
+  }else{
+
+    priceHtml = `
+
+<div class="price">
+
+  ฿${price.toLocaleString(
+    "th-TH"
+  )}
+
+</div>
+
+`;
+
+  }
+
+
+  return `
+
+<article
+class="card"
+tabindex="0"
+role="link"
+onclick='location.href=${JSON.stringify(url)}'
+onkeydown="cardKey(event,this)"
+>
+
+  <div class="image">
+
+    ${
+      p.image
+        ? `
+
+<img
+src="${esc(p.image)}"
+alt="${esc(p.name || "")}"
+loading="lazy"
+>
+
+`
+        : `
+
+<div
+style="
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+"
+>
+  ไม่มีรูป
+</div>
+
+`
+    }
+
+
+    <div class="badges">
+
+      <span
+      class="badge ${
+        type === "instock"
+          ? "stock"
+          : "pre"
+      }"
+      >
+
+        ${
+          type === "instock"
+            ? "พร้อมส่ง"
+            : "PREORDER"
+        }
+
+      </span>
+
+
+      ${
+        onSale
+          ? `
+
+<span class="badge sale">
+  SALE
+</span>
+
+`
+          : bool(
+              p.new_arrival
+            )
+            ? `
+
+<span class="badge new">
+  NEW
+</span>
+
+`
+            : ""
+      }
+
+    </div>
+
+  </div>
+
+
+  <div class="body">
+
+    <h3>
+      ${esc(
+        p.name ||
+        "-"
+      )}
+    </h3>
+
+
+    ${
+      p.fandom
+        ? `
+
+<div class="fandom">
+  ${esc(
+    p.fandom
+  )}
+</div>
+
+`
+        : ""
+    }
+
+
+    ${priceHtml}
+
+  </div>
+
+</article>
+
+`;
+
 }
 function renderState(t,m,retry){const b=document.getElementById("products");b.className="state";b.innerHTML=`<div style="font-size:48px">${retry?"⚠️":"📦"}</div><h2>${esc(t)}</h2><p>${esc(m)}</p>${retry?'<button onclick="loadProducts()">ลองใหม่</button>':'<a href="categories.html">ดูหมวดสินค้า</a>'}`}
 function cardKey(e,el){if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click()}}
@@ -59,5 +326,8 @@ function goBack(){if(document.referrer&&document.referrer!==location.href)histor
 function updateCartCount(){let c=[];try{const x=JSON.parse(localStorage.getItem("cart")||"[]");c=Array.isArray(x)?x:[]}catch(e){}const n=c.reduce((s,i)=>s+Number(i.qty||0),0);document.getElementById("cartCount").textContent=n>99?"99+":String(n)}
 function bool(v){return v===true||v===1||["true","yes","1","active"].includes(String(v||"").toLowerCase())}function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
+
+<script src="cart-drawer.js"></script>
+ 
 </body>
 </html>
