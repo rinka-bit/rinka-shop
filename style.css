@@ -218,3 +218,18 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .checkout-topbar a:active{
   transform:scale(.96);
 }
+
+button,
+a{
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+button{
+  touch-action:
+    manipulation;
+}
+
+img{
+  max-width:100%;
+}
