@@ -80,3 +80,81 @@ body{font-family:'Kodchasan',sans-serif;background:var(--browse-bg);color:var(--
   .empty-state{padding:55px 18px}
 }
 @media(max-width:390px){.product-grid{gap:10px}.badge-new,.badge-sale,.badge-preorder,.badge-stock{font-size:9px;padding:4px 7px}.fandom{font-size:11px}}
+
+@media(max-width:640px){
+
+  .browse-container{
+    padding:
+      14px
+      10px
+      34px;
+  }
+
+  .browse-heading{
+    gap:8px;
+    margin-bottom:13px;
+  }
+
+  .browse-heading h2{
+    font-size:21px;
+  }
+
+  .browse-heading p{
+    font-size:12px;
+    line-height:1.55;
+  }
+
+  .browse-toolbar{
+    gap:8px;
+  }
+
+  .search-wrap input{
+    min-height:44px;
+    font-size:13px;
+  }
+
+  #sortSelect{
+    min-height:44px;
+    font-size:12px;
+  }
+
+  .product-grid{
+    gap:10px;
+  }
+
+  .card{
+    border-radius:15px;
+  }
+
+  .card-body{
+    padding:10px;
+  }
+
+  .card h3{
+    font-size:13px;
+    line-height:1.45;
+  }
+
+  .fandom{
+    font-size:11px;
+  }
+
+  .price-box{
+    margin-top:8px;
+  }
+
+  .normal-price,
+  .sale-price{
+    font-size:16px;
+  }
+
+  .old-price{
+    font-size:11px;
+  }
+
+  .deadline{
+    margin-top:7px;
+    font-size:10px;
+  }
+
+}
