@@ -523,6 +523,14 @@ onclick="showAdminTab('legacy_orders')">
 📚 นำเข้าออเดอร์เก่า
 </button>
 
+<button
+id="nav_customer_lookup"
+type="button"
+onclick="showAdminTab('customer_lookup')"
+>
+  🔎 ค้นหาออเดอร์ลูกค้า
+</button>
+
 
 <hr>
 
@@ -646,6 +654,15 @@ class="hidden">
 <section id="tab_legacy_orders" class="hidden">
   <h1 class="section-title">📚 นำเข้าออเดอร์ลูกค้าเก่า</h1>
   <div id="legacyOrderManager">กำลังโหลด...</div>
+</section>
+
+<section
+id="tab_customer_lookup"
+class="admin-tab hidden"
+>
+
+  <div id="adminCustomerOrderLookup"></div>
+
 </section>
 
 </main>
@@ -894,6 +911,8 @@ style="display:none;"
 <script src="./js/admin.js?v=20260817-1"></script>
 
 <script src="./js/admin-legacy-orders.js?v=20260817-1"></script>
+
+<script src="js/admin-customer-order-lookup.js"></script>
 
 </body>
 </html>
