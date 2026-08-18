@@ -15,6 +15,7 @@ content="width=device-width,initial-scale=1">
 <link
 href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap"
 rel="stylesheet">
+<link rel="stylesheet" href="cart-drawer.css">
 
 <style>
 
@@ -554,18 +555,15 @@ aria-label="เปิดเมนู">
 บัญชีของฉัน
 </h1>
 
-<a
-href="cart.html"
+<button
+type="button"
 class="cart-btn"
-aria-label="เปิดตะกร้าสินค้า">
-
-🛒
-
-<span id="cartCount">
-0
-</span>
-
-</a>
+onclick="openCartDrawer()"
+aria-label="เปิดตะกร้า"
+>
+  🛒
+  <span id="cartCount">0</span>
+</button>
 
 </header>
 
@@ -1963,6 +1961,8 @@ function escapeAccountHtml(
 <script src="menu.js"></script>
 
 <script src="js/maintenance-notice.js"></script>
+<script src="cart-drawer.js"></script>
+  
 <script src="ui.js"></script>
 
 </body>
