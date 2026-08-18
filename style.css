@@ -519,3 +519,20 @@ REDUCED MOTION
   }
 
 }
+
+.side-menu a.active{
+  background:#eef8ff;
+  color:#347fb4;
+  font-weight:700;
+}
+
+@media(max-width:640px){
+
+  .icon-btn,
+  .cart-btn,
+  .collection-cart,
+  .cart-floating{
+    flex-shrink:0;
+  }
+
+}
