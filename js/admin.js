@@ -24,7 +24,9 @@ const adminLoadedTabs = {
 
   manual_order:false,
 
-  legacy_orders:false
+  legacy_orders:false,
+
+  customer_lookup:false
 
 };
 
@@ -135,7 +137,9 @@ function showAdminTab(
 
     "manual_order",
 
-    "legacy_orders"
+    "legacy_orders",
+
+    "customer_lookup"
 
   ];
 
@@ -647,6 +651,40 @@ if(
 
 
   adminLoadedTabs.legacy_orders =
+    true;
+
+
+  return;
+
+}
+
+/*
+=========================================
+CUSTOMER ORDER LOOKUP
+=========================================
+*/
+
+if(
+  tab ===
+  "customer_lookup"
+){
+
+  if(
+    typeof renderAdminCustomerOrderLookup !==
+    "function"
+  ){
+
+    throw new Error(
+      "ไม่พบ renderAdminCustomerOrderLookup()"
+    );
+
+  }
+
+
+  renderAdminCustomerOrderLookup();
+
+
+  adminLoadedTabs.customer_lookup =
     true;
 
 
