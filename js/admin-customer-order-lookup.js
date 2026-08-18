@@ -988,6 +988,11 @@ color:#64748b;
 `
   }
 
+  ${renderAdminCustomerOrderDetailButton(
+  order,
+  source
+)}
+
 </div>
 
 `;
@@ -1251,5 +1256,613 @@ function escapeAdminLookupHtml(
       "'",
       "&#039;"
     );
+
+}
+
+function renderAdminCustomerOrderDetailButton(
+  order,
+  source
+){
+
+  const orderId =
+    String(
+      source === "legacy"
+        ? (
+            order.legacy_id ??
+            order.order_id ??
+            order.id ??
+            ""
+          )
+        : (
+            order.order_id ??
+            order.id ??
+            ""
+          )
+    ).trim();
+
+
+  if(!orderId){
+
+    return "";
+
+  }
+
+
+  const detailId =
+    "adminCustomerOrderDetail_" +
+    source +
+    "_" +
+    orderId.replace(
+      /[^a-zA-Z0-9_-]/g,
+      "_"
+    );
+
+
+  return `
+
+<div
+style="
+margin-top:12px;
+"
+>
+
+  <button
+  type="button"
+  style="
+  width:auto;
+  padding:7px 11px;
+  font-size:12px;
+  "
+  onclick='toggleAdminCustomerOrderDetail(
+    ${JSON.stringify(source)},
+    ${JSON.stringify(orderId)},
+    ${JSON.stringify(detailId)},
+    this
+  )'
+  >
+    ดูรายละเอียด
+  </button>
+
+
+  <div
+  id="${escapeAdminLookupHtml(
+    detailId
+  )}"
+  style="
+  display:none;
+  margin-top:10px;
+  "
+  ></div>
+
+</div>
+
+`;
+
+}
+
+async function toggleAdminCustomerOrderDetail(
+  source,
+  orderId,
+  detailId,
+  button
+){
+
+  const box =
+    document.getElementById(
+      detailId
+    );
+
+
+  if(!box){
+
+    return;
+
+  }
+
+
+  if(
+    box.style.display !==
+    "none"
+  ){
+
+    box.style.display =
+      "none";
+
+
+    if(button){
+
+      button.textContent =
+        "ดูรายละเอียด";
+
+    }
+
+
+    return;
+
+  }
+
+
+  box.style.display =
+    "block";
+
+
+  if(button){
+
+    button.textContent =
+      "ซ่อนรายละเอียด";
+
+  }
+
+
+  if(
+    box.dataset.loaded ===
+    "true"
+  ){
+
+    return;
+
+  }
+
+
+  box.innerHTML = `
+
+<div
+style="
+padding:12px;
+border-radius:10px;
+background:#f8fafc;
+color:#64748b;
+font-size:12px;
+"
+>
+  ⏳ กำลังโหลดรายละเอียดออเดอร์...
+</div>
+
+`;
+
+
+  try{
+
+    const detail =
+      source === "legacy"
+        ? await fetchAdminLegacyOrderDetail(
+            orderId
+          )
+        : await fetchAdminCurrentOrderDetail(
+            orderId
+          );
+
+
+    renderAdminCustomerOrderDetail(
+      box,
+      detail,
+      source
+    );
+
+
+    box.dataset.loaded =
+      "true";
+
+
+  }catch(error){
+
+    console.error(
+      "toggleAdminCustomerOrderDetail error:",
+      error
+    );
+
+
+    box.innerHTML = `
+
+<div
+style="
+padding:12px;
+border:1px solid #fecaca;
+border-radius:10px;
+background:#fff7f7;
+color:#991b1b;
+font-size:12px;
+"
+>
+  โหลดรายละเอียดไม่สำเร็จ:
+  ${escapeAdminLookupHtml(
+    error.message ||
+    String(error)
+  )}
+</div>
+
+`;
+
+  }
+
+}
+
+async function fetchAdminCurrentOrderDetail(
+  orderId
+){
+
+  const response =
+    await fetch(
+
+      API +
+      "?action=getOrder" +
+      "&order_id=" +
+      encodeURIComponent(
+        orderId
+      )
+
+    );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status
+    );
+
+  }
+
+
+  const result =
+    await response.json();
+
+
+  if(
+    result &&
+    result.success === false
+  ){
+
+    throw new Error(
+      result.error ||
+      "โหลดออเดอร์ไม่สำเร็จ"
+    );
+
+  }
+
+
+  return (
+    result.order ||
+    result
+  );
+
+}
+
+async function fetchAdminLegacyOrderDetail(
+  legacyId
+){
+
+  const response =
+    await fetch(
+
+      API +
+      "?action=legacyOrder" +
+      "&legacy_id=" +
+      encodeURIComponent(
+        legacyId
+      )
+
+    );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status
+    );
+
+  }
+
+
+  const result =
+    await response.json();
+
+
+  if(
+    result &&
+    result.success === false
+  ){
+
+    throw new Error(
+      result.error ||
+      "โหลด Legacy Order ไม่สำเร็จ"
+    );
+
+  }
+
+
+  return (
+    result.order ||
+    result.legacy_order ||
+    result
+  );
+
+}
+
+function renderAdminCustomerOrderDetail(
+  box,
+  detail,
+  source
+){
+
+  const items =
+    Array.isArray(
+      detail?.items
+    )
+      ? detail.items
+      : Array.isArray(
+          detail?.order_items
+        )
+        ? detail.order_items
+        : [];
+
+
+  const status =
+    detail?.status ||
+    detail?.order_status ||
+    "-";
+
+
+  const total =
+    Number(
+      detail?.total ??
+      detail?.subtotal ??
+      0
+    );
+
+
+  let html = `
+
+<div
+style="
+padding:12px;
+border:1px solid #dbe7f1;
+border-radius:12px;
+background:#f8fafc;
+"
+>
+
+  <div
+  style="
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+  font-size:12px;
+  "
+  >
+
+    <span>
+      สถานะ:
+      <b>
+        ${escapeAdminLookupHtml(
+          getAdminOrderStatusLabel(
+            status
+          )
+        )}
+      </b>
+    </span>
+
+
+    ${
+      Number.isFinite(total) &&
+      total > 0
+        ? `
+
+<span>
+  ยอดรวม:
+  <b>
+    ฿${total.toLocaleString(
+      "th-TH"
+    )}
+  </b>
+</span>
+
+`
+        : ""
+    }
+
+  </div>
+
+`;
+
+
+  if(
+    !items.length
+  ){
+
+    html += `
+
+<div
+style="
+padding:10px 0;
+color:#64748b;
+font-size:12px;
+"
+>
+  ไม่พบรายการสินค้าใน response นี้
+</div>
+
+`;
+
+  }else{
+
+    html += `
+
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:8px;
+"
+>
+
+${items
+  .map(
+    item =>
+      renderAdminCustomerOrderItem(
+        item
+      )
+  )
+  .join("")}
+
+</div>
+
+`;
+
+  }
+
+
+  html += `
+
+</div>
+
+`;
+
+
+  box.innerHTML =
+    html;
+
+}
+
+function renderAdminCustomerOrderItem(
+  item
+){
+
+  const name =
+    item.name ||
+    item.product_name ||
+    "สินค้า";
+
+
+  const qty =
+    Number(
+      item.qty ??
+      item.quantity ??
+      1
+    );
+
+
+  const price =
+    Number(
+      item.price ??
+      item.unit_price ??
+      item.final_price ??
+      0
+    );
+
+
+  const selectedOptions =
+    item.selected_options &&
+    typeof item.selected_options ===
+      "object"
+      ? item.selected_options
+      : {};
+
+
+  const optionText =
+    Object
+      .entries(
+        selectedOptions
+      )
+      .map(
+        ([key,value]) =>
+          escapeAdminLookupHtml(
+            key
+          ) +
+          ": " +
+          escapeAdminLookupHtml(
+            Array.isArray(value)
+              ? value.join(", ")
+              : value
+          )
+      )
+      .join(" • ");
+
+
+  return `
+
+<div
+style="
+padding:10px;
+border:1px solid #e2e8f0;
+border-radius:10px;
+background:#fff;
+"
+>
+
+  <div
+  style="
+  font-size:13px;
+  font-weight:700;
+  "
+  >
+    ${escapeAdminLookupHtml(
+      name
+    )}
+  </div>
+
+
+  ${
+    optionText
+      ? `
+
+<div
+style="
+margin-top:4px;
+font-size:11px;
+color:#64748b;
+"
+>
+  ${optionText}
+</div>
+
+`
+      : ""
+  }
+
+
+  <div
+  style="
+  margin-top:6px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  font-size:11px;
+  color:#64748b;
+  "
+  >
+
+    <span>
+      จำนวน
+      <b>${qty}</b>
+    </span>
+
+
+    ${
+      Number.isFinite(price) &&
+      price > 0
+        ? `
+
+<span>
+  ราคา
+  <b>
+    ฿${price.toLocaleString(
+      "th-TH"
+    )}
+  </b>
+</span>
+
+`
+        : ""
+    }
+
+  </div>
+
+</div>
+
+`;
 
 }
