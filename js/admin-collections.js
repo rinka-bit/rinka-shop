@@ -315,14 +315,21 @@ async function saveCollectionFromAdmin(){
 
 async function loadAdminCollections(){
 
+  /*
+  adminCollectionList
+  มีเฉพาะหน้า Collection Manager
+
+  แต่ adminCollections ถูกใช้โดย
+  Products / Options / Gifts ด้วย
+
+  ดังนั้นห้าม return เมื่อไม่มี box
+  */
+
   const box =
     document.getElementById(
       "adminCollectionList"
     );
 
-  if(!box){
-    return;
-  }
 
   try{
 
@@ -332,39 +339,116 @@ async function loadAdminCollections(){
         "?action=adminCollections"
       );
 
-    const result =
-      await response.json();
 
-    if(!result.success){
+    if(!response.ok){
 
-      box.textContent =
-        result.error ||
-        "โหลด Collections ไม่สำเร็จ";
-
-      return;
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
 
     }
 
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "โหลด Collections ไม่สำเร็จ"
+      );
+
+    }
+
+
     adminCollections =
-  result.collections || [];
+      Array.isArray(
+        result.collections
+      )
+        ? result.collections
+        : [];
 
-renderAdminCollectionList();
 
-refreshProductCollectionSelects();
+    /*
+    =========================================
+    COLLECTION MANAGER
 
-renderGiftManager();
+    render เฉพาะเมื่อ element มีอยู่
+    =========================================
+    */
+
+    if(
+      box &&
+      typeof renderAdminCollectionList ===
+        "function"
+    ){
+
+      renderAdminCollectionList();
+
+    }
+
+
+    /*
+    =========================================
+    PRODUCT / OPTION DROPDOWNS
+    =========================================
+    */
+
+    if(
+      typeof refreshProductCollectionSelects ===
+        "function"
+    ){
+
+      refreshProductCollectionSelects();
+
+    }
+
+
+    /*
+    Gift Manager ไม่จำเป็นต้อง render
+    ทุกครั้งที่โหลด Collection
+
+    ถ้าเปิด Gift tab ค่อย render เอง
+    */
+
+
+    return {
+
+      success:true,
+
+      count:
+        adminCollections.length
+
+    };
+
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "loadAdminCollections error:",
+      error
+    );
 
-    box.textContent =
-      "โหลด Collections ไม่สำเร็จ";
+
+    if(box){
+
+      box.textContent =
+        "โหลด Collections ไม่สำเร็จ";
+
+    }
+
+
+    throw error;
 
   }
 
 }
-
 
 function renderAdminCollectionList(){
 
