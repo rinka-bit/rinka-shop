@@ -1664,27 +1664,24 @@ function renderCheckoutAddress(
 
   <div>
     <b>
-      ${escapeCheckoutHtml(
-        address.receiver ||
-        "-"
-      )}
+     ${escapeHtml(
+  address.receiver || "-"
+)}
     </b>
   </div>
 
   <div>
     📞
-    ${escapeCheckoutHtml(
-      address.phone ||
-      "-"
-    )}
+   ${escapeHtml(
+  address.phone || "-"
+)}
   </div>
 
   <div>
     📍
-    ${escapeCheckoutHtml(
-      fullAddress ||
-      "-"
-    )}
+   ${escapeHtml(
+  fullAddress || "-"
+)}
   </div>
 
 </div>
@@ -2110,6 +2107,16 @@ function escapeHtml(
 
 }
 
+function escapeCheckoutHtml(
+  value
+){
+
+  return escapeHtml(
+    value
+  );
+
+}
+
 
 /*
 =========================================
@@ -2128,6 +2135,7 @@ const checkoutGiftState = {
   eligibleCampaigns:[],
   selections:{}
 };
+
 
 
 function normalizeGiftBoolean(
