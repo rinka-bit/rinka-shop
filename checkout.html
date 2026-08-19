@@ -1151,7 +1151,91 @@ async function loadDefaultAddress(){
       "selectedAddress"
     );
 
-  if(box){
+
+  /*
+  =========================================
+  1. ADDRESS SELECTED FROM ADDRESS BOOK
+  =========================================
+  */
+
+  let selectedAddress =
+    getCheckoutStoredValue(
+      "selectedCheckoutAddress",
+      null
+    );
+
+
+  /*
+  =========================================
+  2. CUSTOMER ADDRESS CACHE
+  =========================================
+  */
+
+  const cacheKey =
+    getCheckoutAddressCacheKey();
+
+
+  let cachedAddresses = [];
+
+  try{
+
+    const cached =
+      JSON.parse(
+        localStorage.getItem(
+          cacheKey
+        ) || "[]"
+      );
+
+    cachedAddresses =
+      Array.isArray(cached)
+        ? cached
+        : [];
+
+  }catch(error){
+
+    console.warn(
+      "อ่าน address cache ไม่สำเร็จ:",
+      error
+    );
+
+  }
+
+
+  if(
+    !selectedAddress &&
+    cachedAddresses.length
+  ){
+
+    selectedAddress =
+      cachedAddresses.find(
+        address =>
+          normalizeCheckoutBoolean(
+            address.is_default
+          )
+      ) ||
+      cachedAddresses[0];
+
+  }
+
+
+  /*
+  =========================================
+  SHOW CACHED ADDRESS IMMEDIATELY
+  =========================================
+  */
+
+  if(selectedAddress){
+
+    renderCheckoutAddress(
+      selectedAddress
+    );
+
+    window.checkoutAddress =
+      selectedAddress;
+
+    updateCheckoutPaymentState();
+
+  }else if(box){
 
     box.innerHTML = `
 
@@ -1169,88 +1253,116 @@ async function loadDefaultAddress(){
 
   }
 
-  let selectedAddress =
-    getCheckoutStoredValue(
-      "selectedCheckoutAddress",
-      null
-    );
+
+  /*
+  =========================================
+  SERVER REFRESH
+  =========================================
+  */
 
   try{
 
-    if(!selectedAddress){
+    const query =
+      new URLSearchParams({
+        action:
+          "customerAddresses",
+        session_token:
+          checkoutSessionToken
+      });
 
-      const sessionToken =
-  checkoutSessionToken;
-      
-      const query =
-        new URLSearchParams();
 
-      query.set(
-        "action",
-        "customerAddresses"
+    const controller =
+      new AbortController();
+
+
+    const timer =
+      setTimeout(
+        ()=>{
+          controller.abort();
+        },
+        6000
       );
 
-      if(sessionToken){
 
-  query.set(
-    "action",
-    "customerAddresses"
-  );
+    const response =
+      await fetch(
+        API +
+        "?" +
+        query.toString(),
+        {
+          signal:
+            controller.signal
+        }
+      );
 
-  query.set(
-    "session_token",
-    sessionToken
-  );
 
-}else if(customer.email){
+    clearTimeout(
+      timer
+    );
 
-  // รองรับ Backend เก่า
-  query.set(
-    "email",
-    customer.email
-  );
 
-}
+    if(!response.ok){
 
-const response =
-  await fetch(
-    API +
-    "?" +
-    query.toString()
-  );
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
 
-      if(!response.ok){
+    }
 
-        throw new Error(
-          "HTTP " +
-          response.status
-        );
 
-      }
+    const result =
+      await response.json();
 
-      const result =
-        await response.json();
 
-      if(
-        result &&
-        result.success === false
-      ){
+    if(
+      result &&
+      result.success === false
+    ){
 
-        throw new Error(
-          result.error ||
-          "โหลดที่อยู่ไม่สำเร็จ"
-        );
+      throw new Error(
+        result.error ||
+        "โหลดที่อยู่ไม่สำเร็จ"
+      );
 
-      }
+    }
 
-      const addresses =
-        Array.isArray(result)
-          ? result
-          : Array.isArray(
-              result.addresses
-            )
-              ? result.addresses
-              : [];
+
+    const addresses =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(
+            result.addresses
+          )
+            ? result.addresses
+            : [];
+
+
+    /*
+    =========================================
+    CACHE SUCCESSFUL RESPONSE
+    =========================================
+    */
+
+    localStorage.setItem(
+      cacheKey,
+      JSON.stringify(
+        addresses
+      )
+    );
+
+
+    /*
+    =========================================
+    IF USER HAS NOT SELECTED ONE
+    PICK DEFAULT
+    =========================================
+    */
+
+    if(
+      !selectedAddress &&
+      addresses.length
+    ){
 
       selectedAddress =
         addresses.find(
@@ -1259,17 +1371,179 @@ const response =
               address.is_default
             )
         ) ||
-        addresses[0] ||
-        null;
+        addresses[0];
+
+
+      window.checkoutAddress =
+        selectedAddress;
+
+
+      localStorage.setItem(
+        "selectedCheckoutAddress",
+        JSON.stringify(
+          selectedAddress
+        )
+      );
+
+
+      renderCheckoutAddress(
+        selectedAddress
+      );
+
+
+      updateCheckoutPaymentState();
 
     }
 
-    if(!selectedAddress){
 
-      window.checkoutAddress =
-        null;
+    /*
+    =========================================
+    NO ADDRESS
+    =========================================
+    */
 
-      box.innerHTML = `
+    if(
+      !selectedAddress &&
+      !addresses.length
+    ){
+
+      renderCheckoutNoAddress();
+
+    }
+
+
+  }catch(error){
+
+    console.warn(
+      "loadDefaultAddress server refresh:",
+      error
+    );
+
+
+    /*
+    มี cache อยู่แล้ว
+    → ใช้ต่อได้ ไม่ต้องทำอะไร
+    */
+
+    if(selectedAddress){
+
+      return;
+
+    }
+
+
+    /*
+    ไม่มี cache + server ช้า
+    → อย่าปล่อย spinner ค้าง
+    */
+
+    renderCheckoutAddressUnavailable();
+
+  }
+
+}
+
+function getCheckoutAddressCacheKey(){
+
+  const key =
+    String(
+      customer.customer_id ||
+      customer.email ||
+      "guest"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  return (
+    "rinka_customer_addresses_" +
+    key
+  );
+
+}
+
+
+function renderCheckoutAddress(
+  address
+){
+
+  const box =
+    document.getElementById(
+      "selectedAddress"
+    );
+
+
+  if(!box){
+    return;
+  }
+
+
+  const fullAddress =
+    [
+      address.address,
+      address.subdistrict,
+      address.district,
+      address.province,
+      address.postcode
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+
+  box.innerHTML = `
+
+<div class="checkout-address-card">
+
+  <div>
+    <b>
+      ${escapeCheckoutHtml(
+        address.receiver ||
+        "-"
+      )}
+    </b>
+  </div>
+
+  <div>
+    📞
+    ${escapeCheckoutHtml(
+      address.phone ||
+      "-"
+    )}
+  </div>
+
+  <div>
+    📍
+    ${escapeCheckoutHtml(
+      fullAddress ||
+      "-"
+    )}
+  </div>
+
+</div>
+
+`;
+
+}
+
+
+function renderCheckoutNoAddress(){
+
+  window.checkoutAddress =
+    null;
+
+
+  const box =
+    document.getElementById(
+      "selectedAddress"
+    );
+
+
+  if(!box){
+    return;
+  }
+
+
+  box.innerHTML = `
 
 <div class="checkout-address-empty">
 
@@ -1282,140 +1556,99 @@ const response =
   </b>
 
   <span>
-    กรุณาเพิ่มหรือเลือกที่อยู่ก่อนดำเนินการต่อ
-  </span>
-
-</div>
-
-`;
-
-      updateCheckoutPaymentState();
-
-      return;
-
-    }
-
-    window.checkoutAddress =
-      selectedAddress;
-
-    box.innerHTML = `
-
-<div class="checkout-address-card">
-
-  <div class="checkout-address-head">
-
-    <div>
-
-      <div class="checkout-address-name">
-
-        ${escapeHtml(
-          selectedAddress.receiver ||
-          customer.username ||
-          "ผู้รับสินค้า"
-        )}
-
-      </div>
-
-      ${
-        normalizeCheckoutBoolean(
-          selectedAddress.is_default
-        )
-          ? `
-
-<span class="checkout-default-badge">
-  ค่าเริ่มต้น
-</span>
-
-`
-          : ""
-      }
-
-    </div>
-
-    <span class="checkout-address-icon">
-      📦
-    </span>
-
-  </div>
-
-  <div class="checkout-address-line">
-
-    <span>📞</span>
-
-    <span>
-      ${escapeHtml(
-        selectedAddress.phone || "-"
-      )}
-    </span>
-
-  </div>
-
-  <div class="checkout-address-line">
-
-    <span>📍</span>
-
-    <span>
-
-      ${escapeHtml(
-        [
-          selectedAddress.address,
-          selectedAddress.subdistrict,
-          selectedAddress.district,
-          selectedAddress.province,
-          selectedAddress.postcode
-        ]
-          .filter(Boolean)
-          .join(" ")
-      )}
-
-    </span>
-
-  </div>
-
-</div>
-
-`;
-
-    updateCheckoutPaymentState();
-
-  }catch(error){
-
-    console.error(
-      "loadDefaultAddress error",
-      error
-    );
-
-    window.checkoutAddress =
-      null;
-
-    box.innerHTML = `
-
-<div class="checkout-error-box">
-
-  <b>
-    โหลดที่อยู่จัดส่งไม่สำเร็จ
-  </b>
-
-  <span>
-    ${escapeHtml(
-      error.message ||
-      String(error)
-    )}
+    กรุณาเพิ่มที่อยู่ก่อนดำเนินการต่อ
   </span>
 
   <button
   type="button"
-  onclick="loadDefaultAddress()">
-    ลองใหม่
+  class="checkout-secondary-button"
+  onclick="
+    window.location.href=
+    'address-book.html?select=checkout'
+  "
+  >
+    เพิ่ม / เลือกที่อยู่
   </button>
 
 </div>
 
 `;
 
-    updateCheckoutPaymentState();
 
+  updateCheckoutPaymentState();
+
+}
+
+
+function renderCheckoutAddressUnavailable(){
+
+  window.checkoutAddress =
+    null;
+
+
+  const box =
+    document.getElementById(
+      "selectedAddress"
+    );
+
+
+  if(!box){
+    return;
   }
+
+
+  box.innerHTML = `
+
+<div class="checkout-address-empty">
+
+  <div class="checkout-state-icon">
+    ⚠️
+  </div>
+
+  <b>
+    ระบบโหลดที่อยู่ช้ากว่าปกติ
+  </b>
+
+  <span>
+    กรุณาเลือกที่อยู่ใหม่ หรือกดลองอีกครั้ง
+  </span>
+
+  <div
+  style="
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+  "
+  >
+
+    <button
+    type="button"
+    class="checkout-secondary-button"
+    onclick="loadDefaultAddress()"
+    >
+      ลองใหม่
+    </button>
+
+    <button
+    type="button"
+    class="checkout-secondary-button"
+    onclick="
+      window.location.href=
+      'address-book.html?select=checkout'
+    "
+    >
+      เลือกที่อยู่
+    </button>
+
+  </div>
+
+</div>
+
+`;
+
+
+  updateCheckoutPaymentState();
 
 }
 
