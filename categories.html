@@ -40,7 +40,8 @@ aria-label="เปิดตะกร้าสินค้า"
 <section id="categories" class="state"><div class="spinner"></div><h2>กำลังโหลดหมวดสินค้า</h2><p>รอสักครู่นะคะ</p></section>
 </main>
 <script>
-const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=products";
+const API =
+  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=productCards";
 let allCategories=[];
 document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("categorySearch").addEventListener("input",filterCategories);loadCategories()});
 async function loadCategories(){
