@@ -24,8 +24,10 @@
 </main>
 <script src="components.js"></script>
 <script>
+
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=productCards";
+  
 const fandom=new URLSearchParams(location.search).get("name")||"";
 let fandomProducts=[];
 document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("fandomSearch").addEventListener("input",filterProducts);loadProducts()});
