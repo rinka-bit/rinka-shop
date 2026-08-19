@@ -88,7 +88,110 @@ let banks = [];
 let submitting = false;
   
 document.addEventListener("DOMContentLoaded",()=>{if(!sessionToken){location.href="login.html";return}document.getElementById("slip").addEventListener("change",previewSlip);loadPage()});
-async function loadPage(){try{await loadShippingInfo();await Promise.all([loadDefaultAddress(),loadBanks()]);toggleMethod();updateSubmit()}catch(e){console.error(e);toast(e.message||"โหลดข้อมูลไม่สำเร็จ",true)}}
+
+async function loadPage(){
+
+  try{
+
+    /*
+    =========================================
+    LOAD PAGE DATA IN PARALLEL
+    =========================================
+
+    shippingInfo
+    address
+    banks
+
+    ทั้ง 3 ตัวไม่จำเป็นต้องรอกันก่อน fetch
+    */
+
+    const results =
+      await Promise.allSettled([
+
+        loadShippingInfo(),
+
+        loadDefaultAddress(),
+
+        loadBanks()
+
+      ]);
+
+
+    /*
+    =========================================
+    LOG INDIVIDUAL ERRORS
+
+    ไม่ให้ request ตัวเดียวพัง
+    แล้วกลบข้อมูลอีก 2 ตัวที่โหลดสำเร็จ
+    =========================================
+    */
+
+    results.forEach(
+      (
+        result,
+        index
+      )=>{
+
+        if(
+          result.status ===
+          "rejected"
+        ){
+
+          const names = [
+            "shippingInfo",
+            "address",
+            "banks"
+          ];
+
+          console.error(
+            "shipping-payment load failed:",
+            names[index],
+            result.reason
+          );
+
+        }
+
+      }
+    );
+
+
+    toggleMethod();
+
+    updateSubmit();
+
+
+    /*
+    shippingInfo เป็นข้อมูลหลักของหน้านี้
+    ถ้าโหลดไม่ได้ค่อยแจ้ง error หลัก
+    */
+
+    if(
+      results[0].status ===
+      "rejected"
+    ){
+
+      throw results[0].reason;
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "loadPage error:",
+      error
+    );
+
+    toast(
+      error.message ||
+      "โหลดข้อมูลไม่สำเร็จ",
+      true
+    );
+
+  }
+
+}
+  
 async function loadShippingInfo(){
 
   if(!orderId){
