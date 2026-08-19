@@ -3,30 +3,156 @@
 const ManualOrder = {
 
   products:[],
-
   collections:[],
-
   campaigns:[],
-
   rules:[],
-
   items:[],
-
   characters:[],
-
   exclusions:[],
-
   cart:[],
-
   gifts:[],
-
   customers:[],
-
   selectedCustomer:null,
 
-  loading:false
+  loading:false,
+
+  dataLoaded:false,
+  dataLoading:false
 
 };
+
+async function loadManualOrderData(force = false){
+
+  if(ManualOrder.dataLoading){
+    return;
+  }
+
+  if(
+    ManualOrder.dataLoaded &&
+    !force
+  ){
+    filterManualProducts();
+    renderManualCart();
+    renderManualGifts();
+    return;
+  }
+
+  ManualOrder.dataLoading = true;
+
+  const productBox =
+    document.getElementById(
+      "mo_products"
+    );
+
+  try{
+
+    setManualMessage(
+      "กำลังโหลดข้อมูลสินค้าและของแถม...",
+      "info"
+    );
+
+    const [
+      p,
+      c,
+      gc,
+      gr,
+      gi,
+      ch,
+      ex
+    ] = await Promise.all([
+
+      moGet("adminProducts"),
+      moGet("adminCollections"),
+      moGet("getGiftCampaigns"),
+      moGet("getGiftRules"),
+      moGet("getGiftItems"),
+      moGet("getGiftCharacters"),
+      moGet("getGiftCampaignExclusions")
+
+    ]);
+
+    ManualOrder.products =
+      moArray(p,"products");
+
+    ManualOrder.collections =
+      moArray(c,"collections");
+
+    ManualOrder.campaigns =
+      moArray(gc,"campaigns");
+
+    ManualOrder.rules =
+      moArray(gr,"rules");
+
+    ManualOrder.items =
+      moArray(gi,"items","gifts");
+
+    ManualOrder.characters =
+      moArray(ch,"characters");
+
+    ManualOrder.exclusions =
+      moArray(ex,"exclusions");
+
+    ManualOrder.dataLoaded = true;
+
+    const collectionSelect =
+      document.getElementById(
+        "mo_collection"
+      );
+
+    if(collectionSelect){
+
+      collectionSelect.innerHTML =
+        '<option value="">ทั้งหมด</option>' +
+        ManualOrder.collections
+          .map(
+            collection =>
+              `<option value="${moEsc(collection.collection_id)}">${moEsc(collection.name)}</option>`
+          )
+          .join("");
+
+    }
+
+    clearManualMessage();
+
+    filterManualProducts();
+    renderManualCart();
+    renderManualGifts();
+
+  }catch(error){
+
+    console.error(
+      "loadManualOrderData error:",
+      error
+    );
+
+    if(productBox){
+
+      productBox.innerHTML = `
+        <div class="mo-notice mo-error mo-full">
+          โหลดข้อมูลไม่สำเร็จ<br>
+          ${moEsc(error.message || String(error))}
+          <br><br>
+          <button type="button" onclick="loadManualOrderData(true)">
+            ลองใหม่
+          </button>
+        </div>
+      `;
+
+    }
+
+    setManualMessage(
+      "โหลดข้อมูล Manual Order ไม่สำเร็จ: " +
+      (error.message || String(error)),
+      "error"
+    );
+
+  }finally{
+
+    ManualOrder.dataLoading = false;
+
+  }
+
+}
 
 function renderManualOrderManager(){
   const root=document.getElementById('manualOrderManager');
@@ -272,7 +398,6 @@ id="mo_name"
     </div>
 
   </div>`;
-  loadManualOrderData();
 }
 
 async function loadManualOrderData(){
@@ -1069,7 +1194,13 @@ onclick="openManualProductModal('${moEsc(product.product_id)}')"
 
 ${
   product.image
-    ? `<img class="mo-product-thumb" src="${moEsc(product.image)}" alt="">`
+    ? `<img
+    class="mo-product-thumb"
+    src="${moEsc(product.image)}"
+    alt=""
+    loading="lazy"
+    decoding="async"
+  >`
     : `<div class="mo-product-thumb mo-product-thumb-empty">🛍️</div>`
 }
 
