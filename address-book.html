@@ -45,16 +45,274 @@ const shipmentId =
 
 let addressesData=[];
 document.addEventListener("DOMContentLoaded",()=>{if(!sessionToken){location.replace("login.html");return}loadAddresses()});
+
 async function loadAddresses(){
- const box=document.getElementById("addressList");box.className="state";box.innerHTML='<div class="spinner"></div><h2>กำลังโหลดที่อยู่</h2><p>รอสักครู่นะคะ</p>';
- try{
-  const q=new URLSearchParams({action:"customerAddresses",session_token:sessionToken});
-  const res=await fetch(API+"?"+q.toString());if(!res.ok)throw new Error("HTTP "+res.status);
-  const data=await res.json();if(data&&data.success===false)throw new Error(data.error||"กรุณาเข้าสู่ระบบใหม่");
-  addressesData=Array.isArray(data)?data:Array.isArray(data.addresses)?data.addresses:[];
-  renderAddresses(addressesData);
- }catch(err){console.error(err);box.className="state";box.innerHTML=`<div style="font-size:48px">⚠️</div><h2>โหลดที่อยู่ไม่สำเร็จ</h2><p>${esc(err.message||String(err))}</p><button onclick="loadAddresses()">ลองใหม่</button>`}
+
+  const box =
+    document.getElementById(
+      "addressList"
+    );
+
+
+  const cacheKey =
+    getAddressBookCacheKey();
+
+
+  /*
+  =========================================
+  LOCAL CACHE FIRST
+  =========================================
+  */
+
+  let cached = [];
+
+  try{
+
+    const raw =
+      JSON.parse(
+        localStorage.getItem(
+          cacheKey
+        ) || "[]"
+      );
+
+    cached =
+      Array.isArray(raw)
+        ? raw
+        : [];
+
+  }catch(error){
+
+    console.warn(
+      "อ่าน address cache ไม่สำเร็จ:",
+      error
+    );
+
+  }
+
+
+  if(cached.length){
+
+    addressesData =
+      cached;
+
+    renderAddresses(
+      cached
+    );
+
+  }else{
+
+    box.className =
+      "state";
+
+    box.innerHTML = `
+
+<div class="spinner"></div>
+
+<h2>
+กำลังโหลดที่อยู่
+</h2>
+
+<p>
+รอสักครู่นะคะ
+</p>
+
+`;
+
+  }
+
+
+  /*
+  =========================================
+  SERVER REFRESH
+  =========================================
+  */
+
+  try{
+
+    const q =
+      new URLSearchParams({
+        action:
+          "customerAddresses",
+        session_token:
+          sessionToken
+      });
+
+
+    const controller =
+      new AbortController();
+
+
+    const timer =
+      setTimeout(
+        ()=>{
+          controller.abort();
+        },
+        6000
+      );
+
+
+    const res =
+      await fetch(
+        API +
+        "?" +
+        q.toString(),
+        {
+          signal:
+            controller.signal
+        }
+      );
+
+
+    clearTimeout(
+      timer
+    );
+
+
+    if(!res.ok){
+
+      throw new Error(
+        "HTTP " +
+        res.status
+      );
+
+    }
+
+
+    const data =
+      await res.json();
+
+
+    if(
+      data &&
+      data.success === false
+    ){
+
+      throw new Error(
+        data.error ||
+        "กรุณาเข้าสู่ระบบใหม่"
+      );
+
+    }
+
+
+    const rows =
+      Array.isArray(data)
+        ? data
+        : Array.isArray(
+            data.addresses
+          )
+            ? data.addresses
+            : [];
+
+
+    addressesData =
+      rows;
+
+
+    localStorage.setItem(
+      cacheKey,
+      JSON.stringify(
+        rows
+      )
+    );
+
+
+    renderAddresses(
+      rows
+    );
+
+
+  }catch(error){
+
+    console.warn(
+      "loadAddresses refresh:",
+      error
+    );
+
+
+    /*
+    cache มีอยู่แล้ว
+    → อย่าทำลาย list ที่แสดงอยู่
+    */
+
+    if(cached.length){
+
+      return;
+
+    }
+
+
+    /*
+    ไม่มี cache
+    */
+
+    box.className =
+      "state";
+
+
+    box.innerHTML = `
+
+<div style="font-size:48px">
+⚠️
+</div>
+
+<h2>
+โหลดที่อยู่ช้ากว่าปกติ
+</h2>
+
+<p>
+สามารถเพิ่มที่อยู่ใหม่ได้ทันที
+หรือกดลองโหลดอีกครั้ง
+</p>
+
+<div
+style="
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+justify-content:center;
+"
+>
+
+  <button
+  onclick="loadAddresses()"
+  >
+    ลองใหม่
+  </button>
+
+  <button
+  onclick="goAddAddress()"
+  >
+    + เพิ่มที่อยู่ใหม่
+  </button>
+
+</div>
+
+`;
+
+  }
+
 }
+
+function getAddressBookCacheKey(){
+
+  const key =
+    String(
+      customer.customer_id ||
+      customer.email ||
+      "guest"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  return (
+    "rinka_customer_addresses_" +
+    key
+  );
+
+}
+  
 function renderAddresses(rows){
  const box=document.getElementById("addressList");
  if(!rows.length){box.className="state";box.innerHTML='<div style="font-size:48px">📍</div><h2>ยังไม่มีที่อยู่</h2><p>เพิ่มที่อยู่เพื่อใช้สั่งซื้อสินค้า</p><button onclick="goAddAddress()">เพิ่มที่อยู่ใหม่</button>';return}
@@ -156,6 +414,24 @@ function useAddressById(id){
 
     return;
   }
+
+  try{
+
+  localStorage.setItem(
+    getAddressBookCacheKey(),
+    JSON.stringify(
+      addressesData
+    )
+  );
+
+}catch(error){
+
+  console.warn(
+    "บันทึก address cache ไม่สำเร็จ:",
+    error
+  );
+
+}
 
   if(
     selectType ===
