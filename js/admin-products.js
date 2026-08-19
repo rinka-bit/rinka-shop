@@ -1126,15 +1126,27 @@ async function loadAdminProducts(){
 
   try{
 
-    const result =
-  await adminGetJson(
+    const response =
+  await fetch(
     API +
-      "?action=adminProducts",
-    {
-      retries:2,
-      retryDelay:500
-    }
+      "?action=adminProducts"
   );
+
+
+if(
+  !response.ok
+){
+
+  throw new Error(
+    "HTTP " +
+    response.status
+  );
+
+}
+
+
+const result =
+  await response.json();
 
     if(
       !result ||
