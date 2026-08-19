@@ -144,6 +144,12 @@ function showAdminTab(
   ];
 
 
+  /*
+  =========================================
+  SWITCH TAB UI
+  =========================================
+  */
+
   tabs.forEach(
     name => {
 
@@ -184,6 +190,12 @@ function showAdminTab(
   );
 
 
+  /*
+  =========================================
+  LOAD TAB DATA
+  =========================================
+  */
+
   loadAdminTabData(
     tab
   )
@@ -200,13 +212,19 @@ function showAdminTab(
     );
 
 
+  /*
+  =========================================
+  MOBILE SIDEBAR
+  =========================================
+  */
+
   if(
-  window.innerWidth <= 900
-){
+    window.innerWidth <= 900
+  ){
 
-  closeAdminSidebar();
+    closeAdminSidebar();
 
-}
+  }
 
 }
 
@@ -215,8 +233,9 @@ async function loadAdminTabData(
 ){
 
   /*
-  ถ้าโหลดแล้ว
-  ไม่โหลดซ้ำ
+  =========================================
+  ALREADY LOADED
+  =========================================
   */
 
   if(
@@ -245,88 +264,174 @@ async function loadAdminTabData(
 
       await loadDashboardData();
 
+
       adminLoadedTabs.dashboard =
         true;
+
 
       return;
 
     }
 
 
-   /*
-=========================================
-PRODUCTS
-=========================================
-*/
+    /*
+    =========================================
+    PRODUCTS
+    =========================================
+    */
 
-if(
-  tab ===
-  "products"
-){
+    if(
+      tab ===
+      "products"
+    ){
 
-  /*
-  Product Manager ใช้ Collections
-  ทั้งหน้าเพิ่มสินค้า + filter
-  */
+      /*
+      เก็บค่า filter เดิมไว้
+      เผื่อมีการ render manager ใหม่
+      */
 
-  if(
-    !Array.isArray(
-      adminCollections
-    ) ||
-    adminCollections.length === 0
-  ){
-
-    await loadAdminCollections();
-
-  }
+      const savedFilterState =
+        typeof getAdminProductFilterState ===
+          "function"
+          ? getAdminProductFilterState()
+          : null;
 
 
-  if(
-    !Array.isArray(
-      adminProducts
-    ) ||
-    adminProducts.length === 0
-  ){
+      /*
+      แสดง Product Manager ก่อนทันที
+      ไม่ต้องรอ API
+      */
 
-    await loadAdminProducts();
-
-  }
+      renderProductManager();
 
 
-  renderProductManager();
+      /*
+      Products + Collections
+      โหลดพร้อมกัน
+      */
+
+      const tasks = [];
 
 
-  adminLoadedTabs.products =
-    true;
+      if(
+        !Array.isArray(
+          adminCollections
+        ) ||
+        adminCollections.length === 0
+      ){
+
+        tasks.push(
+          loadAdminCollections()
+        );
+
+      }
 
 
-  return;
+      if(
+        !Array.isArray(
+          adminProducts
+        ) ||
+        adminProducts.length === 0
+      ){
 
-}
+        tasks.push(
+          loadAdminProducts()
+        );
+
+      }
+
+
+      if(
+        tasks.length
+      ){
+
+        await Promise.all(
+          tasks
+        );
+
+      }
+
+
+      /*
+      Collections โหลดครบแล้ว
+      render manager อีกครั้ง
+      เพื่อเติม Collection dropdown
+      */
+
+      renderProductManager();
+
+
+      /*
+      คืนค่า filter เดิม
+      */
+
+      if(
+        typeof restoreAdminProductFilterState ===
+        "function"
+      ){
+
+        restoreAdminProductFilterState(
+          savedFilterState
+        );
+
+      }
+
+
+      /*
+      แสดงรายการสินค้า
+      */
+
+      renderAdminProductList();
+
+
+      /*
+      sync dropdown ของ Options
+      ถ้ามีฟังก์ชันนี้
+      */
+
+      if(
+        typeof refreshOptionProductSelect ===
+        "function"
+      ){
+
+        refreshOptionProductSelect();
+
+      }
+
+
+      adminLoadedTabs.products =
+        true;
+
+
+      return;
+
+    }
+
+
     /*
     =========================================
     COLLECTIONS
     =========================================
     */
 
-   if(
-  tab ===
-  "collections"
-){
+    if(
+      tab ===
+      "collections"
+    ){
 
-  renderCollectionManager();
-
-
-  await loadAdminCollections();
+      renderCollectionManager();
 
 
-  adminLoadedTabs.collections =
-    true;
+      await loadAdminCollections();
 
 
-  return;
+      adminLoadedTabs.collections =
+        true;
 
-}
+
+      return;
+
+    }
 
 
     /*
@@ -335,52 +440,71 @@ if(
     =========================================
     */
 
-if(
-  tab ===
-  "options"
-){
+    if(
+      tab ===
+      "options"
+    ){
 
-  /*
-  Options ต้องใช้ข้อมูล
-  Products + Collections
-  แต่ไม่ถือว่าแท็บเหล่านั้นโหลดแล้ว
-  */
+      /*
+      Options ต้องใช้
+      Products + Collections
 
+      โหลดพร้อมกันได้
+      */
 
-  if(
-    !Array.isArray(
-      adminProducts
-    ) ||
-    adminProducts.length === 0
-  ){
-
-    await loadAdminProducts();
-
-  }
+      const tasks = [];
 
 
-  if(
-    !Array.isArray(
-      adminCollections
-    ) ||
-    adminCollections.length === 0
-  ){
+      if(
+        !Array.isArray(
+          adminProducts
+        ) ||
+        adminProducts.length === 0
+      ){
 
-    await loadAdminCollections();
+        tasks.push(
+          loadAdminProducts()
+        );
 
-  }
-
-
-  renderOptionManager();
-
-
-  adminLoadedTabs.options =
-    true;
+      }
 
 
-  return;
+      if(
+        !Array.isArray(
+          adminCollections
+        ) ||
+        adminCollections.length === 0
+      ){
 
-}
+        tasks.push(
+          loadAdminCollections()
+        );
+
+      }
+
+
+      if(
+        tasks.length
+      ){
+
+        await Promise.all(
+          tasks
+        );
+
+      }
+
+
+      renderOptionManager();
+
+
+      adminLoadedTabs.options =
+        true;
+
+
+      return;
+
+    }
+
 
     /*
     =========================================
@@ -614,83 +738,85 @@ color:#991b1b;
 
     }
 
+
     /*
-=========================================
-LEGACY ORDERS
-=========================================
-*/
+    =========================================
+    LEGACY ORDERS
+    =========================================
+    */
 
-if(
-  tab ===
-  "legacy_orders"
-){
+    if(
+      tab ===
+      "legacy_orders"
+    ){
 
-  if(
-    typeof renderLegacyOrderManager !==
-    "function"
-  ){
+      if(
+        typeof renderLegacyOrderManager !==
+        "function"
+      ){
 
-    throw new Error(
-      "ไม่พบ renderLegacyOrderManager()"
-    );
+        throw new Error(
+          "ไม่พบ renderLegacyOrderManager()"
+        );
 
-  }
-
-
-  renderLegacyOrderManager();
+      }
 
 
-  if(
-    typeof loadLegacyUnlinkedOrders ===
-    "function"
-  ){
-
-    await loadLegacyUnlinkedOrders();
-
-  }
+      renderLegacyOrderManager();
 
 
-  adminLoadedTabs.legacy_orders =
-    true;
+      if(
+        typeof loadLegacyUnlinkedOrders ===
+        "function"
+      ){
+
+        await loadLegacyUnlinkedOrders();
+
+      }
 
 
-  return;
-
-}
-
-/*
-=========================================
-CUSTOMER ORDER LOOKUP
-=========================================
-*/
-
-if(
-  tab ===
-  "customer_lookup"
-){
-
-  if(
-    typeof renderAdminCustomerOrderLookup !==
-    "function"
-  ){
-
-    throw new Error(
-      "ไม่พบ renderAdminCustomerOrderLookup()"
-    );
-
-  }
+      adminLoadedTabs.legacy_orders =
+        true;
 
 
-  renderAdminCustomerOrderLookup();
+      return;
+
+    }
 
 
-  adminLoadedTabs.customer_lookup =
-    true;
+    /*
+    =========================================
+    CUSTOMER ORDER LOOKUP
+    =========================================
+    */
+
+    if(
+      tab ===
+      "customer_lookup"
+    ){
+
+      if(
+        typeof renderAdminCustomerOrderLookup !==
+        "function"
+      ){
+
+        throw new Error(
+          "ไม่พบ renderAdminCustomerOrderLookup()"
+        );
+
+      }
 
 
-  return;
+      renderAdminCustomerOrderLookup();
 
-}
+
+      adminLoadedTabs.customer_lookup =
+        true;
+
+
+      return;
+
+    }
 
 
   }catch(error){
