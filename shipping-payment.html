@@ -93,18 +93,6 @@ async function loadPage(){
 
   try{
 
-    /*
-    =========================================
-    LOAD PAGE DATA IN PARALLEL
-    =========================================
-
-    shippingInfo
-    address
-    banks
-
-    ทั้ง 3 ตัวไม่จำเป็นต้องรอกันก่อน fetch
-    */
-
     const results =
       await Promise.allSettled([
 
@@ -116,15 +104,6 @@ async function loadPage(){
 
       ]);
 
-
-    /*
-    =========================================
-    LOG INDIVIDUAL ERRORS
-
-    ไม่ให้ request ตัวเดียวพัง
-    แล้วกลบข้อมูลอีก 2 ตัวที่โหลดสำเร็จ
-    =========================================
-    */
 
     results.forEach(
       (
@@ -159,11 +138,6 @@ async function loadPage(){
 
     updateSubmit();
 
-
-    /*
-    shippingInfo เป็นข้อมูลหลักของหน้านี้
-    ถ้าโหลดไม่ได้ค่อยแจ้ง error หลัก
-    */
 
     if(
       results[0].status ===
