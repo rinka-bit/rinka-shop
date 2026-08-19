@@ -336,9 +336,13 @@ async function loadAdminCollections(){
    const response =
   await fetch(
     API +
-      "?action=adminCollections"
+      "?action=adminCollections" +
+      "&_=" +
+      Date.now(),
+    {
+      cache:"no-store"
+    }
   );
-
 
 if(!response.ok){
 
