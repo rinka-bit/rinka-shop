@@ -3468,7 +3468,7 @@ function buildEligibleGiftCampaigns(){
       Rule ทั้งหมดที่ยอดถึง
       */
 
-      const matchedRules =
+      let matchedRules =
         rules
           .filter(
             rule=>
@@ -3497,6 +3497,39 @@ function buildEligibleGiftCampaigns(){
                 b.min_amount || 0
               )
           );
+
+      /*
+=========================================
+REPLACE TIER CAMPAIGNS
+=========================================
+
+Campaign ที่ยอดใหม่แทนยอดเก่า
+เช่น Genshin:
+
+1200 → ใช้ Rule 1200
+2400 → ใช้ Rule 2400 เท่านั้น
+=========================================
+*/
+
+const replaceTierCampaignIds = [
+  "CAM17871607129142161"
+];
+
+
+if(
+  replaceTierCampaignIds.includes(
+    campaignId
+  ) &&
+  matchedRules.length > 1
+){
+
+  matchedRules = [
+    matchedRules[
+      matchedRules.length - 1
+    ]
+  ];
+
+}
 
       if(!matchedRules.length){
         return;
