@@ -147,180 +147,466 @@ function showLoadingSkeleton(containerId,count=4){
   box.innerHTML = Array.from({length:count},()=>'<div class="home-skeleton" aria-hidden="true"></div>').join("");
 }
 
-async function fetchJson(url,label){
+/*
+=========================================
+HOME DATA CACHE
+=========================================
+*/
+
+const HOME_CACHE_KEY =
+  "rinka_home_data_v1";
+
+
+const HOME_CACHE_MAX_AGE =
+  10 * 60 * 1000;
+
+
+/*
+=========================================
+READ CACHE
+=========================================
+*/
+
+function getHomeCache(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        HOME_CACHE_KEY
+      );
+
+    if(!raw){
+
+      return null;
+
+    }
+
+
+    const parsed =
+      JSON.parse(
+        raw
+      );
+
+
+    if(
+      !parsed ||
+      typeof parsed !==
+        "object"
+    ){
+
+      return null;
+
+    }
+
+
+    if(
+      !Array.isArray(
+        parsed.products
+      ) ||
+      !Array.isArray(
+        parsed.collections
+      )
+    ){
+
+      return null;
+
+    }
+
+
+    return parsed;
+
+
+  }catch(error){
+
+    console.warn(
+      "อ่าน Home cache ไม่สำเร็จ:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/*
+=========================================
+SAVE CACHE
+=========================================
+*/
+
+function saveHomeCache(
+  data
+){
+
+  try{
+
+    localStorage.setItem(
+      HOME_CACHE_KEY,
+      JSON.stringify({
+
+        saved_at:
+          Date.now(),
+
+        products:
+          Array.isArray(
+            data.products
+          )
+            ? data.products
+            : [],
+
+        collections:
+          Array.isArray(
+            data.collections
+          )
+            ? data.collections
+            : []
+
+      })
+    );
+
+
+  }catch(error){
+
+    /*
+    cache เต็ม / browser ปิด storage
+    ไม่ควรทำให้หน้าเว็บพัง
+    */
+
+    console.warn(
+      "บันทึก Home cache ไม่สำเร็จ:",
+      error
+    );
+
+  }
+
+}
+
+
+/*
+=========================================
+RENDER HOME DATA
+=========================================
+*/
+
+function renderHomeData(
+  data
+){
+
+  const products =
+    Array.isArray(
+      data?.products
+    )
+      ? [
+          ...data.products
+        ]
+      : [];
+
+
+  const collections =
+    Array.isArray(
+      data?.collections
+    )
+      ? data.collections
+      : [];
+
+
+  /*
+  =========================================
+  PRODUCTS
+  =========================================
+  */
+
+  window.allProducts =
+    [
+      ...products
+    ];
+
+
+  products.sort(
+    (
+      a,
+      b
+    ) =>
+
+      Number(
+        b.sort_order || 0
+      )
+      -
+      Number(
+        a.sort_order || 0
+      )
+  );
+
+
+  loadFeatured(
+    products
+  );
+
+
+  loadNewArrivals(
+    products
+  );
+
+
+  loadFandoms(
+    products
+  );
+
+
+  /*
+  =========================================
+  COLLECTIONS
+  =========================================
+  */
+
+  renderHomeCollections(
+    collections
+  );
+
+}
+
+
+/*
+=========================================
+FETCH HOME DATA
+=========================================
+*/
+
+async function fetchHomeData(){
+
+  const startedAt =
+    performance.now();
+
 
   const response =
     await fetch(
-      url,
+      BASE_API +
+      "?action=homeData",
       {
-        cache:"default"
+        cache:
+          "default"
       }
     );
+
 
   if(!response.ok){
 
     throw new Error(
-      `${label}: HTTP ${response.status}`
+      "HTTP " +
+      response.status
     );
 
   }
+
 
   const result =
     await response.json();
 
+
   if(
-    result &&
-    result.success === false
+    !result ||
+    result.success !== true
   ){
 
     throw new Error(
-      result.error ||
-      `${label} ไม่สำเร็จ`
+      result?.error ||
+      "โหลดข้อมูลหน้าแรกไม่สำเร็จ"
     );
 
   }
+
+
+  console.log(
+    "HOME DATA:",
+    Math.round(
+      performance.now() -
+      startedAt
+    ),
+    "ms",
+    result.performance || {}
+  );
+
 
   return result;
 
 }
 
+
+/*
+=========================================
+LOAD HOME
+=========================================
+*/
+
 async function loadHome(){
 
-  showLoadingSkeleton(
-    "featuredProducts"
-  );
-
-  showLoadingSkeleton(
-    "newProducts"
-  );
-
-  showLoadingSkeleton(
-    "collectionCards"
-  );
+  const cache =
+    getHomeCache();
 
 
-  document
-    .getElementById(
-      "fandomList"
-    )
-    .innerHTML =
-      stateHtml(
-        "⏳",
-        "กำลังโหลดแฟนด้อม",
-        ""
-      );
-
-
-  setHomeMessage(
-    "กำลังโหลดข้อมูลหน้าหลัก...",
-    "info"
-  );
-
-
-  const productPromise =
-    fetchJson(
-      BASE_API +
-      "?action=productCards",
-      "โหลดสินค้า"
+  const hasCache =
+    Boolean(
+      cache
     );
-
-
-  const collectionPromise =
-    fetchJson(
-      BASE_API +
-      "?action=collections",
-      "โหลดรอบพรีออเดอร์"
-    );
-
-
-  const [
-    productResult,
-    collectionResult
-  ] =
-    await Promise.allSettled([
-
-      productPromise,
-
-      collectionPromise
-
-    ]);
 
 
   /*
-  =====================================
-  PRODUCTS
-  =====================================
+  =========================================
+  CACHE FIRST
+
+  ถ้าเคยโหลดสำเร็จแล้ว
+  แสดงข้อมูลทันที
+  ไม่ต้องรอ Apps Script
+  =========================================
   */
 
-  if(
-    productResult.status ===
-    "fulfilled"
-  ){
+  if(hasCache){
 
-    const result =
-      productResult.value;
-
-
-    const products =
-      Array.isArray(
-        result
-      )
-        ? result
-
-        : Array.isArray(
-            result.products
-          )
-          ? result.products
-          : [];
-
-
-    window.allProducts =
-      [
-        ...products
-      ];
-
-
-    products.sort(
-      (
-        a,
-        b
-      ) =>
-
-        Number(
-          b.sort_order || 0
-        )
-        -
-        Number(
-          a.sort_order || 0
-        )
+    renderHomeData(
+      cache
     );
 
 
-    loadFeatured(
-      products
-    );
+    const age =
+      Date.now() -
+      Number(
+        cache.saved_at || 0
+      );
 
 
-    loadNewArrivals(
-      products
-    );
+    if(
+      age <=
+      HOME_CACHE_MAX_AGE
+    ){
 
+      setHomeMessage(
+        "",
+        "info"
+      );
 
-    loadFandoms(
-      products
-    );
+    }else{
+
+      setHomeMessage(
+        "กำลังอัปเดตข้อมูลล่าสุด...",
+        "info"
+      );
+
+    }
 
   }else{
 
-    const error =
-      productResult.reason;
+    /*
+    ครั้งแรกจริง ๆ
+    ยังไม่มีอะไรใน browser
+    */
 
+    showLoadingSkeleton(
+      "featuredProducts"
+    );
+
+
+    showLoadingSkeleton(
+      "newProducts"
+    );
+
+
+    showLoadingSkeleton(
+      "collectionCards"
+    );
+
+
+    const fandomBox =
+      document.getElementById(
+        "fandomList"
+      );
+
+
+    if(fandomBox){
+
+      fandomBox.innerHTML =
+        stateHtml(
+          "⏳",
+          "กำลังโหลดแฟนด้อม",
+          ""
+        );
+
+    }
+
+
+    setHomeMessage(
+      "กำลังโหลดข้อมูลหน้าหลัก...",
+      "info"
+    );
+
+  }
+
+
+  /*
+  =========================================
+  REFRESH FROM SERVER
+
+  ไม่ว่าจะมี cache หรือไม่
+  ยิง Apps Script แค่ 1 request
+  =========================================
+  */
+
+  try{
+
+    const freshData =
+      await fetchHomeData();
+
+
+    saveHomeCache(
+      freshData
+    );
+
+
+    renderHomeData(
+      freshData
+    );
+
+
+    setHomeMessage(
+      "",
+      "info"
+    );
+
+
+  }catch(error){
 
     console.error(
-      "loadHome products error",
+      "loadHome error:",
       error
     );
 
+
+    /*
+    =========================================
+    ถ้ามี Cache
+    อย่าทำลายหน้าที่แสดงอยู่
+    =========================================
+    */
+
+    if(hasCache){
+
+      setHomeMessage(
+        "กำลังใช้ข้อมูลล่าสุดที่บันทึกไว้ เนื่องจากระบบอัปเดตข้อมูลช้ากว่าปกติ",
+        "info"
+      );
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    ไม่มี Cache + Server พัง
+    =========================================
+    */
 
     const retry = `
 
@@ -342,7 +628,7 @@ onclick="loadHome()"
         stateHtml(
           "⚠️",
           "โหลดสินค้าไม่สำเร็จ",
-          error?.message || "",
+          error.message || "",
           retry
         );
 
@@ -355,7 +641,7 @@ onclick="loadHome()"
         stateHtml(
           "⚠️",
           "โหลดสินค้าไม่สำเร็จ",
-          error?.message || "",
+          error.message || "",
           retry
         );
 
@@ -368,38 +654,9 @@ onclick="loadHome()"
         stateHtml(
           "⚠️",
           "โหลดแฟนด้อมไม่สำเร็จ",
-          error?.message || "",
+          error.message || "",
           retry
         );
-
-  }
-
-
-  /*
-  =====================================
-  COLLECTIONS
-  =====================================
-  */
-
-  if(
-    collectionResult.status ===
-    "fulfilled"
-  ){
-
-    renderHomeCollections(
-      collectionResult.value
-    );
-
-  }else{
-
-    const error =
-      collectionResult.reason;
-
-
-    console.error(
-      "loadHome collections error",
-      error
-    );
 
 
     document
@@ -410,36 +667,13 @@ onclick="loadHome()"
         stateHtml(
           "⚠️",
           "โหลดรอบพรีออเดอร์ไม่สำเร็จ",
-          error?.message || "",
-          `
-<button
-type="button"
-onclick="loadHome()"
->
-ลองโหลดใหม่
-</button>
-`
+          error.message || "",
+          retry
         );
 
-  }
-
-
-  if(
-    productResult.status ===
-      "fulfilled" &&
-    collectionResult.status ===
-      "fulfilled"
-  ){
 
     setHomeMessage(
-      "",
-      "info"
-    );
-
-  }else{
-
-    setHomeMessage(
-      "ข้อมูลบางส่วนโหลดไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+      "โหลดข้อมูลหน้าแรกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
       "error"
     );
 
@@ -637,54 +871,6 @@ ${homeEscape(
         }
       )
       .join("");
-
-}
-
-async function loadCollections(){
-
-  try{
-
-    const result =
-      await fetchJson(
-        BASE_API +
-        "?action=collections",
-        "โหลดรอบพรีออเดอร์"
-      );
-
-
-    renderHomeCollections(
-      result
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "loadCollections error",
-      error
-    );
-
-
-    document
-      .getElementById(
-        "collectionCards"
-      )
-      .innerHTML =
-        stateHtml(
-          "⚠️",
-          "โหลดรอบพรีออเดอร์ไม่สำเร็จ",
-          error.message,
-          `
-<button
-type="button"
-onclick="loadCollections()"
->
-ลองโหลดใหม่
-</button>
-`
-        );
-
-  }
 
 }
 
