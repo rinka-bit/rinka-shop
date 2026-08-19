@@ -8,6 +8,18 @@ let adminOrdersCache = [];
 
 let adminOrderBaseCache = [];
 
+
+/*
+=========================================
+SHIPMENT CACHE
+=========================================
+*/
+
+const adminShipmentCache = {};
+
+const adminShipmentLoading = {};
+
+
 let adminOrderStatusFilter =
   "pending_order";
 
@@ -150,16 +162,8 @@ async function loadOrders(){
     =====================================
     */
 
-    adminOrdersCache =
-      await Promise.all(
-        activeOrders.map(
-          order =>
-            loadAdminOrderDetail(
-              order
-            )
-        )
-      );
-
+   adminOrdersCache =
+  activeOrders;
 
     renderAdminOrders();
 
@@ -914,9 +918,26 @@ ${escapeAdminOrderHtml(
 
     }
 
-    loadOrderShipmentsForAdmin(
-      orderId
-    );
+    const status =
+  String(
+    order.status || ""
+  )
+    .trim()
+    .toLowerCase();
+
+
+if(
+  status ===
+    "ready_to_ship" ||
+  status ===
+    "shipped"
+){
+
+  loadOrderShipmentsForAdmin(
+    orderId
+  );
+
+}
 
   }
 );
@@ -2635,107 +2656,253 @@ ADMIN — ORDER SHIPMENTS
 */
 
 async function loadOrderShipmentsForAdmin(
-  orderId
+  orderId,
+  forceReload = false
 ){
+
+  const normalizedOrderId =
+    String(
+      orderId || ""
+    ).trim();
+
+
+  if(!normalizedOrderId){
+
+    return;
+
+  }
+
 
   const box =
     document.getElementById(
       "shipmentBox_" +
-      orderId
+      normalizedOrderId
     );
 
+
   if(!box){
+
     return;
+
   }
 
+
+  /*
+  =========================================
+  USE CACHE
+  =========================================
+  */
+
+  if(
+    !forceReload &&
+    Object.prototype.hasOwnProperty.call(
+      adminShipmentCache,
+      normalizedOrderId
+    )
+  ){
+
+    renderOrderShipmentsAdmin(
+      normalizedOrderId,
+      adminShipmentCache[
+        normalizedOrderId
+      ]
+    );
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  PREVENT DUPLICATE REQUEST
+  =========================================
+  */
+
+  if(
+    adminShipmentLoading[
+      normalizedOrderId
+    ]
+  ){
+
+    try{
+
+      await adminShipmentLoading[
+        normalizedOrderId
+      ];
+
+    }catch(error){
+
+      /*
+      error ถูกจัดการใน request หลักแล้ว
+      */
+
+    }
+
+    return;
+
+  }
+
+
   box.innerHTML = `
-    <div
-      style="
-        color:#64748b;
-        font-size:13px;
-      "
-    >
-      ⏳ กำลังโหลดรอบจัดส่ง...
-    </div>
-  `;
+
+<div
+style="
+color:#64748b;
+font-size:13px;
+"
+>
+⏳ กำลังโหลดรอบจัดส่ง...
+</div>
+
+`;
+
+
+  const requestPromise =
+    (
+      async ()=>{
+
+        try{
+
+          const response =
+            await fetch(
+              API +
+              "?action=orderShipments" +
+              "&order_id=" +
+              encodeURIComponent(
+                normalizedOrderId
+              )
+            );
+
+
+          if(!response.ok){
+
+            throw new Error(
+              "HTTP " +
+              response.status
+            );
+
+          }
+
+
+          const result =
+            await response.json();
+
+
+          if(
+            result &&
+            result.success === false
+          ){
+
+            throw new Error(
+              result.error ||
+              "โหลดรอบจัดส่งไม่สำเร็จ"
+            );
+
+          }
+
+
+          const shipments =
+            Array.isArray(
+              result.shipments
+            )
+              ? result.shipments
+              : Array.isArray(
+                  result
+                )
+                ? result
+                : [];
+
+
+          /*
+          =========================================
+          SAVE CACHE
+          =========================================
+          */
+
+          adminShipmentCache[
+            normalizedOrderId
+          ] =
+            shipments;
+
+
+          renderOrderShipmentsAdmin(
+            normalizedOrderId,
+            shipments
+          );
+
+
+        }catch(error){
+
+          console.error(
+            "loadOrderShipmentsForAdmin error:",
+            normalizedOrderId,
+            error
+          );
+
+
+          const currentBox =
+            document.getElementById(
+              "shipmentBox_" +
+              normalizedOrderId
+            );
+
+
+          if(currentBox){
+
+            currentBox.innerHTML = `
+
+<div
+style="
+padding:12px;
+border:1px solid #fecdd3;
+border-radius:12px;
+background:#fff1f2;
+color:#be123c;
+font-size:13px;
+"
+>
+⚠️ โหลดข้อมูลรอบจัดส่งไม่สำเร็จ
+</div>
+
+`;
+
+          }
+
+
+          throw error;
+
+        }finally{
+
+          delete adminShipmentLoading[
+            normalizedOrderId
+          ];
+
+        }
+
+      }
+    )();
+
+
+  adminShipmentLoading[
+    normalizedOrderId
+  ] =
+    requestPromise;
+
 
   try{
 
-    const response =
-      await fetch(
-        API +
-        "?action=orderShipments" +
-        "&order_id=" +
-        encodeURIComponent(
-          orderId
-        )
-      );
-
-    if(!response.ok){
-
-      throw new Error(
-        "HTTP " +
-        response.status
-      );
-
-    }
-
-    const result =
-      await response.json();
-
-    if(
-      result &&
-      result.success === false
-    ){
-
-      throw new Error(
-        result.error ||
-        "โหลดรอบจัดส่งไม่สำเร็จ"
-      );
-
-    }
-
-    const shipments =
-      Array.isArray(
-        result.shipments
-      )
-        ? result.shipments
-        : Array.isArray(result)
-          ? result
-          : [];
-
-    renderOrderShipmentsAdmin(
-      orderId,
-      shipments
-    );
+    await requestPromise;
 
   }catch(error){
 
-    console.error(
-      "loadOrderShipmentsForAdmin error:",
-      orderId,
-      error
-    );
-
-    box.innerHTML = `
-      <div
-        style="
-          padding:12px;
-          border:1px solid #fecdd3;
-          border-radius:12px;
-          background:#fff1f2;
-          color:#be123c;
-          font-size:13px;
-        "
-      >
-        ⚠️ โหลดข้อมูลรอบจัดส่งไม่สำเร็จ
-      </div>
-    `;
+    /*
+    UI + console ถูกจัดการด้านบนแล้ว
+    */
 
   }
 
 }
-
 
 /*
 =========================================
