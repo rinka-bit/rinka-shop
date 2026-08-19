@@ -771,6 +771,8 @@ onclick="clearCollectionSearch()">
 
 </main>
 
+<script src="catalog.js?v=20260819-2"></script>
+
 <script>
 
 const API =
@@ -817,13 +819,17 @@ async function loadCollection(){
 
   if(!collectionId){
 
-    showCollectionError(
-      "ไม่พบรอบพรีออเดอร์"
+    renderCollectionError(
+      "ไม่พบรอบพรีออเดอร์",
+      "ลิงก์ Collection นี้ไม่สมบูรณ์"
     );
 
     return;
 
   }
+
+
+  renderCollectionLoading();
 
 
   try{
@@ -838,14 +844,16 @@ async function loadCollection(){
     =========================================
     */
 
+    const collections =
+      Array.isArray(
+        catalog.collections
+      )
+        ? catalog.collections
+        : [];
+
+
     const collection =
-      (
-        Array.isArray(
-          catalog.collections
-        )
-          ? catalog.collections
-          : []
-      ).find(
+      collections.find(
         item =>
           String(
             item.collection_id || ""
@@ -858,9 +866,9 @@ async function loadCollection(){
 
     if(!collection){
 
-      throw new Error(
-        "ไม่พบรอบพรีออเดอร์นี้"
-      );
+      renderCollectionNotFound();
+
+      return;
 
     }
 
@@ -891,18 +899,76 @@ async function loadCollection(){
 
     /*
     =========================================
+    STORE PAGE STATE
+    =========================================
+    */
+
+    currentCollection =
+      collection;
+
+
+    allProducts =
+      products;
+
+
+    /*
+    =========================================
+    PAGE TITLE
+    =========================================
+    */
+
+    const title =
+      String(
+        collection.name ||
+        "Collection"
+      );
+
+
+    document
+      .getElementById(
+        "collectionPageTitle"
+      )
+      .textContent =
+        title;
+
+
+    document.title =
+      title +
+      " | Rinka Shop";
+
+
+    /*
+    =========================================
     RENDER
     =========================================
     */
 
-    renderCollection(
-      collection
+    renderCollectionInfo(
+      collection,
+      products.length
     );
 
 
-    renderProducts(
+    renderCollectionProducts(
       products
     );
+
+
+    const productsSection =
+      document.getElementById(
+        "collectionProductsSection"
+      );
+
+
+    if(productsSection){
+
+      productsSection
+        .classList
+        .remove(
+          "hidden"
+        );
+
+    }
 
 
     console.log(
@@ -922,9 +988,10 @@ async function loadCollection(){
     );
 
 
-    showCollectionError(
+    renderCollectionError(
+      "โหลด Collection ไม่สำเร็จ",
       error.message ||
-      "โหลดรอบพรีออเดอร์ไม่สำเร็จ"
+      "กรุณาลองใหม่อีกครั้ง"
     );
 
   }
@@ -1826,7 +1893,6 @@ function escapeCollectionAttribute(
 </script>
 
 <script src="js/maintenance-notice.js"></script>
-<script src="catalog.js?v=20260819-1"></script>
 <script src="cart-drawer.js"></script>
 <script src="ui.js"></script>
 </body>
