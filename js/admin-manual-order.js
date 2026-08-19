@@ -1550,14 +1550,13 @@ confirmAddManualProduct(
 
 }
 
-
 function confirmAddManualProduct(
   productId
 ){
 
   const product =
     ManualOrder.products.find(
-      item=>
+      item =>
         String(
           item.product_id
         ) ===
@@ -1570,96 +1569,12 @@ function confirmAddManualProduct(
     return;
   }
 
-  const selectedOptions = {};
-const selectedOptionIds = [];
 
-let additionalPrice = 0;
-  
-  const groups =
-    document.querySelectorAll(
-      "#mo_modal_body .mo-option-group"
-    );
-
-  for(const group of groups){
-
-    const optionName =
-      group.dataset.optionName ||
-      "ตัวเลือก";
-
-    const selectionType =
-      group.dataset.selectionType ||
-      "single";
-
-    const selectedInputs =
-      [
-        ...group.querySelectorAll(
-          "input:checked"
-        )
-      ];
-
-    if(
-      selectedInputs.length === 0
-    ){
-
-      alert(
-        "กรุณาเลือก " +
-        optionName
-      );
-
-      return;
-
-    }
-
-    if(
-      selectionType ===
-      "multiple"
-    ){
-
-      selectedOptions[
-        optionName
-      ] =
-        selectedInputs.map(
-          input=>
-            input.value
-        );
-
-    }else{
-
-      selectedOptions[
-        optionName
-      ] =
-        selectedInputs[0].value;
-
-    }
-
-   selectedInputs.forEach(
-  input=>{
-
-    const optionId =
-      String(
-        input.dataset.optionId ||
-        ""
-      ).trim();
-
-    if(optionId){
-
-      selectedOptionIds.push(
-        optionId
-      );
-
-    }
-
-    additionalPrice +=
-      Number(
-        input.dataset
-          .additionalPrice ||
-        0
-      );
-
-  }
-);
-
-  }
+  /*
+  =========================================
+  READ QUANTITY / CRATE
+  =========================================
+  */
 
   const qty =
     Math.max(
@@ -1675,12 +1590,14 @@ let additionalPrice = 0;
       )
     );
 
+
   const crateSelected =
     document
       .getElementById(
         "mo_modal_crate_selected"
       )
       ?.value || "No";
+
 
   const crateFee =
     crateSelected === "Yes"
@@ -1696,85 +1613,403 @@ let additionalPrice = 0;
         )
       : 0;
 
-  const unitPrice =
-    moPrice(
-      product
-    ) +
-    additionalPrice;
 
-  const primaryOptionId =
-  selectedOptionIds[0] ||
-  "";
+  /*
+  =========================================
+  READ OPTION GROUPS
+  =========================================
+  */
 
-const key =
-  product.product_id +
-  "::" +
-  selectedOptionIds.join(",") +
-  "::" +
-  JSON.stringify(
-    selectedOptions
-  ) +
-  "::" +
-  crateSelected +
-  "::" +
-  crateFee;
-  
-  const existing =
-    ManualOrder.cart.find(
-      item=>
-        item._key === key
-    );
+  const groups =
+    [
+      ...document.querySelectorAll(
+        "#mo_modal_body .mo-option-group"
+      )
+    ];
 
-  if(existing){
 
-    existing.qty +=
-      qty;
+  /*
+  สินค้าไม่มี option
+  */
 
-  }else{
+  if(
+    groups.length === 0
+  ){
 
-    ManualOrder.cart.push({
+    const unitPrice =
+      moPrice(
+        product
+      );
 
-  _key:
-    key,
+    const key =
+      product.product_id +
+      "::NO_OPTION::" +
+      crateSelected +
+      "::" +
+      crateFee;
 
-  product_id:
-    product.product_id,
 
-  product_name:
-    product.name,
+    const existing =
+      ManualOrder.cart.find(
+        item =>
+          item._key === key
+      );
 
-  name:
-    product.name,
 
-  price:
-    unitPrice,
+    if(existing){
 
-  qty:
-    qty,
+      existing.qty +=
+        qty;
 
-  option_id:
-    primaryOptionId,
+    }else{
 
-  selected_options:
-    selectedOptions,
+      ManualOrder.cart.push({
 
-  crate_selected:
-    crateSelected,
+        _key:
+          key,
 
-  crate_fee:
-    crateFee,
+        product_id:
+          product.product_id,
 
-  collection_id:
-    product.collection_id ||
-    "",
+        product_name:
+          product.name,
 
-  fandom:
-    product.fandom ||
-    ""
+        name:
+          product.name,
 
-});
+        price:
+          unitPrice,
+
+        qty:
+          qty,
+
+        option_id:
+          "",
+
+        selected_options:
+          {},
+
+        crate_selected:
+          crateSelected,
+
+        crate_fee:
+          crateFee,
+
+        collection_id:
+          product.collection_id ||
+          "",
+
+        fandom:
+          product.fandom ||
+          ""
+
+      });
+
+    }
+
+
+    closeManualProductModal();
+
+    renderManualCart();
+    renderManualGifts();
+
+    return;
 
   }
+
+
+  /*
+  =========================================
+  BUILD SELECTED VARIANTS
+  =========================================
+
+  แต่ละ variant = 1 option_id
+  ดังนั้น Multiple เช่น B + C
+  จะกลายเป็น Cart Item 2 รายการ
+  =========================================
+  */
+
+  const selectedVariants = [];
+
+
+  for(const group of groups){
+
+    const optionName =
+      group.dataset.optionName ||
+      "ตัวเลือก";
+
+
+    const selectionType =
+      String(
+        group.dataset.selectionType ||
+        "single"
+      )
+        .trim()
+        .toLowerCase();
+
+
+    const selectedInputs =
+      [
+        ...group.querySelectorAll(
+          "input:checked"
+        )
+      ];
+
+
+    if(
+      selectedInputs.length === 0
+    ){
+
+      alert(
+        "กรุณาเลือก " +
+        optionName
+      );
+
+      return;
+
+    }
+
+
+    /*
+    =========================================
+    SINGLE
+    =========================================
+    */
+
+    if(
+      selectionType !==
+      "multiple"
+    ){
+
+      const input =
+        selectedInputs[0];
+
+
+      const optionId =
+        String(
+          input.dataset.optionId ||
+          ""
+        ).trim();
+
+
+      if(!optionId){
+
+        alert(
+          "ไม่พบรหัสตัวเลือกของ " +
+          optionName
+        );
+
+        return;
+
+      }
+
+
+      selectedVariants.push({
+
+        option_id:
+          optionId,
+
+        option_name:
+          optionName,
+
+        option_value:
+          input.value,
+
+        additional_price:
+          Number(
+            input.dataset
+              .additionalPrice ||
+            0
+          )
+
+      });
+
+
+      continue;
+
+    }
+
+
+    /*
+    =========================================
+    MULTIPLE
+    =========================================
+
+    เช่น:
+    ตัวละคร B
+    ตัวละคร C
+
+    → สร้าง variant 2 ตัว
+    =========================================
+    */
+
+    selectedInputs.forEach(
+      input => {
+
+        const optionId =
+          String(
+            input.dataset.optionId ||
+            ""
+          ).trim();
+
+
+        if(!optionId){
+          return;
+        }
+
+
+        selectedVariants.push({
+
+          option_id:
+            optionId,
+
+          option_name:
+            optionName,
+
+          option_value:
+            input.value,
+
+          additional_price:
+            Number(
+              input.dataset
+                .additionalPrice ||
+              0
+            )
+
+        });
+
+      }
+    );
+
+  }
+
+
+  if(
+    selectedVariants.length === 0
+  ){
+
+    alert(
+      "ไม่พบตัวเลือกสินค้าที่เลือก"
+    );
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  ADD EACH VARIANT TO CART
+  =========================================
+  */
+
+  selectedVariants.forEach(
+    variant => {
+
+      const selectedOptions = {
+
+        [variant.option_name]:
+          variant.option_value
+
+      };
+
+
+      /*
+      ราคานี้ใช้แสดงใน Admin เท่านั้น
+
+      Backend จะคำนวณราคาใหม่
+      จาก option_id อีกครั้ง
+      */
+
+      const unitPrice =
+        moPrice(
+          product
+        ) +
+        Number(
+          variant.additional_price ||
+          0
+        );
+
+
+      const key =
+        product.product_id +
+        "::" +
+        variant.option_id +
+        "::" +
+        crateSelected +
+        "::" +
+        crateFee;
+
+
+      const existing =
+        ManualOrder.cart.find(
+          item =>
+            item._key === key
+        );
+
+
+      if(existing){
+
+        existing.qty +=
+          qty;
+
+      }else{
+
+        ManualOrder.cart.push({
+
+          _key:
+            key,
+
+          product_id:
+            product.product_id,
+
+          product_name:
+            product.name,
+
+          name:
+            product.name,
+
+          price:
+            unitPrice,
+
+          qty:
+            qty,
+
+          /*
+          สำคัญ:
+          Pricing Service ใช้ field นี้
+          */
+          option_id:
+            variant.option_id,
+
+          /*
+          ใช้สำหรับแสดงชื่อ option
+          ใน Cart / Preview
+          */
+          selected_options:
+            selectedOptions,
+
+          crate_selected:
+            crateSelected,
+
+          crate_fee:
+            crateFee,
+
+          collection_id:
+            product.collection_id ||
+            "",
+
+          fandom:
+            product.fandom ||
+            ""
+
+        });
+
+      }
+
+    }
+  );
+
 
   closeManualProductModal();
 
@@ -1782,7 +2017,6 @@ const key =
   renderManualGifts();
 
 }
-
 
 function closeManualProductModal(){
 
