@@ -333,15 +333,25 @@ async function loadAdminCollections(){
 
   try{
 
-   const result =
-  await adminGetJson(
+   const response =
+  await fetch(
     API +
-      "?action=adminCollections",
-    {
-      retries:2,
-      retryDelay:500
-    }
+      "?action=adminCollections"
   );
+
+
+if(!response.ok){
+
+  throw new Error(
+    "HTTP " +
+    response.status
+  );
+
+}
+
+
+const result =
+  await response.json();
 
     if(
       !result ||
