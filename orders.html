@@ -38,8 +38,28 @@ button,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;display:flex;ali
 const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 const customer=safeJson(localStorage.getItem("customer"),{});
 const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
-const params=new URLSearchParams(location.search);
-const statusFilter=params.get("status")||"";
+const params =
+  new URLSearchParams(
+    location.search
+  );
+
+let statusFilter =
+  params.get(
+    "status"
+  ) || "";
+
+
+/*
+=========================================
+ORDER CACHE
+=========================================
+*/
+
+let customerOrdersCache = [];
+
+let legacyOrdersCache = [];
+
+let ordersLoading = false;
 const FILTERS = [
 
   [
@@ -79,8 +99,89 @@ const FILTERS = [
 
 ];
 document.addEventListener("DOMContentLoaded",()=>{renderFilters();loadOrders()});
+  
 function renderFilters(){
- document.getElementById("filterBar").innerHTML=FILTERS.map(([v,t])=>`<a class="filter-chip ${v===statusFilter?"active":""}" href="orders.html${v?`?status=${encodeURIComponent(v)}`:""}">${t}</a>`).join("");
+
+  const box =
+    document.getElementById(
+      "filterBar"
+    );
+
+
+  box.innerHTML =
+    FILTERS
+      .map(
+        ([value,text]) => `
+
+<button
+type="button"
+class="filter-chip ${
+  value === statusFilter
+    ? "active"
+    : ""
+}"
+onclick='setOrdersStatusFilter(
+  ${JSON.stringify(value)}
+)'
+>
+  ${esc(text)}
+</button>
+
+`
+      )
+      .join("");
+
+}
+
+
+function setOrdersStatusFilter(
+  status
+){
+
+  statusFilter =
+    String(
+      status || ""
+    );
+
+
+  /*
+  เปลี่ยน URL
+  แต่ไม่ reload หน้า
+  */
+
+  const url =
+    new URL(
+      window.location.href
+    );
+
+
+  if(statusFilter){
+
+    url.searchParams.set(
+      "status",
+      statusFilter
+    );
+
+  }else{
+
+    url.searchParams.delete(
+      "status"
+    );
+
+  }
+
+
+  history.replaceState(
+    null,
+    "",
+    url
+  );
+
+
+  renderFilters();
+
+  renderOrdersFromCache();
+
 }
 
  function statusText(s){
@@ -224,6 +325,13 @@ function statusClass(s){
   
 async function loadOrders(){
 
+  if(ordersLoading){
+
+    return;
+
+  }
+
+
   const box =
     document.getElementById(
       "orderList"
@@ -243,23 +351,37 @@ async function loadOrders(){
   }
 
 
-  document
-    .getElementById(
-      "pageTitle"
-    )
-    .textContent =
-      statusFilter
-        ? statusText(
-            statusFilter
-          )
-        : "รายการออเดอร์ทั้งหมด";
+  ordersLoading = true;
+
+
+  box.className =
+    "state";
+
+
+  box.innerHTML = `
+
+<div class="spinner"></div>
+
+<h2>
+  กำลังโหลดออเดอร์
+</h2>
+
+<p>
+  รอสักครู่นะคะ
+</p>
+
+`;
 
 
   try{
 
     /*
     =========================================
-    โหลดออเดอร์ระบบใหม่
+    STEP 1
+    CUSTOMER ORDERS
+
+    โหลดระบบใหม่ก่อน
+    เพื่อไม่ต้องรอ Legacy
     =========================================
     */
 
@@ -289,66 +411,12 @@ async function loadOrders(){
     }
 
 
-    /*
-    =========================================
-    โหลดออเดอร์เก่า
-
-    Legacy ต้องใช้ session เท่านั้น
-    =========================================
-    */
-
-    const requests = [
-
-      fetch(
+    const newResponse =
+      await fetch(
         API +
         "?" +
         newQuery.toString()
-      )
-
-    ];
-
-
-    if(sessionToken){
-
-      const legacyQuery =
-        new URLSearchParams({
-
-          action:
-            "legacyOrders",
-
-          session_token:
-            sessionToken
-
-        });
-
-
-      requests.push(
-
-        fetch(
-          API +
-          "?" +
-          legacyQuery.toString()
-        )
-
       );
-
-    }
-
-
-    const responses =
-      await Promise.all(
-        requests
-      );
-
-
-    /*
-    =========================================
-    ระบบใหม่
-    =========================================
-    */
-
-    const newResponse =
-      responses[0];
 
 
     if(!newResponse.ok){
@@ -378,7 +446,7 @@ async function loadOrders(){
     }
 
 
-    const newOrders =
+    customerOrdersCache =
       Array.isArray(
         newData
       )
@@ -393,27 +461,49 @@ async function loadOrders(){
 
 
     /*
+    แสดงออเดอร์ใหม่ทันที
+    */
+
+    renderOrdersFromCache();
+
+
+    /*
     =========================================
-    ระบบเก่า
+    STEP 2
+    LEGACY ORDERS
+
+    ค่อยโหลดหลังระบบใหม่แสดงแล้ว
     =========================================
     */
 
-    let legacyOrders = [];
-
-
-    if(
-      sessionToken &&
-      responses[1]
-    ){
+    if(sessionToken){
 
       try{
 
-        if(
-          responses[1].ok
-        ){
+        const legacyQuery =
+          new URLSearchParams({
+
+            action:
+              "legacyOrders",
+
+            session_token:
+              sessionToken
+
+          });
+
+
+        const legacyResponse =
+          await fetch(
+            API +
+            "?" +
+            legacyQuery.toString()
+          );
+
+
+        if(legacyResponse.ok){
 
           const legacyData =
-            await responses[1].json();
+            await legacyResponse.json();
 
 
           if(
@@ -424,18 +514,19 @@ async function loadOrders(){
             )
           ){
 
-            legacyOrders =
+            legacyOrdersCache =
               legacyData.orders;
 
           }
 
         }
 
+
       }catch(error){
 
         /*
-        ถ้า legacy โหลดไม่ได้
-        ยังให้ระบบใหม่ใช้งานได้ตามปกติ
+        Legacy พัง
+        ระบบใหม่ยังใช้ต่อได้
         */
 
         console.warn(
@@ -445,192 +536,21 @@ async function loadOrders(){
 
       }
 
-    }
 
+      /*
+      เพิ่ม Legacy เข้า UI
+      โดยไม่ reload หน้า
+      */
 
-    /*
-    =========================================
-    STATUS FILTER
-
-    Filter สถานะใช้กับระบบใหม่เท่านั้น
-    =========================================
-    */
-
-    const filteredNewOrders =
-      statusFilter
-
-        ? newOrders.filter(
-            order =>
-              String(
-                order.status || ""
-              ) ===
-              statusFilter
-          )
-
-        : newOrders;
-
-
-    /*
-    ถ้ามี status filter
-    ไม่เอา Legacy มาแสดง
-    */
-
-   const visibleLegacyOrders =
-  statusFilter
-
-    ? legacyOrders.filter(
-        order =>
-          legacyStatusCode(
-            order.status
-          ) ===
-          statusFilter
-      )
-
-    : legacyOrders;
-    
-    /*
-    =========================================
-    EMPTY
-    =========================================
-    */
-
-    if(
-      filteredNewOrders.length === 0 &&
-      visibleLegacyOrders.length === 0
-    ){
-
-      box.className =
-        "state";
-
-
-      box.innerHTML = `
-
-        <div
-          style="
-            font-size:50px;
-          "
-        >
-          📦
-        </div>
-
-        <h2>
-          ยังไม่มีออเดอร์
-        </h2>
-
-        <p>
-          ${
-            statusFilter
-              ? "ยังไม่มีออเดอร์ในสถานะนี้"
-              : "เมื่อสั่งซื้อแล้ว ออเดอร์จะแสดงที่นี่"
-          }
-        </p>
-
-        <a href="browse.html">
-          เลือกซื้อสินค้า
-        </a>
-
-      `;
-
-
-      return;
+      renderOrdersFromCache();
 
     }
-
-
-    /*
-    =========================================
-    RENDER
-    =========================================
-    */
-
-    box.className =
-      "order-list";
-
-
-    let html = "";
-
-
-    /*
-    ระบบใหม่
-    */
-
-    if(
-      filteredNewOrders.length > 0
-    ){
-
-      html +=
-        filteredNewOrders
-          .map(
-            orderCard
-          )
-          .join("");
-
-    }
-
-
-    /*
-    Legacy
-    */
-
-    if(
-      visibleLegacyOrders.length > 0
-    ){
-
-      html += `
-
-        <div
-          style="
-            margin:
-              10px 2px 0;
-            padding-top:14px;
-            border-top:
-              1px solid
-              var(--border);
-          "
-        >
-
-          <div
-            style="
-              font-size:16px;
-              font-weight:700;
-              color:#3f6078;
-            "
-          >
-            🗃️ ออเดอร์จากระบบเก่า
-          </div>
-
-          <div
-            style="
-              margin-top:3px;
-              color:var(--muted);
-              font-size:11px;
-            "
-          >
-            รายการจากระบบสั่งซื้อเดิมของร้าน
-          </div>
-
-        </div>
-
-      `;
-
-
-      html +=
-        visibleLegacyOrders
-          .map(
-            legacyOrderCard
-          )
-          .join("");
-
-    }
-
-
-    box.innerHTML =
-      html;
 
 
   }catch(error){
 
     console.error(
+      "loadOrders error:",
       error
     );
 
@@ -641,34 +561,234 @@ async function loadOrders(){
 
     box.innerHTML = `
 
-      <div
-        style="
-          font-size:50px;
-        "
-      >
-        ⚠️
-      </div>
+<div
+style="
+font-size:50px;
+"
+>
+⚠️
+</div>
 
-      <h2>
-        โหลดออเดอร์ไม่สำเร็จ
-      </h2>
+<h2>
+โหลดออเดอร์ไม่สำเร็จ
+</h2>
 
-      <p>
-        ${esc(
-          error.message ||
-          String(error)
-        )}
-      </p>
+<p>
+${esc(
+  error.message ||
+  String(error)
+)}
+</p>
 
-      <button
-        onclick="loadOrders()"
-      >
-        ลองใหม่
-      </button>
+<button
+type="button"
+onclick="loadOrders()"
+>
+ลองใหม่
+</button>
 
-    `;
+`;
+
+  }finally{
+
+    ordersLoading = false;
 
   }
+
+}
+
+function renderOrdersFromCache(){
+
+  const box =
+    document.getElementById(
+      "orderList"
+    );
+
+
+  /*
+  =========================================
+  PAGE TITLE
+  =========================================
+  */
+
+  document
+    .getElementById(
+      "pageTitle"
+    )
+    .textContent =
+      statusFilter
+        ? statusText(
+            statusFilter
+          )
+        : "รายการออเดอร์ทั้งหมด";
+
+
+  /*
+  =========================================
+  FILTER NEW ORDERS
+  =========================================
+  */
+
+  const newOrders =
+    statusFilter
+
+      ? customerOrdersCache.filter(
+          order =>
+            String(
+              order.status || ""
+            ) ===
+            statusFilter
+        )
+
+      : customerOrdersCache;
+
+
+  /*
+  =========================================
+  FILTER LEGACY
+  =========================================
+  */
+
+  const legacyOrders =
+    statusFilter
+
+      ? legacyOrdersCache.filter(
+          order =>
+            legacyStatusCode(
+              order.status
+            ) ===
+            statusFilter
+        )
+
+      : legacyOrdersCache;
+
+
+  /*
+  =========================================
+  EMPTY
+  =========================================
+  */
+
+  if(
+    newOrders.length === 0 &&
+    legacyOrders.length === 0
+  ){
+
+    box.className =
+      "state";
+
+
+    box.innerHTML = `
+
+<div
+style="
+font-size:50px;
+"
+>
+📦
+</div>
+
+<h2>
+ยังไม่มีออเดอร์
+</h2>
+
+<p>
+${
+  statusFilter
+    ? "ยังไม่มีออเดอร์ในสถานะนี้"
+    : "เมื่อสั่งซื้อแล้ว ออเดอร์จะแสดงที่นี่"
+}
+</p>
+
+<a href="browse.html">
+เลือกซื้อสินค้า
+</a>
+
+`;
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  RENDER
+  =========================================
+  */
+
+  let html = "";
+
+
+  if(
+    newOrders.length > 0
+  ){
+
+    html +=
+      newOrders
+        .map(
+          orderCard
+        )
+        .join("");
+
+  }
+
+
+  if(
+    legacyOrders.length > 0
+  ){
+
+    html += `
+
+<div
+style="
+margin:10px 2px 0;
+padding-top:14px;
+border-top:1px solid var(--border);
+"
+>
+
+  <div
+  style="
+  font-size:16px;
+  font-weight:700;
+  color:#3f6078;
+  "
+  >
+    🗃️ ออเดอร์จากระบบเก่า
+  </div>
+
+  <div
+  style="
+  margin-top:3px;
+  color:var(--muted);
+  font-size:11px;
+  "
+  >
+    รายการจากระบบสั่งซื้อเดิมของร้าน
+  </div>
+
+</div>
+
+`;
+
+
+    html +=
+      legacyOrders
+        .map(
+          legacyOrderCard
+        )
+        .join("");
+
+  }
+
+
+  box.className =
+    "order-list";
+
+
+  box.innerHTML =
+    html;
 
 }
   
