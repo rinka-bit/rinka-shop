@@ -1745,269 +1745,123 @@ const payload = {
 
 };
 
-    /*
-    สร้างออเดอร์
-    */
+/*
+=========================================
+PREPARE SLIP
+=========================================
+*/
 
-    const formData =
-      new FormData();
-
-    formData.append(
-      "action",
-      "createOrder"
-    );
-
-    formData.append(
-      "payload",
-      JSON.stringify(
-        payload
-      )
-    );
-
-   const response =
-  await paymentFetch(
-    API,
-    {
-      method:
-        "POST",
-
-      body:
-        formData
-    }
+const base64 =
+  await fileToBase64(
+    slip.files[0]
   );
 
-    if(!response.ok){
 
-      throw new Error(
-        "สร้างออเดอร์ไม่สำเร็จ HTTP " +
-        response.status
-      );
+/*
+=========================================
+ONE TRANSACTION REQUEST
 
-    }
+Create Order + Payment
+=========================================
+*/
 
-   const result =
-  await response.json();
+const transactionForm =
+  new FormData();
 
-    localStorage.setItem(
-  "payment_debug_stage",
-  "order_created"
-);
 
-localStorage.setItem(
-  "last_order_performance",
-  JSON.stringify(
-    result.performance || {}
-  )
-);
-
-localStorage.setItem(
-  "last_order_response",
-  JSON.stringify(
-    result || {}
-  )
-);
-
-sessionStorage.setItem(
-  "last_order_performance",
-  JSON.stringify(
-    result.performance || {}
-  )
+transactionForm.append(
+  "action",
+  "createPaidCheckout"
 );
 
 
-if(!result.success){
-
-  throw new Error(
-    result.error ||
-    "สร้างออเดอร์ไม่สำเร็จ"
-  );
-
-}
-
-    const orderId =
-      String(
-        result.order_id || ""
-      ).trim();
-
-    if(!orderId){
-
-      throw new Error(
-        "ระบบไม่ได้ส่งเลขออเดอร์กลับมา"
-      );
-
-    }
-
-    localStorage.setItem(
-  "rinka_pending_payment_order_id",
-  orderId
-);
-
-localStorage.setItem(
-  "rinka_pending_payment_request_id",
-  requestId + "-PAYMENT"
-);
-
-    /*
-    ใช้ยอดที่ Backend คำนวณกลับมา
-    ไม่ใช้ยอดจาก Cart หาก Backend มี total
-    */
-
-    const paymentAmount =
-      Number(
-        result.total
-      );
-
-    if(
-      !Number.isFinite(
-        paymentAmount
-      ) ||
-      paymentAmount <= 0
-    ){
-
-      throw new Error(
-        "ยอดชำระเงินจากระบบไม่ถูกต้อง"
-      );
-
-    }
-
-    const base64 =
-      await fileToBase64(
-        slip.files[0]
-      );
-
-    /*
-    บันทึกการชำระเงิน
-    */
-
-    const paymentForm =
-      new FormData();
-
-    paymentForm.append(
-      "action",
-      "payment"
-    );
-
-   paymentForm.append(
+transactionForm.append(
   "payload",
   JSON.stringify({
 
     request_id:
-      requestId +
-      "-PAYMENT",
+      requestId,
 
-    order_id:
-      orderId,
+    order:
+      payload,
 
-    amount:
-      paymentAmount,
+    payment:{
 
-    slip_base64:
-      base64
+      slip_base64:
+        base64
+
+    }
 
   })
 );
 
-   let paymentResult = null;
+
+/*
+=========================================
+REMEMBER REQUEST BEFORE SENDING
+=========================================
+*/
+
+localStorage.setItem(
+  "rinka_pending_checkout_request_id",
+  requestId
+);
+
+
+let transactionResult =
+  null;
+
 
 try{
 
-  const paymentResponse =
+  const transactionResponse =
     await paymentFetch(
       API,
       {
         method:"POST",
-        body:paymentForm
+        body:transactionForm
       }
     );
 
 
-  if(!paymentResponse.ok){
+  if(!transactionResponse.ok){
 
     throw new Error(
       "HTTP " +
-      paymentResponse.status
+      transactionResponse.status
     );
 
   }
 
 
-  paymentResult =
-    await paymentResponse.json();
-
-
- if(!paymentResult){
-
-  throw new Error(
-    "ไม่สามารถอ่านผลการชำระเงินจากระบบได้"
-  );
-
-}
-
-
-if(
-  paymentResult.success !== true
-){
-
-  /*
-  Backend ตอบกลับมาได้จริง
-  จึงเป็น business error
-  ไม่ใช่ response uncertain
-  */
-
-  const businessError =
-    new Error(
-      paymentResult.error ||
-      "แจ้งชำระเงินไม่สำเร็จ"
-    );
-
-  businessError.isBusinessError =
-    true;
-
-  throw businessError;
-
-}
+  transactionResult =
+    await transactionResponse.json();
 
 
 }catch(error){
 
   /*
-  =========================================
-  BACKEND RESPONDED WITH REAL ERROR
-  =========================================
-  */
+  Transport failure != transaction failure.
 
-  if(
-    error &&
-    error.isBusinessError
-  ){
-
-    throw error;
-
-  }
-
-
-  /*
-  =========================================
-  NETWORK / RESPONSE UNCERTAIN
-
-  Backend อาจบันทึก Payment แล้ว
-  =========================================
+  Backend อาจทำ Order + Payment
+  สำเร็จแล้ว
   */
 
   console.warn(
-    "Payment response uncertain:",
+    "Checkout transaction response uncertain:",
     error
   );
 
 
   localStorage.setItem(
-    "rinka_payment_response_uncertain",
+    "rinka_checkout_response_uncertain",
     "1"
   );
 
 
-  showPaymentPendingConfirmation(
-    orderId
+  showPaymentToast(
+    "ระบบกำลังยืนยันคำสั่งซื้อ กรุณาอย่ากดยืนยันซ้ำ",
+    false
   );
 
 
@@ -2015,7 +1869,56 @@ if(
 
 }
 
-   localStorage.removeItem(
+
+/*
+=========================================
+BACKEND REAL ERROR
+=========================================
+*/
+
+if(
+  !transactionResult ||
+  transactionResult.success !== true
+){
+
+  throw new Error(
+    transactionResult?.error ||
+    "ดำเนินการชำระเงินไม่สำเร็จ"
+  );
+
+}
+
+
+/*
+=========================================
+SUCCESS
+=========================================
+*/
+
+const orderId =
+  String(
+    transactionResult.order_id || ""
+  ).trim();
+
+
+if(!orderId){
+
+  throw new Error(
+    "ระบบไม่ได้ส่งเลขออเดอร์กลับมา"
+  );
+
+}
+
+
+localStorage.removeItem(
+  "rinka_pending_checkout_request_id"
+);
+
+localStorage.removeItem(
+  "rinka_checkout_response_uncertain"
+);
+
+localStorage.removeItem(
   "rinka_pending_payment_order_id"
 );
 
@@ -2027,7 +1930,9 @@ localStorage.removeItem(
   "rinka_payment_response_uncertain"
 );
 
+
 clearPaymentRequestId();
+
 
 showPaymentSuccess(
   orderId
