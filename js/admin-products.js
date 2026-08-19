@@ -1723,6 +1723,8 @@ if(
 
 }
 
+}
+
 function openEditProduct(productId){
 
   const product =
