@@ -960,16 +960,6 @@ let paymentSubmitting = false;
 let paymentToastTimer = null;
 
 
-/*
-=========================================
-REQUEST / IDEMPOTENCY
-=========================================
-*/
-
-const PAYMENT_REQUEST_TIMEOUT =
-  45000;
-
-
 function getPaymentRequestId(){
 
   const storageKey =
@@ -1032,127 +1022,33 @@ function clearPaymentRequestId(){
 
 async function paymentFetch(
   url,
-  options = {},
-  timeout =
-    PAYMENT_REQUEST_TIMEOUT,
-  retryCount = 1
+  options = {}
 ){
 
-  let lastError = null;
+  /*
+  =========================================
+  IMPORTANT TRANSACTION REQUEST
+
+  ห้าม Abort หลังส่ง POST แล้ว
+  เพราะ Backend อาจบันทึกข้อมูลสำเร็จ
+  แต่ response จาก Apps Script กลับมาช้า
+
+  และไม่ retry อัตโนมัติ
+  request_id จะใช้สำหรับ recovery แทน
+  =========================================
+  */
+
+  const response =
+    await fetch(
+      url,
+      options
+    );
 
 
-  for(
-    let attempt = 0;
-    attempt <= retryCount;
-    attempt++
-  ){
-
-    const controller =
-      new AbortController();
-
-
-    const timer =
-      setTimeout(
-        ()=>{
-          controller.abort();
-        },
-        timeout
-      );
-
-
-    try{
-
-      const response =
-        await fetch(
-          url,
-          {
-            ...options,
-
-            signal:
-              controller.signal
-          }
-        );
-
-
-      /*
-      Retry เฉพาะ server error
-
-      4xx ไม่ retry เพราะเป็น request
-      ที่มีปัญหาจริง
-      */
-
-      if(
-        response.status >= 500 &&
-        attempt < retryCount
-      ){
-
-        lastError =
-          new Error(
-            "HTTP " +
-            response.status
-          );
-
-
-        continue;
-
-      }
-
-
-      return response;
-
-
-    }catch(error){
-
-      lastError =
-        error;
-
-
-      /*
-      retry ได้เฉพาะเมื่อยังเหลือ attempt
-      */
-
-      if(
-        attempt >= retryCount
-      ){
-
-        if(
-          error &&
-          error.name ===
-          "AbortError"
-        ){
-
-          throw new Error(
-            "การเชื่อมต่อใช้เวลานานกว่าปกติ กรุณาลองอีกครั้ง"
-          );
-
-        }
-
-
-        throw error;
-
-      }
-
-
-    }finally{
-
-      clearTimeout(
-        timer
-      );
-
-    }
-
-  }
-
-
-  throw (
-    lastError ||
-    new Error(
-      "ไม่สามารถเชื่อมต่อระบบได้"
-    )
-  );
+  return response;
 
 }
-
+  
 async function loadBanks(){
 
   const list =
@@ -1941,6 +1837,16 @@ if(!result.success){
 
     }
 
+    localStorage.setItem(
+  "rinka_pending_payment_order_id",
+  orderId
+);
+
+localStorage.setItem(
+  "rinka_pending_payment_request_id",
+  requestId + "-PAYMENT"
+);
+
     /*
     ใช้ยอดที่ Backend คำนวณกลับมา
     ไม่ใช้ยอดจาก Cart หาก Backend มี total
@@ -2001,88 +1907,131 @@ if(!result.success){
   })
 );
 
-   const paymentResponse =
-  await paymentFetch(
-    API,
-    {
-      method:
-        "POST",
+   let paymentResult = null;
 
-      body:
-        paymentForm
-    }
+try{
+
+  const paymentResponse =
+    await paymentFetch(
+      API,
+      {
+        method:"POST",
+        body:paymentForm
+      }
+    );
+
+
+  if(!paymentResponse.ok){
+
+    throw new Error(
+      "HTTP " +
+      paymentResponse.status
+    );
+
+  }
+
+
+  paymentResult =
+    await paymentResponse.json();
+
+
+ if(!paymentResult){
+
+  throw new Error(
+    "ไม่สามารถอ่านผลการชำระเงินจากระบบได้"
   );
 
-    if(!paymentResponse.ok){
-
-      throw new Error(
-        "แจ้งชำระเงินไม่สำเร็จ HTTP " +
-        paymentResponse.status
-      );
-
-    }
-
-   const paymentResult =
-  await paymentResponse.json();
-
-localStorage.setItem(
-  "payment_debug_stage",
-  "payment_saved"
-);
-
-localStorage.setItem(
-  "last_payment_performance",
-  JSON.stringify(
-    paymentResult.performance || {}
-  )
-);
-
-localStorage.setItem(
-  "last_payment_response",
-  JSON.stringify(
-    paymentResult || {}
-  )
-);
-    
-sessionStorage.setItem(
-  "last_payment_performance",
-  JSON.stringify(
-    paymentResult.performance || {}
-  )
-);
+}
 
 
-console.log(
-  "PAYMENT PERFORMANCE",
-  paymentResult.performance
-);
+if(
+  paymentResult.success !== true
+){
 
+  /*
+  Backend ตอบกลับมาได้จริง
+  จึงเป็น business error
+  ไม่ใช่ response uncertain
+  */
 
-console.log(
-  "Payment Payload",
-  {
-    order_id:
-      result.order_id,
-
-    amount:
-      paymentAmount
-  }
-);
-
-    if(!paymentResult.success){
-
-      throw new Error(
-        paymentResult.error ||
-        "แจ้งชำระเงินไม่สำเร็จ"
-      );
-
-    }
-
-    clearPaymentRequestId();
-
-    showPaymentSuccess(
-      orderId
+  const businessError =
+    new Error(
+      paymentResult.error ||
+      "แจ้งชำระเงินไม่สำเร็จ"
     );
+
+  businessError.isBusinessError =
+    true;
+
+  throw businessError;
+
+}
+
+
+}catch(error){
+
+  /*
+  =========================================
+  BACKEND RESPONDED WITH REAL ERROR
+  =========================================
+  */
+
+  if(
+    error &&
+    error.isBusinessError
+  ){
+
+    throw error;
+
+  }
+
+
+  /*
+  =========================================
+  NETWORK / RESPONSE UNCERTAIN
+
+  Backend อาจบันทึก Payment แล้ว
+  =========================================
+  */
+
+  console.warn(
+    "Payment response uncertain:",
+    error
+  );
+
+
+  localStorage.setItem(
+    "rinka_payment_response_uncertain",
+    "1"
+  );
+
+
+  showPaymentPendingConfirmation(
+    orderId
+  );
+
+
+  return;
+
+}
+
+   localStorage.removeItem(
+  "rinka_pending_payment_order_id"
+);
+
+localStorage.removeItem(
+  "rinka_pending_payment_request_id"
+);
+
+localStorage.removeItem(
+  "rinka_payment_response_uncertain"
+);
+
+clearPaymentRequestId();
+
+showPaymentSuccess(
+  orderId
+);
 
     /*
     ลบสินค้าออกจากตะกร้า
@@ -2808,6 +2757,45 @@ function showPaymentSuccess(
 
   box.classList.add(
     "show"
+  );
+
+}
+
+function showPaymentPendingConfirmation(
+  orderId
+){
+
+  const loadingOverlay =
+  document.getElementById(
+    "loadingOverlay"
+  );
+
+
+  if(loadingOverlay){
+
+    loadingOverlay.style.display =
+      "none";
+
+  }
+
+
+  showPaymentToast(
+    "ระบบได้รับข้อมูลออเดอร์แล้ว กำลังยืนยันสถานะการชำระเงิน",
+    false
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      window.location.href =
+        "order.html?id=" +
+        encodeURIComponent(
+          orderId
+        );
+
+    },
+    1200
   );
 
 }
