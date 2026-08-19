@@ -1,5 +1,15 @@
 let highlightedProductId = "";
 
+
+/*
+=========================================
+ADMIN PRODUCTS REQUEST STATE
+=========================================
+*/
+
+let adminProductsLoadingPromise =
+  null;
+
 function getAdminProductFilterState(){
 
   return {
@@ -1029,7 +1039,9 @@ async function saveProductFromAdmin(){
     โหลดรายการใหม่
     */
 
-    await loadAdminProducts();
+    await loadAdminProducts(
+  true
+);
 
 
   }catch(error){
@@ -1088,7 +1100,9 @@ async function saveProductFromAdmin(){
 
 }
 
-async function loadAdminProducts(){
+async function loadAdminProducts(
+  forceReload = false
+){
 
   const listBox =
     document.getElementById(
@@ -1097,83 +1111,21 @@ async function loadAdminProducts(){
 
 
   /*
-  แสดง loading เฉพาะถ้ายังไม่มีข้อมูลเก่า
-  ถ้ามี cache อยู่แล้ว ไม่ล้างรายการทิ้ง
+  =========================================
+  USE FRONTEND CACHE
+
+  ถ้ามีข้อมูลแล้วและไม่ได้สั่ง force
+  ไม่ต้องยิง Apps Script ใหม่
+  =========================================
   */
 
   if(
-    listBox &&
-    (
-      !Array.isArray(
-        adminProducts
-      ) ||
-      adminProducts.length === 0
-    )
+    !forceReload &&
+    Array.isArray(
+      adminProducts
+    ) &&
+    adminProducts.length > 0
   ){
-
-    listBox.innerHTML = `
-
-<div class="card">
-
-  ⏳ กำลังโหลดสินค้า...
-
-</div>
-
-`;
-
-  }
-
-
-  try{
-
-    const response =
-  await fetch(
-    API +
-      "?action=adminProducts"
-  );
-
-
-if(
-  !response.ok
-){
-
-  throw new Error(
-    "HTTP " +
-    response.status
-  );
-
-}
-
-
-const result =
-  await response.json();
-
-    if(
-      !result ||
-      result.success !== true
-    ){
-
-      throw new Error(
-        result?.error ||
-        "โหลดสินค้าไม่สำเร็จ"
-      );
-
-    }
-
-
-    adminProducts =
-      Array.isArray(
-        result.products
-      )
-        ? result.products
-        : [];
-
-
-    /*
-    Render รายการสินค้าอย่างเดียว
-    ไม่ rebuild Product Manager
-    ไม่ reset Collection filter
-    */
 
     renderAdminProductList();
 
@@ -1193,52 +1145,212 @@ const result =
       success:true,
 
       count:
-        adminProducts.length
+        adminProducts.length,
+
+      cached:true
 
     };
 
-
-  }catch(error){
-
-    console.error(
-      "loadAdminProducts error:",
-      error
-    );
+  }
 
 
-    if(
-      listBox &&
-      (
-        !Array.isArray(
-          adminProducts
-        ) ||
-        adminProducts.length === 0
-      )
-    ){
+  /*
+  =========================================
+  PREVENT DUPLICATE REQUEST
 
-      listBox.innerHTML = `
+  ถ้ามี request adminProducts
+  กำลังวิ่งอยู่แล้ว
+  ใช้ promise เดิม
+  =========================================
+  */
+
+  if(
+    adminProductsLoadingPromise
+  ){
+
+    return adminProductsLoadingPromise;
+
+  }
+
+
+  /*
+  =========================================
+  LOADING UI
+
+  แสดง loading เฉพาะกรณี
+  ยังไม่มีข้อมูลเก่า
+  =========================================
+  */
+
+  if(
+    listBox &&
+    (
+      !Array.isArray(
+        adminProducts
+      ) ||
+      adminProducts.length === 0
+    )
+  ){
+
+    listBox.innerHTML = `
 
 <div class="card">
 
-  โหลดสินค้าไม่สำเร็จ
-
-  <br>
-
-  ${escapeHtml(
-    error.message ||
-    String(error)
-  )}
+⏳ กำลังโหลดสินค้า...
 
 </div>
 
 `;
 
-    }
-
-
-    throw error;
-
   }
+
+
+  adminProductsLoadingPromise =
+    (
+      async ()=>{
+
+        try{
+
+          const response =
+            await fetch(
+              API +
+              "?action=adminProducts"
+            );
+
+
+          if(
+            !response.ok
+          ){
+
+            throw new Error(
+              "HTTP " +
+              response.status
+            );
+
+          }
+
+
+          const result =
+            await response.json();
+
+
+          if(
+            !result ||
+            result.success !== true
+          ){
+
+            throw new Error(
+              result?.error ||
+              "โหลดสินค้าไม่สำเร็จ"
+            );
+
+          }
+
+
+          adminProducts =
+            Array.isArray(
+              result.products
+            )
+              ? result.products
+              : [];
+
+
+          /*
+          =========================================
+          RENDER
+
+          ไม่ rebuild Product Manager
+          เพราะจะทำให้ filter/form reset
+          =========================================
+          */
+
+          renderAdminProductList();
+
+
+          if(
+            typeof refreshOptionProductSelect ===
+            "function"
+          ){
+
+            refreshOptionProductSelect();
+
+          }
+
+
+          return {
+
+            success:true,
+
+            count:
+              adminProducts.length,
+
+            cached:false
+
+          };
+
+
+        }catch(error){
+
+          console.error(
+            "loadAdminProducts error:",
+            error
+          );
+
+
+          if(
+            listBox &&
+            (
+              !Array.isArray(
+                adminProducts
+              ) ||
+              adminProducts.length === 0
+            )
+          ){
+
+            listBox.innerHTML = `
+
+<div class="card">
+
+โหลดสินค้าไม่สำเร็จ
+
+<br>
+
+${escapeHtml(
+  error.message ||
+  String(error)
+)}
+
+<br><br>
+
+<button
+type="button"
+onclick="loadAdminProducts(true)"
+>
+ลองใหม่
+</button>
+
+</div>
+
+`;
+
+          }
+
+
+          throw error;
+
+
+        }finally{
+
+          adminProductsLoadingPromise =
+            null;
+
+        }
+
+      }
+    )();
+
+
+  return adminProductsLoadingPromise;
 
 }
 
@@ -1594,13 +1706,20 @@ async function toggleProductStatus(productId){
   const result =
     await response.json();
 
-  alert(
-    result.success
-      ? "อัปเดตสถานะเป็น " + result.status
-      : result.error || "อัปเดตไม่สำเร็จ"
-  );
+ alert(
+  result.success
+    ? "อัปเดตสถานะเป็น " + result.status
+    : result.error || "อัปเดตไม่สำเร็จ"
+);
 
-  loadAdminProducts();
+
+if(
+  result.success
+){
+
+  await loadAdminProducts(
+    true
+  );
 
 }
 
@@ -2260,11 +2379,15 @@ if(
 
     }
 
-    alert("แก้ไขสินค้าเรียบร้อยแล้ว");
+    alert(
+  "แก้ไขสินค้าเรียบร้อยแล้ว"
+);
 
-    closeEditProductModal();
+closeEditProductModal();
 
-    await loadAdminProducts();
+await loadAdminProducts(
+  true
+);
 
   }catch(error){
 
