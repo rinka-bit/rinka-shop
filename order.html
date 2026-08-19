@@ -39,19 +39,279 @@
 const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 const orderId=new URLSearchParams(location.search).get("id");
 document.addEventListener("DOMContentLoaded",loadOrder);
+ 
 async function loadOrder(){
- const box=document.getElementById("orderBox");
- const customer=safeJson(localStorage.getItem("customer"),{});
- const token=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
- if(!orderId){state("ไม่พบเลขออเดอร์","ลิงก์นี้ไม่สมบูรณ์");return}
- if(!token){box.innerHTML=`<div style="font-size:50px">🔒</div><h2>กรุณาเข้าสู่ระบบ</h2><p>ต้องเข้าสู่ระบบก่อนดูออเดอร์</p><a href="login.html">เข้าสู่ระบบ</a>`;return}
- try{
-  const q=new URLSearchParams({action:"order",id:orderId,session_token:token});
-  const res=await fetch(API+"?"+q.toString()); if(!res.ok) throw new Error("HTTP "+res.status);
-  const data=await res.json(); if(!data.success) throw new Error(data.error||"ไม่พบออเดอร์");
-  renderOrder(data.order);
- }catch(err){console.error(err);state("โหลดออเดอร์ไม่สำเร็จ",err.message||String(err),true)}
+
+  const box =
+    document.getElementById(
+      "orderBox"
+    );
+
+
+  const customer =
+    safeJson(
+      localStorage.getItem(
+        "customer"
+      ),
+      {}
+    );
+
+
+  const token =
+    String(
+      customer.session_token ||
+      localStorage.getItem(
+        "session_token"
+      ) ||
+      ""
+    ).trim();
+
+
+  if(!orderId){
+
+    state(
+      "ไม่พบเลขออเดอร์",
+      "ลิงก์นี้ไม่สมบูรณ์"
+    );
+
+    return;
+
+  }
+
+
+  if(!token){
+
+    box.innerHTML = `
+
+<div style="font-size:50px">
+🔒
+</div>
+
+<h2>
+กรุณาเข้าสู่ระบบ
+</h2>
+
+<p>
+ต้องเข้าสู่ระบบก่อนดูออเดอร์
+</p>
+
+<a href="login.html">
+เข้าสู่ระบบ
+</a>
+
+`;
+
+    return;
+
+  }
+
+
+  /*
+  =========================================
+  LOCAL SNAPSHOT FIRST
+  =========================================
+  */
+
+  const snapshotKey =
+    "rinka_order_snapshot_" +
+    orderId;
+
+
+  let snapshot =
+    null;
+
+
+  try{
+
+    snapshot =
+      safeJson(
+        localStorage.getItem(
+          snapshotKey
+        ),
+        null
+      );
+
+
+  }catch(error){
+
+    snapshot =
+      null;
+
+  }
+
+
+  if(
+    snapshot &&
+    String(
+      snapshot.order_id || ""
+    ) ===
+    String(orderId)
+  ){
+
+    /*
+    แสดงทันที
+    ไม่รอ Apps Script
+    */
+
+    renderOrder(
+      snapshot
+    );
+
+
+    console.log(
+      "ORDER SOURCE: snapshot",
+      orderId
+    );
+
+  }
+
+
+  /*
+  =========================================
+  SERVER REFRESH IN BACKGROUND
+  =========================================
+  */
+
+  try{
+
+    const q =
+      new URLSearchParams({
+
+        action:
+          "order",
+
+        id:
+          orderId,
+
+        session_token:
+          token
+
+      });
+
+
+    const res =
+      await fetch(
+        API +
+        "?" +
+        q.toString()
+      );
+
+
+    if(!res.ok){
+
+      throw new Error(
+        "HTTP " +
+        res.status
+      );
+
+    }
+
+
+    const data =
+      await res.json();
+
+
+    if(
+      !data ||
+      data.success !== true
+    ){
+
+      throw new Error(
+        data?.error ||
+        "ไม่พบออเดอร์"
+      );
+
+    }
+
+
+    const order =
+      data.order;
+
+
+    if(
+      !order ||
+      !order.order_id
+    ){
+
+      throw new Error(
+        "ข้อมูลออเดอร์ไม่สมบูรณ์"
+      );
+
+    }
+
+
+    /*
+    =========================================
+    UPDATE SNAPSHOT
+    =========================================
+    */
+
+    try{
+
+      localStorage.setItem(
+        snapshotKey,
+        JSON.stringify(
+          order
+        )
+      );
+
+    }catch(error){
+
+      console.warn(
+        "Save order snapshot failed:",
+        error
+      );
+
+    }
+
+
+    /*
+    render ข้อมูลจริงจาก backend
+    ทับ snapshot
+    */
+
+    renderOrder(
+      order
+    );
+
+
+    console.log(
+      "ORDER SOURCE: server",
+      orderId
+    );
+
+
+  }catch(error){
+
+    console.warn(
+      "loadOrder server refresh:",
+      error
+    );
+
+
+    /*
+    ถ้ามี snapshot อยู่แล้ว
+    ไม่ทำลายหน้าที่ลูกค้าเห็น
+    */
+
+    if(snapshot){
+
+      return;
+
+    }
+
+
+    state(
+      "โหลดออเดอร์ไม่สำเร็จ",
+      error.message ||
+      String(error),
+      true
+    );
+
+  }
+
 }
+ 
 function renderOrder(o){
  const items=Array.isArray(o.items)?o.items:[]; const gifts=Array.isArray(o.gifts)?o.gifts:[];
  const shipments =
@@ -96,7 +356,20 @@ const domestic =
  const shippingTotal=importFee+domestic;
  document.getElementById("orderBox").className="";
  document.getElementById("orderBox").innerHTML=`<div class="grid"><section>
- <div class="card summary"><h2>📦 ${esc(o.order_id||"-")}</h2><div class="badges">${statusBadge(o.status)}${o.payment_status==="paid"?'<span class="badge paid">ชำระเงินแล้ว</span>':'<span class="badge pending">รอชำระเงิน</span>'}${shippingBadge(o.shipping_payment_status)}${gifts.length?`<span class="badge progress">ของแถม ${gifts.length} ชิ้น</span>`:""}${o.legacy_order?'<span class="badge progress">ออเดอร์เก่า</span>':""}</div>
+ <div class="card summary"><h2>📦 ${esc(o.order_id||"-")}</h2><div class="badges">${statusBadge(o.status)} ${
+  o.payment_status ===
+    "paid"
+
+    ? '<span class="badge paid">ชำระเงินแล้ว</span>'
+
+    : o.payment_status ===
+        "processing"
+
+      ? '<span class="badge progress">กำลังยืนยันการชำระเงิน</span>'
+
+      : '<span class="badge pending">รอชำระเงิน</span>'
+}
+${shippingBadge(o.shipping_payment_status)}${gifts.length?`<span class="badge progress">ของแถม ${gifts.length} ชิ้น</span>`:""}${o.legacy_order?'<span class="badge progress">ออเดอร์เก่า</span>':""}</div>
  <div class="meta"><div><span>ลูกค้า</span><strong>${esc(o.customer_name||"-")}</strong></div><div><span>วันที่สั่งซื้อ</span><strong>${formatDate(o.created_at)}</strong></div><div><span>สถานะ</span><strong>${statusText(o.status)}</strong></div><div><span>ยอดรวม</span><strong>฿${Number(o.total||0).toLocaleString("th-TH")}</strong></div>${o.preorder_round?`<div><span>รอบพรีออเดอร์</span><strong>${esc(o.preorder_round)}</strong></div>`:""}${o.import_fee_status?`<div><span>สถานะค่านำเข้า</span><strong>${o.import_fee_status==="pending"?"รอคำนวณ":"รวมแล้ว"}</strong></div>`:""}</div></div>
  ${messageHtml(o.status)}<div class="card"><h2>📍 ติดตามสถานะ</h2>${timeline(o.status)}</div>
  <div class="card"><h2>🛍️ รายการสินค้า</h2>${items.length?items.map(itemHtml).join(""):'<p>ไม่มีรายการสินค้า</p>'}</div>
