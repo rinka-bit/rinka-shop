@@ -271,7 +271,9 @@ async function saveCollectionFromAdmin(){
 
     renderCollectionManager();
 
-    await loadAdminCollections();
+    await loadAdminCollections(
+  true
+);
 
   }catch(error){
 
@@ -313,17 +315,9 @@ async function saveCollectionFromAdmin(){
 
 }
 
-async function loadAdminCollections(){
-
-  /*
-  adminCollectionList
-  มีเฉพาะหน้า Collection Manager
-
-  แต่ adminCollections ถูกใช้โดย
-  Products / Options / Gifts ด้วย
-
-  ดังนั้นห้าม return เมื่อไม่มี box
-  */
+async function loadAdminCollections(
+  forceReload = false
+){
 
   const box =
     document.getElementById(
@@ -331,31 +325,80 @@ async function loadAdminCollections(){
     );
 
 
+  /*
+  =========================================
+  USE FRONTEND CACHE
+
+  ถ้ามีข้อมูลอยู่แล้ว
+  ไม่ต้องยิง Apps Script ใหม่
+  =========================================
+  */
+
+  if(
+    !forceReload &&
+    Array.isArray(
+      adminCollections
+    ) &&
+    adminCollections.length > 0
+  ){
+
+    if(
+      box &&
+      typeof renderAdminCollectionList ===
+      "function"
+    ){
+
+      renderAdminCollectionList();
+
+    }
+
+
+    if(
+      typeof refreshProductCollectionSelects ===
+      "function"
+    ){
+
+      refreshProductCollectionSelects();
+
+    }
+
+
+    return {
+
+      success:true,
+
+      count:
+        adminCollections.length,
+
+      cached:true
+
+    };
+
+  }
+
+
   try{
 
-   const response =
-  await fetch(
-    API +
-      "?action=adminCollections" +
-      "&_=" +
-      Date.now(),
-    {
-      cache:"no-store"
+    const response =
+      await fetch(
+        API +
+        "?action=adminCollections"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
     }
-  );
-
-if(!response.ok){
-
-  throw new Error(
-    "HTTP " +
-    response.status
-  );
-
-}
 
 
-const result =
-  await response.json();
+    const result =
+      await response.json();
+
 
     if(
       !result ||
@@ -378,18 +421,10 @@ const result =
         : [];
 
 
-    /*
-    =========================================
-    COLLECTION MANAGER
-
-    render เฉพาะเมื่อ element มีอยู่
-    =========================================
-    */
-
     if(
       box &&
       typeof renderAdminCollectionList ===
-        "function"
+      "function"
     ){
 
       renderAdminCollectionList();
@@ -397,15 +432,9 @@ const result =
     }
 
 
-    /*
-    =========================================
-    PRODUCT / OPTION DROPDOWNS
-    =========================================
-    */
-
     if(
       typeof refreshProductCollectionSelects ===
-        "function"
+      "function"
     ){
 
       refreshProductCollectionSelects();
@@ -413,20 +442,14 @@ const result =
     }
 
 
-    /*
-    Gift Manager ไม่จำเป็นต้อง render
-    ทุกครั้งที่โหลด Collection
-
-    ถ้าเปิด Gift tab ค่อย render เอง
-    */
-
-
     return {
 
       success:true,
 
       count:
-        adminCollections.length
+        adminCollections.length,
+
+      cached:false
 
     };
 
@@ -521,6 +544,8 @@ src="${collection.image || ""}"
 alt="${escapeHtml(
   collection.name || ""
 )}"
+loading="lazy"
+decoding="async"
 style="
 width:100%;
 height:180px;
@@ -973,7 +998,9 @@ ${
 
     closeEditCollectionModal();
 
-    await loadAdminCollections();
+   await loadAdminCollections(
+  true
+);
 
   }catch(error){
 
@@ -1073,7 +1100,9 @@ async function toggleCollectionStatusAdmin(
         : "ปิด Collection แล้ว"
     );
 
-    await loadAdminCollections();
+   await loadAdminCollections(
+  true
+);
 
   }catch(error){
 
