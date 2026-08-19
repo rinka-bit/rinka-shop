@@ -41,20 +41,96 @@ aria-label="เปิดตะกร้าสินค้า"
 </main>
 <script>
 
- const API =
-"https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=productCards";
- 
 let allCategories=[];
 document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("categorySearch").addEventListener("input",filterCategories);loadCategories()});
 async function loadCategories(){
- try{
-  const r=await fetch(API);if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(d&&d.success===false)throw new Error(d.error||"โหลดหมวดสินค้าไม่สำเร็จ");
-  const products=Array.isArray(d)?d:Array.isArray(d.products)?d.products:[];
-  const map=new Map();products.forEach(p=>{const c=String(p.main_category||"").trim();if(c)map.set(c,(map.get(c)||0)+1)});
-  allCategories=[...map.entries()].map(([name,count])=>({name,count})).sort((a,b)=>a.name.localeCompare(b.name,"th"));
-  renderCategories(allCategories);
- }catch(e){console.error(e);renderState("โหลดหมวดสินค้าไม่สำเร็จ",e.message||String(e),true)}
+
+  try{
+
+    const catalog =
+      await RinkaCatalog.load();
+
+
+    const products =
+      Array.isArray(
+        catalog.products
+      )
+        ? catalog.products
+        : [];
+
+
+    const map =
+      new Map();
+
+
+    products.forEach(
+      product => {
+
+        const category =
+          String(
+            product.main_category || ""
+          ).trim();
+
+
+        if(!category){
+          return;
+        }
+
+
+        map.set(
+          category,
+          (
+            map.get(
+              category
+            ) || 0
+          ) + 1
+        );
+
+      }
+    );
+
+
+    allCategories =
+      [
+        ...map.entries()
+      ]
+        .map(
+          ([name,count])=>({
+            name,
+            count
+          })
+        )
+        .sort(
+          (a,b)=>
+            a.name.localeCompare(
+              b.name,
+              "th"
+            )
+        );
+
+
+    renderCategories(
+      allCategories
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    renderState(
+      "โหลดหมวดสินค้าไม่สำเร็จ",
+      error.message ||
+      String(error),
+      true
+    );
+
+  }
+
 }
+ 
 function filterCategories(){const q=document.getElementById("categorySearch").value.trim().toLowerCase();renderCategories(!q?allCategories:allCategories.filter(c=>c.name.toLowerCase().includes(q)))}
 function renderCategories(rows){
  const box=document.getElementById("categories");document.getElementById("categoryCount").textContent=rows.length.toLocaleString("th-TH")+" หมวด";
@@ -66,7 +142,10 @@ function cardKey(e,el){if(e.key==="Enter"||e.key===" "){e.preventDefault();el.cl
 function updateCartCount(){let c=[];try{const x=JSON.parse(localStorage.getItem("cart")||"[]");c=Array.isArray(x)?x:[]}catch(e){}const n=c.reduce((s,i)=>s+Number(i.qty||0),0);document.getElementById("cartCount").textContent=n>99?"99+":String(n)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
+
+ <script src="catalog.js?v=20260819-1"></script>
 <script src="menu.js"></script>
 <script src="cart-drawer.js"></script>
+ 
 </body>
 </html>
