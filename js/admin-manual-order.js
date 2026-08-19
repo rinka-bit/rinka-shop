@@ -1390,6 +1390,9 @@ name="${moEsc(
 value="${moEsc(
   option.option_value || ""
 )}"
+data-option-id="${moEsc(
+  option.option_id || ""
+)}"
 data-additional-price="${Number(
   option.additional_price || 0
 )}"
@@ -1568,8 +1571,10 @@ function confirmAddManualProduct(
   }
 
   const selectedOptions = {};
-  let additionalPrice = 0;
+const selectedOptionIds = [];
 
+let additionalPrice = 0;
+  
   const groups =
     document.querySelectorAll(
       "#mo_modal_body .mo-option-group"
@@ -1627,18 +1632,32 @@ function confirmAddManualProduct(
 
     }
 
-    selectedInputs.forEach(
-      input=>{
+   selectedInputs.forEach(
+  input=>{
 
-        additionalPrice +=
-          Number(
-            input.dataset
-              .additionalPrice ||
-            0
-          );
+    const optionId =
+      String(
+        input.dataset.optionId ||
+        ""
+      ).trim();
 
-      }
-    );
+    if(optionId){
+
+      selectedOptionIds.push(
+        optionId
+      );
+
+    }
+
+    additionalPrice +=
+      Number(
+        input.dataset
+          .additionalPrice ||
+        0
+      );
+
+  }
+);
 
   }
 
@@ -1683,24 +1702,23 @@ function confirmAddManualProduct(
     ) +
     additionalPrice;
 
-  const key =
+  const primaryOptionId =
+  selectedOptionIds[0] ||
+  "";
 
-    product.product_id +
-
-    "::" +
-
-    JSON.stringify(
-      selectedOptions
-    ) +
-
-    "::" +
-
-    crateSelected +
-
-    "::" +
-
-    crateFee;
-
+const key =
+  product.product_id +
+  "::" +
+  selectedOptionIds.join(",") +
+  "::" +
+  JSON.stringify(
+    selectedOptions
+  ) +
+  "::" +
+  crateSelected +
+  "::" +
+  crateFee;
+  
   const existing =
     ManualOrder.cart.find(
       item=>
@@ -1716,42 +1734,45 @@ function confirmAddManualProduct(
 
     ManualOrder.cart.push({
 
-      _key:
-        key,
+  _key:
+    key,
 
-      product_id:
-        product.product_id,
+  product_id:
+    product.product_id,
 
-      product_name:
-        product.name,
+  product_name:
+    product.name,
 
-      name:
-        product.name,
+  name:
+    product.name,
 
-      price:
-        unitPrice,
+  price:
+    unitPrice,
 
-      qty:
-        qty,
+  qty:
+    qty,
 
-      selected_options:
-        selectedOptions,
+  option_id:
+    primaryOptionId,
 
-      crate_selected:
-        crateSelected,
+  selected_options:
+    selectedOptions,
 
-      crate_fee:
-        crateFee,
+  crate_selected:
+    crateSelected,
 
-      collection_id:
-        product.collection_id ||
-        "",
+  crate_fee:
+    crateFee,
 
-      fandom:
-        product.fandom ||
-        ""
+  collection_id:
+    product.collection_id ||
+    "",
 
-    });
+  fandom:
+    product.fandom ||
+    ""
+
+});
 
   }
 
