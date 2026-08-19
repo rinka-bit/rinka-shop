@@ -103,8 +103,6 @@ aria-label="เปิดตะกร้า">
 const BASE_API =
   "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
-const API = BASE_API + "?action=products";
-
 function homeEscape(value){
   return String(value ?? "")
     .replaceAll("&","&amp;")
@@ -150,15 +148,40 @@ function showLoadingSkeleton(containerId,count=4){
 }
 
 async function fetchJson(url,label){
-  const response = await fetch(url,{cache:"no-store"});
+
+  const response =
+    await fetch(
+      url,
+      {
+        cache:"default"
+      }
+    );
+
   if(!response.ok){
-    throw new Error(`${label}: HTTP ${response.status}`);
+
+    throw new Error(
+      `${label}: HTTP ${response.status}`
+    );
+
   }
-  const result = await response.json();
-  if(result && result.success === false){
-    throw new Error(result.error || `${label} ไม่สำเร็จ`);
+
+  const result =
+    await response.json();
+
+  if(
+    result &&
+    result.success === false
+  ){
+
+    throw new Error(
+      result.error ||
+      `${label} ไม่สำเร็จ`
+    );
+
   }
+
   return result;
+
 }
 
 async function loadHome(){
