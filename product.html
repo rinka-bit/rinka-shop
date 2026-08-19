@@ -1027,6 +1027,8 @@ role="status"
 aria-live="polite">
 </div>
 
+<script src="catalog.js?v=20260819-2"></script>
+
 <script>
 
 const API =
@@ -1098,11 +1100,6 @@ async function loadProduct(){
 `;
 
   try{
-
-    const response =
-      await fetch(
-        `${API}?action=product&id=${encodeURIComponent(productId)}`
-      );
 
     if(!response.ok){
 
