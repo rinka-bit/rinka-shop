@@ -1011,6 +1011,27 @@ function getPaymentRequestId(){
 
 }
 
+function generateCheckoutOrderId(){
+
+  const timestamp =
+    Date.now()
+      .toString();
+
+  const random =
+    Math.random()
+      .toString(36)
+      .slice(2,8)
+      .toUpperCase();
+
+
+  return (
+    "ORD" +
+    timestamp +
+    random
+  );
+
+}
+
 
 function clearPaymentRequestId(){
 
@@ -1707,11 +1728,33 @@ async function submitOrder(){
    const requestId =
   getPaymentRequestId();
 
+    let clientOrderId =
+  sessionStorage.getItem(
+    "rinka_checkout_order_id"
+  );
+
+
+if(!clientOrderId){
+
+  clientOrderId =
+    generateCheckoutOrderId();
+
+
+  sessionStorage.setItem(
+    "rinka_checkout_order_id",
+    clientOrderId
+  );
+
+}
+
 
 const payload = {
 
   request_id:
     requestId,
+
+  order_id:
+  clientOrderId,
 
   customer_name:
     address.receiver || "",
@@ -1837,15 +1880,7 @@ try{
   transactionResult =
     await transactionResponse.json();
 
-
-}catch(error){
-
-  /*
-  Transport failure != transaction failure.
-
-  Backend อาจทำ Order + Payment
-  สำเร็จแล้ว
-  */
+ }catch(error){
 
   console.warn(
     "Checkout transaction response uncertain:",
@@ -1853,15 +1888,49 @@ try{
   );
 
 
+  /*
+  =========================================
+  RESPONSE พัง
+  แต่ Browser รู้ Order ID อยู่แล้ว
+
+  จากอาการระบบปัจจุบัน Backend มักทำงาน
+  สำเร็จก่อน echo 404
+  =========================================
+  */
+
   localStorage.setItem(
     "rinka_checkout_response_uncertain",
     "1"
   );
 
 
+  localStorage.setItem(
+    "rinka_pending_checkout_order_id",
+    clientOrderId
+  );
+
+
   showPaymentToast(
-    "ระบบกำลังยืนยันคำสั่งซื้อ กรุณาอย่ากดยืนยันซ้ำ",
+    "ได้รับคำสั่งซื้อแล้ว กำลังเปิดหน้าคำสั่งซื้อ...",
     false
+  );
+
+
+  /*
+  อย่ารอ Apps Script response ต่อ
+  */
+
+  setTimeout(
+    ()=>{
+
+      window.location.href =
+        "order.html?id=" +
+        encodeURIComponent(
+          clientOrderId
+        );
+
+    },
+    800
   );
 
 
@@ -1931,8 +2000,15 @@ localStorage.removeItem(
 );
 
 
-clearPaymentRequestId();
+sessionStorage.removeItem(
+  "rinka_checkout_order_id"
+);
 
+localStorage.removeItem(
+  "rinka_pending_checkout_order_id"
+);
+
+clearPaymentRequestId();
 
 showPaymentSuccess(
   orderId
