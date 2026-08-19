@@ -111,9 +111,7 @@ async function initBrowse(){
       );
 
     if(grid){
-
       grid.innerHTML = "";
-
     }
 
     document
@@ -127,11 +125,11 @@ async function initBrowse(){
     setBrowseStatus(
       "โหลดสินค้าไม่สำเร็จ กรุณาลองใหม่ " +
       `<button
-        type="button"
-        class="secondary-btn"
-        onclick="initBrowse()"
+      type="button"
+      class="secondary-btn"
+      onclick="initBrowse()"
       >
-        ลองใหม่
+      ลองใหม่
       </button>`
     );
 
@@ -140,7 +138,6 @@ async function initBrowse(){
   }
 
 }
-
 function handleSearch(){
   updateSearchControls();
   window.clearTimeout(searchTimer);
