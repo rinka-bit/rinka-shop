@@ -2,12 +2,6 @@
 =========================================
 RINKA PUBLIC CATALOG
 =========================================
-
-Public storefront reads GitHub Pages first.
-
-Apps Script is only fallback when
-catalog.json is unavailable.
-=========================================
 */
 
 window.RinkaCatalog =
@@ -20,10 +14,6 @@ const RINKA_CATALOG_URL =
 
 const RINKA_CATALOG_CACHE_KEY =
   "rinka_public_catalog_v1";
-
-
-const RINKA_CATALOG_CACHE_MAX_AGE =
-  30 * 60 * 1000;
 
 
 window.RinkaCatalog.getCached =
@@ -42,7 +32,9 @@ window.RinkaCatalog.getCached =
 
 
       const data =
-        JSON.parse(raw);
+        JSON.parse(
+          raw
+        );
 
 
       if(
@@ -61,6 +53,7 @@ window.RinkaCatalog.getCached =
 
 
       return data;
+
 
     }catch(error){
 
@@ -95,6 +88,7 @@ window.RinkaCatalog.saveCached =
         })
       );
 
+
     }catch(error){
 
       console.warn(
@@ -114,12 +108,6 @@ window.RinkaCatalog.load =
       window.RinkaCatalog
         .getCached();
 
-
-    /*
-    =========================================
-    GITHUB STATIC JSON
-    =========================================
-    */
 
     try{
 
@@ -188,12 +176,6 @@ window.RinkaCatalog.load =
 
     }
 
-
-    /*
-    =========================================
-    LOCAL CACHE FALLBACK
-    =========================================
-    */
 
     if(cached){
 
