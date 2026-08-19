@@ -1144,6 +1144,8 @@ src="${escapeHtml(
   option.image
 )}"
 alt=""
+loading="lazy"
+decoding="async"
 style="
 width:100%;
 height:120px;
@@ -2877,18 +2879,20 @@ async function openProductOptions(
   }
 
 
+  /*
+  showAdminTab("options")
+  จะเรียก renderOptionManager()
+  และ renderOptionManager()
+  จะโหลด options ให้เองอยู่แล้ว
+  */
+
   showAdminTab(
     "options"
   );
 
 
-  /*
-  Product Manager ถูกโหลดอยู่แล้ว
-  จึงหา product ได้ทันที
-  */
-
   requestAnimationFrame(
-    async () => {
+    () => {
 
       const product =
         adminProducts.find(
@@ -2942,7 +2946,10 @@ async function openProductOptions(
       updateOptionProductInfo();
 
 
-      await loadAdminProductOptions();
+      /*
+      ห้าม loadAdminProductOptions() ซ้ำตรงนี้
+      renderOptionManager โหลดให้แล้ว
+      */
 
 
       document
@@ -2950,15 +2957,16 @@ async function openProductOptions(
           "optionManager"
         )
         ?.scrollIntoView({
+
           behavior:"smooth",
           block:"start"
+
         });
 
     }
   );
 
 }
-
 
 /*
 =========================================================
