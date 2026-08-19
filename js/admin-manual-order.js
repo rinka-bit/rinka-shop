@@ -262,9 +262,12 @@ id="mo_name"
 
       <div id="mo_preview_body"></div>
 
-    </div>
+        </div>
 
   </div>`;
+
+  loadManualOrderData();
+
 }
 
 async function loadManualOrderData(force = false){
