@@ -35,41 +35,110 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 async function initBrowse(){
+
   showBrowseLoading();
   clearBrowseStatus();
 
+  const startedAt =
+    performance.now();
+
   try{
-    const response = await fetch(BASE_API + "?action=products", { cache:"no-store" });
+
+    const response =
+      await fetch(
+        BASE_API +
+        "?action=productCards"
+      );
 
     if(!response.ok){
-      throw new Error("HTTP " + response.status);
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
     }
 
-    const result = await response.json();
+    const result =
+      await response.json();
 
-    if(result && result.success === false){
-      throw new Error(result.error || "โหลดสินค้าไม่สำเร็จ");
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        "โหลดสินค้าไม่สำเร็จ"
+      );
+
     }
 
-    browseProducts = Array.isArray(result)
-      ? result
-      : Array.isArray(result.products)
-        ? result.products
-        : [];
+    browseProducts =
+      Array.isArray(result)
+        ? result
+        : Array.isArray(
+            result.products
+          )
+          ? result.products
+          : [];
+
+    console.log(
+      "BROWSE PRODUCT CARDS:",
+      browseProducts.length,
+      "items /",
+      Math.round(
+        performance.now() -
+        startedAt
+      ),
+      "ms"
+    );
 
     renderBrowseResults();
 
   }catch(error){
-    console.error("initBrowse error:", error);
-    hideBrowseLoading();
-    document.getElementById("productGrid").innerHTML = "";
-    document.getElementById("emptyState").classList.add("hidden");
-    setBrowseStatus(
-      "โหลดสินค้าไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่ " +
-      `<button type="button" class="secondary-btn" onclick="initBrowse()">ลองใหม่</button>`
+
+    console.error(
+      "initBrowse error:",
+      error
     );
+
+    hideBrowseLoading();
+
+    const grid =
+      document.getElementById(
+        "productGrid"
+      );
+
+    if(grid){
+
+      grid.innerHTML = "";
+
+    }
+
+    document
+      .getElementById(
+        "emptyState"
+      )
+      ?.classList.add(
+        "hidden"
+      );
+
+    setBrowseStatus(
+      "โหลดสินค้าไม่สำเร็จ กรุณาลองใหม่ " +
+      `<button
+        type="button"
+        class="secondary-btn"
+        onclick="initBrowse()"
+      >
+        ลองใหม่
+      </button>`
+    );
+
     updateResultCount(0);
+
   }
+
 }
 
 function handleSearch(){
