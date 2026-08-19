@@ -913,7 +913,12 @@ onchange='selectLegacyProductImage(${JSON.stringify(item.row_id)},this)'>
 
 ${
   item.preview_url
-    ? `<img class="legacy-image-preview" src="${legacyAttr(item.preview_url)}" alt="ตัวอย่างรูปสินค้า">`
+    ? `<img
+class="legacy-image-preview"
+src="${legacyAttr(item.preview_url)}"
+alt="ตัวอย่างรูปสินค้า"
+loading="lazy"
+decoding="async">
     : `<img class="legacy-image-preview hidden" alt="ตัวอย่างรูปสินค้า">`
 }
 
