@@ -31,12 +31,107 @@ const API =
 const fandom=new URLSearchParams(location.search).get("name")||"";
 let fandomProducts=[];
 document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("fandomSearch").addEventListener("input",filterProducts);loadProducts()});
-async function loadProducts(){const box=document.getElementById("products");if(!fandom){renderState("ไม่พบ Fandom","ลิงก์นี้ไม่สมบูรณ์");return}try{const r=await fetch(API);if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(d&&d.success===false)throw new Error(d.error||"โหลดสินค้าไม่สำเร็จ");const rows=Array.isArray(d)?d:Array.isArray(d.products)?d.products:[];fandomProducts=rows.filter(p=>String(p.fandom||"")===fandom);document.getElementById("fandomTitle").textContent="🎮 "+fandom;document.getElementById("fandomDescription").textContent="สินค้าทั้งหมดจาก "+fandom;document.getElementById("topTitle").textContent=fandom;document.title=fandom+" | Rinka Shop";renderProducts(fandomProducts)}catch(e){console.error(e);renderState("โหลดสินค้าไม่สำเร็จ",e.message||String(e),true)}}
-function filterProducts(){const q=document.getElementById("fandomSearch").value.trim().toLowerCase();renderProducts(!q?fandomProducts:fandomProducts.filter(p=>[p.name,p.description,p.main_category,p.sub_category,p.search_keywords].join(" ").toLowerCase().includes(q)))}
+
+async function loadProducts(){
+
+  if(!fandom){
+
+    renderState(
+      "ไม่พบ Fandom",
+      "ลิงก์นี้ไม่สมบูรณ์"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const catalog =
+      await RinkaCatalog.load();
+
+
+    const rows =
+      Array.isArray(
+        catalog.products
+      )
+        ? catalog.products
+        : [];
+
+
+    fandomProducts =
+      rows.filter(
+        product =>
+          String(
+            product.fandom || ""
+          ) ===
+          fandom
+      );
+
+
+    document
+      .getElementById(
+        "fandomTitle"
+      )
+      .textContent =
+        "🎮 " +
+        fandom;
+
+
+    document
+      .getElementById(
+        "fandomDescription"
+      )
+      .textContent =
+        "สินค้าทั้งหมดจาก " +
+        fandom;
+
+
+    document
+      .getElementById(
+        "topTitle"
+      )
+      .textContent =
+        fandom;
+
+
+    document.title =
+      fandom +
+      " | Rinka Shop";
+
+
+    renderProducts(
+      fandomProducts
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    renderState(
+      "โหลดสินค้าไม่สำเร็จ",
+      error.message ||
+      String(error),
+      true
+    );
+
+  }
+
+}
+  
+  function filterProducts(){const q=document.getElementById("fandomSearch").value.trim().toLowerCase();renderProducts(!q?fandomProducts:fandomProducts.filter(p=>[p.name,p.description,p.main_category,p.sub_category,p.search_keywords].join(" ").toLowerCase().includes(q)))}
 function renderProducts(rows){const box=document.getElementById("products");document.getElementById("productCount").textContent=rows.length.toLocaleString("th-TH")+" รายการ";if(!rows.length){renderState("ไม่พบสินค้า",document.getElementById("fandomSearch").value?"ลองเปลี่ยนคำค้นดูนะคะ":"ยังไม่มีสินค้าใน Fandom นี้");return}box.className="product-grid";box.innerHTML=rows.map(createProductCard).join("")}
 function renderState(t,m,retry){const b=document.getElementById("products");b.className="state";b.innerHTML=`<div style="font-size:48px">${retry?"⚠️":"📦"}</div><h2>${escapeComponentHtml(t)}</h2><p>${escapeComponentHtml(m)}</p>${retry?'<button onclick="loadProducts()">ลองใหม่</button>':'<a href="browse.html">ดูสินค้าทั้งหมด</a>'}`}
 function goBack(){if(document.referrer&&document.referrer!==location.href)history.back();else location.href="home.html"}
 function updateCartCount(){const cart=safeStorageArray("cart");const n=cart.reduce((s,i)=>s+Number(i.qty||0),0);document.getElementById("cartCount").textContent=n>99?"99+":String(n)}
 </script>
+
+<script src="components.js"></script>
+<script src="catalog.js?v=20260819-1"></script>
+  
 </body>
 </html>
