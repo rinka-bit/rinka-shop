@@ -1072,6 +1072,7 @@ async function loadProduct(){
       "product"
     );
 
+
   if(!productId){
 
     renderProductError(
@@ -1080,7 +1081,9 @@ async function loadProduct(){
     );
 
     return;
+
   }
+
 
   root.innerHTML = `
 
@@ -1091,44 +1094,44 @@ async function loadProduct(){
   aria-hidden="true">
   </div>
 
-  <h2>กำลังโหลดสินค้า</h2>
+  <h2>
+    กำลังโหลดสินค้า
+  </h2>
 
-  <p>กำลังเตรียมรายละเอียดสินค้าให้ค่ะ</p>
+  <p>
+    กำลังเตรียมรายละเอียดสินค้าให้ค่ะ
+  </p>
 
 </div>
 
 `;
 
+
   try{
 
-    if(!response.ok){
+    const catalog =
+      await RinkaCatalog.load();
 
-      throw new Error(
-        `HTTP ${response.status}`
-      );
 
-    }
+    const products =
+      Array.isArray(
+        catalog.products
+      )
+        ? catalog.products
+        : [];
 
-    const result =
-      await response.json();
-
-    if(
-      result &&
-      result.success === false
-    ){
-
-      throw new Error(
-        result.error ||
-        "โหลดสินค้าไม่สำเร็จ"
-      );
-
-    }
 
     const product =
-      result &&
-      result.product
-        ? result.product
-        : result;
+      products.find(
+        item =>
+          String(
+            item.product_id || ""
+          ).trim() ===
+          String(
+            productId || ""
+          ).trim()
+      );
+
 
     if(
       !product ||
@@ -1138,9 +1141,58 @@ async function loadProduct(){
       renderProductNotFound();
 
       return;
+
     }
 
-    renderProduct(product);
+
+    /*
+    =========================================
+    BUILD IMAGES
+
+    รองรับ renderer เดิมของ Product
+    =========================================
+    */
+
+    const productWithImages = {
+
+      ...product,
+
+      images:[
+        product.image,
+        product.image2,
+        product.image3,
+        product.image4
+      ]
+        .map(
+          value =>
+            String(
+              value || ""
+            ).trim()
+        )
+        .filter(
+          Boolean
+        )
+
+    };
+
+
+    renderProduct(
+      productWithImages
+    );
+
+
+    console.log(
+      "PRODUCT CATALOG:",
+      catalog.source,
+      productId,
+      Array.isArray(
+        productWithImages.options
+      )
+        ? productWithImages.options.length
+        : 0,
+      "options"
+    );
+
 
   }catch(error){
 
@@ -1148,6 +1200,7 @@ async function loadProduct(){
       "loadProduct error:",
       error
     );
+
 
     renderProductError(
       "โหลดข้อมูลสินค้าไม่สำเร็จ",
@@ -1158,7 +1211,7 @@ async function loadProduct(){
   }
 
 }
-
+  
 function renderProductNotFound(){
 
   document
