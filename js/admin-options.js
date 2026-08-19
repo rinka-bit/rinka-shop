@@ -2562,15 +2562,11 @@ async function saveProductOptionsBatchFromAdmin(){
     resetOptionBatchForm();
 
 
-    await loadAdminProductOptions();
+   await loadAdminProductOptions();
 
-
-    /*
-    refresh Product Manager
-    เพื่อให้จำนวน option/search อัปเดต
-    */
-
-    await loadAdminProducts();
+await loadAdminProducts(
+  true
+);
 
 
     refreshOptionProductSelect();
