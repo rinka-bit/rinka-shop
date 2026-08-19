@@ -1,5 +1,107 @@
 let highlightedProductId = "";
 
+function getAdminProductFilterState(){
+
+  return {
+
+    search:
+      document
+        .getElementById(
+          "productSearch"
+        )
+        ?.value || "",
+
+    status:
+      document
+        .getElementById(
+          "productStatusFilter"
+        )
+        ?.value || "",
+
+    collection:
+      document
+        .getElementById(
+          "productCollectionFilter"
+        )
+        ?.value || "",
+
+    type:
+      document
+        .getElementById(
+          "productTypeFilter"
+        )
+        ?.value || ""
+
+  };
+
+}
+
+
+function restoreAdminProductFilterState(
+  state
+){
+
+  if(!state){
+
+    return;
+
+  }
+
+
+  const search =
+    document.getElementById(
+      "productSearch"
+    );
+
+  const status =
+    document.getElementById(
+      "productStatusFilter"
+    );
+
+  const collection =
+    document.getElementById(
+      "productCollectionFilter"
+    );
+
+  const type =
+    document.getElementById(
+      "productTypeFilter"
+    );
+
+
+  if(search){
+
+    search.value =
+      state.search || "";
+
+  }
+
+
+  if(status){
+
+    status.value =
+      state.status || "";
+
+  }
+
+
+  if(collection){
+
+    collection.value =
+      state.collection || "";
+
+  }
+
+
+  if(type){
+
+    type.value =
+      state.type || "";
+
+  }
+
+}
+
 function renderProductManager(){
 
   document
@@ -994,13 +1096,30 @@ async function loadAdminProducts(){
     );
 
 
-  if(listBox){
+  /*
+  แสดง loading เฉพาะถ้ายังไม่มีข้อมูลเก่า
+  ถ้ามี cache อยู่แล้ว ไม่ล้างรายการทิ้ง
+  */
+
+  if(
+    listBox &&
+    (
+      !Array.isArray(
+        adminProducts
+      ) ||
+      adminProducts.length === 0
+    )
+  ){
 
     listBox.innerHTML = `
-      <div class="card">
-        ⏳ กำลังโหลดสินค้า...
-      </div>
-    `;
+
+<div class="card">
+
+  ⏳ กำลังโหลดสินค้า...
+
+</div>
+
+`;
 
   }
 
@@ -1014,7 +1133,9 @@ async function loadAdminProducts(){
       );
 
 
-    if(!response.ok){
+    if(
+      !response.ok
+    ){
 
       throw new Error(
         "HTTP " +
@@ -1050,18 +1171,32 @@ async function loadAdminProducts(){
 
 
     /*
-    =========================================
-    Render เฉพาะส่วนที่เกี่ยวกับ Products
-    =========================================
+    Render รายการสินค้าอย่างเดียว
+    ไม่ rebuild Product Manager
+    ไม่ reset Collection filter
     */
 
     renderAdminProductList();
 
 
-    refreshOptionProductSelect();
+    if(
+      typeof refreshOptionProductSelect ===
+      "function"
+    ){
+
+      refreshOptionProductSelect();
+
+    }
 
 
-    refreshProductCollectionSelects();
+    return {
+
+      success:true,
+
+      count:
+        adminProducts.length
+
+    };
 
 
   }catch(error){
@@ -1072,20 +1207,37 @@ async function loadAdminProducts(){
     );
 
 
-    if(listBox){
+    if(
+      listBox &&
+      (
+        !Array.isArray(
+          adminProducts
+        ) ||
+        adminProducts.length === 0
+      )
+    ){
 
       listBox.innerHTML = `
-        <div class="card">
-          โหลดสินค้าไม่สำเร็จ
-          <br>
-          ${escapeHtml(
-            error.message ||
-            String(error)
-          )}
-        </div>
-      `;
+
+<div class="card">
+
+  โหลดสินค้าไม่สำเร็จ
+
+  <br>
+
+  ${escapeHtml(
+    error.message ||
+    String(error)
+  )}
+
+</div>
+
+`;
 
     }
+
+
+    throw error;
 
   }
 
@@ -1189,6 +1341,8 @@ String(highlightedProductId)
 
 <img
 src="${product.image || ""}"
+loading="lazy"
+decoding="async"
 style="
 width:100%;
 height:180px;
