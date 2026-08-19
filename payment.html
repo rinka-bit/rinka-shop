@@ -946,6 +946,8 @@ class="loading-overlay">
 
 </div>
 
+<script src="catalog.js?v=20260819-3"></script>
+
 <script>
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
@@ -1158,10 +1160,12 @@ async function loadBanks(){
       "bankList"
     );
 
+
   const detail =
     document.getElementById(
       "bankDetail"
     );
+
 
   list.innerHTML = `
 
@@ -1177,55 +1181,35 @@ async function loadBanks(){
 
 `;
 
-  detail.innerHTML = "";
+
+  detail.innerHTML =
+    "";
+
 
   try{
 
-    const response =
-      await fetch(
-        API + "?action=banks"
-      );
+    const catalog =
+      await RinkaCatalog.load();
 
-    if(!response.ok){
-
-      throw new Error(
-        "HTTP " +
-        response.status
-      );
-
-    }
-
-    const result =
-      await response.json();
-
-    if(
-      result &&
-      result.success === false
-    ){
-
-      throw new Error(
-        result.error ||
-        "โหลดบัญชีธนาคารไม่สำเร็จ"
-      );
-
-    }
 
     bankData =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(result.banks)
-          ? result.banks
-          : [];
+      Array.isArray(
+        catalog.banks
+      )
+        ? catalog.banks
+        : [];
+
 
     bankData =
       bankData.filter(
-        bank=>
+        bank =>
           normalizePaymentBoolean(
             bank.status === undefined
               ? true
               : bank.status
           )
       );
+
 
     if(!bankData.length){
 
@@ -1249,80 +1233,74 @@ async function loadBanks(){
 
 `;
 
+
       updatePaymentButtonState();
 
       return;
 
     }
 
+
     list.innerHTML =
       bankData
         .map(
-          (bank,index)=>{
+          bank => `
 
-            const accountId =
-              String(
-                bank.account_id ||
-                index
-              );
-
-            return `
-
-<label
+<button
+type="button"
 class="payment-bank-card"
-data-payment-bank="${escapePaymentAttribute(accountId)}">
+data-payment-bank="${escapePaymentAttribute(
+  String(
+    bank.account_id || ""
+  )
+)}"
+onclick="
+  selectPaymentBank(
+    '${escapePaymentAttribute(
+      String(
+        bank.account_id || ""
+      )
+    )}'
+  )
+"
+>
 
-  <input
-  type="radio"
-  name="bank"
-  value="${escapePaymentAttribute(accountId)}"
-  ${index === 0 ? "checked" : ""}
-  onchange='selectPaymentBank(${JSON.stringify(accountId)})'>
-
-  <div class="payment-bank-main">
-
-    <div class="payment-bank-icon">
-      🏦
-    </div>
-
-    <div>
-
-      <div class="payment-bank-name">
-        ${escapePaymentHtml(
-          bank.bank_name ||
-          "บัญชีธนาคาร"
-        )}
-      </div>
-
-      <div class="payment-bank-owner">
-        ${escapePaymentHtml(
-          bank.account_name ||
-          ""
-        )}
-      </div>
-
-    </div>
-
+  <div class="payment-bank-card-name">
+    ${escapePaymentHtml(
+      bank.bank_name ||
+      "ช่องทางชำระเงิน"
+    )}
   </div>
 
-  <span class="payment-bank-check">
-    ✓
-  </span>
+  <div class="payment-bank-card-number">
+    ${escapePaymentHtml(
+      bank.account_number ||
+      ""
+    )}
+  </div>
 
-</label>
+</button>
 
-`;
-
-          }
+`
         )
         .join("");
 
+
     selectPaymentBank(
       String(
-        bankData[0].account_id ||
-        0
+        bankData[0]
+          .account_id ||
+        ""
       )
     );
+
+
+    console.log(
+      "PAYMENT BANKS:",
+      catalog.source,
+      bankData.length
+    );
+
 
   }catch(error){
 
@@ -1330,6 +1308,7 @@ data-payment-bank="${escapePaymentAttribute(accountId)}">
       "loadBanks error:",
       error
     );
+
 
     list.innerHTML = `
 
@@ -1356,12 +1335,12 @@ data-payment-bank="${escapePaymentAttribute(accountId)}">
 
 `;
 
+
     updatePaymentButtonState();
 
   }
 
 }
-
 
 function selectPaymentBank(
   id
