@@ -81,7 +81,7 @@
   target="_blank"
   rel="noopener noreferrer"
   >
-    💬 สั่งซื้อผ่าน DM
+    💬 ติดต่อร้าน DM
   </a>
 
 
