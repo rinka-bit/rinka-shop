@@ -1814,6 +1814,8 @@ src="${escapeAdminLookupHtml(
   image
 )}"
 alt=""
+loading="lazy"
+decoding="async"
 style="
 width:64px;
 height:64px;
