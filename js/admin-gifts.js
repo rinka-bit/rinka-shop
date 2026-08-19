@@ -89,7 +89,7 @@ openCreateGiftCampaign()
 type="button"
 style="background:#64748b;"
 onclick="
-reloadGiftManager()
+reloadGiftManager(event)
 "
 >
 ↻ โหลดใหม่
@@ -449,13 +449,13 @@ RELOAD
 =========================================
 */
 
-async function reloadGiftManager(){
+async function reloadGiftManager(
+  event
+){
 
   const button =
-    event &&
-    event.currentTarget
-      ? event.currentTarget
-      : null;
+    event?.currentTarget ||
+    null;
 
   if(button){
 
@@ -485,7 +485,6 @@ async function reloadGiftManager(){
   }
 
 }
-
 
 /*
 =========================================
