@@ -21,139 +21,6 @@ const ManualOrder = {
 
 };
 
-async function loadManualOrderData(force = false){
-
-  if(ManualOrder.dataLoading){
-    return;
-  }
-
-  if(
-    ManualOrder.dataLoaded &&
-    !force
-  ){
-    filterManualProducts();
-    renderManualCart();
-    renderManualGifts();
-    return;
-  }
-
-  ManualOrder.dataLoading = true;
-
-  const productBox =
-    document.getElementById(
-      "mo_products"
-    );
-
-  try{
-
-    setManualMessage(
-      "กำลังโหลดข้อมูลสินค้าและของแถม...",
-      "info"
-    );
-
-    const [
-      p,
-      c,
-      gc,
-      gr,
-      gi,
-      ch,
-      ex
-    ] = await Promise.all([
-
-      moGet("adminProducts"),
-      moGet("adminCollections"),
-      moGet("getGiftCampaigns"),
-      moGet("getGiftRules"),
-      moGet("getGiftItems"),
-      moGet("getGiftCharacters"),
-      moGet("getGiftCampaignExclusions")
-
-    ]);
-
-    ManualOrder.products =
-      moArray(p,"products");
-
-    ManualOrder.collections =
-      moArray(c,"collections");
-
-    ManualOrder.campaigns =
-      moArray(gc,"campaigns");
-
-    ManualOrder.rules =
-      moArray(gr,"rules");
-
-    ManualOrder.items =
-      moArray(gi,"items","gifts");
-
-    ManualOrder.characters =
-      moArray(ch,"characters");
-
-    ManualOrder.exclusions =
-      moArray(ex,"exclusions");
-
-    ManualOrder.dataLoaded = true;
-
-    const collectionSelect =
-      document.getElementById(
-        "mo_collection"
-      );
-
-    if(collectionSelect){
-
-      collectionSelect.innerHTML =
-        '<option value="">ทั้งหมด</option>' +
-        ManualOrder.collections
-          .map(
-            collection =>
-              `<option value="${moEsc(collection.collection_id)}">${moEsc(collection.name)}</option>`
-          )
-          .join("");
-
-    }
-
-    clearManualMessage();
-
-    filterManualProducts();
-    renderManualCart();
-    renderManualGifts();
-
-  }catch(error){
-
-    console.error(
-      "loadManualOrderData error:",
-      error
-    );
-
-    if(productBox){
-
-      productBox.innerHTML = `
-        <div class="mo-notice mo-error mo-full">
-          โหลดข้อมูลไม่สำเร็จ<br>
-          ${moEsc(error.message || String(error))}
-          <br><br>
-          <button type="button" onclick="loadManualOrderData(true)">
-            ลองใหม่
-          </button>
-        </div>
-      `;
-
-    }
-
-    setManualMessage(
-      "โหลดข้อมูล Manual Order ไม่สำเร็จ: " +
-      (error.message || String(error)),
-      "error"
-    );
-
-  }finally{
-
-    ManualOrder.dataLoading = false;
-
-  }
-
-}
-
 function renderManualOrderManager(){
   const root=document.getElementById('manualOrderManager');
   if(!root)return;
@@ -400,7 +267,25 @@ id="mo_name"
   </div>`;
 }
 
-async function loadManualOrderData(){
+async function loadManualOrderData(force = false){
+
+  if(ManualOrder.dataLoading){
+    return;
+  }
+
+  if(
+    ManualOrder.dataLoaded &&
+    !force
+  ){
+
+    filterManualProducts();
+    renderManualCart();
+    renderManualGifts();
+
+    return;
+  }
+
+  ManualOrder.dataLoading = true;
 
   const productBox =
     document.getElementById(
@@ -410,50 +295,97 @@ async function loadManualOrderData(){
   try{
 
     setManualMessage(
-      "กำลังโหลดข้อมูลสินค้าและของแถม...",
+      "กำลังโหลดข้อมูลสินค้า...",
       "info"
     );
 
-    const [
-      p,
-      c,
-      gc,
-      gr,
-      gi,
-      ch,
-      ex
-    ] = await Promise.all([
+    const response =
+      await fetch(
+        "./data/catalog.json?v=" +
+        Date.now()
+      );
 
-      moGet("adminProducts"),
-      moGet("adminCollections"),
-      moGet("getGiftCampaigns"),
-      moGet("getGiftRules"),
-      moGet("getGiftItems"),
-      moGet("getGiftCharacters"),
-      moGet("getGiftCampaignExclusions")
+    if(!response.ok){
 
-    ]);
+      throw new Error(
+        "โหลด catalog ไม่สำเร็จ: HTTP " +
+        response.status
+      );
+
+    }
+
+    const catalog =
+      await response.json();
+
+    if(
+      !catalog ||
+      catalog.success === false
+    ){
+
+      throw new Error(
+        catalog?.error ||
+        "ข้อมูล catalog ไม่ถูกต้อง"
+      );
+
+    }
 
     ManualOrder.products =
-      moArray(p,"products");
+      Array.isArray(
+        catalog.products
+      )
+        ? catalog.products
+        : [];
 
     ManualOrder.collections =
-      moArray(c,"collections");
+      Array.isArray(
+        catalog.collections
+      )
+        ? catalog.collections
+        : [];
+
+    const gifts =
+      catalog.gifts &&
+      typeof catalog.gifts === "object"
+        ? catalog.gifts
+        : {};
 
     ManualOrder.campaigns =
-      moArray(gc,"campaigns");
+      Array.isArray(
+        gifts.campaigns
+      )
+        ? gifts.campaigns
+        : [];
 
     ManualOrder.rules =
-      moArray(gr,"rules");
+      Array.isArray(
+        gifts.rules
+      )
+        ? gifts.rules
+        : [];
 
     ManualOrder.items =
-      moArray(gi,"items","gifts");
+      Array.isArray(
+        gifts.items
+      )
+        ? gifts.items
+        : [];
 
     ManualOrder.characters =
-      moArray(ch,"characters");
+      Array.isArray(
+        gifts.characters
+      )
+        ? gifts.characters
+        : [];
 
     ManualOrder.exclusions =
-      moArray(ex,"exclusions");
+      Array.isArray(
+        gifts.exclusions
+      )
+        ? gifts.exclusions
+        : [];
+
+    ManualOrder.dataLoaded =
+      true;
 
     const collectionSelect =
       document.getElementById(
@@ -466,14 +398,19 @@ async function loadManualOrderData(){
         '<option value="">ทั้งหมด</option>' +
         ManualOrder.collections
           .map(
-            collection=>
-              `<option value="${moEsc(collection.collection_id)}">${moEsc(collection.name)}</option>`
+            collection =>
+              `<option value="${moEsc(
+                collection.collection_id
+              )}">${moEsc(
+                collection.name
+              )}</option>`
           )
           .join("");
 
     }
 
     clearManualMessage();
+
     filterManualProducts();
     renderManualCart();
     renderManualGifts();
@@ -489,22 +426,43 @@ async function loadManualOrderData(){
 
       productBox.innerHTML = `
 
-<div class="mo-notice mo-error mo-full">
-  โหลดข้อมูลไม่สำเร็จ<br>
-  ${moEsc(error.message || String(error))}
-  <br><br>
-  <button type="button" onclick="loadManualOrderData()">ลองใหม่</button>
-</div>
+        <div class="mo-notice mo-error mo-full">
 
-`;
+          โหลดข้อมูลไม่สำเร็จ<br>
+
+          ${moEsc(
+            error.message ||
+            String(error)
+          )}
+
+          <br><br>
+
+          <button
+            type="button"
+            onclick="loadManualOrderData(true)"
+          >
+            ลองใหม่
+          </button>
+
+        </div>
+
+      `;
 
     }
 
     setManualMessage(
       "โหลดข้อมูล Manual Order ไม่สำเร็จ: " +
-      (error.message || String(error)),
+      (
+        error.message ||
+        String(error)
+      ),
       "error"
     );
+
+  }finally{
+
+    ManualOrder.dataLoading =
+      false;
 
   }
 
