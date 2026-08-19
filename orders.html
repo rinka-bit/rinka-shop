@@ -126,48 +126,6 @@ onclick='setOrdersStatusFilter(
 
 }
 
-
-function setOrdersStatusFilter(
-  status
-){
-
-  statusFilter =
-    String(
-      status || ""
-    );
-
-  const url =
-    new URL(
-      window.location.href
-    );
-
-  if(statusFilter){
-
-    url.searchParams.set(
-      "status",
-      statusFilter
-    );
-
-  }else{
-
-    url.searchParams.delete(
-      "status"
-    );
-
-  }
-
-  history.replaceState(
-    null,
-    "",
-    url
-  );
-
-  renderFilters();
-
-  renderOrdersFromCache();
-
-}
-
 function setOrdersStatusFilter(
   status
 ){
@@ -356,6 +314,84 @@ function statusClass(s){
   );
 
 }
+
+  function getOrdersCacheKey(){
+
+  const key =
+    String(
+      customer.customer_id ||
+      customer.email ||
+      "customer"
+    )
+      .trim()
+      .toLowerCase();
+
+
+  return (
+    "rinka_customer_orders_" +
+    key
+  );
+
+}
+
+
+function readOrdersLocalCache(){
+
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          getOrdersCacheKey()
+        ) ||
+        "[]"
+      );
+
+
+    return Array.isArray(
+      data
+    )
+      ? data
+      : [];
+
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveOrdersLocalCache(
+  orders
+){
+
+  try{
+
+    localStorage.setItem(
+      getOrdersCacheKey(),
+      JSON.stringify(
+        Array.isArray(
+          orders
+        )
+          ? orders
+          : []
+      )
+    );
+
+
+  }catch(error){
+
+    console.warn(
+      "Save orders cache failed:",
+      error
+    );
+
+  }
+
+}
   
 async function loadOrders(){
 
@@ -382,8 +418,24 @@ async function loadOrders(){
 
   ordersLoading = true;
 
+  const cachedOrders =
+  readOrdersLocalCache();
+
+
+if(cachedOrders.length){
+
+  customerOrdersCache =
+    cachedOrders;
+
+
+  renderOrdersFromCache();
+
+
+}else{
+
   box.className =
     "state";
+
 
   box.innerHTML = `
 
@@ -398,6 +450,8 @@ async function loadOrders(){
 </p>
 
 `;
+
+}
 
   try{
 
@@ -470,6 +524,10 @@ async function loadOrders(){
           )
           ? newData.orders
           : [];
+
+    saveOrdersLocalCache(
+  customerOrdersCache
+);
 
     /*
     แสดงระบบใหม่ทันที
