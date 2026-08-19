@@ -39,22 +39,120 @@ aria-label="เปิดตะกร้าสินค้า"
 <section id="products" class="state"><div class="spinner"></div><h2>กำลังโหลดสินค้า</h2><p>รอสักครู่นะคะ</p></section>
 </main>
 <script>
-const API =
-const API =
-  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec?action=productCards";
+
 const category=new URLSearchParams(location.search).get("name")||"";
 let categoryProducts=[];
 document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("categorySearch").addEventListener("input",filterCategoryProducts);loadProducts()});
+
 async function loadProducts(){
- const box=document.getElementById("products");
- if(!category){renderState("ไม่พบหมวดสินค้า","ลิงก์นี้ไม่สมบูรณ์");return}
- try{
-  const r=await fetch(API);if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(d&&d.success===false)throw new Error(d.error||"โหลดสินค้าไม่สำเร็จ");
-  const rows=Array.isArray(d)?d:Array.isArray(d.products)?d.products:[];categoryProducts=rows.filter(p=>String(p.main_category||"")===category);
-  document.getElementById("categoryTitle").textContent="🏷️ "+category;document.getElementById("topTitle").textContent=category;document.getElementById("categoryDescription").textContent="สินค้าทั้งหมดในหมวด "+category;document.title=category+" | Rinka Shop";
-  renderProducts(categoryProducts);
- }catch(e){console.error(e);renderState("โหลดสินค้าไม่สำเร็จ",e.message||String(e),true)}
+
+  const box =
+    document.getElementById(
+      "products"
+    );
+
+
+  if(!category){
+
+    renderState(
+      "ไม่พบหมวดสินค้า",
+      "ลิงก์นี้ไม่สมบูรณ์"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const catalog =
+      await RinkaCatalog.load();
+
+
+    const rows =
+      Array.isArray(
+        catalog.products
+      )
+        ? catalog.products
+        : [];
+
+
+    categoryProducts =
+      rows.filter(
+        product =>
+          String(
+            product.main_category || ""
+          ).trim() ===
+          String(
+            category || ""
+          ).trim()
+      );
+
+
+    document
+      .getElementById(
+        "categoryTitle"
+      )
+      .textContent =
+        "🏷️ " +
+        category;
+
+
+    document
+      .getElementById(
+        "categoryDescription"
+      )
+      .textContent =
+        "สินค้าทั้งหมดในหมวด " +
+        category;
+
+
+    document
+      .getElementById(
+        "topTitle"
+      )
+      .textContent =
+        category;
+
+
+    document.title =
+      category +
+      " | Rinka Shop";
+
+
+    renderProducts(
+      categoryProducts
+    );
+
+
+    console.log(
+      "CATEGORY CATALOG:",
+      catalog.source,
+      categoryProducts.length,
+      "products"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "loadProducts error:",
+      error
+    );
+
+
+    renderState(
+      "โหลดสินค้าไม่สำเร็จ",
+      error.message ||
+      String(error),
+      true
+    );
+
+  }
+
 }
+ 
 function filterCategoryProducts(){const q=document.getElementById("categorySearch").value.trim().toLowerCase();if(!q){renderProducts(categoryProducts);return}renderProducts(categoryProducts.filter(p=>[p.name,p.fandom,p.description,p.sub_category,p.search_keywords].join(" ").toLowerCase().includes(q)))}
 function clearSearch(){document.getElementById("categorySearch").value="";renderProducts(categoryProducts)}
 function renderProducts(rows){
@@ -329,6 +427,7 @@ function updateCartCount(){let c=[];try{const x=JSON.parse(localStorage.getItem(
 function bool(v){return v===true||v===1||["true","yes","1","active"].includes(String(v||"").toLowerCase())}function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
 
+<script src="components.js"></script>
 <script src="catalog.js?v=20260819-1"></script>
 <script src="cart-drawer.js"></script>
  
