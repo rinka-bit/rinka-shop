@@ -1788,6 +1788,85 @@ const payload = {
 
 };
 
+    /*
+=========================================
+ORDER SNAPSHOT FOR FAST ORDER PAGE
+=========================================
+*/
+
+const orderSnapshot = {
+
+  order_id:
+    clientOrderId,
+
+  customer_name:
+    address.receiver || "",
+
+  email:
+    address.email || "",
+
+  phone:
+    String(
+      address.phone || ""
+    ),
+
+  social:
+    address.social || "",
+
+  subtotal:
+    calculatedTotal,
+
+  total:
+    calculatedTotal,
+
+  status:
+    "pending_order",
+
+  payment_status:
+    "processing",
+
+  shipping_payment_status:
+    "unpaid",
+
+  created_at:
+    new Date()
+      .toISOString(),
+
+  items:
+    cart,
+
+  gifts:
+    Array.isArray(
+      address.gifts
+    )
+      ? address.gifts
+      : [],
+
+  shipments:[],
+
+  pending_shipment:
+    null,
+
+  pending_shipment_id:
+    "",
+
+  import_fee:
+    0,
+
+  domestic_shipping_fee:
+    0
+
+};
+
+
+localStorage.setItem(
+  "rinka_order_snapshot_" +
+  clientOrderId,
+  JSON.stringify(
+    orderSnapshot
+  )
+);
+
 /*
 =========================================
 PREPARE SLIP
@@ -1978,6 +2057,45 @@ if(!orderId){
 
 }
 
+    try{
+
+  const snapshotKey =
+    "rinka_order_snapshot_" +
+    orderId;
+
+
+  const snapshot =
+    JSON.parse(
+      localStorage.getItem(
+        snapshotKey
+      ) || "{}"
+    );
+
+
+  localStorage.setItem(
+    snapshotKey,
+    JSON.stringify({
+
+      ...snapshot,
+
+      order_id:
+        orderId,
+
+      payment_status:
+        "paid"
+
+    })
+  );
+
+
+}catch(error){
+
+  console.warn(
+    "Update order snapshot failed:",
+    error
+  );
+
+}
 
 localStorage.removeItem(
   "rinka_pending_checkout_request_id"
