@@ -368,73 +368,6 @@ function renderHomeData(
 
 }
 
-
-/*
-=========================================
-FETCH HOME DATA
-=========================================
-*/
-
-async function fetchHomeData(){
-
-  const startedAt =
-    performance.now();
-
-
-  const response =
-    await fetch(
-      BASE_API +
-      "?action=homeData",
-      {
-        cache:
-          "default"
-      }
-    );
-
-
-  if(!response.ok){
-
-    throw new Error(
-      "HTTP " +
-      response.status
-    );
-
-  }
-
-
-  const result =
-    await response.json();
-
-
-  if(
-    !result ||
-    result.success !== true
-  ){
-
-    throw new Error(
-      result?.error ||
-      "โหลดข้อมูลหน้าแรกไม่สำเร็จ"
-    );
-
-  }
-
-
-  console.log(
-    "HOME DATA:",
-    Math.round(
-      performance.now() -
-      startedAt
-    ),
-    "ms",
-    result.performance || {}
-  );
-
-
-  return result;
-
-}
-
-
 /*
 =========================================
 LOAD HOME
@@ -443,135 +376,82 @@ LOAD HOME
 
 async function loadHome(){
 
-  const cache =
-    getHomeCache();
-
-
-  const hasCache =
-    Boolean(
-      cache
-    );
+  const cached =
+    window.RinkaCatalog
+      ?.getCached?.();
 
 
   /*
   =========================================
   CACHE FIRST
-
-  ถ้าเคยโหลดสำเร็จแล้ว
-  แสดงข้อมูลทันที
-  ไม่ต้องรอ Apps Script
   =========================================
   */
 
-  if(hasCache){
+  if(cached){
 
     renderHomeData(
-      cache
+      cached
     );
 
-
-    const age =
-      Date.now() -
-      Number(
-        cache.saved_at || 0
-      );
-
-
-    if(
-      age <=
-      HOME_CACHE_MAX_AGE
-    ){
-
-      setHomeMessage(
-        "",
-        "info"
-      );
-
-    }else{
-
-      setHomeMessage(
-        "กำลังอัปเดตข้อมูลล่าสุด...",
-        "info"
-      );
-
-    }
+    setHomeMessage(
+      "",
+      "info"
+    );
 
   }else{
-
-    /*
-    ครั้งแรกจริง ๆ
-    ยังไม่มีอะไรใน browser
-    */
 
     showLoadingSkeleton(
       "featuredProducts"
     );
 
-
     showLoadingSkeleton(
       "newProducts"
     );
-
 
     showLoadingSkeleton(
       "collectionCards"
     );
 
-
-    const fandomBox =
-      document.getElementById(
+    document
+      .getElementById(
         "fandomList"
-      );
-
-
-    if(fandomBox){
-
-      fandomBox.innerHTML =
+      )
+      .innerHTML =
         stateHtml(
           "⏳",
           "กำลังโหลดแฟนด้อม",
           ""
         );
 
-    }
-
-
-    setHomeMessage(
-      "กำลังโหลดข้อมูลหน้าหลัก...",
-      "info"
-    );
-
   }
 
 
   /*
   =========================================
-  REFRESH FROM SERVER
-
-  ไม่ว่าจะมี cache หรือไม่
-  ยิง Apps Script แค่ 1 request
+  STATIC GITHUB CATALOG
   =========================================
   */
 
   try{
 
-    const freshData =
-      await fetchHomeData();
-
-
-    saveHomeCache(
-      freshData
-    );
+    const data =
+      await RinkaCatalog.load();
 
 
     renderHomeData(
-      freshData
+      data
     );
 
 
     setHomeMessage(
       "",
       "info"
+    );
+
+
+    console.log(
+      "HOME CATALOG SOURCE:",
+      data.source
     );
 
 
@@ -583,30 +463,17 @@ async function loadHome(){
     );
 
 
-    /*
-    =========================================
-    ถ้ามี Cache
-    อย่าทำลายหน้าที่แสดงอยู่
-    =========================================
-    */
+    if(cached){
 
-    if(hasCache){
-
-      setHomeMessage(
-        "กำลังใช้ข้อมูลล่าสุดที่บันทึกไว้ เนื่องจากระบบอัปเดตข้อมูลช้ากว่าปกติ",
-        "info"
-      );
+      /*
+      cache ยังแสดงได้อยู่
+      ไม่ทำลาย UI
+      */
 
       return;
 
     }
 
-
-    /*
-    =========================================
-    ไม่มี Cache + Server พัง
-    =========================================
-    */
 
     const retry = `
 
@@ -620,30 +487,32 @@ onclick="loadHome()"
 `;
 
 
-    document
-      .getElementById(
-        "featuredProducts"
-      )
-      .innerHTML =
-        stateHtml(
-          "⚠️",
-          "โหลดสินค้าไม่สำเร็จ",
-          error.message || "",
-          retry
-        );
+    [
+      "featuredProducts",
+      "newProducts",
+      "collectionCards"
+    ].forEach(
+      id => {
 
+        const box =
+          document.getElementById(
+            id
+          );
 
-    document
-      .getElementById(
-        "newProducts"
-      )
-      .innerHTML =
-        stateHtml(
-          "⚠️",
-          "โหลดสินค้าไม่สำเร็จ",
-          error.message || "",
-          retry
-        );
+        if(box){
+
+          box.innerHTML =
+            stateHtml(
+              "⚠️",
+              "โหลดข้อมูลไม่สำเร็จ",
+              error.message || "",
+              retry
+            );
+
+        }
+
+      }
+    );
 
 
     document
@@ -653,20 +522,7 @@ onclick="loadHome()"
       .innerHTML =
         stateHtml(
           "⚠️",
-          "โหลดแฟนด้อมไม่สำเร็จ",
-          error.message || "",
-          retry
-        );
-
-
-    document
-      .getElementById(
-        "collectionCards"
-      )
-      .innerHTML =
-        stateHtml(
-          "⚠️",
-          "โหลดรอบพรีออเดอร์ไม่สำเร็จ",
+          "โหลดข้อมูลไม่สำเร็จ",
           error.message || "",
           retry
         );
@@ -1132,6 +988,7 @@ loadHome();
 updateCartCount();
 </script>
 
+<script src="catalog.js?v=20260819-1"></script>
 <script src="menu.js"></script>
 
 <script src="js/maintenance-notice.js"></script>
