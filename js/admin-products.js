@@ -988,32 +988,106 @@ async function saveProductFromAdmin(){
 
 async function loadAdminProducts(){
 
-  const response =
-    await fetch(
-      API + "?action=adminProducts"
+  const listBox =
+    document.getElementById(
+      "adminProductList"
     );
 
-  const result =
-    await response.json();
 
-  if(!result.success){
-    document.getElementById("adminProductList").innerHTML =
-      "โหลดสินค้าไม่สำเร็จ";
-    return;
+  if(listBox){
+
+    listBox.innerHTML = `
+      <div class="card">
+        ⏳ กำลังโหลดสินค้า...
+      </div>
+    `;
+
   }
 
-adminProducts =
-  Array.isArray(result.products)
-    ? result.products
-    : [];
 
-renderAdminProductList();
+  try{
 
-refreshOptionProductSelect();
+    const response =
+      await fetch(
+        API +
+        "?action=adminProducts"
+      );
 
-refreshProductCollectionSelects();
 
-renderAdminCollectionList();
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "โหลดสินค้าไม่สำเร็จ"
+      );
+
+    }
+
+
+    adminProducts =
+      Array.isArray(
+        result.products
+      )
+        ? result.products
+        : [];
+
+
+    /*
+    =========================================
+    Render เฉพาะส่วนที่เกี่ยวกับ Products
+    =========================================
+    */
+
+    renderAdminProductList();
+
+
+    refreshOptionProductSelect();
+
+
+    refreshProductCollectionSelects();
+
+
+  }catch(error){
+
+    console.error(
+      "loadAdminProducts error:",
+      error
+    );
+
+
+    if(listBox){
+
+      listBox.innerHTML = `
+        <div class="card">
+          โหลดสินค้าไม่สำเร็จ
+          <br>
+          ${escapeHtml(
+            error.message ||
+            String(error)
+          )}
+        </div>
+      `;
+
+    }
+
+  }
 
 }
 
