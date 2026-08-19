@@ -39,62 +39,31 @@ async function initBrowse(){
   showBrowseLoading();
   clearBrowseStatus();
 
-  const startedAt =
-    performance.now();
 
   try{
 
-    const response =
-      await fetch(
-        BASE_API +
-        "?action=productCards"
-      );
+    const catalog =
+      await RinkaCatalog.load();
 
-    if(!response.ok){
-
-      throw new Error(
-        "HTTP " +
-        response.status
-      );
-
-    }
-
-    const result =
-      await response.json();
-
-    if(
-      result &&
-      result.success === false
-    ){
-
-      throw new Error(
-        result.error ||
-        "โหลดสินค้าไม่สำเร็จ"
-      );
-
-    }
 
     browseProducts =
-      Array.isArray(result)
-        ? result
-        : Array.isArray(
-            result.products
-          )
-          ? result.products
-          : [];
+      Array.isArray(
+        catalog.products
+      )
+        ? catalog.products
+        : [];
+
 
     console.log(
-      "BROWSE PRODUCT CARDS:",
+      "BROWSE CATALOG:",
+      catalog.source,
       browseProducts.length,
-      "items /",
-      Math.round(
-        performance.now() -
-        startedAt
-      ),
-      "ms"
+      "products"
     );
 
+
     renderBrowseResults();
+
 
   }catch(error){
 
@@ -103,16 +72,17 @@ async function initBrowse(){
       error
     );
 
+
     hideBrowseLoading();
 
-    const grid =
-      document.getElementById(
-        "productGrid"
-      );
 
-    if(grid){
-      grid.innerHTML = "";
-    }
+    document
+      .getElementById(
+        "productGrid"
+      )
+      .innerHTML =
+      "";
+
 
     document
       .getElementById(
@@ -121,6 +91,7 @@ async function initBrowse(){
       ?.classList.add(
         "hidden"
       );
+
 
     setBrowseStatus(
       "โหลดสินค้าไม่สำเร็จ กรุณาลองใหม่ " +
@@ -133,11 +104,15 @@ async function initBrowse(){
       </button>`
     );
 
-    updateResultCount(0);
+
+    updateResultCount(
+      0
+    );
 
   }
 
 }
+
 function handleSearch(){
   updateSearchControls();
   window.clearTimeout(searchTimer);
