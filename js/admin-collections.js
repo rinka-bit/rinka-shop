@@ -1098,15 +1098,23 @@ function closeEditCollectionModal(){
 
 function refreshProductCollectionSelects(){
 
+  /*
+  =========================================
+  ADD PRODUCT — COLLECTION
+  =========================================
+  */
+
   const addSelect =
     document.getElementById(
       "p_collection_id"
     );
 
+
   if(addSelect){
 
     const currentValue =
       addSelect.value;
+
 
     addSelect.innerHTML = `
 
@@ -1115,12 +1123,14 @@ function refreshProductCollectionSelects(){
 </option>
 
 ${adminCollections
-  .map(collection=>`
+  .map(
+    collection => `
 
 <option
 value="${escapeHtml(
   collection.collection_id
-)}">
+)}"
+>
 
 ${escapeHtml(
   collection.name || "-"
@@ -1128,25 +1138,36 @@ ${escapeHtml(
 
 </option>
 
-`)
+`
+  )
   .join("")}
 
 `;
+
 
     addSelect.value =
       currentValue;
 
   }
 
+
+  /*
+  =========================================
+  EDIT PRODUCT — COLLECTION
+  =========================================
+  */
+
   const editSelect =
     document.getElementById(
       "e_collection_id"
     );
 
+
   if(editSelect){
 
     const currentValue =
       editSelect.value;
+
 
     editSelect.innerHTML = `
 
@@ -1155,12 +1176,14 @@ ${escapeHtml(
 </option>
 
 ${adminCollections
-  .map(collection=>`
+  .map(
+    collection => `
 
 <option
 value="${escapeHtml(
   collection.collection_id
-)}">
+)}"
+>
 
 ${escapeHtml(
   collection.name || "-"
@@ -1168,13 +1191,83 @@ ${escapeHtml(
 
 </option>
 
-`)
+`
+  )
   .join("")}
 
 `;
 
+
     editSelect.value =
       currentValue;
+
+  }
+
+
+  /*
+  =========================================
+  PRODUCT LIST — COLLECTION FILTER
+  =========================================
+  */
+
+  const filterSelect =
+    document.getElementById(
+      "productCollectionFilter"
+    );
+
+
+  if(filterSelect){
+
+    const currentValue =
+      filterSelect.value;
+
+
+    filterSelect.innerHTML = `
+
+<option value="">
+ทุก Collection
+</option>
+
+${adminCollections
+  .map(
+    collection => `
+
+<option
+value="${escapeHtml(
+  collection.collection_id
+)}"
+>
+
+${escapeHtml(
+  collection.name || "-"
+)}
+
+</option>
+
+`
+  )
+  .join("")}
+
+`;
+
+
+    filterSelect.value =
+      currentValue;
+
+
+    /*
+    ถ้าค่าเดิมไม่มีอยู่แล้ว
+    ให้กลับไปทุก Collection
+    */
+
+    if(
+      filterSelect.value !==
+      currentValue
+    ){
+
+      filterSelect.value = "";
+
+    }
 
   }
 
