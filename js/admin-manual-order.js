@@ -1570,27 +1570,6 @@ function confirmAddManualProduct(
   }
 
 
-  /*
-  =========================================
-  READ QUANTITY / CRATE
-  =========================================
-  */
-
-  const qty =
-    Math.max(
-      1,
-      Math.floor(
-        Number(
-          document
-            .getElementById(
-              "mo_modal_qty"
-            )
-            ?.value || 1
-        )
-      )
-    );
-
-
   const crateSelected =
     document
       .getElementById(
@@ -1614,32 +1593,37 @@ function confirmAddManualProduct(
       : 0;
 
 
-  /*
-  =========================================
-  READ OPTION GROUPS
-  =========================================
-  */
-
-  const groups =
-    [
-      ...document.querySelectorAll(
-        "#mo_modal_body .mo-option-group"
-      )
-    ];
+  const groups = [
+    ...document.querySelectorAll(
+      "#mo_modal_body .mo-option-group"
+    )
+  ];
 
 
   /*
-  สินค้าไม่มี option
+  =========================================
+  NO OPTION
+  =========================================
   */
 
   if(
     groups.length === 0
   ){
 
-    const unitPrice =
-      moPrice(
-        product
+    const qty =
+      Math.max(
+        1,
+        Math.floor(
+          Number(
+            document
+              .getElementById(
+                "mo_modal_qty"
+              )
+              ?.value || 1
+          )
+        )
       );
+
 
     const key =
       product.product_id +
@@ -1658,8 +1642,7 @@ function confirmAddManualProduct(
 
     if(existing){
 
-      existing.qty +=
-        qty;
+      existing.qty += qty;
 
     }else{
 
@@ -1678,7 +1661,7 @@ function confirmAddManualProduct(
           product.name,
 
         price:
-          unitPrice,
+          moPrice(product),
 
         qty:
           qty,
@@ -1720,17 +1703,9 @@ function confirmAddManualProduct(
 
   /*
   =========================================
-  BUILD SELECTED VARIANTS
-  =========================================
-
-  แต่ละ variant = 1 option_id
-  ดังนั้น Multiple เช่น B + C
-  จะกลายเป็น Cart Item 2 รายการ
+  OPTION PRODUCTS
   =========================================
   */
-
-  const selectedVariants = [];
-
 
   for(const group of groups){
 
@@ -1748,12 +1723,11 @@ function confirmAddManualProduct(
         .toLowerCase();
 
 
-    const selectedInputs =
-      [
-        ...group.querySelectorAll(
-          "input:checked"
-        )
-      ];
+    const selectedInputs = [
+      ...group.querySelectorAll(
+        "input:checked"
+      )
+    ];
 
 
     if(
@@ -1777,8 +1751,7 @@ function confirmAddManualProduct(
     */
 
     if(
-      selectionType !==
-      "multiple"
+      selectionType !== "multiple"
     ){
 
       const input =
@@ -1795,7 +1768,7 @@ function confirmAddManualProduct(
       if(!optionId){
 
         alert(
-          "ไม่พบรหัสตัวเลือกของ " +
+          "ไม่พบ option_id ของ " +
           optionName
         );
 
@@ -1804,25 +1777,44 @@ function confirmAddManualProduct(
       }
 
 
-      selectedVariants.push({
-
-        option_id:
-          optionId,
-
-        option_name:
-          optionName,
-
-        option_value:
-          input.value,
-
-        additional_price:
-          Number(
-            input.dataset
-              .additionalPrice ||
-            0
+      const qty =
+        Math.max(
+          1,
+          Math.floor(
+            Number(
+              document
+                .getElementById(
+                  "mo_modal_qty"
+                )
+                ?.value || 1
+            )
           )
+        );
 
-      });
+
+      addManualVariantToCart(
+        product,
+        {
+          option_id:
+            optionId,
+
+          option_name:
+            optionName,
+
+          option_value:
+            input.value,
+
+          additional_price:
+            Number(
+              input.dataset
+                .additionalPrice ||
+              0
+            )
+        },
+        qty,
+        crateSelected,
+        crateFee
+      );
 
 
       continue;
@@ -1835,11 +1827,11 @@ function confirmAddManualProduct(
     MULTIPLE
     =========================================
 
-    เช่น:
-    ตัวละคร B
-    ตัวละคร C
+    Checkbox แต่ละตัว = สินค้า 1 ชิ้น
 
-    → สร้าง variant 2 ตัว
+    B + C
+    = B × 1
+    + C × 1
     =========================================
     */
 
@@ -1858,163 +1850,144 @@ function confirmAddManualProduct(
         }
 
 
-        selectedVariants.push({
+        addManualVariantToCart(
+          product,
+          {
+            option_id:
+              optionId,
 
-          option_id:
-            optionId,
+            option_name:
+              optionName,
 
-          option_name:
-            optionName,
+            option_value:
+              input.value,
 
-          option_value:
-            input.value,
-
-          additional_price:
-            Number(
-              input.dataset
-                .additionalPrice ||
-              0
-            )
-
-        });
-
-      }
-    );
-
-  }
-
-
-  if(
-    selectedVariants.length === 0
-  ){
-
-    alert(
-      "ไม่พบตัวเลือกสินค้าที่เลือก"
-    );
-
-    return;
-
-  }
-
-
-  /*
-  =========================================
-  ADD EACH VARIANT TO CART
-  =========================================
-  */
-
-  selectedVariants.forEach(
-    variant => {
-
-      const selectedOptions = {
-
-        [variant.option_name]:
-          variant.option_value
-
-      };
-
-
-      /*
-      ราคานี้ใช้แสดงใน Admin เท่านั้น
-
-      Backend จะคำนวณราคาใหม่
-      จาก option_id อีกครั้ง
-      */
-
-      const unitPrice =
-        moPrice(
-          product
-        ) +
-        Number(
-          variant.additional_price ||
-          0
-        );
-
-
-      const key =
-        product.product_id +
-        "::" +
-        variant.option_id +
-        "::" +
-        crateSelected +
-        "::" +
-        crateFee;
-
-
-      const existing =
-        ManualOrder.cart.find(
-          item =>
-            item._key === key
-        );
-
-
-      if(existing){
-
-        existing.qty +=
-          qty;
-
-      }else{
-
-        ManualOrder.cart.push({
-
-          _key:
-            key,
-
-          product_id:
-            product.product_id,
-
-          product_name:
-            product.name,
-
-          name:
-            product.name,
-
-          price:
-            unitPrice,
-
-          qty:
-            qty,
+            additional_price:
+              Number(
+                input.dataset
+                  .additionalPrice ||
+                0
+              )
+          },
 
           /*
           สำคัญ:
-          Pricing Service ใช้ field นี้
+          multiple checkbox
+          แต่ละ option = 1 ชิ้น
           */
-          option_id:
-            variant.option_id,
+          1,
 
-          /*
-          ใช้สำหรับแสดงชื่อ option
-          ใน Cart / Preview
-          */
-          selected_options:
-            selectedOptions,
-
-          crate_selected:
-            crateSelected,
-
-          crate_fee:
-            crateFee,
-
-          collection_id:
-            product.collection_id ||
-            "",
-
-          fandom:
-            product.fandom ||
-            ""
-
-        });
+          crateSelected,
+          crateFee
+        );
 
       }
+    );
 
-    }
-  );
+  }
 
 
   closeManualProductModal();
 
   renderManualCart();
   renderManualGifts();
+
+}
+
+function addManualVariantToCart(
+  product,
+  variant,
+  qty,
+  crateSelected,
+  crateFee
+){
+
+  const selectedOptions = {
+
+    [variant.option_name]:
+      variant.option_value
+
+  };
+
+
+  const unitPrice =
+    moPrice(
+      product
+    ) +
+    Number(
+      variant.additional_price ||
+      0
+    );
+
+
+  const key =
+    product.product_id +
+    "::" +
+    variant.option_id +
+    "::" +
+    crateSelected +
+    "::" +
+    crateFee;
+
+
+  const existing =
+    ManualOrder.cart.find(
+      item =>
+        item._key === key
+    );
+
+
+  if(existing){
+
+    existing.qty +=
+      qty;
+
+    return;
+
+  }
+
+
+  ManualOrder.cart.push({
+
+    _key:
+      key,
+
+    product_id:
+      product.product_id,
+
+    product_name:
+      product.name,
+
+    name:
+      product.name,
+
+    price:
+      unitPrice,
+
+    qty:
+      qty,
+
+    option_id:
+      variant.option_id,
+
+    selected_options:
+      selectedOptions,
+
+    crate_selected:
+      crateSelected,
+
+    crate_fee:
+      crateFee,
+
+    collection_id:
+      product.collection_id ||
+      "",
+
+    fandom:
+      product.fandom ||
+      ""
+
+  });
 
 }
 
