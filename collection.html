@@ -817,155 +817,102 @@ async function loadCollection(){
 
   if(!collectionId){
 
-    renderCollectionError(
-      "ไม่พบรหัส Collection",
-      "ลิงก์นี้ไม่สมบูรณ์"
+    showCollectionError(
+      "ไม่พบรอบพรีออเดอร์"
     );
 
     return;
+
   }
 
-  renderCollectionLoading();
 
   try{
 
-    const [
-      collectionResponse,
-      productResponse
-    ] = await Promise.all([
+    const catalog =
+      await RinkaCatalog.load();
 
-      fetch(
-        API +
-        "?action=collection&id=" +
-        encodeURIComponent(
-          collectionId
-        )
-      ),
 
-      fetch(
-        API +
-        "?action=collectionProducts&id=" +
-        encodeURIComponent(
-          collectionId
-        )
-      )
-
-    ]);
-
-    if(!collectionResponse.ok){
-
-      throw new Error(
-        "โหลดข้อมูล Collection ไม่สำเร็จ"
-      );
-
-    }
-
-    if(!productResponse.ok){
-
-      throw new Error(
-        "โหลดสินค้าใน Collection ไม่สำเร็จ"
-      );
-
-    }
-
-    const collectionResult =
-      await collectionResponse.json();
-
-    const productResult =
-      await productResponse.json();
-
-    if(
-      collectionResult &&
-      collectionResult.success === false
-    ){
-
-      throw new Error(
-        collectionResult.error ||
-        "โหลดข้อมูล Collection ไม่สำเร็จ"
-      );
-
-    }
-
-    if(
-      productResult &&
-      productResult.success === false
-    ){
-
-      throw new Error(
-        productResult.error ||
-        "โหลดสินค้าไม่สำเร็จ"
-      );
-
-    }
+    /*
+    =========================================
+    COLLECTION
+    =========================================
+    */
 
     const collection =
-      collectionResult &&
-      collectionResult.collection
-        ? collectionResult.collection
-        : collectionResult;
+      (
+        Array.isArray(
+          catalog.collections
+        )
+          ? catalog.collections
+          : []
+      ).find(
+        item =>
+          String(
+            item.collection_id || ""
+          ).trim() ===
+          String(
+            collectionId || ""
+          ).trim()
+      );
+
+
+    if(!collection){
+
+      throw new Error(
+        "ไม่พบรอบพรีออเดอร์นี้"
+      );
+
+    }
+
+
+    /*
+    =========================================
+    PRODUCTS
+    =========================================
+    */
 
     const products =
-      Array.isArray(
-        productResult
-      )
-        ? productResult
-        : Array.isArray(
-            productResult.products
-          )
-            ? productResult.products
-            : [];
-
-    if(
-      !collection ||
-      !(
-        collection.collection_id ||
-        collection.name
-      )
-    ){
-
-      renderCollectionNotFound();
-
-      return;
-    }
-
-    currentCollection =
-      collection;
-
-    allProducts =
-      products.slice();
-
-    renderCollectionInfo(
-      collection,
-      products.length
-    );
-
-    renderCollectionProducts(
-      allProducts
-    );
-
-    document
-      .getElementById(
-        "collectionProductsSection"
-      )
-      .classList.remove(
-        "hidden"
+      (
+        Array.isArray(
+          catalog.products
+        )
+          ? catalog.products
+          : []
+      ).filter(
+        product =>
+          String(
+            product.collection_id || ""
+          ).trim() ===
+          String(
+            collectionId || ""
+          ).trim()
       );
 
-    document.title =
-      `${collection.name || "Collection"} | Rinka Shop`;
 
-    const title =
-      document.getElementById(
-        "collectionPageTitle"
-      );
+    /*
+    =========================================
+    RENDER
+    =========================================
+    */
 
-    if(title){
+    renderCollection(
+      collection
+    );
 
-      title.textContent =
-        collection.name ||
-        "Collection";
 
-    }
+    renderProducts(
+      products
+    );
+
+
+    console.log(
+      "COLLECTION CATALOG:",
+      catalog.source,
+      collectionId,
+      products.length,
+      "products"
+    );
+
 
   }catch(error){
 
@@ -974,10 +921,10 @@ async function loadCollection(){
       error
     );
 
-    renderCollectionError(
-      "โหลด Collection ไม่สำเร็จ",
+
+    showCollectionError(
       error.message ||
-      "กรุณาลองใหม่อีกครั้ง"
+      "โหลดรอบพรีออเดอร์ไม่สำเร็จ"
     );
 
   }
@@ -1879,6 +1826,7 @@ function escapeCollectionAttribute(
 </script>
 
 <script src="js/maintenance-notice.js"></script>
+<script src="catalog.js?v=20260819-1"></script>
 <script src="cart-drawer.js"></script>
 <script src="ui.js"></script>
 </body>
