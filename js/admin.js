@@ -305,120 +305,154 @@ async function loadAdminTabData(
     =========================================
     */
 
-    if(
-      tab ===
-      "products"
-    ){
+   if(
+  tab ===
+  "products"
+){
 
-      /*
-      เก็บ filter เดิมไว้
-      เผื่อ render Product Manager ใหม่
-      */
+  /*
+  =========================================
+  SAVE FILTER STATE
+  =========================================
+  */
 
-      const savedFilterState =
-        typeof getAdminProductFilterState ===
-          "function"
-          ? getAdminProductFilterState()
-          : null;
-
-
-      /*
-      แสดงหน้า Product Manager ก่อน
-      โดยไม่ต้องรอ API
-      */
-
-      renderProductManager();
+  const savedFilterState =
+    typeof getAdminProductFilterState ===
+      "function"
+      ? getAdminProductFilterState()
+      : null;
 
 
-      /*
-      =========================================
-      COLLECTIONS
+  /*
+  =========================================
+  RENDER UI IMMEDIATELY
+  =========================================
+  */
 
-      โหลดก่อน Products
-      เพราะหน้าเพิ่มสินค้า + filter ต้องใช้
-      =========================================
-      */
-
-      if(
-        !Array.isArray(
-          adminCollections
-        ) ||
-        adminCollections.length === 0
-      ){
-
-        await loadAdminCollections();
-
-      }
+  renderProductManager();
 
 
-      /*
-      Collection โหลดแล้ว
-      render ใหม่เพื่อเติม dropdown
-      */
+  /*
+  =========================================
+  LOAD COLLECTIONS + PRODUCTS IN PARALLEL
 
-      renderProductManager();
+  ห้าม await ทีละตัว
+  เพราะสอง API นี้ไม่จำเป็นต้องรอกัน
+  =========================================
+  */
 
-
-      if(
-        typeof restoreAdminProductFilterState ===
-          "function"
-      ){
-
-        restoreAdminProductFilterState(
-          savedFilterState
-        );
-
-      }
+  const jobs = [];
 
 
-      /*
-      =========================================
-      PRODUCTS
-      =========================================
-      */
+  if(
+    !Array.isArray(
+      adminCollections
+    ) ||
+    adminCollections.length === 0
+  ){
 
-      if(
-        !Array.isArray(
-          adminProducts
-        ) ||
-        adminProducts.length === 0
-      ){
+    jobs.push(
+      loadAdminCollections()
+    );
 
-        await loadAdminProducts();
-
-      }
+  }
 
 
-      /*
-      render รายการ
-      */
+  if(
+    !Array.isArray(
+      adminProducts
+    ) ||
+    adminProducts.length === 0
+  ){
 
-      renderAdminProductList();
+    jobs.push(
+      loadAdminProducts()
+    );
 
-
-      /*
-      sync Product dropdown
-      ของ Option Manager ถ้ามี
-      */
-
-      if(
-        typeof refreshOptionProductSelect ===
-          "function"
-      ){
-
-        refreshOptionProductSelect();
-
-      }
+  }
 
 
-      adminLoadedTabs.products =
-        true;
+  if(
+    jobs.length > 0
+  ){
+
+    await Promise.all(
+      jobs
+    );
+
+  }
 
 
-      return;
+  /*
+  =========================================
+  REFRESH COLLECTION DROPDOWNS
 
-    }
+  ไม่ rebuild manager ทั้งหน้า
+  เพราะจะ reset form/filter
+  =========================================
+  */
 
+  if(
+    typeof refreshProductCollectionSelects ===
+    "function"
+  ){
+
+    refreshProductCollectionSelects();
+
+  }
+
+
+  /*
+  =========================================
+  RESTORE FILTER
+  =========================================
+  */
+
+  if(
+    savedFilterState &&
+    typeof restoreAdminProductFilterState ===
+      "function"
+  ){
+
+    restoreAdminProductFilterState(
+      savedFilterState
+    );
+
+  }
+
+
+  /*
+  =========================================
+  RENDER PRODUCTS
+  =========================================
+  */
+
+  renderAdminProductList();
+
+
+  /*
+  =========================================
+  OPTION MANAGER PRODUCT SELECT
+  =========================================
+  */
+
+  if(
+    typeof refreshOptionProductSelect ===
+      "function"
+  ){
+
+    refreshOptionProductSelect();
+
+  }
+
+
+  adminLoadedTabs.products =
+    true;
+
+
+  return;
+
+}
 
     /*
     =========================================
