@@ -48,18 +48,12 @@ let statusFilter =
     "status"
   ) || "";
 
-
-/*
-=========================================
-ORDER CACHE
-=========================================
-*/
-
 let customerOrdersCache = [];
 
 let legacyOrdersCache = [];
 
 let ordersLoading = false;
+  
 const FILTERS = [
 
   [
@@ -107,7 +101,6 @@ function renderFilters(){
       "filterBar"
     );
 
-
   box.innerHTML =
     FILTERS
       .map(
@@ -133,6 +126,47 @@ onclick='setOrdersStatusFilter(
 
 }
 
+
+function setOrdersStatusFilter(
+  status
+){
+
+  statusFilter =
+    String(
+      status || ""
+    );
+
+  const url =
+    new URL(
+      window.location.href
+    );
+
+  if(statusFilter){
+
+    url.searchParams.set(
+      "status",
+      statusFilter
+    );
+
+  }else{
+
+    url.searchParams.delete(
+      "status"
+    );
+
+  }
+
+  history.replaceState(
+    null,
+    "",
+    url
+  );
+
+  renderFilters();
+
+  renderOrdersFromCache();
+
+}
 
 function setOrdersStatusFilter(
   status
@@ -326,17 +360,13 @@ function statusClass(s){
 async function loadOrders(){
 
   if(ordersLoading){
-
     return;
-
   }
-
 
   const box =
     document.getElementById(
       "orderList"
     );
-
 
   if(
     !sessionToken &&
@@ -350,49 +380,38 @@ async function loadOrders(){
 
   }
 
-
   ordersLoading = true;
-
 
   box.className =
     "state";
-
 
   box.innerHTML = `
 
 <div class="spinner"></div>
 
 <h2>
-  กำลังโหลดออเดอร์
+กำลังโหลดออเดอร์
 </h2>
 
 <p>
-  รอสักครู่นะคะ
+รอสักครู่นะคะ
 </p>
 
 `;
-
 
   try{
 
     /*
     =========================================
-    STEP 1
-    CUSTOMER ORDERS
-
-    โหลดระบบใหม่ก่อน
-    เพื่อไม่ต้องรอ Legacy
+    NEW ORDERS FIRST
     =========================================
     */
 
     const newQuery =
       new URLSearchParams({
-
         action:
           "customerOrders"
-
       });
-
 
     if(sessionToken){
 
@@ -410,14 +429,12 @@ async function loadOrders(){
 
     }
 
-
     const newResponse =
       await fetch(
         API +
         "?" +
         newQuery.toString()
       );
-
 
     if(!newResponse.ok){
 
@@ -428,10 +445,8 @@ async function loadOrders(){
 
     }
 
-
     const newData =
       await newResponse.json();
-
 
     if(
       newData &&
@@ -445,23 +460,19 @@ async function loadOrders(){
 
     }
 
-
     customerOrdersCache =
       Array.isArray(
         newData
       )
         ? newData
-        : (
-            Array.isArray(
-              newData.orders
-            )
-              ? newData.orders
-              : []
-          );
-
+        : Array.isArray(
+            newData.orders
+          )
+          ? newData.orders
+          : [];
 
     /*
-    แสดงออเดอร์ใหม่ทันที
+    แสดงระบบใหม่ทันที
     */
 
     renderOrdersFromCache();
@@ -469,10 +480,7 @@ async function loadOrders(){
 
     /*
     =========================================
-    STEP 2
-    LEGACY ORDERS
-
-    ค่อยโหลดหลังระบบใหม่แสดงแล้ว
+    LEGACY LOAD AFTERWARD
     =========================================
     */
 
@@ -491,7 +499,6 @@ async function loadOrders(){
 
           });
 
-
         const legacyResponse =
           await fetch(
             API +
@@ -499,12 +506,10 @@ async function loadOrders(){
             legacyQuery.toString()
           );
 
-
         if(legacyResponse.ok){
 
           const legacyData =
             await legacyResponse.json();
-
 
           if(
             legacyData &&
@@ -521,13 +526,7 @@ async function loadOrders(){
 
         }
 
-
       }catch(error){
-
-        /*
-        Legacy พัง
-        ระบบใหม่ยังใช้ต่อได้
-        */
 
         console.warn(
           "Legacy orders load failed:",
@@ -536,16 +535,9 @@ async function loadOrders(){
 
       }
 
-
-      /*
-      เพิ่ม Legacy เข้า UI
-      โดยไม่ reload หน้า
-      */
-
       renderOrdersFromCache();
 
     }
-
 
   }catch(error){
 
@@ -554,18 +546,12 @@ async function loadOrders(){
       error
     );
 
-
     box.className =
       "state";
 
-
     box.innerHTML = `
 
-<div
-style="
-font-size:50px;
-"
->
+<div style="font-size:50px">
 ⚠️
 </div>
 
@@ -596,20 +582,13 @@ onclick="loadOrders()"
   }
 
 }
-
+  
 function renderOrdersFromCache(){
 
   const box =
     document.getElementById(
       "orderList"
     );
-
-
-  /*
-  =========================================
-  PAGE TITLE
-  =========================================
-  */
 
   document
     .getElementById(
@@ -623,15 +602,8 @@ function renderOrdersFromCache(){
         : "รายการออเดอร์ทั้งหมด";
 
 
-  /*
-  =========================================
-  FILTER NEW ORDERS
-  =========================================
-  */
-
   const newOrders =
     statusFilter
-
       ? customerOrdersCache.filter(
           order =>
             String(
@@ -639,19 +611,11 @@ function renderOrdersFromCache(){
             ) ===
             statusFilter
         )
-
       : customerOrdersCache;
 
 
-  /*
-  =========================================
-  FILTER LEGACY
-  =========================================
-  */
-
   const legacyOrders =
     statusFilter
-
       ? legacyOrdersCache.filter(
           order =>
             legacyStatusCode(
@@ -659,15 +623,8 @@ function renderOrdersFromCache(){
             ) ===
             statusFilter
         )
-
       : legacyOrdersCache;
 
-
-  /*
-  =========================================
-  EMPTY
-  =========================================
-  */
 
   if(
     newOrders.length === 0 &&
@@ -677,14 +634,9 @@ function renderOrdersFromCache(){
     box.className =
       "state";
 
-
     box.innerHTML = `
 
-<div
-style="
-font-size:50px;
-"
->
+<div style="font-size:50px">
 📦
 </div>
 
@@ -711,17 +663,11 @@ ${
   }
 
 
-  /*
-  =========================================
-  RENDER
-  =========================================
-  */
-
   let html = "";
 
 
   if(
-    newOrders.length > 0
+    newOrders.length
   ){
 
     html +=
@@ -735,7 +681,7 @@ ${
 
 
   if(
-    legacyOrders.length > 0
+    legacyOrders.length
   ){
 
     html += `
@@ -748,30 +694,29 @@ border-top:1px solid var(--border);
 "
 >
 
-  <div
-  style="
-  font-size:16px;
-  font-weight:700;
-  color:#3f6078;
-  "
-  >
-    🗃️ ออเดอร์จากระบบเก่า
-  </div>
+<div
+style="
+font-size:16px;
+font-weight:700;
+color:#3f6078;
+"
+>
+🗃️ ออเดอร์จากระบบเก่า
+</div>
 
-  <div
-  style="
-  margin-top:3px;
-  color:var(--muted);
-  font-size:11px;
-  "
-  >
-    รายการจากระบบสั่งซื้อเดิมของร้าน
-  </div>
+<div
+style="
+margin-top:3px;
+color:var(--muted);
+font-size:11px;
+"
+>
+รายการจากระบบสั่งซื้อเดิมของร้าน
+</div>
 
 </div>
 
 `;
-
 
     html +=
       legacyOrders
@@ -785,7 +730,6 @@ border-top:1px solid var(--border);
 
   box.className =
     "order-list";
-
 
   box.innerHTML =
     html;
