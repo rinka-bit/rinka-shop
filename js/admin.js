@@ -305,16 +305,10 @@ async function loadAdminTabData(
     =========================================
     */
 
-   if(
+  if(
   tab ===
   "products"
 ){
-
-  /*
-  =========================================
-  SAVE FILTER STATE
-  =========================================
-  */
 
   const savedFilterState =
     typeof getAdminProductFilterState ===
@@ -323,23 +317,8 @@ async function loadAdminTabData(
       : null;
 
 
-  /*
-  =========================================
-  RENDER UI IMMEDIATELY
-  =========================================
-  */
-
   renderProductManager();
 
-
-  /*
-  =========================================
-  LOAD COLLECTIONS + PRODUCTS IN PARALLEL
-
-  ห้าม await ทีละตัว
-  เพราะสอง API นี้ไม่จำเป็นต้องรอกัน
-  =========================================
-  */
 
   const jobs = [];
 
@@ -373,7 +352,7 @@ async function loadAdminTabData(
 
 
   if(
-    jobs.length > 0
+    jobs.length
   ){
 
     await Promise.all(
@@ -382,15 +361,6 @@ async function loadAdminTabData(
 
   }
 
-
-  /*
-  =========================================
-  REFRESH COLLECTION DROPDOWNS
-
-  ไม่ rebuild manager ทั้งหน้า
-  เพราะจะ reset form/filter
-  =========================================
-  */
 
   if(
     typeof refreshProductCollectionSelects ===
@@ -401,12 +371,6 @@ async function loadAdminTabData(
 
   }
 
-
-  /*
-  =========================================
-  RESTORE FILTER
-  =========================================
-  */
 
   if(
     savedFilterState &&
@@ -421,20 +385,8 @@ async function loadAdminTabData(
   }
 
 
-  /*
-  =========================================
-  RENDER PRODUCTS
-  =========================================
-  */
-
   renderAdminProductList();
 
-
-  /*
-  =========================================
-  OPTION MANAGER PRODUCT SELECT
-  =========================================
-  */
 
   if(
     typeof refreshOptionProductSelect ===
@@ -448,7 +400,6 @@ async function loadAdminTabData(
 
   adminLoadedTabs.products =
     true;
-
 
   return;
 
