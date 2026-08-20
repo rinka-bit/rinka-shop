@@ -10519,7 +10519,7 @@
       "sub_category": "badge, พวงกุญแจ, ชิกิชิ",
       "round": "Genshin Impact 8-2026",
       "description": "",
-      "search_keywords": "เข็มกลัด-Odette เข็มกลัด-Alyosha เข็มกลัด-Vodyanista เข็มกลัด-Mitya เข็มกลัด-Valeriy เข็มกลัด-Anastasya เข็มกลัด-Pantalone เข็มกลัด-Pierro เข็มกลัด-Pulcinella เข็มกลัด-Sandrone เข็มกลัด-Tartaglia พวงกุญแจ-Odette พวงกุญแจ-Alyosha พวงกุญแจ-Vodyanista พวงกุญแจ-Mitya พวงกุญแจ-Vlery พวงกุญแจ-Anastasya พวงกุญแจ-Pantalone พวงกุญแจ-Pierro พวงกุญแจ-Pulcinella พวงกุญแจ-Sandrone พวงกุญแจ-Tartaglia ชิกิชิ",
+      "search_keywords": "เข็มกลัด-Odette เข็มกลัด-Alyosha เข็มกลัด-Vodyanista เข็มกลัด-Mitya เข็มกลัด-Valeriy เข็มกลัด-Anastasya เข็มกลัด-Pantalone เข็มกลัด-Pierro เข็มกลัด-Pulcinella เข็มกลัด-Sandrone เข็มกลัด-Tartaglia พวงกุญแจ-Odette พวงกุญแจ-Alyosha พวงกุญแจ-Vodyanista พวงกุญแจ-Mitya พวงกุญแจ-Valery พวงกุญแจ-Anastasya พวงกุญแจ-Pantalone พวงกุญแจ-Pierro พวงกุญแจ-Pulcinella พวงกุญแจ-Sandrone พวงกุญแจ-Tartaglia ชิกิชิ",
       "image": "https://drive.google.com/thumbnail?id=16pnCBFQzqnhjoTqJLC074FRlBHne9xwY&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -10706,7 +10706,7 @@
         {
           "option_id": "OPT1787159097716_16",
           "option_name": "สินค้า+ตัวละคร",
-          "option_value": "พวงกุญแจ-Vlery",
+          "option_value": "พวงกุญแจ-Valery",
           "additional_price": 0,
           "price": 220,
           "stock": 9999,
@@ -12706,9 +12706,9 @@
       "display_order": 4
     }
   ],
-  "generated_at": "2026-08-20T05:35:46.403Z",
+  "generated_at": "2026-08-20T05:38:38.621Z",
   "performance": {
-    "total_ms": 3263,
+    "total_ms": 4241,
     "product_count": 88,
     "collection_count": 2,
     "bank_count": 4
