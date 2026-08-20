@@ -123,6 +123,41 @@ function renderDashboardStats(
   เดือนนี้
   </div>
 
+ <div class="card">
+
+  ☁️<br>
+
+  <strong>
+    Catalog
+  </strong>
+
+  <br><br>
+
+  <button
+  id="publishCatalogButton"
+  type="button"
+  onclick="publishAdminCatalog()"
+  style="
+  width:auto;
+  padding:8px 12px;
+  "
+  >
+    Publish Catalog
+  </button>
+
+  <div
+  id="catalogPublishStatus"
+  style="
+  margin-top:8px;
+  font-size:12px;
+  color:#666;
+  "
+  >
+    อัปเดตข้อมูลหน้าร้าน
+  </div>
+
+</div>
+
 </div>
 
 `;
@@ -502,3 +537,195 @@ async function loadDashboardData(){
   }
 
 }
+
+async function publishAdminCatalog(){
+
+  const button =
+    document.getElementById(
+      "publishCatalogButton"
+    );
+
+  const status =
+    document.getElementById(
+      "catalogPublishStatus"
+    );
+
+
+  const publishSecret =
+    window.prompt(
+      "กรอกรหัสสำหรับ Publish Catalog"
+    );
+
+
+  if(
+    publishSecret === null
+  ){
+    return;
+  }
+
+
+  if(
+    !String(
+      publishSecret
+    ).trim()
+  ){
+
+    alert(
+      "กรุณากรอกรหัส Publish"
+    );
+
+    return;
+  }
+
+
+  try{
+
+    if(button){
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "⏳ Publishing...";
+
+    }
+
+
+    if(status){
+
+      status.textContent =
+        "กำลังสร้าง Catalog...";
+
+    }
+
+
+    const formData =
+      new FormData();
+
+
+    formData.append(
+      "action",
+      "publishCatalog"
+    );
+
+
+    formData.append(
+      "payload",
+      JSON.stringify({
+
+        publish_secret:
+          String(
+            publishSecret
+          ).trim()
+
+      })
+    );
+
+
+    const response =
+      await fetch(
+        API,
+        {
+
+          method:
+            "POST",
+
+          body:
+            formData
+
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        result?.message ||
+        "Publish ไม่สำเร็จ"
+      );
+
+    }
+
+
+    if(status){
+
+      status.textContent =
+        "✅ Publish สำเร็จ — " +
+        Number(
+          result.products || 0
+        ).toLocaleString(
+          "th-TH"
+        ) +
+        " สินค้า";
+
+    }
+
+
+    alert(
+      "Publish Catalog เรียบร้อยแล้ว ☁️"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "publishAdminCatalog error:",
+      error
+    );
+
+
+    if(status){
+
+      status.textContent =
+        "❌ " +
+        (
+          error.message ||
+          String(error)
+        );
+
+    }
+
+
+    alert(
+      "Publish Catalog ไม่สำเร็จ\n\n" +
+      (
+        error.message ||
+        String(error)
+      )
+    );
+
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Publish Catalog";
+
+    }
+
+  }
+
+}
+
