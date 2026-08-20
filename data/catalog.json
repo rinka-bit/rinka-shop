@@ -11904,7 +11904,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1Oby6VuC_Z8laCaOI82zYPGb77L5Rge2Q&sz=w2000",
       "status": "active",
-      "stock": 9999,
+      "stock": 10,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -12706,9 +12706,9 @@
       "display_order": 4
     }
   ],
-  "generated_at": "2026-08-20T05:34:21.118Z",
+  "generated_at": "2026-08-20T05:35:46.403Z",
   "performance": {
-    "total_ms": 2843,
+    "total_ms": 3263,
     "product_count": 88,
     "collection_count": 2,
     "bank_count": 4
