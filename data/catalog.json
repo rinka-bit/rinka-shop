@@ -9745,7 +9745,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1mf4weDobzdDvtF6GAKcWIswxRfFUO9fu&sz=w2000",
       "status": "active",
-      "stock": 9995,
+      "stock": 9994,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -10378,46 +10378,6 @@
           "sort_order": 6
         }
       ]
-    },
-    {
-      "product_id": "PROD1787100481222",
-      "name": "Gourmet Team Recipe Book",
-      "price_mode": "fixed",
-      "price": 890,
-      "final_price": 890,
-      "base_price": 950,
-      "min_price": 950,
-      "max_price": 950,
-      "has_price_range": false,
-      "old_price": 950,
-      "on_sale": true,
-      "sale_price": 890,
-      "sale_start": "2026-08-18T17:00:00.000Z",
-      "sale_end": "2026-08-26T17:00:00.000Z",
-      "main_category": "Book",
-      "fandom": "Genshin Impact",
-      "sub_category": "Book",
-      "round": "Genshin Impact 8-2026",
-      "description": "เนื้อหาเป็นภาษาจีนนะคะ จำนวน 180หน้า\n\n-เป็นปกแข็ง\n-ของตกแต่งลายไข่ดาว\n-แผ่นสติกเกอร์ตัวละคร",
-      "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1yT1M_6DgOLpYo6k37CdR5cJzeyl9IBBd&sz=w2000",
-      "status": "active",
-      "stock": 9999,
-      "product_type": "preorder",
-      "crate_available": "",
-      "crate_fee": 0,
-      "shipping_fee": 0,
-      "preorder_deadline": "",
-      "estimated_arrival": "ถึงคลังสินค้าปลายเดือน 9-2026",
-      "image2": "https://drive.google.com/thumbnail?id=10T8On5-imHLokLvAIPnonwe_3yzrrGQz&sz=w2000",
-      "image3": "https://drive.google.com/thumbnail?id=1-sk9hb1F5alzpAZOgfbsrmeZy2cfRrrr&sz=w2000",
-      "featured": "",
-      "new_arrival": "",
-      "sort_order": 0,
-      "image4": "https://drive.google.com/thumbnail?id=12V7wEtZVG2NmV8NoMPKZNk70Dg0lgTuS&sz=w2000",
-      "collection_id": "COL1787098494147",
-      "created_at": "",
-      "options": []
     },
     {
       "product_id": "PROD1787100481223",
@@ -11127,7 +11087,7 @@
           "option_value": "เซ็ตตรายาง",
           "additional_price": 0,
           "price": 290,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 5
@@ -12626,10 +12586,10 @@
       "display_order": 4
     }
   ],
-  "generated_at": "2026-08-20T15:27:02.018Z",
+  "generated_at": "2026-08-21T00:16:52.642Z",
   "performance": {
-    "total_ms": 6352,
-    "product_count": 86,
+    "total_ms": 5482,
+    "product_count": 85,
     "collection_count": 2,
     "bank_count": 4
   }
