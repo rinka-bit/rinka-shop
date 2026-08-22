@@ -13631,7 +13631,7 @@
       "search_keywords": "",
       "image": "",
       "status": "active",
-      "stock": 10,
+      "stock": 99999,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -17220,20 +17220,6 @@
   ],
   "collections": [
     {
-      "collection_id": "COL1786614253262",
-      "name": "Wuthering Waves – Tidal Letters Series FUN4YEAH",
-      "fandom": "Wuthering Waves",
-      "image": "https://drive.google.com/thumbnail?id=1ZCGhBjTdEEBsxhbziIziKbKdc753dNPy&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "",
-      "featured": "",
-      "created_at": "2026-08-13T09:44:18.312Z",
-      "collection_type": "preorder",
-      "description": "สามารถสั่งได้เรื่อย ๆ จนกว่าสินค้าจะหมดนะคะ\n\nราคารวมส่งมาไทยเกือบทุกชิ้น ยกเว้นตุ๊กตาก้อนใหญ่ค่ะ",
-      "banner_image": "https://drive.google.com/thumbnail?id=1B3y5YqC9Mr2EdgPynRlpcLPhdJj4JPkm&sz=w2000",
-      "product_count": 17
-    },
-    {
       "collection_id": "COL1787098494147",
       "name": "Genshin Impact 8-2026",
       "fandom": "Genshin Impact",
@@ -17259,20 +17245,6 @@
       "collection_type": "preorder",
       "description": "ราคายังไม่รวมส่งกลับไทย ไม่สามารถรวมยอดรับของแถมจากคอลเลคชั่นอื่น ๆ ได้นะคะ\n\nระยะเวลาชำระยอดคงเหลือประมาณ 3 เดือนนับจากวันที่เปิดให้ชำระรอบ2ค่ะ",
       "banner_image": "https://drive.google.com/thumbnail?id=1RQN__8eSo5FWpuB0Pr_HGZ-SBKL44V6G&sz=w2000",
-      "product_count": 4
-    },
-    {
-      "collection_id": "COL1787293973508",
-      "name": "Tears of Themis - 2026 Café Collaboration",
-      "fandom": "Tears of Themis",
-      "image": "https://drive.google.com/thumbnail?id=1xJEr5_K2r95Yz9GSs9Cfe2lcqFSUEo8I&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "",
-      "featured": "",
-      "created_at": "2026-08-21T06:32:58.596Z",
-      "collection_type": "preorder",
-      "description": "❌ ไม่เข้าร่วมโปรสินค้าใหม่ฉลองครบรอบ\n❌ ไม่เข้าร่วมกิจกรรมของแถมตามยอดซื้อ\n\nราคารวมส่งกลับไทยทุกรายการค่ะ\n\nสินค้าเป็นแบบจำนวนจำกัด หมดแล้วหมดเลย อัพเดตสต๊อกทุก2-3ชั่วโมงค่ะ",
-      "banner_image": "https://drive.google.com/thumbnail?id=1XTqjxzb42RNn4L8WQUZ1fgVuahuY9ixN&sz=w2000",
       "product_count": 4
     },
     {
@@ -18986,11 +18958,11 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-08-22T08:45:01.717Z",
+  "generated_at": "2026-08-22T09:15:17.544Z",
   "performance": {
-    "total_ms": 5178,
+    "total_ms": 4969,
     "product_count": 157,
-    "collection_count": 7,
+    "collection_count": 5,
     "bank_count": 3
   }
 }
