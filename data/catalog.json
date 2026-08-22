@@ -9358,7 +9358,7 @@
           "option_value": "XS-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -9369,7 +9369,7 @@
           "option_value": "S-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -9380,7 +9380,7 @@
           "option_value": "M-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 2
@@ -9391,7 +9391,7 @@
           "option_value": "L-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 3
@@ -9435,7 +9435,7 @@
           "option_value": "XS-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 7
@@ -9446,7 +9446,7 @@
           "option_value": "S-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 8
@@ -9457,7 +9457,7 @@
           "option_value": "M-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 9
@@ -9847,7 +9847,7 @@
           "option_value": "XS",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -9858,7 +9858,7 @@
           "option_value": "S",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -13670,15 +13670,29 @@
       "collection_id": "COL1787297483925",
       "name": "Tears of Themis - Stellis Serenade",
       "fandom": "Tears of Themis",
-      "image": "https://drive.google.com/thumbnail?id=1W9vdXTPngujpXtnFkbXkMOAfFzit3rnT&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1O8fH6PZ1tsnhcer3Wt9IHt-KK4RqOJcB&sz=w2000",
       "status": "active",
-      "preorder_deadline": "2026-09-10T17:00:00.000Z",
+      "preorder_deadline": "2026-09-09T17:00:00.000Z",
       "featured": "yes",
       "created_at": "2026-08-21T07:31:31.047Z",
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยทุกรายการแล้ว\n\n🎁 โปรของแถมตามยอดซื้อ\n\nเมื่อซื้อสินค้าใหม่เฉพาะคอลนี้\n\nทุกยอดสินค้าครบ 600฿ → เลือกของแถมได้ 1 ชิ้น (เลือก 1 จาก 9)\n\nของแถมมี 3 กลุ่ม:\n\n-เซ็ตการ์ดโพลารอยด์ภาพตัวละคร+การ์ดใส : มี 4 แบบ/ 1 เซ็ตมี 2 ใบ\n-การ์ดสะสมลายเส้นแบบนูน/พิมพ์สี : มี 4 แบบ / 1 เซ็ตมี 1 ใบ\n-เซ็ตโปสการ์ดโพลารอยด์ลายจิบิ : มี 1 แบบ / 1 เซ็ตมี 4 ใบ\n\nสะสมของแถมตามยอดได้ 1ออเดอร์ได้รับสูงสุด 5 ชิ้นและเลือกแบบซ้ำไม่ได้",
-      "banner_image": "https://drive.google.com/thumbnail?id=1Xud3lLPBisnUcqarileKg-qvdh0g6h3o&sz=w2000",
+      "banner_image": "https://drive.google.com/thumbnail?id=1qdoFObgZUMhpqrtat9QvaQIN88uXqkXC&sz=w2000",
       "product_count": 19
+    },
+    {
+      "collection_id": "COL1787322876305",
+      "name": "Tears of Themis Forever Begins withYou",
+      "fandom": "Tears of Themis",
+      "image": "https://drive.google.com/thumbnail?id=1029iCrh7433LeVQIg1WYON_rJzHylHhr&sz=w2000",
+      "status": "active",
+      "preorder_deadline": "2026-09-09T17:00:00.000Z",
+      "featured": "",
+      "created_at": "2026-08-21T14:34:42.133Z",
+      "collection_type": "preorder",
+      "description": "",
+      "banner_image": "https://drive.google.com/thumbnail?id=16MnGc_udC9FXTy1BHHVCGqZR9ZfkC1EB&sz=w2000",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -15242,11 +15256,11 @@
       "display_order": 4
     }
   ],
-  "generated_at": "2026-08-21T09:27:59.821Z",
+  "generated_at": "2026-08-22T02:26:39.219Z",
   "performance": {
-    "total_ms": 5632,
+    "total_ms": 7071,
     "product_count": 113,
-    "collection_count": 5,
+    "collection_count": 6,
     "bank_count": 4
   }
 }
