@@ -9402,7 +9402,7 @@
           "option_value": "XL-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -9413,7 +9413,7 @@
           "option_value": "2XL-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 5
@@ -9424,7 +9424,7 @@
           "option_value": "3XL-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 6
@@ -9468,7 +9468,7 @@
           "option_value": "L-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 10
@@ -9501,7 +9501,7 @@
           "option_value": "3XL-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 13
@@ -10339,7 +10339,7 @@
           "option_value": "Scarameow",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1kZLEsQYAo5bZ4S1OptCxt5GPfa8baoaX&sz=w2000",
           "sort_order": 3
@@ -10350,7 +10350,7 @@
           "option_value": "Alhaibird",
           "additional_price": 0,
           "price": null,
-          "stock": 9997,
+          "stock": 9996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1ZWnpves6Uq8jengsUoMlanTSEUV7e0J7&sz=w2000",
           "sort_order": 4
@@ -10361,7 +10361,7 @@
           "option_value": "Kavehbirb",
           "additional_price": 0,
           "price": null,
-          "stock": 9997,
+          "stock": 9996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1yfagFT0z2jUdsfzju_TbMEVTrN9MvWSh&sz=w2000",
           "sort_order": 5
@@ -11784,7 +11784,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1Oby6VuC_Z8laCaOI82zYPGb77L5Rge2Q&sz=w2000",
       "status": "active",
-      "stock": 10,
+      "stock": 1,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -18944,9 +18944,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-08-22T12:12:06.299Z",
+  "generated_at": "2026-08-23T04:29:40.853Z",
   "performance": {
-    "total_ms": 5650,
+    "total_ms": 3557,
     "product_count": 157,
     "collection_count": 4,
     "bank_count": 3
