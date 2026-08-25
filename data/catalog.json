@@ -9358,7 +9358,7 @@
           "option_value": "XS-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -9369,7 +9369,7 @@
           "option_value": "S-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -9380,7 +9380,7 @@
           "option_value": "M-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 2
@@ -9391,7 +9391,7 @@
           "option_value": "L-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 3
@@ -9402,7 +9402,7 @@
           "option_value": "XL-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -9413,7 +9413,7 @@
           "option_value": "2XL-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 5
@@ -9424,7 +9424,7 @@
           "option_value": "3XL-ฟ้า",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 6
@@ -9435,7 +9435,7 @@
           "option_value": "XS-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 7
@@ -9446,7 +9446,7 @@
           "option_value": "S-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 8
@@ -9457,7 +9457,7 @@
           "option_value": "M-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 9
@@ -9468,7 +9468,7 @@
           "option_value": "L-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 10
@@ -9501,7 +9501,7 @@
           "option_value": "3XL-น้ำเงิน",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 9999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 13
@@ -9721,46 +9721,6 @@
           "sort_order": 4
         }
       ]
-    },
-    {
-      "product_id": "PROD1787100481210",
-      "name": "Columbina collection - Hair Clip",
-      "price_mode": "fixed",
-      "price": 530,
-      "final_price": 530,
-      "base_price": 650,
-      "min_price": 650,
-      "max_price": 650,
-      "has_price_range": false,
-      "old_price": 650,
-      "on_sale": true,
-      "sale_price": 530,
-      "sale_start": "2026-08-18T17:00:00.000Z",
-      "sale_end": "2026-08-26T17:00:00.000Z",
-      "main_category": "Hair clip",
-      "fandom": "Genshin Impact",
-      "sub_category": "Hair Clip",
-      "round": "Genshin Impact 8-2026",
-      "description": "*ไม่ได้รับสแตนดี้แถมนะคะ",
-      "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1mf4weDobzdDvtF6GAKcWIswxRfFUO9fu&sz=w2000",
-      "status": "active",
-      "stock": 9993,
-      "product_type": "preorder",
-      "crate_available": "",
-      "crate_fee": 0,
-      "shipping_fee": 0,
-      "preorder_deadline": "",
-      "estimated_arrival": "ถึงคลังสินค้าปลายเดือน 9-2026",
-      "image2": "https://drive.google.com/thumbnail?id=1lrEgzUL0vys5Spf7IBFR38wbyf22XRjr&sz=w2000",
-      "image3": "https://drive.google.com/thumbnail?id=1qDTheXmmqaIYVirmBWmakFKzE3KFiGQY&sz=w2000",
-      "featured": "",
-      "new_arrival": "",
-      "sort_order": 0,
-      "image4": "https://drive.google.com/thumbnail?id=1u-l729ugwYva1F2oPakBscp1396gZjkX&sz=w2000",
-      "collection_id": "COL1787098494147",
-      "created_at": "",
-      "options": []
     },
     {
       "product_id": "PROD1787100481211",
@@ -10380,6 +10340,46 @@
       ]
     },
     {
+      "product_id": "PROD1787100481222",
+      "name": "Gourmet Team Recipe Book",
+      "price_mode": "fixed",
+      "price": 890,
+      "final_price": 890,
+      "base_price": 950,
+      "min_price": 950,
+      "max_price": 950,
+      "has_price_range": false,
+      "old_price": 950,
+      "on_sale": true,
+      "sale_price": 890,
+      "sale_start": "2026-08-18T17:00:00.000Z",
+      "sale_end": "2026-08-26T17:00:00.000Z",
+      "main_category": "Book",
+      "fandom": "Genshin Impact",
+      "sub_category": "Book",
+      "round": "Genshin Impact 8-2026",
+      "description": "เนื้อหาเป็นภาษาจีนนะคะ จำนวน 180หน้า\n\n-เป็นปกแข็ง\n-ของตกแต่งลายไข่ดาว\n-แผ่นสติกเกอร์ตัวละคร",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1yT1M_6DgOLpYo6k37CdR5cJzeyl9IBBd&sz=w2000",
+      "status": "active",
+      "stock": 9999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "preorder_deadline": "",
+      "estimated_arrival": "ถึงคลังสินค้าปลายเดือน 9-2026",
+      "image2": "https://drive.google.com/thumbnail?id=10T8On5-imHLokLvAIPnonwe_3yzrrGQz&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1-sk9hb1F5alzpAZOgfbsrmeZy2cfRrrr&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=12V7wEtZVG2NmV8NoMPKZNk70Dg0lgTuS&sz=w2000",
+      "collection_id": "COL1787098494147",
+      "created_at": "",
+      "options": []
+    },
+    {
       "product_id": "PROD1787100481223",
       "name": "Everwinter without Mercy series",
       "price_mode": "option",
@@ -10435,7 +10435,7 @@
           "option_value": "เข็มกลัด-Alyosha",
           "additional_price": 0,
           "price": 100,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1oW91efpK0WI7xBi3PFiKxWkUhc0OO6Tu&sz=w2000",
           "sort_order": 1
@@ -10468,7 +10468,7 @@
           "option_value": "เข็มกลัด-Valeriy",
           "additional_price": 0,
           "price": 100,
-          "stock": 9999,
+          "stock": 9989,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1NdRMaa6fSmkugNZaVfsY-N2MfUALN5m3&sz=w2000",
           "sort_order": 4
@@ -10589,7 +10589,7 @@
           "option_value": "พวงกุญแจ-Valery",
           "additional_price": 0,
           "price": 220,
-          "stock": 9999,
+          "stock": 9996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1SXCCC6gYTB-WHaJdW0CafzF4jtHBud6i&sz=w2000",
           "sort_order": 15
@@ -10718,7 +10718,7 @@
           "option_value": "ผ้าคลุมมีฮู้ด",
           "additional_price": 0,
           "price": 970,
-          "stock": 9998,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1LOhV_1osUFztM03T6u3siInIHj6JSraS&sz=w2000",
           "sort_order": 0
@@ -10781,7 +10781,7 @@
           "option_value": "Alyosha",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1d-0rLX0JrvWf4LDBewidLuR6vW0qOZhV&sz=w2000",
           "sort_order": 0
@@ -10803,7 +10803,7 @@
           "option_value": "Sandrone",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1bXZb2FvIFrNaJGSgVnuwjz2YLOdThaIB&sz=w2000",
           "sort_order": 2
@@ -18944,9 +18944,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-08-23T04:29:40.853Z",
+  "generated_at": "2026-08-25T08:50:05.507Z",
   "performance": {
-    "total_ms": 3557,
+    "total_ms": 4137,
     "product_count": 157,
     "collection_count": 4,
     "bank_count": 3
