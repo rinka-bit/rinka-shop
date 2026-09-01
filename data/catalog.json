@@ -13631,7 +13631,7 @@
       "search_keywords": "",
       "image": "",
       "status": "active",
-      "stock": 98495,
+      "stock": 97329,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -17263,7 +17263,7 @@
           "additional_price": 0,
           "price": 170,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 0
         },
@@ -17274,7 +17274,7 @@
           "additional_price": 0,
           "price": 150,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 1
         },
@@ -17285,7 +17285,7 @@
           "additional_price": 0,
           "price": 150,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 2
         },
@@ -17296,7 +17296,7 @@
           "additional_price": 0,
           "price": 150,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 3
         },
@@ -17307,7 +17307,7 @@
           "additional_price": 0,
           "price": 150,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 4
         },
@@ -17318,7 +17318,7 @@
           "additional_price": 0,
           "price": 170,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 5
         },
@@ -17329,7 +17329,7 @@
           "additional_price": 0,
           "price": 170,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 6
         },
@@ -17340,7 +17340,7 @@
           "additional_price": 0,
           "price": 170,
           "stock": 1,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 7
         },
@@ -17351,7 +17351,7 @@
           "additional_price": 0,
           "price": 170,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 8
         },
@@ -17362,7 +17362,7 @@
           "additional_price": 0,
           "price": 170,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 9
         },
@@ -17373,7 +17373,7 @@
           "additional_price": 0,
           "price": 170,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 10
         },
@@ -17384,7 +17384,7 @@
           "additional_price": 0,
           "price": 150,
           "stock": 2,
-          "selection_type": "single",
+          "selection_type": "multiple",
           "image": "",
           "sort_order": 11
         }
@@ -19103,9 +19103,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-01T05:56:59.346Z",
+  "generated_at": "2026-09-01T06:04:53.570Z",
   "performance": {
-    "total_ms": 11520,
+    "total_ms": 5372,
     "product_count": 158,
     "collection_count": 3,
     "bank_count": 3
