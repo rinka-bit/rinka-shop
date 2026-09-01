@@ -17216,6 +17216,179 @@
           "sort_order": 1
         }
       ]
+    },
+    {
+      "product_id": "PROD1788241931708",
+      "name": "WuWa (ตี้หาร) ก้อนหัวโมจิ",
+      "price_mode": "option",
+      "price": 150,
+      "final_price": 150,
+      "base_price": 0,
+      "min_price": 150,
+      "max_price": 170,
+      "has_price_range": true,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Wuthering Waves",
+      "sub_category": "อื่น ๆ",
+      "round": "",
+      "description": "",
+      "search_keywords": "Phrolova Augusta Iuno Chisa Lynae Mornye Aemeath Luuk Herssen Sigrika Hiyuki Denia Aemeath(เด็ก)",
+      "image": "https://drive.google.com/thumbnail?id=1ykirlIXAt3AXyhvgGHMdpNoXApc87MJc&sz=w2000",
+      "status": "active",
+      "stock": 24,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "preorder_deadline": "",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "",
+      "created_at": "",
+      "options": [
+        {
+          "option_id": "OPT1788242172669_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Phrolova",
+          "additional_price": 0,
+          "price": 170,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1788242172669_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Augusta",
+          "additional_price": 0,
+          "price": 150,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1788242172669_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Iuno",
+          "additional_price": 0,
+          "price": 150,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1788242172669_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Chisa",
+          "additional_price": 0,
+          "price": 150,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1788242172669_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Lynae",
+          "additional_price": 0,
+          "price": 150,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1788242172669_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Mornye",
+          "additional_price": 0,
+          "price": 170,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1788242172669_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Aemeath",
+          "additional_price": 0,
+          "price": 170,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1788242172669_8",
+          "option_name": "ตัวละคร",
+          "option_value": "Luuk Herssen",
+          "additional_price": 0,
+          "price": 170,
+          "stock": 1,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 7
+        },
+        {
+          "option_id": "OPT1788242172669_9",
+          "option_name": "ตัวละคร",
+          "option_value": "Sigrika",
+          "additional_price": 0,
+          "price": 170,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 8
+        },
+        {
+          "option_id": "OPT1788242172669_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Hiyuki",
+          "additional_price": 0,
+          "price": 170,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 9
+        },
+        {
+          "option_id": "OPT1788242172669_11",
+          "option_name": "ตัวละคร",
+          "option_value": "Denia",
+          "additional_price": 0,
+          "price": 170,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 10
+        },
+        {
+          "option_id": "OPT1788242172669_12",
+          "option_name": "ตัวละคร",
+          "option_value": "Aemeath(เด็ก)",
+          "additional_price": 0,
+          "price": 150,
+          "stock": 2,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 11
+        }
+      ]
     }
   ],
   "collections": [
@@ -18930,10 +19103,10 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-08-27T14:23:46.763Z",
+  "generated_at": "2026-09-01T05:56:59.346Z",
   "performance": {
-    "total_ms": 5188,
-    "product_count": 157,
+    "total_ms": 11520,
+    "product_count": 158,
     "collection_count": 3,
     "bank_count": 3
   }
