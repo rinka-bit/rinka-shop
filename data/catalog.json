@@ -17753,34 +17753,6 @@
   ],
   "collections": [
     {
-      "collection_id": "COL1787291625995",
-      "name": "Tears of Themis - The Men from N.X.X.",
-      "fandom": "Tears of Themis",
-      "image": "https://drive.google.com/thumbnail?id=16X8HkQfLiV--qCN_BnkrgtTPUIP7QCdR&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-09-09T17:00:00.000Z",
-      "featured": "",
-      "created_at": "2026-08-21T05:53:55.025Z",
-      "collection_type": "preorder",
-      "description": "ราคายังไม่รวมส่งกลับไทย ไม่สามารถรวมยอดรับของแถมจากคอลเลคชั่นอื่น ๆ ได้นะคะ\n\nระยะเวลาชำระยอดคงเหลือประมาณ 3 เดือนนับจากวันที่เปิดให้ชำระรอบ2ค่ะ",
-      "banner_image": "https://drive.google.com/thumbnail?id=1RQN__8eSo5FWpuB0Pr_HGZ-SBKL44V6G&sz=w2000",
-      "product_count": 4
-    },
-    {
-      "collection_id": "COL1787297483925",
-      "name": "Tears of Themis - Stellis Serenade",
-      "fandom": "Tears of Themis",
-      "image": "https://drive.google.com/thumbnail?id=1O8fH6PZ1tsnhcer3Wt9IHt-KK4RqOJcB&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-09-09T17:00:00.000Z",
-      "featured": "yes",
-      "created_at": "2026-08-21T07:31:31.047Z",
-      "collection_type": "preorder",
-      "description": "ราคารวมส่งกลับไทยทุกรายการแล้ว\n\n🎁 โปรของแถมตามยอดซื้อ\n\nเมื่อซื้อสินค้าใหม่เฉพาะคอลนี้\n\nทุกยอดสินค้าครบ 600฿ → เลือกของแถมได้ 1 ชิ้น (เลือก 1 จาก 9)\n\nของแถมมี 3 กลุ่ม:\n\n-เซ็ตการ์ดโพลารอยด์ภาพตัวละคร+การ์ดใส : มี 4 แบบ/ 1 เซ็ตมี 2 ใบ\n-การ์ดสะสมลายเส้นแบบนูน/พิมพ์สี : มี 4 แบบ / 1 เซ็ตมี 1 ใบ\n-เซ็ตโปสการ์ดโพลารอยด์ลายจิบิ : มี 1 แบบ / 1 เซ็ตมี 4 ใบ\n\nสะสมของแถมตามยอดได้ 1ออเดอร์ได้รับสูงสุด 5 ชิ้นและเลือกแบบซ้ำไม่ได้",
-      "banner_image": "https://drive.google.com/thumbnail?id=1qdoFObgZUMhpqrtat9QvaQIN88uXqkXC&sz=w2000",
-      "product_count": 19
-    },
-    {
       "collection_id": "COL1787382396035",
       "name": "Light and Night 8-2026",
       "fandom": "Light and Night",
@@ -19556,11 +19528,11 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-02T06:18:58.572Z",
+  "generated_at": "2026-09-02T06:21:08.017Z",
   "performance": {
-    "total_ms": 5156,
+    "total_ms": 4075,
     "product_count": 167,
-    "collection_count": 5,
+    "collection_count": 3,
     "bank_count": 3
   }
 }
