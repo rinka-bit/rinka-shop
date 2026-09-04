@@ -17295,7 +17295,7 @@
           "option_value": "Chisa",
           "additional_price": 0,
           "price": 150,
-          "stock": 2,
+          "stock": 1,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 3
@@ -17306,7 +17306,7 @@
           "option_value": "Lynae",
           "additional_price": 0,
           "price": 150,
-          "stock": 1,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -17690,10 +17690,10 @@
       "sub_category": "น้ำหอม",
       "round": "Zayne BD 2026",
       "description": "เป็นแนว Fruity Chypre (果香西普香调) หรือกลิ่นตระกูลชิพเพรที่มีความฟรุตตี้\n\n🍐 Top Notes\n\n粉红胡椒 | 黑加仑 (Pink Pepper | Blackcurrant)\n\nช่วงแรกจะเป็นความ สดใส หวานฉ่ำ และมีความเผ็ดซ่านิด ๆ\n\n🍍 Middle Notes — กลิ่นกลาง\n\n菠萝 | 茉莉 | 广藿香 (Pineapple | Jasmine | Patchouli)\n\nช่วงกลางจะเริ่ม หวานฉ่ำแบบผลไม้ + ดอกไม้สะอาด ๆ แล้วมี patchouli เพิ่มมิติ\n\n🌲 Base Notes — กลิ่นฐาน\n\n桦木 | 龙涎香 | 雪松 | 橡木苔 | 麝香\n(Birch | Ambergris | Cedarwood | Oakmoss | Musk)\n\nช่วงท้ายจะเปลี่ยนไปทาง ไม้สะอาด เย็น สุขุม และนุ่มอบอุ่น\n\n***ราคายังไม่รวมส่งมาไทย ตีลังไม้เพิ่มเริ่มต้น+150฿\n\nในเซ็ตมี 5 อย่าง\n\n1. น้ำหอม ขนาด 30mL\n2. น้ำหอมขนาดทดลอง\n3. การ์ดน้ำหอม\n4. โฟโต้การ์ด\n5. จดหมายลายมือ (ภาษาจีน)\n",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลัง ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
       "image": "https://drive.google.com/thumbnail?id=1qkNvdX37GlKLqkiQI-I-EmoMuC-DLI5I&sz=w2000",
       "status": "active",
-      "stock": 9999,
+      "stock": 9998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -17708,7 +17708,30 @@
       "image4": "",
       "collection_id": "COL1788328187652",
       "created_at": "",
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1788493630345_1",
+          "option_name": "ตัวเลือก",
+          "option_value": "ไม่ตีลัง",
+          "additional_price": 0,
+          "price": null,
+          "stock": 9999,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1788493630345_2",
+          "option_name": "ตัวเลือก",
+          "option_value": "ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 9999,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1788329076505",
@@ -17730,7 +17753,7 @@
       "sub_category": "น้ำหอม",
       "round": "Zayne BD 2026",
       "description": "เป็นแนว Fruity Chypre (果香西普香调) หรือกลิ่นตระกูลชิพเพรที่มีความฟรุตตี้\n\n🍐 Top Notes\n\n粉红胡椒 | 黑加仑 (Pink Pepper | Blackcurrant)\n\nช่วงแรกจะเป็นความ สดใส หวานฉ่ำ และมีความเผ็ดซ่านิด ๆ\n\n🍍 Middle Notes — กลิ่นกลาง\n\n菠萝 | 茉莉 | 广藿香 (Pineapple | Jasmine | Patchouli)\n\nช่วงกลางจะเริ่ม หวานฉ่ำแบบผลไม้ + ดอกไม้สะอาด ๆ แล้วมี patchouli เพิ่มมิติ\n\n🌲 Base Notes — กลิ่นฐาน\n\n桦木 | 龙涎香 | 雪松 | 橡木苔 | 麝香\n(Birch | Ambergris | Cedarwood | Oakmoss | Musk)\n\nช่วงท้ายจะเปลี่ยนไปทาง ไม้สะอาด เย็น สุขุม และนุ่มอบอุ่น\n\n***ราคายังไม่รวมส่งมาไทย ตีลังไม้เพิ่มเริ่มต้น+150฿\n\nในเซ็ตมี 7 อย่าง\n\n1. น้ำหอม ขนาด 50mL\n2. น้ำหอมขนาดทดลอง\n3. การ์ดน้ำหอม\n4. โฟโต้การ์ด\n5. จดหมายลายมือ (ภาษาจีน)\n6. เข็มกลัด\n7. จี้ห้อยโลหะ",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลัง ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
       "image": "https://drive.google.com/thumbnail?id=1qkNvdX37GlKLqkiQI-I-EmoMuC-DLI5I&sz=w2000",
       "status": "active",
       "stock": 9997,
@@ -17748,7 +17771,30 @@
       "image4": "",
       "collection_id": "COL1788328187652",
       "created_at": "",
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1788493661955_1",
+          "option_name": "ตัวเลือก",
+          "option_value": "ไม่ตีลัง",
+          "additional_price": 0,
+          "price": null,
+          "stock": 9999,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1788493661955_2",
+          "option_name": "ตัวเลือก",
+          "option_value": "ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 9999,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1788491608991",
@@ -17795,7 +17841,7 @@
           "option_value": "ไม่ตีลัง",
           "additional_price": 0,
           "price": null,
-          "stock": 6,
+          "stock": 5,
           "selection_type": "single",
           "image": "",
           "sort_order": 0
@@ -19591,9 +19637,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-04T03:22:48.030Z",
+  "generated_at": "2026-09-04T03:48:05.627Z",
   "performance": {
-    "total_ms": 6907,
+    "total_ms": 6583,
     "product_count": 168,
     "collection_count": 3,
     "bank_count": 3
