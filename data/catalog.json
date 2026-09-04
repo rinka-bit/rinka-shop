@@ -17770,7 +17770,7 @@
       "sub_category": "ฟิกเกอร์",
       "round": "",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลัง ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
       "image": "https://drive.google.com/thumbnail?id=1V38aTMBjPOBJfkvPIc4qsTfpZ_F8F6YU&sz=w2000",
       "status": "active",
       "stock": 6,
@@ -17788,7 +17788,30 @@
       "image4": "",
       "collection_id": "",
       "created_at": "",
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1788492146610_1",
+          "option_name": "ตัวเลือก",
+          "option_value": "ไม่ตีลัง",
+          "additional_price": 0,
+          "price": null,
+          "stock": 6,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1788492146610_2",
+          "option_name": "ตัวเลือก",
+          "option_value": "ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 6,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     }
   ],
   "collections": [
@@ -19568,9 +19591,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-04T03:16:30.679Z",
+  "generated_at": "2026-09-04T03:22:48.030Z",
   "performance": {
-    "total_ms": 7297,
+    "total_ms": 6907,
     "product_count": 168,
     "collection_count": 3,
     "bank_count": 3
