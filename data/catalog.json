@@ -18524,7 +18524,7 @@
           "option_value": "Caleb",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -20323,9 +20323,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-07T09:22:50.218Z",
+  "generated_at": "2026-09-07T10:57:44.724Z",
   "performance": {
-    "total_ms": 6339,
+    "total_ms": 4186,
     "product_count": 175,
     "collection_count": 4,
     "bank_count": 3
