@@ -17878,7 +17878,7 @@
       "fandom": "Love and deepspace",
       "sub_category": "อื่น ๆ",
       "round": "",
-      "description": "",
+      "description": "ขนาด 29.5*43.5 ซม.",
       "search_keywords": "Xavier Zayne Rafayel Sylus Caleb",
       "image": "https://drive.google.com/thumbnail?id=1GnePR-io2NQhMvIIn2fKdaYjNxpfLR1G&sz=w2000",
       "status": "active",
@@ -17974,7 +17974,7 @@
       "fandom": "Love and deepspace",
       "sub_category": "โปสเตอร์",
       "round": "",
-      "description": "",
+      "description": "ขนาด 43.5*29 ซม.",
       "search_keywords": "Xavier Zayne Rafayel Sylus Caleb",
       "image": "https://drive.google.com/thumbnail?id=1e37ml3W0WtPLPM1ODDq26FFbRF1pXS5u&sz=w2000",
       "status": "active",
@@ -18070,7 +18070,7 @@
       "fandom": "Love and deepspace",
       "sub_category": "พวงกุญแจ",
       "round": "",
-      "description": "",
+      "description": "ขนาด 8.6*21.8ซม.",
       "search_keywords": "Xavier Zayne Rafayel Sylus Caleb",
       "image": "https://drive.google.com/thumbnail?id=1G_Nv955AKFa-LCFsHI3HtO7fme9CeHTH&sz=w2000",
       "status": "active",
@@ -18166,7 +18166,7 @@
       "fandom": "Love and deepspace",
       "sub_category": "อื่น ๆ",
       "round": "",
-      "description": "",
+      "description": "ขนาดตั๋ว 60*120มม. ซองใส่ 100*225มม.",
       "search_keywords": "Xavier Zayne Rafayel Sylus Caleb",
       "image": "https://drive.google.com/thumbnail?id=1TzZWgrzgXnUo5dvuqcxyLRT7UjfWAKZw&sz=w2000",
       "status": "active",
@@ -20323,9 +20323,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-07T08:40:31.381Z",
+  "generated_at": "2026-09-07T09:22:50.218Z",
   "performance": {
-    "total_ms": 3459,
+    "total_ms": 6339,
     "product_count": 175,
     "collection_count": 4,
     "bank_count": 3
