@@ -13652,14 +13652,14 @@
       "product_id": "PROD1787368420097",
       "name": "แหวนคู่ Destiné & Destinée (Luke)",
       "price_mode": "fixed",
-      "price": 1050,
-      "final_price": 1050,
+      "price": 1150,
+      "final_price": 1150,
       "base_price": 1150,
       "min_price": 1150,
       "max_price": 1150,
       "has_price_range": false,
-      "old_price": 1150,
-      "on_sale": true,
+      "old_price": null,
+      "on_sale": false,
       "sale_price": 1050,
       "sale_start": "2026-08-18T17:00:00.000Z",
       "sale_end": "2026-09-07T17:00:00.000Z",
@@ -18428,7 +18428,7 @@
           "option_value": "Caleb",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -20323,9 +20323,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-07T10:57:44.724Z",
+  "generated_at": "2026-09-09T05:23:24.381Z",
   "performance": {
-    "total_ms": 4186,
+    "total_ms": 4018,
     "product_count": 175,
     "collection_count": 4,
     "bank_count": 3
