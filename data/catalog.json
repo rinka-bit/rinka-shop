@@ -17778,7 +17778,7 @@
           "option_value": "ไม่ตีลัง",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9997,
           "selection_type": "single",
           "image": "",
           "sort_order": 0
@@ -17926,7 +17926,7 @@
           "option_value": "Rafayel",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1NaJmEZ38tiSzxys1nz9vZq9mDg3U94Lu&sz=w2000",
           "sort_order": 2
@@ -18530,46 +18530,6 @@
           "sort_order": 4
         }
       ]
-    },
-    {
-      "product_id": "PROD1789007110281",
-      "name": "HSR x White Rabbit",
-      "price_mode": "fixed",
-      "price": 700,
-      "final_price": 700,
-      "base_price": 700,
-      "min_price": 700,
-      "max_price": 700,
-      "has_price_range": false,
-      "old_price": null,
-      "on_sale": false,
-      "sale_price": 0,
-      "sale_start": "",
-      "sale_end": "",
-      "main_category": "อื่น ๆ",
-      "fandom": "Honkai Star Rail",
-      "sub_category": "อื่น ๆ",
-      "round": "",
-      "description": "",
-      "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=11UqSCTmdZYZ7Apd2GtFXz9euAt9Ztjna&sz=w2000",
-      "status": "active",
-      "stock": 6,
-      "product_type": "preorder",
-      "crate_available": "",
-      "crate_fee": 0,
-      "shipping_fee": 0,
-      "preorder_deadline": "",
-      "estimated_arrival": "พรีเซล",
-      "image2": "",
-      "image3": "",
-      "featured": "",
-      "new_arrival": "",
-      "sort_order": 0,
-      "image4": "",
-      "collection_id": "",
-      "created_at": "",
-      "options": []
     }
   ],
   "collections": [
@@ -20363,10 +20323,10 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-10T02:25:48.518Z",
+  "generated_at": "2026-09-10T03:24:33.944Z",
   "performance": {
-    "total_ms": 3463,
-    "product_count": 176,
+    "total_ms": 3886,
+    "product_count": 175,
     "collection_count": 4,
     "bank_count": 3
   }
