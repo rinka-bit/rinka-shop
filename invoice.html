@@ -501,14 +501,13 @@ async function loadInvoice(){
 
   try{
 
-    const url =
-      API +
-      "?action=getDMInvoice" +
-      "&invoice_id=" +
-      encodeURIComponent(
-        invoiceId
-      );
-
+   const url =
+  API +
+  "?action=dmInvoice" +
+  "&invoice_id=" +
+  encodeURIComponent(
+    invoiceId
+  );
 
     const response =
       await fetch(
