@@ -1,4 +1,3 @@
-```javascript
 /*
 =========================================
 RINKA ADMIN — DM INVOICE MANAGER
@@ -711,12 +710,6 @@ function selectDMInvoiceType(
 }
 
 
-/*
-=========================================
-ADD ITEM
-=========================================
-*/
-
 function addDMInvoiceItem(){
 
   const index =
@@ -741,7 +734,7 @@ function addDMInvoiceItem(){
   renderDMInvoiceItems();
 
 
-  setTimeout(
+  requestAnimationFrame(
     ()=>{
 
       const input =
@@ -755,11 +748,6 @@ function addDMInvoiceItem(){
 
         input.focus();
 
-        /*
-        วาง cursor ไว้ท้ายข้อความ
-        โดยไม่แตะ value
-        */
-
         try{
 
           const length =
@@ -772,18 +760,13 @@ function addDMInvoiceItem(){
 
         }catch(error){
 
-          /*
-          บาง browser / input type
-          อาจไม่รองรับ setSelectionRange
-          ไม่ต้องทำอะไร
-          */
+          // ไม่ต้องทำอะไร
 
         }
 
       }
 
-    },
-    50
+    }
   );
 
 }
@@ -823,7 +806,6 @@ function removeDMInvoiceItem(
   updateDMInvoiceTotals();
 
 }
-
 
 /*
 =========================================
@@ -916,6 +898,8 @@ function renderDMInvoiceItems(){
 
       <input
         id="dmProductName_${index}"
+        data-dm-field="product_name"
+        data-dm-index="${index}"
         type="text"
         value="${dmInvoiceEsc(item.product_name)}"
         placeholder="เช่น Acrylic Stand"
@@ -932,6 +916,8 @@ function renderDMInvoiceItems(){
 
       <input
         id="dmCharacterName_${index}"
+        data-dm-field="character_name"
+        data-dm-index="${index}"
         type="text"
         value="${dmInvoiceEsc(item.character_name)}"
         placeholder="ถ้ามี"
@@ -958,6 +944,8 @@ function renderDMInvoiceItems(){
 
         <input
           id="dmQuantity_${index}"
+          data-dm-field="quantity"
+          data-dm-index="${index}"
           type="number"
           min="1"
           step="1"
@@ -975,6 +963,8 @@ function renderDMInvoiceItems(){
 
         <input
           id="dmUnitPrice_${index}"
+          data-dm-field="unit_price"
+          data-dm-index="${index}"
           type="number"
           min="0"
           step="0.01"
@@ -994,6 +984,8 @@ function renderDMInvoiceItems(){
 
       <input
         id="dmImageUrl_${index}"
+        data-dm-field="image_url"
+        data-dm-index="${index}"
         type="url"
         value="${dmInvoiceEsc(item.image_url)}"
         placeholder="https://..."
@@ -1043,147 +1035,70 @@ function renderDMInvoiceItems(){
 
   /*
   =========================================
-  BIND INPUT EVENTS
+  EVENT DELEGATION
 
   สำคัญ:
-  - ไม่ใช้ inline oninput
-  - ไม่ render รายการใหม่ตอนพิมพ์
-  - ไม่แตะ DOM ของ input
+  ไม่ bind listener ใหม่ให้ input ทุกตัว
+  ใช้ listener ตัวเดียวที่ container
+
+  และ listener นี้จะไม่ render input ใหม่
   =========================================
   */
 
-  DMInvoiceManager.items.forEach(
-    (
-      item,
-      index
-    ) => {
+  if(
+    !container.dataset.dmEventsBound
+  ){
 
-      const productNameInput =
-        document.getElementById(
-          "dmProductName_" +
-          index
-        );
+    container.addEventListener(
+      "input",
+      function(event){
 
-
-      const characterInput =
-        document.getElementById(
-          "dmCharacterName_" +
-          index
-        );
+        const input =
+          event.target.closest(
+            "input[data-dm-field]"
+          );
 
 
-      const quantityInput =
-        document.getElementById(
-          "dmQuantity_" +
-          index
-        );
+        if(!input){
+
+          return;
+
+        }
 
 
-      const unitPriceInput =
-        document.getElementById(
-          "dmUnitPrice_" +
-          index
-        );
+        const index =
+          Number(
+            input.dataset.dmIndex
+          );
 
 
-      const imageUrlInput =
-        document.getElementById(
-          "dmImageUrl_" +
-          index
-        );
+        const field =
+          input.dataset.dmField;
 
 
-      if(productNameInput){
+        if(
+          !Number.isInteger(index)
+        ){
 
-        productNameInput.addEventListener(
-          "input",
-          function(){
+          return;
 
-            updateDMInvoiceItem(
-              index,
-              "product_name",
-              this.value
-            );
+        }
 
-          }
+
+        updateDMInvoiceItem(
+          index,
+          field,
+          input.value
         );
 
       }
+    );
 
 
-      if(characterInput){
+    container.dataset.dmEventsBound =
+      "true";
 
-        characterInput.addEventListener(
-          "input",
-          function(){
-
-            updateDMInvoiceItem(
-              index,
-              "character_name",
-              this.value
-            );
-
-          }
-        );
-
-      }
-
-
-      if(quantityInput){
-
-        quantityInput.addEventListener(
-          "input",
-          function(){
-
-            updateDMInvoiceItem(
-              index,
-              "quantity",
-              this.value
-            );
-
-          }
-        );
-
-      }
-
-
-      if(unitPriceInput){
-
-        unitPriceInput.addEventListener(
-          "input",
-          function(){
-
-            updateDMInvoiceItem(
-              index,
-              "unit_price",
-              this.value
-            );
-
-          }
-        );
-
-      }
-
-
-      if(imageUrlInput){
-
-        imageUrlInput.addEventListener(
-          "input",
-          function(){
-
-            updateDMInvoiceItem(
-              index,
-              "image_url",
-              this.value
-            );
-
-          }
-        );
-
-      }
-
-    }
-  );
+  }
 
 }
 
@@ -1243,21 +1158,46 @@ function updateDMInvoiceItem(
     field === "quantity"
   ){
 
-    const parsed =
-      Number(
-        value
+    /*
+    ตอนกำลังพิมพ์
+    อย่า force ค่า 1 กลับเข้า input
+
+    เพราะถ้าผู้ใช้กำลังลบ/แก้ตัวเลข
+    การ force ค่าใหม่อาจทำให้ cursor กระโดด
+    */
+
+    const raw =
+      String(
+        value ?? ""
       );
 
 
-    item.quantity =
-      Number.isFinite(
-        parsed
-      )
-        ? Math.max(
-            1,
-            parsed
-          )
-        : 1;
+    if(
+      raw === ""
+    ){
+
+      item.quantity =
+        0;
+
+    }else{
+
+      const parsed =
+        Number(
+          raw
+        );
+
+
+      item.quantity =
+        Number.isFinite(
+          parsed
+        )
+          ? Math.max(
+              0,
+              parsed
+            )
+          : 0;
+
+    }
 
   }
 
@@ -1272,21 +1212,38 @@ function updateDMInvoiceItem(
     field === "unit_price"
   ){
 
-    const parsed =
-      Number(
-        value
+    const raw =
+      String(
+        value ?? ""
       );
 
 
-    item.unit_price =
-      Number.isFinite(
-        parsed
-      )
-        ? Math.max(
-            0,
-            parsed
-          )
-        : 0;
+    if(
+      raw === ""
+    ){
+
+      item.unit_price =
+        0;
+
+    }else{
+
+      const parsed =
+        Number(
+          raw
+        );
+
+
+      item.unit_price =
+        Number.isFinite(
+          parsed
+        )
+          ? Math.max(
+              0,
+              parsed
+            )
+          : 0;
+
+    }
 
   }
 
@@ -1295,7 +1252,8 @@ function updateDMInvoiceItem(
   =========================================
   UPDATE ONLY ITEM TOTAL
 
-  ไม่ render input ใหม่
+  ห้าม renderDMInvoiceItems()
+  ห้ามแก้ value ของ input
   =========================================
   */
 
@@ -1331,7 +1289,8 @@ function updateDMInvoiceItem(
   =========================================
   UPDATE GRAND TOTAL
 
-  ฟังก์ชันนี้ render แค่กล่อง total
+  updateDMInvoiceTotals()
+  แก้เฉพาะกล่องยอดรวม
   ไม่แตะ input
   =========================================
   */
@@ -1339,7 +1298,6 @@ function updateDMInvoiceItem(
   updateDMInvoiceTotals();
 
 }
-
 
 /*
 =========================================
@@ -2616,4 +2574,3 @@ function dmInvoiceEsc(
     );
 
 }
-```
