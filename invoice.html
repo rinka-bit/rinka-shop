@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="th">
 
@@ -38,7 +39,7 @@
 
       width:
         min(
-          100% - 32px,
+          calc(100% - 32px),
           760px
         );
 
@@ -126,7 +127,7 @@
 
     .section{
 
-      margin-top:24px;
+      margin-top:28px;
 
     }
 
@@ -312,6 +313,301 @@
     }
 
 
+    .status.paid{
+
+      background:#f0fdf4;
+
+      color:#166534;
+
+    }
+
+
+    .form-grid{
+
+      display:grid;
+
+      grid-template-columns:
+        1fr
+        1fr;
+
+      gap:14px;
+
+    }
+
+
+    .form-group{
+
+      display:flex;
+
+      flex-direction:column;
+
+      gap:6px;
+
+    }
+
+
+    .form-group.full{
+
+      grid-column:
+        1 / -1;
+
+    }
+
+
+    label{
+
+      font-size:14px;
+
+      font-weight:600;
+
+    }
+
+
+    input,
+    textarea,
+    select{
+
+      width:100%;
+
+      padding:11px 12px;
+
+      border:
+        1px solid #cbd5e1;
+
+      border-radius:10px;
+
+      background:#fff;
+
+      color:#243746;
+
+      font:inherit;
+
+      outline:none;
+
+    }
+
+
+    input:focus,
+    textarea:focus,
+    select:focus{
+
+      border-color:#7dcfff;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(
+          125,
+          207,
+          255,
+          0.15
+        );
+
+    }
+
+
+    textarea{
+
+      min-height:90px;
+
+      resize:vertical;
+
+    }
+
+
+    .required{
+
+      color:#dc2626;
+
+    }
+
+
+    .bank-card{
+
+      border:
+        1px solid #dbeafe;
+
+      border-radius:14px;
+
+      padding:14px;
+
+      margin-bottom:10px;
+
+      cursor:pointer;
+
+      transition:
+        0.15s ease;
+
+    }
+
+
+    .bank-card:hover{
+
+      border-color:#7dcfff;
+
+    }
+
+
+    .bank-card.selected{
+
+      border:
+        2px solid #4ca9dc;
+
+      background:#f0f9ff;
+
+    }
+
+
+    .bank-name{
+
+      font-weight:700;
+
+      margin-bottom:4px;
+
+    }
+
+
+    .bank-detail{
+
+      color:#64748b;
+
+      font-size:13px;
+
+      line-height:1.6;
+
+    }
+
+
+    .bank-empty{
+
+      padding:14px;
+
+      background:#f8fafc;
+
+      border-radius:12px;
+
+      color:#64748b;
+
+      font-size:14px;
+
+    }
+
+
+    .slip-box{
+
+      border:
+        1px dashed #93c5fd;
+
+      background:#f8fcff;
+
+      border-radius:14px;
+
+      padding:16px;
+
+    }
+
+
+    .slip-preview{
+
+      display:none;
+
+      margin-top:12px;
+
+      max-width:240px;
+
+      max-height:300px;
+
+      border-radius:12px;
+
+      border:
+        1px solid #dbeafe;
+
+    }
+
+
+    .submit-button{
+
+      width:100%;
+
+      margin-top:20px;
+
+      padding:14px 18px;
+
+      border:0;
+
+      border-radius:12px;
+
+      background:#4ca9dc;
+
+      color:#fff;
+
+      font-size:16px;
+
+      font-weight:700;
+
+      cursor:pointer;
+
+    }
+
+
+    .submit-button:hover{
+
+      background:#2586b8;
+
+    }
+
+
+    .submit-button:disabled{
+
+      opacity:.55;
+
+      cursor:not-allowed;
+
+    }
+
+
+    .message{
+
+      margin-top:14px;
+
+      padding:14px;
+
+      border-radius:12px;
+
+      font-size:14px;
+
+      display:none;
+
+    }
+
+
+    .message.success{
+
+      display:block;
+
+      background:#f0fdf4;
+
+      border:
+        1px solid #bbf7d0;
+
+      color:#166534;
+
+    }
+
+
+    .message.error{
+
+      display:block;
+
+      background:#fef2f2;
+
+      border:
+        1px solid #fecaca;
+
+      color:#991b1b;
+
+    }
+
+
     .loading{
 
       text-align:center;
@@ -352,6 +648,13 @@
     }
 
 
+    .hidden{
+
+      display:none !important;
+
+    }
+
+
     @media(
       max-width:600px
     ){
@@ -360,7 +663,7 @@
 
         width:
           min(
-            100% - 20px,
+            calc(100% - 20px),
             760px
           );
 
@@ -393,6 +696,20 @@
         width:70px;
 
         height:70px;
+
+      }
+
+
+      .form-grid{
+
+        grid-template-columns:1fr;
+
+      }
+
+
+      .form-group.full{
+
+        grid-column:auto;
 
       }
 
@@ -443,6 +760,15 @@ const API =
   "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
 
+let CURRENT_INVOICE = null;
+
+let CURRENT_BANKS = [];
+
+let SELECTED_BANK = null;
+
+let PAYMENT_SUBMITTING = false;
+
+
 /*
 =========================================
 GET INVOICE ID
@@ -456,7 +782,6 @@ function getInvoiceId(){
       window.location.search
     );
 
-
   return String(
     params.get("id") || ""
   ).trim();
@@ -466,7 +791,7 @@ function getInvoiceId(){
 
 /*
 =========================================
-LOAD
+LOAD INVOICE
 =========================================
 */
 
@@ -476,7 +801,6 @@ async function loadInvoice(){
     document.getElementById(
       "invoiceRoot"
     );
-
 
   const invoiceId =
     getInvoiceId();
@@ -501,13 +825,14 @@ async function loadInvoice(){
 
   try{
 
-   const url =
-  API +
-  "?action=dmInvoice" +
-  "&invoice_id=" +
-  encodeURIComponent(
-    invoiceId
-  );
+    const url =
+      API +
+      "?action=dmInvoice" +
+      "&invoice_id=" +
+      encodeURIComponent(
+        invoiceId
+      );
+
 
     const response =
       await fetch(
@@ -545,9 +870,21 @@ async function loadInvoice(){
     }
 
 
+    CURRENT_INVOICE =
+      result.invoice || {};
+
+
     renderInvoice(
       result
     );
+
+
+    /*
+    โหลดบัญชีธนาคารหลังจาก
+    Invoice โหลดสำเร็จ
+    */
+
+    await loadBanks();
 
 
   }catch(error){
@@ -582,7 +919,331 @@ async function loadInvoice(){
 
 /*
 =========================================
-RENDER
+LOAD BANKS
+=========================================
+*/
+
+async function loadBanks(){
+
+  const container =
+    document.getElementById(
+      "bankAccounts"
+    );
+
+
+  if(!container){
+
+    return;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+        API +
+        "?action=banks"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    /*
+    รองรับทั้ง
+
+    [
+      {...}
+    ]
+
+    และ
+
+    {
+      success:true,
+      data:[...]
+    }
+    */
+
+    if(Array.isArray(result)){
+
+      CURRENT_BANKS =
+        result;
+
+    }else if(
+      Array.isArray(
+        result?.data
+      )
+    ){
+
+      CURRENT_BANKS =
+        result.data;
+
+    }else if(
+      Array.isArray(
+        result?.banks
+      )
+    ){
+
+      CURRENT_BANKS =
+        result.banks;
+
+    }else{
+
+      CURRENT_BANKS = [];
+
+    }
+
+
+    renderBanks();
+
+
+  }catch(error){
+
+    console.error(
+      "loadBanks error:",
+      error
+    );
+
+
+    container.innerHTML = `
+
+      <div class="bank-empty">
+
+        ไม่สามารถโหลดข้อมูลบัญชีธนาคารได้
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/*
+=========================================
+RENDER BANKS
+=========================================
+*/
+
+function renderBanks(){
+
+  const container =
+    document.getElementById(
+      "bankAccounts"
+    );
+
+
+  if(!container){
+
+    return;
+
+  }
+
+
+  if(
+    !CURRENT_BANKS.length
+  ){
+
+    container.innerHTML = `
+
+      <div class="bank-empty">
+
+        ยังไม่มีข้อมูลบัญชีธนาคาร
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    CURRENT_BANKS
+      .map(
+        (
+          bank,
+          index
+        ) => {
+
+          const bankId =
+            String(
+              bank.bank_id ||
+              bank.account_id ||
+              bank.id ||
+              index
+            );
+
+
+          const bankName =
+            bank.bank_name ||
+            bank.name ||
+            "ธนาคาร";
+
+
+          const accountName =
+            bank.account_name ||
+            bank.account_holder ||
+            bank.holder_name ||
+            "";
+
+
+          const accountNumber =
+            bank.account_number ||
+            bank.account_no ||
+            "";
+
+
+          const qr =
+            bank.qr_url ||
+            bank.qr_image ||
+            bank.qr ||
+            "";
+
+
+          return `
+
+<div
+  class="bank-card"
+  data-bank-index="${index}"
+  onclick="selectBank(${index})"
+>
+
+  <div class="bank-name">
+
+    ${escapeHtml(
+      bankName
+    )}
+
+  </div>
+
+
+  <div class="bank-detail">
+
+    ${
+      accountName
+        ? `
+          ชื่อบัญชี:
+          ${escapeHtml(
+            accountName
+          )}
+          <br>
+        `
+        : ""
+    }
+
+
+    ${
+      accountNumber
+        ? `
+          เลขบัญชี:
+          <strong>
+            ${escapeHtml(
+              accountNumber
+            )}
+          </strong>
+        `
+        : ""
+    }
+
+  </div>
+
+
+  ${
+    qr
+      ? `
+        <img
+          src="${escapeHtml(qr)}"
+          alt="QR"
+          style="
+            width:150px;
+            max-width:100%;
+            margin-top:12px;
+            border-radius:10px;
+          "
+        >
+      `
+      : ""
+  }
+
+</div>
+
+`;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/*
+=========================================
+SELECT BANK
+=========================================
+*/
+
+function selectBank(
+  index
+){
+
+  SELECTED_BANK =
+    CURRENT_BANKS[
+      index
+    ] || null;
+
+
+  document
+    .querySelectorAll(
+      ".bank-card"
+    )
+    .forEach(
+      card => {
+
+        card.classList.remove(
+          "selected"
+        );
+
+      }
+    );
+
+
+  const selected =
+    document.querySelector(
+      '[data-bank-index="' +
+      index +
+      '"]'
+    );
+
+
+  if(selected){
+
+    selected.classList.add(
+      "selected"
+    );
+
+  }
+
+}
+
+
+/*
+=========================================
+RENDER INVOICE
 =========================================
 */
 
@@ -612,10 +1273,6 @@ function renderInvoice(
     invoice.invoice_id || "";
 
 
-  const invoiceType =
-    invoice.invoice_type || "product";
-
-
   const createdAt =
     formatDate(
       invoice.created_at
@@ -633,179 +1290,591 @@ function renderInvoice(
 
         <div class="empty">
 
-          ไม่มีรายการสินค้า
+          ${
+            invoice.invoice_type === "shipping"
+              ? "Invoice สำหรับแจ้งค่าส่ง"
+              : "ไม่มีรายการสินค้า"
+          }
 
         </div>
 
       `;
 
 
+  const isPaid =
+    String(
+      invoice.payment_status ||
+      ""
+    ).toLowerCase() ===
+    "paid";
+
+
   const statusText =
-    invoice.payment_status === "paid"
+    isPaid
       ? "ชำระเงินแล้ว"
       : "รอชำระเงิน";
 
 
   root.innerHTML = `
 
-    <div class="header">
+<div class="header">
 
-      <div class="logo">
+  <div class="logo">
 
-        Rinka Shop
+    Rinka Shop
 
-      </div>
-
-
-      <div class="subtitle">
-
-        Invoice สำหรับรายการสั่งซื้อทาง DM
-
-      </div>
+  </div>
 
 
-      <div class="invoice-id">
+  <div class="subtitle">
 
-        ${escapeHtml(
-          invoiceId
-        )}
+    Invoice สำหรับรายการสั่งซื้อทาง DM
 
-      </div>
-
-    </div>
+  </div>
 
 
-    ${
-      createdAt
-        ? `
+  <div class="invoice-id">
 
-          <div
-            style="
-              text-align:center;
-              color:#777;
-              font-size:13px;
-              margin-bottom:10px;
-            "
-          >
+    ${escapeHtml(
+      invoiceId
+    )}
 
-            สร้างเมื่อ ${escapeHtml(
-              createdAt
-            )}
+  </div>
 
-          </div>
-
-        `
-        : ""
-    }
+</div>
 
 
-    <div class="section">
-
-      <div class="section-title">
-
-        🛍️ รายการสินค้า
-
-      </div>
-
-
-      ${itemHtml}
-
-    </div>
-
-
-    <div class="summary">
-
-      <div class="summary-row">
-
-        <span>
-          ยอดสินค้า
-        </span>
-
-        <strong>
-          ${money(
-            invoice.subtotal
-          )} บาท
-        </strong>
-
-      </div>
-
-
-      <div class="summary-row">
-
-        <span>
-          ค่านำเข้า
-        </span>
-
-        <strong>
-          ${money(
-            invoice.import_fee
-          )} บาท
-        </strong>
-
-      </div>
-
-
-      <div class="summary-row">
-
-        <span>
-          ค่าตีลัง
-        </span>
-
-        <strong>
-          ${money(
-            invoice.crate_fee
-          )} บาท
-        </strong>
-
-      </div>
-
-
-      <div class="summary-row">
-
-        <span>
-          ค่าส่งในไทย
-        </span>
-
-        <strong>
-          ${money(
-            invoice.domestic_shipping_fee
-          )} บาท
-        </strong>
-
-      </div>
-
+${
+  createdAt
+    ? `
 
       <div
-        class="summary-row summary-total"
+        style="
+          text-align:center;
+          color:#777;
+          font-size:13px;
+          margin-bottom:10px;
+        "
       >
 
-        <span>
-          ยอดรวมทั้งหมด
-        </span>
-
-        <strong>
-          ${money(
-            invoice.total
-          )} บาท
-        </strong>
+        สร้างเมื่อ
+        ${escapeHtml(
+          createdAt
+        )}
 
       </div>
 
+    `
+    : ""
+}
+
+
+<div class="section">
+
+  <div class="section-title">
+
+    🛍️ รายการสินค้า
+
+  </div>
+
+
+  ${itemHtml}
+
+</div>
+
+
+<div class="summary">
+
+  <div class="summary-row">
+
+    <span>
+      ยอดสินค้า
+    </span>
+
+    <strong>
+      ${money(
+        invoice.subtotal
+      )}
+      บาท
+    </strong>
+
+  </div>
+
+
+  <div class="summary-row">
+
+    <span>
+      ค่านำเข้า
+    </span>
+
+    <strong>
+      ${money(
+        invoice.import_fee
+      )}
+      บาท
+    </strong>
+
+  </div>
+
+
+  <div class="summary-row">
+
+    <span>
+      ค่าตีลัง
+    </span>
+
+    <strong>
+      ${money(
+        invoice.crate_fee
+      )}
+      บาท
+    </strong>
+
+  </div>
+
+
+  <div class="summary-row">
+
+    <span>
+      ค่าส่งในไทย
+    </span>
+
+    <strong>
+      ${money(
+        invoice.domestic_shipping_fee
+      )}
+      บาท
+    </strong>
+
+  </div>
+
+
+  <div
+    class="summary-row summary-total"
+  >
+
+    <span>
+      ยอดรวมทั้งหมด
+    </span>
+
+    <strong>
+      ${money(
+        invoice.total
+      )}
+      บาท
+    </strong>
+
+  </div>
+
+</div>
+
+
+<div
+  class="
+    status
+    ${isPaid ? "paid" : ""}
+  "
+>
+
+  สถานะการชำระเงิน:
+
+  <strong>
+    ${escapeHtml(
+      statusText
+    )}
+  </strong>
+
+</div>
+
+
+${
+  isPaid
+    ? `
+
+      <div
+        class="section"
+      >
+
+        <div
+          class="message success"
+          style="display:block;"
+        >
+
+          ✅ Invoice นี้ได้รับการแจ้งชำระเงินแล้วค่ะ
+
+          <br>
+
+          หากต้องการแก้ไขข้อมูล
+          กรุณาติดต่อร้านค่ะ
+
+        </div>
+
+      </div>
+
+    `
+    : renderCustomerPaymentForm(
+        invoice
+      )
+}
+
+`;
+
+}
+
+
+/*
+=========================================
+CUSTOMER FORM
+=========================================
+*/
+
+function renderCustomerPaymentForm(
+  invoice
+){
+
+  return `
+
+<div class="section">
+
+  <div class="section-title">
+
+    📦 ข้อมูลสำหรับจัดส่ง
+
+  </div>
+
+
+  <div class="form-grid">
+
+
+    <div class="form-group">
+
+      <label>
+
+        Twitter / X
+
+        <span class="required">*</span>
+
+      </label>
+
+      <input
+        id="customerTwitter"
+        type="text"
+        value="${escapeHtml(
+          invoice.twitter || ""
+        )}"
+        placeholder="@username"
+      >
+
     </div>
 
 
-    <div class="status">
+    <div class="form-group">
 
-      สถานะการชำระเงิน:
-      <strong>
-        ${escapeHtml(
-          statusText
-        )}
-      </strong>
+      <label>
+
+        Email
+
+        <span class="required">*</span>
+
+      </label>
+
+      <input
+        id="customerEmail"
+        type="email"
+        value="${escapeHtml(
+          invoice.email || ""
+        )}"
+        placeholder="example@email.com"
+      >
 
     </div>
 
-  `;
+
+    <div class="form-group">
+
+      <label>
+
+        ชื่อผู้รับ
+
+        <span class="required">*</span>
+
+      </label>
+
+      <input
+        id="customerReceiver"
+        type="text"
+        value="${escapeHtml(
+          invoice.receiver || ""
+        )}"
+        placeholder="ชื่อ-นามสกุล"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+
+        เบอร์โทร
+
+        <span class="required">*</span>
+
+      </label>
+
+      <input
+        id="customerPhone"
+        type="tel"
+        value="${escapeHtml(
+          invoice.phone || ""
+        )}"
+        placeholder="08xxxxxxxx"
+      >
+
+    </div>
+
+
+    <div class="form-group full">
+
+      <label>
+
+        ที่อยู่
+
+        <span class="required">*</span>
+
+      </label>
+
+      <textarea
+        id="customerAddress"
+        placeholder="บ้านเลขที่ / หมู่บ้าน / ถนน"
+      >${escapeHtml(
+        invoice.address || ""
+      )}</textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        แขวง / ตำบล
+        <span class="required">*</span>
+      </label>
+
+      <input
+        id="customerSubdistrict"
+        type="text"
+        value="${escapeHtml(
+          invoice.subdistrict || ""
+        )}"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        เขต / อำเภอ
+        <span class="required">*</span>
+      </label>
+
+      <input
+        id="customerDistrict"
+        type="text"
+        value="${escapeHtml(
+          invoice.district || ""
+        )}"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        จังหวัด
+        <span class="required">*</span>
+      </label>
+
+      <input
+        id="customerProvince"
+        type="text"
+        value="${escapeHtml(
+          invoice.province || ""
+        )}"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        รหัสไปรษณีย์
+        <span class="required">*</span>
+      </label>
+
+      <input
+        id="customerPostcode"
+        type="text"
+        inputmode="numeric"
+        value="${escapeHtml(
+          invoice.postcode || ""
+        )}"
+        placeholder="10xxx"
+      >
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="section">
+
+  <div class="section-title">
+
+    💳 แจ้งชำระเงิน
+
+  </div>
+
+
+  <div
+    style="
+      color:#64748b;
+      font-size:14px;
+      margin-bottom:14px;
+    "
+  >
+
+    กรุณาเลือกบัญชีสำหรับโอนเงิน
+    แล้วแนบสลิปเพื่อยืนยันการชำระเงินค่ะ
+
+  </div>
+
+
+  <div id="bankAccounts">
+
+    <div class="bank-empty">
+
+      กำลังโหลดบัญชีธนาคาร...
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="form-grid"
+    style="margin-top:14px;"
+  >
+
+    <div class="form-group">
+
+      <label>
+
+        วันที่โอน
+
+        <span class="required">*</span>
+
+      </label>
+
+      <input
+        id="transferDate"
+        type="date"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+
+        เวลาโอน
+
+        <span class="required">*</span>
+
+      </label>
+
+      <input
+        id="transferTime"
+        type="time"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="slip-box"
+    style="margin-top:14px;"
+  >
+
+    <label>
+
+      สลิปการโอนเงิน
+
+      <span class="required">*</span>
+
+    </label>
+
+
+    <input
+      id="paymentSlip"
+      type="file"
+      accept="image/*"
+      style="margin-top:8px;"
+      onchange="previewSlip(this)"
+    >
+
+
+    <img
+      id="slipPreview"
+      class="slip-preview"
+      alt="ตัวอย่างสลิป"
+    >
+
+
+    <div
+      style="
+        color:#64748b;
+        font-size:12px;
+        margin-top:8px;
+      "
+    >
+
+      รองรับไฟล์รูปภาพ
+      เช่น JPG / PNG / WEBP
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="paymentMessage"
+    class="message"
+  ></div>
+
+
+  <button
+    type="button"
+    id="submitPaymentButton"
+    class="submit-button"
+    onclick="submitPayment()"
+  >
+
+    💳 แจ้งชำระเงิน
+
+  </button>
+
+</div>
+
+`;
 
 }
 
@@ -944,6 +2013,775 @@ function renderItem(
 
 /*
 =========================================
+PREVIEW SLIP
+=========================================
+*/
+
+function previewSlip(
+  input
+){
+
+  const preview =
+    document.getElementById(
+      "slipPreview"
+    );
+
+
+  if(
+    !preview ||
+    !input.files ||
+    !input.files[0]
+  ){
+
+    if(preview){
+
+      preview.style.display =
+        "none";
+
+      preview.removeAttribute(
+        "src"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  const file =
+    input.files[0];
+
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    alert(
+      "กรุณาเลือกไฟล์รูปภาพ"
+    );
+
+    input.value = "";
+
+    return;
+
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(event){
+
+      preview.src =
+        event.target.result;
+
+      preview.style.display =
+        "block";
+
+    };
+
+
+  reader.readAsDataURL(
+    file
+  );
+
+}
+
+
+/*
+=========================================
+SUBMIT PAYMENT
+=========================================
+*/
+
+async function submitPayment(){
+
+  if(PAYMENT_SUBMITTING){
+
+    return;
+
+  }
+
+
+  const message =
+    document.getElementById(
+      "paymentMessage"
+    );
+
+
+  const button =
+    document.getElementById(
+      "submitPaymentButton"
+    );
+
+
+  try{
+
+    PAYMENT_SUBMITTING =
+      true;
+
+
+    if(message){
+
+      message.className =
+        "message";
+
+      message.textContent = "";
+
+    }
+
+
+    const data =
+      collectCustomerData();
+
+
+    validateCustomerData(
+      data
+    );
+
+
+    if(!SELECTED_BANK){
+
+      throw new Error(
+        "กรุณาเลือกบัญชีธนาคารที่โอน"
+      );
+
+    }
+
+
+    const slipInput =
+      document.getElementById(
+        "paymentSlip"
+      );
+
+
+    if(
+      !slipInput ||
+      !slipInput.files ||
+      !slipInput.files[0]
+    ){
+
+      throw new Error(
+        "กรุณาแนบสลิปการโอนเงิน"
+      );
+
+    }
+
+
+    const file =
+      slipInput.files[0];
+
+
+    if(
+      !file.type.startsWith(
+        "image/"
+      )
+    ){
+
+      throw new Error(
+        "ไฟล์สลิปต้องเป็นรูปภาพ"
+      );
+
+    }
+
+
+    if(
+      file.size >
+      8 * 1024 * 1024
+    ){
+
+      throw new Error(
+        "ไฟล์สลิปต้องมีขนาดไม่เกิน 8 MB"
+      );
+
+    }
+
+
+    if(button){
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "⏳ กำลังส่งข้อมูล...";
+    }
+
+
+    const base64 =
+      await fileToBase64(
+        file
+      );
+
+
+    /*
+    =========================================
+    PAYMENT PAYLOAD
+
+    Backend จะรับ action นี้ใน doPost
+    =========================================
+    */
+
+    const payload = {
+
+      action:
+        "submitDMInvoicePayment",
+
+      data:{
+
+        invoice_id:
+          getInvoiceId(),
+
+        twitter:
+          data.twitter,
+
+        email:
+          data.email,
+
+        receiver:
+          data.receiver,
+
+        phone:
+          data.phone,
+
+        address:
+          data.address,
+
+        subdistrict:
+          data.subdistrict,
+
+        district:
+          data.district,
+
+        province:
+          data.province,
+
+        postcode:
+          data.postcode,
+
+        bank_account:
+          getBankAccountValue(
+            SELECTED_BANK
+          ),
+
+        transfer_date:
+          data.transfer_date,
+
+        transfer_time:
+          data.transfer_time,
+
+        slip_name:
+          file.name,
+
+        slip_mime_type:
+          file.type,
+
+        slip_base64:
+          base64
+
+      }
+
+    };
+
+
+    const response =
+      await fetch(
+        API,
+        {
+
+          method:
+            "POST",
+
+          headers:{
+            "Content-Type":
+              "text/plain;charset=utf-8"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "ไม่สามารถแจ้งชำระเงินได้"
+      );
+
+    }
+
+
+    if(message){
+
+      message.className =
+        "message success";
+
+
+      message.innerHTML = `
+
+        ✅ แจ้งชำระเงินเรียบร้อยแล้วค่ะ
+
+        <br><br>
+
+        ทางร้านจะตรวจสอบยอดและสลิป
+        แล้วอัปเดตสถานะให้ค่ะ
+
+      `;
+
+    }
+
+
+    /*
+    ป้องกันการแจ้งซ้ำ
+    */
+
+    const formElements =
+      document.querySelectorAll(
+        "#customerTwitter, #customerEmail, #customerReceiver, #customerPhone, #customerAddress, #customerSubdistrict, #customerDistrict, #customerProvince, #customerPostcode, #transferDate, #transferTime, #paymentSlip"
+      );
+
+
+    formElements.forEach(
+      element => {
+
+        element.disabled =
+          true;
+
+      }
+    );
+
+
+    if(button){
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "✅ แจ้งชำระเงินแล้ว";
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "submitPayment error:",
+      error
+    );
+
+
+    if(message){
+
+      message.className =
+        "message error";
+
+
+      message.innerHTML = `
+
+        ❌ ไม่สามารถแจ้งชำระเงินได้
+
+        <br><br>
+
+        ${escapeHtml(
+          error.message ||
+          String(error)
+        )}
+
+      `;
+
+    }
+
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "💳 แจ้งชำระเงิน";
+
+    }
+
+  }finally{
+
+    PAYMENT_SUBMITTING =
+      false;
+
+  }
+
+}
+
+
+/*
+=========================================
+COLLECT CUSTOMER DATA
+=========================================
+*/
+
+function collectCustomerData(){
+
+  return {
+
+    twitter:
+      getValue(
+        "customerTwitter"
+      ),
+
+    email:
+      getValue(
+        "customerEmail"
+      ),
+
+    receiver:
+      getValue(
+        "customerReceiver"
+      ),
+
+    phone:
+      getValue(
+        "customerPhone"
+      ),
+
+    address:
+      getValue(
+        "customerAddress"
+      ),
+
+    subdistrict:
+      getValue(
+        "customerSubdistrict"
+      ),
+
+    district:
+      getValue(
+        "customerDistrict"
+      ),
+
+    province:
+      getValue(
+        "customerProvince"
+      ),
+
+    postcode:
+      getValue(
+        "customerPostcode"
+      ),
+
+    transfer_date:
+      getValue(
+        "transferDate"
+      ),
+
+    transfer_time:
+      getValue(
+        "transferTime"
+      )
+
+  };
+
+}
+
+
+/*
+=========================================
+VALIDATE CUSTOMER
+=========================================
+*/
+
+function validateCustomerData(
+  data
+){
+
+  const required = [
+
+    [
+      "Twitter / X",
+      data.twitter
+    ],
+
+    [
+      "Email",
+      data.email
+    ],
+
+    [
+      "ชื่อผู้รับ",
+      data.receiver
+    ],
+
+    [
+      "เบอร์โทร",
+      data.phone
+    ],
+
+    [
+      "ที่อยู่",
+      data.address
+    ],
+
+    [
+      "แขวง / ตำบล",
+      data.subdistrict
+    ],
+
+    [
+      "เขต / อำเภอ",
+      data.district
+    ],
+
+    [
+      "จังหวัด",
+      data.province
+    ],
+
+    [
+      "รหัสไปรษณีย์",
+      data.postcode
+    ],
+
+    [
+      "วันที่โอน",
+      data.transfer_date
+    ],
+
+    [
+      "เวลาโอน",
+      data.transfer_time
+    ]
+
+  ];
+
+
+  for(
+    const item of required
+  ){
+
+    if(
+      !String(
+        item[1] || ""
+      ).trim()
+    ){
+
+      throw new Error(
+        "กรุณากรอก " +
+        item[0]
+      );
+
+    }
+
+  }
+
+
+  if(
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      .test(
+        data.email
+      )
+  ){
+
+    throw new Error(
+      "รูปแบบ Email ไม่ถูกต้อง"
+    );
+
+  }
+
+}
+
+
+/*
+=========================================
+BANK ACCOUNT VALUE
+=========================================
+*/
+
+function getBankAccountValue(
+  bank
+){
+
+  if(!bank){
+
+    return "";
+
+  }
+
+
+  /*
+  ถ้า Backend ต้องการ
+  ชื่อธนาคาร + เลขบัญชี
+  */
+
+  const bankName =
+    String(
+      bank.bank_name ||
+      bank.name ||
+      ""
+    ).trim();
+
+
+  const accountNumber =
+    String(
+      bank.account_number ||
+      bank.account_no ||
+      ""
+    ).trim();
+
+
+  const accountName =
+    String(
+      bank.account_name ||
+      bank.account_holder ||
+      bank.holder_name ||
+      ""
+    ).trim();
+
+
+  return [
+
+    bankName,
+
+    accountNumber,
+
+    accountName
+
+  ]
+    .filter(Boolean)
+    .join(" | ");
+
+}
+
+
+/*
+=========================================
+FILE TO BASE64
+=========================================
+*/
+
+function fileToBase64(
+  file
+){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(){
+
+          const result =
+            String(
+              reader.result || ""
+            );
+
+
+          const comma =
+            result.indexOf(",");
+
+
+          if(
+            comma === -1
+          ){
+
+            reject(
+              new Error(
+                "ไม่สามารถอ่านไฟล์สลิปได้"
+              )
+            );
+
+            return;
+
+          }
+
+
+          resolve(
+            result.slice(
+              comma + 1
+            )
+          );
+
+        };
+
+
+      reader.onerror =
+        function(){
+
+          reject(
+            new Error(
+              "ไม่สามารถอ่านไฟล์สลิปได้"
+            )
+          );
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/*
+=========================================
+GET VALUE
+=========================================
+*/
+
+function getValue(
+  id
+){
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+
+  return element
+    ? String(
+        element.value || ""
+      ).trim()
+    : "";
+
+}
+
+
+/*
+=========================================
 MONEY
 =========================================
 */
@@ -1056,3 +2894,4 @@ loadInvoice();
 </body>
 
 </html>
+```
