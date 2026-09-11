@@ -1,3 +1,4 @@
+```javascript
 /*
 =========================================
 RINKA ADMIN — DM INVOICE MANAGER
@@ -750,7 +751,36 @@ function addDMInvoiceItem(){
         );
 
 
-      input?.focus();
+      if(input){
+
+        input.focus();
+
+        /*
+        วาง cursor ไว้ท้ายข้อความ
+        โดยไม่แตะ value
+        */
+
+        try{
+
+          const length =
+            input.value.length;
+
+          input.setSelectionRange(
+            length,
+            length
+          );
+
+        }catch(error){
+
+          /*
+          บาง browser / input type
+          อาจไม่รองรับ setSelectionRange
+          ไม่ต้องทำอะไร
+          */
+
+        }
+
+      }
 
     },
     50
@@ -889,7 +919,6 @@ function renderDMInvoiceItems(){
         type="text"
         value="${dmInvoiceEsc(item.product_name)}"
         placeholder="เช่น Acrylic Stand"
-        oninput="updateDMInvoiceItem(${index}, 'product_name', this.value)"
       >
 
     </div>
@@ -902,10 +931,10 @@ function renderDMInvoiceItems(){
       </label>
 
       <input
+        id="dmCharacterName_${index}"
         type="text"
         value="${dmInvoiceEsc(item.character_name)}"
         placeholder="ถ้ามี"
-        oninput="updateDMInvoiceItem(${index}, 'character_name', this.value)"
       >
 
     </div>
@@ -928,11 +957,11 @@ function renderDMInvoiceItems(){
         </label>
 
         <input
+          id="dmQuantity_${index}"
           type="number"
           min="1"
           step="1"
           value="${Number(item.quantity || 1)}"
-          oninput="updateDMInvoiceItem(${index}, 'quantity', this.value)"
         >
 
       </div>
@@ -945,11 +974,11 @@ function renderDMInvoiceItems(){
         </label>
 
         <input
+          id="dmUnitPrice_${index}"
           type="number"
           min="0"
           step="0.01"
           value="${Number(item.unit_price || 0)}"
-          oninput="updateDMInvoiceItem(${index}, 'unit_price', this.value)"
         >
 
       </div>
@@ -964,10 +993,10 @@ function renderDMInvoiceItems(){
       </label>
 
       <input
+        id="dmImageUrl_${index}"
         type="url"
         value="${dmInvoiceEsc(item.image_url)}"
         placeholder="https://..."
-        oninput="updateDMInvoiceItem(${index}, 'image_url', this.value)"
       >
 
       <small
@@ -984,6 +1013,7 @@ function renderDMInvoiceItems(){
 
 
     <div
+      id="dmInvoiceItemTotal_${index}"
       style="
         text-align:right;
         font-weight:600;
@@ -1009,6 +1039,151 @@ function renderDMInvoiceItems(){
         }
       )
       .join("");
+
+
+  /*
+  =========================================
+  BIND INPUT EVENTS
+
+  สำคัญ:
+  - ไม่ใช้ inline oninput
+  - ไม่ render รายการใหม่ตอนพิมพ์
+  - ไม่แตะ DOM ของ input
+  =========================================
+  */
+
+  DMInvoiceManager.items.forEach(
+    (
+      item,
+      index
+    ) => {
+
+      const productNameInput =
+        document.getElementById(
+          "dmProductName_" +
+          index
+        );
+
+
+      const characterInput =
+        document.getElementById(
+          "dmCharacterName_" +
+          index
+        );
+
+
+      const quantityInput =
+        document.getElementById(
+          "dmQuantity_" +
+          index
+        );
+
+
+      const unitPriceInput =
+        document.getElementById(
+          "dmUnitPrice_" +
+          index
+        );
+
+
+      const imageUrlInput =
+        document.getElementById(
+          "dmImageUrl_" +
+          index
+        );
+
+
+      if(productNameInput){
+
+        productNameInput.addEventListener(
+          "input",
+          function(){
+
+            updateDMInvoiceItem(
+              index,
+              "product_name",
+              this.value
+            );
+
+          }
+        );
+
+      }
+
+
+      if(characterInput){
+
+        characterInput.addEventListener(
+          "input",
+          function(){
+
+            updateDMInvoiceItem(
+              index,
+              "character_name",
+              this.value
+            );
+
+          }
+        );
+
+      }
+
+
+      if(quantityInput){
+
+        quantityInput.addEventListener(
+          "input",
+          function(){
+
+            updateDMInvoiceItem(
+              index,
+              "quantity",
+              this.value
+            );
+
+          }
+        );
+
+      }
+
+
+      if(unitPriceInput){
+
+        unitPriceInput.addEventListener(
+          "input",
+          function(){
+
+            updateDMInvoiceItem(
+              index,
+              "unit_price",
+              this.value
+            );
+
+          }
+        );
+
+      }
+
+
+      if(imageUrlInput){
+
+        imageUrlInput.addEventListener(
+          "input",
+          function(){
+
+            updateDMInvoiceItem(
+              index,
+              "image_url",
+              this.value
+            );
+
+          }
+        );
+
+      }
+
+    }
+  );
 
 }
 
@@ -1038,85 +1213,130 @@ function updateDMInvoiceItem(
   }
 
 
+  /*
+  =========================================
+  TEXT
+  =========================================
+  */
+
   if(
-    field === "quantity"
+    field === "product_name" ||
+    field === "character_name" ||
+    field === "image_url"
   ){
-
-    item.quantity =
-      Math.max(
-        1,
-        Number(value || 1)
-      );
-
-  }else if(
-    field === "unit_price"
-  ){
-
-    item.unit_price =
-      Math.max(
-        0,
-        Number(value || 0)
-      );
-
-  }else{
 
     item[field] =
-      value;
+      String(
+        value ?? ""
+      );
 
   }
-
-
-  updateDMInvoiceTotals();
 
 
   /*
-  อัปเดตเฉพาะยอดของรายการ
-  ไม่ render ใหม่ทั้งฟอร์ม
+  =========================================
+  QUANTITY
+  =========================================
   */
 
-  const cards =
-    document.querySelectorAll(
-      "#dmInvoiceItems .card"
-    );
+  else if(
+    field === "quantity"
+  ){
 
-
-  const card =
-    cards[index];
-
-
-  if(card){
-
-    const total =
-      Number(item.quantity || 0) *
-      Number(item.unit_price || 0);
-
-
-    const totalElement =
-      Array.from(
-        card.querySelectorAll(
-          "div"
-        )
-      ).find(
-        element =>
-          element.textContent
-            .includes(
-              "รวมรายการ:"
-            )
+    const parsed =
+      Number(
+        value
       );
 
 
-    if(totalElement){
-
-      totalElement.innerHTML =
-        `
-        รวมรายการ:
-        ${dmInvoiceMoney(total)}
-        บาท
-        `;
-
-    }
+    item.quantity =
+      Number.isFinite(
+        parsed
+      )
+        ? Math.max(
+            1,
+            parsed
+          )
+        : 1;
 
   }
+
+
+  /*
+  =========================================
+  UNIT PRICE
+  =========================================
+  */
+
+  else if(
+    field === "unit_price"
+  ){
+
+    const parsed =
+      Number(
+        value
+      );
+
+
+    item.unit_price =
+      Number.isFinite(
+        parsed
+      )
+        ? Math.max(
+            0,
+            parsed
+          )
+        : 0;
+
+  }
+
+
+  /*
+  =========================================
+  UPDATE ONLY ITEM TOTAL
+
+  ไม่ render input ใหม่
+  =========================================
+  */
+
+  const itemTotalElement =
+    document.getElementById(
+      "dmInvoiceItemTotal_" +
+      index
+    );
+
+
+  if(itemTotalElement){
+
+    const total =
+      Number(
+        item.quantity || 0
+      ) *
+      Number(
+        item.unit_price || 0
+      );
+
+
+    itemTotalElement.textContent =
+      "รวมรายการ: " +
+      dmInvoiceMoney(
+        total
+      ) +
+      " บาท";
+
+  }
+
+
+  /*
+  =========================================
+  UPDATE GRAND TOTAL
+
+  ฟังก์ชันนี้ render แค่กล่อง total
+  ไม่แตะ input
+  =========================================
+  */
+
+  updateDMInvoiceTotals();
 
 }
 
@@ -1214,9 +1434,7 @@ function setDMShippingType(
   if(box){
 
     box.style.display =
-      (
-        value === "not_included"
-      )
+      value === "not_included"
         ? "block"
         : "none";
 
@@ -2055,9 +2273,6 @@ function showDMInvoiceSuccess(
   =========================================
   INVOICE URL
   =========================================
-
-  ตอนนี้ใช้หน้า invoice.html
-  =========================================
   */
 
   const invoiceUrl =
@@ -2401,3 +2616,4 @@ function dmInvoiceEsc(
     );
 
 }
+```
