@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Invoice | Rinka Shop</title>
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+
+      margin:0;
+
+      background:#f6fbff;
+
+      color:#243746;
+
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
+
+    }
+
+
+    .page{
+
+      width:
+        min(
+          100% - 32px,
+          760px
+        );
+
+      margin:
+        30px auto 60px;
+
+    }
+
+
+    .card{
+
+      background:#fff;
+
+      border:
+        1px solid #dbeafe;
+
+      border-radius:20px;
+
+      padding:24px;
+
+      box-shadow:
+        0 8px 30px
+        rgba(
+          125,
+          207,
+          255,
+          0.10
+        );
+
+    }
+
+
+    .header{
+
+      text-align:center;
+
+      margin-bottom:24px;
+
+    }
+
+
+    .logo{
+
+      font-size:28px;
+
+      font-weight:800;
+
+      color:#4ca9dc;
+
+      margin-bottom:6px;
+
+    }
+
+
+    .subtitle{
+
+      color:#777;
+
+      font-size:14px;
+
+    }
+
+
+    .invoice-id{
+
+      display:inline-block;
+
+      margin-top:14px;
+
+      padding:
+        7px 12px;
+
+      border-radius:999px;
+
+      background:#eef9ff;
+
+      color:#2586b8;
+
+      font-size:13px;
+
+      font-weight:700;
+
+    }
+
+
+    .section{
+
+      margin-top:24px;
+
+    }
+
+
+    .section-title{
+
+      font-size:18px;
+
+      font-weight:700;
+
+      margin-bottom:14px;
+
+    }
+
+
+    .item{
+
+      display:grid;
+
+      grid-template-columns:
+        90px
+        1fr;
+
+      gap:14px;
+
+      padding:14px 0;
+
+      border-bottom:
+        1px solid #edf2f7;
+
+    }
+
+
+    .item:last-child{
+
+      border-bottom:0;
+
+    }
+
+
+    .item-image{
+
+      width:90px;
+
+      height:90px;
+
+      border-radius:14px;
+
+      object-fit:cover;
+
+      background:#f1f5f9;
+
+      border:
+        1px solid #e5e7eb;
+
+    }
+
+
+    .item-no-image{
+
+      width:90px;
+
+      height:90px;
+
+      border-radius:14px;
+
+      background:#f1f5f9;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:center;
+
+      color:#94a3b8;
+
+      font-size:12px;
+
+      text-align:center;
+
+      padding:8px;
+
+    }
+
+
+    .item-name{
+
+      font-weight:700;
+
+      margin-bottom:5px;
+
+    }
+
+
+    .item-character{
+
+      color:#777;
+
+      font-size:14px;
+
+      margin-bottom:8px;
+
+    }
+
+
+    .item-meta{
+
+      display:flex;
+
+      justify-content:space-between;
+
+      gap:12px;
+
+      font-size:14px;
+
+    }
+
+
+    .item-total{
+
+      font-weight:700;
+
+    }
+
+
+    .summary{
+
+      margin-top:18px;
+
+      padding-top:18px;
+
+      border-top:
+        1px solid #dbeafe;
+
+    }
+
+
+    .summary-row{
+
+      display:flex;
+
+      justify-content:space-between;
+
+      gap:20px;
+
+      padding:6px 0;
+
+    }
+
+
+    .summary-total{
+
+      margin-top:10px;
+
+      padding-top:14px;
+
+      border-top:
+        1px solid #dbeafe;
+
+      font-size:20px;
+
+      font-weight:800;
+
+      color:#2082b4;
+
+    }
+
+
+    .status{
+
+      padding:12px 14px;
+
+      border-radius:12px;
+
+      background:#fff7ed;
+
+      color:#9a3412;
+
+      font-size:14px;
+
+      margin-top:18px;
+
+    }
+
+
+    .loading{
+
+      text-align:center;
+
+      padding:60px 20px;
+
+      color:#777;
+
+    }
+
+
+    .error{
+
+      text-align:center;
+
+      padding:30px 20px;
+
+      color:#991b1b;
+
+      background:#fef2f2;
+
+      border:
+        1px solid #fecaca;
+
+      border-radius:14px;
+
+    }
+
+
+    .empty{
+
+      text-align:center;
+
+      padding:30px;
+
+      color:#777;
+
+    }
+
+
+    @media(
+      max-width:600px
+    ){
+
+      .page{
+
+        width:
+          min(
+            100% - 20px,
+            760px
+          );
+
+        margin-top:12px;
+
+      }
+
+
+      .card{
+
+        padding:18px;
+
+        border-radius:16px;
+
+      }
+
+
+      .item{
+
+        grid-template-columns:
+          70px
+          1fr;
+
+      }
+
+
+      .item-image,
+      .item-no-image{
+
+        width:70px;
+
+        height:70px;
+
+      }
+
+
+      .summary-row{
+
+        font-size:14px;
+
+      }
+
+
+      .summary-total{
+
+        font-size:18px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <main class="page">
+
+    <div
+      id="invoiceRoot"
+      class="card"
+    >
+
+      <div class="loading">
+
+        กำลังโหลด Invoice...
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+<script>
+
+const API =
+  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyTWj76w/exec";
+
+
+/*
+=========================================
+GET INVOICE ID
+=========================================
+*/
+
+function getInvoiceId(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  return String(
+    params.get("id") || ""
+  ).trim();
+
+}
+
+
+/*
+=========================================
+LOAD
+=========================================
+*/
+
+async function loadInvoice(){
+
+  const root =
+    document.getElementById(
+      "invoiceRoot"
+    );
+
+
+  const invoiceId =
+    getInvoiceId();
+
+
+  if(!invoiceId){
+
+    root.innerHTML = `
+
+      <div class="error">
+
+        ❌ ไม่พบ Invoice ID
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  try{
+
+    const url =
+      API +
+      "?action=getDMInvoice" +
+      "&invoice_id=" +
+      encodeURIComponent(
+        invoiceId
+      );
+
+
+    const response =
+      await fetch(
+        url,
+        {
+          method:"GET"
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "ไม่สามารถโหลด Invoice ได้"
+      );
+
+    }
+
+
+    renderInvoice(
+      result
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "loadInvoice error:",
+      error
+    );
+
+
+    root.innerHTML = `
+
+      <div class="error">
+
+        ❌ ไม่สามารถโหลด Invoice ได้
+
+        <br><br>
+
+        ${escapeHtml(
+          error.message ||
+          String(error)
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/*
+=========================================
+RENDER
+=========================================
+*/
+
+function renderInvoice(
+  result
+){
+
+  const root =
+    document.getElementById(
+      "invoiceRoot"
+    );
+
+
+  const invoice =
+    result.invoice || {};
+
+
+  const items =
+    Array.isArray(
+      result.items
+    )
+      ? result.items
+      : [];
+
+
+  const invoiceId =
+    invoice.invoice_id || "";
+
+
+  const invoiceType =
+    invoice.invoice_type || "product";
+
+
+  const createdAt =
+    formatDate(
+      invoice.created_at
+    );
+
+
+  const itemHtml =
+    items.length
+      ? items
+          .map(
+            renderItem
+          )
+          .join("")
+      : `
+
+        <div class="empty">
+
+          ไม่มีรายการสินค้า
+
+        </div>
+
+      `;
+
+
+  const statusText =
+    invoice.payment_status === "paid"
+      ? "ชำระเงินแล้ว"
+      : "รอชำระเงิน";
+
+
+  root.innerHTML = `
+
+    <div class="header">
+
+      <div class="logo">
+
+        Rinka Shop
+
+      </div>
+
+
+      <div class="subtitle">
+
+        Invoice สำหรับรายการสั่งซื้อทาง DM
+
+      </div>
+
+
+      <div class="invoice-id">
+
+        ${escapeHtml(
+          invoiceId
+        )}
+
+      </div>
+
+    </div>
+
+
+    ${
+      createdAt
+        ? `
+
+          <div
+            style="
+              text-align:center;
+              color:#777;
+              font-size:13px;
+              margin-bottom:10px;
+            "
+          >
+
+            สร้างเมื่อ ${escapeHtml(
+              createdAt
+            )}
+
+          </div>
+
+        `
+        : ""
+    }
+
+
+    <div class="section">
+
+      <div class="section-title">
+
+        🛍️ รายการสินค้า
+
+      </div>
+
+
+      ${itemHtml}
+
+    </div>
+
+
+    <div class="summary">
+
+      <div class="summary-row">
+
+        <span>
+          ยอดสินค้า
+        </span>
+
+        <strong>
+          ${money(
+            invoice.subtotal
+          )} บาท
+        </strong>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <span>
+          ค่านำเข้า
+        </span>
+
+        <strong>
+          ${money(
+            invoice.import_fee
+          )} บาท
+        </strong>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <span>
+          ค่าตีลัง
+        </span>
+
+        <strong>
+          ${money(
+            invoice.crate_fee
+          )} บาท
+        </strong>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <span>
+          ค่าส่งในไทย
+        </span>
+
+        <strong>
+          ${money(
+            invoice.domestic_shipping_fee
+          )} บาท
+        </strong>
+
+      </div>
+
+
+      <div
+        class="summary-row summary-total"
+      >
+
+        <span>
+          ยอดรวมทั้งหมด
+        </span>
+
+        <strong>
+          ${money(
+            invoice.total
+          )} บาท
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="status">
+
+      สถานะการชำระเงิน:
+      <strong>
+        ${escapeHtml(
+          statusText
+        )}
+      </strong>
+
+    </div>
+
+  `;
+
+}
+
+
+/*
+=========================================
+ITEM
+=========================================
+*/
+
+function renderItem(
+  item
+){
+
+  const imageUrl =
+    String(
+      item.image_url || ""
+    ).trim();
+
+
+  const imageHtml =
+    imageUrl
+      ? `
+
+        <img
+          class="item-image"
+          src="${escapeHtml(
+            imageUrl
+          )}"
+          alt=""
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+        <div
+          class="item-no-image"
+          style="display:none;"
+        >
+          ไม่มีรูป
+        </div>
+
+      `
+      : `
+
+        <div class="item-no-image">
+
+          ไม่มีรูปสินค้า
+
+        </div>
+
+      `;
+
+
+  const character =
+    String(
+      item.character_name || ""
+    ).trim();
+
+
+  return `
+
+    <div class="item">
+
+      <div>
+
+        ${imageHtml}
+
+      </div>
+
+
+      <div>
+
+        <div class="item-name">
+
+          ${escapeHtml(
+            item.product_name || ""
+          )}
+
+        </div>
+
+
+        ${
+          character
+            ? `
+
+              <div class="item-character">
+
+                ตัวละคร:
+                ${escapeHtml(
+                  character
+                )}
+
+              </div>
+
+            `
+            : ""
+        }
+
+
+        <div class="item-meta">
+
+          <span>
+
+            ${money(
+              item.unit_price
+            )}
+            บาท ×
+            ${Number(
+              item.quantity || 0
+            )}
+
+          </span>
+
+
+          <span class="item-total">
+
+            ${money(
+              item.total
+            )}
+            บาท
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/*
+=========================================
+MONEY
+=========================================
+*/
+
+function money(
+  value
+){
+
+  return Number(
+    value || 0
+  ).toLocaleString(
+    "th-TH",
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+/*
+=========================================
+DATE
+=========================================
+*/
+
+function formatDate(
+  value
+){
+
+  if(!value){
+
+    return "";
+
+  }
+
+
+  const date =
+    new Date(
+      value
+    );
+
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return String(
+      value
+    );
+
+  }
+
+
+  return date.toLocaleString(
+    "th-TH",
+    {
+      dateStyle:"medium",
+      timeStyle:"short"
+    }
+  );
+
+}
+
+
+/*
+=========================================
+ESCAPE
+=========================================
+*/
+
+function escapeHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+loadInvoice();
+
+</script>
+
+</body>
+
+</html>
