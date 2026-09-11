@@ -826,12 +826,10 @@ async function loadInvoice(){
   try{
 
     const url =
-      API +
-      "?action=dmInvoice" +
-      "&invoice_id=" +
-      encodeURIComponent(
-        invoiceId
-      );
+  API +
+  "?action=dmInvoice" +
+  "&invoice_id=" +
+  encodeURIComponent(invoiceId);
 
 
     const response =
