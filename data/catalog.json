@@ -18990,7 +18990,7 @@
           "price": null,
           "stock": 9999,
           "selection_type": "single",
-          "image": "https://drive.google.com/thumbnail?id=1qI5tPsUY8blokLQh9G9Ghw2NJcC8vOlc&sz=w2000",
+          "image": "https://drive.google.com/thumbnail?id=1r1Qhaqc9fyH6u5aUV4HhUt-X268enwU3&sz=w2000",
           "sort_order": 5
         }
       ]
@@ -21717,9 +21717,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-13T14:47:47.002Z",
+  "generated_at": "2026-09-13T15:14:23.278Z",
   "performance": {
-    "total_ms": 5967,
+    "total_ms": 4510,
     "product_count": 191,
     "collection_count": 2,
     "bank_count": 3
