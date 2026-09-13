@@ -1144,19 +1144,55 @@ function renderBanks(){
         : ""
     }
 
+${
+  accountNumber
+    ? `
+      <div
+        style="
+          display:flex;
+          align-items:center;
+          gap:8px;
+          flex-wrap:wrap;
+        "
+      >
 
-    ${
-      accountNumber
-        ? `
+        <span>
           เลขบัญชี:
-          <strong>
-            ${escapeHtml(
-              accountNumber
-            )}
-          </strong>
-        `
-        : ""
-    }
+        </span>
+
+        <strong>
+          ${escapeHtml(
+            accountNumber
+          )}
+        </strong>
+
+        <button
+          type="button"
+          onclick="
+            event.stopPropagation();
+            copyBankAccount(
+              '${escapeHtml(accountNumber)}',
+              this
+            );
+          "
+          style="
+            border:0;
+            background:#dff3ff;
+            color:#2586b8;
+            border-radius:8px;
+            padding:6px 10px;
+            font-size:12px;
+            font-weight:700;
+            cursor:pointer;
+          "
+        >
+          📋 คัดลอก
+        </button>
+
+      </div>
+    `
+    : ""
+}
 
   </div>
 
@@ -2847,6 +2883,135 @@ function formatDate(
 
 }
 
+  /*
+=========================================
+COPY BANK ACCOUNT
+=========================================
+*/
+
+async function copyBankAccount(
+  accountNumber,
+  button
+){
+
+  try{
+
+    await navigator.clipboard.writeText(
+      String(
+        accountNumber || ""
+      )
+    );
+
+
+    if(button){
+
+      const original =
+        button.textContent;
+
+
+      button.textContent =
+        "✅ คัดลอกแล้ว";
+
+
+      button.disabled =
+        true;
+
+
+      setTimeout(
+        () => {
+
+          button.textContent =
+            original;
+
+          button.disabled =
+            false;
+
+        },
+        1500
+      );
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "copyBankAccount error:",
+      error
+    );
+
+
+    /*
+    fallback สำหรับ browser
+    ที่ไม่อนุญาต clipboard API
+    */
+
+    try{
+
+      const textarea =
+        document.createElement(
+          "textarea"
+        );
+
+
+      textarea.value =
+        String(
+          accountNumber || ""
+        );
+
+
+      textarea.style.position =
+        "fixed";
+
+      textarea.style.opacity =
+        "0";
+
+
+      document.body.appendChild(
+        textarea
+      );
+
+
+      textarea.select();
+
+
+      document.execCommand(
+        "copy"
+      );
+
+
+      textarea.remove();
+
+
+      if(button){
+
+        button.textContent =
+          "✅ คัดลอกแล้ว";
+
+
+        setTimeout(
+          () => {
+
+            button.textContent =
+              "📋 คัดลอก";
+
+          },
+          1500
+        );
+
+      }
+
+    }catch(fallbackError){
+
+      alert(
+        "ไม่สามารถคัดลอกเลขบัญชีได้ กรุณาคัดลอกด้วยตนเองค่ะ"
+      );
+
+    }
+
+  }
+
+}
 
 /*
 =========================================
