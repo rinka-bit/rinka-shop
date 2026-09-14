@@ -12,34 +12,44 @@ RINKA ADMIN — DM INVOICE MANAGER
 Backend:
 createDMInvoice(data)
 
-หมายเหตุ:
-- ยังไม่ตัด Stock
-- ยังไม่สร้าง Order หลัก
-- ยังไม่โหลด Catalog / Products API
-- รูปสินค้าใช้ URL ก่อน
+รูปสินค้า:
+- เลือกจากเครื่องได้
+- Preview ได้
+- Browser resize/compress ก่อนส่ง
+- Backend อัปโหลดเข้า Google Drive
+- บันทึก URL ลง DMInvoiceItems.image_url
+
 =========================================
 */
 
-
 const DMInvoiceManager = {
 
-  type: "product",
+  type:
+    "product",
 
-  items: [],
+  items:
+    [],
 
-  importIncluded: "included",
+  importIncluded:
+    "included",
 
-  crateType: "no_crate",
+  crateType:
+    "no_crate",
 
-  shippingType: "free",
+  shippingType:
+    "free",
 
-  importFee: 0,
+  importFee:
+    0,
 
-  crateFee: 0,
+  crateFee:
+    0,
 
-  domesticShippingFee: 0,
+  domesticShippingFee:
+    0,
 
-  creating: false
+  creating:
+    false
 
 };
 
@@ -72,33 +82,26 @@ function renderManualOrderManager(){
   DMInvoiceManager.type =
     "product";
 
-
-  DMInvoiceManager.items = [];
-
+  DMInvoiceManager.items =
+    [];
 
   DMInvoiceManager.importIncluded =
     "included";
 
-
   DMInvoiceManager.crateType =
     "no_crate";
-
 
   DMInvoiceManager.shippingType =
     "free";
 
-
   DMInvoiceManager.importFee =
     0;
-
 
   DMInvoiceManager.crateFee =
     0;
 
-
   DMInvoiceManager.domesticShippingFee =
     0;
-
 
   DMInvoiceManager.creating =
     false;
@@ -617,7 +620,6 @@ function renderManualOrderManager(){
 
   addDMInvoiceItem();
 
-
   updateDMInvoiceTotals();
 
   updateDMShippingOnlyTotal();
@@ -643,7 +645,6 @@ function selectDMInvoiceType(
     document.getElementById(
       "dmInvoiceProductForm"
     );
-
 
   const shippingForm =
     document.getElementById(
@@ -675,7 +676,6 @@ function selectDMInvoiceType(
     document.getElementById(
       "dmInvoiceTypeProduct"
     );
-
 
   const shippingButton =
     document.getElementById(
@@ -710,6 +710,12 @@ function selectDMInvoiceType(
 }
 
 
+/*
+=========================================
+ADD ITEM
+=========================================
+*/
+
 function addDMInvoiceItem(){
 
   const index =
@@ -718,15 +724,29 @@ function addDMInvoiceItem(){
 
   DMInvoiceManager.items.push({
 
-    product_name:"",
+    product_name:
+      "",
 
-    character_name:"",
+    character_name:
+      "",
 
-    quantity:1,
+    quantity:
+      1,
 
-    unit_price:0,
+    unit_price:
+      0,
 
-    image_url:""
+    image_url:
+      "",
+
+    image_base64:
+      "",
+
+    image_name:
+      "",
+
+    image_mime_type:
+      ""
 
   });
 
@@ -735,7 +755,7 @@ function addDMInvoiceItem(){
 
 
   requestAnimationFrame(
-    ()=>{
+    () => {
 
       const input =
         document.getElementById(
@@ -760,7 +780,7 @@ function addDMInvoiceItem(){
 
         }catch(error){
 
-          // ไม่ต้องทำอะไร
+          // ignore
 
         }
 
@@ -807,6 +827,7 @@ function removeDMInvoiceItem(
 
 }
 
+
 /*
 =========================================
 RENDER ITEMS
@@ -835,6 +856,22 @@ function renderDMInvoiceItems(){
           item,
           index
         ) => {
+
+          const hasImage =
+            !!String(
+              item.image_base64 ||
+              item.image_url ||
+              ""
+            ).trim();
+
+
+          const previewSrc =
+            item.image_base64
+              ? item.image_base64
+              : item.image_url
+                ? item.image_url
+                : "";
+
 
           return `
 
@@ -890,6 +927,8 @@ function renderDMInvoiceItems(){
     "
   >
 
+    <!-- PRODUCT NAME -->
+
     <div>
 
       <label>
@@ -908,6 +947,8 @@ function renderDMInvoiceItems(){
     </div>
 
 
+    <!-- CHARACTER -->
+
     <div>
 
       <label>
@@ -925,6 +966,8 @@ function renderDMInvoiceItems(){
 
     </div>
 
+
+    <!-- QUANTITY + PRICE -->
 
     <div
       style="
@@ -976,33 +1019,116 @@ function renderDMInvoiceItems(){
     </div>
 
 
+    <!-- IMAGE -->
+
     <div>
 
       <label>
-        รูปสินค้า URL
+        รูปสินค้า
       </label>
 
-      <input
-        id="dmImageUrl_${index}"
-        data-dm-field="image_url"
-        data-dm-index="${index}"
-        type="url"
-        value="${dmInvoiceEsc(item.image_url)}"
-        placeholder="https://..."
-      >
 
-      <small
+      <input
+        id="dmImageFile_${index}"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        data-dm-image-index="${index}"
+        onchange="handleDMInvoiceImage(this)"
         style="
-          display:block;
-          color:#777;
-          margin-top:4px;
+          width:100%;
+          padding:10px;
+          border:1px dashed #93c5fd;
+          border-radius:10px;
+          background:#f8fcff;
         "
       >
-        ตอนนี้ใส่ URL รูปได้ก่อน ระบบแนบไฟล์จากเครื่องจะเพิ่มในขั้นถัดไป
-      </small>
+
+
+      <div
+        style="
+          color:#64748b;
+          font-size:12px;
+          margin-top:6px;
+          line-height:1.6;
+        "
+      >
+        เลือกรูปจากเครื่องได้เลย
+        ระบบจะย่อรูปและอัปโหลดเข้า Google Drive อัตโนมัติ
+      </div>
+
+
+      <div
+        id="dmImagePreviewBox_${index}"
+        style="
+          margin-top:10px;
+          ${hasImage ? "" : "display:none;"}
+        "
+      >
+
+        <div
+          style="
+            position:relative;
+            display:inline-block;
+          "
+        >
+
+          <img
+            id="dmImagePreview_${index}"
+            src="${dmInvoiceEsc(previewSrc)}"
+            alt="รูปสินค้า"
+            style="
+              display:block;
+              width:180px;
+              max-width:100%;
+              max-height:240px;
+              object-fit:contain;
+              border-radius:12px;
+              border:1px solid #dbeafe;
+              background:#f8fafc;
+            "
+          >
+
+
+          <button
+            type="button"
+            onclick="removeDMInvoiceImage(${index})"
+            style="
+              position:absolute;
+              top:6px;
+              right:6px;
+              width:auto;
+              padding:4px 8px;
+              border:0;
+              border-radius:999px;
+              background:#fff;
+              color:#991b1b;
+              box-shadow:0 2px 8px rgba(0,0,0,.12);
+              cursor:pointer;
+            "
+          >
+            ✕
+          </button>
+
+        </div>
+
+
+        <div
+          id="dmImageName_${index}"
+          style="
+            color:#64748b;
+            font-size:12px;
+            margin-top:6px;
+          "
+        >
+          ${dmInvoiceEsc(item.image_name || "")}
+        </div>
+
+      </div>
 
     </div>
 
+
+    <!-- ITEM TOTAL -->
 
     <div
       id="dmInvoiceItemTotal_${index}"
@@ -1017,7 +1143,6 @@ function renderDMInvoiceItems(){
         Number(item.quantity || 0) *
         Number(item.unit_price || 0)
       )}
-
       บาท
 
     </div>
@@ -1036,12 +1161,6 @@ function renderDMInvoiceItems(){
   /*
   =========================================
   EVENT DELEGATION
-
-  สำคัญ:
-  ไม่ bind listener ใหม่ให้ input ทุกตัว
-  ใช้ listener ตัวเดียวที่ container
-
-  และ listener นี้จะไม่ render input ใหม่
   =========================================
   */
 
@@ -1105,6 +1224,485 @@ function renderDMInvoiceItems(){
 
 /*
 =========================================
+HANDLE IMAGE
+=========================================
+*/
+
+async function handleDMInvoiceImage(
+  input
+){
+
+  const index =
+    Number(
+      input?.dataset?.dmImageIndex
+    );
+
+
+  if(
+    !Number.isInteger(index)
+  ){
+
+    return;
+
+  }
+
+
+  const item =
+    DMInvoiceManager.items[index];
+
+
+  if(!item){
+
+    return;
+
+  }
+
+
+  const file =
+    input.files &&
+    input.files[0];
+
+
+  if(!file){
+
+    return;
+
+  }
+
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    alert(
+      "กรุณาเลือกไฟล์รูปภาพ"
+    );
+
+    input.value = "";
+
+    return;
+
+  }
+
+
+  /*
+  จำกัดไฟล์ต้นฉบับไว้ 12 MB
+  ก่อน resize
+  */
+
+  if(
+    file.size >
+    12 * 1024 * 1024
+  ){
+
+    alert(
+      "ไฟล์รูปใหญ่เกินไปค่ะ กรุณาเลือกไฟล์ไม่เกิน 12 MB"
+    );
+
+    input.value = "";
+
+    return;
+
+  }
+
+
+  try{
+
+    /*
+    แสดงสถานะก่อน
+    */
+
+    const previewBox =
+      document.getElementById(
+        "dmImagePreviewBox_" +
+        index
+      );
+
+
+    const preview =
+      document.getElementById(
+        "dmImagePreview_" +
+        index
+      );
+
+
+    const nameElement =
+      document.getElementById(
+        "dmImageName_" +
+        index
+      );
+
+
+    if(previewBox){
+
+      previewBox.style.display =
+        "block";
+
+    }
+
+
+    if(nameElement){
+
+      nameElement.textContent =
+        "⏳ กำลังเตรียมรูป...";
+
+    }
+
+
+    const compressed =
+      await compressDMInvoiceImage(
+        file
+      );
+
+
+    item.image_base64 =
+      compressed.base64;
+
+    item.image_name =
+      compressed.fileName;
+
+    item.image_mime_type =
+      compressed.mimeType;
+
+
+    /*
+    เก็บ URL เดิมไว้เฉพาะกรณี
+    ไม่ได้อัปโหลดใหม่
+    */
+
+    if(preview){
+
+      preview.src =
+        compressed.base64;
+
+      preview.style.display =
+        "block";
+
+    }
+
+
+    if(nameElement){
+
+      nameElement.textContent =
+        "📷 " +
+        compressed.fileName;
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "handleDMInvoiceImage error:",
+      error
+    );
+
+
+    item.image_base64 =
+      "";
+
+    item.image_name =
+      "";
+
+    item.image_mime_type =
+      "";
+
+
+    input.value =
+      "";
+
+
+    alert(
+      error.message ||
+      "ไม่สามารถเตรียมรูปสินค้าได้"
+    );
+
+  }
+
+}
+
+
+/*
+=========================================
+COMPRESS IMAGE
+=========================================
+*/
+
+function compressDMInvoiceImage(
+  file
+){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(){
+
+          const source =
+            String(
+              reader.result || ""
+            );
+
+
+          const img =
+            new Image();
+
+
+          img.onload =
+            function(){
+
+              try{
+
+                const maxSize =
+                  1600;
+
+
+                let width =
+                  img.width;
+
+                let height =
+                  img.height;
+
+
+                /*
+                Resize ด้านยาวไม่เกิน 1600px
+                */
+
+                if(
+                  width > maxSize ||
+                  height > maxSize
+                ){
+
+                  if(
+                    width >= height
+                  ){
+
+                    height =
+                      Math.round(
+                        height *
+                        maxSize /
+                        width
+                      );
+
+                    width =
+                      maxSize;
+
+                  }else{
+
+                    width =
+                      Math.round(
+                        width *
+                        maxSize /
+                        height
+                      );
+
+                    height =
+                      maxSize;
+
+                  }
+
+                }
+
+
+                const canvas =
+                  document.createElement(
+                    "canvas"
+                  );
+
+
+                canvas.width =
+                  width;
+
+                canvas.height =
+                  height;
+
+
+                const ctx =
+                  canvas.getContext(
+                    "2d"
+                  );
+
+
+                if(!ctx){
+
+                  reject(
+                    new Error(
+                      "ไม่สามารถเตรียมรูปสินค้าได้"
+                    )
+                  );
+
+                  return;
+
+                }
+
+
+                ctx.drawImage(
+                  img,
+                  0,
+                  0,
+                  width,
+                  height
+                );
+
+
+                /*
+                ใช้ JPEG เพื่อให้ payload
+                ไม่ใหญ่เกินไป
+                */
+
+                const outputMime =
+                  "image/jpeg";
+
+
+                const base64 =
+                  canvas.toDataURL(
+                    outputMime,
+                    0.82
+                  );
+
+
+                const originalName =
+                  String(
+                    file.name ||
+                    "product-image"
+                  );
+
+
+                const baseName =
+                  originalName
+                    .replace(
+                      /\.[^/.]+$/,
+                      ""
+                    )
+                    .replace(
+                      /[^a-zA-Z0-9ก-๙_-]+/g,
+                      "_"
+                    )
+                    .slice(
+                      0,
+                      80
+                    );
+
+
+                resolve({
+
+                  base64:
+                    base64,
+
+                  mimeType:
+                    outputMime,
+
+                  fileName:
+                    (
+                      baseName ||
+                      "product-image"
+                    ) +
+                    ".jpg"
+
+                });
+
+
+              }catch(error){
+
+                reject(
+                  error
+                );
+
+              }
+
+            };
+
+
+          img.onerror =
+            function(){
+
+              reject(
+                new Error(
+                  "ไม่สามารถอ่านรูปสินค้าได้"
+                )
+              );
+
+            };
+
+
+          img.src =
+            source;
+
+        };
+
+
+      reader.onerror =
+        function(){
+
+          reject(
+            new Error(
+              "ไม่สามารถอ่านไฟล์รูปสินค้าได้"
+            )
+          );
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/*
+=========================================
+REMOVE IMAGE
+=========================================
+*/
+
+function removeDMInvoiceImage(
+  index
+){
+
+  const item =
+    DMInvoiceManager.items[index];
+
+
+  if(!item){
+
+    return;
+
+  }
+
+
+  item.image_url =
+    "";
+
+  item.image_base64 =
+    "";
+
+  item.image_name =
+    "";
+
+  item.image_mime_type =
+    "";
+
+
+  renderDMInvoiceItems();
+
+}
+
+
+/*
+=========================================
 UPDATE ITEM
 =========================================
 */
@@ -1129,15 +1727,12 @@ function updateDMInvoiceItem(
 
 
   /*
-  =========================================
   TEXT
-  =========================================
   */
 
   if(
     field === "product_name" ||
-    field === "character_name" ||
-    field === "image_url"
+    field === "character_name"
   ){
 
     item[field] =
@@ -1149,22 +1744,12 @@ function updateDMInvoiceItem(
 
 
   /*
-  =========================================
   QUANTITY
-  =========================================
   */
 
   else if(
     field === "quantity"
   ){
-
-    /*
-    ตอนกำลังพิมพ์
-    อย่า force ค่า 1 กลับเข้า input
-
-    เพราะถ้าผู้ใช้กำลังลบ/แก้ตัวเลข
-    การ force ค่าใหม่อาจทำให้ cursor กระโดด
-    */
 
     const raw =
       String(
@@ -1203,9 +1788,7 @@ function updateDMInvoiceItem(
 
 
   /*
-  =========================================
   UNIT PRICE
-  =========================================
   */
 
   else if(
@@ -1249,12 +1832,10 @@ function updateDMInvoiceItem(
 
 
   /*
-  =========================================
-  UPDATE ONLY ITEM TOTAL
+  UPDATE ITEM TOTAL ONLY
 
   ห้าม renderDMInvoiceItems()
-  ห้ามแก้ value ของ input
-  =========================================
+  เพราะจะทำให้ input กระโดด
   */
 
   const itemTotalElement =
@@ -1285,19 +1866,10 @@ function updateDMInvoiceItem(
   }
 
 
-  /*
-  =========================================
-  UPDATE GRAND TOTAL
-
-  updateDMInvoiceTotals()
-  แก้เฉพาะกล่องยอดรวม
-  ไม่แตะ input
-  =========================================
-  */
-
   updateDMInvoiceTotals();
 
 }
+
 
 /*
 =========================================
@@ -1406,7 +1978,7 @@ function setDMShippingType(
 
 /*
 =========================================
-CALCULATE PRODUCT TOTAL
+CALCULATE PRODUCT SUBTOTAL
 =========================================
 */
 
@@ -1438,6 +2010,12 @@ function getDMProductSubtotal(){
 }
 
 
+/*
+=========================================
+IMPORT FEE
+=========================================
+*/
+
 function getDMProductImportFee(){
 
   if(
@@ -1459,6 +2037,12 @@ function getDMProductImportFee(){
 }
 
 
+/*
+=========================================
+CRATE FEE
+=========================================
+*/
+
 function getDMProductCrateFee(){
 
   if(
@@ -1479,6 +2063,12 @@ function getDMProductCrateFee(){
 
 }
 
+
+/*
+=========================================
+SHIPPING FEE
+=========================================
+*/
 
 function getDMProductShippingFee(){
 
@@ -1513,7 +2103,7 @@ function getDMProductShippingFee(){
 
 /*
 =========================================
-RENDER PRODUCT TOTAL
+PRODUCT TOTAL
 =========================================
 */
 
@@ -1809,7 +2399,7 @@ async function submitDMInvoice(){
     background:#eff6ff;
   "
 >
-  กำลังสร้าง Invoice...
+  กำลังเตรียมข้อมูล Invoice...
 </div>
 
 `;
@@ -1831,8 +2421,184 @@ async function submitDMInvoice(){
       "product"
     ){
 
+      /*
+      ตรวจข้อมูลก่อน
+      */
+
+      const rawItems =
+        DMInvoiceManager.items;
+
+
+      if(
+        rawItems.length === 0
+      ){
+
+        throw new Error(
+          "กรุณาเพิ่มรายการสินค้าอย่างน้อย 1 รายการ"
+        );
+
+      }
+
+
+      if(
+        rawItems.some(
+          item =>
+            !String(
+              item.product_name || ""
+            ).trim()
+        )
+      ){
+
+        throw new Error(
+          "กรุณากรอกชื่อสินค้าให้ครบทุกรายการ"
+        );
+
+      }
+
+
+      if(
+        rawItems.some(
+          item =>
+            !Number.isFinite(
+              Number(item.quantity)
+            ) ||
+            Number(item.quantity) <= 0
+        )
+      ){
+
+        throw new Error(
+          "จำนวนสินค้าไม่ถูกต้อง"
+        );
+
+      }
+
+
+      if(
+        rawItems.some(
+          item =>
+            !Number.isFinite(
+              Number(item.unit_price)
+            ) ||
+            Number(item.unit_price) < 0
+        )
+      ){
+
+        throw new Error(
+          "ราคาสินค้าไม่ถูกต้อง"
+        );
+
+      }
+
+
+      /*
+      =========================================
+      UPLOAD IMAGE
+      =========================================
+
+      รูปจะถูกอัปโหลดทีละรายการก่อน
+      แล้วเปลี่ยนเป็น image_url
+
+      ดังนั้น Backend createDMInvoice()
+      จะยังได้รับ image_url แบบเดิม
+      และไม่ต้องเก็บ Base64 ลง Sheet
+      =========================================
+      */
+
+      if(resultBox){
+
+        resultBox.innerHTML = `
+
+<div
+  style="
+    padding:14px;
+    border-radius:12px;
+    background:#eff6ff;
+  "
+>
+  ⏳ กำลังอัปโหลดรูปสินค้า...
+</div>
+
+`;
+
+      }
+
+
+      for(
+        let i = 0;
+        i < rawItems.length;
+        i++
+      ){
+
+        const item =
+          rawItems[i];
+
+
+        if(
+          item.image_base64
+        ){
+
+          if(resultBox){
+
+            resultBox.innerHTML = `
+
+<div
+  style="
+    padding:14px;
+    border-radius:12px;
+    background:#eff6ff;
+  "
+>
+  ⏳ กำลังอัปโหลดรูปสินค้า
+  ${i + 1}/${rawItems.length}...
+</div>
+
+`;
+
+          }
+
+
+          const uploadResponse =
+            await uploadDMInvoiceImage(
+              item
+            );
+
+
+          if(
+            !uploadResponse ||
+            uploadResponse.success !== true
+          ){
+
+            throw new Error(
+              uploadResponse?.error ||
+              "ไม่สามารถอัปโหลดรูปสินค้า รายการที่ " +
+              (i + 1)
+            );
+
+          }
+
+
+          item.image_url =
+            String(
+              uploadResponse.url ||
+              ""
+            ).trim();
+
+
+          /*
+          หลังอัปโหลดสำเร็จ
+          ไม่ต้องส่ง Base64 ต่อไป
+          */
+
+          item.image_base64 =
+            "";
+
+        }
+
+      }
+
+
       const items =
-        DMInvoiceManager.items
+        rawItems
           .map(
             item => ({
 
@@ -1863,54 +2629,6 @@ async function submitDMInvoice(){
 
             })
           );
-
-
-      if(
-        items.some(
-          item =>
-            !item.product_name
-        )
-      ){
-
-        throw new Error(
-          "กรุณากรอกชื่อสินค้าให้ครบทุกรายการ"
-        );
-
-      }
-
-
-      if(
-        items.some(
-          item =>
-            !Number.isFinite(
-              item.quantity
-            ) ||
-            item.quantity <= 0
-        )
-      ){
-
-        throw new Error(
-          "จำนวนสินค้าไม่ถูกต้อง"
-        );
-
-      }
-
-
-      if(
-        items.some(
-          item =>
-            !Number.isFinite(
-              item.unit_price
-            ) ||
-            item.unit_price < 0
-        )
-      ){
-
-        throw new Error(
-          "ราคาสินค้าไม่ถูกต้อง"
-        );
-
-      }
 
 
       payload = {
@@ -2023,7 +2741,8 @@ async function submitDMInvoice(){
         invoice_type:
           "shipping",
 
-        items:[],
+        items:
+          [],
 
         import_included:
           "not_included",
@@ -2057,6 +2776,25 @@ async function submitDMInvoice(){
     API
     =========================================
     */
+
+    if(resultBox){
+
+      resultBox.innerHTML = `
+
+<div
+  style="
+    padding:14px;
+    border-radius:12px;
+    background:#eff6ff;
+  "
+>
+  ⏳ กำลังสร้าง Invoice...
+</div>
+
+`;
+
+    }
+
 
     const response =
       await fetch(
@@ -2155,7 +2893,6 @@ async function submitDMInvoice(){
 
     }
 
-
   }finally{
 
     DMInvoiceManager.creating =
@@ -2173,6 +2910,71 @@ async function submitDMInvoice(){
     }
 
   }
+
+}
+
+
+/*
+=========================================
+UPLOAD IMAGE
+=========================================
+*/
+
+async function uploadDMInvoiceImage(
+  item
+){
+
+  const response =
+    await fetch(
+      API,
+      {
+
+        method:
+          "POST",
+
+        headers:{
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+
+        body:
+          JSON.stringify({
+
+            action:
+              "uploadDMInvoiceImage",
+
+            data:{
+
+              file_name:
+                item.image_name ||
+                "product-image.jpg",
+
+              mime_type:
+                item.image_mime_type ||
+                "image/jpeg",
+
+              base64:
+                item.image_base64 || ""
+
+            }
+
+          })
+
+      }
+    );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status
+    );
+
+  }
+
+
+  return await response.json();
 
 }
 
@@ -2226,12 +3028,6 @@ function showDMInvoiceSuccess(
 
   }
 
-
-  /*
-  =========================================
-  INVOICE URL
-  =========================================
-  */
 
   const invoiceUrl =
     new URL(
