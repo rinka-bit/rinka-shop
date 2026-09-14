@@ -3194,11 +3194,9 @@ function buildDMInvoiceCustomerMessage(
 
   return `
 
-สวัสดีค่ะ 🩵
+แจ้ง Invoice สำหรับรายการที่สั่งทาง DM ค่ะ🩵
 
-แจ้ง Invoice สำหรับรายการที่สั่งทาง DM ค่ะ
-
-เลข Invoice:
+เลขที่ใบสั่งซื้อ:
 ${invoiceId}
 
 ยอดรวม:
