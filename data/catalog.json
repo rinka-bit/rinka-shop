@@ -21773,13 +21773,13 @@
         "rule_name": "ซื้อครบ 1,200฿",
         "min_amount": 1200,
         "max_select": 2,
-        "allow_duplicate": "yes",
+        "allow_duplicate": "",
         "reward_mode": "custom",
         "reward_description": "",
         "active": "yes",
         "sort_order": 2,
         "created_at": "2026-09-14T16:37:33.423Z",
-        "updated_at": "2026-09-14T16:44:10.435Z"
+        "updated_at": "2026-09-14T17:05:37.519Z"
       },
       {
         "rule_id": "RULE17894038534233282",
@@ -21787,7 +21787,7 @@
         "rule_name": "ซื้อครบ 1,800฿",
         "min_amount": 1800,
         "max_select": 3,
-        "allow_duplicate": "yes",
+        "allow_duplicate": "",
         "reward_mode": "custom",
         "reward_description": "",
         "active": "yes",
@@ -21801,7 +21801,7 @@
         "rule_name": "ซื้อครบ 2,400฿",
         "min_amount": 2400,
         "max_select": 4,
-        "allow_duplicate": "yes",
+        "allow_duplicate": "",
         "reward_mode": "custom",
         "reward_description": "",
         "active": "yes",
@@ -21815,7 +21815,7 @@
         "rule_name": "ซื้อครบ 3,000฿",
         "min_amount": 3000,
         "max_select": 5,
-        "allow_duplicate": "yes",
+        "allow_duplicate": "",
         "reward_mode": "custom",
         "reward_description": "",
         "active": "yes",
@@ -22534,19 +22534,19 @@
         "updated_at": "2026-09-02T06:18:34.753Z"
       },
       {
-        "gift_item_id": "GIFT17894040781551935",
+        "gift_item_id": "GIFT17894040781551931",
         "rule_id": "RULE17894038534233280",
         "gift_name": "ตั๋วAshveil",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/112ADC25-0542-4A9B-AEEB-AAE57A64C7F0.png?raw=true",
         "has_character": "",
         "max_same_character": 0,
         "active": "yes",
-        "sort_order": 3,
+        "sort_order": 1,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
       {
-        "gift_item_id": "GIFT17894040781551934",
+        "gift_item_id": "GIFT17894040781551932",
         "rule_id": "RULE17894038534233280",
         "gift_name": "เซ็ตการ์ด Aventurine",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/D0D854AE-71F1-4E02-8A13-8EFDFFBB7E0D.png?raw=true",
@@ -22565,7 +22565,7 @@
         "has_character": "",
         "max_same_character": 0,
         "active": "yes",
-        "sort_order": 1,
+        "sort_order": 3,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
@@ -22575,9 +22575,9 @@
         "gift_name": "ตั๋วAshveil",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/112ADC25-0542-4A9B-AEEB-AAE57A64C7F0.png?raw=true",
         "has_character": "",
-        "max_same_character": 2,
+        "max_same_character": 0,
         "active": "yes",
-        "sort_order": 3,
+        "sort_order": 4,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
@@ -22587,9 +22587,9 @@
         "gift_name": "เซ็ตการ์ด Aventurine",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/D0D854AE-71F1-4E02-8A13-8EFDFFBB7E0D.png?raw=true",
         "has_character": "",
-        "max_same_character": 2,
+        "max_same_character": 0,
         "active": "yes",
-        "sort_order": 2,
+        "sort_order": 5,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
@@ -22599,9 +22599,9 @@
         "gift_name": "เซ็ตการ์ดRobin",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/48FA67EA-9BE7-4127-969A-741D805164EB.png?raw=true",
         "has_character": "",
-        "max_same_character": 2,
+        "max_same_character": 0,
         "active": "yes",
-        "sort_order": 1,
+        "sort_order": 6,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
@@ -22613,43 +22613,43 @@
         "has_character": "",
         "max_same_character": 0,
         "active": "yes",
-        "sort_order": 4,
+        "sort_order": 7,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
       {
-        "gift_item_id": "GIFT17894040781551942",
+        "gift_item_id": "GIFT17894040781551938",
         "rule_id": "RULE17894038534233282",
         "gift_name": "สแตนดี้จิบิ Robin",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/82FAC1CF-2296-452E-A6B5-DBDD48CA75C1.png?raw=true",
         "has_character": "",
         "max_same_character": 0,
         "active": "yes",
-        "sort_order": 5,
+        "sort_order": 8,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
       {
-        "gift_item_id": "GIFT17894040781551943",
+        "gift_item_id": "GIFT17894040781551939",
         "rule_id": "RULE17894038534233282",
         "gift_name": "สแตนดี้จิบิ Aventurine",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/666996FD-4F38-4D5E-9762-D085CF7C5C2E.png?raw=true",
         "has_character": "",
         "max_same_character": 0,
         "active": "yes",
-        "sort_order": 6,
+        "sort_order": 9,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       },
       {
-        "gift_item_id": "GIFT17894040781551944",
+        "gift_item_id": "GIFT17894040781551940",
         "rule_id": "RULE17894038534233282",
         "gift_name": "อะคริลิคcheck-in Hyacine",
         "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/CC828948-CA47-4FC0-9FEB-67679D8A2854.png?raw=true",
         "has_character": "",
         "max_same_character": 0,
         "active": "yes",
-        "sort_order": 7,
+        "sort_order": 10,
         "created_at": "2026-09-14T16:41:18.155Z",
         "updated_at": "2026-09-14T16:41:18.155Z"
       }
@@ -23134,9 +23134,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-14T17:00:41.828Z",
+  "generated_at": "2026-09-14T17:10:36.217Z",
   "performance": {
-    "total_ms": 4045,
+    "total_ms": 3315,
     "product_count": 221,
     "collection_count": 3,
     "bank_count": 3
