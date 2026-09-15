@@ -52,6 +52,8 @@ let customerOrdersCache = [];
 
 let legacyOrdersCache = [];
 
+let dmOrdersCache = [];
+
 let ordersLoading = false;
   
 const FILTERS = [
@@ -419,25 +421,21 @@ async function loadOrders(){
   ordersLoading = true;
 
   const cachedOrders =
-  readOrdersLocalCache();
+    readOrdersLocalCache();
 
+  if(cachedOrders.length){
 
-if(cachedOrders.length){
+    customerOrdersCache =
+      cachedOrders;
 
-  customerOrdersCache =
-    cachedOrders;
+    renderOrdersFromCache();
 
+  }else{
 
-  renderOrdersFromCache();
+    box.className =
+      "state";
 
-
-}else{
-
-  box.className =
-    "state";
-
-
-  box.innerHTML = `
+    box.innerHTML = `
 
 <div class="spinner"></div>
 
@@ -451,13 +449,13 @@ if(cachedOrders.length){
 
 `;
 
-}
+  }
 
   try{
 
     /*
     =========================================
-    NEW ORDERS FIRST
+    STORE ORDERS + DM INVOICES
     =========================================
     */
 
@@ -483,24 +481,57 @@ if(cachedOrders.length){
 
     }
 
-    const newResponse =
-      await fetch(
-        API +
-        "?" +
-        newQuery.toString()
-      );
+    const dmQuery =
+      new URLSearchParams({
+        action:
+          "customerDMInvoices",
+        session_token:
+          sessionToken
+      });
+
+    const [
+      newResponse,
+      dmResponse
+    ] =
+      await Promise.all([
+        fetch(
+          API +
+          "?" +
+          newQuery.toString()
+        ),
+        fetch(
+          API +
+          "?" +
+          dmQuery.toString()
+        )
+      ]);
 
     if(!newResponse.ok){
 
       throw new Error(
-        "HTTP " +
+        "โหลดออเดอร์เว็บไซต์ไม่สำเร็จ: HTTP " +
         newResponse.status
       );
 
     }
 
-    const newData =
-      await newResponse.json();
+    if(!dmResponse.ok){
+
+      throw new Error(
+        "โหลด DM Invoice ไม่สำเร็จ: HTTP " +
+        dmResponse.status
+      );
+
+    }
+
+    const [
+      newData,
+      dmData
+    ] =
+      await Promise.all([
+        newResponse.json(),
+        dmResponse.json()
+      ]);
 
     if(
       newData &&
@@ -510,6 +541,18 @@ if(cachedOrders.length){
       throw new Error(
         newData.error ||
         "โหลดออเดอร์ไม่สำเร็จ"
+      );
+
+    }
+
+    if(
+      !dmData ||
+      dmData.success !== true
+    ){
+
+      throw new Error(
+        dmData?.error ||
+        "โหลด DM Invoice ไม่สำเร็จ"
       );
 
     }
@@ -525,16 +568,83 @@ if(cachedOrders.length){
           ? newData.orders
           : [];
 
-    saveOrdersLocalCache(
-  customerOrdersCache
-);
+    customerOrdersCache =
+      customerOrdersCache.map(
+        item => ({
+          ...item,
+          order_source:
+            "store"
+        })
+      );
+
+    const dmRaw =
+      Array.isArray(
+        dmData.orders
+      )
+        ? dmData.orders
+        : Array.isArray(
+            dmData.invoices
+          )
+          ? dmData.invoices
+          : [];
 
     /*
-    แสดงระบบใหม่ทันที
+    หน้า "รายการออเดอร์" แสดงเฉพาะ DM Invoice
+    ประเภท product
+    ส่วน shipping invoice ไม่ถือเป็นออเดอร์สินค้า
     */
+    dmOrdersCache =
+      dmRaw
+        .filter(
+          item =>
+            String(
+              item.invoice_type ||
+              "product"
+            )
+              .trim()
+              .toLowerCase() ===
+            "product"
+        )
+        .map(
+          item => {
+
+            let status =
+              String(
+                item.status || ""
+              )
+                .trim()
+                .toLowerCase();
+
+            if(
+              !status ||
+              status === "sent" ||
+              status === "payment_submitted"
+            ){
+
+              status =
+                "pending_order";
+
+            }
+
+            return {
+              ...item,
+              status,
+              order_source:
+                "dm_invoice",
+              order_id:
+                item.order_id ||
+                item.invoice_id ||
+                ""
+            };
+
+          }
+        );
+
+    saveOrdersLocalCache(
+      customerOrdersCache
+    );
 
     renderOrdersFromCache();
-
 
     /*
     =========================================
@@ -640,7 +750,7 @@ onclick="loadOrders()"
   }
 
 }
-  
+
 function renderOrdersFromCache(){
 
   const box =
@@ -659,8 +769,7 @@ function renderOrdersFromCache(){
           )
         : "รายการออเดอร์ทั้งหมด";
 
-
-  const newOrders =
+  const storeOrders =
     statusFilter
       ? customerOrdersCache.filter(
           order =>
@@ -671,6 +780,33 @@ function renderOrdersFromCache(){
         )
       : customerOrdersCache;
 
+  const dmOrders =
+    statusFilter
+      ? dmOrdersCache.filter(
+          order =>
+            String(
+              order.status || ""
+            ) ===
+            statusFilter
+        )
+      : dmOrdersCache;
+
+  /*
+  Store + DM เรียงรวมตามวันที่
+  */
+  const currentOrders =
+    [
+      ...storeOrders,
+      ...dmOrders
+    ].sort(
+      (a,b) =>
+        new Date(
+          b.created_at || 0
+        ).getTime() -
+        new Date(
+          a.created_at || 0
+        ).getTime()
+    );
 
   const legacyOrders =
     statusFilter
@@ -683,9 +819,8 @@ function renderOrdersFromCache(){
         )
       : legacyOrdersCache;
 
-
   if(
-    newOrders.length === 0 &&
+    currentOrders.length === 0 &&
     legacyOrders.length === 0
   ){
 
@@ -720,23 +855,20 @@ ${
 
   }
 
-
   let html = "";
 
-
   if(
-    newOrders.length
+    currentOrders.length
   ){
 
     html +=
-      newOrders
+      currentOrders
         .map(
           orderCard
         )
         .join("");
 
   }
-
 
   if(
     legacyOrders.length
@@ -785,7 +917,6 @@ font-size:11px;
 
   }
 
-
   box.className =
     "order-list";
 
@@ -793,20 +924,177 @@ font-size:11px;
     html;
 
 }
-  
+
 function orderCard(o){
- const date=o.created_at?new Date(o.created_at).toLocaleDateString("th-TH",{year:"numeric",month:"short",day:"numeric"}):"-";
- const url="order.html?id="+encodeURIComponent(o.order_id||"");
- return `<article class="order-card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)">
-${o.preview_image
-  ? `<img
-      class="order-image"
-      src="${attr(o.preview_image)}"
-      alt="${attr(o.preview_name||"")}"
-      loading="lazy"
-    >`:`<div class="order-image" style="display:flex;align-items:center;justify-content:center">📦</div>`}
- <div class="order-main"><div class="order-id">${esc(o.order_id||"-")}</div><div class="order-name">${esc(o.preview_name||"รายการสินค้า")}</div><div class="order-meta">${Number(o.item_count||0).toLocaleString("th-TH")} รายการ</div></div>
- <div class="order-side"><div><div class="order-total">฿${Number(o.total||0).toLocaleString("th-TH")}</div><div class="order-date">${date}</div></div><span class="badge ${statusClass(o.status)}">${statusText(o.status)}</span></div></article>`;
+
+  const date =
+    o.created_at
+      ? new Date(
+          o.created_at
+        ).toLocaleDateString(
+          "th-TH",
+          {
+            year:"numeric",
+            month:"short",
+            day:"numeric"
+          }
+        )
+      : "-";
+
+  const source =
+    String(
+      o.order_source ||
+      o.order_type ||
+      o.source ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const isDM =
+    source === "dm_invoice" ||
+    String(
+      o.order_id ||
+      o.invoice_id ||
+      ""
+    ).startsWith(
+      "INV-"
+    );
+
+  const id =
+    String(
+      o.order_id ||
+      o.invoice_id ||
+      ""
+    );
+
+  const url =
+    isDM
+      ? "invoice.html?id=" +
+        encodeURIComponent(id)
+      : "order.html?id=" +
+        encodeURIComponent(id);
+
+  const image =
+    String(
+      o.preview_image ||
+      o.image_url ||
+      ""
+    );
+
+  const name =
+    String(
+      o.preview_name ||
+      o.product_name ||
+      "รายการสินค้า"
+    );
+
+  const sourceBadge =
+    isDM
+      ? `
+        <span
+          style="
+            display:inline-block;
+            padding:4px 7px;
+            margin-right:5px;
+            border-radius:999px;
+            background:#fff1f2;
+            color:#be185d;
+            font-size:9px;
+            vertical-align:middle;
+          "
+        >
+          💬 DM Invoice
+        </span>
+      `
+      : "";
+
+  return `
+
+<article
+class="order-card"
+tabindex="0"
+role="link"
+onclick='location.href=${JSON.stringify(url)}'
+onkeydown="cardKey(event,this)"
+>
+
+${
+  image
+    ? `
+      <img
+        class="order-image"
+        src="${attr(image)}"
+        alt="${attr(name)}"
+        loading="lazy"
+      >
+    `
+    : `
+      <div
+        class="order-image"
+        style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        "
+      >
+        📦
+      </div>
+    `
+}
+
+<div class="order-main">
+
+  <div class="order-id">
+    ${sourceBadge}
+    ${esc(id || "-")}
+  </div>
+
+  <div class="order-name">
+    ${esc(name)}
+  </div>
+
+  <div class="order-meta">
+    ${Number(
+      o.item_count ||
+      (
+        Array.isArray(o.items)
+          ? o.items.length
+          : 0
+      )
+    ).toLocaleString("th-TH")} รายการ
+  </div>
+
+</div>
+
+<div class="order-side">
+
+  <div>
+
+    <div class="order-total">
+      ฿${Number(
+        o.total || 0
+      ).toLocaleString("th-TH")}
+    </div>
+
+    <div class="order-date">
+      ${date}
+    </div>
+
+  </div>
+
+  <span
+    class="badge ${statusClass(o.status)}"
+  >
+    ${statusText(o.status)}
+  </span>
+
+</div>
+
+</article>
+
+`;
+
 }
 
 function legacyOrderCard(
