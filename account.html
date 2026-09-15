@@ -1538,12 +1538,10 @@ async function loadOrders(){
       "orderSummaryGrid"
     );
 
-
   const errorBox =
     document.getElementById(
       "accountOrderError"
     );
-
 
   grid.innerHTML = `
 
@@ -1556,51 +1554,93 @@ style="grid-column:1/-1;"
 
 `;
 
-
   errorBox.classList.add(
     "hidden"
   );
 
-
   try{
 
-    const query =
+    /*
+    =========================================
+    LOAD STORE SUMMARY + DM INVOICES
+    =========================================
+
+    - accountOrderSummary = Orders ปกติ + Legacy ตามระบบเดิม
+    - customerDMInvoices = DM Invoice ที่ผูกกับ account นี้
+    - นับเฉพาะ invoice_type = product เป็น "คำสั่งซื้อ"
+    - shipping invoice ไม่เอามาปนกับจำนวนออเดอร์สินค้า
+    =========================================
+    */
+
+    const summaryQuery =
       new URLSearchParams();
 
-
-    query.set(
+    summaryQuery.set(
       "action",
       "accountOrderSummary"
     );
 
-
-    query.set(
+    summaryQuery.set(
       "session_token",
       sessionToken
     );
 
+    const dmQuery =
+      new URLSearchParams();
 
-    const response =
-      await fetch(
-        API +
-        "?" +
-        query.toString()
-      );
+    dmQuery.set(
+      "action",
+      "customerDMInvoices"
+    );
 
+    dmQuery.set(
+      "session_token",
+      sessionToken
+    );
 
-    if(!response.ok){
+    const [
+      summaryResponse,
+      dmResponse
+    ] =
+      await Promise.all([
+        fetch(
+          API +
+          "?" +
+          summaryQuery.toString()
+        ),
+        fetch(
+          API +
+          "?" +
+          dmQuery.toString()
+        )
+      ]);
+
+    if(!summaryResponse.ok){
 
       throw new Error(
-        "HTTP " +
-        response.status
+        "โหลดออเดอร์เว็บไซต์ไม่สำเร็จ: HTTP " +
+        summaryResponse.status
       );
 
     }
 
+    if(!dmResponse.ok){
 
-    const result =
-      await response.json();
+      throw new Error(
+        "โหลด DM Invoice ไม่สำเร็จ: HTTP " +
+        dmResponse.status
+      );
 
+    }
+
+    const [
+      result,
+      dmResult
+    ] =
+      await Promise.all([
+        summaryResponse.json(),
+        dmResponse.json()
+      ]);
 
     if(
       !result ||
@@ -1614,6 +1654,17 @@ style="grid-column:1/-1;"
 
     }
 
+    if(
+      !dmResult ||
+      dmResult.success !== true
+    ){
+
+      throw new Error(
+        dmResult?.error ||
+        "โหลดข้อมูล DM Invoice ไม่สำเร็จ"
+      );
+
+    }
 
     const counts = {
 
@@ -1655,6 +1706,87 @@ style="grid-column:1/-1;"
 
     };
 
+    const dmInvoices =
+      Array.isArray(
+        dmResult.orders
+      )
+        ? dmResult.orders
+        : (
+            Array.isArray(
+              dmResult.invoices
+            )
+              ? dmResult.invoices
+              : []
+          );
+
+    /*
+    =========================================
+    DM PRODUCT INVOICE → ACCOUNT STATUS
+    =========================================
+    */
+
+    const dmProductInvoices =
+      dmInvoices.filter(
+        invoice =>
+          String(
+            invoice.invoice_type ||
+            "product"
+          )
+            .trim()
+            .toLowerCase() ===
+          "product"
+      );
+
+    dmProductInvoices.forEach(
+      invoice => {
+
+        let status =
+          String(
+            invoice.status || ""
+          )
+            .trim()
+            .toLowerCase();
+
+        /*
+        Invoice ที่เพิ่งส่ง / ลูกค้าเพิ่งแจ้งชำระ
+        ยังถือว่าอยู่ช่วง "รอกดสั่งสินค้า"
+        จน Admin เปลี่ยนเป็น pending
+        */
+        if(
+          !status ||
+          status === "sent" ||
+          status === "payment_submitted"
+        ){
+
+          status =
+            "pending_order";
+
+        }
+
+        if(
+          Object.prototype.hasOwnProperty.call(
+            counts,
+            status
+          )
+        ){
+
+          counts[
+            status
+          ] += 1;
+
+        }
+
+      }
+    );
+
+    const dmProductTotal =
+      dmProductInvoices.length;
+
+    const total =
+      Number(
+        result.total || 0
+      ) +
+      dmProductTotal;
 
     grid.innerHTML = [
 
@@ -1716,9 +1848,7 @@ onclick="window.location.href='orders.html'"
 </div>
 
 <div class="order-summary-count">
-${Number(
-  result.total || 0
-)}
+${Number(total || 0)}
 </div>
 
 </div>
@@ -1726,13 +1856,6 @@ ${Number(
 `
 
     ].join("");
-
-
-    /*
-    Legacy มีปัญหา
-    แต่ระบบใหม่โหลดได้:
-    ไม่ทำให้หน้า Account พัง
-    */
 
     if(
       result.legacy_warning
@@ -1745,7 +1868,6 @@ ${Number(
 
     }
 
-
   }catch(error){
 
     console.error(
@@ -1753,10 +1875,8 @@ ${Number(
       error
     );
 
-
     grid.innerHTML =
       "";
-
 
     errorBox.innerHTML = `
 
@@ -1780,7 +1900,6 @@ onclick="loadOrders()"
 
 `;
 
-
     errorBox.classList.remove(
       "hidden"
     );
@@ -1788,7 +1907,7 @@ onclick="loadOrders()"
   }
 
 }
-  
+
 function createAccountOrderSummary(
   status,
   icon,
