@@ -53,97 +53,194 @@ async function loadOrders(){
       "orders"
     );
 
-
   if(box){
-
     box.innerHTML = `
-
-<div class="card">
-⏳ กำลังโหลดออเดอร์...
-</div>
-
-`;
-
+      <div class="card">
+        ⏳ กำลังโหลดออเดอร์...
+      </div>
+    `;
   }
-
 
   try{
 
-    const response =
-      await fetch(
-        API +
-        "?action=orders"
-      );
+    /*
+    =========================================
+    LOAD STORE ORDERS + DM INVOICES
+    =========================================
+    */
 
+    const [
+      storeResponse,
+      dmResponse
+    ] =
+      await Promise.all([
 
-    if(!response.ok){
+        fetch(
+          API +
+          "?action=orders"
+        ),
 
+        fetch(
+          API +
+          "?action=adminDMInvoices"
+        )
+
+      ]);
+
+    if(!storeResponse.ok){
       throw new Error(
-        "HTTP " +
-        response.status
+        "โหลดออเดอร์เว็บไซต์ไม่สำเร็จ: HTTP " +
+        storeResponse.status
       );
-
     }
 
+    if(!dmResponse.ok){
+      throw new Error(
+        "โหลด DM Invoice ไม่สำเร็จ: HTTP " +
+        dmResponse.status
+      );
+    }
 
-    const result =
-      await response.json();
+    const storeResult =
+      await storeResponse.json();
 
+    const dmResult =
+      await dmResponse.json();
 
-    const rawOrders =
+    if(
+      storeResult &&
+      storeResult.success === false
+    ){
+      throw new Error(
+        storeResult.error ||
+        "โหลดออเดอร์เว็บไซต์ไม่สำเร็จ"
+      );
+    }
+
+    if(
+      dmResult &&
+      dmResult.success === false
+    ){
+      throw new Error(
+        dmResult.error ||
+        "โหลด DM Invoice ไม่สำเร็จ"
+      );
+    }
+
+    const storeOrders =
       Array.isArray(
-        result.orders
+        storeResult.orders
       )
-        ? [
-            ...result.orders
-          ].reverse()
-
+        ? storeResult.orders
         : Array.isArray(
-            result
+            storeResult
           )
-          ? [
-              ...result
-            ].reverse()
-
+          ? storeResult
           : [];
 
+    const dmOrders =
+      Array.isArray(
+        dmResult.orders
+      )
+        ? dmResult.orders
+        : Array.isArray(
+            dmResult.invoices
+          )
+          ? dmResult.invoices
+          : [];
+
+    const rawOrders = [
+
+      ...storeOrders.map(
+        order => ({
+          ...order,
+          order_source:
+            "store"
+        })
+      ),
+
+      ...dmOrders.map(
+        order => ({
+          ...order,
+          order_source:
+            "dm_invoice"
+        })
+      )
+
+    ].sort(
+      (
+        first,
+        second
+      ) => {
+
+        const firstTime =
+          new Date(
+            first.created_at || 0
+          ).getTime() || 0;
+
+        const secondTime =
+          new Date(
+            second.created_at || 0
+          ).getTime() || 0;
+
+        return (
+          secondTime -
+          firstTime
+        );
+
+      }
+    );
 
     /*
-    =====================================
+    =========================================
     BASE CACHE
 
-    เก็บ Paid Orders ทั้งหมด
-    รวม shipped / completed
-    =====================================
+    Store:
+    - แสดงเฉพาะ payment_status = paid
+
+    DM Invoice:
+    - submitted = ลูกค้าแจ้งชำระแล้ว
+    - paid = รองรับกรณีภายหลังมีการ confirm
+    =========================================
     */
 
     adminOrderBaseCache =
       rawOrders.filter(
         order => {
 
-          return (
+          const source =
+            String(
+              order.order_source || ""
+            )
+              .trim()
+              .toLowerCase();
+
+          const paymentStatus =
             String(
               order.payment_status || ""
             )
               .trim()
-              .toLowerCase() ===
+              .toLowerCase();
+
+          if(
+            source ===
+            "dm_invoice"
+          ){
+            return (
+              paymentStatus ===
+                "submitted" ||
+              paymentStatus ===
+                "paid"
+            );
+          }
+
+          return (
+            paymentStatus ===
             "paid"
           );
 
         }
       );
-
-
-    /*
-    =====================================
-    ACTIVE ORDER MANAGER
-
-    - completed ไม่แสดง
-    - shipped:
-        ถ้ายังไม่เกิน 3 วัน
-        ยังแสดงใน Order Manager
-    =====================================
-    */
 
     const activeOrders =
       adminOrderBaseCache.filter(
@@ -153,31 +250,15 @@ async function loadOrders(){
           )
       );
 
-
-    /*
-    โหลด Detail เฉพาะ Active Orders
-
-    ป้องกัน Archive เก่าหลายร้อยออเดอร์
-    ยิง getOrder ทีละใบตอนเปิด Admin
-    =====================================
-    */
-
-   adminOrdersCache =
-  activeOrders;
+    adminOrdersCache =
+      activeOrders;
 
     renderAdminOrders();
-
-
-    /*
-    ถ้าหน้า Archive เปิดอยู่
-    ให้อัปเดตหน้า Archive ด้วย
-    */
 
     const shippedTab =
       document.getElementById(
         "tab_shipped_orders"
       );
-
 
     if(
       shippedTab &&
@@ -187,11 +268,8 @@ async function loadOrders(){
       typeof renderAdminShippedOrders ===
         "function"
     ){
-
       renderAdminShippedOrders();
-
     }
-
 
   }catch(error){
 
@@ -200,70 +278,51 @@ async function loadOrders(){
       error
     );
 
-
     if(box){
-
       box.innerHTML = `
-
-<div
-class="card"
-style="
-background:#fff1f2;
-border-color:#fecdd3;
-color:#be123c;
-"
->
-
-โหลดออเดอร์ไม่สำเร็จ
-
-<br><br>
-
-${escapeAdminOrderHtml(
-  error.message ||
-  String(error)
-)}
-
-<br><br>
-
-<button
-type="button"
-onclick="loadOrders()"
->
-ลองใหม่
-</button>
-
-</div>
-
-`;
-
+        <div
+          class="card"
+          style="
+            background:#fff1f2;
+            border-color:#fecdd3;
+            color:#be123c;
+          "
+        >
+          โหลดออเดอร์ไม่สำเร็จ
+          <br><br>
+          ${escapeAdminOrderHtml(
+            error.message ||
+            String(error)
+          )}
+          <br><br>
+          <button
+            type="button"
+            onclick="loadOrders()"
+          >
+            ลองใหม่
+          </button>
+        </div>
+      `;
     }
-
 
     const shippedBox =
       document.getElementById(
         "shippedOrders"
       );
 
-
     if(shippedBox){
-
       shippedBox.innerHTML = `
-
-<div
-class="card"
-style="
-background:#fff1f2;
-border-color:#fecdd3;
-color:#be123c;
-"
->
-
-โหลดออเดอร์ที่จัดส่งแล้วไม่สำเร็จ
-
-</div>
-
-`;
-
+        <div
+          class="card"
+          style="
+            background:#fff1f2;
+            border-color:#fecdd3;
+            color:#be123c;
+          "
+        >
+          โหลดออเดอร์ที่จัดส่งแล้วไม่สำเร็จ
+        </div>
+      `;
     }
 
   }
@@ -647,6 +706,55 @@ RENDER ORDER LIST
 
 function renderAdminOrders(){
 
+  /*
+  DM Invoice ที่เพิ่งแจ้งชำระอาจยังมี status
+  sent / payment_submitted
+  ให้เริ่มในกลุ่ม "รอกดสั่งสินค้า"
+  */
+  adminOrdersCache.forEach(
+    order => {
+
+      const source =
+        String(
+          order.order_source ||
+          order.source ||
+          order.order_type ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const orderId =
+        String(
+          order.order_id || ""
+        ).trim();
+
+      const isDMInvoice =
+        source === "dm_invoice" ||
+        /^INV-/i.test(orderId);
+
+      const status =
+        String(
+          order.status || ""
+        )
+          .trim()
+          .toLowerCase();
+
+      if(
+        isDMInvoice &&
+        (
+          !status ||
+          status === "sent" ||
+          status === "payment_submitted"
+        )
+      ){
+        order.status =
+          "pending_order";
+      }
+
+    }
+  );
+
   const box =
     document.getElementById(
       "orders"
@@ -926,11 +1034,31 @@ ${escapeAdminOrderHtml(
     .toLowerCase();
 
 
+const orderSource =
+  String(
+    order.order_source ||
+    order.source ||
+    order.order_type ||
+    ""
+  )
+    .trim()
+    .toLowerCase();
+
+const isDMInvoice =
+  orderSource ===
+    "dm_invoice" ||
+  /^INV-/i.test(
+    orderId
+  );
+
 if(
-  status ===
-    "ready_to_ship" ||
-  status ===
-    "shipped"
+  !isDMInvoice &&
+  (
+    status ===
+      "ready_to_ship" ||
+    status ===
+      "shipped"
+  )
 ){
 
   loadOrderShipmentsForAdmin(
@@ -972,367 +1100,519 @@ function renderOrderCard(
       order.order_id || ""
     ).trim();
 
-  const status =
-  String(
-    order.status ||
-    "pending_order"
-  ).trim();
+  const source =
+    String(
+      order.order_source ||
+      order.source ||
+      order.order_type ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
 
+  const isDMInvoice =
+    source ===
+      "dm_invoice" ||
+    /^INV-/i.test(
+      orderId
+    );
+
+  /*
+  DM Invoice หลังแจ้งชำระจะมี raw status เป็น
+  sent / payment_submitted ได้
+  แต่ใน Order Manager ให้เริ่มที่ pending_order
+  จนกว่าแอดมินจะอัปเดต workflow
+  */
+  const rawStatus =
+    String(
+      order.status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const status =
+    isDMInvoice &&
+    (
+      !rawStatus ||
+      rawStatus === "sent" ||
+      rawStatus === "payment_submitted"
+    )
+      ? "pending_order"
+      : (
+          rawStatus ||
+          "pending_order"
+        );
+
+  /*
+  เก็บ normalized status ไว้ใน object
+  เพื่อ render/filter รอบถัดไปในหน้านี้ตรงกัน
+  */
+  order.status =
+    status;
 
   const customerName =
     String(
-      order.customer_name || "-"
+      order.customer_name ||
+      order.receiver ||
+      "-"
     ).trim();
-
 
   const email =
     String(
       order.email || "-"
     ).trim();
 
-
   const phone =
     String(
       order.phone || "-"
     ).trim();
 
-
   const social =
     String(
-      order.social || "-"
+      order.social ||
+      order.twitter ||
+      "-"
     ).trim();
-
 
   const total =
     Number(
       order.total || 0
     );
 
-
   const createdAt =
     formatAdminOrderDate(
       order.created_at
     );
-
 
   const itemsHtml =
     renderAdminOrderItems(
       order.items
     );
 
-
   const giftsHtml =
-    renderAdminOrderGifts(
-      order.gifts
-    );
+    isDMInvoice
+      ? ""
+      : renderAdminOrderGifts(
+          order.gifts
+        );
 
+  const paymentStatus =
+    String(
+      order.payment_status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const sourceBadge =
+    isDMInvoice
+      ? `
+        <span
+          style="
+            display:inline-block;
+            margin-left:8px;
+            padding:4px 8px;
+            border-radius:999px;
+            background:#f3e8ff;
+            color:#7e22ce;
+            font-size:11px;
+            font-weight:700;
+            vertical-align:middle;
+          "
+        >
+          💬 DM Invoice
+        </span>
+      `
+      : `
+        <span
+          style="
+            display:inline-block;
+            margin-left:8px;
+            padding:4px 8px;
+            border-radius:999px;
+            background:#dbeafe;
+            color:#1d4ed8;
+            font-size:11px;
+            font-weight:700;
+            vertical-align:middle;
+          "
+        >
+          🛒 เว็บไซต์
+        </span>
+      `;
+
+  const paymentBadge =
+    isDMInvoice &&
+    paymentStatus ===
+      "submitted"
+      ? `
+        <span
+          style="
+            display:inline-block;
+            margin-left:6px;
+            padding:4px 8px;
+            border-radius:999px;
+            background:#fef3c7;
+            color:#92400e;
+            font-size:11px;
+            font-weight:700;
+            vertical-align:middle;
+          "
+        >
+          🧾 แจ้งชำระแล้ว
+        </span>
+      `
+      : "";
+
+  const slipHtml =
+    isDMInvoice &&
+    order.slip_url
+      ? `
+        <div
+          style="
+            margin-top:14px;
+            padding:12px 14px;
+            border:1px solid #fde68a;
+            border-radius:12px;
+            background:#fffbeb;
+          "
+        >
+          <b>
+            🧾 หลักฐานการชำระเงิน
+          </b>
+
+          <div
+            style="
+              margin-top:8px;
+            "
+          >
+            <a
+              href="${escapeAdminOrderHtml(
+                order.slip_url
+              )}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              เปิดสลิป
+            </a>
+          </div>
+        </div>
+      `
+      : "";
+
+  const feeBoxHtml =
+    isDMInvoice
+      ? ""
+      : `
+        <div
+          id="feeBox_${escapeAdminOrderHtml(
+            orderId
+          )}"
+          style="display:none;"
+        >
+
+          ${renderAdminArrivalItems(
+            orderId,
+            order.items
+          )}
+
+          <div
+            class="card"
+            style="
+              background:#f8fbff;
+              box-shadow:none;
+              margin-bottom:12px;
+            "
+          >
+
+            <h4
+              style="
+                margin-top:0;
+              "
+            >
+              💰 ค่านำเข้าและค่าส่งในไทย
+            </h4>
+
+            <label>
+              ค่านำเข้า
+            </label>
+
+            <input
+              id="import_${escapeAdminOrderHtml(
+                orderId
+              )}"
+              type="number"
+              min="0"
+              step="0.01"
+              value="${escapeAdminOrderHtml(
+                order.import_fee_round2 ??
+                order.import_fee ??
+                0
+              )}"
+              placeholder="ค่านำเข้า"
+            >
+
+            <br><br>
+
+            <label>
+              ค่าส่งในไทย
+            </label>
+
+            <input
+              id="domestic_${escapeAdminOrderHtml(
+                orderId
+              )}"
+              type="number"
+              min="0"
+              step="0.01"
+              value="${escapeAdminOrderHtml(
+                order.domestic_shipping_fee ??
+                0
+              )}"
+              placeholder="ค่าส่งในไทย"
+            >
+
+          </div>
+
+        </div>
+      `;
+
+  const shipmentHtml =
+    isDMInvoice
+      ? ""
+      : `
+        <div
+          id="shipmentBox_${escapeAdminOrderHtml(
+            orderId
+          )}"
+          style="
+            margin-top:16px;
+            padding-top:16px;
+            border-top:1px solid #e5e7eb;
+          "
+        >
+        </div>
+      `;
 
   return `
 
 <div
-class="order-card"
-id="orderCard_${escapeAdminOrderHtml(
-  orderId
-)}"
+  class="order-card"
+  id="orderCard_${escapeAdminOrderHtml(
+    orderId
+  )}"
 >
 
-<div
-style="
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-gap:12px;
-flex-wrap:wrap;
-"
->
+  <div
+    style="
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+    "
+  >
 
-<div>
+    <div>
 
-<h3
-style="
-margin:0 0 8px;
-"
->
-📦
-${escapeAdminOrderHtml(
-  orderId
-)}
-</h3>
+      <h3
+        style="
+          margin:0 0 8px;
+        "
+      >
+        📦
+        ${escapeAdminOrderHtml(
+          orderId
+        )}
+        ${sourceBadge}
+        ${paymentBadge}
+      </h3>
 
-<div
-style="
-color:#64748b;
-font-size:13px;
-"
->
-${escapeAdminOrderHtml(
-  createdAt
-)}
-</div>
+      <div
+        style="
+          color:#64748b;
+          font-size:13px;
+        "
+      >
+        ${escapeAdminOrderHtml(
+          createdAt
+        )}
+      </div>
 
-</div>
+    </div>
 
-<div
-style="
-font-size:20px;
-font-weight:700;
-color:#2563eb;
-"
->
-฿${total.toLocaleString(
-  "th-TH",
-  {
-    maximumFractionDigits:2
-  }
-)}
-</div>
+    <div
+      style="
+        font-size:20px;
+        font-weight:700;
+        color:#2563eb;
+      "
+    >
+      ฿${total.toLocaleString(
+        "th-TH",
+        {
+          maximumFractionDigits:2
+        }
+      )}
+    </div>
 
-</div>
+  </div>
 
-<hr
-style="
-border:none;
-border-top:1px solid #e5e7eb;
-margin:14px 0;
-"
->
+  <hr
+    style="
+      border:none;
+      border-top:1px solid #e5e7eb;
+      margin:14px 0;
+    "
+  >
 
-<div
-class="grid"
-style="
-grid-template-columns:
-repeat(auto-fit,minmax(180px,1fr));
-"
->
+  <div
+    class="grid"
+    style="
+      grid-template-columns:
+      repeat(auto-fit,minmax(180px,1fr));
+    "
+  >
 
-<div>
+    <div>
+      <b>👤 ลูกค้า</b>
+      <div>
+        ${escapeAdminOrderHtml(
+          customerName
+        )}
+      </div>
+    </div>
 
-<b>👤 ลูกค้า</b>
+    <div>
+      <b>📧 อีเมล</b>
+      <div>
+        ${escapeAdminOrderHtml(
+          email
+        )}
+      </div>
+    </div>
 
-<div>
-${escapeAdminOrderHtml(
-  customerName
-)}
-</div>
+    <div>
+      <b>📱 เบอร์โทร</b>
+      <div>
+        ${escapeAdminOrderHtml(
+          phone
+        )}
+      </div>
+    </div>
 
-</div>
+    <div>
+      <b>💬 แอค X / Social</b>
+      <div>
+        ${escapeAdminOrderHtml(
+          social
+        )}
+      </div>
+    </div>
 
-<div>
+  </div>
 
-<b>📧 อีเมล</b>
+  ${itemsHtml}
 
-<div>
-${escapeAdminOrderHtml(
-  email
-)}
-</div>
+  ${giftsHtml}
 
-</div>
+  ${slipHtml}
 
-<div>
+  <div
+    style="
+      margin-top:16px;
+      padding-top:16px;
+      border-top:1px solid #e5e7eb;
+    "
+  >
 
-<b>📱 เบอร์โทร</b>
+    <label
+      for="status_${escapeAdminOrderHtml(
+        orderId
+      )}"
+    >
+      <b>
+        สถานะออเดอร์
+      </b>
+    </label>
 
-<div>
-${escapeAdminOrderHtml(
-  phone
-)}
-</div>
+    <br><br>
 
-</div>
+    <select
+      id="status_${escapeAdminOrderHtml(
+        orderId
+      )}"
+      onchange="
+        toggleOrderFields(
+          '${escapeAdminOrderJs(
+            orderId
+          )}'
+        )
+      "
+    >
 
-<div>
+      <option value="pending_order">
+        รอกดสั่งสินค้า
+      </option>
 
-<b>💬 แอค X / Social</b>
+      <option value="pending">
+        กดสั่งสินค้าแล้ว
+      </option>
 
-<div>
-${escapeAdminOrderHtml(
-  social
-)}
-</div>
+      <option value="china_arrived">
+        สินค้าถึงโกดังจีน
+      </option>
 
-</div>
+      <option value="shipping_to_th">
+        กำลังมาไทย
+      </option>
 
-</div>
+      <option value="ready_to_ship">
+        เตรียมจัดส่ง
+      </option>
 
-${itemsHtml}
+      <option value="shipped">
+        จัดส่งแล้ว
+      </option>
 
-${giftsHtml}
+      <option value="completed">
+        เสร็จสิ้น
+      </option>
 
-<div
-style="
-margin-top:16px;
-padding-top:16px;
-border-top:1px solid #e5e7eb;
-"
->
+    </select>
 
-<label
-for="status_${escapeAdminOrderHtml(
-  orderId
-)}"
->
+    <br><br>
 
-<b>
-สถานะออเดอร์
-</b>
+    ${feeBoxHtml}
 
-</label>
+    <button
+      id="updateOrderBtn_${escapeAdminOrderHtml(
+        orderId
+      )}"
+      type="button"
+      onclick="
+        updateOrderStatus(
+          '${escapeAdminOrderJs(
+            orderId
+          )}'
+        )
+      "
+    >
+      💾 อัปเดตสถานะ
+    </button>
 
-<br><br>
+    <div
+      id="orderLoading_${escapeAdminOrderHtml(
+        orderId
+      )}"
+      class="loading-text"
+      style="display:none;"
+    >
+      ⏳ กำลังอัปเดต...
+    </div>
 
-<select
-id="status_${escapeAdminOrderHtml(
-  orderId
-)}"
-onchange="
-toggleOrderFields(
-'${escapeAdminOrderJs(
-  orderId
-)}'
-)
-"
->
+    ${shipmentHtml}
 
-<option value="pending_order">
-รอกดสั่งสินค้า
-</option>
-
-<option value="pending">
-กดสั่งสินค้าแล้ว
-</option>
-
-<option value="china_arrived">
-สินค้าถึงโกดังจีน
-</option>
-
-<option value="shipping_to_th">
-กำลังมาไทย
-</option>
-
-<option value="ready_to_ship">
-เตรียมจัดส่ง
-</option>
-
-<option value="shipped">
-จัดส่งแล้ว
-</option>
-
-</select>
-
-<br><br>
-
-<div
-id="feeBox_${escapeAdminOrderHtml(
-  orderId
-)}"
-style="display:none;"
->
-
-${renderAdminArrivalItems(
-  orderId,
-  order.items
-)}
-
-<div
-class="card"
-style="
-background:#f8fbff;
-box-shadow:none;
-margin-bottom:12px;
-"
->
-
-<h4
-style="
-margin-top:0;
-"
->
-💰 ค่านำเข้าและค่าส่งในไทย
-</h4>
-
-<label>
-ค่านำเข้า
-</label>
-
-<input
-id="import_${escapeAdminOrderHtml(
-  orderId
-)}"
-type="number"
-min="0"
-step="0.01"
-value="${escapeAdminOrderHtml(
-  order.import_fee_round2 ??
-  order.import_fee ??
-  0
-)}"
-placeholder="ค่านำเข้า"
->
-
-<br><br>
-
-<label>
-ค่าส่งในไทย
-</label>
-
-<input
-id="domestic_${escapeAdminOrderHtml(
-  orderId
-)}"
-type="number"
-min="0"
-step="0.01"
-value="${escapeAdminOrderHtml(
-  order.domestic_shipping_fee ??
-  0
-)}"
-placeholder="ค่าส่งในไทย"
->
-
-</div>
-
-</div>
-
-<button
-id="updateOrderBtn_${escapeAdminOrderHtml(
-  orderId
-)}"
-type="button"
-onclick="
-updateOrderStatus(
-'${escapeAdminOrderJs(
-  orderId
-)}'
-)
-"
->
-💾 อัปเดตสถานะ
-</button>
-
-<div
-id="orderLoading_${escapeAdminOrderHtml(
-  orderId
-)}"
-class="loading-text"
-style="display:none;"
->
-⏳ กำลังอัปเดต...
-</div>
-
-<div
-id="shipmentBox_${escapeAdminOrderHtml(
-  orderId
-)}"
-style="
-margin-top:16px;
-padding-top:16px;
-border-top:1px solid #e5e7eb;
-"
->
-</div>
-
-</div>
+  </div>
 
 </div>
 
@@ -1357,32 +1637,28 @@ function renderAdminOrderItems(
     ) ||
     items.length === 0
   ){
-
     return "";
-
   }
-
 
   let html = `
 
 <div
-style="
-margin-top:16px;
-padding-top:16px;
-border-top:1px solid #e5e7eb;
-"
+  style="
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px solid #e5e7eb;
+  "
 >
 
-<h4
-style="
-margin:0 0 10px;
-"
->
-🛍️ รายการสินค้า
-</h4>
+  <h4
+    style="
+      margin:0 0 10px;
+    "
+  >
+    🛍️ รายการสินค้า
+  </h4>
 
 `;
-
 
   items.forEach(
     item => {
@@ -1394,6 +1670,10 @@ margin:0 0 10px;
           "สินค้า"
         ).trim();
 
+      const characterName =
+        String(
+          item.character_name || ""
+        ).trim();
 
       const quantity =
         Math.max(
@@ -1405,7 +1685,6 @@ margin:0 0 10px;
           )
         );
 
-
       const unitPrice =
         Number(
           item.unit_price ??
@@ -1413,16 +1692,15 @@ margin:0 0 10px;
           0
         );
 
-
       const finalPrice =
         Number(
           item.final_price ??
+          item.total ??
           (
             unitPrice *
             quantity
           )
         );
-
 
       const selectedOption =
         formatAdminSelectedOption(
@@ -1430,84 +1708,150 @@ margin:0 0 10px;
           item.selected_options
         );
 
+      const imageUrl =
+        String(
+          item.image_url ||
+          item.image ||
+          ""
+        ).trim();
 
       html += `
 
 <div
-style="
-padding:10px 12px;
-margin-bottom:8px;
-border:1px solid #e5e7eb;
-border-radius:12px;
-background:#fff;
-"
+  style="
+    padding:10px 12px;
+    margin-bottom:8px;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    background:#fff;
+  "
 >
 
-<div
-style="
-display:flex;
-justify-content:space-between;
-gap:10px;
-"
->
+  <div
+    style="
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    "
+  >
 
-<div>
+    <div
+      style="
+        display:flex;
+        gap:10px;
+        min-width:0;
+        flex:1;
+      "
+    >
 
-<b>
-${escapeAdminOrderHtml(
-  name
-)}
-</b>
+      ${
+        imageUrl
+          ? `
+            <img
+              src="${escapeAdminOrderHtml(
+                imageUrl
+              )}"
+              alt=""
+              loading="lazy"
+              style="
+                width:58px;
+                height:58px;
+                flex:0 0 58px;
+                object-fit:cover;
+                border-radius:10px;
+                border:1px solid #e5e7eb;
+                background:#f8fafc;
+              "
+            >
+          `
+          : ""
+      }
 
-${
-  selectedOption
-    ? `
+      <div
+        style="
+          min-width:0;
+        "
+      >
 
-<div
-style="
-margin-top:4px;
-font-size:13px;
-color:#64748b;
-"
->
-${escapeAdminOrderHtml(
-  selectedOption
-)}
-</div>
+        <b>
+          ${escapeAdminOrderHtml(
+            name
+          )}
+        </b>
 
-`
-    : ""
-}
+        ${
+          characterName
+            ? `
+              <div
+                style="
+                  margin-top:4px;
+                  font-size:13px;
+                  color:#64748b;
+                "
+              >
+                ตัวละคร:
+                ${escapeAdminOrderHtml(
+                  characterName
+                )}
+              </div>
+            `
+            : ""
+        }
 
-<div
-style="
-margin-top:4px;
-font-size:13px;
-color:#64748b;
-"
->
-${quantity} ชิ้น
-×
-฿${unitPrice.toLocaleString(
-  "th-TH",
-  {
-    maximumFractionDigits:2
-  }
-)}
-</div>
+        ${
+          selectedOption
+            ? `
+              <div
+                style="
+                  margin-top:4px;
+                  font-size:13px;
+                  color:#64748b;
+                "
+              >
+                ${escapeAdminOrderHtml(
+                  selectedOption
+                )}
+              </div>
+            `
+            : ""
+        }
 
-</div>
+        <div
+          style="
+            margin-top:4px;
+            font-size:13px;
+            color:#64748b;
+          "
+        >
+          ${quantity} ชิ้น
+          ×
+          ฿${unitPrice.toLocaleString(
+            "th-TH",
+            {
+              maximumFractionDigits:2
+            }
+          )}
+        </div>
 
-<b>
-฿${finalPrice.toLocaleString(
-  "th-TH",
-  {
-    maximumFractionDigits:2
-  }
-)}
-</b>
+      </div>
 
-</div>
+    </div>
+
+    <b
+      style="
+        white-space:nowrap;
+      "
+    >
+      ฿${finalPrice.toLocaleString(
+        "th-TH",
+        {
+          maximumFractionDigits:2
+        }
+      )}
+    </b>
+
+  </div>
 
 </div>
 
@@ -1516,11 +1860,8 @@ ${quantity} ชิ้น
     }
   );
 
-
   html += `
-
 </div>
-
 `;
 
   return html;
@@ -2193,7 +2534,6 @@ async function updateOrderStatus(
       orderId
     );
 
-
   if(!statusElement){
 
     console.error(
@@ -2205,10 +2545,47 @@ async function updateOrderStatus(
 
   }
 
+  const order =
+    adminOrderBaseCache.find(
+      item =>
+        String(
+          item.order_id || ""
+        ).trim() ===
+        String(
+          orderId || ""
+        ).trim()
+    ) ||
+    adminOrdersCache.find(
+      item =>
+        String(
+          item.order_id || ""
+        ).trim() ===
+        String(
+          orderId || ""
+        ).trim()
+    );
+
+  const source =
+    String(
+      order?.order_source ||
+      order?.source ||
+      order?.order_type ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const isDMInvoice =
+    source ===
+      "dm_invoice" ||
+    /^INV-/i.test(
+      String(
+        orderId || ""
+      ).trim()
+    );
 
   const status =
     statusElement.value;
-
 
   const payload = {
 
@@ -2216,62 +2593,70 @@ async function updateOrderStatus(
       orderId,
 
     status:
-      status
+      status,
+
+    order_source:
+      isDMInvoice
+        ? "dm_invoice"
+        : "store"
 
   };
 
+  /*
+  =========================================
+  STORE ORDER
+  ready_to_ship ใช้ Shipment/Arrival เดิม
+  =========================================
+  */
 
   if(
+    !isDMInvoice &&
     status ===
-    "ready_to_ship"
+      "ready_to_ship"
   ){
 
-   try{
+    try{
 
-  payload.arrival_items =
-    getAdminArrivalItems(
-      orderId
-    );
+      payload.arrival_items =
+        getAdminArrivalItems(
+          orderId
+        );
 
-}catch(error){
+    }catch(error){
 
-  alert(
-    error.message ||
-    "ข้อมูลสินค้าที่ถึงไทยไม่ถูกต้อง"
-  );
+      alert(
+        error.message ||
+        "ข้อมูลสินค้าที่ถึงไทยไม่ถูกต้อง"
+      );
 
-  return;
+      return;
 
-}
+    }
 
+    const totalArrivedQty =
+      payload.arrival_items.reduce(
+        (
+          sum,
+          item
+        ) =>
+          sum +
+          Number(
+            item.arrived_th_qty || 0
+          ),
+        0
+      );
 
-const totalArrivedQty =
-  payload.arrival_items.reduce(
-    (
-      sum,
-      item
-    ) =>
+    if(
+      totalArrivedQty <= 0
+    ){
 
-      sum +
-      Number(
-        item.arrived_th_qty || 0
-      ),
+      alert(
+        "กรุณาติ๊กสินค้าที่ถึงไทยอย่างน้อย 1 ชิ้น"
+      );
 
-    0
-  );
+      return;
 
-
-if(
-  totalArrivedQty <= 0
-){
-
-  alert(
-    "กรุณาติ๊กสินค้าที่ถึงไทยอย่างน้อย 1 ชิ้น"
-  );
-
-  return;
-
-}
+    }
 
     payload.import_fee_round2 =
       Number(
@@ -2283,7 +2668,6 @@ if(
           ?.value || 0
       );
 
-
     payload.domestic_shipping_fee =
       Number(
         document
@@ -2293,7 +2677,6 @@ if(
           )
           ?.value || 0
       );
-
 
     if(
       !Number.isFinite(
@@ -2322,62 +2705,89 @@ if(
       orderId
     );
 
-
   const loading =
     document.getElementById(
       "orderLoading_" +
       orderId
     );
 
-
   if(button){
-
-    button.disabled =
-      true;
-
+    button.disabled = true;
   }
-
 
   if(loading){
-
     loading.style.display =
       "block";
-
   }
-
 
   try{
 
-    const formData =
-      new FormData();
+    let response;
 
+    /*
+    =========================================
+    DM INVOICE
 
-    formData.append(
-      "payload",
-      JSON.stringify(
-        payload
-      )
-    );
+    DM Invoice ไม่ใช้ Shipment/Arrival ของ Orders เดิม
+    จึงยิงตรงไปที่ updateDMInvoiceOrderStatus
+    ซึ่งอยู่ใน dm-invoice.gs
+    =========================================
+    */
 
+    if(isDMInvoice){
 
-    const response =
-      await fetch(
+      response =
+        await fetch(
+          API,
+          {
+            method:
+              "POST",
 
-        API +
-        "?action=updateOrderStatus",
+            headers:{
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
 
-        {
+            body:
+              JSON.stringify({
+                action:
+                  "updateDMInvoiceOrderStatus",
+                data:
+                  payload
+              })
+          }
+        );
 
-          method:
-            "POST",
+    }else{
 
-          body:
-            formData
+      /*
+      Store Order ใช้ route เดิม
+      เพื่อไม่กระทบ Shipment/Arrival logic
+      */
 
-        }
+      const formData =
+        new FormData();
 
+      formData.append(
+        "payload",
+        JSON.stringify(
+          payload
+        )
       );
 
+      response =
+        await fetch(
+          API +
+          "?action=updateOrderStatus",
+          {
+            method:
+              "POST",
+            body:
+              formData
+          }
+        );
+
+    }
 
     if(!response.ok){
 
@@ -2388,28 +2798,19 @@ if(
 
     }
 
-
     const result =
       await response.json();
 
-
     alert(
-
       result.success
-
         ? "อัปเดตสถานะแล้ว"
-
         : result.error ||
           result.message ||
           "อัปเดตไม่สำเร็จ"
-
     );
 
-
     if(result.success){
-
       await loadOrders();
-
     }
 
   }catch(error){
@@ -2419,7 +2820,6 @@ if(
       error
     );
 
-
     alert(
       error.message ||
       "เกิดข้อผิดพลาด กรุณาลองใหม่"
@@ -2428,18 +2828,13 @@ if(
   }finally{
 
     if(button){
-
       button.disabled =
         false;
-
     }
 
-
     if(loading){
-
       loading.style.display =
         "none";
-
     }
 
   }
@@ -5223,4 +5618,3 @@ ${escapeAdminOrderHtml(
 `;
 
 }
-
