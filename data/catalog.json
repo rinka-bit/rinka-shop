@@ -24888,9 +24888,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-15T12:23:16.286Z",
+  "generated_at": "2026-09-15T12:24:20.824Z",
   "performance": {
-    "total_ms": 6635,
+    "total_ms": 6118,
     "product_count": 220,
     "collection_count": 3,
     "bank_count": 3
