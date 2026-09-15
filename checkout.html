@@ -1701,6 +1701,14 @@ const TEMP_GIFT_CONFIG = {
   ],
   singleMax: 1,
   cardMaxPerItem: 2,
+
+  // 3 รายการนี้รวมกันเลือกได้สูงสุด 1 ชิ้น
+  exclusiveGroupIds: [
+    "GIFT17894040781551938",
+    "GIFT17894040781551939",
+    "GIFT17894040781551940"
+  ],
+
   maxEntitlement: 5
 };
 
@@ -1728,6 +1736,35 @@ function getTempGiftItemMax(giftItemId){
   if(isTempGiftCard(giftItemId)) return TEMP_GIFT_CONFIG.cardMaxPerItem;
   if(isTempGiftSingle(giftItemId)) return TEMP_GIFT_CONFIG.singleMax;
   return 0;
+}
+
+function isTempGiftExclusiveGroup(giftItemId){
+  return TEMP_GIFT_CONFIG.exclusiveGroupIds.includes(
+    normalizeGiftId(giftItemId)
+  );
+}
+
+function getTempGiftExclusiveGroupCount(excludeRuleId = "", excludeGiftItemId = ""){
+  const excludedRuleId = normalizeGiftId(excludeRuleId);
+  const excludedGiftItemId = normalizeGiftId(excludeGiftItemId);
+
+  return Object.entries(checkoutGiftState.selections || {}).reduce((sum, [ruleId, selection])=>{
+    return sum + Object.entries(selection || {}).reduce((ruleSum, [id, data])=>{
+      if(!isTempGiftExclusiveGroup(id)) return ruleSum;
+
+      let qty = Math.max(0, Number(data?.qty || 0));
+
+      // เวลาตรวจ item ปัจจุบัน ให้ไม่นับจำนวนของ item นั้นซ้ำ
+      if(
+        normalizeGiftId(ruleId) === excludedRuleId &&
+        normalizeGiftId(id) === excludedGiftItemId
+      ){
+        qty = 0;
+      }
+
+      return ruleSum + qty;
+    }, 0);
+  }, 0);
 }
 
 function prepareTemporaryGiftRules(){
@@ -3312,7 +3349,7 @@ margin-top:4px;
 เลือกได้สูงสุด ${maxSelect} ชิ้น
 ${
   allowDuplicate
-    ? " • ได้รับสูงสุด5ชิ้นต่อออเดอร์(ยอด 3,000)"
+    ? " • ได้รับสูงสุด5ชิ้นต่อออเดอร์ (ยอด3,000฿)"
     : ""
 }
 </div>
@@ -3723,6 +3760,22 @@ function changeCheckoutGiftQty(
     return;
   }
 
+  // Stande​e Robin / Aventurine / Acrylic Check-in
+  // เป็นกลุ่ม exclusive เดียวกัน: รวมกันเลือกได้สูงสุด 1 ชิ้น
+  if(isTempGiftExclusiveGroup(giftItemId) && nextQty > 0){
+    const exclusiveWithoutCurrent =
+      getTempGiftExclusiveGroupCount(ruleId, giftItemId);
+
+    if(
+      nextQty + exclusiveWithoutCurrent > 1
+    ){
+      alert(
+        "สแตนดี้ Robin, สแตนดี้ Aventurine และ Acrylic Check-in เลือกได้รวมกันสูงสุด 1 ชิ้น"
+      );
+      return;
+    }
+  }
+
   const selectedWithoutCurrent =
     getGiftRuleSelectedCount(
       ruleId
@@ -3807,6 +3860,25 @@ function setCheckoutGiftItemQty(
       normalizedQty,
       tempItemMax
     );
+  }
+
+  // Stande​e Robin / Aventurine / Acrylic Check-in
+  // เป็นกลุ่ม exclusive เดียวกัน: รวมกันเลือกได้สูงสุด 1 ชิ้น
+  if(
+    isTempGiftExclusiveGroup(normalizedGiftItemId) &&
+    normalizedQty > 0
+  ){
+    const exclusiveWithoutCurrent =
+      getTempGiftExclusiveGroupCount(normalizedRuleId, normalizedGiftItemId);
+
+    if(
+      normalizedQty + exclusiveWithoutCurrent > 1
+    ){
+      normalizedQty = Math.max(
+        0,
+        1 - exclusiveWithoutCurrent
+      );
+    }
   }
 
   if(normalizedQty <= 0){
