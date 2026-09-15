@@ -38,7 +38,37 @@
 <script>
 const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 const orderId=new URLSearchParams(location.search).get("id");
-document.addEventListener("DOMContentLoaded",loadOrder);
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    /*
+    DM Invoice ใช้หน้ารายละเอียด invoice.html
+    ป้องกันกรณีมีลิงก์เก่าหรือเปิด order.html?id=INV-...
+    */
+    if(
+      String(
+        orderId || ""
+      ).startsWith(
+        "INV-"
+      )
+    ){
+
+      location.replace(
+        "invoice.html?id=" +
+        encodeURIComponent(
+          orderId
+        )
+      );
+
+      return;
+
+    }
+
+    loadOrder();
+
+  }
+);
  
 async function loadOrder(){
 
