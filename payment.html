@@ -1747,6 +1747,89 @@ if(!clientOrderId){
 
 }
 
+/*
+=========================================
+NORMALIZE TEMP GIFT RULES BEFORE BACKEND
+=========================================
+
+หน้า checkout ใช้ TEMP_GIFT_RULE_* เพื่อรวมสิทธิ์
+ของ campaign ชั่วคราว
+
+แต่ Backend ต้องได้รับ rule_id จริงจาก GiftRules
+ดังนั้นห้ามส่ง TEMP_GIFT_RULE_* เข้า Backend
+=========================================
+*/
+
+const paymentGifts =
+  Array.isArray(address.gifts)
+    ? address.gifts.map(gift => {
+
+        const normalizedGift = {
+          ...gift
+        };
+
+        const ruleId =
+          String(
+            normalizedGift.rule_id ||
+            normalizedGift.ruleId ||
+            ""
+          ).trim();
+
+        /*
+        TEMP RULE
+        */
+
+        if(
+          ruleId.startsWith(
+            "TEMP_GIFT_RULE_"
+          )
+        ){
+
+          /*
+          Checkout ควรเก็บ rule จริงไว้ใน
+          source_rule_id / original_rule_id
+          */
+
+          const realRuleId =
+            String(
+              normalizedGift.source_rule_id ||
+              normalizedGift.original_rule_id ||
+              normalizedGift.real_rule_id ||
+              ""
+            ).trim();
+
+          if(realRuleId){
+
+            normalizedGift.rule_id =
+              realRuleId;
+
+          }else{
+
+            /*
+            ถ้าไม่มี rule จริงติดมาด้วย
+            ไม่ส่ง TEMP rule ให้ backend
+            */
+
+            delete normalizedGift.rule_id;
+            delete normalizedGift.ruleId;
+
+          }
+
+        }
+
+        /*
+        field ชั่วคราวไม่ต้องส่งเข้า Backend
+        */
+
+        delete normalizedGift.source_rule_id;
+        delete normalizedGift.original_rule_id;
+        delete normalizedGift.real_rule_id;
+        delete normalizedGift.temp_rule_id;
+
+        return normalizedGift;
+
+      })
+    : [];
 
 const payload = {
 
@@ -1780,11 +1863,7 @@ const payload = {
     cart,
 
   gifts:
-    Array.isArray(
-      address.gifts
-    )
-      ? address.gifts
-      : []
+    paymentGifts
 
 };
 
@@ -1835,12 +1914,8 @@ const orderSnapshot = {
   items:
     cart,
 
-  gifts:
-    Array.isArray(
-      address.gifts
-    )
-      ? address.gifts
-      : [],
+ gifts:
+  paymentGifts,
 
   shipments:[],
 
