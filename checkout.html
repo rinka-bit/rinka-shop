@@ -1801,8 +1801,51 @@ function prepareTemporaryGiftRules(){
       return;
     }
 
+    /*
+    =========================================
+    REAL ENTITLEMENT RULE FOR BACKEND
+    =========================================
+    */
+    const originalRules =
+      Array.isArray(campaign.rules)
+        ? [...campaign.rules]
+        : [];
+
+    const entitlementRule =
+      originalRules
+        .filter(rule => {
+          const minAmount = Number(rule.min_amount || 0);
+          return (
+            normalizeGiftId(rule.rule_id) &&
+            Number(campaign.eligible_total || 0) >= minAmount
+          );
+        })
+        .sort((a,b) => {
+          const aMax = Number(a.max_select || 1);
+          const bMax = Number(b.max_select || 1);
+          const aExact = aMax === entitlement ? 1 : 0;
+          const bExact = bMax === entitlement ? 1 : 0;
+
+          if(aExact !== bExact) return bExact - aExact;
+          if(aMax !== bMax) return bMax - aMax;
+
+          return Number(b.min_amount || 0) -
+                 Number(a.min_amount || 0);
+        })[0] || null;
+
+    campaign.temporary_entitlement_rule_id =
+      entitlementRule
+        ? normalizeGiftId(entitlementRule.rule_id)
+        : "";
+
+    if(!campaign.temporary_entitlement_rule_id){
+      throw new Error(
+        "ไม่พบ Gift Rule จริงสำหรับคำนวณสิทธิ์ของแถม"
+      );
+    }
+
     const byId = new Map();
-   (campaign.rules || []).forEach(rule=>{
+   originalRules.forEach(rule=>{
 
   (rule.items || []).forEach(item=>{
 
@@ -4638,6 +4681,16 @@ function collectCheckoutGiftSelections(){
 
                     );
 
+                  if(
+                    !normalizeGiftId(
+                      campaign.temporary_entitlement_rule_id
+                    )
+                  ){
+                    throw new Error(
+                      "ไม่พบ Gift Rule จริงสำหรับคำนวณสิทธิ์ของแถม"
+                    );
+                  }
+
                   gifts.push({
 
                     campaign_id:
@@ -4649,11 +4702,19 @@ function collectCheckoutGiftSelections(){
                       campaign.campaign_name ||
                       "",
 
+                    temporary_simple_gift:
+                      true,
+
+                    entitlement_rule_id:
+                      normalizeGiftId(
+                        campaign.temporary_entitlement_rule_id
+                      ),
+
                     rule_id:
-  normalizeGiftId(
-    item.source_rule_id ||
-    rule.rule_id
-  ),
+                      normalizeGiftId(
+                        item.source_rule_id ||
+                        ""
+                      ),
 
 rule_name:
   item.source_rule_name ||
