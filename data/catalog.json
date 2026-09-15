@@ -18711,15 +18711,15 @@
       "product_id": "PROD1789306073438",
       "name": "นุยซัมเมอร์",
       "price_mode": "fixed",
-      "price": 419,
-      "final_price": 419,
+      "price": 390,
+      "final_price": 390,
       "base_price": 479,
       "min_price": 479,
       "max_price": 479,
       "has_price_range": false,
       "old_price": 479,
       "on_sale": true,
-      "sale_price": 419,
+      "sale_price": 390,
       "sale_start": "2026-09-14T17:00:00.000Z",
       "sale_end": "2026-09-29T17:00:00.000Z",
       "main_category": "ตุ๊กตา",
@@ -19337,7 +19337,7 @@
           "option_value": "XS",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -20048,7 +20048,7 @@
           "option_value": "Aventurine",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=18mZ4gh2lr6ra0yiuO6y6s7udn7EzWUA4&sz=w2000",
           "sort_order": 1
@@ -20059,7 +20059,7 @@
           "option_value": "Boothill",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1btA0LaT7C1I3OI5HI65pifZi_lOgQLe0&sz=w2000",
           "sort_order": 2
@@ -20144,7 +20144,7 @@
           "option_value": "Aventurine",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9993,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1ymhrH6toHgQ9kW4o4kxXzvWNSkjCxO5U&sz=w2000",
           "sort_order": 1
@@ -20155,7 +20155,7 @@
           "option_value": "Sunday",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=12TZwS1vfU3UeMfNDBeh4JwpjiAF9uFw4&sz=w2000",
           "sort_order": 2
@@ -21358,7 +21358,7 @@
           "option_value": "Aventurine-Waveflair",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 8
@@ -21888,7 +21888,7 @@
           "option_value": "Aventurine-Waveflair",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -24888,9 +24888,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-15T00:41:39.343Z",
+  "generated_at": "2026-09-15T03:47:12.989Z",
   "performance": {
-    "total_ms": 4106,
+    "total_ms": 7482,
     "product_count": 220,
     "collection_count": 3,
     "bank_count": 3
