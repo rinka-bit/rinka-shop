@@ -767,40 +767,6 @@ button:disabled{
 
 }
 
-@media(max-width:640px){
-
-  .checkout-container{
-    padding:
-      14px
-      10px
-      110px;
-  }
-
-  .checkout-topbar{
-    min-height:62px;
-    padding:8px 11px;
-  }
-
-  .checkout-topbar h1{
-    font-size:17px;
-  }
-
-  .checkout-card{
-    border-radius:16px;
-    padding:14px;
-  }
-
-  .checkout-item{
-    gap:10px;
-  }
-
-  .checkout-item img{
-    width:72px;
-    height:72px;
-  }
-
-}
-
 </style>
 
 </head>
@@ -858,10 +824,10 @@ class="checkout-cart-count">
 <button
 type="button"
 class="checkout-secondary-button"
-onclick="renderCheckoutManualAddressForm()">
-แก้ไข / เปลี่ยนที่อยู่
+onclick="window.location.href='address-book.html?select=checkout'">
+เปลี่ยนที่อยู่
 </button>
-  
+
 </div>
 
 <div id="selectedAddress">
@@ -990,37 +956,25 @@ role="status"
 aria-live="polite">
 </div>
 
-<script src="catalog.js?v=20260819-3"></script>
-
 <script>
 const API =
 "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
 
 const customer =
-  JSON.parse(
-    localStorage.getItem(
-      "customer"
-    ) || "{}"
-  );
+JSON.parse(
+  localStorage.getItem(
+    "customer"
+  ) || "{}"
+);
 
-const checkoutSessionToken =
-  String(
-    localStorage.getItem(
-      "session_token"
-    ) ||
-    customer.session_token ||
-    ""
-  ).trim();
+if(!customer.email){
 
-if(!checkoutSessionToken){
-
-  window.location.href =
-    "login.html";
+  window.location =
+  "login.html";
 
 }
   
 let cart = [];
-let checkoutSubmitting = false;
 
 loadCheckout();
 
@@ -1148,11 +1102,28 @@ function loadCheckout(){
 
 async function loadDefaultAddress(){
 
-  /*
-  =========================================
-  SELECTED ADDRESS
-  =========================================
-  */
+  const box =
+    document.getElementById(
+      "selectedAddress"
+    );
+
+  if(box){
+
+    box.innerHTML = `
+
+<div class="checkout-inline-loading">
+
+  <span class="checkout-mini-spinner"></span>
+
+  <span>
+    กำลังโหลดที่อยู่จัดส่ง...
+  </span>
+
+</div>
+
+`;
+
+  }
 
   let selectedAddress =
     getCheckoutStoredValue(
@@ -1160,555 +1131,103 @@ async function loadDefaultAddress(){
       null
     );
 
+  try{
 
-  /*
-  =========================================
-  FALLBACK:
-  ADDRESS USED IN PREVIOUS CHECKOUT
-  =========================================
-  */
+    if(!selectedAddress){
 
-  if(!selectedAddress){
+      const sessionToken =
+        localStorage.getItem(
+          "session_token"
+        ) ||
+        customer.session_token ||
+        "";
 
-    selectedAddress =
-      getCheckoutStoredValue(
-        "checkoutAddress",
-        null
+      const query =
+        new URLSearchParams();
+
+      query.set(
+        "action",
+        "customerAddresses"
       );
 
-  }
-
-
-  /*
-  =========================================
-  FOUND LOCAL ADDRESS
-  =========================================
-  */
-
-  if(
-    selectedAddress &&
-    selectedAddress.receiver &&
-    selectedAddress.phone &&
-    selectedAddress.address &&
-    selectedAddress.province &&
-    selectedAddress.postcode
-  ){
-
-    window.checkoutAddress =
-      selectedAddress;
-
-
-    renderCheckoutAddress(
-      selectedAddress
-    );
-
-
-    updateCheckoutPaymentState();
-
-    return;
-
-  }
-
-
-  /*
-  =========================================
-  NO LOCAL ADDRESS
-
-  ไม่รอ Apps Script
-  ให้กรอกตรง Checkout เลย
-  =========================================
-  */
-
-  window.checkoutAddress =
-    null;
-
-
-  renderCheckoutManualAddressForm();
-
-
-  updateCheckoutPaymentState();
-
-}
-
-function renderCheckoutAddress(
-  address
-){
-
-  const box =
-    document.getElementById(
-      "selectedAddress"
-    );
-
-
-  if(!box){
-    return;
-  }
-
-
-  const fullAddress =
-    [
-      address.address,
-      address.subdistrict,
-      address.district,
-      address.province,
-      address.postcode
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-
-  box.innerHTML = `
-
-<div class="checkout-address-card">
-
-  <div>
-    <b>
-      ${escapeHtml(
-        address.receiver || "-"
-      )}
-    </b>
-  </div>
-
-  <div style="margin-top:6px;">
-    📞
-    ${escapeHtml(
-      address.phone || "-"
-    )}
-  </div>
-
-  <div style="margin-top:6px;">
-    📍
-    ${escapeHtml(
-      fullAddress || "-"
-    )}
-  </div>
-
-  <button
-  type="button"
-  class="checkout-secondary-button"
-  style="margin-top:12px;"
-  onclick="
-    renderCheckoutManualAddressForm()
-  "
-  >
-    ✏️ เปลี่ยนที่อยู่
-  </button>
-
-</div>
-
-`;
-
-}
-
-
-function renderCheckoutManualAddressForm(){
-
-  const box =
-    document.getElementById(
-      "selectedAddress"
-    );
-
-
-  if(!box){
-    return;
-  }
-
-
-  const old =
-    window.checkoutAddress ||
-    getCheckoutStoredValue(
-      "selectedCheckoutAddress",
-      {}
-    ) ||
-    {};
-
-
-  box.innerHTML = `
-
-<div class="checkout-address-card">
-
-  <div
-  style="
-  font-weight:700;
-  margin-bottom:12px;
-  color:#355a73;
-  "
-  >
-    📍 กรอกที่อยู่จัดส่ง
-  </div>
-
-
-  <div
-  style="
-  display:grid;
-  grid-template-columns:
-    repeat(2,minmax(0,1fr));
-  gap:10px;
-  "
-  >
-
-    <input
-    id="checkoutManualReceiver"
-    type="text"
-    placeholder="ชื่อผู้รับ *"
-    value="${escapeHtml(
-      old.receiver || ""
-    )}"
-    style="
-    width:100%;
-    padding:11px;
-    border:1px solid #d7e3ec;
-    border-radius:12px;
-    "
-    >
-
-    <input
-    id="checkoutManualPhone"
-    type="tel"
-    placeholder="เบอร์โทร *"
-    value="${escapeHtml(
-      old.phone || ""
-    )}"
-    style="
-    width:100%;
-    padding:11px;
-    border:1px solid #d7e3ec;
-    border-radius:12px;
-    "
-    >
-
-  </div>
-
-
-  <textarea
-  id="checkoutManualAddress"
-  rows="3"
-  placeholder="บ้านเลขที่ หมู่บ้าน ถนน ซอย *"
-  style="
-  width:100%;
-  margin-top:10px;
-  padding:11px;
-  border:1px solid #d7e3ec;
-  border-radius:12px;
-  resize:vertical;
-  "
-  >${escapeHtml(
-    old.address || ""
-  )}</textarea>
-
-
-  <div
-  style="
-  display:grid;
-  grid-template-columns:
-    repeat(2,minmax(0,1fr));
-  gap:10px;
-  margin-top:10px;
-  "
-  >
-
-    <input
-    id="checkoutManualSubdistrict"
-    type="text"
-    placeholder="แขวง / ตำบล"
-    value="${escapeHtml(
-      old.subdistrict || ""
-    )}"
-    style="
-    width:100%;
-    padding:11px;
-    border:1px solid #d7e3ec;
-    border-radius:12px;
-    "
-    >
-
-    <input
-    id="checkoutManualDistrict"
-    type="text"
-    placeholder="เขต / อำเภอ"
-    value="${escapeHtml(
-      old.district || ""
-    )}"
-    style="
-    width:100%;
-    padding:11px;
-    border:1px solid #d7e3ec;
-    border-radius:12px;
-    "
-    >
-
-    <input
-    id="checkoutManualProvince"
-    type="text"
-    placeholder="จังหวัด *"
-    value="${escapeHtml(
-      old.province || ""
-    )}"
-    style="
-    width:100%;
-    padding:11px;
-    border:1px solid #d7e3ec;
-    border-radius:12px;
-    "
-    >
-
-    <input
-    id="checkoutManualPostcode"
-    type="text"
-    inputmode="numeric"
-    maxlength="5"
-    placeholder="รหัสไปรษณีย์ *"
-    value="${escapeHtml(
-      old.postcode || ""
-    )}"
-    style="
-    width:100%;
-    padding:11px;
-    border:1px solid #d7e3ec;
-    border-radius:12px;
-    "
-    >
-
-  </div>
-
-
-  <button
-  type="button"
-  class="checkout-primary-button"
-  style="
-  width:100%;
-  margin-top:12px;
-  "
-  onclick="
-    saveCheckoutManualAddress()
-  "
-  >
-    ✅ ใช้ที่อยู่นี้
-  </button>
-
-</div>
-
-`;
-
-}
-
-
-function saveCheckoutManualAddress(){
-
-  const value =
-    id =>
-      String(
-        document
-          .getElementById(
-            id
-          )
-          ?.value || ""
-      ).trim();
-
-
-  const address = {
-
-    receiver:
-      value(
-        "checkoutManualReceiver"
-      ),
-
-    phone:
-      value(
-        "checkoutManualPhone"
-      ),
-
-    address:
-      value(
-        "checkoutManualAddress"
-      ),
-
-    subdistrict:
-      value(
-        "checkoutManualSubdistrict"
-      ),
-
-    district:
-      value(
-        "checkoutManualDistrict"
-      ),
-
-    province:
-      value(
-        "checkoutManualProvince"
-      ),
-
-    postcode:
-      value(
-        "checkoutManualPostcode"
-      ),
-
-    email:
-      customer.email ||
-      ""
-
-  };
-
-
-  if(
-    !address.receiver ||
-    !address.phone ||
-    !address.address ||
-    !address.province ||
-    !address.postcode
-  ){
-
-    showCheckoutMessage(
-      "กรุณากรอกชื่อผู้รับ เบอร์โทร ที่อยู่ จังหวัด และรหัสไปรษณีย์ให้ครบ",
-      true
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !/^\d{5}$/.test(
-      address.postcode
-    )
-  ){
-
-    showCheckoutMessage(
-      "กรุณากรอกรหัสไปรษณีย์ 5 หลัก",
-      true
-    );
-
-    return;
-
-  }
-
-
-  window.checkoutAddress =
-    address;
-
-
-  localStorage.setItem(
-    "selectedCheckoutAddress",
-    JSON.stringify(
-      address
-    )
-  );
-
-
-  renderCheckoutAddress(
-    address
-  );
-
-
-  updateCheckoutPaymentState();
-
-
-  showCheckoutMessage(
-    "ใช้ที่อยู่นี้สำหรับคำสั่งซื้อแล้ว",
-    false
-  );
-
-}
-
-function getCheckoutAddressCacheKey(){
-
-  const key =
-    String(
-      customer.customer_id ||
-      customer.email ||
-      "guest"
-    )
-      .trim()
-      .toLowerCase();
-
-
-  return (
-    "rinka_customer_addresses_" +
-    key
-  );
-
-}
-
-
-function renderCheckoutAddress(
-  address
-){
-
-  const box =
-    document.getElementById(
-      "selectedAddress"
-    );
-
-
-  if(!box){
-    return;
-  }
-
-
-  const fullAddress =
-    [
-      address.address,
-      address.subdistrict,
-      address.district,
-      address.province,
-      address.postcode
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-
-  box.innerHTML = `
-
-<div class="checkout-address-card">
-
-  <div>
-    <b>
-     ${escapeHtml(
-  address.receiver || "-"
-)}
-    </b>
-  </div>
-
-  <div>
-    📞
-   ${escapeHtml(
-  address.phone || "-"
-)}
-  </div>
-
-  <div>
-    📍
-   ${escapeHtml(
-  fullAddress || "-"
-)}
-  </div>
-
-</div>
-
-`;
-
-}
-
-
-function renderCheckoutNoAddress(){
-
-  window.checkoutAddress =
-    null;
-
-
-  const box =
-    document.getElementById(
-      "selectedAddress"
-    );
-
-
-  if(!box){
-    return;
-  }
-
-
-  box.innerHTML = `
+      if(sessionToken){
+
+        query.set(
+          "session_token",
+          sessionToken
+        );
+
+      }else if(customer.email){
+
+        /*
+        รองรับ Backend เวอร์ชันเก่าชั่วคราว
+        */
+
+        query.set(
+          "email",
+          customer.email
+        );
+
+      }
+
+      const response =
+        await fetch(
+          API +
+          "?" +
+          query.toString()
+        );
+
+      if(!response.ok){
+
+        throw new Error(
+          "HTTP " +
+          response.status
+        );
+
+      }
+
+      const result =
+        await response.json();
+
+      if(
+        result &&
+        result.success === false
+      ){
+
+        throw new Error(
+          result.error ||
+          "โหลดที่อยู่ไม่สำเร็จ"
+        );
+
+      }
+
+      const addresses =
+        Array.isArray(result)
+          ? result
+          : Array.isArray(
+              result.addresses
+            )
+              ? result.addresses
+              : [];
+
+      selectedAddress =
+        addresses.find(
+          address =>
+            normalizeCheckoutBoolean(
+              address.is_default
+            )
+        ) ||
+        addresses[0] ||
+        null;
+
+    }
+
+    if(!selectedAddress){
+
+      window.checkoutAddress =
+        null;
+
+      box.innerHTML = `
 
 <div class="checkout-address-empty">
 
@@ -1721,99 +1240,140 @@ function renderCheckoutNoAddress(){
   </b>
 
   <span>
-    กรุณาเพิ่มที่อยู่ก่อนดำเนินการต่อ
+    กรุณาเพิ่มหรือเลือกที่อยู่ก่อนดำเนินการต่อ
+  </span>
+
+</div>
+
+`;
+
+      updateCheckoutPaymentState();
+
+      return;
+
+    }
+
+    window.checkoutAddress =
+      selectedAddress;
+
+    box.innerHTML = `
+
+<div class="checkout-address-card">
+
+  <div class="checkout-address-head">
+
+    <div>
+
+      <div class="checkout-address-name">
+
+        ${escapeHtml(
+          selectedAddress.receiver ||
+          customer.username ||
+          "ผู้รับสินค้า"
+        )}
+
+      </div>
+
+      ${
+        normalizeCheckoutBoolean(
+          selectedAddress.is_default
+        )
+          ? `
+
+<span class="checkout-default-badge">
+  ค่าเริ่มต้น
+</span>
+
+`
+          : ""
+      }
+
+    </div>
+
+    <span class="checkout-address-icon">
+      📦
+    </span>
+
+  </div>
+
+  <div class="checkout-address-line">
+
+    <span>📞</span>
+
+    <span>
+      ${escapeHtml(
+        selectedAddress.phone || "-"
+      )}
+    </span>
+
+  </div>
+
+  <div class="checkout-address-line">
+
+    <span>📍</span>
+
+    <span>
+
+      ${escapeHtml(
+        [
+          selectedAddress.address,
+          selectedAddress.subdistrict,
+          selectedAddress.district,
+          selectedAddress.province,
+          selectedAddress.postcode
+        ]
+          .filter(Boolean)
+          .join(" ")
+      )}
+
+    </span>
+
+  </div>
+
+</div>
+
+`;
+
+    updateCheckoutPaymentState();
+
+  }catch(error){
+
+    console.error(
+      "loadDefaultAddress error",
+      error
+    );
+
+    window.checkoutAddress =
+      null;
+
+    box.innerHTML = `
+
+<div class="checkout-error-box">
+
+  <b>
+    โหลดที่อยู่จัดส่งไม่สำเร็จ
+  </b>
+
+  <span>
+    ${escapeHtml(
+      error.message ||
+      String(error)
+    )}
   </span>
 
   <button
   type="button"
-  class="checkout-secondary-button"
-  onclick="
-    window.location.href=
-    'address-book.html?select=checkout'
-  "
-  >
-    เพิ่ม / เลือกที่อยู่
+  onclick="loadDefaultAddress()">
+    ลองใหม่
   </button>
 
 </div>
 
 `;
 
+    updateCheckoutPaymentState();
 
-  updateCheckoutPaymentState();
-
-}
-
-
-function renderCheckoutAddressUnavailable(){
-
-  window.checkoutAddress =
-    null;
-
-
-  const box =
-    document.getElementById(
-      "selectedAddress"
-    );
-
-
-  if(!box){
-    return;
   }
-
-
-  box.innerHTML = `
-
-<div class="checkout-address-empty">
-
-  <div class="checkout-state-icon">
-    ⚠️
-  </div>
-
-  <b>
-    ระบบโหลดที่อยู่ช้ากว่าปกติ
-  </b>
-
-  <span>
-    กรุณาเลือกที่อยู่ใหม่ หรือกดลองอีกครั้ง
-  </span>
-
-  <div
-  style="
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
-  "
-  >
-
-    <button
-    type="button"
-    class="checkout-secondary-button"
-    onclick="loadDefaultAddress()"
-    >
-      ลองใหม่
-    </button>
-
-    <button
-    type="button"
-    class="checkout-secondary-button"
-    onclick="
-      window.location.href=
-      'address-book.html?select=checkout'
-    "
-    >
-      เลือกที่อยู่
-    </button>
-
-  </div>
-
-</div>
-
-`;
-
-
-  updateCheckoutPaymentState();
 
 }
 
@@ -2107,16 +1667,6 @@ function escapeHtml(
 
 }
 
-function escapeCheckoutHtml(
-  value
-){
-
-  return escapeHtml(
-    value
-  );
-
-}
-
 
 /*
 =========================================
@@ -2135,6 +1685,86 @@ const checkoutGiftState = {
   eligibleCampaigns:[],
   selections:{}
 };
+
+/* TEMPORARY GIFT CONFIG — รอบปัจจุบัน */
+const TEMP_GIFT_CONFIG = {
+  cardIds: [
+    "GIFT17894040781551931",
+    "GIFT17894040781551932",
+    "GIFT17894040781551933"
+  ],
+  singleIds: [
+    "GIFT17894040781551937",
+    "GIFT17894040781551938",
+    "GIFT17894040781551939",
+    "GIFT17894040781551940"
+  ],
+  singleMax: 1,
+  cardMaxPerItem: 2,
+  maxEntitlement: 5
+};
+
+function getTempGiftEntitlement(total){
+  const amount = Number(total || 0);
+  if(!Number.isFinite(amount) || amount < 600) return 0;
+  return Math.min(TEMP_GIFT_CONFIG.maxEntitlement, Math.floor(amount / 600));
+}
+
+function isTempGiftCard(giftItemId){
+  return TEMP_GIFT_CONFIG.cardIds.includes(normalizeGiftId(giftItemId));
+}
+
+function isTempGiftSingle(giftItemId){
+  return TEMP_GIFT_CONFIG.singleIds.includes(normalizeGiftId(giftItemId));
+}
+
+function isTempGiftAllowed(giftItemId, entitlement){
+  if(!entitlement) return false;
+  if(isTempGiftCard(giftItemId)) return true;
+  return entitlement >= 2 && isTempGiftSingle(giftItemId);
+}
+
+function getTempGiftItemMax(giftItemId){
+  if(isTempGiftCard(giftItemId)) return TEMP_GIFT_CONFIG.cardMaxPerItem;
+  if(isTempGiftSingle(giftItemId)) return TEMP_GIFT_CONFIG.singleMax;
+  return 0;
+}
+
+function prepareTemporaryGiftRules(){
+  (checkoutGiftState.eligibleCampaigns || []).forEach(campaign=>{
+    const entitlement = getTempGiftEntitlement(campaign.eligible_total);
+    if(entitlement <= 0){
+      campaign.rules = [];
+      return;
+    }
+
+    const byId = new Map();
+    (campaign.rules || []).forEach(rule=>{
+      (rule.items || []).forEach(item=>{
+        const id = normalizeGiftId(item.gift_item_id);
+        if(id && isTempGiftAllowed(id, entitlement) && !byId.has(id)){
+          byId.set(id, item);
+        }
+      });
+    });
+
+    const order = [...TEMP_GIFT_CONFIG.cardIds, ...TEMP_GIFT_CONFIG.singleIds];
+    const allItems = [...byId.values()].sort((a,b)=>{
+      const ai = order.indexOf(normalizeGiftId(a.gift_item_id));
+      const bi = order.indexOf(normalizeGiftId(b.gift_item_id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+
+    campaign.rules = allItems.length ? [{
+      rule_id: `TEMP_GIFT_RULE_${normalizeGiftId(campaign.campaign_id)}`,
+      rule_name: "เลือกของแถม",
+      min_amount: 600,
+      max_select: entitlement,
+      allow_duplicate: true,
+      items: allItems
+    }] : [];
+  });
+}
 
 
 
@@ -2283,53 +1913,12 @@ async function fetchCheckoutGiftAction(
     }
   );
 
-  const controller =
-    new AbortController();
-
-  const timeoutId =
-    setTimeout(
-      ()=>controller.abort(),
-      12000
+  const response =
+    await fetch(
+      API +
+      "?" +
+      query.toString()
     );
-
-  let response;
-
-  try{
-
-    response =
-      await fetch(
-        API +
-        "?" +
-        query.toString(),
-        {
-          signal:
-            controller.signal
-        }
-      );
-
-  }catch(error){
-
-    if(
-      error &&
-      error.name ===
-      "AbortError"
-    ){
-
-      throw new Error(
-        "โหลดข้อมูลของแถมนานเกินไป กรุณาลองใหม่"
-      );
-
-    }
-
-    throw error;
-
-  }finally{
-
-    clearTimeout(
-      timeoutId
-    );
-
-  }
 
   if(!response.ok){
 
@@ -2415,69 +2004,6 @@ async function fetchCheckoutGiftActionFallback(
 
 }
 
-async function loadCheckoutGiftData(){
-
-  const catalog =
-    await RinkaCatalog.load();
-
-
-  const gifts =
-    catalog &&
-    catalog.gifts &&
-    typeof catalog.gifts ===
-      "object"
-      ? catalog.gifts
-      : {};
-
-
-  return {
-
-    campaigns:
-      Array.isArray(
-        gifts.campaigns
-      )
-        ? gifts.campaigns
-        : [],
-
-    rules:
-      Array.isArray(
-        gifts.rules
-      )
-        ? gifts.rules
-        : [],
-
-    items:
-      Array.isArray(
-        gifts.items
-      )
-        ? gifts.items
-        : [],
-
-    characters:
-      Array.isArray(
-        gifts.characters
-      )
-        ? gifts.characters
-        : [],
-
-    exclusions:
-      Array.isArray(
-        gifts.exclusions
-      )
-        ? gifts.exclusions
-        : [],
-
-    collections:
-      Array.isArray(
-        catalog.collections
-      )
-        ? catalog.collections
-        : []
-
-  };
-
-}
-
 async function loadGifts(){
 
   const giftSection =
@@ -2507,57 +2033,127 @@ async function loadGifts(){
 
   try{
 
-  const giftData =
-  await loadCheckoutGiftData();
+    console.log(
+      "========== GIFT DEBUG START =========="
+    );
+
+    console.log(
+      "CART:",
+      cart
+    );
 
 
-const campaigns =
-  Array.isArray(
-    giftData.campaigns
-  )
-    ? giftData.campaigns
-    : [];
+    const [
+      campaigns,
+      rules,
+      items,
+      characters,
+      exclusions,
+      collections
+    ] =
+      await Promise.all([
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCampaigns"
+          ],
+          [
+            "campaigns"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftRules"
+          ],
+          [
+            "rules"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftItems"
+          ],
+          [
+            "items",
+            "gifts"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCharacters"
+          ],
+          [
+            "characters"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCampaignExclusions"
+          ],
+          [
+            "exclusions"
+          ]
+        ),
+
+        fetchCheckoutGiftActionFallback(
+          [
+            "getCollections",
+            "collections"
+          ],
+          [
+            "collections"
+          ]
+        ).catch(
+          error => {
+
+            console.warn(
+              "โหลด Collections ไม่สำเร็จ ใช้ข้อมูลจาก Cart แทน",
+              error
+            );
+
+            return [];
+
+          }
+        )
+
+      ]);
 
 
-const rules =
-  Array.isArray(
-    giftData.rules
-  )
-    ? giftData.rules
-    : [];
+    console.log(
+      "RAW CAMPAIGNS:",
+      campaigns
+    );
+
+    console.log(
+      "RAW RULES:",
+      rules
+    );
+
+    console.log(
+      "RAW ITEMS:",
+      items
+    );
+
+    console.log(
+      "RAW CHARACTERS:",
+      characters
+    );
+
+    console.log(
+      "RAW EXCLUSIONS:",
+      exclusions
+    );
+
+    console.log(
+      "RAW COLLECTIONS:",
+      collections
+    );
 
 
-const items =
-  Array.isArray(
-    giftData.items
-  )
-    ? giftData.items
-    : [];
-
-
-const characters =
-  Array.isArray(
-    giftData.characters
-  )
-    ? giftData.characters
-    : [];
-
-
-const exclusions =
-  Array.isArray(
-    giftData.exclusions
-  )
-    ? giftData.exclusions
-    : [];
-
-
-const collections =
-  Array.isArray(
-    giftData.collections
-  )
-    ? giftData.collections
-    : [];
-    
     checkoutGiftState.campaigns =
       campaigns.filter(
         campaign =>
@@ -2697,6 +2293,7 @@ const collections =
     );
 
 
+    prepareTemporaryGiftRules();
     renderCheckoutGiftEngine();
 
 
@@ -2712,9 +2309,7 @@ const collections =
 
 <div class="gift-error">
 
-<b>
 โหลดข้อมูลของแถมไม่สำเร็จ
-</b>
 
 <br>
 
@@ -2722,14 +2317,6 @@ ${escapeHtml(
   error.message ||
   String(error)
 )}
-
-<br><br>
-
-<button
-type="button"
-onclick="loadGifts()">
-ลองโหลดของแถมใหม่
-</button>
 
 </div>
 
@@ -3164,255 +2751,6 @@ function campaignHasRequiredItem(
 
 }
 
-function normalizeCheckoutGiftRewardMode(
-  value
-){
-
-  return String(
-    value || ""
-  )
-    .trim()
-    .toLowerCase() === "custom"
-      ? "custom"
-      : "normal";
-
-}
-
-
-function createCheckoutGiftSelectionRuleId(
-  entitlementRuleId,
-  sourceRuleId
-){
-
-  const entitlementId =
-    normalizeGiftId(
-      entitlementRuleId
-    );
-
-  const sourceId =
-    normalizeGiftId(
-      sourceRuleId
-    );
-
-  if(
-    entitlementId ===
-    sourceId
-  ){
-
-    return entitlementId;
-
-  }
-
-  return (
-    entitlementId +
-    "__SOURCE__" +
-    sourceId
-  );
-
-}
-
-
-function getCheckoutGiftRuleItems(
-  sourceRuleId,
-  giftItems
-){
-
-  const normalizedSourceRuleId =
-    normalizeGiftId(
-      sourceRuleId
-    );
-
-  return (
-    Array.isArray(giftItems)
-      ? giftItems
-      : []
-  )
-    .filter(
-      item =>
-
-        normalizeGiftId(
-          item.rule_id
-        ) ===
-        normalizedSourceRuleId
-    )
-    .sort(
-      (
-        firstItem,
-        secondItem
-      ) =>
-
-        Number(
-          firstItem.sort_order || 0
-        ) -
-
-        Number(
-          secondItem.sort_order || 0
-        )
-    );
-
-}
-
-
-function buildCheckoutGiftSelectionGroup({
-  entitlementRule,
-  sourceRule,
-  maxSelect,
-  giftItems,
-  inherited
-}){
-
-  if(
-    !entitlementRule ||
-    !sourceRule
-  ){
-
-    return null;
-
-  }
-
-  const entitlementRuleId =
-    normalizeGiftId(
-      entitlementRule.rule_id
-    );
-
-  const sourceRuleId =
-    normalizeGiftId(
-      sourceRule.rule_id
-    );
-
-  const selectionRuleId =
-    createCheckoutGiftSelectionRuleId(
-      entitlementRuleId,
-      sourceRuleId
-    );
-
-  const items =
-    getCheckoutGiftRuleItems(
-      sourceRuleId,
-      giftItems
-    );
-
-  if(!items.length){
-
-    return null;
-
-  }
-
-  const entitlementRuleName =
-    String(
-      entitlementRule.rule_name ||
-      entitlementRuleId
-    ).trim();
-
-  const sourceRuleName =
-    String(
-      sourceRule.rule_name ||
-      sourceRuleId
-    ).trim();
-
-  const isInherited =
-    Boolean(inherited);
-
-  return {
-
-    /*
-    rule_id ใช้เป็น ID ของกลุ่มการเลือกในหน้า Checkout
-    อาจเป็น ID เสมือนเมื่อเป็นสิทธิ์จากเทียร์ก่อนหน้า
-    */
-    ...sourceRule,
-
-    rule_id:
-      selectionRuleId,
-
-    selection_rule_id:
-      selectionRuleId,
-
-    /*
-    Rule ที่เป็นเจ้าของสิทธิ์
-    เช่น ยอด 1,200 เป็นผู้มอบสิทธิ์ยอด 600 เพิ่ม 2 ชิ้น
-    */
-    entitlement_rule_id:
-      entitlementRuleId,
-
-    entitlement_rule_name:
-      entitlementRuleName,
-
-    entitlement_min_amount:
-      Number(
-        entitlementRule.min_amount || 0
-      ),
-
-    /*
-    Rule ต้นทางของ Gift Item
-    */
-    source_rule_id:
-      sourceRuleId,
-
-    source_rule_name:
-      sourceRuleName,
-
-    source_min_amount:
-      Number(
-        sourceRule.min_amount || 0
-      ),
-
-    max_select:
-      Math.max(
-        1,
-        Math.floor(
-          Number(
-            maxSelect || 1
-          )
-        )
-      ),
-
-    /*
-    ใช้เงื่อนไขเลือกซ้ำของ Rule ต้นทาง
-    เพราะ Gift Item มาจาก Rule ต้นทาง
-    */
-    allow_duplicate:
-      sourceRule.allow_duplicate,
-
-    reward_mode:
-      normalizeCheckoutGiftRewardMode(
-        entitlementRule.reward_mode
-      ),
-
-    reward_description:
-      String(
-        entitlementRule.reward_description ||
-        ""
-      ).trim(),
-
-    inherited:
-      isInherited,
-
-    rule_name:
-      isInherited
-        ? (
-            sourceRuleName +
-            " — สิทธิ์เพิ่มจาก " +
-            entitlementRuleName
-          )
-        : sourceRuleName,
-
-    display_description:
-      isInherited
-        ? (
-            "สิทธิ์จาก " +
-            entitlementRuleName +
-            " ให้เลือกของแถมจาก " +
-            sourceRuleName
-          )
-        : "",
-
-    items:
-      items
-
-  };
-
-}
-  
 function buildEligibleGiftCampaigns(){
 
   const result = [];
@@ -3426,6 +2764,7 @@ function buildEligibleGiftCampaigns(){
   const giftItems =
     checkoutGiftState.items || [];
 
+
   campaigns.forEach(
     campaign=>{
 
@@ -3435,40 +2774,78 @@ function buildEligibleGiftCampaigns(){
         );
 
       if(!campaignId){
+
         return;
+
       }
+
+
+      /*
+      =========================================
+      1. หาสินค้าที่ Campaign นี้ใช้คำนวณ
+      =========================================
+      */
 
       const eligibleCartItems =
         getCampaignEligibleCartItems(
           campaign
         );
 
-      if(!eligibleCartItems.length){
+
+      if(
+        eligibleCartItems.length===0
+      ){
+
+        console.log(
+          "Campaign ไม่มีสินค้าเข้าเงื่อนไข:",
+          campaignId
+        );
+
         return;
+
       }
+
+
+      /*
+      =========================================
+      2. คำนวณยอดที่ใช้รับของแถม
+      =========================================
+      */
 
       const eligibleTotal =
         eligibleCartItems.reduce(
-          (sum,item)=>
+          (
+            sum,
+            item
+          )=>
             sum +
-            getCartItemTotal(item),
+            getCartItemTotal(
+              item
+            ),
           0
         );
+
 
       if(
         !Number.isFinite(
           eligibleTotal
         ) ||
-        eligibleTotal <= 0
+        eligibleTotal<=0
       ){
+
         return;
+
       }
 
+
       /*
-      Rule ทั้งหมดที่ยอดถึง
+      =========================================
+      3. หา Rule ที่อยู่ใน Campaign
+         และยอดถึงเงื่อนไข
+      =========================================
       */
 
-      let matchedRules =
+      const matchedRules =
         rules
           .filter(
             rule=>
@@ -3477,157 +2854,137 @@ function buildEligibleGiftCampaigns(){
                 rule.campaign_id
               ) ===
               campaignId
+
           )
           .filter(
-            rule=>
+            rule=>{
 
-              eligibleTotal >=
-              Number(
-                rule.min_amount || 0
-              )
+              const minAmount =
+                Number(
+                  rule.min_amount || 0
+                );
+
+              return (
+                Number.isFinite(
+                  minAmount
+                ) &&
+                eligibleTotal >=
+                minAmount
+              );
+
+            }
           )
           .sort(
-            (a,b)=>
+            (
+              a,
+              b
+            )=>
 
               Number(
                 a.min_amount || 0
               ) -
-
               Number(
                 b.min_amount || 0
               )
           );
 
-      /*
-=========================================
-REPLACE TIER CAMPAIGNS
-=========================================
 
-Campaign ที่ยอดใหม่แทนยอดเก่า
-เช่น Genshin:
+      if(
+        matchedRules.length===0
+      ){
 
-1200 → ใช้ Rule 1200
-2400 → ใช้ Rule 2400 เท่านั้น
-=========================================
-*/
+        console.log(
+          "ยอดยังไม่ถึง Rule:",
+          campaignId,
+          eligibleTotal
+        );
 
-const replaceTierCampaignIds = [
-  "CAM17871607129142161"
-];
-
-
-if(
-  replaceTierCampaignIds.includes(
-    campaignId
-  ) &&
-  matchedRules.length > 1
-){
-
-  matchedRules = [
-    matchedRules[
-      matchedRules.length - 1
-    ]
-  ];
-
-}
-
-      if(!matchedRules.length){
         return;
+
       }
 
+
       /*
-      ใช้ Rule สูงสุดเป็นจำนวนสิทธิ์รวม
+      =========================================
+      4. เชื่อม Gift Item ด้วย rule_id
+
+      GiftItems ไม่มี campaign_id
+      =========================================
       */
 
-      const highestRule =
-        matchedRules[
-          matchedRules.length - 1
-        ];
+      const preparedRules =
+        matchedRules
+          .map(
+            rule=>{
 
-      const maxSelect =
-        Math.max(
-          1,
-          Math.floor(
-            Number(
-              highestRule.max_select || 1
-            )
+              const ruleId =
+                normalizeGiftId(
+                  rule.rule_id
+                );
+
+
+              const ruleItems =
+                giftItems
+                  .filter(
+                    item=>
+
+                      normalizeGiftId(
+                        item.rule_id
+                      ) ===
+                      ruleId
+
+                  )
+                  .sort(
+                    (
+                      a,
+                      b
+                    )=>
+
+                      Number(
+                        a.sort_order || 0
+                      ) -
+                      Number(
+                        b.sort_order || 0
+                      )
+                  );
+
+
+              return {
+
+                ...rule,
+
+                items:
+                  ruleItems
+
+              };
+
+            }
           )
-        );
-
-      const matchedRuleIds =
-        new Set(
-          matchedRules.map(
+          .filter(
             rule=>
-              normalizeGiftId(
-                rule.rule_id
-              )
-          )
-        );
-
-      /*
-      รวม Gift Item ของทุก Rule ที่ปลดล็อก
-      และตัดรายการซ้ำ
-      */
-
-      const itemMap = {};
-
-      giftItems.forEach(
-        item=>{
-
-          const itemRuleId =
-            normalizeGiftId(
-              item.rule_id
-            );
-
-          const giftItemId =
-            normalizeGiftId(
-              item.gift_item_id
-            );
-
-          if(
-            !matchedRuleIds.has(
-              itemRuleId
-            ) ||
-            !giftItemId
-          ){
-            return;
-          }
-
-          if(
-            !itemMap[
-              giftItemId
-            ]
-          ){
-
-            itemMap[
-              giftItemId
-            ] = item;
-
-          }
-
-        }
-      );
-
-      const availableItems =
-        Object
-          .values(
-            itemMap
-          )
-          .sort(
-            (a,b)=>
-
-              Number(
-                a.sort_order || 0
-              ) -
-
-              Number(
-                b.sort_order || 0
-              )
+              rule.items.length>0
           );
 
-      if(!availableItems.length){
+
+      if(
+        preparedRules.length===0
+      ){
+
+        console.warn(
+          "พบ Rule แต่ไม่มี Gift Item ที่เชื่อมด้วย rule_id:",
+          campaignId
+        );
+
         return;
+
       }
+
+
+      /*
+      =========================================
+      5. ส่งโครงสร้างที่ Renderer ใช้งาน
+      =========================================
+      */
 
       result.push({
 
@@ -3642,25 +2999,14 @@ if(
         eligible_total:
           eligibleTotal,
 
-        highest_rule:
-          highestRule,
-
-        matched_rules:
-          matchedRules,
-
-        max_select:
-          Math.min(
-            maxSelect,
-            availableItems.length
-          ),
-
-        items:
-          availableItems
+        rules:
+          preparedRules
 
       });
 
     }
   );
+
 
   return result;
 
@@ -3755,49 +3101,6 @@ function getGiftItemSelectionQty(
 
 }
 
- function getSimpleGiftCampaignSelection(
-  campaignId
-){
-
-  const key =
-    "campaign::" +
-    normalizeGiftId(
-      campaignId
-    );
-
-  if(
-    !checkoutGiftState
-      .selections[
-        key
-      ]
-  ){
-
-    checkoutGiftState
-      .selections[
-        key
-      ] = {};
-
-  }
-
-  return checkoutGiftState
-    .selections[
-      key
-    ];
-
-}
-
-
-function getSimpleGiftSelectedCount(
-  campaignId
-){
-
-  return Object.keys(
-    getSimpleGiftCampaignSelection(
-      campaignId
-    )
-  ).length;
-
-} 
 
 function getGiftRuleSelectedCount(
   ruleId
@@ -3827,6 +3130,7 @@ function getGiftRuleSelectedCount(
 
 }
 
+
 function renderCheckoutGiftEngine(){
 
   const giftSection =
@@ -3855,41 +3159,43 @@ function renderCheckoutGiftEngine(){
     return;
   }
 
-  let html = "";
+  let html = `
+
+<h2 style="margin-top:24px;">
+🎁 ของแถมที่ได้รับสิทธิ์
+</h2>
+
+`;
 
   campaigns.forEach(
-    campaign=>{
+    campaign => {
 
-      const maxSelect =
-        Math.max(
-          1,
-          Number(
-            campaign.max_select || 1
-          )
-        );
+      const scopeText =
+        String(
+          campaign.eligibility_scope ||
+          "collection_only"
+        ) === "fandom_all"
+          ? "คำนวณจากสินค้าทั้ง Fandom"
+          : "คำนวณจาก Collection นี้";
 
       html += `
 
-<div
-class="gift-campaign-card"
-data-simple-gift-campaign="${escapeHtml(
-  campaign.campaign_id
-)}"
->
+<div class="gift-campaign-card">
 
 <h3 class="gift-campaign-title">
-
 ${escapeHtml(
   campaign.campaign_name ||
-  "ของแถม"
+  "Gift Campaign"
 )}
-
 </h3>
 
 <div class="gift-campaign-meta">
 
-ยอดรวมที่เข้าเงื่อนไข
+${escapeHtml(scopeText)}
 
+<br>
+
+ยอดที่นำมาคำนวณ:
 <b>
 ฿${Number(
   campaign.eligible_total || 0
@@ -3901,38 +3207,17 @@ ${escapeHtml(
 )}
 </b>
 
-<br>
-
-ได้รับของแถม
-
-<b>
-${maxSelect}
-ชิ้น
-</b>
-
-<br>
-
-<span
-data-simple-gift-count="${escapeHtml(
-  campaign.campaign_id
-)}"
->
-
-เลือกแล้ว 0 / ${maxSelect} ชิ้น
-
-</span>
-
 </div>
 
 `;
 
-      campaign.items.forEach(
-        item=>{
+      campaign.rules.forEach(
+        rule => {
 
           html +=
-            renderSimpleCheckoutGiftItem(
+            renderCheckoutGiftRule(
               campaign,
-              item
+              rule
             );
 
         }
@@ -3950,10 +3235,7 @@ data-simple-gift-count="${escapeHtml(
   html += `
 
 <div class="gift-summary-note">
-
-ของแถมแต่ละรายการเลือกได้อย่างละ 1 ชิ้น
-และสามารถเว้นไว้ไม่เลือกได้
-
+สามารถเว้นของแถมไว้ไม่เลือกได้ แต่จำนวนที่เลือกต้องไม่เกินสิทธิ์ของแต่ละ Rule
 </div>
 
 `;
@@ -3961,529 +3243,10 @@ data-simple-gift-count="${escapeHtml(
   giftSection.innerHTML =
     html;
 
-}
-
-  function renderSimpleCheckoutGiftItem(
-  campaign,
-  item
-){
-
-  const campaignId =
-    normalizeGiftId(
-      campaign.campaign_id
-    );
-
-  const giftItemId =
-    normalizeGiftId(
-      item.gift_item_id
-    );
-
-  const image =
-    String(
-      item.gift_image || ""
-    ).trim();
-
-  const hasCharacter =
-    normalizeGiftBoolean(
-      item.has_character
-    );
-
-  return `
-
-<div
-class="gift-item-row"
-data-simple-gift-row="${escapeHtml(
-  campaignId +
-  "::" +
-  giftItemId
-)}"
->
-
-${
-  image
-    ? `
-
-<img
-class="gift-item-image"
-src="${escapeHtml(image)}"
-alt=""
-loading="lazy"
-onerror="this.style.visibility='hidden'"
->
-
-`
-    : `
-
-<div class="gift-item-image"></div>
-
-`
-}
-
-<div class="gift-item-main">
-
-<div class="gift-item-name">
-
-${escapeHtml(
-  item.gift_name ||
-  "ของแถม"
-)}
-
-</div>
-
-${
-  hasCharacter
-    ? `
-
-<div
-class="gift-character-box"
-data-simple-character-box="${escapeHtml(
-  campaignId +
-  "::" +
-  giftItemId
-)}"
->
-</div>
-
-`
-    : ""
-}
-
-</div>
-
-<div class="gift-item-actions">
-
-<input
-type="checkbox"
-data-simple-gift-campaign-id="${escapeHtml(
-  campaignId
-)}"
-data-simple-gift-item-id="${escapeHtml(
-  giftItemId
-)}"
-onchange="toggleSimpleCheckoutGift(this)"
->
-
-</div>
-
-</div>
-
-`;
+  refreshAllGiftRuleUI();
 
 }
 
-  function findSimpleGiftCampaign(
-  campaignId
-){
-
-  const targetId =
-    normalizeGiftId(
-      campaignId
-    );
-
-  return (
-    checkoutGiftState
-      .eligibleCampaigns
-      .find(
-        campaign=>
-
-          normalizeGiftId(
-            campaign.campaign_id
-          ) ===
-          targetId
-      ) ||
-    null
-  );
-
-}
-
-
-function findSimpleGiftItem(
-  campaign,
-  giftItemId
-){
-
-  if(!campaign){
-    return null;
-  }
-
-  const targetId =
-    normalizeGiftId(
-      giftItemId
-    );
-
-  return (
-    campaign.items.find(
-      item=>
-
-        normalizeGiftId(
-          item.gift_item_id
-        ) ===
-        targetId
-    ) ||
-    null
-  );
-
-}
-
-
-function toggleSimpleCheckoutGift(
-  checkbox
-){
-
-  const campaignId =
-    normalizeGiftId(
-      checkbox.dataset
-        .simpleGiftCampaignId
-    );
-
-  const giftItemId =
-    normalizeGiftId(
-      checkbox.dataset
-        .simpleGiftItemId
-    );
-
-  const campaign =
-    findSimpleGiftCampaign(
-      campaignId
-    );
-
-  if(!campaign){
-
-    checkbox.checked = false;
-
-    return;
-  }
-
-  const item =
-    findSimpleGiftItem(
-      campaign,
-      giftItemId
-    );
-
-  if(!item){
-
-    checkbox.checked = false;
-
-    return;
-  }
-
-  const selection =
-    getSimpleGiftCampaignSelection(
-      campaignId
-    );
-
-  const maxSelect =
-    Math.max(
-      1,
-      Number(
-        campaign.max_select || 1
-      )
-    );
-
-  if(checkbox.checked){
-
-    if(
-      Object.keys(
-        selection
-      ).length >=
-      maxSelect
-    ){
-
-      checkbox.checked = false;
-
-      alert(
-        `เลือกของแถมได้สูงสุด ${maxSelect} ชิ้น`
-      );
-
-      return;
-    }
-
-    selection[
-      giftItemId
-    ] = {
-
-      gift_item_id:
-        giftItemId,
-
-      character_id:
-        ""
-
-    };
-
-  }else{
-
-    delete selection[
-      giftItemId
-    ];
-
-  }
-
-  refreshSimpleGiftItemUI(
-    campaign,
-    item
-  );
-
-  refreshSimpleGiftCampaignCount(
-    campaign
-  );
-
-}
-
-
-function refreshSimpleGiftCampaignCount(
-  campaign
-){
-
-  const campaignId =
-    normalizeGiftId(
-      campaign.campaign_id
-    );
-
-  const count =
-    getSimpleGiftSelectedCount(
-      campaignId
-    );
-
-  const maxSelect =
-    Math.max(
-      1,
-      Number(
-        campaign.max_select || 1
-      )
-    );
-
-  const box =
-    document.querySelector(
-      `[data-simple-gift-count="${CSS.escape(
-        campaignId
-      )}"]`
-    );
-
-  if(box){
-
-    box.textContent =
-      `เลือกแล้ว ${count} / ${maxSelect} ชิ้น`;
-
-  }
-
-}
-
-
-function refreshSimpleGiftItemUI(
-  campaign,
-  item
-){
-
-  const campaignId =
-    normalizeGiftId(
-      campaign.campaign_id
-    );
-
-  const giftItemId =
-    normalizeGiftId(
-      item.gift_item_id
-    );
-
-  const selection =
-    getSimpleGiftCampaignSelection(
-      campaignId
-    );
-
-  const selected =
-    Boolean(
-      selection[
-        giftItemId
-      ]
-    );
-
-  const row =
-    document.querySelector(
-      `[data-simple-gift-row="${CSS.escape(
-        campaignId +
-        "::" +
-        giftItemId
-      )}"]`
-    );
-
-  if(row){
-
-    row.classList.toggle(
-      "selected",
-      selected
-    );
-
-  }
-
-  const characterBox =
-    document.querySelector(
-      `[data-simple-character-box="${CSS.escape(
-        campaignId +
-        "::" +
-        giftItemId
-      )}"]`
-    );
-
-  if(!characterBox){
-    return;
-  }
-
-  if(!selected){
-
-    characterBox.innerHTML = "";
-
-    return;
-  }
-
-  const characters =
-    getCharactersForGiftItem(
-      giftItemId
-    );
-
-  if(!characters.length){
-
-    characterBox.innerHTML = `
-
-<div
-style="
-margin-top:8px;
-font-size:12px;
-color:#be123c;
-"
->
-ยังไม่มีตัวละครให้เลือก
-</div>
-
-`;
-
-    return;
-  }
-
-  const selectedCharacterId =
-    normalizeGiftId(
-      selection[
-        giftItemId
-      ].character_id
-    );
-
-  characterBox.innerHTML = `
-
-<div class="gift-character-title">
-เลือกตัวละคร
-</div>
-
-<div class="gift-char-list">
-
-${characters.map(
-  character=>{
-
-    const characterId =
-      normalizeGiftId(
-        character.character_id
-      );
-
-    const characterImage =
-      String(
-        character.character_image ||
-        character.image ||
-        ""
-      ).trim();
-
-    return `
-
-<label class="gift-char-item">
-
-<input
-type="radio"
-name="simple-gift-character-${escapeHtml(
-  campaignId +
-  "-" +
-  giftItemId
-)}"
-value="${escapeHtml(
-  characterId
-)}"
-${
-  selectedCharacterId ===
-  characterId
-    ? " checked"
-    : ""
-}
-onchange="
-selectSimpleGiftCharacter(
-'${escapeJsValue(campaignId)}',
-'${escapeJsValue(giftItemId)}',
-this.value
-)
-"
->
-
-${
-  characterImage
-    ? `
-
-<img
-class="gift-char-image"
-src="${escapeHtml(
-  characterImage
-)}"
-alt=""
->
-
-`
-    : ""
-}
-
-<span>
-
-${escapeHtml(
-  character.character_name ||
-  characterId
-)}
-
-</span>
-
-</label>
-
-`;
-
-  }
-).join("")}
-
-</div>
-
-`;
-
-}
-
-
-function selectSimpleGiftCharacter(
-  campaignId,
-  giftItemId,
-  characterId
-){
-
-  const selection =
-    getSimpleGiftCampaignSelection(
-      campaignId
-    );
-
-  const itemSelection =
-    selection[
-      normalizeGiftId(
-        giftItemId
-      )
-    ];
-
-  if(!itemSelection){
-    return;
-  }
-
-  itemSelection.character_id =
-    normalizeGiftId(
-      characterId
-    );
-
-}
 
 function renderCheckoutGiftRule(
   campaign,
@@ -4493,10 +3256,8 @@ function renderCheckoutGiftRule(
   const maxSelect =
     Math.max(
       1,
-      Math.floor(
-        Number(
-          rule.max_select || 1
-        )
+      Number(
+        rule.max_select || 1
       )
     );
 
@@ -4504,23 +3265,6 @@ function renderCheckoutGiftRule(
     normalizeGiftBoolean(
       rule.allow_duplicate
     );
-
-  const inherited =
-    Boolean(
-      rule.inherited
-    );
-
-  const description =
-    String(
-      rule.display_description ||
-      ""
-    ).trim();
-
-  const rewardDescription =
-    String(
-      rule.reward_description ||
-      ""
-    ).trim();
 
   let html = `
 
@@ -4542,18 +3286,10 @@ data-gift-duplicate="${
 <div>
 
 <div class="gift-rule-name">
-
-${
-  inherited
-    ? "🔁 "
-    : ""
-}
-
 ${escapeHtml(
   rule.rule_name ||
   "Gift Rule"
 )}
-
 </div>
 
 <div
@@ -4561,81 +3297,25 @@ style="
 font-size:13px;
 color:#64748b;
 margin-top:4px;
-line-height:1.7;
 "
 >
-
-${
-  inherited
-    ? `
-
-${escapeHtml(
-  description
-)}
-
-<br>
-
-เลือกได้สูงสุด
-<b>${maxSelect}</b>
-ชิ้น
-
-`
-    : `
-
 ซื้อครบ
 ฿${Number(
-  rule.source_min_amount ??
-  rule.min_amount ??
-  0
+  rule.min_amount || 0
 ).toLocaleString(
   "th-TH",
   {
     maximumFractionDigits:2
   }
 )}
-
 •
-เลือกได้สูงสุด
-${maxSelect}
-ชิ้น
-
-`
-}
-
+เลือกได้สูงสุด ${maxSelect} ชิ้น
 ${
   allowDuplicate
     ? " • เลือกรายการเดิมซ้ำได้"
     : ""
 }
-
 </div>
-
-${
-  inherited &&
-  rewardDescription
-    ? `
-
-<div
-style="
-margin-top:8px;
-padding:9px 11px;
-border-radius:10px;
-background:#f0f9ff;
-color:#486b82;
-font-size:12px;
-line-height:1.65;
-"
->
-
-${escapeHtml(
-  rewardDescription
-)}
-
-</div>
-
-`
-    : ""
-}
 
 </div>
 
@@ -4645,9 +3325,7 @@ data-gift-count-for="${escapeHtml(
   rule.rule_id || ""
 )}"
 >
-
 เลือกแล้ว 0 / ${maxSelect}
-
 </div>
 
 </div>
@@ -4677,6 +3355,7 @@ data-gift-count-for="${escapeHtml(
   return html;
 
 }
+
 
 function renderCheckoutGiftItem(
   campaign,
@@ -5029,6 +3708,21 @@ function changeCheckoutGiftQty(
       Number(change || 0)
     );
 
+  const tempItemMax =
+    getTempGiftItemMax(giftItemId);
+
+  if(
+    tempItemMax > 0 &&
+    nextQty > tempItemMax
+  ){
+    alert(
+      isTempGiftCard(giftItemId)
+        ? `การ์ดใบนี้เลือกซ้ำได้สูงสุด ${tempItemMax} ชิ้น`
+        : `ของแถมรายการนี้เลือกได้สูงสุด ${tempItemMax} ชิ้น`
+    );
+    return;
+  }
+
   const selectedWithoutCurrent =
     getGiftRuleSelectedCount(
       ruleId
@@ -5097,13 +3791,23 @@ function setCheckoutGiftItemQty(
       normalizedRuleId
     );
 
-  const normalizedQty =
+  let normalizedQty =
     Math.max(
       0,
       Math.floor(
         Number(qty || 0)
       )
     );
+
+  const tempItemMax =
+    getTempGiftItemMax(normalizedGiftItemId);
+
+  if(tempItemMax > 0){
+    normalizedQty = Math.min(
+      normalizedQty,
+      tempItemMax
+    );
+  }
 
   if(normalizedQty <= 0){
 
@@ -5517,6 +4221,7 @@ function selectCheckoutGiftCharacter(
 
 }
 
+
 function validateCheckoutGiftSelections(){
 
   for(
@@ -5525,78 +4230,190 @@ function validateCheckoutGiftSelections(){
       .eligibleCampaigns
   ){
 
-    const campaignId =
-      normalizeGiftId(
-        campaign.campaign_id
-      );
-
-    const selection =
-      getSimpleGiftCampaignSelection(
-        campaignId
-      );
-
-    const selectedIds =
-      Object.keys(
-        selection
-      );
-
-    const maxSelect =
-      Math.max(
-        1,
-        Number(
-          campaign.max_select || 1
-        )
-      );
-
-    if(
-      selectedIds.length >
-      maxSelect
-    ){
-
-      alert(
-        `เลือกของแถมได้สูงสุด ${maxSelect} ชิ้น`
-      );
-
-      return false;
-    }
-
     for(
-      const giftItemId
-      of selectedIds
+      const rule
+      of campaign.rules
     ){
 
-      const item =
-        findSimpleGiftItem(
-          campaign,
-          giftItemId
+      const selectedCount =
+        getGiftRuleSelectedCount(
+          rule.rule_id
         );
 
-      if(!item){
-        continue;
-      }
+      const maxSelect =
+        Math.max(
+          1,
+          Number(
+            rule.max_select || 1
+          )
+        );
 
       if(
-        !normalizeGiftBoolean(
-          item.has_character
-        )
+        selectedCount > maxSelect
       ){
-        continue;
-      }
-
-      const characterId =
-        normalizeGiftId(
-          selection[
-            giftItemId
-          ].character_id
-        );
-
-      if(!characterId){
 
         alert(
-          `กรุณาเลือกตัวละครของ ${item.gift_name || "ของแถม"}`
+          `ของแถม ${rule.rule_name || ""} เลือกได้สูงสุด ${maxSelect} ชิ้น`
         );
 
         return false;
+      }
+
+      const ruleSelection =
+        getGiftRuleSelection(
+          rule.rule_id
+        );
+
+      for(
+        const [
+          giftItemId,
+          selection
+        ]
+        of Object.entries(
+          ruleSelection
+        )
+      ){
+
+        const item =
+          findGiftItemInRule(
+            rule,
+            giftItemId
+          );
+
+        if(!item){
+          continue;
+        }
+
+        const qty =
+          Math.max(
+            0,
+            Number(
+              selection.qty || 0
+            )
+          );
+
+        if(
+          !normalizeGiftBoolean(
+            item.has_character
+          )
+        ){
+          continue;
+        }
+
+        const characters =
+          getCharactersForGiftItem(
+            giftItemId
+          );
+
+        if(!characters.length){
+
+          alert(
+            `ของแถม ${item.gift_name || ""} เปิดให้เลือกตัวละคร แต่ยังไม่มี Character ที่ใช้งานได้`
+          );
+
+          return false;
+        }
+
+        const selectedCharacters =
+          Array.isArray(
+            selection.characters
+          )
+            ? selection.characters
+            : [];
+
+        for(
+          let index = 0;
+          index < qty;
+          index++
+        ){
+
+          if(
+            !normalizeGiftId(
+              selectedCharacters[
+                index
+              ]
+            )
+          ){
+
+            alert(
+              `กรุณาเลือกตัวละครของ ${item.gift_name || "ของแถม"} ชิ้นที่ ${index + 1}`
+            );
+
+            return false;
+          }
+
+        }
+
+        const maxSameCharacter =
+          Math.max(
+            1,
+            Number(
+              item.max_same_character || 1
+            )
+          );
+
+        const counts = {};
+
+        selectedCharacters
+          .slice(
+            0,
+            qty
+          )
+          .forEach(
+            characterId => {
+
+              const normalizedId =
+                normalizeGiftId(
+                  characterId
+                );
+
+              counts[
+                normalizedId
+              ] =
+                (
+                  counts[
+                    normalizedId
+                  ] || 0
+                ) + 1;
+
+            }
+          );
+
+        for(
+          const [
+            characterId,
+            count
+          ]
+          of Object.entries(
+            counts
+          )
+        ){
+
+          if(
+            count >
+            maxSameCharacter
+          ){
+
+            const character =
+              characters.find(
+                item =>
+
+                  normalizeGiftId(
+                    item.character_id
+                  ) ===
+                  characterId
+
+              );
+
+            alert(
+              `${character ? character.character_name : "ตัวละครเดียวกัน"} เลือกซ้ำได้สูงสุด ${maxSameCharacter} ชิ้น`
+            );
+
+            return false;
+          }
+
+        }
+
       }
 
     }
@@ -5607,6 +4424,7 @@ function validateCheckoutGiftSelections(){
 
 }
 
+
 function collectCheckoutGiftSelections(){
 
   const gifts = [];
@@ -5614,117 +4432,125 @@ function collectCheckoutGiftSelections(){
   checkoutGiftState
     .eligibleCampaigns
     .forEach(
-      campaign=>{
+      campaign => {
 
-        const campaignId =
-          normalizeGiftId(
-            campaign.campaign_id
-          );
+        campaign.rules.forEach(
+          rule => {
 
-        const selection =
-          getSimpleGiftCampaignSelection(
-            campaignId
-          );
-
-        const entitlementRule =
-          campaign.highest_rule ||
-          {};
-
-        Object.entries(
-          selection
-        ).forEach(
-          ([
-            giftItemId,
-            selected
-          ])=>{
-
-            const item =
-              findSimpleGiftItem(
-                campaign,
-                giftItemId
+            const ruleSelection =
+              getGiftRuleSelection(
+                rule.rule_id
               );
 
-            if(!item){
-              return;
-            }
+            Object.entries(
+              ruleSelection
+            ).forEach(
+              ([
+                giftItemId,
+                selection
+              ]) => {
 
-            const characterId =
-              normalizeGiftId(
-                selected.character_id
-              );
+                const item =
+                  findGiftItemInRule(
+                    rule,
+                    giftItemId
+                  );
 
-            const characters =
-              getCharactersForGiftItem(
-                giftItemId
-              );
+                if(!item){
+                  return;
+                }
 
-            const character =
-              characters.find(
-                row=>
+                const qty =
+                  Math.max(
+                    0,
+                    Number(
+                      selection.qty || 0
+                    )
+                  );
 
-                  normalizeGiftId(
-                    row.character_id
-                  ) ===
-                  characterId
-              );
+                const characters =
+                  getCharactersForGiftItem(
+                    giftItemId
+                  );
 
-            gifts.push({
+                for(
+                  let index = 0;
+                  index < qty;
+                  index++
+                ){
 
-              campaign_id:
-                campaignId,
+                  const characterId =
+                    normalizeGiftId(
+                      selection.characters &&
+                      selection.characters[
+                        index
+                      ]
+                    );
 
-              campaign_name:
-                campaign.campaign_name ||
-                "",
+                  const character =
+                    characters.find(
+                      row =>
 
-              /*
-              Rule จริงที่ Gift Item อยู่
-              */
-              rule_id:
-                normalizeGiftId(
-                  item.rule_id
-                ),
+                        normalizeGiftId(
+                          row.character_id
+                        ) ===
+                        characterId
 
-              /*
-              Rule สูงสุดที่มอบจำนวนสิทธิ์รวม
-              */
-              entitlement_rule_id:
-                normalizeGiftId(
-                  entitlementRule.rule_id
-                ),
+                    );
 
-              temporary_simple_gift:
-                true,
+                  gifts.push({
 
-              gift_item_id:
-                normalizeGiftId(
-                  item.gift_item_id
-                ),
+                    campaign_id:
+                      normalizeGiftId(
+                        campaign.campaign_id
+                      ),
 
-              gift_id:
-                normalizeGiftId(
-                  item.gift_item_id
-                ),
+                    campaign_name:
+                      campaign.campaign_name ||
+                      "",
 
-              gift_name:
-                item.gift_name ||
-                "",
+                    rule_id:
+                      normalizeGiftId(
+                        rule.rule_id
+                      ),
 
-              character_id:
-                characterId,
+                    rule_name:
+                      rule.rule_name ||
+                      "",
 
-              character_name:
-                character
-                  ? character.character_name ||
-                    ""
-                  : "",
+                    tier_name:
+                      rule.rule_name ||
+                      "",
 
-              collection_id:
-                normalizeGiftId(
-                  campaign.collection_id
-                )
+                    gift_item_id:
+                      giftItemId,
 
-            });
+                    gift_id:
+                      giftItemId,
+
+                    gift_name:
+                      item.gift_name ||
+                      "",
+
+                    character_id:
+                      characterId,
+
+                    character_name:
+                      character
+                        ? character.character_name || ""
+                        : "",
+
+                    collection_id:
+                      normalizeGiftId(
+                        campaign.collection_id
+                      )
+
+                  });
+
+                }
+
+              }
+            );
 
           }
         );
@@ -5735,7 +4561,10 @@ function collectCheckoutGiftSelections(){
   return gifts;
 
 }
-  
+
+
+let checkoutSubmitting = false;
+
 function goPayment(){
 
   if(checkoutSubmitting){
@@ -5798,19 +4627,20 @@ function goPayment(){
     const gifts =
       collectCheckoutGiftSelections();
 
-   const checkoutData = {
+    const checkoutData = {
 
-  ...addressData,
+      ...addressData,
 
-  email:
-    addressData.email ||
-    customer.email ||
-    "",
+      email:
+        addressData.email ||
+        customer.email ||
+        "",
 
-  gifts:
-    gifts
+      gifts:
+        gifts
 
-};
+    };
+
     window.checkoutAddress =
       checkoutData;
 
@@ -6068,8 +4898,6 @@ function goCheckoutBack(){
 
 </script>
 
-<script src="ui.js"></script>
-  
 </body>
 
 </html>
