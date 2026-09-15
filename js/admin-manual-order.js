@@ -48,6 +48,9 @@ const DMInvoiceManager = {
   domesticShippingFee:
     0,
 
+  createRequestId:
+    "",
+
   creating:
     false
 
@@ -102,6 +105,9 @@ function renderManualOrderManager(){
 
   DMInvoiceManager.domesticShippingFee =
     0;
+
+  DMInvoiceManager.createRequestId =
+    "";
 
   DMInvoiceManager.creating =
     false;
@@ -2344,6 +2350,55 @@ function updateDMShippingOnlyTotal(){
 
 /*
 =========================================
+CREATE REQUEST ID
+=========================================
+*/
+
+function getDMInvoiceCreateRequestId(){
+
+  if(DMInvoiceManager.createRequestId){
+
+    return DMInvoiceManager.createRequestId;
+
+  }
+
+
+  let requestId = "";
+
+
+  if(
+    window.crypto &&
+    typeof window.crypto.randomUUID === "function"
+  ){
+
+    requestId =
+      "DMREQ-" +
+      window.crypto.randomUUID();
+
+  }else{
+
+    requestId =
+      "DMREQ-" +
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .slice(2, 12);
+
+  }
+
+
+  DMInvoiceManager.createRequestId =
+    requestId;
+
+
+  return requestId;
+
+}
+
+
+/*
+=========================================
 SUBMIT
 =========================================
 */
@@ -2375,6 +2430,10 @@ async function submitDMInvoice(){
 
     DMInvoiceManager.creating =
       true;
+
+
+    const createRequestId =
+      getDMInvoiceCreateRequestId();
 
 
     if(button){
@@ -2815,8 +2874,14 @@ async function submitDMInvoice(){
               action:
                 "createDMInvoice",
 
-              data:
-                payload
+              data:{
+
+                ...payload,
+
+                request_id:
+                  createRequestId
+
+              }
 
             })
 
@@ -2853,6 +2918,10 @@ if(
       );
 
     }
+
+
+    DMInvoiceManager.createRequestId =
+      "";
 
 
     showDMInvoiceSuccess(
