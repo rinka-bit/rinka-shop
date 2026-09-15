@@ -2399,6 +2399,200 @@ function getDMInvoiceCreateRequestId(){
 
 /*
 =========================================
+CREATE REQUEST / RECOVERY
+=========================================
+*/
+async function postCreateDMInvoice(
+  payload,
+  requestId
+){
+
+  const response =
+    await fetch(
+      API,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+        body:JSON.stringify({
+          action:"createDMInvoice",
+          data:{
+            ...payload,
+            request_id:requestId
+          }
+        })
+      }
+    );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " +
+      response.status
+    );
+
+  }
+
+
+  return await response.json();
+
+}
+
+
+async function recoverDMInvoiceByRequestId(
+  requestId
+){
+
+  if(!requestId){
+
+    return null;
+
+  }
+
+
+  try{
+
+    const url =
+      new URL(
+        API
+      );
+
+    url.searchParams.set(
+      "action",
+      "dmInvoiceByRequestId"
+    );
+
+    url.searchParams.set(
+      "request_id",
+      requestId
+    );
+
+    /*
+    cache buster เพื่อไม่ให้ browser/CDN
+    คืนผล GET เก่าระหว่าง recovery
+    */
+    url.searchParams.set(
+      "_",
+      String(Date.now())
+    );
+
+
+    const response =
+      await fetch(
+        url.toString(),
+        {
+          method:"GET",
+          cache:"no-store"
+        }
+      );
+
+
+    if(!response.ok){
+
+      console.warn(
+        "DM INVOICE RECOVERY HTTP:",
+        response.status
+      );
+
+      return null;
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    console.log(
+      "DM INVOICE RECOVERY RESPONSE:",
+      result
+    );
+
+
+    if(
+      result &&
+      result.success === true &&
+      result.found === true &&
+      result.invoice_id
+    ){
+
+      return result;
+
+    }
+
+
+    return null;
+
+
+  }catch(error){
+
+    console.warn(
+      "recoverDMInvoiceByRequestId error:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+async function waitAndRecoverDMInvoice(
+  requestId
+){
+
+  /*
+  Apps Script / Sheets อาจใช้เวลาสั้น ๆ
+  ก่อน GET ถัดไปเห็นแถวล่าสุด
+  */
+  const delays = [
+    250,
+    700,
+    1400
+  ];
+
+
+  for(
+    let index = 0;
+    index < delays.length;
+    index++
+  ){
+
+    await new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          delays[index]
+        )
+    );
+
+
+    const recovered =
+      await recoverDMInvoiceByRequestId(
+        requestId
+      );
+
+
+    if(recovered){
+
+      return recovered;
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/*
+=========================================
 SUBMIT
 =========================================
 */
@@ -2855,65 +3049,177 @@ async function submitDMInvoice(){
     }
 
 
-    const response =
-      await fetch(
-        API,
-        {
+    let result = null;
+    let createError = null;
 
-          method:
-            "POST",
 
-          headers:{
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
+    try{
 
-          body:
-            JSON.stringify({
+      result =
+        await postCreateDMInvoice(
+          payload,
+          createRequestId
+        );
 
-              action:
-                "createDMInvoice",
 
-              data:{
-
-                ...payload,
-
-                request_id:
-                  createRequestId
-
-              }
-
-            })
-
-        }
+      console.log(
+        "CREATE DM INVOICE RESPONSE:",
+        result
       );
 
 
-    if(!response.ok){
+    }catch(error){
 
-      throw new Error(
-        "HTTP " +
-        response.status
+      createError =
+        error;
+
+      console.warn(
+        "CREATE DM INVOICE POST ERROR — TRY RECOVERY:",
+        error
       );
 
     }
 
 
-    const result =
-  await response.json();
+    /*
+    ถ้า POST ตอบกลับผิดรูป เช่น
+    {status:"success", message:"Rinka Shop API Online"}
+    หรือเกิด HTTP / network error
+    ให้เช็ก request_id ก่อนสรุปว่า fail
+    */
+    if(
+      !result ||
+      result.success !== true ||
+      !result.invoice_id
+    ){
 
-console.log(
-  "CREATE DM INVOICE RESPONSE:",
-  result
-);
+      if(resultBox){
 
-if(
-  !result ||
-  result.success !== true
-){
+        resultBox.innerHTML = `
+
+<div
+  style="
+    padding:14px;
+    border-radius:12px;
+    background:#eff6ff;
+  "
+>
+  ⏳ กำลังตรวจสอบ Invoice ที่สร้าง...
+</div>
+
+`;
+
+      }
+
+
+      const recovered =
+        await waitAndRecoverDMInvoice(
+          createRequestId
+        );
+
+
+      if(recovered){
+
+        result =
+          recovered;
+
+      }else{
+
+        /*
+        ยังไม่พบ request_id:
+        retry create อีก 1 ครั้งด้วย request_id เดิม
+        Backend idempotency จะกันการสร้างซ้ำ
+        */
+        console.warn(
+          "DM INVOICE NOT FOUND — RETRY CREATE ONCE",
+          createRequestId
+        );
+
+
+        try{
+
+          const retryResult =
+            await postCreateDMInvoice(
+              payload,
+              createRequestId
+            );
+
+
+          console.log(
+            "CREATE DM INVOICE RETRY RESPONSE:",
+            retryResult
+          );
+
+
+          if(
+            retryResult &&
+            retryResult.success === true &&
+            retryResult.invoice_id
+          ){
+
+            result =
+              retryResult;
+
+          }else{
+
+            const recoveredAfterRetry =
+              await waitAndRecoverDMInvoice(
+                createRequestId
+              );
+
+
+            if(recoveredAfterRetry){
+
+              result =
+                recoveredAfterRetry;
+
+            }
+
+          }
+
+
+        }catch(retryError){
+
+          console.warn(
+            "CREATE DM INVOICE RETRY ERROR:",
+            retryError
+          );
+
+
+          const recoveredAfterRetry =
+            await waitAndRecoverDMInvoice(
+              createRequestId
+            );
+
+
+          if(recoveredAfterRetry){
+
+            result =
+              recoveredAfterRetry;
+
+          }else if(!createError){
+
+            createError =
+              retryError;
+
+          }
+
+        }
+
+      }
+
+    }
+
+
+    if(
+      !result ||
+      result.success !== true ||
+      !result.invoice_id
+    ){
 
       throw new Error(
         result?.error ||
+        createError?.message ||
         "สร้าง Invoice ไม่สำเร็จ"
       );
 
