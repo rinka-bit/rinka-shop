@@ -1744,28 +1744,54 @@ function isTempGiftExclusiveGroup(giftItemId){
   );
 }
 
-function getTempGiftExclusiveGroupCount(excludeRuleId = "", excludeGiftItemId = ""){
-  const excludedRuleId = normalizeGiftId(excludeRuleId);
-  const excludedGiftItemId = normalizeGiftId(excludeGiftItemId);
-
-  return Object.entries(checkoutGiftState.selections || {}).reduce((sum, [ruleId, selection])=>{
-    return sum + Object.entries(selection || {}).reduce((ruleSum, [id, data])=>{
-      if(!isTempGiftExclusiveGroup(id)) return ruleSum;
-
-      let qty = Math.max(0, Number(data?.qty || 0));
-
-      // เวลาตรวจ item ปัจจุบัน ให้ไม่นับจำนวนของ item นั้นซ้ำ
-      if(
-        normalizeGiftId(ruleId) === excludedRuleId &&
-        normalizeGiftId(id) === excludedGiftItemId
-      ){
-        qty = 0;
-      }
-
-      return ruleSum + qty;
-    }, 0);
+function getTempGiftExclusiveGroupCount(ruleId){
+  const selection = getGiftRuleSelection(ruleId);
+  return Object.entries(selection || {}).reduce((sum, [id, data])=>{
+    if(!isTempGiftExclusiveGroup(id)) return sum;
+    return sum + Math.max(0, Number(data?.qty || 0));
   }, 0);
 }
+
+
+function getTempGiftExclusiveGroupCountAll(){
+
+  return Object.values(
+    checkoutGiftState.selections || {}
+  ).reduce(
+    (total, ruleSelection) => {
+
+      return total +
+        Object.entries(
+          ruleSelection || {}
+        ).reduce(
+          (sum, [giftItemId, data]) => {
+
+            if(
+              !isTempGiftExclusiveGroup(
+                giftItemId
+              )
+            ){
+              return sum;
+            }
+
+            return sum +
+              Math.max(
+                0,
+                Number(
+                  data?.qty || 0
+                )
+              );
+
+          },
+          0
+        );
+
+    },
+    0
+  );
+
+}
+
 
 function prepareTemporaryGiftRules(){
   (checkoutGiftState.eligibleCampaigns || []).forEach(campaign=>{
@@ -3349,7 +3375,7 @@ margin-top:4px;
 เลือกได้สูงสุด ${maxSelect} ชิ้น
 ${
   allowDuplicate
-    ? " • ได้รับสูงสุด5ชิ้นต่อออเดอร์ (ยอด3,000฿)"
+    ? " • ได้รับของแถมมากสุด5ชิ้นต่อออเดอร์ (ยอด3,000฿)"
     : ""
 }
 </div>
@@ -3764,7 +3790,7 @@ function changeCheckoutGiftQty(
   // เป็นกลุ่ม exclusive เดียวกัน: รวมกันเลือกได้สูงสุด 1 ชิ้น
   if(isTempGiftExclusiveGroup(giftItemId) && nextQty > 0){
     const exclusiveWithoutCurrent =
-      getTempGiftExclusiveGroupCount(ruleId, giftItemId);
+      getTempGiftExclusiveGroupCountAll() - currentQty;
 
     if(
       nextQty + exclusiveWithoutCurrent > 1
@@ -3869,7 +3895,8 @@ function setCheckoutGiftItemQty(
     normalizedQty > 0
   ){
     const exclusiveWithoutCurrent =
-      getTempGiftExclusiveGroupCount(normalizedRuleId, normalizedGiftItemId);
+      getTempGiftExclusiveGroupCountAll() -
+      (ruleSelection[normalizedGiftItemId]?.qty || 0);
 
     if(
       normalizedQty + exclusiveWithoutCurrent > 1
