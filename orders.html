@@ -968,8 +968,29 @@ function orderCard(o){
       ""
     );
 
+  const normalizedStatus =
+    String(
+      o.status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  /*
+  DM Invoice:
+  - pending_order = ยังเป็นใบแจ้งชำระ / Invoice
+  - pending ขึ้นไป = เข้าสู่ workflow คำสั่งซื้อแล้ว
+  */
+  const dmStillInvoice =
+    isDM &&
+    (
+      !normalizedStatus ||
+      normalizedStatus === "sent" ||
+      normalizedStatus === "payment_submitted" ||
+      normalizedStatus === "pending_order"
+    );
+
   const url =
-    isDM
+    dmStillInvoice
       ? "invoice.html?id=" +
         encodeURIComponent(id)
       : "order.html?id=" +
