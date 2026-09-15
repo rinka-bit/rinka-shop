@@ -42,29 +42,6 @@ document.addEventListener(
   "DOMContentLoaded",
   ()=>{
 
-    /*
-    DM Invoice ใช้หน้ารายละเอียด invoice.html
-    ป้องกันกรณีมีลิงก์เก่าหรือเปิด order.html?id=INV-...
-    */
-    if(
-      String(
-        orderId || ""
-      ).startsWith(
-        "INV-"
-      )
-    ){
-
-      location.replace(
-        "invoice.html?id=" +
-        encodeURIComponent(
-          orderId
-        )
-      );
-
-      return;
-
-    }
-
     loadOrder();
 
   }
@@ -132,6 +109,162 @@ async function loadOrder(){
 `;
 
     return;
+
+  }
+
+
+  /*
+  =========================================
+  DM INVOICE AS ORDER
+
+  หลังแอดมินเปลี่ยนเป็น pending ขึ้นไป
+  ให้แสดงในหน้ารายละเอียดออเดอร์นี้
+  โดยข้อมูลยังอยู่ใน DMInvoices ตามเดิม
+  =========================================
+  */
+
+  if(
+    String(
+      orderId || ""
+    ).startsWith(
+      "INV-"
+    )
+  ){
+
+    try{
+
+      const q =
+        new URLSearchParams({
+          action:
+            "customerDMInvoices",
+          session_token:
+            token
+        });
+
+      const res =
+        await fetch(
+          API +
+          "?" +
+          q.toString()
+        );
+
+      if(!res.ok){
+        throw new Error(
+          "HTTP " +
+          res.status
+        );
+      }
+
+      const data =
+        await res.json();
+
+      if(
+        !data ||
+        data.success !== true
+      ){
+        throw new Error(
+          data?.error ||
+          "โหลดข้อมูล DM Invoice ไม่สำเร็จ"
+        );
+      }
+
+      const dmOrders =
+        Array.isArray(
+          data.orders
+        )
+          ? data.orders
+          : Array.isArray(
+              data.invoices
+            )
+            ? data.invoices
+            : [];
+
+      const order =
+        dmOrders.find(
+          item =>
+            String(
+              item.order_id ||
+              item.invoice_id ||
+              ""
+            ).trim() ===
+            String(orderId).trim()
+        );
+
+      if(!order){
+        throw new Error(
+          "ไม่พบคำสั่งซื้อนี้ในบัญชีของคุณ"
+        );
+      }
+
+      let status =
+        String(
+          order.status ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+      if(
+        !status ||
+        status === "sent" ||
+        status === "payment_submitted" ||
+        status === "pending_order"
+      ){
+
+        location.replace(
+          "invoice.html?id=" +
+          encodeURIComponent(
+            orderId
+          )
+        );
+
+        return;
+
+      }
+
+      renderOrder({
+        ...order,
+        order_id:
+          order.order_id ||
+          order.invoice_id ||
+          orderId,
+        order_source:
+          "dm_invoice",
+        payment_status:
+          order.payment_status === "submitted"
+            ? "paid"
+            : order.payment_status,
+        gifts:[],
+        shipments:[],
+        pending_shipment:null,
+        pending_shipment_id:"",
+        shipping_payment_status:""
+      });
+
+      console.log(
+        "ORDER SOURCE: dm_invoice",
+        orderId
+      );
+
+      return;
+
+    }catch(error){
+
+      console.warn(
+        "load DM order:",
+        error
+      );
+
+      state(
+        "โหลดออเดอร์ไม่สำเร็จ",
+        error.message ||
+        String(error),
+        true
+      );
+
+      return;
+
+    }
 
   }
 
@@ -343,6 +476,7 @@ async function loadOrder(){
 }
  
 function renderOrder(o){
+ const isDMOrder = String(o.order_source || o.source || o.order_type || "").toLowerCase() === "dm_invoice" || String(o.order_id || "").startsWith("INV-");
  const items=Array.isArray(o.items)?o.items:[]; const gifts=Array.isArray(o.gifts)?o.gifts:[];
  const shipments =
   Array.isArray(
@@ -399,15 +533,17 @@ const domestic =
 
       : '<span class="badge pending">รอชำระเงิน</span>'
 }
-${shippingBadge(o.shipping_payment_status)}${gifts.length?`<span class="badge progress">ของแถม ${gifts.length} ชิ้น</span>`:""}${o.legacy_order?'<span class="badge progress">ออเดอร์เก่า</span>':""}</div>
+${isDMOrder?'<span class="badge progress">💬 สั่งซื้อผ่าน DM</span>':shippingBadge(o.shipping_payment_status)}${gifts.length?`<span class="badge progress">ของแถม ${gifts.length} ชิ้น</span>`:""}${o.legacy_order?'<span class="badge progress">ออเดอร์เก่า</span>':""}</div>
  <div class="meta"><div><span>ลูกค้า</span><strong>${esc(o.customer_name||"-")}</strong></div><div><span>วันที่สั่งซื้อ</span><strong>${formatDate(o.created_at)}</strong></div><div><span>สถานะ</span><strong>${statusText(o.status)}</strong></div><div><span>ยอดรวม</span><strong>฿${Number(o.total||0).toLocaleString("th-TH")}</strong></div>${o.preorder_round?`<div><span>รอบพรีออเดอร์</span><strong>${esc(o.preorder_round)}</strong></div>`:""}${o.import_fee_status?`<div><span>สถานะค่านำเข้า</span><strong>${o.import_fee_status==="pending"?"รอคำนวณ":"รวมแล้ว"}</strong></div>`:""}</div></div>
  ${messageHtml(o.status)}<div class="card"><h2>📍 ติดตามสถานะ</h2>${timeline(o.status)}</div>
  <div class="card"><h2>🛍️ รายการสินค้า</h2>${items.length?items.map(itemHtml).join(""):'<p>ไม่มีรายการสินค้า</p>'}</div>
  ${gifts.length?`<div class="card"><h2>🎁 ของแถม</h2>${gifts.map(giftHtml).join("")}</div>`:""}
- </section><aside class="side"><div class="card"><h2>🚚 การจัดส่ง</h2>
- <div class="side-row"><span>ค่านำเข้า</span><strong>฿${importFee.toLocaleString("th-TH")}</strong></div><div class="side-row"><span>ค่าส่งในไทย</span><strong>฿${domestic.toLocaleString("th-TH")}</strong></div><div class="side-row side-total"><span>รวมค่าส่ง</span><strong>฿${shippingTotal.toLocaleString("th-TH")}</strong></div>
+ </section><aside class="side"><div class="card"><h2>${isDMOrder?"🧾 สรุปคำสั่งซื้อ":"🚚 การจัดส่ง"}</h2>
+ ${isDMOrder
+   ? `<div class="side-row"><span>ยอดสินค้า</span><strong>฿${Number(o.subtotal ?? o.total ?? 0).toLocaleString("th-TH")}</strong></div><div class="side-row side-total"><span>ยอดรวม</span><strong>฿${Number(o.total||0).toLocaleString("th-TH")}</strong></div>`
+   : `<div class="side-row"><span>ค่านำเข้า</span><strong>฿${importFee.toLocaleString("th-TH")}</strong></div><div class="side-row"><span>ค่าส่งในไทย</span><strong>฿${domestic.toLocaleString("th-TH")}</strong></div><div class="side-row side-total"><span>รวมค่าส่ง</span><strong>฿${shippingTotal.toLocaleString("th-TH")}</strong></div>`}
 ${
-  pendingShipmentId
+  !isDMOrder && pendingShipmentId
     ? `
 
 <button
