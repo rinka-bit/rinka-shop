@@ -18667,7 +18667,7 @@
           "option_value": "Argenti",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1uOOSMMzvB2M6eDVSOftOQyEhReCcqhCf&sz=w2000",
           "sort_order": 2
@@ -18752,7 +18752,7 @@
           "option_value": "Phainon",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9994,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1GILpZlCzNenCKsZVd44iZyEuxEJjlVTO&sz=w2000",
           "sort_order": 0
@@ -18763,7 +18763,7 @@
           "option_value": "Anaxa",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9990,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1RrOVEYugGExGDzPqD3QKnRfWJ-i45Ufm&sz=w2000",
           "sort_order": 1
@@ -20037,7 +20037,7 @@
           "option_value": "Dr.Ratio",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1yMB9S58rdapHL6gykBTMX2ENC-kI1og4&sz=w2000",
           "sort_order": 0
@@ -20048,7 +20048,7 @@
           "option_value": "Aventurine",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9995,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=18mZ4gh2lr6ra0yiuO6y6s7udn7EzWUA4&sz=w2000",
           "sort_order": 1
@@ -20070,7 +20070,7 @@
           "option_value": "Argenti",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1zhs6XjDRjevcqToDP7U8zVSzOamrnv22&sz=w2000",
           "sort_order": 3
@@ -20092,15 +20092,15 @@
       "product_id": "PROD1789306878085",
       "name": "มินิฟิกเกอร์นั่ง",
       "price_mode": "fixed",
-      "price": 620,
-      "final_price": 620,
+      "price": 659,
+      "final_price": 659,
       "base_price": 759,
       "min_price": 759,
       "max_price": 759,
       "has_price_range": false,
       "old_price": 759,
       "on_sale": true,
-      "sale_price": 620,
+      "sale_price": 659,
       "sale_start": "2026-09-14T17:00:00.000Z",
       "sale_end": "2026-09-29T17:00:00.000Z",
       "main_category": "ฟิกเกอร์",
@@ -20144,7 +20144,7 @@
           "option_value": "Aventurine",
           "additional_price": 0,
           "price": null,
-          "stock": 9993,
+          "stock": 9992,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1ymhrH6toHgQ9kW4o4kxXzvWNSkjCxO5U&sz=w2000",
           "sort_order": 1
@@ -20166,7 +20166,7 @@
           "option_value": "Robin",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1gwBq_3t0v9-Ij0YO9A_7GZ0JPaoNbAY4&sz=w2000",
           "sort_order": 3
@@ -20667,7 +20667,7 @@
       "fandom": "Honkai Star Rail",
       "sub_category": "เครื่องประดับ",
       "round": "HSR 9-2026",
-      "description": "ไซส์ 11 เส้นผ่านศูนย์กลางประมาณ50มม.\n\nไซส์ 13เส้นผ่านศูนย์กลางประมาณ52มม.\n\nไซส์ 15 เส้นผ่านศูนย์กลางประมาณ54มม.",
+      "description": "ไซส์ 11 เส้นรอบวงประมาณ50มม.\n\nไซส์ 13 เส้นรอบวงประมาณ52มม.\n\nไซส์ 15 เส้นรอบวงประมาณ54มม.",
       "search_keywords": "ไซส์ 11 ไซส์ 13 ไซส์ 15",
       "image": "https://drive.google.com/thumbnail?id=1hr8BMbuPAuBLMtCMblpGI6o_yAMB0W2f&sz=w2000",
       "status": "active",
@@ -21358,7 +21358,7 @@
           "option_value": "Aventurine-Waveflair",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9995,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 8
@@ -21888,7 +21888,7 @@
           "option_value": "Aventurine-Waveflair",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -24888,9 +24888,9 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-15T04:11:41.624Z",
+  "generated_at": "2026-09-15T12:23:16.286Z",
   "performance": {
-    "total_ms": 5127,
+    "total_ms": 6635,
     "product_count": 220,
     "collection_count": 3,
     "bank_count": 3
