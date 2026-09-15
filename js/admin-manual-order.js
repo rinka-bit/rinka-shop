@@ -2835,13 +2835,17 @@ async function submitDMInvoice(){
 
 
     const result =
-      await response.json();
+  await response.json();
 
+console.log(
+  "CREATE DM INVOICE RESPONSE:",
+  result
+);
 
-    if(
-      !result ||
-      result.success !== true
-    ){
+if(
+  !result ||
+  result.success !== true
+){
 
       throw new Error(
         result?.error ||
