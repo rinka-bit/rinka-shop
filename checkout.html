@@ -1802,14 +1802,55 @@ function prepareTemporaryGiftRules(){
     }
 
     const byId = new Map();
-    (campaign.rules || []).forEach(rule=>{
-      (rule.items || []).forEach(item=>{
-        const id = normalizeGiftId(item.gift_item_id);
-        if(id && isTempGiftAllowed(id, entitlement) && !byId.has(id)){
-          byId.set(id, item);
+   (campaign.rules || []).forEach(rule=>{
+
+  (rule.items || []).forEach(item=>{
+
+    const id =
+      normalizeGiftId(
+        item.gift_item_id
+      );
+
+    if(
+      id &&
+      isTempGiftAllowed(
+        id,
+        entitlement
+      ) &&
+      !byId.has(id)
+    ){
+
+      /*
+      =========================================
+      IMPORTANT
+
+      TEMP rule ใช้สำหรับ UI เท่านั้น
+      เก็บ rule_id ต้นฉบับของ Gift Item ไว้
+      เพื่อส่งกลับ Backend ตอนสร้าง Order
+      =========================================
+      */
+
+      byId.set(
+        id,
+        {
+          ...item,
+
+          source_rule_id:
+            normalizeGiftId(
+              rule.rule_id
+            ),
+
+          source_rule_name:
+            rule.rule_name ||
+            ""
         }
-      });
-    });
+      );
+
+    }
+
+  });
+
+});
 
     const order = [...TEMP_GIFT_CONFIG.cardIds, ...TEMP_GIFT_CONFIG.singleIds];
     const allItems = [...byId.values()].sort((a,b)=>{
@@ -4609,17 +4650,20 @@ function collectCheckoutGiftSelections(){
                       "",
 
                     rule_id:
-                      normalizeGiftId(
-                        rule.rule_id
-                      ),
+  normalizeGiftId(
+    item.source_rule_id ||
+    rule.rule_id
+  ),
 
-                    rule_name:
-                      rule.rule_name ||
-                      "",
+rule_name:
+  item.source_rule_name ||
+  rule.rule_name ||
+  "",
 
-                    tier_name:
-                      rule.rule_name ||
-                      "",
+tier_name:
+  item.source_rule_name ||
+  rule.rule_name ||
+  "",
 
                     gift_item_id:
                       giftItemId,
