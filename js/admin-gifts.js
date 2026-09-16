@@ -89,7 +89,7 @@ openCreateGiftCampaign()
 type="button"
 style="background:#64748b;"
 onclick="
-reloadGiftManager(event)
+reloadGiftManager()
 "
 >
 ↻ โหลดใหม่
@@ -449,13 +449,13 @@ RELOAD
 =========================================
 */
 
-async function reloadGiftManager(
-  event
-){
+async function reloadGiftManager(){
 
   const button =
-    event?.currentTarget ||
-    null;
+    event &&
+    event.currentTarget
+      ? event.currentTarget
+      : null;
 
   if(button){
 
@@ -485,6 +485,7 @@ async function reloadGiftManager(
   }
 
 }
+
 
 /*
 =========================================
@@ -825,6 +826,7 @@ function renderGiftRuleNode(
             item.rule_id || ""
           ) ===
           ruleId
+
       ),
 
       "gift_name"
@@ -841,121 +843,6 @@ function renderGiftRuleNode(
     adminGiftOpenNodes.has(
       nodeKey
     );
-
-  const rewardMode =
-    normalizeAdminGiftRewardMode(
-      rule.reward_mode
-    );
-
-  const rewards =
-    Array.isArray(
-      rule.rewards
-    )
-      ? rule.rewards
-      : [];
-
-  const rewardDescription =
-    String(
-      rule.reward_description || ""
-    ).trim();
-
-  const rewardSummaryHtml =
-    rewardMode === "custom"
-      ? `
-
-<div
-style="
-margin-top:8px;
-padding:10px 12px;
-border:1px solid #d7ebf7;
-border-radius:12px;
-background:#f5fbff;
-color:#486b82;
-font-size:13px;
-line-height:1.7;
-"
->
-
-<div
-style="
-font-weight:700;
-color:#3476a2;
-margin-bottom:5px;
-"
->
-🔁 รวมสิทธิ์จากเทียร์ก่อนหน้า
-</div>
-
-${
-  rewards.length
-    ? rewards
-        .map(
-          reward => `
-
-<div>
-• ${escapeHtml(
-  reward.source_rule_name ||
-  reward.source_rule_id ||
-  "ไม่พบชื่อ Rule"
-)}
-จำนวน
-<b>${Math.max(
-  1,
-  Number(
-    reward.quantity || 1
-  )
-)}</b>
-ชิ้น
-</div>
-
-`
-        )
-        .join("")
-    : `
-
-<div style="color:#b45309;">
-ยังไม่ได้กำหนดเทียร์ก่อนหน้า
-</div>
-
-`
-}
-
-${
-  rewardDescription
-    ? `
-
-<div
-style="
-margin-top:7px;
-padding-top:7px;
-border-top:1px dashed #cbdde8;
-"
->
-${escapeHtml(
-  rewardDescription
-)}
-</div>
-
-`
-    : ""
-}
-
-</div>
-
-`
-      : `
-
-<div
-style="
-margin-top:7px;
-color:#64748b;
-font-size:12px;
-"
->
-📌 สิทธิ์แบบธรรมดาตามขั้น
-</div>
-
-`;
 
   return `
 
@@ -1011,7 +898,7 @@ ${formatGiftAdminMoney(
 
 &nbsp; • &nbsp;
 
-ของแถมเทียร์นี้:
+เลือกได้:
 
 ${Number(
   rule.max_select || 1
@@ -1038,8 +925,6 @@ ${renderGiftStatusBadge(
 )}
 
 </div>
-
-${rewardSummaryHtml}
 
 </div>
 
@@ -1128,6 +1013,7 @@ ${
 `;
 
 }
+
 
 function renderGiftItemNode(
   item
@@ -2053,16 +1939,6 @@ async function submitGiftRule(){
       "giftRuleSortOrder"
     );
 
-  const rewardModeInput =
-    document.getElementById(
-      "giftRuleRewardMode"
-    );
-
-  const rewardDescriptionInput =
-    document.getElementById(
-      "giftRuleRewardDescription"
-    );
-
   const saveButton =
     document.getElementById(
       "giftModalSaveBtn"
@@ -2072,80 +1948,6 @@ async function submitGiftRule(){
     document.getElementById(
       "giftModalLoading"
     );
-
-  const rewardMode =
-    normalizeAdminGiftRewardMode(
-      rewardModeInput
-        ? rewardModeInput.value
-        : "normal"
-    );
-
-  const rewards = [];
-
-  if(rewardMode === "custom"){
-
-    document
-      .querySelectorAll(
-        "[data-gift-reward-rule]"
-      )
-      .forEach(
-        (
-          row,
-          index
-        ) => {
-
-          const checkbox =
-            row.querySelector(
-              "[data-gift-reward-enabled]"
-            );
-
-          const quantityInput =
-            row.querySelector(
-              "[data-gift-reward-quantity]"
-            );
-
-          if(
-            !checkbox ||
-            !checkbox.checked
-          ){
-
-            return;
-
-          }
-
-          const sourceRuleId =
-            String(
-              row.dataset.giftRewardRule ||
-              ""
-            ).trim();
-
-          const quantity =
-            Number(
-              quantityInput
-                ? quantityInput.value
-                : 0
-            );
-
-          rewards.push({
-
-            source_rule_id:
-              sourceRuleId,
-
-            quantity:
-              quantity,
-
-            active:
-              "yes",
-
-            sort_order:
-              index
-
-          });
-
-        }
-      );
-
-  }
 
   const payload = {
 
@@ -2183,17 +1985,6 @@ async function submitGiftRule(){
         ? allowDuplicateInput.value
         : "",
 
-    reward_mode:
-      rewardMode,
-
-    reward_description:
-      rewardDescriptionInput
-        ? rewardDescriptionInput.value.trim()
-        : "",
-
-    rewards:
-      rewards,
-
     active:
       activeInput
         ? activeInput.value
@@ -2208,7 +1999,9 @@ async function submitGiftRule(){
 
   };
 
-  if(!payload.campaign_id){
+  if(
+    !payload.campaign_id
+  ){
 
     alert(
       "ไม่พบ Campaign สำหรับ Rule นี้"
@@ -2218,13 +2011,19 @@ async function submitGiftRule(){
 
   }
 
-  if(!payload.rule_name){
+  if(
+    !payload.rule_name
+  ){
 
     alert(
       "กรุณากรอกชื่อ Rule"
     );
 
-    ruleNameInput?.focus();
+    if(ruleNameInput){
+
+      ruleNameInput.focus();
+
+    }
 
     return;
 
@@ -2241,58 +2040,35 @@ async function submitGiftRule(){
       "ยอดขั้นต่ำต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป"
     );
 
-    minAmountInput?.focus();
+    if(minAmountInput){
+
+      minAmountInput.focus();
+
+    }
 
     return;
 
   }
 
   if(
-    !Number.isInteger(
+    !Number.isFinite(
       payload.max_select
     ) ||
-    payload.max_select < 1
+    payload.max_select < 1 ||
+    !Number.isInteger(
+      payload.max_select
+    )
   ){
 
     alert(
-      "จำนวนของแถมเทียร์นี้ต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
+      "จำนวนสูงสุดที่เลือกได้ต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
     );
 
-    maxSelectInput?.focus();
+    if(maxSelectInput){
 
-    return;
+      maxSelectInput.focus();
 
-  }
-
-  if(
-    payload.reward_mode === "custom" &&
-    payload.rewards.length === 0
-  ){
-
-    alert(
-      "กรุณาเลือกเทียร์ก่อนหน้าอย่างน้อย 1 เทียร์"
-    );
-
-    return;
-
-  }
-
-  const invalidReward =
-    payload.rewards.find(
-      reward =>
-
-        !reward.source_rule_id ||
-        !Number.isInteger(
-          reward.quantity
-        ) ||
-        reward.quantity < 1
-    );
-
-  if(invalidReward){
-
-    alert(
-      "จำนวนของแถมจากแต่ละเทียร์ต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป"
-    );
+    }
 
     return;
 
@@ -2318,7 +2094,9 @@ async function submitGiftRule(){
 
   if(saveButton){
 
-    saveButton.disabled = true;
+    saveButton.disabled =
+      true;
+
     saveButton.textContent =
       "กำลังบันทึก...";
 
@@ -2339,16 +2117,9 @@ async function submitGiftRule(){
     const formData =
       new FormData();
 
-    /*
-    จุดสำคัญ:
-    ถ้ามี rule_id ต้องใช้ updateGiftRule
-    */
-
     formData.append(
       "action",
-      payload.rule_id
-        ? "updateGiftRule"
-        : "saveGiftRule"
+      "saveGiftRule"
     );
 
     formData.append(
@@ -4122,6 +3893,17 @@ function renderGiftCampaignForm(){
         )
       : false;
 
+  const ruleMode =
+    campaign &&
+    String(
+      campaign.rule_mode || ""
+    )
+      .trim()
+      .toLowerCase() ===
+      "highest_tier"
+        ? "highest_tier"
+        : "independent";
+
   modalBody.innerHTML = `
 
 <input
@@ -4390,6 +4172,55 @@ color:#64748b;
 </div>
 
 
+<div
+class="full"
+style="
+border:1px solid #dbeafe;
+background:#f8fbff;
+border-radius:14px;
+padding:16px;
+"
+>
+
+<label for="giftCampaignRuleMode" style="font-weight:700;">
+รูปแบบการทำงานของ Tier
+</label>
+
+<br><br>
+
+<select id="giftCampaignRuleMode">
+
+<option
+value="independent"
+${ruleMode === "independent" ? "selected" : ""}
+>
+แต่ละ Rule ทำงานตามปกติ
+</option>
+
+<option
+value="highest_tier"
+${ruleMode === "highest_tier" ? "selected" : ""}
+>
+ใช้เฉพาะ Tier สูงสุดที่ถึง (Genshin / WuWa)
+</option>
+
+</select>
+
+<p
+style="
+margin:8px 0 0;
+font-size:13px;
+color:#64748b;
+"
+>
+<strong>Tier สูงสุด:</strong>
+เช่น 1,200 เลือกเข็มกลัด A/B/C ได้ 1 ชิ้น
+แต่เมื่อยอดถึง 2,400 จะแสดงและรับเฉพาะของแถม Tier 2,400 เท่านั้น
+</p>
+
+</div>
+
+
 <div class="full">
 
 <label for="giftCampaignDescription">
@@ -4553,530 +4384,6 @@ disabled
 
 }
 
-function normalizeAdminGiftRewardMode(
-  value
-){
-
-  return String(
-    value || ""
-  )
-    .trim()
-    .toLowerCase() === "custom"
-      ? "custom"
-      : "normal";
-
-}
-
-
-function getAdminGiftRuleRewardMap(
-  rule
-){
-
-  const map = {};
-
-  const rewards =
-    rule &&
-    Array.isArray(
-      rule.rewards
-    )
-      ? rule.rewards
-      : [];
-
-  rewards.forEach(
-    reward => {
-
-      const sourceRuleId =
-        String(
-          reward.source_rule_id || ""
-        ).trim();
-
-      if(!sourceRuleId){
-        return;
-      }
-
-      map[
-        sourceRuleId
-      ] = {
-
-        quantity:
-          Math.max(
-            1,
-            Number(
-              reward.quantity || 1
-            )
-          ),
-
-        active:
-          normalizeGiftAdminYes(
-            reward.active === undefined
-              ? true
-              : reward.active
-          ),
-
-        sort_order:
-          Math.max(
-            0,
-            Number(
-              reward.sort_order || 0
-            )
-          )
-
-      };
-
-    }
-  );
-
-  return map;
-
-}
-
-
-function renderGiftRewardRuleChoices(){
-
-  const container =
-    document.getElementById(
-      "giftRuleRewardChoices"
-    );
-
-  const modeInput =
-    document.getElementById(
-      "giftRuleRewardMode"
-    );
-
-  const campaignInput =
-    document.getElementById(
-      "giftRuleCampaignId"
-    );
-
-  const currentRuleInput =
-    document.getElementById(
-      "giftRuleId"
-    );
-
-  const minAmountInput =
-    document.getElementById(
-      "giftRuleMinAmount"
-    );
-
-  if(
-    !container ||
-    !modeInput ||
-    !campaignInput
-  ){
-
-    return;
-
-  }
-
-  const rewardMode =
-    normalizeAdminGiftRewardMode(
-      modeInput.value
-    );
-
-  container.style.display =
-    rewardMode === "custom"
-      ? "block"
-      : "none";
-
-  if(rewardMode !== "custom"){
-    return;
-  }
-
-  const campaignId =
-    String(
-      campaignInput.value || ""
-    ).trim();
-
-  const currentRuleId =
-    String(
-      currentRuleInput
-        ? currentRuleInput.value
-        : ""
-    ).trim();
-
-  const currentMinAmount =
-    Number(
-      minAmountInput
-        ? minAmountInput.value
-        : 0
-    );
-
-  /*
-  เก็บค่าที่ผู้ใช้กำลังกรอกไว้
-  เวลาพิมพ์ยอดขั้นต่ำแล้วรายการถูก Render ใหม่
-  */
-
-  const currentSelections = {};
-
-  container
-    .querySelectorAll(
-      "[data-gift-reward-rule]"
-    )
-    .forEach(
-      row => {
-
-        const sourceRuleId =
-          String(
-            row.dataset.giftRewardRule || ""
-          ).trim();
-
-        const checkbox =
-          row.querySelector(
-            "[data-gift-reward-enabled]"
-          );
-
-        const quantityInput =
-          row.querySelector(
-            "[data-gift-reward-quantity]"
-          );
-
-        if(!sourceRuleId){
-          return;
-        }
-
-        currentSelections[
-          sourceRuleId
-        ] = {
-
-          checked:
-            Boolean(
-              checkbox &&
-              checkbox.checked
-            ),
-
-          quantity:
-            Math.max(
-              1,
-              Number(
-                quantityInput
-                  ? quantityInput.value
-                  : 1
-              ) || 1
-            )
-
-        };
-
-      }
-    );
-
-  const editingRule =
-    currentRuleId
-      ? adminGiftRules.find(
-          rule =>
-
-            String(
-              rule.rule_id || ""
-            ).trim() ===
-            currentRuleId
-        )
-      : null;
-
-  const savedRewardMap =
-    getAdminGiftRuleRewardMap(
-      editingRule
-    );
-
-  const availableRules =
-    adminGiftRules
-      .filter(
-        rule => {
-
-          const ruleId =
-            String(
-              rule.rule_id || ""
-            ).trim();
-
-          const ruleCampaignId =
-            String(
-              rule.campaign_id || ""
-            ).trim();
-
-          const minAmount =
-            Number(
-              rule.min_amount || 0
-            );
-
-          if(
-            !ruleId ||
-            ruleId === currentRuleId ||
-            ruleCampaignId !== campaignId
-          ){
-
-            return false;
-
-          }
-
-          /*
-          แสดงเฉพาะเทียร์ที่ยอดต่ำกว่า Rule ปัจจุบัน
-          */
-
-          return (
-            Number.isFinite(
-              currentMinAmount
-            ) &&
-            minAmount <
-            currentMinAmount
-          );
-
-        }
-      )
-      .sort(
-        (
-          firstRule,
-          secondRule
-        ) =>
-
-          Number(
-            firstRule.min_amount || 0
-          ) -
-
-          Number(
-            secondRule.min_amount || 0
-          )
-      );
-
-  if(!availableRules.length){
-
-    container.innerHTML = `
-
-<div
-style="
-padding:14px;
-border:1px dashed #cbdde8;
-border-radius:14px;
-background:#f8fbff;
-color:#64748b;
-line-height:1.7;
-">
-
-ยังไม่มีเทียร์ก่อนหน้าที่มียอดต่ำกว่า Rule นี้
-
-<br>
-
-กรุณาสร้าง Rule ยอดต่ำกว่าก่อน
-หรือกรอกยอดขั้นต่ำของ Rule นี้ให้สูงกว่าเทียร์เดิม
-
-</div>
-
-`;
-
-    return;
-
-  }
-
-  container.innerHTML = `
-
-<div
-style="
-margin-bottom:10px;
-color:#64748b;
-font-size:13px;
-line-height:1.7;
-">
-
-เลือกเทียร์ก่อนหน้าที่ลูกค้าจะได้รับเพิ่ม
-นอกเหนือจากของแถมของ Rule ปัจจุบัน
-
-</div>
-
-<div
-style="
-display:grid;
-gap:10px;
-">
-
-${availableRules.map(
-  (
-    sourceRule,
-    index
-  ) => {
-
-    const sourceRuleId =
-      String(
-        sourceRule.rule_id || ""
-      ).trim();
-
-    const currentSelection =
-      currentSelections[
-        sourceRuleId
-      ];
-
-    const savedReward =
-      savedRewardMap[
-        sourceRuleId
-      ];
-
-    const checked =
-      currentSelection
-        ? currentSelection.checked
-        : Boolean(savedReward);
-
-    const quantity =
-      currentSelection
-        ? currentSelection.quantity
-        : savedReward
-          ? Math.max(
-              1,
-              Number(
-                savedReward.quantity || 1
-              )
-            )
-          : 1;
-
-    return `
-
-<div
-data-gift-reward-rule="${escapeHtml(
-  sourceRuleId
-)}"
-style="
-display:grid;
-grid-template-columns:minmax(0,1fr) 130px;
-gap:12px;
-align-items:center;
-padding:13px;
-border:1px solid #dbe7f1;
-border-radius:14px;
-background:#ffffff;
-">
-
-<label
-style="
-display:flex;
-align-items:flex-start;
-gap:10px;
-cursor:pointer;
-margin:0;
-">
-
-<input
-type="checkbox"
-data-gift-reward-enabled
-${checked ? "checked" : ""}
-style="
-width:18px;
-height:18px;
-margin-top:3px;
-">
-
-<span>
-
-<strong>
-${escapeHtml(
-  sourceRule.rule_name ||
-  sourceRuleId
-)}
-</strong>
-
-<br>
-
-<small
-style="
-color:#64748b;
-line-height:1.6;
-">
-
-ยอดขั้นต่ำ
-฿${Number(
-  sourceRule.min_amount || 0
-).toLocaleString("th-TH")}
-
-</small>
-
-</span>
-
-</label>
-
-<div>
-
-<label
-style="
-display:block;
-margin-bottom:6px;
-font-size:12px;
-color:#64748b;
-">
-
-จำนวนที่ได้รับ
-
-</label>
-
-<input
-type="number"
-data-gift-reward-quantity
-value="${quantity}"
-min="1"
-step="1"
-${checked ? "" : "disabled"}
-style="width:100%;">
-
-</div>
-
-</div>
-
-`;
-
-  }
-).join("")}
-
-</div>
-
-`;
-
-  container
-    .querySelectorAll(
-      "[data-gift-reward-rule]"
-    )
-    .forEach(
-      row => {
-
-        const checkbox =
-          row.querySelector(
-            "[data-gift-reward-enabled]"
-          );
-
-        const quantityInput =
-          row.querySelector(
-            "[data-gift-reward-quantity]"
-          );
-
-        if(
-          !checkbox ||
-          !quantityInput
-        ){
-
-          return;
-
-        }
-
-        checkbox.addEventListener(
-          "change",
-          () => {
-
-            quantityInput.disabled =
-              !checkbox.checked;
-
-            if(checkbox.checked){
-
-              quantityInput.focus();
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-}
-
-
-function toggleGiftRuleRewardMode(){
-
-  renderGiftRewardRuleChoices();
-
-}
-
 function renderGiftRuleForm(){
 
   const modalTitle =
@@ -5126,7 +4433,9 @@ function renderGiftRuleForm(){
       modalBody.innerHTML = `
 
 <div class="gift-error full">
+
 ไม่พบข้อมูล Rule ที่ต้องการแก้ไข
+
 </div>
 
 `;
@@ -5152,7 +4461,8 @@ function renderGiftRuleForm(){
 
         String(
           item.campaign_id || ""
-        ) === campaignId
+        ) ===
+        campaignId
     );
 
   if(!campaign){
@@ -5165,7 +4475,9 @@ function renderGiftRuleForm(){
     modalBody.innerHTML = `
 
 <div class="gift-error full">
+
 ไม่พบ Campaign สำหรับ Rule นี้
+
 </div>
 
 `;
@@ -5225,20 +4537,6 @@ function renderGiftRuleForm(){
         )
       : true;
 
-  const rewardMode =
-    normalizeAdminGiftRewardMode(
-      rule
-        ? rule.reward_mode
-        : "normal"
-    );
-
-  const rewardDescription =
-    rule
-      ? String(
-          rule.reward_description || ""
-        )
-      : "";
-
   modalBody.innerHTML = `
 
 <input
@@ -5248,20 +4546,24 @@ value="${escapeHtml(
   rule
     ? rule.rule_id || ""
     : ""
-)}">
+)}"
+>
 
 <input
 type="hidden"
 id="giftRuleCampaignId"
 value="${escapeHtml(
   campaignId
-)}">
+)}"
+>
 
 
 <div class="full">
 
 <label>
+
 Campaign
+
 </label>
 
 <br><br>
@@ -5272,7 +4574,8 @@ value="${escapeHtml(
   campaign.campaign_name ||
   campaignId
 )}"
-disabled>
+disabled
+>
 
 </div>
 
@@ -5282,7 +4585,9 @@ disabled>
 <label for="giftRuleName">
 
 ชื่อ Rule
-<span style="color:#ef4444;">*</span>
+<span style="color:#ef4444;">
+*
+</span>
 
 </label>
 
@@ -5294,7 +4599,8 @@ id="giftRuleName"
 value="${escapeHtml(
   ruleName
 )}"
-placeholder="เช่น ซื้อครบ 1,200 บาท">
+placeholder="เช่น ซื้อครบ 500 บาท"
+>
 
 </div>
 
@@ -5304,7 +4610,9 @@ placeholder="เช่น ซื้อครบ 1,200 บาท">
 <label for="giftRuleMinAmount">
 
 ยอดขั้นต่ำ
-<span style="color:#ef4444;">*</span>
+<span style="color:#ef4444;">
+*
+</span>
 
 </label>
 
@@ -5315,7 +4623,8 @@ type="number"
 id="giftRuleMinAmount"
 value="${minAmount}"
 min="0"
-step="0.01">
+step="0.01"
+>
 
 </div>
 
@@ -5324,8 +4633,10 @@ step="0.01">
 
 <label for="giftRuleMaxSelect">
 
-ของแถมเทียร์นี้
-<span style="color:#ef4444;">*</span>
+เลือกของแถมได้สูงสุด
+<span style="color:#ef4444;">
+*
+</span>
 
 </label>
 
@@ -5336,104 +4647,8 @@ type="number"
 id="giftRuleMaxSelect"
 value="${maxSelect}"
 min="1"
-step="1">
-
-<small
-style="
-display:block;
-margin-top:7px;
-color:#64748b;
-line-height:1.6;
-">
-
-จำนวนของแถมจาก Rule ปัจจุบันที่ลูกค้าเลือกได้
-
-</small>
-
-</div>
-
-
-<div class="full">
-
-<label for="giftRuleRewardMode">
-
-รูปแบบสิทธิ์ของแถม
-
-</label>
-
-<br><br>
-
-<select
-id="giftRuleRewardMode"
-onchange="toggleGiftRuleRewardMode()">
-
-<option
-value="normal"
-${rewardMode === "normal" ? "selected" : ""}>
-
-ธรรมดาตามขั้น
-
-</option>
-
-<option
-value="custom"
-${rewardMode === "custom" ? "selected" : ""}>
-
-รวมสิทธิ์จากเทียร์ก่อนหน้า
-
-</option>
-
-</select>
-
-<small
-style="
-display:block;
-margin-top:7px;
-color:#64748b;
-line-height:1.7;
-">
-
-แบบธรรมดา:
-ลูกค้าได้รับเฉพาะของแถมจาก Rule นี้
-
-<br>
-
-แบบรวมสิทธิ์:
-ลูกค้าได้รับของแถม Rule นี้
-และเลือกของจากเทียร์ก่อนหน้าตามจำนวนที่กำหนด
-
-</small>
-
-</div>
-
-
-<div
-id="giftRuleRewardChoices"
-class="full"
-style="display:none;">
-</div>
-
-
-<div class="full">
-
-<label for="giftRuleRewardDescription">
-
-คำอธิบายสิทธิ์
-
-</label>
-
-<br><br>
-
-<textarea
-id="giftRuleRewardDescription"
-rows="3"
-placeholder="เช่น รับของแถมยอด 600 บาท 3 ชิ้น และของแถมยอด 1,200 บาท 1 ชิ้น"
-style="
-width:100%;
-resize:vertical;
-">${escapeHtml(
-  rewardDescription
-)}</textarea>
+step="1"
+>
 
 </div>
 
@@ -5441,7 +4656,9 @@ resize:vertical;
 <div>
 
 <label for="giftRuleAllowDuplicate">
+
 อนุญาตให้เลือกซ้ำ
+
 </label>
 
 <br><br>
@@ -5450,13 +4667,15 @@ resize:vertical;
 
 <option
 value=""
-${!allowDuplicate ? "selected" : ""}>
+${!allowDuplicate ? "selected" : ""}
+>
 ไม่อนุญาต
 </option>
 
 <option
 value="yes"
-${allowDuplicate ? "selected" : ""}>
+${allowDuplicate ? "selected" : ""}
+>
 อนุญาต
 </option>
 
@@ -5468,7 +4687,9 @@ ${allowDuplicate ? "selected" : ""}>
 <div>
 
 <label for="giftRuleSortOrder">
+
 ลำดับการแสดงผล
+
 </label>
 
 <br><br>
@@ -5478,7 +4699,8 @@ type="number"
 id="giftRuleSortOrder"
 value="${sortOrder}"
 min="0"
-step="1">
+step="1"
+>
 
 </div>
 
@@ -5486,7 +4708,9 @@ step="1">
 <div>
 
 <label for="giftRuleActive">
+
 สถานะ
+
 </label>
 
 <br><br>
@@ -5495,13 +4719,15 @@ step="1">
 
 <option
 value="yes"
-${isActive ? "selected" : ""}>
+${isActive ? "selected" : ""}
+>
 เปิดใช้งาน
 </option>
 
 <option
 value=""
-${!isActive ? "selected" : ""}>
+${!isActive ? "selected" : ""}
+>
 ปิดใช้งาน
 </option>
 
@@ -5513,7 +4739,9 @@ ${!isActive ? "selected" : ""}>
 <div>
 
 <label>
+
 Rule ID
+
 </label>
 
 <br><br>
@@ -5525,31 +4753,12 @@ value="${escapeHtml(
     ? rule.rule_id || ""
     : "สร้างอัตโนมัติเมื่อบันทึก"
 )}"
-disabled>
+disabled
+>
 
 </div>
 
 `;
-
-  const minInput =
-    document.getElementById(
-      "giftRuleMinAmount"
-    );
-
-  if(minInput){
-
-    minInput.addEventListener(
-      "input",
-      () => {
-
-        renderGiftRewardRuleChoices();
-
-      }
-    );
-
-  }
-
-  renderGiftRewardRuleChoices();
 
   window.setTimeout(
     () => {
@@ -5802,6 +5011,11 @@ async function submitGiftCampaign(){
       'input[name="giftCampaignEligibilityScope"]:checked'
     );
 
+  const ruleModeInput =
+    document.getElementById(
+      "giftCampaignRuleMode"
+    );
+
   const bannerFileInput =
     document.getElementById(
       "giftCampaignBannerFile"
@@ -5851,6 +5065,11 @@ async function submitGiftCampaign(){
       requireCampaignItemInput.checked
         ? "yes"
         : "",
+
+    rule_mode:
+      ruleModeInput
+        ? ruleModeInput.value
+        : "independent",
 
     description:
       descriptionInput
@@ -5925,6 +5144,18 @@ async function submitGiftCampaign(){
 
     return;
 
+  }
+
+  if(
+    payload.rule_mode !==
+      "independent" &&
+    payload.rule_mode !==
+      "highest_tier"
+  ){
+    alert(
+      "กรุณาเลือกรูปแบบการทำงานของ Tier"
+    );
+    return;
   }
 
   const bannerFile =
