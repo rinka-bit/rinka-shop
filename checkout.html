@@ -976,8 +976,6 @@ if(!customer.email){
   
 let cart = [];
 
-loadCheckout();
-
 function loadCheckout(){
 
   const checkoutSource =
@@ -1102,6 +1100,15 @@ function loadCheckout(){
 
 let checkoutBootstrapPromise =
   null;
+
+
+/*
+IMPORTANT:
+ต้องเรียกหลัง checkoutBootstrapPromise ถูก initialize แล้ว
+ไม่อย่างนั้น loadDefaultAddress/loadGifts จะเข้า loadCheckoutBootstrap()
+ขณะที่ตัวแปรยังอยู่ใน Temporal Dead Zone
+*/
+loadCheckout();
 
 
 async function loadCheckoutBootstrap(){
