@@ -1686,7 +1686,13 @@ const checkoutGiftState = {
   selections:{}
 };
 
-/* TEMPORARY GIFT CONFIG — รอบปัจจุบัน */
+/* TEMPORARY GIFT CONFIG — รอบปัจจุบัน
+   ใช้เฉพาะ Star Rail Campaign นี้เท่านั้น
+   Campaign อื่นจะใช้ Gift Engine ปกติ
+*/
+const TEMP_GIFT_CAMPAIGN_ID =
+  "CAMP17894038008669540";
+
 const TEMP_GIFT_CONFIG = {
   cardIds: [
     "GIFT17894040781551931",
@@ -1793,8 +1799,108 @@ function getTempGiftExclusiveGroupCountAll(){
 }
 
 
+
+/*
+=========================================================
+CAMPAIGN RULE MODE
+=========================================================
+*/
+
+function getGiftCampaignRuleMode(
+  campaign
+){
+
+  const mode =
+    String(
+      campaign?.rule_mode ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+  return mode ===
+    "highest_tier"
+      ? "highest_tier"
+      : "independent";
+}
+
+
+function applyGiftCampaignRuleModes(){
+
+  (checkoutGiftState.eligibleCampaigns || [])
+    .forEach(
+      campaign => {
+
+        const campaignId =
+          normalizeGiftId(
+            campaign.campaign_id
+          );
+
+        // Star Rail รอบปัจจุบันใช้ TEMP logic เดิม
+        if(
+          campaignId ===
+          TEMP_GIFT_CAMPAIGN_ID
+        ){
+          return;
+        }
+
+        if(
+          getGiftCampaignRuleMode(
+            campaign
+          ) !==
+          "highest_tier"
+        ){
+          return;
+        }
+
+        const eligibleTotal =
+          Number(
+            campaign.eligible_total || 0
+          );
+
+        const highestRule =
+          (campaign.rules || [])
+            .filter(
+              rule =>
+                eligibleTotal >=
+                Number(
+                  rule.min_amount || 0
+                )
+            )
+            .sort(
+              (a,b) =>
+                Number(
+                  b.min_amount || 0
+                ) -
+                Number(
+                  a.min_amount || 0
+                )
+            )[0] ||
+          null;
+
+        campaign.rules =
+          highestRule
+            ? [highestRule]
+            : [];
+
+      }
+    );
+
+}
+
+
 function prepareTemporaryGiftRules(){
   (checkoutGiftState.eligibleCampaigns || []).forEach(campaign=>{
+
+    if(
+      normalizeGiftId(
+        campaign.campaign_id
+      ) !==
+      TEMP_GIFT_CAMPAIGN_ID
+    ){
+      return;
+    }
+
     const entitlement = getTempGiftEntitlement(campaign.eligible_total);
     if(entitlement <= 0){
       campaign.rules = [];
@@ -2440,6 +2546,7 @@ async function loadGifts(){
     );
 
 
+    applyGiftCampaignRuleModes();
     prepareTemporaryGiftRules();
     renderCheckoutGiftEngine();
 
@@ -4681,75 +4788,138 @@ function collectCheckoutGiftSelections(){
 
                     );
 
-                  if(
-                    !normalizeGiftId(
-                      campaign.temporary_entitlement_rule_id
-                    )
-                  ){
-                    throw new Error(
-                      "ไม่พบ Gift Rule จริงสำหรับคำนวณสิทธิ์ของแถม"
+                  const campaignId =
+                    normalizeGiftId(
+                      campaign.campaign_id
                     );
-                  }
 
-                  gifts.push({
+                  const isTemporaryStarRailCampaign =
+                    campaignId ===
+                    TEMP_GIFT_CAMPAIGN_ID;
 
-                    campaign_id:
-                      normalizeGiftId(
-                        campaign.campaign_id
-                      ),
 
-                    campaign_name:
-                      campaign.campaign_name ||
-                      "",
+                  if(
+                    isTemporaryStarRailCampaign
+                  ){
 
-                    temporary_simple_gift:
-                      true,
-
-                    entitlement_rule_id:
-                      normalizeGiftId(
+                    if(
+                      !normalizeGiftId(
                         campaign.temporary_entitlement_rule_id
-                      ),
-
-                    rule_id:
-                      normalizeGiftId(
-                        item.source_rule_id ||
-                        ""
-                      ),
-
-rule_name:
-  item.source_rule_name ||
-  rule.rule_name ||
-  "",
-
-tier_name:
-  item.source_rule_name ||
-  rule.rule_name ||
-  "",
-
-                    gift_item_id:
-                      giftItemId,
-
-                    gift_id:
-                      giftItemId,
-
-                    gift_name:
-                      item.gift_name ||
-                      "",
-
-                    character_id:
-                      characterId,
-
-                    character_name:
-                      character
-                        ? character.character_name || ""
-                        : "",
-
-                    collection_id:
-                      normalizeGiftId(
-                        campaign.collection_id
                       )
+                    ){
+                      throw new Error(
+                        "ไม่พบ Gift Rule จริงสำหรับคำนวณสิทธิ์ของแถม"
+                      );
+                    }
 
-                  });
+                    gifts.push({
+
+                      campaign_id:
+                        campaignId,
+
+                      campaign_name:
+                        campaign.campaign_name ||
+                        "",
+
+                      temporary_simple_gift:
+                        true,
+
+                      entitlement_rule_id:
+                        normalizeGiftId(
+                          campaign.temporary_entitlement_rule_id
+                        ),
+
+                      rule_id:
+                        normalizeGiftId(
+                          item.source_rule_id ||
+                          ""
+                        ),
+
+                      rule_name:
+                        item.source_rule_name ||
+                        rule.rule_name ||
+                        "",
+
+                      tier_name:
+                        item.source_rule_name ||
+                        rule.rule_name ||
+                        "",
+
+                      gift_item_id:
+                        giftItemId,
+
+                      gift_id:
+                        giftItemId,
+
+                      gift_name:
+                        item.gift_name ||
+                        "",
+
+                      character_id:
+                        characterId,
+
+                      character_name:
+                        character
+                          ? character.character_name || ""
+                          : "",
+
+                      collection_id:
+                        normalizeGiftId(
+                          campaign.collection_id
+                        )
+
+                    });
+
+                  }else{
+
+                    gifts.push({
+
+                      campaign_id:
+                        campaignId,
+
+                      campaign_name:
+                        campaign.campaign_name ||
+                        "",
+
+                      rule_id:
+                        normalizeGiftId(
+                          rule.rule_id
+                        ),
+
+                      rule_name:
+                        rule.rule_name ||
+                        "",
+
+                      tier_name:
+                        rule.rule_name ||
+                        "",
+
+                      gift_item_id:
+                        giftItemId,
+
+                      gift_id:
+                        giftItemId,
+
+                      gift_name:
+                        item.gift_name ||
+                        "",
+
+                      character_id:
+                        characterId,
+
+                      character_name:
+                        character
+                          ? character.character_name || ""
+                          : "",
+
+                      collection_id:
+                        normalizeGiftId(
+                          campaign.collection_id
+                        )
+
+                    });
+
+                  }
 
                 }
 
