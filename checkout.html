@@ -1718,6 +1718,54 @@ const TEMP_GIFT_CONFIG = {
   maxEntitlement: 5
 };
 
+function isTemporaryStarRailCampaign(
+  campaign
+){
+
+  const campaignId =
+    normalizeGiftId(
+      campaign?.campaign_id
+    );
+
+  if(
+    campaignId ===
+    TEMP_GIFT_CAMPAIGN_ID
+  ){
+    return true;
+  }
+
+  /*
+  Fallback ป้องกัน regression:
+  ถ้า API object เปลี่ยนรูป/ข้อมูล campaign_id มีปัญหา
+  แต่ Campaign นี้ยังมี Gift Item ชุด Star Rail เดิม
+  ให้ถือเป็น TEMP Star Rail เหมือนเดิม
+  */
+  return (
+    (campaign?.rules || [])
+      .some(
+        rule =>
+          (rule.items || [])
+            .some(
+              item => {
+
+                const id =
+                  normalizeGiftId(
+                    item.gift_item_id
+                  );
+
+                return (
+                  TEMP_GIFT_CONFIG.cardIds.includes(id) ||
+                  TEMP_GIFT_CONFIG.singleIds.includes(id)
+                );
+
+              }
+            )
+      )
+  );
+
+}
+
+
 function getTempGiftEntitlement(total){
   const amount = Number(total || 0);
   if(!Number.isFinite(amount) || amount < 600) return 0;
@@ -1838,8 +1886,9 @@ function applyGiftCampaignRuleModes(){
 
         // Star Rail รอบปัจจุบันใช้ TEMP logic เดิม
         if(
-          campaignId ===
-          TEMP_GIFT_CAMPAIGN_ID
+          isTemporaryStarRailCampaign(
+            campaign
+          )
         ){
           return;
         }
@@ -1893,10 +1942,9 @@ function prepareTemporaryGiftRules(){
   (checkoutGiftState.eligibleCampaigns || []).forEach(campaign=>{
 
     if(
-      normalizeGiftId(
-        campaign.campaign_id
-      ) !==
-      TEMP_GIFT_CAMPAIGN_ID
+      !isTemporaryStarRailCampaign(
+        campaign
+      )
     ){
       return;
     }
@@ -3689,9 +3737,7 @@ data-gift-character-box="${escapeHtml(
 
 <div class="gift-item-actions">
 
-${
-  allowDuplicate
-    ? `
+${`
 
 <div class="gift-qty-control">
 
@@ -3742,26 +3788,7 @@ changeCheckoutGiftQty(
 
 </div>
 
-`
-    : `
-
-<input
-type="checkbox"
-data-gift-checkbox-rule="${escapeHtml(
-  rule.rule_id || ""
-)}"
-data-gift-checkbox-item="${escapeHtml(
-  giftItemId
-)}"
-onchange="
-toggleCheckoutGiftItem(
-this
-)
-"
->
-
-`
-}
+`}
 
 </div>
 
@@ -3965,14 +3992,31 @@ function changeCheckoutGiftQty(
   const tempItemMax =
     getTempGiftItemMax(giftItemId);
 
+  const allowDuplicate =
+    normalizeGiftBoolean(
+      found.rule.allow_duplicate
+    );
+
+  const itemMax =
+    tempItemMax > 0
+      ? tempItemMax
+      : (
+          allowDuplicate
+            ? maxSelect
+            : 1
+        );
+
   if(
-    tempItemMax > 0 &&
-    nextQty > tempItemMax
+    nextQty > itemMax
   ){
     alert(
-      isTempGiftCard(giftItemId)
-        ? `การ์ดใบนี้เลือกซ้ำได้สูงสุด ${tempItemMax} ชิ้น`
-        : `ของแถมรายการนี้เลือกได้สูงสุด ${tempItemMax} ชิ้น`
+      itemMax === 1
+        ? "ของแถมรายการนี้เลือกได้สูงสุด 1 ชิ้น"
+        : (
+            isTempGiftCard(giftItemId)
+              ? `การ์ดใบนี้เลือกซ้ำได้สูงสุด ${itemMax} ชิ้น`
+              : `ของแถมรายการนี้เลือกได้สูงสุด ${itemMax} ชิ้น`
+          )
     );
     return;
   }
@@ -4072,12 +4116,34 @@ function setCheckoutGiftItemQty(
   const tempItemMax =
     getTempGiftItemMax(normalizedGiftItemId);
 
-  if(tempItemMax > 0){
-    normalizedQty = Math.min(
-      normalizedQty,
-      tempItemMax
+  const allowDuplicate =
+    normalizeGiftBoolean(
+      found.rule.allow_duplicate
     );
-  }
+
+  const ruleMaxSelect =
+    Math.max(
+      1,
+      Math.floor(
+        Number(
+          found.rule.max_select || 1
+        )
+      )
+    );
+
+  const itemMax =
+    tempItemMax > 0
+      ? tempItemMax
+      : (
+          allowDuplicate
+            ? ruleMaxSelect
+            : 1
+        );
+
+  normalizedQty = Math.min(
+    normalizedQty,
+    itemMax
+  );
 
   // Stande​e Robin / Aventurine / Acrylic Check-in
   // เป็นกลุ่ม exclusive เดียวกัน: รวมกันเลือกได้สูงสุด 1 ชิ้น
@@ -4794,8 +4860,15 @@ function collectCheckoutGiftSelections(){
                     );
 
                   const isTemporaryStarRailCampaign =
-                    campaignId ===
-                    TEMP_GIFT_CAMPAIGN_ID;
+                    (
+                      campaignId ===
+                        TEMP_GIFT_CAMPAIGN_ID ||
+                      String(
+                        rule.rule_id || ""
+                      ).startsWith(
+                        "TEMP_GIFT_RULE_"
+                      )
+                    );
 
 
                   if(
