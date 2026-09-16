@@ -4859,10 +4859,11 @@ function collectCheckoutGiftSelections(){
                       campaign.campaign_id
                     );
 
-                  const isTemporaryStarRailCampaign =
+                  const isTemporaryStarRailCampaignForPayload =
                     (
-                      campaignId ===
-                        TEMP_GIFT_CAMPAIGN_ID ||
+                      isTemporaryStarRailCampaign(
+                        campaign
+                      ) ||
                       String(
                         rule.rule_id || ""
                       ).startsWith(
@@ -4872,7 +4873,7 @@ function collectCheckoutGiftSelections(){
 
 
                   if(
-                    isTemporaryStarRailCampaign
+                    isTemporaryStarRailCampaignForPayload
                   ){
 
                     if(
@@ -4887,8 +4888,10 @@ function collectCheckoutGiftSelections(){
 
                     gifts.push({
 
+                      // TEMP Star Rail backend ใช้ Campaign ID คงที่เดียวกัน
+                      // ป้องกัน campaign object จาก API ที่ ID หาย/เปลี่ยนรูป
                       campaign_id:
-                        campaignId,
+                        TEMP_GIFT_CAMPAIGN_ID,
 
                       campaign_name:
                         campaign.campaign_name ||
