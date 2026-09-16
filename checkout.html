@@ -1100,6 +1100,112 @@ function loadCheckout(){
 
 }
 
+let checkoutBootstrapPromise =
+  null;
+
+
+async function loadCheckoutBootstrap(){
+
+  if(checkoutBootstrapPromise){
+
+    return checkoutBootstrapPromise;
+
+  }
+
+
+  checkoutBootstrapPromise =
+    (async()=>{
+
+      const sessionToken =
+        localStorage.getItem(
+          "session_token"
+        ) ||
+        customer.session_token ||
+        "";
+
+
+      const query =
+        new URLSearchParams();
+
+
+      query.set(
+        "action",
+        "checkoutBootstrap"
+      );
+
+
+      if(sessionToken){
+
+        query.set(
+          "session_token",
+          sessionToken
+        );
+
+      }
+
+
+      const response =
+        await fetch(
+          API +
+          "?" +
+          query.toString()
+        );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "HTTP " +
+          response.status
+        );
+
+      }
+
+
+      const result =
+        await response.json();
+
+
+      if(
+        !result ||
+        result.success !== true
+      ){
+
+        throw new Error(
+          result?.error ||
+          "โหลดข้อมูล Checkout ไม่สำเร็จ"
+        );
+
+      }
+
+
+      return result;
+
+    })();
+
+
+  try{
+
+    return await checkoutBootstrapPromise;
+
+  }catch(error){
+
+    /*
+    ถ้า request แรกพัง ให้ retry ได้เมื่อผู้ใช้ reload/เรียกใหม่
+    ไม่ทำ blind retry อัตโนมัติ
+    */
+
+    checkoutBootstrapPromise =
+      null;
+
+
+    throw error;
+
+  }
+
+}
+
+
 async function loadDefaultAddress(){
 
   const box =
@@ -1135,80 +1241,16 @@ async function loadDefaultAddress(){
 
     if(!selectedAddress){
 
-      const sessionToken =
-        localStorage.getItem(
-          "session_token"
-        ) ||
-        customer.session_token ||
-        "";
+      const bootstrap =
+        await loadCheckoutBootstrap();
 
-      const query =
-        new URLSearchParams();
-
-      query.set(
-        "action",
-        "customerAddresses"
-      );
-
-      if(sessionToken){
-
-        query.set(
-          "session_token",
-          sessionToken
-        );
-
-      }else if(customer.email){
-
-        /*
-        รองรับ Backend เวอร์ชันเก่าชั่วคราว
-        */
-
-        query.set(
-          "email",
-          customer.email
-        );
-
-      }
-
-      const response =
-        await fetch(
-          API +
-          "?" +
-          query.toString()
-        );
-
-      if(!response.ok){
-
-        throw new Error(
-          "HTTP " +
-          response.status
-        );
-
-      }
-
-      const result =
-        await response.json();
-
-      if(
-        result &&
-        result.success === false
-      ){
-
-        throw new Error(
-          result.error ||
-          "โหลดที่อยู่ไม่สำเร็จ"
-        );
-
-      }
 
       const addresses =
-        Array.isArray(result)
-          ? result
-          : Array.isArray(
-              result.addresses
-            )
-              ? result.addresses
-              : [];
+        Array.isArray(
+          bootstrap.addresses
+        )
+          ? bootstrap.addresses
+          : [];
 
       selectedAddress =
         addresses.find(
@@ -2344,84 +2386,56 @@ async function loadGifts(){
     );
 
 
-    const [
-      campaigns,
-      rules,
-      items,
-      characters,
-      exclusions,
-      collections
-    ] =
-      await Promise.all([
+    const bootstrap =
+      await loadCheckoutBootstrap();
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftCampaigns"
-          ],
-          [
-            "campaigns"
-          ]
-        ),
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftRules"
-          ],
-          [
-            "rules"
-          ]
-        ),
+    const campaigns =
+      Array.isArray(
+        bootstrap.campaigns
+      )
+        ? bootstrap.campaigns
+        : [];
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftItems"
-          ],
-          [
-            "items",
-            "gifts"
-          ]
-        ),
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftCharacters"
-          ],
-          [
-            "characters"
-          ]
-        ),
+    const rules =
+      Array.isArray(
+        bootstrap.rules
+      )
+        ? bootstrap.rules
+        : [];
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getGiftCampaignExclusions"
-          ],
-          [
-            "exclusions"
-          ]
-        ),
 
-        fetchCheckoutGiftActionFallback(
-          [
-            "getCollections",
-            "collections"
-          ],
-          [
-            "collections"
-          ]
-        ).catch(
-          error => {
+    const items =
+      Array.isArray(
+        bootstrap.items
+      )
+        ? bootstrap.items
+        : [];
 
-            console.warn(
-              "โหลด Collections ไม่สำเร็จ ใช้ข้อมูลจาก Cart แทน",
-              error
-            );
 
-            return [];
+    const characters =
+      Array.isArray(
+        bootstrap.characters
+      )
+        ? bootstrap.characters
+        : [];
 
-          }
-        )
 
-      ]);
+    const exclusions =
+      Array.isArray(
+        bootstrap.exclusions
+      )
+        ? bootstrap.exclusions
+        : [];
+
+
+    const collections =
+      Array.isArray(
+        bootstrap.collections
+      )
+        ? bootstrap.collections
+        : [];
 
 
     console.log(
