@@ -2344,56 +2344,84 @@ async function loadGifts(){
     );
 
 
-    /*
-    =========================================
-    PERFORMANCE FIX
-    โหลด Gift data ทั้งชุดด้วย Apps Script request เดียว
-    เดิมยิง 6 requests พร้อมกัน ทำให้ Apps Script ต้องเปิด
-    หลาย execution และอ่านหลายชีตแยกกัน
-    =========================================
-    */
+    const [
+      campaigns,
+      rules,
+      items,
+      characters,
+      exclusions,
+      collections
+    ] =
+      await Promise.all([
 
-    const giftData =
-      await fetchCheckoutGiftAction(
-        "checkoutGiftData"
-      );
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCampaigns"
+          ],
+          [
+            "campaigns"
+          ]
+        ),
 
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftRules"
+          ],
+          [
+            "rules"
+          ]
+        ),
 
-    const campaigns =
-      Array.isArray(giftData.campaigns)
-        ? giftData.campaigns
-        : [];
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftItems"
+          ],
+          [
+            "items",
+            "gifts"
+          ]
+        ),
 
-    const rules =
-      Array.isArray(giftData.rules)
-        ? giftData.rules
-        : [];
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCharacters"
+          ],
+          [
+            "characters"
+          ]
+        ),
 
-    const items =
-      Array.isArray(giftData.items)
-        ? giftData.items
-        : [];
+        fetchCheckoutGiftActionFallback(
+          [
+            "getGiftCampaignExclusions"
+          ],
+          [
+            "exclusions"
+          ]
+        ),
 
-    const characters =
-      Array.isArray(giftData.characters)
-        ? giftData.characters
-        : [];
+        fetchCheckoutGiftActionFallback(
+          [
+            "getCollections",
+            "collections"
+          ],
+          [
+            "collections"
+          ]
+        ).catch(
+          error => {
 
-    const exclusions =
-      Array.isArray(giftData.exclusions)
-        ? giftData.exclusions
-        : [];
+            console.warn(
+              "โหลด Collections ไม่สำเร็จ ใช้ข้อมูลจาก Cart แทน",
+              error
+            );
 
-    const collections =
-      Array.isArray(giftData.collections)
-        ? giftData.collections
-        : [];
+            return [];
 
+          }
+        )
 
-    console.log(
-      "GIFT DATA PERFORMANCE:",
-      giftData.performance || {}
-    );
+      ]);
 
 
     console.log(
