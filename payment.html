@@ -2011,6 +2011,10 @@ let transactionResult =
 
 try{
 
+  const checkoutRequestStartedAt =
+    performance.now();
+
+
   const transactionResponse =
     await paymentFetch(
       API,
@@ -2033,6 +2037,21 @@ try{
 
   transactionResult =
     await transactionResponse.json();
+
+
+  console.log(
+    "PAID CHECKOUT PROFILE",
+    {
+      browser_total_ms:
+        Math.round(
+          performance.now() -
+          checkoutRequestStartedAt
+        ),
+      backend:
+        transactionResult.performance ||
+        null
+    }
+  );
 
  }catch(error){
 
@@ -2132,35 +2151,72 @@ if(!orderId){
 
 }
 
-    try{
+try{
 
-  const snapshotKey =
+  const clientSnapshotKey =
+    "rinka_order_snapshot_" +
+    clientOrderId;
+
+
+  const serverSnapshotKey =
     "rinka_order_snapshot_" +
     orderId;
 
 
-  const snapshot =
+  const clientSnapshot =
     JSON.parse(
       localStorage.getItem(
-        snapshotKey
+        clientSnapshotKey
       ) || "{}"
     );
 
 
+  const serverSnapshot =
+    JSON.parse(
+      localStorage.getItem(
+        serverSnapshotKey
+      ) || "{}"
+    );
+
+
+  /*
+  ถ้า backend orderId ไม่ตรง clientOrderId
+  ต้อง copy snapshot ที่มี items/gifts/address ไป key จริง
+  ไม่อย่างนั้น order.html จะเจอ snapshot ว่างและต้องรอ API
+  */
+  const snapshot = {
+
+    ...clientSnapshot,
+
+    ...serverSnapshot,
+
+    order_id:
+      orderId,
+
+    payment_status:
+      "paid"
+
+  };
+
+
   localStorage.setItem(
-    snapshotKey,
-    JSON.stringify({
-
-      ...snapshot,
-
-      order_id:
-        orderId,
-
-      payment_status:
-        "paid"
-
-    })
+    serverSnapshotKey,
+    JSON.stringify(
+      snapshot
+    )
   );
+
+
+  if(
+    clientSnapshotKey !==
+    serverSnapshotKey
+  ){
+
+    localStorage.removeItem(
+      clientSnapshotKey
+    );
+
+  }
 
 
 }catch(error){
@@ -2171,6 +2227,7 @@ if(!orderId){
   );
 
 }
+
 
 localStorage.removeItem(
   "rinka_pending_checkout_request_id"
