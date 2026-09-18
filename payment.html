@@ -10,16 +10,6 @@ content="width=device-width,initial-scale=1">
 
 <title>ชำระเงิน | Rinka Shop</title>
 
-<script>
-(function(){
-  try{
-    const m=localStorage.getItem("rinka_theme_mode")||"system";
-    const d=m==="dark"||(m==="system"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.dataset.themeMode=m;
-    document.documentElement.dataset.theme=d?"dark":"light";
-  }catch(_){}
-})();
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -751,7 +741,6 @@ button:disabled{
 
 </style>
 
-<link rel="stylesheet" href="theme.css?v=20260918-1">
 </head>
 
 <body>
@@ -1863,6 +1852,13 @@ const payload = {
 
   social:
     address.social || "",
+
+  customer_id:
+    String(
+      localStorage.getItem(
+        "customer_id"
+      ) || ""
+    ).trim(),
 
   subtotal:
     calculatedTotal,
@@ -4316,7 +4312,6 @@ function goPaymentBack(){
 
 <script src="ui.js"></script>
   
-<script src="theme.js?v=20260918-1"></script>
 </body>
 
 </html>
