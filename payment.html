@@ -2229,10 +2229,133 @@ if(
   transactionResult.success !== true
 ){
 
-  throw new Error(
+  const originalTransactionError =
     transactionResult?.error ||
-    "ดำเนินการชำระเงินไม่สำเร็จ"
+    "ดำเนินการชำระเงินไม่สำเร็จ";
+
+
+  /*
+  PERFORMANCE / RELIABILITY PASS #12
+
+  Backend บาง execution ทำ Order + Payment + Email สำเร็จแล้ว
+  แต่ response สุดท้ายกลับ success:false
+
+  ห้ามยิง createPaidCheckout ซ้ำ
+  ให้ตรวจสถานะ Order/Payment ที่เขียนจริงก่อน 1 ครั้ง
+  */
+
+  let recoveryResult =
+    null;
+
+
+  try{
+
+    showPaymentToast(
+      "กำลังตรวจสอบสถานะการชำระเงิน...",
+      false
+    );
+
+
+    const recoveryForm =
+      new FormData();
+
+
+    recoveryForm.append(
+      "action",
+      "recoverPaidCheckout"
+    );
+
+
+    recoveryForm.append(
+      "payload",
+      JSON.stringify({
+
+        order_id:
+          clientOrderId,
+
+        email:
+          address.email || ""
+
+      })
+    );
+
+
+    const recoveryResponse =
+      await paymentFetch(
+        API,
+        {
+          method:"POST",
+          body:recoveryForm
+        }
+      );
+
+
+    if(recoveryResponse.ok){
+
+      recoveryResult =
+        await recoveryResponse.json();
+
+    }
+
+
+  }catch(recoveryError){
+
+    console.warn(
+      "Paid checkout recovery check failed:",
+      recoveryError
+    );
+
+  }
+
+
+  console.log(
+    "PAID CHECKOUT RECOVERY",
+    recoveryResult
   );
+
+
+  if(
+    recoveryResult &&
+    recoveryResult.success === true &&
+    recoveryResult.recovered === true &&
+    recoveryResult.order_id
+  ){
+
+    /*
+    เปลี่ยน false response ให้เป็น success เฉพาะเมื่อ
+    backend ยืนยันว่ามี payment จริงแล้วเท่านั้น
+    */
+
+    transactionResult = {
+
+      success:true,
+
+      order_id:
+        String(
+          recoveryResult.order_id
+        ).trim(),
+
+      payment_status:
+        "paid",
+
+      recovered:true,
+
+      performance:{
+        recovery_ms:
+          recoveryResult.performance?.total_ms ||
+          null
+      }
+
+    };
+
+
+  }else{
+
+    throw new Error(
+      originalTransactionError
+    );
+
+  }
 
 }
 
