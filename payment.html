@@ -2049,6 +2049,19 @@ try{
         ),
       backend:
         transactionResult.performance ||
+        null,
+
+      create_order_ms:
+        transactionResult.performance?.create_order_ms ||
+        null,
+
+      save_payment_ms:
+        transactionResult.performance?.save_payment_ms ||
+        null,
+
+      payment_steps:
+        transactionResult.performance?.payment ||
+        transactionResult.payment?.performance ||
         null
     }
   );
