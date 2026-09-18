@@ -2068,6 +2068,11 @@ try{
           checkoutProfile.total_ms ??
           "n/a"
         ),
+      "failure_stage=" +
+        (
+          transactionResult.failure_stage ??
+          "n/a"
+        ),
       "create_order_ms=" +
         (
           checkoutProfile.create_order_ms ??
@@ -2349,8 +2354,163 @@ if(
     };
 
 
+  }else if(
+    recoveryResult &&
+    recoveryResult.success === true
+  ){
+
+    /*
+    RELIABILITY PASS #14
+
+    Recovery ยืนยันแล้วว่า payment ยังไม่สำเร็จจริง
+    จึง retry transaction เดิมได้ 1 ครั้งอย่างมีเงื่อนไข
+
+    - ใช้ request_id เดิม
+    - backend idempotency เดิม
+    - ไม่ retry ถ้า recovery endpoint เองตรวจสอบไม่ได้
+    - ไม่มี loop / ไม่มี retry ครั้งที่ 3
+    */
+
+    console.warn(
+      "PAID CHECKOUT VERIFIED RETRY",
+      {
+        order_exists:
+          recoveryResult.order_exists === true,
+        order_id:
+          recoveryResult.order_id || "",
+        payment_status:
+          recoveryResult.payment_status || ""
+      }
+    );
+
+
+    showPaymentToast(
+      recoveryResult.order_exists === true
+        ? "พบออเดอร์แล้ว กำลังบันทึกการชำระเงินต่อ..."
+        : "กำลังลองส่งออเดอร์อีกครั้ง...",
+      false
+    );
+
+
+    const retryForm =
+      new FormData();
+
+
+    retryForm.append(
+      "action",
+      "createPaidCheckout"
+    );
+
+
+    retryForm.append(
+      "payload",
+      JSON.stringify({
+
+        request_id:
+          requestId,
+
+        order:
+          payload,
+
+        payment:{
+
+          slip_base64:
+            base64
+
+        }
+
+      })
+    );
+
+
+    const retryStartedAt =
+      performance.now();
+
+
+    const retryResponse =
+      await paymentFetch(
+        API,
+        {
+          method:"POST",
+          body:retryForm
+        }
+      );
+
+
+    if(!retryResponse.ok){
+
+      throw new Error(
+        originalTransactionError
+      );
+
+    }
+
+
+    const retryResult =
+      await retryResponse.json();
+
+
+    console.log(
+      "PAID CHECKOUT VERIFIED RETRY RESULT",
+      [
+        "browser_ms=" +
+          Math.round(
+            performance.now() -
+            retryStartedAt
+          ),
+        "success=" +
+          String(
+            retryResult?.success === true
+          ),
+        "failure_stage=" +
+          String(
+            retryResult?.failure_stage ||
+            ""
+          ),
+        "backend_ms=" +
+          String(
+            retryResult?.performance?.total_ms ??
+            "n/a"
+          ),
+        "create_order_ms=" +
+          String(
+            retryResult?.performance?.create_order_ms ??
+            "n/a"
+          ),
+        "save_payment_ms=" +
+          String(
+            retryResult?.performance?.save_payment_ms ??
+            "n/a"
+          )
+      ].join(
+        " | "
+      )
+    );
+
+
+    if(
+      !retryResult ||
+      retryResult.success !== true
+    ){
+
+      throw new Error(
+        retryResult?.error ||
+        originalTransactionError
+      );
+
+    }
+
+
+    transactionResult =
+      retryResult;
+
+
   }else{
 
+    /*
+    Recovery เองไม่สามารถยืนยันสถานะได้
+    ห้าม retry แบบเดา
+    */
     throw new Error(
       originalTransactionError
     );
