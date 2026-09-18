@@ -524,3 +524,259 @@ html[data-theme="dark"] :is(
   border-color:var(--rk-border) !important;
 }
 
+/* =========================================================
+   DARK MODE PHASE 2 — remaining customer pages
+   ========================================================= */
+
+/* Home preorder collection cards */
+html[data-theme="dark"] .collection-card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] .collection-card:hover{
+  box-shadow:0 14px 30px rgba(0,0,0,.30) !important;
+}
+html[data-theme="dark"] .collection-content{
+  background:var(--rk-surface) !important;
+}
+html[data-theme="dark"] :is(.collection-card-title,.collection-card h3){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] :is(.collection-card-fandom,.collection-card p,.collection-deadline){
+  color:var(--rk-muted) !important;
+}
+
+/* Generic headers / page cards used by remaining pages */
+html[data-theme="dark"] :is(.topbar,.page-header){
+  background:rgba(23,34,53,.94) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:0 5px 20px rgba(0,0,0,.22) !important;
+}
+html[data-theme="dark"] :is(.topbar h1,.page-header h1){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] :is(
+  .topbar button,.topbar a,.page-header button,.page-header a,
+  .icon-btn,.cart-btn
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:0 5px 18px rgba(0,0,0,.24) !important;
+}
+
+/* Lookup / order lists / order detail */
+html[data-theme="dark"] :is(
+  .order,.order-card,.lookup-order-detail,.filter-chip,
+  .summary,.meta div,.gift,.state
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] :is(
+  .lookup-order-detail,.meta div
+){
+  background:var(--rk-surface-2) !important;
+}
+html[data-theme="dark"] :is(
+  .id,.order-id,.order-name,.summary h2,.lookup-detail-heading,
+  .item h3,.gift strong
+){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] :is(
+  .muted,.option,.order-meta,.order-date,.meta span,.item-meta,
+  .side-row,.state p
+){
+  color:var(--rk-muted) !important;
+}
+html[data-theme="dark"] :is(
+  .items,.money,.lookup-summary-total,.lookup-tracking,.item,.side-total
+){
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] .lookup-detail-button{
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-link) !important;
+}
+html[data-theme="dark"] :is(.lookup-item-image-placeholder,.order-image,.ph){
+  background:var(--rk-image-bg) !important;
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] .source{
+  background:#18354a !important;
+  color:#8bd6ff !important;
+}
+html[data-theme="dark"] .badge{
+  border:1px solid var(--rk-border);
+}
+html[data-theme="dark"] .filter-chip.active{
+  background:#18354a !important;
+  color:#8bd6ff !important;
+  border-color:#3e6d8d !important;
+}
+
+/* Categories + category page */
+html[data-theme="dark"] :is(
+  .hero,.toolbar,.category-card
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] .hero{
+  background:linear-gradient(135deg,#1a2940,#172235) !important;
+}
+html[data-theme="dark"] :is(.hero h2,.category-card h3){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] .category-icon{
+  background:#18354a !important;
+}
+html[data-theme="dark"] .category-arrow{
+  color:#7dcfff !important;
+}
+html[data-theme="dark"] .side-menu{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  box-shadow:12px 0 30px rgba(0,0,0,.32) !important;
+}
+html[data-theme="dark"] .menu-header{
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] .side-menu a{
+  color:var(--rk-text) !important;
+}
+html[data-theme="dark"] .side-menu a:hover{
+  background:var(--rk-surface-2) !important;
+}
+
+/* Change address / shipping payment / generic form cards */
+html[data-theme="dark"] :is(
+  .card,.option-card,.address,.bank-card,.bank-detail,.slip-drop,
+  .preview,.overlay-card,.note
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] :is(.address,.bank-detail,.preview,.slip-drop){
+  background:var(--rk-surface-2) !important;
+}
+html[data-theme="dark"] :is(.card h2,.field label){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] .option-card:has(input:checked),
+html[data-theme="dark"] .bank-card:has(input:checked){
+  background:#18354a !important;
+  border-color:var(--rk-accent-dark) !important;
+}
+html[data-theme="dark"] .secondary{
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-link) !important;
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] .preview img,
+html[data-theme="dark"] .qr{
+  background:#fff !important;
+}
+
+/* Account */
+html[data-theme="dark"] .profile-card{
+  background:linear-gradient(135deg,#1a2940,#172235) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] :is(
+  .order-summary-card,.account-card,.account-menu-card,.account-action-card,
+  .profile-avatar-preview
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] :is(
+  .profile-name,.account-section h2,.order-summary-card strong
+){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] :is(
+  .profile-email,.profile-social,.profile-avatar-note
+){
+  color:var(--rk-muted) !important;
+}
+html[data-theme="dark"] :is(.profile-avatar-button,.profile-avatar-cancel){
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-link) !important;
+  border-color:var(--rk-border) !important;
+}
+
+/* DM invoice */
+html[data-theme="dark"] .page .card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] :is(.subtitle,.item-character,.bank-detail){
+  color:var(--rk-muted) !important;
+}
+html[data-theme="dark"] :is(.item,.summary){
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] :is(.item-image,.item-no-image){
+  background:var(--rk-image-bg) !important;
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] .invoice-id{
+  background:#18354a !important;
+  color:#8bd6ff !important;
+}
+html[data-theme="dark"] .bank-card.selected{
+  background:#18354a !important;
+  border-color:var(--rk-accent-dark) !important;
+}
+html[data-theme="dark"] .bank-empty{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-muted) !important;
+}
+html[data-theme="dark"] .slip-box{
+  background:var(--rk-surface-2) !important;
+  border-color:#45617c !important;
+}
+
+/* Login */
+html[data-theme="dark"] :is(.shop-title h1,.form-title){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] :is(.shop-title p,.form-description,.helper-text){
+  color:var(--rk-muted) !important;
+}
+html[data-theme="dark"] .info-box{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-muted) !important;
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] .info-box strong{
+  color:var(--rk-text) !important;
+}
+html[data-theme="dark"] .loading-card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+}
+
+/* Inline pale info box on change-address */
+html[data-theme="dark"] .rk-dark-inline-info{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
