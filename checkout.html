@@ -1178,7 +1178,6 @@ Address และ Gift เป็นข้อมูลคนละชุดแล
 Gift ยังคงเป็น combined endpoint เดียว
 ไม่ได้ย้อนกลับไปยิง 6 gift requests แบบเดิม
 */
-loadCheckout();
 
 
 async function loadCheckoutBootstrap(){
@@ -5813,6 +5812,12 @@ function goCheckoutBack(){
   }
 
 }
+
+/*
+Start only after every checkout state constant has been initialized.
+Prevents TDZ: Cannot access 'checkoutGiftState' before initialization.
+*/
+loadCheckout();
 
 </script>
 
