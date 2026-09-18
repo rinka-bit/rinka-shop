@@ -780,3 +780,72 @@ html[data-theme="dark"] .rk-dark-inline-info{
   border-color:var(--rk-border) !important;
 }
 
+
+
+/* =========================================================
+   DARK MODE PATCH — Checkout gifts + submit-order loading
+   ========================================================= */
+html[data-theme="dark"] :is(
+  #giftSection .gift-loading,
+  #giftSection .gift-empty,
+  #giftSection .gift-error,
+  #giftSection .gift-campaign-card,
+  #giftSection .gift-rule-card,
+  #giftSection .gift-item-row,
+  #giftSection .gift-character-box,
+  #giftSection .gift-char-item
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+
+html[data-theme="dark"] #giftSection :is(
+  .gift-rule-card,
+  .gift-character-box,
+  .gift-char-item
+){
+  background:var(--rk-surface-2) !important;
+}
+
+html[data-theme="dark"] #giftSection .gift-item-row.selected,
+html[data-theme="dark"] #giftSection .gift-char-item:has(input:checked){
+  background:#18354a !important;
+  border-color:var(--rk-accent-dark) !important;
+}
+
+html[data-theme="dark"] #giftSection :is(
+  .gift-campaign-title,
+  .gift-rule-name,
+  .gift-item-name,
+  .gift-character-title
+){
+  color:var(--rk-heading) !important;
+}
+
+html[data-theme="dark"] #giftSection :is(
+  .gift-campaign-meta,
+  .gift-rule-count,
+  .gift-summary-note
+){
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] #giftSection .gift-qty-control,
+html[data-theme="dark"] #giftSection .gift-qty-control button{
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .loading-overlay{
+  background:rgba(5,10,18,.78) !important;
+}
+
+html[data-theme="dark"] .loading-overlay-card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border:1px solid var(--rk-border) !important;
+  box-shadow:0 18px 55px rgba(0,0,0,.45) !important;
+}
