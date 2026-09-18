@@ -23,6 +23,60 @@ button{border:0;border-radius:13px;padding:12px 18px;background:#75bce6;color:wh
 .row{display:flex;justify-content:space-between;gap:10px} .total{font-size:17px;font-weight:800;color:#347aa6}
 .state{text-align:center;padding:28px;color:#7890a0}
 @media(max-width:600px){.search{flex-direction:column}.head{flex-direction:column}}
+
+.lookup-summary-total{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #edf2f5;
+}
+.lookup-summary-total strong{
+  color:#347aa6;
+  font-size:18px;
+}
+.lookup-detail-button{
+  width:100%;
+  margin-top:12px;
+  padding:10px 13px;
+  border:0;
+  border-radius:12px;
+  background:#eef8ff;
+  color:#3476a2;
+  font:inherit;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+.lookup-detail-arrow{
+  margin-left:5px;
+}
+.lookup-order-detail{
+  margin-top:12px;
+  padding:13px;
+  border-radius:14px;
+  background:#f9fcfe;
+  border:1px solid #e6f0f5;
+}
+.lookup-order-detail[hidden]{
+  display:none !important;
+}
+.lookup-detail-heading{
+  margin-bottom:8px;
+  color:#486579;
+  font-size:13px;
+  font-weight:800;
+}
+.lookup-tracking{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid #e7eff3;
+  font-size:13px;
+  line-height:1.6;
+}
+
 </style>
 </head>
 <body>
@@ -63,13 +117,94 @@ async function searchOrders(){
 }
 function renderOrder(o){
  const items=Array.isArray(o.items)?o.items:[];
- const itemHtml=items.length?items.map(i=>`<div class="item"><div><b>${esc(i.name||"สินค้า")}</b>${i.option?`<div class="option">${esc(i.option)}</div>`:""}<div class="option">จำนวน ${Number(i.qty||0)} ชิ้น</div></div><div>${Number(i.unit_price||0)>0?money(Number(i.total||0)||Number(i.unit_price||0)*Number(i.qty||0)):""}</div></div>`).join(""):'<div class="muted">ไม่มีรายละเอียดสินค้าในข้อมูลเดิม</div>';
+ const detailId="detail_"+String(o.source||"order")+"_"+String(o.order_id||"").replace(/[^a-zA-Z0-9_-]/g,"_");
+ const itemsCount=items.reduce((sum,i)=>sum+Number(i.qty||0),0);
+
+ const itemHtml=items.length
+   ? items.map(i=>`
+      <div class="item">
+        <div>
+          <b>${esc(i.name||"สินค้า")}</b>
+          ${i.option?`<div class="option">${esc(i.option)}</div>`:""}
+          <div class="option">จำนวน ${Number(i.qty||0)} ชิ้น${Number(i.unit_price||0)>0?` • ${money(i.unit_price)}/ชิ้น`:""}</div>
+        </div>
+        <div>${Number(i.unit_price||0)>0?money(Number(i.total||0)||Number(i.unit_price||0)*Number(i.qty||0)):""}</div>
+      </div>`)
+     .join("")
+   : '<div class="muted">ไม่มีรายละเอียดสินค้าในข้อมูลเดิม</div>';
+
  const fees=[];
  if(Number(o.import_fee||0))fees.push(`<div class="row"><span>ค่านำเข้า</span><span>${money(o.import_fee)}</span></div>`);
  if(Number(o.crate_fee||0))fees.push(`<div class="row"><span>ค่าตีลัง</span><span>${money(o.crate_fee)}</span></div>`);
  if(Number(o.domestic_shipping_fee||0))fees.push(`<div class="row"><span>ค่าส่งในไทย</span><span>${money(o.domestic_shipping_fee)}</span></div>`);
- return `<article class="order"><div class="head"><div><div class="id">${esc(o.order_id)}</div><div class="muted">${fmtDate(o.created_at)}</div></div><span class="source">${sourceLabel(o.source)}</span></div><div class="meta"><span class="badge">${esc(statusLabel(o.status))}</span><span class="badge">${esc(statusLabel(o.payment_status))}</span>${o.tracking_no?`<span class="badge">${esc(o.courier||"Tracking")}: ${esc(o.tracking_no)}</span>`:""}</div><div class="items">${itemHtml}</div><div class="money"><div class="row"><span>ยอดสินค้า</span><span>${money(o.subtotal)}</span></div>${fees.join("")}<div class="row total"><span>ยอดรวม</span><span>${money(o.total)}</span></div></div></article>`;
+
+ return `
+ <article class="order">
+   <div class="head">
+     <div>
+       <div class="id">${esc(o.order_id)}</div>
+       <div class="muted">${fmtDate(o.created_at)}</div>
+     </div>
+     <span class="source">${sourceLabel(o.source)}</span>
+   </div>
+
+   <div class="meta">
+     <span class="badge">${esc(statusLabel(o.status))}</span>
+     <span class="badge">${esc(statusLabel(o.payment_status))}</span>
+     ${itemsCount?`<span class="badge">${itemsCount.toLocaleString("th-TH")} ชิ้น</span>`:""}
+     ${o.tracking_no?`<span class="badge">${esc(o.courier||"Tracking")}: ${esc(o.tracking_no)}</span>`:""}
+   </div>
+
+   <div class="lookup-summary-total">
+     <span>ยอดรวม</span>
+     <strong>${money(o.total)}</strong>
+   </div>
+
+   <button
+     type="button"
+     class="lookup-detail-button"
+     aria-expanded="false"
+     aria-controls="${detailId}"
+     onclick="toggleOrderDetail(this,'${detailId}')">
+     ดูรายละเอียดออเดอร์
+     <span class="lookup-detail-arrow">⌄</span>
+   </button>
+
+   <div id="${detailId}" class="lookup-order-detail" hidden>
+     <div class="lookup-detail-heading">รายการสินค้า</div>
+     <div class="items">${itemHtml}</div>
+
+     <div class="money">
+       <div class="row"><span>ยอดสินค้า</span><span>${money(o.subtotal)}</span></div>
+       ${fees.join("")}
+       <div class="row total"><span>ยอดรวม</span><span>${money(o.total)}</span></div>
+     </div>
+
+     ${o.tracking_no?`
+       <div class="lookup-tracking">
+         <b>🚚 การจัดส่ง</b>
+         <div>${esc(o.courier||"")} ${esc(o.tracking_no)}</div>
+       </div>
+     `:""}
+   </div>
+ </article>`;
 }
+
+function toggleOrderDetail(button,id){
+ const detail=document.getElementById(id);
+ if(!detail)return;
+
+ const opening=detail.hidden;
+ detail.hidden=!opening;
+ button.setAttribute("aria-expanded",String(opening));
+
+ const arrow=button.querySelector(".lookup-detail-arrow");
+ if(arrow)arrow.textContent=opening?"⌃":"⌄";
+
+ const label=Array.from(button.childNodes).find(node=>node.nodeType===Node.TEXT_NODE);
+ if(label)label.nodeValue=opening?"ซ่อนรายละเอียดออเดอร์ ":"ดูรายละเอียดออเดอร์ ";
+}
+
 document.getElementById("twitter").addEventListener("keydown",e=>{if(e.key==="Enter")searchOrders()});
 </script>
 </body>
