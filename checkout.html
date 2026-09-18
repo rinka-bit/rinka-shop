@@ -1103,10 +1103,15 @@ let checkoutBootstrapPromise =
 
 
 /*
-IMPORTANT:
-ต้องเรียกหลัง checkoutBootstrapPromise ถูก initialize แล้ว
-ไม่อย่างนั้น loadDefaultAddress/loadGifts จะเข้า loadCheckoutBootstrap()
-ขณะที่ตัวแปรยังอยู่ใน Temporal Dead Zone
+PERFORMANCE PASS #8
+
+Address และ Gift เป็นข้อมูลคนละชุดและไม่ต้องรอกัน
+จึงยิง 2 requests พร้อมกัน:
+- customerAddresses
+- checkoutGiftData
+
+Gift ยังคงเป็น combined endpoint เดียว
+ไม่ได้ย้อนกลับไปยิง 6 gift requests แบบเดิม
 */
 loadCheckout();
 
@@ -1131,19 +1136,19 @@ async function loadCheckoutBootstrap(){
         "";
 
 
-      const query =
+      const addressQuery =
         new URLSearchParams();
 
 
-      query.set(
+      addressQuery.set(
         "action",
-        "checkoutBootstrap"
+        "customerAddresses"
       );
 
 
       if(sessionToken){
 
-        query.set(
+        addressQuery.set(
           "session_token",
           sessionToken
         );
@@ -1151,39 +1156,172 @@ async function loadCheckoutBootstrap(){
       }
 
 
-      const response =
-        await fetch(
-          API +
-          "?" +
-          query.toString()
+      const addressStartedAt =
+        performance.now();
+
+
+      const giftStartedAt =
+        performance.now();
+
+
+      const [
+        addressResponse,
+        giftResponse
+      ] =
+        await Promise.all([
+
+          fetch(
+            API +
+            "?" +
+            addressQuery.toString()
+          ),
+
+          fetch(
+            API +
+            "?action=checkoutGiftData"
+          )
+
+        ]);
+
+
+      const totalNetworkMs =
+        Math.round(
+          Math.max(
+            performance.now() -
+            addressStartedAt,
+            performance.now() -
+            giftStartedAt
+          )
         );
 
 
-      if(!response.ok){
+      if(!addressResponse.ok){
 
         throw new Error(
-          "HTTP " +
-          response.status
+          "โหลดที่อยู่ไม่สำเร็จ HTTP " +
+          addressResponse.status
         );
 
       }
 
 
-      const result =
-        await response.json();
+      if(!giftResponse.ok){
+
+        throw new Error(
+          "โหลดข้อมูลของแถมไม่สำเร็จ HTTP " +
+          giftResponse.status
+        );
+
+      }
+
+
+      const [
+        addressResult,
+        giftResult
+      ] =
+        await Promise.all([
+
+          addressResponse.json(),
+
+          giftResponse.json()
+
+        ]);
 
 
       if(
-        !result ||
-        result.success !== true
+        !addressResult ||
+        addressResult.success !== true
       ){
 
         throw new Error(
-          result?.error ||
-          "โหลดข้อมูล Checkout ไม่สำเร็จ"
+          addressResult?.error ||
+          "โหลดที่อยู่ไม่สำเร็จ"
         );
 
       }
+
+
+      if(
+        !giftResult ||
+        giftResult.success !== true
+      ){
+
+        throw new Error(
+          giftResult?.error ||
+          "โหลดข้อมูลของแถมไม่สำเร็จ"
+        );
+
+      }
+
+
+      const result = {
+
+        success:true,
+
+        addresses:
+          Array.isArray(
+            addressResult.addresses
+          )
+            ? addressResult.addresses
+            : [],
+
+        campaigns:
+          Array.isArray(
+            giftResult.campaigns
+          )
+            ? giftResult.campaigns
+            : [],
+
+        rules:
+          Array.isArray(
+            giftResult.rules
+          )
+            ? giftResult.rules
+            : [],
+
+        items:
+          Array.isArray(
+            giftResult.items
+          )
+            ? giftResult.items
+            : [],
+
+        characters:
+          Array.isArray(
+            giftResult.characters
+          )
+            ? giftResult.characters
+            : [],
+
+        exclusions:
+          Array.isArray(
+            giftResult.exclusions
+          )
+            ? giftResult.exclusions
+            : [],
+
+        collections:
+          Array.isArray(
+            giftResult.collections
+          )
+            ? giftResult.collections
+            : [],
+
+        performance:{
+          network_parallel_ms:
+            totalNetworkMs,
+          gift_backend:
+            giftResult.performance ||
+            null
+        }
+
+      };
+
+
+      console.log(
+        "CHECKOUT BOOTSTRAP PROFILE",
+        result.performance
+      );
 
 
       return result;
@@ -1196,11 +1334,6 @@ async function loadCheckoutBootstrap(){
     return await checkoutBootstrapPromise;
 
   }catch(error){
-
-    /*
-    ถ้า request แรกพัง ให้ retry ได้เมื่อผู้ใช้ reload/เรียกใหม่
-    ไม่ทำ blind retry อัตโนมัติ
-    */
 
     checkoutBootstrapPromise =
       null;
