@@ -77,6 +77,38 @@ button{border:0;border-radius:13px;padding:12px 18px;background:#75bce6;color:wh
   line-height:1.6;
 }
 
+
+.lookup-item-main{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  min-width:0;
+}
+.lookup-item-image{
+  width:62px;
+  height:62px;
+  flex:0 0 62px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid #e1ebf0;
+  background:#f4f8fa;
+}
+.lookup-item-image-placeholder{
+  width:62px;
+  height:62px;
+  flex:0 0 62px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  border:1px solid #e1ebf0;
+  background:#f4f8fa;
+  color:#9aabb5;
+  font-size:20px;
+}
+.lookup-item-text{
+  min-width:0;
+}
+
 </style>
 </head>
 <body>
@@ -123,10 +155,15 @@ function renderOrder(o){
  const itemHtml=items.length
    ? items.map(i=>`
       <div class="item">
-        <div>
-          <b>${esc(i.name||"สินค้า")}</b>
-          ${i.option?`<div class="option">${esc(i.option)}</div>`:""}
-          <div class="option">จำนวน ${Number(i.qty||0)} ชิ้น${Number(i.unit_price||0)>0?` • ${money(i.unit_price)}/ชิ้น`:""}</div>
+        <div class="lookup-item-main">
+          ${i.image
+            ? `<img class="lookup-item-image" src="${esc(i.image)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;lookup-item-image-placeholder&quot;>🛍️</div>'">`
+            : `<div class="lookup-item-image-placeholder">🛍️</div>`}
+          <div class="lookup-item-text">
+            <b>${esc(i.name||"สินค้า")}</b>
+            ${i.option?`<div class="option">${esc(i.option)}</div>`:""}
+            <div class="option">จำนวน ${Number(i.qty||0)} ชิ้น${Number(i.unit_price||0)>0?` • ${money(i.unit_price)}/ชิ้น`:""}</div>
+          </div>
         </div>
         <div>${Number(i.unit_price||0)>0?money(Number(i.total||0)||Number(i.unit_price||0)*Number(i.qty||0)):""}</div>
       </div>`)
