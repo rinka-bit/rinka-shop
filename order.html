@@ -103,25 +103,24 @@ async function loadOrder(){
     )
   ){
 
-    if(!token){
-
-      location.replace(
-        "lookup.html"
-      );
-
-      return;
-
-    }
+    /*
+    DM Invoice ใช้ Invoice ID จากลิงก์เป็นตัวเปิดรายละเอียด
+    ไม่บังคับ Login เพื่อให้ลูกค้าที่เพิ่งแจ้งชำระเห็น Order ได้ทันที
+    */
 
     try{
 
       const q =
         new URLSearchParams({
+
           action:
-            "customerDMInvoices",
-          session_token:
-            token
+            "dmInvoice",
+
+          invoice_id:
+            orderId
+
         });
+
 
       const res =
         await fetch(
@@ -130,112 +129,151 @@ async function loadOrder(){
           q.toString()
         );
 
+
       if(!res.ok){
+
         throw new Error(
           "HTTP " +
           res.status
         );
+
       }
+
 
       const data =
         await res.json();
+
 
       if(
         !data ||
         data.success !== true
       ){
+
         throw new Error(
           data?.error ||
           "โหลดข้อมูล DM Invoice ไม่สำเร็จ"
         );
+
       }
 
-      const dmOrders =
+
+      const invoice =
+        data.invoice || {};
+
+      const items =
         Array.isArray(
-          data.orders
+          data.items
         )
-          ? data.orders
-          : Array.isArray(
-              data.invoices
-            )
-            ? data.invoices
-            : [];
+          ? data.items
+          : [];
 
-      const order =
-        dmOrders.find(
-          item =>
-            String(
-              item.order_id ||
-              item.invoice_id ||
-              ""
-            ).trim() ===
-            String(orderId).trim()
-        );
 
-      if(!order){
-        throw new Error(
-          "ไม่พบคำสั่งซื้อนี้ในบัญชีของคุณ"
-        );
-      }
+      const dmOrder = {
 
-      let status =
-        String(
-          order.status ||
-          ""
-        )
-          .trim()
-          .toLowerCase();
+        ...invoice,
 
-      if(
-        !status ||
-        status === "sent" ||
-        status === "payment_submitted" ||
-        status === "pending_order"
-      ){
-
-        location.replace(
-          "invoice.html?id=" +
-          encodeURIComponent(
-            orderId
-          )
-        );
-
-        return;
-
-      }
-
-      renderOrder({
-        ...order,
         order_id:
-          order.order_id ||
-          order.invoice_id ||
+          invoice.invoice_id ||
           orderId,
+
         order_source:
           "dm_invoice",
+
+        customer_name:
+          invoice.receiver ||
+          "ลูกค้า",
+
+        items:
+          items.map(
+            item => ({
+
+              ...item,
+
+              name:
+                item.product_name ||
+                "สินค้า",
+
+              qty:
+                Number(
+                  item.quantity || 0
+                ),
+
+              price:
+                Number(
+                  item.unit_price || 0
+                ),
+
+              image:
+                item.image_url ||
+                item.image ||
+                "",
+
+              selected_option:
+                item.character_name
+                  ? {
+                      character:
+                        item.character_name
+                    }
+                  : {}
+
+            })
+          ),
+
         payment_status:
-          order.payment_status === "submitted"
-            ? "paid"
-            : order.payment_status,
+          String(
+            invoice.payment_status ||
+            ""
+          )
+            .trim()
+            .toLowerCase() ===
+              "submitted"
+            ? "processing"
+            : invoice.payment_status,
+
+        status:
+          invoice.status ||
+          (
+            String(
+              invoice.payment_status ||
+              ""
+            )
+              .trim()
+              .toLowerCase() ===
+                "submitted"
+              ? "payment_submitted"
+              : "sent"
+          ),
+
         gifts:[],
         shipments:[],
         pending_shipment:null,
         pending_shipment_id:"",
         shipping_payment_status:""
-      });
+
+      };
+
+
+      renderOrder(
+        dmOrder
+      );
+
 
       console.log(
-        "ORDER SOURCE: dm_invoice",
+        "ORDER SOURCE: dm_invoice_public",
         orderId
       );
 
+
       return;
+
 
     }catch(error){
 
       console.warn(
-        "load DM order:",
+        "load public DM order:",
         error
       );
+
 
       state(
         "โหลดออเดอร์ไม่สำเร็จ",
@@ -243,6 +281,7 @@ async function loadOrder(){
         String(error),
         true
       );
+
 
       return;
 
