@@ -108,6 +108,52 @@ async function loadOrder(){
     ไม่บังคับ Login เพื่อให้ลูกค้าที่เพิ่งแจ้งชำระเห็น Order ได้ทันที
     */
 
+    const dmSnapshotKey =
+      "rinka_order_snapshot_" +
+      orderId;
+
+    let dmSnapshot =
+      null;
+
+
+    try{
+
+      dmSnapshot =
+        safeJson(
+          localStorage.getItem(
+            dmSnapshotKey
+          ),
+          null
+        );
+
+    }catch(snapshotError){
+
+      dmSnapshot =
+        null;
+
+    }
+
+
+    if(
+      dmSnapshot &&
+      String(
+        dmSnapshot.order_id || ""
+      ) ===
+      String(orderId)
+    ){
+
+      renderOrder(
+        dmSnapshot
+      );
+
+      console.log(
+        "ORDER SOURCE: dm_snapshot",
+        orderId
+      );
+
+    }
+
+
     try{
 
       const q =
@@ -253,6 +299,25 @@ async function loadOrder(){
       };
 
 
+      try{
+
+        localStorage.setItem(
+          dmSnapshotKey,
+          JSON.stringify(
+            dmOrder
+          )
+        );
+
+      }catch(snapshotError){
+
+        console.warn(
+          "Save DM order snapshot failed:",
+          snapshotError
+        );
+
+      }
+
+
       renderOrder(
         dmOrder
       );
@@ -273,6 +338,13 @@ async function loadOrder(){
         "load public DM order:",
         error
       );
+
+
+      if(dmSnapshot){
+
+        return;
+
+      }
 
 
       state(
