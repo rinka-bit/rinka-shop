@@ -2021,7 +2021,7 @@ try{
   Apps Script บางครั้ง backend ทำงานเสร็จแล้ว แต่ HTTP response
   กลับมาที่ browser ช้ากว่าหลายวินาที
 
-  หลัง 6.5 วินาที เราจะตรวจสถานะ payment แบบ read-only 1 ครั้ง
+  หลัง 8 วินาที เราจะตรวจสถานะ payment แบบ read-only 1 ครั้ง
   พร้อมกับปล่อย POST เดิมทำงานต่อ:
   - ไม่ abort POST
   - ไม่ส่ง createPaidCheckout ซ้ำ
@@ -2068,20 +2068,6 @@ try{
           async()=>{
 
             try{
-
-              const earlyRecoveryStartedAt =
-                performance.now();
-
-              console.log(
-                "PAID CHECKOUT EARLY RECOVERY START",
-                {
-                  browser_ms:
-                    Math.round(
-                      earlyRecoveryStartedAt -
-                      checkoutRequestStartedAt
-                    )
-                }
-              );
 
               const recoveryForm =
                 new FormData();
@@ -2203,7 +2189,7 @@ try{
             }
 
           },
-          6500
+          8000
         );
 
       }
@@ -2218,7 +2204,7 @@ try{
 
 
   /*
-  ถ้า early recovery ยังไม่พบ paid
+  ถ้า recovery 8 วิยังไม่พบ paid
   ให้รอ POST หลักต่อเหมือนเดิม
   */
   if(
@@ -2250,10 +2236,7 @@ try{
             checkoutRequestStartedAt
           ),
         order_id:
-          transactionResult.order_id,
-        recovery_ms:
-          transactionResult.performance?.recovery_ms ??
-          "n/a"
+          transactionResult.order_id
       }
     );
 
