@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="cart-drawer.css">
- <style>
+<link rel="stylesheet" href="theme.css?v=20260918-2">
+<style>
 :root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--text:#334155;--muted:#64748b;--border:#dbe7f1}
 *{box-sizing:border-box}body{margin:0;font-family:'Kodchasan',sans-serif;color:var(--text);background:linear-gradient(180deg,#fbfdff,var(--bg))}
 button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
@@ -22,16 +23,7 @@ button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height
 </style>
 </head>
 <body>
-<header class="topbar"><button id="menuButton" type="button">☰</button><h1>หมวดสินค้า</h1><button
-type="button"
-class="cart"
-onclick="openCartDrawer()"
-aria-label="เปิดตะกร้าสินค้า"
->
-  🛒
-  <span id="cartCount" class="count">0</span>
-</button>
-</header>
+<header class="topbar"><button id="menuButton" type="button">☰</button><h1>หมวดสินค้า</h1><button type="button" class="cart" onclick="openCartDrawer()" aria-label="เปิดตะกร้าสินค้า">🛒<span id="cartCount" class="count">0</span></button></header>
 <div id="overlay" class="overlay hidden"></div>
 <aside id="sideMenu" class="side-menu"><div class="menu-header"><h2>Rinka Shop</h2></div><a href="home.html">🏠 หน้าแรก</a><a href="browse.html">🛍️ สินค้าทั้งหมด</a><a href="categories.html">🏷️ หมวดสินค้า</a><a href="lookup.html">📦 เช็กออเดอร์</a><a href="change-address.html">📍 เปลี่ยนที่อยู่</a><a href="account.html">👤 บัญชีของฉัน</a><a href="cart.html">🛒 ตะกร้า</a><a href="https://x.com/prewithrinka" target="_blank" rel="noopener noreferrer">📞 ติดต่อร้าน</a></aside>
 <main class="container">
@@ -40,112 +32,19 @@ aria-label="เปิดตะกร้าสินค้า"
 <section id="categories" class="state"><div class="spinner"></div><h2>กำลังโหลดหมวดสินค้า</h2><p>รอสักครู่นะคะ</p></section>
 </main>
 <script>
-
 let allCategories=[];
 document.addEventListener("DOMContentLoaded",()=>{updateCartCount();document.getElementById("categorySearch").addEventListener("input",filterCategories);loadCategories()});
-async function loadCategories(){
-
-  try{
-
-    const catalog =
-      await RinkaCatalog.load();
-
-
-    const products =
-      Array.isArray(
-        catalog.products
-      )
-        ? catalog.products
-        : [];
-
-
-    const map =
-      new Map();
-
-
-    products.forEach(
-      product => {
-
-        const category =
-          String(
-            product.main_category || ""
-          ).trim();
-
-
-        if(!category){
-          return;
-        }
-
-
-        map.set(
-          category,
-          (
-            map.get(
-              category
-            ) || 0
-          ) + 1
-        );
-
-      }
-    );
-
-
-    allCategories =
-      [
-        ...map.entries()
-      ]
-        .map(
-          ([name,count])=>({
-            name,
-            count
-          })
-        )
-        .sort(
-          (a,b)=>
-            a.name.localeCompare(
-              b.name,
-              "th"
-            )
-        );
-
-
-    renderCategories(
-      allCategories
-    );
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-    renderState(
-      "โหลดหมวดสินค้าไม่สำเร็จ",
-      error.message ||
-      String(error),
-      true
-    );
-
-  }
-
-}
- 
+async function loadCategories(){try{const catalog=await RinkaCatalog.load();const products=Array.isArray(catalog.products)?catalog.products:[];const map=new Map();products.forEach(product=>{const category=String(product.main_category||"").trim();if(!category)return;map.set(category,(map.get(category)||0)+1)});allCategories=[...map.entries()].map(([name,count])=>({name,count})).sort((a,b)=>a.name.localeCompare(b.name,"th"));renderCategories(allCategories)}catch(error){console.error(error);renderState("โหลดหมวดสินค้าไม่สำเร็จ",error.message||String(error),true)}}
 function filterCategories(){const q=document.getElementById("categorySearch").value.trim().toLowerCase();renderCategories(!q?allCategories:allCategories.filter(c=>c.name.toLowerCase().includes(q)))}
-function renderCategories(rows){
- const box=document.getElementById("categories");document.getElementById("categoryCount").textContent=rows.length.toLocaleString("th-TH")+" หมวด";
- if(!rows.length){renderState("ไม่พบหมวดสินค้า",document.getElementById("categorySearch").value?"ลองเปลี่ยนคำค้นดูนะคะ":"ยังไม่มีหมวดสินค้า");return}
- box.className="grid";box.innerHTML=rows.map(c=>{const url="category.html?name="+encodeURIComponent(c.name);return `<article class="category-card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)"><div><div class="category-icon">🏷️</div><h3>${esc(c.name)}</h3><p>${c.count.toLocaleString("th-TH")} รายการ</p></div><div class="category-arrow">›</div></article>`}).join("");
-}
+function renderCategories(rows){const box=document.getElementById("categories");document.getElementById("categoryCount").textContent=rows.length.toLocaleString("th-TH")+" หมวด";if(!rows.length){renderState("ไม่พบหมวดสินค้า",document.getElementById("categorySearch").value?"ลองเปลี่ยนคำค้นดูนะคะ":"ยังไม่มีหมวดสินค้า");return}box.className="grid";box.innerHTML=rows.map(c=>{const url="category.html?name="+encodeURIComponent(c.name);return `<article class="category-card" tabindex="0" role="link" onclick='location.href=${JSON.stringify(url)}' onkeydown="cardKey(event,this)"><div><div class="category-icon">🏷️</div><h3>${esc(c.name)}</h3><p>${c.count.toLocaleString("th-TH")} รายการ</p></div><div class="category-arrow">›</div></article>`}).join("")}
 function renderState(t,m,retry){const b=document.getElementById("categories");b.className="state";b.innerHTML=`<div style="font-size:48px">${retry?"⚠️":"🏷️"}</div><h2>${esc(t)}</h2><p>${esc(m)}</p>${retry?'<button onclick="loadCategories()">ลองใหม่</button>':""}`}
 function cardKey(e,el){if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click()}}
 function updateCartCount(){let c=[];try{const x=JSON.parse(localStorage.getItem("cart")||"[]");c=Array.isArray(x)?x:[]}catch(e){}const n=c.reduce((s,i)=>s+Number(i.qty||0),0);document.getElementById("cartCount").textContent=n>99?"99+":String(n)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
-
- <script src="catalog.js?v=20260819-1"></script>
+<script src="catalog.js?v=20260819-1"></script>
 <script src="menu.js"></script>
 <script src="cart-drawer.js"></script>
- 
+<script src="theme.js?v=20260918-2"></script>
 </body>
 </html>
