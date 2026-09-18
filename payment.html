@@ -2044,6 +2044,11 @@ try{
     {};
 
 
+  const orderProfile =
+    checkoutProfile.order ||
+    {};
+
+
   const paymentProfile =
     checkoutProfile.payment ||
     transactionResult.payment?.performance ||
@@ -2076,6 +2081,41 @@ try{
       "create_order_ms=" +
         (
           checkoutProfile.create_order_ms ??
+          "n/a"
+        ),
+      "order_lock_ms=" +
+        (
+          orderProfile.lock_ms ??
+          "n/a"
+        ),
+      "order_validate_ms=" +
+        (
+          orderProfile.validate_ms ??
+          "n/a"
+        ),
+      "order_build_items_ms=" +
+        (
+          orderProfile.build_items_ms ??
+          "n/a"
+        ),
+      "order_gift_validation_ms=" +
+        (
+          orderProfile.gift_validation_ms ??
+          "n/a"
+        ),
+      "order_insert_order_ms=" +
+        (
+          orderProfile.insert_order_ms ??
+          "n/a"
+        ),
+      "order_insert_items_ms=" +
+        (
+          orderProfile.insert_items_ms ??
+          "n/a"
+        ),
+      "order_insert_gifts_ms=" +
+        (
+          orderProfile.insert_gifts_ms ??
           "n/a"
         ),
       "save_payment_ms=" +
@@ -2159,6 +2199,8 @@ try{
         ),
       backend:
         checkoutProfile,
+      order_steps:
+        orderProfile,
       payment_steps:
         paymentProfile
     }
