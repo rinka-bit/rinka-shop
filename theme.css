@@ -266,3 +266,261 @@ html[data-theme="dark"] .rk-theme-button{
 
 /* Native controls */
 html[data-theme="dark"]{accent-color:var(--rk-accent-dark)}
+
+/* =========================================================
+   DARK MODE PHASE 1.1
+   Cart Drawer + Payment
+   ========================================================= */
+
+/* Payment page local variables */
+html[data-theme="dark"]{
+  --payment-background:var(--rk-bg);
+  --payment-card:var(--rk-surface);
+  --payment-text:var(--rk-text);
+  --payment-muted:var(--rk-muted);
+  --payment-border:var(--rk-border);
+}
+
+/* ---------- CART DRAWER ---------- */
+html[data-theme="dark"] .cart-drawer-overlay{
+  background:rgba(0,0,0,.58) !important;
+}
+
+html[data-theme="dark"] .cart-drawer{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:-18px 0 42px rgba(0,0,0,.38) !important;
+}
+
+html[data-theme="dark"] :is(
+  .cart-drawer-header,
+  .cart-drawer-footer
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .cart-drawer-body{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+}
+
+html[data-theme="dark"] :is(
+  .cart-drawer-title,
+  .cart-drawer-empty-title,
+  .cart-drawer-item-name,
+  .cart-drawer-summary-total
+){
+  color:var(--rk-heading) !important;
+}
+
+html[data-theme="dark"] :is(
+  .cart-drawer-empty-text,
+  .cart-drawer-item-meta,
+  .cart-drawer-item-option,
+  .cart-drawer-summary-label
+){
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] :is(
+  .cart-drawer-close,
+  .cart-drawer-qty-button,
+  .cart-drawer-minus,
+  .cart-drawer-plus
+){
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] :is(
+  .cart-drawer-item,
+  .cart-drawer-summary
+){
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] :is(
+  .cart-drawer-item-image,
+  .cart-drawer-item-placeholder
+){
+  background:var(--rk-image-bg) !important;
+}
+
+html[data-theme="dark"] .cart-drawer-title-count{
+  background:#18354a !important;
+  color:#8bd6ff !important;
+}
+
+html[data-theme="dark"] .cart-drawer-remove{
+  background:#3a1822 !important;
+  color:#fda4af !important;
+  border-color:#632235 !important;
+}
+
+/* ---------- PAYMENT ---------- */
+html[data-theme="dark"] .payment-topbar{
+  background:rgba(23,34,53,.94) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:0 5px 20px rgba(0,0,0,.22) !important;
+}
+
+html[data-theme="dark"] .payment-topbar h1{
+  color:var(--rk-heading) !important;
+}
+
+html[data-theme="dark"] :is(
+  .payment-topbar button,
+  .payment-topbar a
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:0 5px 18px rgba(0,0,0,.25) !important;
+}
+
+html[data-theme="dark"] :is(
+  .payment-card,
+  .payment-summary
+){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+
+html[data-theme="dark"] :is(
+  .payment-card h2,
+  .payment-summary h2,
+  .payment-detail-head h3,
+  .payment-slip-drop b,
+  .payment-summary-item b
+){
+  color:var(--rk-heading) !important;
+}
+
+html[data-theme="dark"] .payment-bank-card{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .payment-bank-card:hover{
+  background:#203149 !important;
+  border-color:#4d7898 !important;
+}
+
+html[data-theme="dark"] .payment-bank-card.selected{
+  background:#18354a !important;
+  border-color:var(--rk-accent-dark) !important;
+  box-shadow:0 0 0 2px rgba(117,200,245,.13) !important;
+}
+
+html[data-theme="dark"] .payment-bank-icon{
+  background:var(--rk-image-bg) !important;
+}
+
+html[data-theme="dark"] .payment-bank-check{
+  background:#21445d !important;
+  color:#8bd6ff !important;
+}
+
+html[data-theme="dark"] .payment-detail-card{
+  background:linear-gradient(135deg,#1a2940,#172235) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .payment-account-line{
+  border-color:var(--rk-border) !important;
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] .payment-account-line strong{
+  color:var(--rk-text) !important;
+}
+
+/* QR intentionally stays white for reliable scanning */
+html[data-theme="dark"] .payment-qr-wrap{
+  background:#fff !important;
+  border-color:#d8e2ea !important;
+  box-shadow:0 7px 20px rgba(0,0,0,.18);
+}
+
+html[data-theme="dark"] .payment-secondary-button{
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-link) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .payment-slip-drop{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:#45617c !important;
+}
+
+html[data-theme="dark"] .payment-slip-drop.dragging{
+  background:#18354a !important;
+  border-color:var(--rk-accent-dark) !important;
+}
+
+html[data-theme="dark"] .payment-slip-preview-card{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .payment-slip-preview-card img{
+  background:#fff !important;
+}
+
+html[data-theme="dark"] .payment-slip-preview-card button{
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-link) !important;
+}
+
+html[data-theme="dark"] .payment-summary-item{
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] :is(
+  .payment-section-note,
+  .payment-bank-owner,
+  .payment-detail-label,
+  .payment-save-tip,
+  .payment-slip-drop span,
+  .payment-slip-preview-card span,
+  .payment-summary-item span,
+  .payment-summary-row,
+  .payment-back-link
+){
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] :is(
+  .payment-summary-row strong,
+  .payment-summary-total span
+){
+  color:var(--rk-text) !important;
+}
+
+html[data-theme="dark"] .payment-summary-total{
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .payment-summary-total strong{
+  color:#7dcfff !important;
+}
+
+html[data-theme="dark"] :is(
+  .payment-loading-box,
+  .payment-empty-box
+){
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-muted) !important;
+  border-color:var(--rk-border) !important;
+}
+
