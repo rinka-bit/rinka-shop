@@ -2039,6 +2039,111 @@ try{
     await transactionResponse.json();
 
 
+  const checkoutProfile =
+    transactionResult.performance ||
+    {};
+
+
+  const paymentProfile =
+    checkoutProfile.payment ||
+    transactionResult.payment?.performance ||
+    {};
+
+
+  /*
+  PERFORMANCE PASS #11
+  แสดงเป็นข้อความ flat เพื่อให้ Chrome เก็บค่าไว้ครบ
+  ไม่ต้องกดขยาย object
+  */
+  console.log(
+    [
+      "PAID CHECKOUT PROFILE FLAT",
+      "browser_total_ms=" +
+        Math.round(
+          performance.now() -
+          checkoutRequestStartedAt
+        ),
+      "backend_total_ms=" +
+        (
+          checkoutProfile.total_ms ??
+          "n/a"
+        ),
+      "create_order_ms=" +
+        (
+          checkoutProfile.create_order_ms ??
+          "n/a"
+        ),
+      "save_payment_ms=" +
+        (
+          checkoutProfile.save_payment_ms ??
+          "n/a"
+        ),
+      "precheck_ms=" +
+        (
+          paymentProfile.precheck_ms ??
+          "n/a"
+        ),
+      "upload_slip_ms=" +
+        (
+          paymentProfile.upload_slip_ms ??
+          "n/a"
+        ),
+      "lock_ms=" +
+        (
+          paymentProfile.lock_ms ??
+          "n/a"
+        ),
+      "load_order_ms=" +
+        (
+          paymentProfile.load_order_ms ??
+          "n/a"
+        ),
+      "load_payments_ms=" +
+        (
+          paymentProfile.load_payments_ms ??
+          "n/a"
+        ),
+      "insert_payment_ms=" +
+        (
+          paymentProfile.insert_payment_ms ??
+          "n/a"
+        ),
+      "update_order_ms=" +
+        (
+          paymentProfile.update_order_ms ??
+          "n/a"
+        ),
+      "load_stock_items_ms=" +
+        (
+          paymentProfile.load_stock_items_ms ??
+          "n/a"
+        ),
+      "deduct_stock_ms=" +
+        (
+          paymentProfile.deduct_stock_ms ??
+          "n/a"
+        ),
+      "build_email_ms=" +
+        (
+          paymentProfile.build_email_ms ??
+          "n/a"
+        ),
+      "send_email_ms=" +
+        (
+          paymentProfile.send_email_ms ??
+          "n/a"
+        ),
+      "payment_total_ms=" +
+        (
+          paymentProfile.total_ms ??
+          "n/a"
+        )
+    ].join(
+      " | "
+    )
+  );
+
+
   console.log(
     "PAID CHECKOUT PROFILE",
     {
@@ -2048,21 +2153,9 @@ try{
           checkoutRequestStartedAt
         ),
       backend:
-        transactionResult.performance ||
-        null,
-
-      create_order_ms:
-        transactionResult.performance?.create_order_ms ||
-        null,
-
-      save_payment_ms:
-        transactionResult.performance?.save_payment_ms ||
-        null,
-
+        checkoutProfile,
       payment_steps:
-        transactionResult.performance?.payment ||
-        transactionResult.payment?.performance ||
-        null
+        paymentProfile
     }
   );
 
