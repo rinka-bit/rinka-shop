@@ -85,34 +85,6 @@ async function loadOrder(){
 
   }
 
-
-  if(!token){
-
-    box.innerHTML = `
-
-<div style="font-size:50px">
-🔒
-</div>
-
-<h2>
-กรุณาเข้าสู่ระบบ
-</h2>
-
-<p>
-ต้องเข้าสู่ระบบก่อนดูออเดอร์
-</p>
-
-<a href="login.html">
-เข้าสู่ระบบ
-</a>
-
-`;
-
-    return;
-
-  }
-
-
   /*
   =========================================
   DM INVOICE AS ORDER
@@ -130,6 +102,16 @@ async function loadOrder(){
       "INV-"
     )
   ){
+
+    if(!token){
+
+      location.replace(
+        "lookup.html"
+      );
+
+      return;
+
+    }
 
     try{
 
@@ -325,6 +307,34 @@ async function loadOrder(){
       "ORDER SOURCE: snapshot",
       orderId
     );
+
+  }
+
+
+  /*
+  Guest checkout:
+  หลังชำระเงิน payment.html สร้าง snapshot ไว้แล้ว
+  จึงเปิดรายละเอียดออเดอร์ได้ทันทีโดยไม่ต้อง Login
+  โดยไม่เปิด authenticated order endpoint เป็น public
+  */
+  if(
+    !token &&
+    snapshot
+  ){
+
+    return;
+
+  }
+
+
+  if(!token){
+
+    state(
+      "ไม่พบข้อมูลออเดอร์ในอุปกรณ์นี้",
+      "กรุณาใช้หน้าเช็กออเดอร์เพื่อค้นหาด้วย Twitter/X"
+    );
+
+    return;
 
   }
 
