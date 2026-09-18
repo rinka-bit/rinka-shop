@@ -871,6 +871,35 @@ async function loadInvoice(){
       result.invoice || {};
 
 
+    /*
+    Invoice ที่แจ้งชำระแล้ว:
+    ไม่เปิดฟอร์มจ่ายซ้ำ ให้ไปหน้ารายละเอียดออเดอร์ทันที
+    */
+    const loadedPaymentStatus =
+      String(
+        CURRENT_INVOICE.payment_status ||
+        ""
+      )
+        .trim()
+        .toLowerCase();
+
+    if(
+      loadedPaymentStatus === "submitted" ||
+      loadedPaymentStatus === "paid"
+    ){
+
+      location.replace(
+        "order.html?id=" +
+        encodeURIComponent(
+          invoiceId
+        )
+      );
+
+      return;
+
+    }
+
+
     renderInvoice(
       result
     );
@@ -1619,6 +1648,39 @@ function renderCustomerPaymentForm(
         )}"
         placeholder="example@email.com"
       >
+
+    </div>
+
+    <div
+      class="form-group full"
+      style="margin-top:-2px;"
+    >
+
+      <button
+        type="button"
+        id="loadCustomerDataButton"
+        class="submit-button"
+        style="
+          margin-top:0;
+          background:#eef8ff;
+          color:#2586b8;
+          border:1px solid #bfe4f7;
+        "
+        onclick="loadExistingCustomerData()"
+      >
+        📍 โหลดข้อมูลที่อยู่เดิม
+      </button>
+
+      <div
+        id="customerLookupMessage"
+        style="
+          margin-top:7px;
+          color:#64748b;
+          font-size:12px;
+        "
+      >
+        สำหรับลูกค้าเก่า: กรอก Twitter/X + Email แล้วกดโหลดข้อมูล
+      </div>
 
     </div>
 
@@ -2391,6 +2453,20 @@ async function submitPayment(){
 
 
     /*
+    แจ้งชำระสำเร็จแล้ว ไปหน้ารายละเอียดออเดอร์
+    */
+    location.replace(
+      "order.html?id=" +
+      encodeURIComponent(
+        result.invoice_id ||
+        getInvoiceId()
+      )
+    );
+
+    return;
+
+
+    /*
     ป้องกันการแจ้งซ้ำ
     */
 
@@ -2467,6 +2543,264 @@ async function submitPayment(){
       false;
 
   }
+
+}
+
+
+/*
+=========================================
+LOAD EXISTING CUSTOMER ADDRESS
+=========================================
+*/
+
+async function loadExistingCustomerData(){
+
+  const twitter =
+    getValue(
+      "customerTwitter"
+    );
+
+  const email =
+    getValue(
+      "customerEmail"
+    );
+
+  const button =
+    document.getElementById(
+      "loadCustomerDataButton"
+    );
+
+  const message =
+    document.getElementById(
+      "customerLookupMessage"
+    );
+
+
+  if(
+    !twitter ||
+    !email
+  ){
+
+    if(message){
+      message.textContent =
+        "กรุณากรอก Twitter/X และ Email ก่อนค่ะ";
+    }
+
+    return;
+
+  }
+
+
+  try{
+
+    if(button){
+      button.disabled = true;
+      button.textContent =
+        "⏳ กำลังโหลดข้อมูล...";
+    }
+
+    if(message){
+      message.textContent =
+        "กำลังค้นหาข้อมูลลูกค้าเดิม...";
+    }
+
+
+    const q =
+      new URLSearchParams({
+
+        action:
+          "guestCheckoutLookup",
+
+        twitter:
+          twitter,
+
+        email:
+          email
+
+      });
+
+
+    const response =
+      await fetch(
+        API +
+        "?" +
+        q.toString()
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "ไม่พบข้อมูลลูกค้าเดิม"
+      );
+
+    }
+
+
+    const addresses =
+      Array.isArray(
+        result.addresses
+      )
+        ? result.addresses
+        : [];
+
+
+    const address =
+      result.address ||
+      result.default_address ||
+      addresses.find(
+        item =>
+          item &&
+          (
+            item.is_default === true ||
+            String(
+              item.is_default || ""
+            ).toLowerCase() === "true" ||
+            String(
+              item.is_default || ""
+            ) === "1"
+          )
+      ) ||
+      addresses[0] ||
+      {};
+
+
+    const customer =
+      result.customer || {};
+
+
+    setInvoiceFieldValue(
+      "customerTwitter",
+      customer.twitter ||
+      twitter
+    );
+
+    setInvoiceFieldValue(
+      "customerEmail",
+      customer.email ||
+      email
+    );
+
+    setInvoiceFieldValue(
+      "customerReceiver",
+      address.receiver ||
+      customer.receiver ||
+      ""
+    );
+
+    setInvoiceFieldValue(
+      "customerPhone",
+      address.phone ||
+      customer.phone ||
+      ""
+    );
+
+    setInvoiceFieldValue(
+      "customerAddress",
+      address.address ||
+      ""
+    );
+
+    setInvoiceFieldValue(
+      "customerSubdistrict",
+      address.subdistrict ||
+      ""
+    );
+
+    setInvoiceFieldValue(
+      "customerDistrict",
+      address.district ||
+      ""
+    );
+
+    setInvoiceFieldValue(
+      "customerProvince",
+      address.province ||
+      ""
+    );
+
+    setInvoiceFieldValue(
+      "customerPostcode",
+      address.postcode ||
+      ""
+    );
+
+
+    if(message){
+
+      message.textContent =
+        Object.keys(address).length
+          ? "✅ โหลดข้อมูลที่อยู่เดิมแล้ว ตรวจสอบอีกครั้งก่อนชำระเงินนะคะ"
+          : "พบข้อมูลลูกค้าแล้ว แต่ยังไม่มีที่อยู่ที่บันทึกไว้";
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "loadExistingCustomerData:",
+      error
+    );
+
+    if(message){
+      message.textContent =
+        "❌ " +
+        (
+          error.message ||
+          String(error)
+        );
+    }
+
+  }finally{
+
+    if(button){
+      button.disabled = false;
+      button.textContent =
+        "📍 โหลดข้อมูลที่อยู่เดิม";
+    }
+
+  }
+
+}
+
+
+function setInvoiceFieldValue(
+  id,
+  value
+){
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+  if(!element){
+    return;
+  }
+
+  element.value =
+    String(
+      value || ""
+    );
 
 }
 
