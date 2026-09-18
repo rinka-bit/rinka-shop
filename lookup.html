@@ -111,8 +111,33 @@ button{border:0;border-radius:13px;padding:12px 18px;background:#75bce6;color:wh
 
 </style>
 <link rel="stylesheet" href="theme.css?v=20260918-2">
+<link rel="stylesheet" href="cart-drawer.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header class="page-header">
+  <button id="menuButton" class="icon-btn" type="button" aria-label="เปิดเมนู">☰</button>
+  <h1>เช็กออเดอร์</h1>
+  <button type="button" class="cart-btn" onclick="openCartDrawer()" aria-label="เปิดตะกร้า">
+    🛒
+    <span id="cartCount">0</span>
+  </button>
+</header>
+
+<div id="overlay" class="overlay hidden"></div>
+
+<aside id="sideMenu" class="side-menu">
+  <div class="menu-header"><h2>Rinka Shop</h2></div>
+  <a href="home.html">🏠 หน้าแรก</a>
+  <a href="browse.html">🛍️ สินค้าทั้งหมด</a>
+  <a href="categories.html">🏷️ หมวดสินค้า</a>
+  <a href="lookup.html" class="active">📦 เช็กออเดอร์</a>
+  <a href="change-address.html">📍 เปลี่ยนที่อยู่</a>
+  <a href="account.html">👤 บัญชีของฉัน</a>
+  <a href="cart.html">🛒 ตะกร้า</a>
+  <a href="https://x.com/prewithrinka" target="_blank" rel="noopener noreferrer">📞 ติดต่อร้าน</a>
+</aside>
+
 <main>
 <section class="card">
 <h1>🔎 เช็กออเดอร์</h1>
@@ -245,6 +270,8 @@ function toggleOrderDetail(button,id){
 
 document.getElementById("twitter").addEventListener("keydown",e=>{if(e.key==="Enter")searchOrders()});
 </script>
+<script src="menu.js"></script>
+<script src="cart-drawer.js"></script>
 <script src="theme.js?v=20260918-2"></script>
 </body>
 </html>
