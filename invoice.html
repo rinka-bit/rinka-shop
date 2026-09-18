@@ -2825,22 +2825,13 @@ async function loadExistingCustomerData(){
         : [];
 
 
+    /*
+    Backend เลือกที่อยู่ที่ "ครบที่สุด" มาให้แล้ว
+    ไม่เลือก default ที่อาจมีแค่ชื่อ/เบอร์ก่อนที่อยู่เต็ม
+    */
     const address =
       result.address ||
       result.default_address ||
-      addresses.find(
-        item =>
-          item &&
-          (
-            item.is_default === true ||
-            String(
-              item.is_default || ""
-            ).toLowerCase() === "true" ||
-            String(
-              item.is_default || ""
-            ) === "1"
-          )
-      ) ||
       addresses[0] ||
       {};
 
@@ -2908,12 +2899,27 @@ async function loadExistingCustomerData(){
 
     if(message){
 
+      const hasFullAddress =
+        Boolean(
+          address.address ||
+          address.subdistrict ||
+          address.district ||
+          address.province ||
+          address.postcode
+        );
+
       message.textContent =
-        Object.keys(address).length
+        hasFullAddress
           ? "✅ โหลดข้อมูลที่อยู่เดิมแล้ว ตรวจสอบอีกครั้งก่อนชำระเงินนะคะ"
-          : "พบข้อมูลลูกค้าแล้ว แต่ยังไม่มีที่อยู่ที่บันทึกไว้";
+          : "พบข้อมูลลูกค้าแล้ว แต่ยังไม่พบที่อยู่เต็มที่บันทึกไว้";
 
     }
+
+
+    console.log(
+      "CUSTOMER ADDRESS LOOKUP PROFILE:",
+      result.performance || {}
+    );
 
 
   }catch(error){
