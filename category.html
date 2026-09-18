@@ -20,6 +20,7 @@ button,input,a{font:inherit}.topbar{position:sticky;top:0;z-index:100;min-height
 .state{min-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;border:1px solid var(--border);border-radius:20px;background:#fff}.state p{margin:0;color:var(--muted)}.state button,.state a{border:none;border-radius:999px;padding:10px 16px;background:var(--p);color:#fff;text-decoration:none;font-weight:700}.spinner{width:36px;height:36px;border:4px solid #dff2fc;border-top-color:var(--pd);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.hidden{display:none!important}
 @media(min-width:720px){.grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}}@media(max-width:600px){.topbar{min-height:64px;padding:9px 11px}.topbar h1{font-size:17px}.container{padding:14px 10px 36px}.hero{padding:17px}.toolbar{align-items:stretch;flex-direction:column}.result-count{padding-left:3px}}
 </style>
+<link rel="stylesheet" href="theme.css?v=20260918-2">
 </head>
 <body>
 <header class="topbar"><button type="button" onclick="goBack()">←</button><h1 id="topTitle">หมวดสินค้า</h1>
@@ -431,5 +432,6 @@ function bool(v){return v===true||v===1||["true","yes","1","active"].includes(St
 <script src="catalog.js?v=20260819-1"></script>
 <script src="cart-drawer.js"></script>
  
+<script src="theme.js?v=20260918-2"></script>
 </body>
 </html>
