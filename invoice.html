@@ -761,6 +761,8 @@ const API =
 
 let CURRENT_INVOICE = null;
 
+let CURRENT_INVOICE_ITEMS = [];
+
 let CURRENT_BANKS = [];
 
 let SELECTED_BANK = null;
@@ -870,6 +872,13 @@ async function loadInvoice(){
     CURRENT_INVOICE =
       result.invoice || {};
 
+    CURRENT_INVOICE_ITEMS =
+      Array.isArray(
+        result.items
+      )
+        ? result.items
+        : [];
+
 
     /*
     Invoice ที่แจ้งชำระแล้ว:
@@ -906,11 +915,35 @@ async function loadInvoice(){
 
 
     /*
-    โหลดบัญชีธนาคารหลังจาก
-    Invoice โหลดสำเร็จ
+    Backend รุ่นใหม่รวม BankAccounts มากับ dmInvoice แล้ว
+    จึงไม่ต้องยิง Apps Script รอบที่ 2
     */
+    if(
+      Array.isArray(
+        result.banks
+      )
+    ){
 
-    await loadBanks();
+      CURRENT_BANKS =
+        result.banks;
+
+      renderBanks();
+
+    }else{
+
+      /*
+      fallback เผื่อ backend เก่ายัง deploy ไม่ครบ
+      ไม่ block การแสดง Invoice
+      */
+      loadBanks();
+
+    }
+
+
+    console.log(
+      "DM INVOICE LOAD PROFILE:",
+      result.performance || {}
+    );
 
 
   }catch(error){
@@ -2450,6 +2483,135 @@ async function submitPayment(){
       `;
 
     }
+
+
+    /*
+    สร้าง Order snapshot ก่อน redirect
+    order.html จะ render ได้ทันทีโดยไม่รอ Apps Script
+    */
+    const paidInvoiceId =
+      result.invoice_id ||
+      getInvoiceId();
+
+    const dmSnapshot = {
+
+      ...(CURRENT_INVOICE || {}),
+
+      order_id:
+        paidInvoiceId,
+
+      invoice_id:
+        paidInvoiceId,
+
+      order_source:
+        "dm_invoice",
+
+      customer_name:
+        data.receiver ||
+        "ลูกค้า",
+
+      receiver:
+        data.receiver,
+
+      twitter:
+        data.twitter,
+
+      email:
+        data.email,
+
+      phone:
+        data.phone,
+
+      address:
+        data.address,
+
+      subdistrict:
+        data.subdistrict,
+
+      district:
+        data.district,
+
+      province:
+        data.province,
+
+      postcode:
+        data.postcode,
+
+      payment_status:
+        "processing",
+
+      status:
+        "payment_submitted",
+
+      items:
+        CURRENT_INVOICE_ITEMS.map(
+          item => ({
+
+            ...item,
+
+            name:
+              item.product_name ||
+              "สินค้า",
+
+            qty:
+              Number(
+                item.quantity || 0
+              ),
+
+            price:
+              Number(
+                item.unit_price || 0
+              ),
+
+            image:
+              item.image_url ||
+              item.image ||
+              "",
+
+            selected_option:
+              item.character_name
+                ? {
+                    character:
+                      item.character_name
+                  }
+                : {}
+
+          })
+        ),
+
+      gifts:[],
+      shipments:[],
+      pending_shipment:null,
+      pending_shipment_id:"",
+      shipping_payment_status:""
+
+    };
+
+
+    try{
+
+      localStorage.setItem(
+        "rinka_order_snapshot_" +
+        paidInvoiceId,
+        JSON.stringify(
+          dmSnapshot
+        )
+      );
+
+    }catch(snapshotError){
+
+      console.warn(
+        "Save DM order snapshot failed:",
+        snapshotError
+      );
+
+    }
+
+
+    console.log(
+      "DM PAYMENT PROFILE:",
+      result.performance || {}
+    );
 
 
     /*
