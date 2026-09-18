@@ -2015,14 +2015,240 @@ try{
     performance.now();
 
 
-  const transactionResponse =
-    await paymentFetch(
+  /*
+  PERFORMANCE / RELIABILITY PASS #16
+
+  Apps Script บางครั้ง backend ทำงานเสร็จแล้ว แต่ HTTP response
+  กลับมาที่ browser ช้ากว่าหลายวินาที
+
+  หลัง 8 วินาที เราจะตรวจสถานะ payment แบบ read-only 1 ครั้ง
+  พร้อมกับปล่อย POST เดิมทำงานต่อ:
+  - ไม่ abort POST
+  - ไม่ส่ง createPaidCheckout ซ้ำ
+  - ไม่สร้าง Order/Payment ซ้ำ
+  - ถ้ายืนยันว่า paid แล้ว ใช้ผล recovery เป็น success ได้ทันที
+  */
+
+  const transactionPromise =
+    paymentFetch(
       API,
       {
         method:"POST",
         body:transactionForm
       }
+    )
+      .then(
+        async response => {
+
+          if(!response.ok){
+
+            throw new Error(
+              "HTTP " +
+              response.status
+            );
+
+          }
+
+
+          return {
+            source:"transaction",
+            result:
+              await response.json()
+          };
+
+        }
+      );
+
+
+  const earlyRecoveryPromise =
+    new Promise(
+      resolve => {
+
+        setTimeout(
+          async()=>{
+
+            try{
+
+              const recoveryForm =
+                new FormData();
+
+
+              recoveryForm.append(
+                "action",
+                "recoverPaidCheckout"
+              );
+
+
+              recoveryForm.append(
+                "payload",
+                JSON.stringify({
+
+                  order_id:
+                    clientOrderId,
+
+                  email:
+                    address.email || ""
+
+                })
+              );
+
+
+              const response =
+                await paymentFetch(
+                  API,
+                  {
+                    method:"POST",
+                    body:recoveryForm
+                  }
+                );
+
+
+              if(!response.ok){
+
+                resolve({
+                  source:"early_recovery",
+                  result:null
+                });
+
+                return;
+
+              }
+
+
+              const recovery =
+                await response.json();
+
+
+              if(
+                recovery &&
+                recovery.success === true &&
+                recovery.recovered === true &&
+                recovery.order_id
+              ){
+
+                resolve({
+
+                  source:
+                    "early_recovery",
+
+                  result:{
+
+                    success:true,
+
+                    order_id:
+                      String(
+                        recovery.order_id
+                      ).trim(),
+
+                    payment_status:
+                      "paid",
+
+                    recovered:true,
+
+                    early_recovery:true,
+
+                    performance:{
+                      recovery_ms:
+                        recovery.performance?.total_ms ||
+                        null
+                    }
+
+                  }
+
+                });
+
+                return;
+
+              }
+
+
+              /*
+              ยังไม่ paid ณ จุดที่ตรวจ:
+              ไม่ถือว่า fail และไม่ retry
+              รอ POST หลักต่อไป
+              */
+              resolve({
+                source:"early_recovery",
+                result:null
+              });
+
+
+            }catch(error){
+
+              console.warn(
+                "Early paid recovery check failed:",
+                error
+              );
+
+
+              resolve({
+                source:"early_recovery",
+                result:null
+              });
+
+            }
+
+          },
+          8000
+        );
+
+      }
     );
+
+
+  let transactionEnvelope =
+    await Promise.race([
+      transactionPromise,
+      earlyRecoveryPromise
+    ]);
+
+
+  /*
+  ถ้า recovery 8 วิยังไม่พบ paid
+  ให้รอ POST หลักต่อเหมือนเดิม
+  */
+  if(
+    !transactionEnvelope ||
+    !transactionEnvelope.result
+  ){
+
+    transactionEnvelope =
+      await transactionPromise;
+
+  }
+
+
+  transactionResult =
+    transactionEnvelope.result;
+
+
+  if(
+    transactionEnvelope.source ===
+    "early_recovery"
+  ){
+
+    console.log(
+      "PAID CHECKOUT EARLY RECOVERY SUCCESS",
+      {
+        browser_ms:
+          Math.round(
+            performance.now() -
+            checkoutRequestStartedAt
+          ),
+        order_id:
+          transactionResult.order_id
+      }
+    );
+
+  }
+
+
+  /*
+  transactionResponse ถูก parse ภายใน transactionPromise แล้ว
+  */
+  const transactionResponse = {
+    ok:true
+  };
 
 
   if(!transactionResponse.ok){
@@ -2033,10 +2259,6 @@ try{
     );
 
   }
-
-
-  transactionResult =
-    await transactionResponse.json();
 
 
   const checkoutProfile =
@@ -2067,6 +2289,11 @@ try{
         Math.round(
           performance.now() -
           checkoutRequestStartedAt
+        ),
+      "response_source=" +
+        String(
+          transactionEnvelope?.source ||
+          "transaction"
         ),
       "backend_total_ms=" +
         (
