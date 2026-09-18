@@ -535,6 +535,30 @@ button{
 
 }
 
+
+
+/* Rinka Points — Phase 1 */
+.points-card{
+  margin-top:18px;
+  padding:22px;
+  border-radius:20px;
+  background:var(--rk-surface, #fff);
+  border:1px solid var(--rk-border, #e9e9ef);
+  box-shadow:var(--rk-shadow-soft, 0 8px 24px rgba(0,0,0,.06));
+}
+.points-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;}
+.points-title{font-size:18px;font-weight:700;}
+.points-balance{font-size:34px;font-weight:800;line-height:1.1;margin-top:8px;}
+.points-balance span{font-size:15px;font-weight:600;color:var(--rk-muted, #777);}
+.points-rate{font-size:13px;color:var(--rk-muted, #777);margin-top:6px;}
+.points-history{margin-top:18px;border-top:1px solid var(--rk-border, #eee);padding-top:14px;}
+.points-history-title{font-size:14px;font-weight:700;margin-bottom:8px;}
+.points-tx{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--rk-border, #eee);font-size:13px;}
+.points-tx:last-child{border-bottom:0;}
+.points-tx-note{color:var(--rk-muted, #777);}
+.points-tx-value{font-weight:700;white-space:nowrap;}
+.points-empty{font-size:13px;color:var(--rk-muted, #777);}
+
 </style>
 
 <link rel="stylesheet" href="theme.css?v=20260918-2">
@@ -687,6 +711,20 @@ class="profile-social hidden">
 
 </div>
 
+</section>
+
+<section class="points-card" aria-labelledby="rinkaPointsTitle">
+  <div class="points-head">
+    <div>
+      <div id="rinkaPointsTitle" class="points-title">⭐ Rinka Points</div>
+      <div id="rinkaPointsBalance" class="points-balance">— <span>แต้ม</span></div>
+      <div id="rinkaPointsRate" class="points-rate">กำลังโหลดข้อมูลแต้ม...</div>
+    </div>
+  </div>
+  <div class="points-history">
+    <div class="points-history-title">รายการล่าสุด</div>
+    <div id="rinkaPointsHistory" class="points-empty">กำลังโหลด...</div>
+  </div>
 </section>
 
 <section class="account-section">
@@ -896,6 +934,7 @@ document.addEventListener(
     bindProfileAvatarUpload();
     updateCartCount();
     loadOrders();
+    loadRinkaPoints();
 
   }
 );
@@ -2044,6 +2083,57 @@ function safeAccountJson(
   }
 
 }
+
+async function loadRinkaPoints(){
+
+  const balanceBox = document.getElementById("rinkaPointsBalance");
+  const rateBox = document.getElementById("rinkaPointsRate");
+  const historyBox = document.getElementById("rinkaPointsHistory");
+
+  try{
+    const query = new URLSearchParams();
+    query.set("action", "customerPoints");
+    query.set("session_token", sessionToken);
+
+    const response = await fetch(API + "?" + query.toString());
+    if(!response.ok){
+      throw new Error("HTTP " + response.status);
+    }
+
+    const result = await response.json();
+    if(!result || result.success !== true){
+      throw new Error(result?.error || "โหลดข้อมูลแต้มไม่สำเร็จ");
+    }
+
+    const balance = Number(result.balance || 0);
+    const rate = Number(result.baht_per_point || 100);
+    balanceBox.innerHTML = `${balance.toLocaleString("th-TH")} <span>แต้ม</span>`;
+    rateBox.textContent = `ทุก ${rate.toLocaleString("th-TH")} บาทของยอดสินค้า = 1 แต้ม`;
+
+    const transactions = Array.isArray(result.transactions) ? result.transactions : [];
+    if(!transactions.length){
+      historyBox.className = "points-empty";
+      historyBox.textContent = "ยังไม่มีประวัติแต้ม";
+      return;
+    }
+
+    historyBox.className = "";
+    historyBox.innerHTML = transactions.slice(0,5).map(tx => {
+      const points = Number(tx.points || 0);
+      const sign = points > 0 ? "+" : "";
+      const note = escapeAccountHtml(tx.note || tx.order_id || "รายการแต้ม");
+      return `<div class="points-tx"><div class="points-tx-note">${note}</div><div class="points-tx-value">${sign}${points.toLocaleString("th-TH")} แต้ม</div></div>`;
+    }).join("");
+
+  }catch(error){
+    console.error("loadRinkaPoints error:", error);
+    balanceBox.innerHTML = `0 <span>แต้ม</span>`;
+    rateBox.textContent = "ไม่สามารถโหลดข้อมูลแต้มได้ในขณะนี้";
+    historyBox.className = "points-empty";
+    historyBox.textContent = "ลองรีเฟรชหน้าอีกครั้ง";
+  }
+}
+
 
 function escapeAccountHtml(
   value
