@@ -4,28 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>สินค้า | Rinka Shop</title>
+<script>
+(function(){
+  try{
+    const m=localStorage.getItem("rinka_theme_mode")||"system";
+    const d=m==="dark"||(m==="system"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.dataset.themeMode=m;
+    document.documentElement.dataset.theme=d?"dark":"light";
+  }catch(_){}
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link
-rel="stylesheet"
-href="browse.css?v=20260819-4">
+<link rel="stylesheet" href="browse.css?v=20260819-4">
 <link rel="stylesheet" href="cart-drawer.css">
+<link rel="stylesheet" href="theme.css?v=20260918-1">
 </head>
 <body>
 <header class="page-header">
   <button id="menuButton" class="icon-btn" type="button" aria-label="เปิดเมนู">☰</button>
   <h1 id="pageTitle">สินค้า</h1>
- <button
-type="button"
-class="cart-btn"
-onclick="openCartDrawer()"
-aria-label="เปิดตะกร้า"
->
-  🛒
-  <span id="cartCount">0</span>
-</button>
+  <button type="button" class="cart-btn" onclick="openCartDrawer()" aria-label="เปิดตะกร้า">🛒<span id="cartCount">0</span></button>
 </header>
 <div id="overlay" class="overlay hidden"></div>
 <aside id="sideMenu" class="side-menu">
@@ -37,65 +38,45 @@ aria-label="เปิดตะกร้า"
   <a href="lookup.html">📄 เช็กออเดอร์</a>
   <a href="cart.html">🛒 ตะกร้า</a>
 </aside>
-
 <main class="browse-container">
-  <nav id="breadcrumb" class="breadcrumb" aria-label="breadcrumb">
-    <a href="home.html">หน้าแรก</a><span>›</span><span>สินค้า</span>
-  </nav>
-
+  <nav id="breadcrumb" class="breadcrumb" aria-label="breadcrumb"><a href="home.html">หน้าแรก</a><span>›</span><span>สินค้า</span></nav>
   <section class="browse-heading">
-    <div>
-      <h2 id="browseTitle">สินค้า</h2>
-      <p id="browseDescription">กำลังโหลดสินค้า...</p>
-    </div>
+    <div><h2 id="browseTitle">สินค้า</h2><p id="browseDescription">กำลังโหลดสินค้า...</p></div>
     <div id="resultCount" class="result-count" aria-live="polite"></div>
   </section>
-
   <section class="browse-toolbar" aria-label="เครื่องมือค้นหาและเรียงสินค้า">
     <div class="search-wrap">
       <span class="search-icon">🔎</span>
       <input type="search" id="searchInput" placeholder="ค้นหาชื่อสินค้า แฟนด้อม หรือหมวดหมู่" autocomplete="off">
       <button id="clearSearchButton" class="clear-search hidden" type="button" aria-label="ล้างคำค้น">✕</button>
     </div>
-
     <select id="sortSelect" aria-label="เรียงสินค้า">
       <option value="newest">ใหม่ล่าสุด</option>
       <option value="price_low">ราคา ต่ำ → สูง</option>
       <option value="price_high">ราคา สูง → ต่ำ</option>
       <option value="name">ชื่อสินค้า</option>
     </select>
-
     <button id="resetFilterButton" class="secondary-btn hidden" type="button">↻ ล้างตัวกรอง</button>
   </section>
-
   <div id="activeFilter" class="active-filter hidden"></div>
   <div id="statusMessage" class="status-message hidden" role="alert"></div>
-
   <section id="loading" class="loading" aria-live="polite">
-    <div class="loading-spinner"></div>
-    <strong>กำลังโหลดสินค้า...</strong>
-    <span>รอสักครู่นะคะ</span>
+    <div class="loading-spinner"></div><strong>กำลังโหลดสินค้า...</strong><span>รอสักครู่นะคะ</span>
   </section>
-
   <section id="productGrid" class="product-grid" aria-live="polite"></section>
-
   <section id="emptyState" class="empty-state hidden">
-    <div class="cat">(=^･ω･^=)</div>
-    <h3>ไม่พบสินค้า</h3>
+    <div class="cat">(=^･ω･^=)</div><h3>ไม่พบสินค้า</h3>
     <p id="emptyDescription">ลองเปลี่ยนคำค้นหรือล้างตัวกรองดูนะคะ</p>
     <button id="emptyResetButton" class="primary-btn" type="button">ดูสินค้าทั้งหมด</button>
   </section>
 </main>
-
 <script src="app.js?v=20260819-4"></script>
 <script src="components.js?v=20260819-4"></script>
 <script src="menu.js?v=20260819-4"></script>
-
 <script src="cart-drawer.js?v=20260819-4"></script>
 <script src="ui.js?v=20260819-4"></script>
-
 <script src="catalog.js?v=20260819-1"></script>
-
 <script src="browse.js?v=20260819-4"></script>
+<script src="theme.js?v=20260918-1"></script>
 </body>
 </html>
