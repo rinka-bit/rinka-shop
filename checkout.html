@@ -767,6 +767,79 @@ button:disabled{
 
 }
 
+
+.checkout-card-note{
+  margin:5px 0 0;
+  color:#7890a0;
+  font-size:12px;
+  line-height:1.5;
+}
+.guest-checkout-form{
+  display:grid;
+  gap:13px;
+}
+.guest-form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.guest-field{
+  display:grid;
+  gap:6px;
+}
+.guest-field.full{
+  grid-column:1/-1;
+}
+.guest-field label{
+  color:#486579;
+  font-size:12px;
+  font-weight:700;
+}
+.guest-field input,
+.guest-field textarea{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid #d8e7ef;
+  border-radius:12px;
+  padding:11px 12px;
+  background:#fff;
+  color:#263b49;
+  font:inherit;
+}
+.guest-field textarea{
+  min-height:78px;
+  resize:vertical;
+}
+.guest-lookup-row{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
+  align-items:end;
+}
+.guest-lookup-button{
+  border:0;
+  border-radius:12px;
+  padding:11px 14px;
+  background:#eaf7ff;
+  color:#3476a2;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.guest-lookup-status{
+  min-height:18px;
+  color:#6f8797;
+  font-size:12px;
+}
+.guest-lookup-status.ok{color:#16815c}
+.guest-lookup-status.error{color:#c2415d}
+@media(max-width:680px){
+  .guest-form-grid,
+  .guest-lookup-row{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 
 </head>
@@ -816,17 +889,14 @@ class="checkout-cart-count">
 <div>
 
 <h2>
-📍 ที่อยู่จัดส่ง
+📍 ข้อมูลผู้สั่งซื้อและที่อยู่จัดส่ง
 </h2>
 
-</div>
+<p class="checkout-card-note">
+ไม่จำเป็นต้องเข้าสู่ระบบ • ลูกค้าเก่าสามารถโหลดข้อมูลเดิมด้วย Twitter/X + Email
+</p>
 
-<button
-type="button"
-class="checkout-secondary-button"
-onclick="window.location.href='address-book.html?select=checkout'">
-เปลี่ยนที่อยู่
-</button>
+</div>
 
 </div>
 
@@ -967,12 +1037,7 @@ JSON.parse(
   ) || "{}"
 );
 
-if(!customer.email){
 
-  window.location =
-  "login.html";
-
-}
   
 let cart = [];
 
@@ -1129,38 +1194,57 @@ async function loadCheckoutBootstrap(){
     (async()=>{
 
       const sessionToken =
-        localStorage.getItem(
-          "session_token"
-        ) ||
-        customer.session_token ||
-        "";
+        String(
+          localStorage.getItem(
+            "session_token"
+          ) ||
+          customer.session_token ||
+          ""
+        ).trim();
 
 
-      const addressQuery =
-        new URLSearchParams();
+      const giftPromise =
+        fetch(
+          API +
+          "?action=checkoutGiftData"
+        );
 
 
-      addressQuery.set(
-        "action",
-        "customerAddresses"
-      );
+      let addressPromise =
+        Promise.resolve(
+          null
+        );
 
 
       if(sessionToken){
 
-        addressQuery.set(
+        const query =
+          new URLSearchParams();
+
+
+        query.set(
+          "action",
+          "customerAddresses"
+        );
+
+
+        query.set(
           "session_token",
           sessionToken
         );
 
+
+        addressPromise =
+          fetch(
+            API +
+            "?" +
+            query.toString()
+          );
+
       }
 
 
-      const addressStartedAt =
-        performance.now();
-
-
-      const giftStartedAt =
+      const startedAt =
         performance.now();
 
 
@@ -1169,40 +1253,9 @@ async function loadCheckoutBootstrap(){
         giftResponse
       ] =
         await Promise.all([
-
-          fetch(
-            API +
-            "?" +
-            addressQuery.toString()
-          ),
-
-          fetch(
-            API +
-            "?action=checkoutGiftData"
-          )
-
+          addressPromise,
+          giftPromise
         ]);
-
-
-      const totalNetworkMs =
-        Math.round(
-          Math.max(
-            performance.now() -
-            addressStartedAt,
-            performance.now() -
-            giftStartedAt
-          )
-        );
-
-
-      if(!addressResponse.ok){
-
-        throw new Error(
-          "โหลดที่อยู่ไม่สำเร็จ HTTP " +
-          addressResponse.status
-        );
-
-      }
 
 
       if(!giftResponse.ok){
@@ -1215,30 +1268,8 @@ async function loadCheckoutBootstrap(){
       }
 
 
-      const [
-        addressResult,
-        giftResult
-      ] =
-        await Promise.all([
-
-          addressResponse.json(),
-
-          giftResponse.json()
-
-        ]);
-
-
-      if(
-        !addressResult ||
-        addressResult.success !== true
-      ){
-
-        throw new Error(
-          addressResult?.error ||
-          "โหลดที่อยู่ไม่สำเร็จ"
-        );
-
-      }
+      const giftResult =
+        await giftResponse.json();
 
 
       if(
@@ -1254,65 +1285,71 @@ async function loadCheckoutBootstrap(){
       }
 
 
+      let addresses = [];
+
+
+      if(addressResponse){
+
+        if(addressResponse.ok){
+
+          const addressResult =
+            await addressResponse.json();
+
+
+          if(
+            addressResult &&
+            addressResult.success === true &&
+            Array.isArray(
+              addressResult.addresses
+            )
+          ){
+
+            addresses =
+              addressResult.addresses;
+
+          }
+
+        }
+
+      }
+
+
       const result = {
 
         success:true,
-
-        addresses:
-          Array.isArray(
-            addressResult.addresses
-          )
-            ? addressResult.addresses
-            : [],
-
+        addresses,
         campaigns:
-          Array.isArray(
-            giftResult.campaigns
-          )
+          Array.isArray(giftResult.campaigns)
             ? giftResult.campaigns
             : [],
-
         rules:
-          Array.isArray(
-            giftResult.rules
-          )
+          Array.isArray(giftResult.rules)
             ? giftResult.rules
             : [],
-
         items:
-          Array.isArray(
-            giftResult.items
-          )
+          Array.isArray(giftResult.items)
             ? giftResult.items
             : [],
-
         characters:
-          Array.isArray(
-            giftResult.characters
-          )
+          Array.isArray(giftResult.characters)
             ? giftResult.characters
             : [],
-
         exclusions:
-          Array.isArray(
-            giftResult.exclusions
-          )
+          Array.isArray(giftResult.exclusions)
             ? giftResult.exclusions
             : [],
-
         collections:
-          Array.isArray(
-            giftResult.collections
-          )
+          Array.isArray(giftResult.collections)
             ? giftResult.collections
             : [],
-
         performance:{
-          network_parallel_ms:
-            totalNetworkMs,
-          gift_backend:
-            giftResult.performance ||
-            null
+          total_network_ms:
+            Math.round(
+              performance.now() -
+              startedAt
+            ),
+          guest:
+            !sessionToken
         }
 
       };
@@ -1338,7 +1375,6 @@ async function loadCheckoutBootstrap(){
     checkoutBootstrapPromise =
       null;
 
-
     throw error;
 
   }
@@ -1353,33 +1389,34 @@ async function loadDefaultAddress(){
       "selectedAddress"
     );
 
-  if(box){
-
-    box.innerHTML = `
-
-<div class="checkout-inline-loading">
-
-  <span class="checkout-mini-spinner"></span>
-
-  <span>
-    กำลังโหลดที่อยู่จัดส่ง...
-  </span>
-
-</div>
-
-`;
-
-  }
 
   let selectedAddress =
     getCheckoutStoredValue(
       "selectedCheckoutAddress",
       null
+    ) ||
+    getCheckoutStoredValue(
+      "checkoutAddress",
+      null
     );
+
+
+  const sessionToken =
+    String(
+      localStorage.getItem(
+        "session_token"
+      ) ||
+      customer.session_token ||
+      ""
+    ).trim();
+
 
   try{
 
-    if(!selectedAddress){
+    if(
+      !selectedAddress &&
+      sessionToken
+    ){
 
       const bootstrap =
         await loadCheckoutBootstrap();
@@ -1391,6 +1428,7 @@ async function loadDefaultAddress(){
         )
           ? bootstrap.addresses
           : [];
+
 
       selectedAddress =
         addresses.find(
@@ -1404,119 +1442,11 @@ async function loadDefaultAddress(){
 
     }
 
-    if(!selectedAddress){
 
-      window.checkoutAddress =
-        null;
+    renderGuestCheckoutForm(
+      selectedAddress || {}
+    );
 
-      box.innerHTML = `
-
-<div class="checkout-address-empty">
-
-  <div class="checkout-state-icon">
-    📍
-  </div>
-
-  <b>
-    ยังไม่มีที่อยู่จัดส่ง
-  </b>
-
-  <span>
-    กรุณาเพิ่มหรือเลือกที่อยู่ก่อนดำเนินการต่อ
-  </span>
-
-</div>
-
-`;
-
-      updateCheckoutPaymentState();
-
-      return;
-
-    }
-
-    window.checkoutAddress =
-      selectedAddress;
-
-    box.innerHTML = `
-
-<div class="checkout-address-card">
-
-  <div class="checkout-address-head">
-
-    <div>
-
-      <div class="checkout-address-name">
-
-        ${escapeHtml(
-          selectedAddress.receiver ||
-          customer.username ||
-          "ผู้รับสินค้า"
-        )}
-
-      </div>
-
-      ${
-        normalizeCheckoutBoolean(
-          selectedAddress.is_default
-        )
-          ? `
-
-<span class="checkout-default-badge">
-  ค่าเริ่มต้น
-</span>
-
-`
-          : ""
-      }
-
-    </div>
-
-    <span class="checkout-address-icon">
-      📦
-    </span>
-
-  </div>
-
-  <div class="checkout-address-line">
-
-    <span>📞</span>
-
-    <span>
-      ${escapeHtml(
-        selectedAddress.phone || "-"
-      )}
-    </span>
-
-  </div>
-
-  <div class="checkout-address-line">
-
-    <span>📍</span>
-
-    <span>
-
-      ${escapeHtml(
-        [
-          selectedAddress.address,
-          selectedAddress.subdistrict,
-          selectedAddress.district,
-          selectedAddress.province,
-          selectedAddress.postcode
-        ]
-          .filter(Boolean)
-          .join(" ")
-      )}
-
-    </span>
-
-  </div>
-
-</div>
-
-`;
-
-    updateCheckoutPaymentState();
 
   }catch(error){
 
@@ -1525,39 +1455,421 @@ async function loadDefaultAddress(){
       error
     );
 
-    window.checkoutAddress =
-      null;
 
-    box.innerHTML = `
+    renderGuestCheckoutForm(
+      selectedAddress || {}
+    );
 
-<div class="checkout-error-box">
+  }
 
-  <b>
-    โหลดที่อยู่จัดส่งไม่สำเร็จ
-  </b>
+}
 
-  <span>
-    ${escapeHtml(
-      error.message ||
-      String(error)
-    )}
-  </span>
 
-  <button
-  type="button"
-  onclick="loadDefaultAddress()">
-    ลองใหม่
-  </button>
+function renderGuestCheckoutForm(
+  data
+){
+
+  const box =
+    document.getElementById(
+      "selectedAddress"
+    );
+
+
+  const initial = {
+
+    social:
+      data.social ||
+      customer.twitter ||
+      customer.social ||
+      "",
+
+    email:
+      data.email ||
+      customer.email ||
+      "",
+
+    receiver:
+      data.receiver ||
+      customer.username ||
+      "",
+
+    phone:
+      data.phone ||
+      "",
+
+    address:
+      data.address ||
+      "",
+
+    subdistrict:
+      data.subdistrict ||
+      "",
+
+    district:
+      data.district ||
+      "",
+
+    province:
+      data.province ||
+      "",
+
+    postcode:
+      data.postcode ||
+      ""
+
+  };
+
+
+  box.innerHTML = `
+
+<div class="guest-checkout-form">
+
+  <div class="guest-lookup-row">
+
+    <div class="guest-field">
+      <label>Twitter / X *</label>
+      <input id="guestSocial" value="${escapeHtml(initial.social)}" placeholder="@username">
+    </div>
+
+    <div class="guest-field">
+      <label>Email *</label>
+      <input id="guestEmail" type="email" value="${escapeHtml(initial.email)}" placeholder="example@email.com">
+    </div>
+
+    <button
+    type="button"
+    class="guest-lookup-button"
+    onclick="lookupPreviousCheckoutData()">
+      โหลดข้อมูลเดิม
+    </button>
+
+  </div>
+
+  <div id="guestLookupStatus" class="guest-lookup-status"></div>
+
+  <div class="guest-form-grid">
+
+    <div class="guest-field">
+      <label>ชื่อผู้รับ *</label>
+      <input id="guestReceiver" value="${escapeHtml(initial.receiver)}">
+    </div>
+
+    <div class="guest-field">
+      <label>เบอร์โทร *</label>
+      <input id="guestPhone" value="${escapeHtml(initial.phone)}">
+    </div>
+
+    <div class="guest-field full">
+      <label>ที่อยู่ *</label>
+      <textarea id="guestAddress">${escapeHtml(initial.address)}</textarea>
+    </div>
+
+    <div class="guest-field">
+      <label>แขวง / ตำบล</label>
+      <input id="guestSubdistrict" value="${escapeHtml(initial.subdistrict)}">
+    </div>
+
+    <div class="guest-field">
+      <label>เขต / อำเภอ</label>
+      <input id="guestDistrict" value="${escapeHtml(initial.district)}">
+    </div>
+
+    <div class="guest-field">
+      <label>จังหวัด *</label>
+      <input id="guestProvince" value="${escapeHtml(initial.province)}">
+    </div>
+
+    <div class="guest-field">
+      <label>รหัสไปรษณีย์ *</label>
+      <input id="guestPostcode" inputmode="numeric" value="${escapeHtml(initial.postcode)}">
+    </div>
+
+  </div>
 
 </div>
 
 `;
 
-    updateCheckoutPaymentState();
+
+  [
+    "guestSocial",
+    "guestEmail",
+    "guestReceiver",
+    "guestPhone",
+    "guestAddress",
+    "guestSubdistrict",
+    "guestDistrict",
+    "guestProvince",
+    "guestPostcode"
+  ].forEach(
+    id => {
+
+      document
+        .getElementById(id)
+        ?.addEventListener(
+          "input",
+          syncGuestCheckoutAddress
+        );
+
+    }
+  );
+
+
+  syncGuestCheckoutAddress();
+
+}
+
+
+function normalizeGuestTwitter(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .trim()
+    .replace(
+      /^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i,
+      ""
+    )
+    .replace(/^@/,"")
+    .split(/[/?#]/)[0]
+    .trim();
+
+}
+
+
+function syncGuestCheckoutAddress(){
+
+  const get =
+    id =>
+      String(
+        document
+          .getElementById(id)
+          ?.value ||
+        ""
+      ).trim();
+
+
+  const data = {
+
+    social:
+      normalizeGuestTwitter(
+        get("guestSocial")
+      ),
+
+    email:
+      get("guestEmail"),
+
+    receiver:
+      get("guestReceiver"),
+
+    phone:
+      get("guestPhone"),
+
+    address:
+      get("guestAddress"),
+
+    subdistrict:
+      get("guestSubdistrict"),
+
+    district:
+      get("guestDistrict"),
+
+    province:
+      get("guestProvince"),
+
+    postcode:
+      get("guestPostcode")
+
+  };
+
+
+  const valid =
+    Boolean(
+      data.social &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        data.email
+      ) &&
+      data.receiver &&
+      data.phone &&
+      data.address &&
+      data.province &&
+      data.postcode
+    );
+
+
+  window.checkoutAddress =
+    valid
+      ? data
+      : null;
+
+
+  updateCheckoutPaymentState();
+
+}
+
+
+async function lookupPreviousCheckoutData(){
+
+  const twitter =
+    normalizeGuestTwitter(
+      document
+        .getElementById(
+          "guestSocial"
+        )
+        ?.value
+    );
+
+
+  const email =
+    String(
+      document
+        .getElementById(
+          "guestEmail"
+        )
+        ?.value ||
+      ""
+    ).trim();
+
+
+  const status =
+    document.getElementById(
+      "guestLookupStatus"
+    );
+
+
+  if(
+    !twitter ||
+    !email
+  ){
+
+    status.className =
+      "guest-lookup-status error";
+
+    status.textContent =
+      "กรุณากรอก Twitter/X และ Email ก่อนโหลดข้อมูลเดิม";
+
+    return;
+
+  }
+
+
+  status.className =
+    "guest-lookup-status";
+
+  status.textContent =
+    "กำลังค้นหาข้อมูลเดิม...";
+
+
+  try{
+
+    const query =
+      new URLSearchParams({
+        action:"guestCheckoutLookup",
+        twitter,
+        email
+      });
+
+
+    const response =
+      await fetch(
+        API +
+        "?" +
+        query.toString()
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.error ||
+        "ค้นหาข้อมูลไม่สำเร็จ"
+      );
+
+    }
+
+
+    if(!result.found){
+
+      status.className =
+        "guest-lookup-status error";
+
+      status.textContent =
+        "ไม่พบข้อมูลเดิมที่ตรงกับ Twitter/X + Email นี้";
+
+      return;
+
+    }
+
+
+    const address =
+      Array.isArray(
+        result.addresses
+      )
+        ? result.addresses[0]
+        : null;
+
+
+    if(address){
+
+      renderGuestCheckoutForm({
+
+        ...address,
+
+        social:
+          twitter,
+
+        email:
+          email
+
+      });
+
+
+      const newStatus =
+        document.getElementById(
+          "guestLookupStatus"
+        );
+
+
+      newStatus.className =
+        "guest-lookup-status ok";
+
+      newStatus.textContent =
+        "โหลดข้อมูลเดิมเรียบร้อยแล้ว ✓";
+
+
+    }else{
+
+      status.className =
+        "guest-lookup-status ok";
+
+      status.textContent =
+        "พบข้อมูลลูกค้าเดิม แต่ยังไม่มีที่อยู่ที่บันทึกไว้";
+
+    }
+
+
+  }catch(error){
+
+    status.className =
+      "guest-lookup-status error";
+
+    status.textContent =
+      error.message ||
+      "ค้นหาข้อมูลเดิมไม่สำเร็จ";
 
   }
 
 }
+
 
 function renderItems(){
 
@@ -5201,6 +5513,8 @@ function goPayment(){
   }
 
   if(
+    !addressData.social ||
+    !addressData.email ||
     !addressData.receiver ||
     !addressData.phone ||
     !addressData.address ||
@@ -5209,7 +5523,7 @@ function goPayment(){
   ){
 
     showCheckoutMessage(
-      "ข้อมูลที่อยู่จัดส่งไม่ครบ กรุณาเลือกหรือแก้ไขที่อยู่ใหม่",
+      "กรุณากรอก Twitter/X, Email และข้อมูลจัดส่งที่มีเครื่องหมาย * ให้ครบ",
       true
     );
 
