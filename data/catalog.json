@@ -21337,7 +21337,7 @@
           "option_value": "Box (ไม่ตีลัง)",
           "additional_price": 0,
           "price": 2550,
-          "stock": 9999,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -21644,7 +21644,7 @@
           "option_value": "Durin",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1fn-BBzzk4fxiV_ZCwiGisg6As9F4zkrM&sz=w2000",
           "sort_order": 2
@@ -21655,7 +21655,7 @@
           "option_value": "Lohen",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1eFPnPUJe54gNyK709G5zMYnWoZT_aHIt&sz=w2000",
           "sort_order": 3
@@ -21718,7 +21718,7 @@
           "option_value": "Zhongli",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1JGC82c_Si6uZO41dMbSsEhGNcPkeIeUx&sz=w2000",
           "sort_order": 1
@@ -21807,7 +21807,7 @@
       "sale_start": "",
       "sale_end": "",
       "main_category": "การ์ด",
-      "fandom": "Genshi Impact",
+      "fandom": "Genshin Impact",
       "sub_category": "การ์ด",
       "round": "Genshin 9-2026",
       "description": "ขนาด 75*160มม.",
@@ -21881,7 +21881,7 @@
       "sale_start": "",
       "sale_end": "",
       "main_category": "เข็มกลัด",
-      "fandom": "Genshi Impact",
+      "fandom": "Genshin Impact",
       "sub_category": "เข็มกลัด",
       "round": "Genshin 9-2026",
       "description": "",
@@ -21955,7 +21955,7 @@
       "sale_start": "",
       "sale_end": "",
       "main_category": "การ์ด",
-      "fandom": "Genshi Impact",
+      "fandom": "Genshin Impact",
       "sub_category": "การ์ด",
       "round": "Genshin 9-2026",
       "description": "ขนาด 150*100มม.\n\nสินค้ามีทั้งหมด 15 แบบ แบ่งเป็น\n-แบบธรรมดา 14แบบ+ซีเคร็ต สุ่ม1 จาก 4 แบบ\n-ซีเคร็ตมี 4 แบบ ตามรูป 2 และ 3 ค่ะ",
@@ -22763,7 +22763,7 @@
           "option_value": "Wanderer",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1GJNb50ROdcndkVpmTl794lHsryP2queT&sz=w2000",
           "sort_order": 5
@@ -23021,7 +23021,7 @@
       "sale_start": "",
       "sale_end": "",
       "main_category": "การ์ด",
-      "fandom": "Genshi Impact",
+      "fandom": "Genshin Impact",
       "sub_category": "การ์ด",
       "round": "Genshin 9-2026",
       "description": "-เข็มกลัดสี่เหลี่ยม 70*43มม.\n-เข็มกลัดกลม 58มม.\n-เข็มกลัดวงรี 65*47มม.\n-เซ็ตโปสการ์ด 190*110มม.",
@@ -23291,7 +23291,7 @@
       {
         "campaign_id": "CAM17898163708579035",
         "campaign_name": "ของแถมรอบพรี Genshin 9-2026",
-        "collection_id": "COL1789402151204",
+        "collection_id": "COL1789811785447",
         "description": "",
         "banner_image": "",
         "eligibility_scope": "fandom_all",
@@ -23300,7 +23300,7 @@
         "active": "yes",
         "sort_order": 0,
         "created_at": "2026-09-19T11:12:50.857Z",
-        "updated_at": "2026-09-19T11:12:50.857Z"
+        "updated_at": "2026-09-19T12:38:37.970Z"
       }
     ],
     "rules": [
@@ -25331,15 +25331,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-19T12:26:54.183Z",
+  "generated_at": "2026-09-19T14:34:14.746Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1288,
-    "collections_ms": 723,
-    "gifts_ms": 1564,
-    "banks_ms": 385,
-    "total_ms": 3960,
+    "products_ms": 1402,
+    "collections_ms": 620,
+    "gifts_ms": 1980,
+    "banks_ms": 272,
+    "total_ms": 4274,
     "product_count": 219,
     "collection_count": 4,
     "bank_count": 3
