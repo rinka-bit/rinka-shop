@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ประวัติ Rinka Points | Rinka Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20260919-1">
+<style>
+:root{--p:#7dcfff;--pd:#4ba5db;--bg:#f6fbff;--text:#334155;--muted:#64748b;--border:#dbe7f1}
+*{box-sizing:border-box}body{margin:0;font-family:'Kodchasan',sans-serif;background:linear-gradient(180deg,#fbfdff,var(--bg));color:var(--text)}button,a{font:inherit}
+.topbar{position:sticky;top:0;z-index:100;min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.topbar a{width:46px;height:46px;border-radius:999px;background:#fff;color:var(--text);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:21px;box-shadow:0 4px 14px rgba(71,85,105,.1)}.topbar h1{flex:1;margin:0;text-align:center;color:#3f6078;font-size:20px}.topbar-spacer{width:46px}
+.container{width:min(760px,100%);margin:auto;padding:20px 16px 48px}.balance-card,.history-card{background:#fff;border:1px solid var(--border);border-radius:21px;box-shadow:0 8px 25px rgba(86,142,178,.08)}.balance-card{padding:20px;margin-bottom:16px}.balance-title{font-weight:700}.balance{margin-top:7px;font-size:34px;font-weight:800}.balance span{font-size:14px;color:var(--muted)}.rate{margin-top:5px;color:var(--muted);font-size:12px}.history-card{padding:6px 18px}.tx{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:15px 0;border-bottom:1px solid var(--border)}.tx:last-child{border-bottom:0}.tx-note{font-weight:600;overflow-wrap:anywhere}.tx-meta{margin-top:5px;color:var(--muted);font-size:11px}.tx-points{font-weight:800;white-space:nowrap}.tx-points.plus{color:#16803b}.tx-points.minus{color:#be123c}.state{padding:34px 16px;text-align:center;color:var(--muted)}.load-more{width:100%;min-height:46px;margin-top:14px;border:1px solid var(--border);border-radius:999px;background:#eef8ff;color:#3476a2;font-weight:700}.load-more:disabled{opacity:.55}.hidden{display:none!important}
+html[data-theme="dark"]{--bg:var(--rk-bg);--text:var(--rk-text);--muted:var(--rk-muted);--border:var(--rk-border)}html[data-theme="dark"] .balance-card,html[data-theme="dark"] .history-card{background:var(--rk-surface);color:var(--rk-text);border-color:var(--rk-border)}html[data-theme="dark"] .load-more{background:var(--rk-surface-3);color:var(--rk-link);border-color:var(--rk-border)}
+@media(max-width:600px){.container{padding:14px 10px 36px}.topbar h1{font-size:17px}.balance-card{padding:18px}}
+</style>
+</head>
+<body>
+<header class="topbar"><a href="account.html" aria-label="กลับ">←</a><h1>ประวัติ Rinka Points</h1><div class="topbar-spacer"></div></header>
+<main class="container">
+<section class="balance-card"><div class="balance-title">⭐ Rinka Points</div><div id="balance" class="balance">— <span>แต้ม</span></div><div id="rate" class="rate">กำลังโหลดข้อมูลแต้ม...</div></section>
+<section id="history" class="history-card"><div class="state">กำลังโหลดประวัติแต้ม...</div></section>
+<button id="loadMore" class="load-more hidden" type="button">โหลดรายการเพิ่มเติม</button>
+</main>
+<script>
+const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+const customer=safeJson(localStorage.getItem("customer"),{});
+const sessionToken=String(localStorage.getItem("session_token")||customer.session_token||"").trim();
+let offset=0;const pageSize=20;let loading=false;
+if(!sessionToken){location.href="login.html"}else{loadSummary();loadHistory(true)}
+document.getElementById("loadMore").addEventListener("click",()=>loadHistory(false));
+async function loadSummary(){try{const q=new URLSearchParams({action:"customerPoints",session_token:sessionToken});const r=await fetch(API+"?"+q);const d=await r.json();if(!d||d.success!==true)throw new Error(d?.error||"โหลดแต้มไม่สำเร็จ");document.getElementById("balance").innerHTML=`${Number(d.balance||0).toLocaleString("th-TH")} <span>แต้ม</span>`;document.getElementById("rate").textContent=`ทุก ${Number(d.baht_per_point||100).toLocaleString("th-TH")} บาทของยอดสินค้า = 1 แต้ม`}catch(e){document.getElementById("rate").textContent="โหลดข้อมูลแต้มไม่สำเร็จ"}}
+async function loadHistory(reset){if(loading)return;loading=true;const btn=document.getElementById("loadMore");btn.disabled=true;if(reset)offset=0;try{const q=new URLSearchParams({action:"customerPointsHistory",session_token:sessionToken,offset:String(offset),limit:String(pageSize)});const r=await fetch(API+"?"+q);const d=await r.json();if(!d||d.success!==true)throw new Error(d?.error||"โหลดประวัติไม่สำเร็จ");const list=Array.isArray(d.transactions)?d.transactions:[];const box=document.getElementById("history");if(reset)box.innerHTML="";if(!list.length&&offset===0){box.innerHTML='<div class="state">ยังไม่มีประวัติแต้ม</div>'}else{box.insertAdjacentHTML("beforeend",list.map(renderTx).join(""));offset+=list.length}btn.classList.toggle("hidden",!d.has_more)}catch(e){if(reset)document.getElementById("history").innerHTML='<div class="state">โหลดประวัติแต้มไม่สำเร็จ<br>ลองรีเฟรชหน้าอีกครั้ง</div>';btn.classList.add("hidden")}finally{loading=false;btn.disabled=false}}
+function renderTx(tx){const points=Number(tx.points||0);const sign=points>0?"+":"";const cls=points<0?"minus":"plus";const note=esc(tx.note||tx.order_id||"รายการแต้ม");const date=formatDate(tx.created_at);const order=tx.order_id?` · ${esc(tx.order_id)}`:"";return `<div class="tx"><div><div class="tx-note">${note}</div><div class="tx-meta">${date}${order}</div></div><div class="tx-points ${cls}">${sign}${points.toLocaleString("th-TH")} แต้ม</div></div>`}
+function formatDate(v){const d=new Date(v);if(Number.isNaN(d.getTime()))return"";return new Intl.DateTimeFormat("th-TH",{dateStyle:"medium",timeStyle:"short"}).format(d)}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function safeJson(v,f){try{return JSON.parse(v||"")||f}catch(e){return f}}
+</script>
+<script src="theme.js?v=20260919-1"></script>
+</body>
+</html>
