@@ -21537,7 +21537,7 @@
           "option_value": "Childe",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1dDzjNM5CRWi9zZMuicIkGpfmhJP2zqps&sz=w2000",
           "sort_order": 0
@@ -21622,7 +21622,7 @@
           "option_value": "Childe",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1EdI5rCXzHnMr8L67r-KH1qkeNyEdW5sg&sz=w2000",
           "sort_order": 0
@@ -21847,7 +21847,7 @@
           "option_value": "Box(ไม่แยกบ้าน)",
           "additional_price": 0,
           "price": 1190,
-          "stock": 9999,
+          "stock": 9996,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -21921,7 +21921,7 @@
           "option_value": "Box(ไม่แยกบ้าน)",
           "additional_price": 0,
           "price": 1230,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -21995,7 +21995,7 @@
           "option_value": "Box(ไม่แยกบ้าน)",
           "additional_price": 0,
           "price": 1590,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -22465,7 +22465,7 @@
           "option_value": "Tsaritsa-สแตนดี้",
           "additional_price": 0,
           "price": 320,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1SqoqsVBGvNUltfTjUbmVEj4TFJfALfMF&sz=w2000",
           "sort_order": 37
@@ -22517,7 +22517,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1i08yku8x3t7Y6Z_ksaLpuZvnusTInewY&sz=w2000",
       "status": "active",
-      "stock": 9999,
+      "stock": 9998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -22682,7 +22682,7 @@
       "fandom": "Genshin Impact",
       "sub_category": "ตุ๊กตา",
       "round": "Genshin 9-2026",
-      "description": "ขนาดแต่ละคนนะคะ\n-Arlecchino 6.5cm.\n-Kinich 8.5cm .\n-Klee 10.5cm.\n-Wanderer 11cm.\n-Wriothesley 6cm.\n-Citlali 10cm.\n\nมีการ์ดแถมตามคาร์ที่ซื้อค่ะ",
+      "description": "ขนาด 20ซม.\n\nมีการ์ดแถมตามคาร์ที่ซื้อค่ะ",
       "search_keywords": "Arlecchino Klee Wriothesley Kinich Citlali Wanderer",
       "image": "https://drive.google.com/thumbnail?id=1TdKpFDsUOGq4NhGgTTPLrwrU5HHUMEGG&sz=w2000",
       "status": "active",
@@ -22899,7 +22899,7 @@
           "option_value": "Tartaglia",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=12ea4p4YfwFbHD3qdZDuKnTtqNB0pTCFI&sz=w2000",
           "sort_order": 4
@@ -25331,15 +25331,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-19T14:34:14.746Z",
+  "generated_at": "2026-09-19T16:06:47.927Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1402,
-    "collections_ms": 620,
-    "gifts_ms": 1980,
-    "banks_ms": 272,
-    "total_ms": 4274,
+    "products_ms": 1385,
+    "collections_ms": 666,
+    "gifts_ms": 1987,
+    "banks_ms": 328,
+    "total_ms": 4366,
     "product_count": 219,
     "collection_count": 4,
     "bank_count": 3
