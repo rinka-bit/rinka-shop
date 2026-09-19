@@ -413,6 +413,12 @@
     }
 
 
+    /* Keep the native time field editable; add a large explicit picker target. */
+    .transfer-time-picker{display:flex;gap:8px;align-items:stretch;min-width:0}
+    .transfer-time-picker input{min-width:0;flex:1;width:0}
+    .transfer-time-open{flex:0 0 auto;padding:10px 12px;border:1px solid #7dcfff;border-radius:10px;background:#eef8ff;color:#17618b;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+    .transfer-time-open:focus-visible{outline:3px solid #7dcfff;outline-offset:2px}
+
     .required{
 
       color:#dc2626;
@@ -1928,10 +1934,19 @@ function renderCustomerPaymentForm(
 
       </label>
 
-      <input
-        id="transferTime"
-        type="time"
-      >
+       <div class="transfer-time-picker">
+         <input
+           id="transferTime"
+           type="time"
+           aria-label="เวลาโอน"
+         >
+         <button
+           type="button"
+           class="transfer-time-open"
+           aria-label="เลือกเวลาโอน"
+           onclick="openTransferTimePicker()"
+         >🕒 เลือกเวลา</button>
+       </div>
 
     </div>
 
@@ -2139,6 +2154,18 @@ function renderItem(
 
 }
 
+
+/* Open the browser's native time picker from an easy-to-tap button. */
+function openTransferTimePicker(){
+  const input = document.getElementById("transferTime");
+  if(!input || input.disabled) return;
+  input.focus();
+  if(typeof input.showPicker === "function"){
+    try{ input.showPicker(); return; }
+    catch(error){ /* Browser does not allow opening its native picker. */ }
+  }
+  input.click();
+}
 
 /*
 =========================================
