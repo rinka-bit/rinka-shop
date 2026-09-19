@@ -551,13 +551,9 @@ button{
 .points-balance{font-size:34px;font-weight:800;line-height:1.1;margin-top:8px;}
 .points-balance span{font-size:15px;font-weight:600;color:var(--rk-muted, #777);}
 .points-rate{font-size:13px;color:var(--rk-muted, #777);margin-top:6px;}
-.points-history{margin-top:18px;border-top:1px solid var(--rk-border, #eee);padding-top:14px;}
-.points-history-title{font-size:14px;font-weight:700;margin-bottom:8px;}
-.points-tx{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--rk-border, #eee);font-size:13px;}
-.points-tx:last-child{border-bottom:0;}
-.points-tx-note{color:var(--rk-muted, #777);}
-.points-tx-value{font-weight:700;white-space:nowrap;}
-.points-empty{font-size:13px;color:var(--rk-muted, #777);}
+.points-actions{margin-top:16px;padding-top:14px;border-top:1px solid var(--rk-border, #eee);}
+.points-history-link{width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--rk-border, #dbe7f1);border-radius:999px;background:var(--rk-surface-3, #eef8ff);color:var(--rk-link, #347fb4);text-decoration:none;font-weight:700;font-size:13px;}
+.points-history-link:active{transform:scale(.985);}
 
 </style>
 
@@ -721,9 +717,8 @@ class="profile-social hidden">
       <div id="rinkaPointsRate" class="points-rate">กำลังโหลดข้อมูลแต้ม...</div>
     </div>
   </div>
-  <div class="points-history">
-    <div class="points-history-title">รายการล่าสุด</div>
-    <div id="rinkaPointsHistory" class="points-empty">กำลังโหลด...</div>
+  <div class="points-actions">
+    <a class="points-history-link" href="points-history.html">ดูประวัติแต้ม <span aria-hidden="true">›</span></a>
   </div>
 </section>
 
@@ -2088,7 +2083,6 @@ async function loadRinkaPoints(){
 
   const balanceBox = document.getElementById("rinkaPointsBalance");
   const rateBox = document.getElementById("rinkaPointsRate");
-  const historyBox = document.getElementById("rinkaPointsHistory");
 
   try{
     const query = new URLSearchParams();
@@ -2110,27 +2104,10 @@ async function loadRinkaPoints(){
     balanceBox.innerHTML = `${balance.toLocaleString("th-TH")} <span>แต้ม</span>`;
     rateBox.textContent = `ทุก ${rate.toLocaleString("th-TH")} บาทของยอดสินค้า = 1 แต้ม`;
 
-    const transactions = Array.isArray(result.transactions) ? result.transactions : [];
-    if(!transactions.length){
-      historyBox.className = "points-empty";
-      historyBox.textContent = "ยังไม่มีประวัติแต้ม";
-      return;
-    }
-
-    historyBox.className = "";
-    historyBox.innerHTML = transactions.slice(0,5).map(tx => {
-      const points = Number(tx.points || 0);
-      const sign = points > 0 ? "+" : "";
-      const note = escapeAccountHtml(tx.note || tx.order_id || "รายการแต้ม");
-      return `<div class="points-tx"><div class="points-tx-note">${note}</div><div class="points-tx-value">${sign}${points.toLocaleString("th-TH")} แต้ม</div></div>`;
-    }).join("");
-
   }catch(error){
     console.error("loadRinkaPoints error:", error);
     balanceBox.innerHTML = `0 <span>แต้ม</span>`;
     rateBox.textContent = "ไม่สามารถโหลดข้อมูลแต้มได้ในขณะนี้";
-    historyBox.className = "points-empty";
-    historyBox.textContent = "ลองรีเฟรชหน้าอีกครั้ง";
   }
 }
 
