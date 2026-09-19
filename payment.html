@@ -1854,6 +1854,26 @@ const payload = {
   social:
     address.social || "",
 
+  /*
+  SHIPPING ADDRESS SNAPSHOT
+  ส่งไปพร้อม request เดิมเท่านั้น
+  ไม่เพิ่ม HTTP request และไม่แตะ payment/recovery flow
+  */
+  address:
+    address.address || "",
+
+  subdistrict:
+    address.subdistrict || "",
+
+  district:
+    address.district || "",
+
+  province:
+    address.province || "",
+
+  postcode:
+    address.postcode || "",
+
   subtotal:
     calculatedTotal,
 
@@ -1892,6 +1912,26 @@ const orderSnapshot = {
 
   social:
     address.social || "",
+
+  /*
+  SHIPPING ADDRESS SNAPSHOT
+  ส่งไปพร้อม request เดิมเท่านั้น
+  ไม่เพิ่ม HTTP request และไม่แตะ payment/recovery flow
+  */
+  address:
+    address.address || "",
+
+  subdistrict:
+    address.subdistrict || "",
+
+  district:
+    address.district || "",
+
+  province:
+    address.province || "",
+
+  postcode:
+    address.postcode || "",
 
   subtotal:
     calculatedTotal,
