@@ -849,3 +849,98 @@ html[data-theme="dark"] .loading-overlay-card{
   border:1px solid var(--rk-border) !important;
   box-shadow:0 18px 55px rgba(0,0,0,.45) !important;
 }
+
+/* =========================================================
+   DARK MODE CLEANUP — 2026-09-19
+   Home products / Help / Account menu / Payment success / Order messages
+   ========================================================= */
+
+/* HOME — product cards whose body still used hard-coded white */
+html[data-theme="dark"] :is(.home-card,.home-product-card){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] :is(.home-card,.home-product-card) :is(.card-body,.home-card-body){
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+}
+html[data-theme="dark"] :is(.home-card,.home-product-card) :is(h3,.product-name,.card-title){
+  color:var(--rk-heading) !important;
+}
+html[data-theme="dark"] :is(.home-card,.home-product-card) :is(.fandom,.product-fandom,.deadline,.card-meta){
+  color:var(--rk-muted) !important;
+}
+
+/* HELP */
+html[data-theme="dark"] .help-hero{
+  background:linear-gradient(135deg,#1a2940,#172235) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] .help-hero h2{color:var(--rk-heading) !important}
+html[data-theme="dark"] .help-hero p{color:var(--rk-muted) !important}
+html[data-theme="dark"] .help-toolbar{
+  background:rgba(23,34,53,.95) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] .faq,
+html[data-theme="dark"] .faq button,
+html[data-theme="dark"] .help-empty{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+html[data-theme="dark"] .faq button:hover{background:var(--rk-surface-2) !important}
+html[data-theme="dark"] .faq-content{color:var(--rk-muted) !important}
+html[data-theme="dark"] .faq-content :is(b,strong){color:var(--rk-text) !important}
+html[data-theme="dark"] .faq-tag{background:#18354a !important;color:#8bd6ff !important}
+html[data-theme="dark"] .faq-arrow{color:var(--rk-muted) !important}
+html[data-theme="dark"] .help-contact{
+  background:#132f28 !important;
+  border-color:#28654f !important;
+  color:#b7efd6 !important;
+}
+html[data-theme="dark"] .help-contact h2{color:#86efac !important}
+html[data-theme="dark"] .help-contact a{
+  background:#1b4035 !important;
+  color:#a7f3d0 !important;
+  border:1px solid #28654f !important;
+}
+
+/* ACCOUNT — actual class is .menu-card */
+html[data-theme="dark"] .menu-card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+html[data-theme="dark"] .menu-card:hover{background:var(--rk-surface-2) !important}
+html[data-theme="dark"] .menu-card-icon{background:var(--rk-surface-3) !important}
+html[data-theme="dark"] .menu-card-title{color:var(--rk-heading) !important}
+html[data-theme="dark"] .menu-card-subtitle,
+html[data-theme="dark"] .menu-card-arrow{color:var(--rk-muted) !important}
+
+/* PAYMENT — success state shown after backend confirms payment */
+html[data-theme="dark"] .payment-success-state{
+  background:rgba(5,10,18,.78) !important;
+}
+html[data-theme="dark"] .payment-success-state > div{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border:1px solid var(--rk-border) !important;
+  box-shadow:0 20px 55px rgba(0,0,0,.46) !important;
+}
+html[data-theme="dark"] .payment-success-state h2{color:var(--rk-heading) !important}
+html[data-theme="dark"] .payment-success-state p{color:var(--rk-muted) !important}
+html[data-theme="dark"] .payment-success-icon{background:#153b2a !important;color:#86efac !important}
+
+/* ORDER — semantic status message cards need matching text contrast */
+html[data-theme="dark"] .message{color:var(--rk-text) !important}
+html[data-theme="dark"] .m-pending{background:#3a2a17 !important;border-color:#72502a !important;color:#fed7aa !important}
+html[data-theme="dark"] .m-progress{background:#172b46 !important;border-color:#2c4f78 !important;color:#bfdbfe !important}
+html[data-theme="dark"] .m-ready{background:#373316 !important;border-color:#6d6424 !important;color:#fde68a !important}
+html[data-theme="dark"] .m-done{background:#15352b !important;border-color:#28654f !important;color:#a7f3d0 !important}
