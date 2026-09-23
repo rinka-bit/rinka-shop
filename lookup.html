@@ -211,6 +211,26 @@ function renderOrder(o){
      .join("")
    : '<div class="muted">ไม่มีรายละเอียดสินค้าในข้อมูลเดิม</div>';
 
+ const giftHtml=gifts.length
+   ? `<section class="lookup-gifts" aria-label="รายการของแถม">
+        <div class="lookup-detail-heading">🎁 รายการของแถม</div>
+        ${gifts.map(g=>{
+          const qty=Number(g.qty||1);
+          return `<div class="lookup-gift">
+            ${g.image
+              ? `<img class="lookup-item-image" src="${esc(g.image)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;lookup-item-image-placeholder&quot;>🎁</div>'">`
+              : `<div class="lookup-item-image-placeholder">🎁</div>`}
+            <div class="lookup-item-text">
+              <b>${esc(g.name||"ของแถม")}</b>
+              ${g.character_name?`<div class="option">ตัวละคร: ${esc(g.character_name)}</div>`:""}
+              <div class="option">จำนวน ${Number.isFinite(qty)&&qty>0?qty:1} ชิ้น</div>
+            </div>
+            <span class="free">ฟรี</span>
+          </div>`;
+        }).join("")}
+      </section>`
+   : "";
+
  const fees=[];
  if(Number(o.import_fee||0))fees.push(`<div class="row"><span>ค่านำเข้า</span><span>${money(o.import_fee)}</span></div>`);
  if(Number(o.crate_fee||0))fees.push(`<div class="row"><span>ค่าตีลัง</span><span>${money(o.crate_fee)}</span></div>`);
@@ -251,6 +271,7 @@ function renderOrder(o){
    <div id="${detailId}" class="lookup-order-detail" hidden>
      <div class="lookup-detail-heading">รายการสินค้า</div>
      <div class="items">${itemHtml}</div>
+      ${giftHtml}
 
      <div class="money">
        <div class="row"><span>ยอดสินค้า</span><span>${money(o.subtotal)}</span></div>
