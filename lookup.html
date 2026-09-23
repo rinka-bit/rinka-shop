@@ -109,6 +109,7 @@ button{border:0;border-radius:13px;padding:12px 18px;background:#75bce6;color:wh
   min-width:0;
 }
 
+.lookup-filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.lookup-filters button{background:#eef8ff;color:#3476a2;border:1px solid #cde7f6;font-size:12px;padding:9px 11px}.lookup-filters button.active{background:#3476a2;color:white}.lookup-gifts{margin-top:14px;border-top:1px solid #e7eff3;padding-top:12px}.lookup-gift{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:13px}.lookup-gift .lookup-item-text{flex:1}.lookup-gift .free{color:#16845b;font-weight:700}#lookupCount{margin-top:10px}
 </style>
 <link rel="stylesheet" href="theme.css?v=20260918-2">
 <link rel="stylesheet" href="cart-drawer.css">
@@ -146,6 +147,7 @@ button{border:0;border-radius:13px;padding:12px 18px;background:#75bce6;color:wh
 <input id="twitter" placeholder="@username" autocomplete="off">
 <button onclick="searchOrders()">ค้นหาออเดอร์</button>
 </div>
+<div class="lookup-filters" id="lookupFilters" aria-label="กรองออเดอร์"><button type="button" data-filter="all" class="active">ออเดอร์ทั้งหมด</button><button type="button" data-filter="legacy">ออเดอร์เก่า</button><button type="button" data-filter="current">เว็บ / DM Invoice</button><button type="button" data-filter="shipped">จัดส่งแล้ว</button></div><div id="lookupCount" class="muted" aria-live="polite"></div>
 <div class="muted" style="margin-top:10px">หน้านี้ไม่แสดง Email, เบอร์โทร, ที่อยู่ หรือสลิปการชำระเงิน</div>
 </section>
 <div id="result"></div>
@@ -155,8 +157,9 @@ const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const money=v=>"฿"+Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:0,maximumFractionDigits:2});
 const norm=v=>String(v||"").trim().replace(/^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i,"").replace(/^@/,"").split(/[/?#]/)[0].trim();
+let lookupOrders=[];let lookupFilter="all";
 const sourceLabel=s=>s==="web"?"Web Order":s==="dm"?"DM Invoice":"Legacy";
-const statusLabel=s=>({pending:"รอกดสั่งสินค้า",pending_order:"รอกดสั่งสินค้า",china_arrived:"กดสั่งสินค้าแล้ว",shipping_to_th:"กำลังมาไทย",ready_to_ship:"เตรียมจัดส่ง",shipped:"จัดส่งแล้ว",completed:"เสร็จสิ้น",paid:"ชำระแล้ว",unpaid:"ยังไม่ชำระ",submitted:"แจ้งชำระแล้ว",payment_submitted:"แจ้งชำระแล้ว",partial:"ชำระบางส่วน"}[String(s||"").toLowerCase()]||s||"-");
+const statusLabel=s=>({pending:"รอกดสั่งสินค้า",pending_order:"รอกดสั่งสินค้า",ordered:"กดสั่งสินค้าแล้ว",order_placed:"กดสั่งสินค้าแล้ว",purchased:"กดสั่งสินค้าแล้ว",china_arrived:"กดสั่งสินค้าแล้ว",shipping_to_th:"กำลังมาไทย",ready_to_ship:"เตรียมจัดส่ง",shipped:"จัดส่งแล้ว",completed:"เสร็จสิ้น",paid:"ชำระแล้ว",unpaid:"ยังไม่ชำระ",submitted:"แจ้งชำระแล้ว",payment_submitted:"แจ้งชำระแล้ว",partial:"ชำระบางส่วน"}[String(s||"").toLowerCase()]||s||"-");
 function fmtDate(v){if(!v)return "-";const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleString("th-TH",{dateStyle:"medium",timeStyle:"short"})}
 async function searchOrders(){
  const twitter=norm(document.getElementById("twitter").value);
@@ -168,13 +171,25 @@ async function searchOrders(){
   const r=await fetch(API+"?"+q.toString());
   const data=await r.json();
   if(!data||data.success!==true)throw new Error(data?.error||"ค้นหาไม่สำเร็จ");
-  const orders=Array.isArray(data.orders)?data.orders:[];
+  const orders=Array.isArray(data.orders)?data.orders:[];lookupOrders=orders;
   if(!orders.length){box.innerHTML='<div class="state">ไม่พบออเดอร์ของ @'+esc(twitter)+'</div>';return}
-  box.innerHTML=orders.map(renderOrder).join("");
+  renderLookupResults();
  }catch(e){box.innerHTML='<div class="state">โหลดข้อมูลไม่สำเร็จ<br>'+esc(e.message||e)+'</div>'}
 }
+function renderLookupResults(){
+ const box=document.getElementById("result");
+ const list=lookupOrders.filter(o=>lookupFilter==="all" || (lookupFilter==="legacy"&&o.source==="legacy") || (lookupFilter==="current"&&o.source!=="legacy") || (lookupFilter==="shipped"&&["shipped","completed","จัดส่งแล้ว"].includes(String(o.status||"").trim().toLowerCase())));
+ document.getElementById("lookupCount").textContent=`แสดง ${list.length.toLocaleString("th-TH")} จาก ${lookupOrders.length.toLocaleString("th-TH")} ออเดอร์`;
+ box.innerHTML=list.length?list.map(renderOrder).join(""):'<div class="state">ไม่มีออเดอร์ในประเภทนี้</div>';
+}
+document.querySelectorAll("#lookupFilters button").forEach(button=>button.addEventListener("click",()=>{
+ lookupFilter=button.dataset.filter;
+ document.querySelectorAll("#lookupFilters button").forEach(b=>b.classList.toggle("active",b===button));
+ renderLookupResults();
+}));
 function renderOrder(o){
  const items=Array.isArray(o.items)?o.items:[];
+ const gifts=Array.isArray(o.gifts)?o.gifts:[];
  const detailId="detail_"+String(o.source||"order")+"_"+String(o.order_id||"").replace(/[^a-zA-Z0-9_-]/g,"_");
  const itemsCount=items.reduce((sum,i)=>sum+Number(i.qty||0),0);
 
@@ -208,7 +223,7 @@ function renderOrder(o){
        <div class="id">${esc(o.order_id)}</div>
        <div class="muted">${fmtDate(o.created_at)}</div>
      </div>
-     <span class="source">${sourceLabel(o.source)}</span>
+     <span class="source">${esc(sourceLabel(o.source))}</span>
    </div>
 
    <div class="meta">
