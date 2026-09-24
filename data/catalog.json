@@ -28290,7 +28290,7 @@
       "final_price": 270,
       "base_price": 0,
       "min_price": 270,
-      "max_price": 370,
+      "max_price": 780,
       "has_price_range": true,
       "old_price": null,
       "on_sale": false,
@@ -28302,7 +28302,7 @@
       "sub_category": "เครื่องสำอางค์",
       "round": "LnD 9-2026",
       "description": "ในเซ็ตประกอบด้วย\n-ครีมทามือ 1หลอด\n-บอดี้ครีม 1กระปุก\n-ลิปบาล์ม 1ชิ้น\n-ยางรัดผม Scrunchie 1ชิ้น\n\nโทนกลิ่น\nTop note : Apple/ Galbanum\nMiddle note : Rose/ Mahonia\nBase note : Pinewood/ Sandalwood\n\n-ครีมทามือและบอดี้ครีม : ผลไม้กึ่งสุก\n\n-ลิปบาล์มกระปุกดีไซน์ตุ๊กตา : ความฝันอันแผ่วเบาในวันฤดูร้อน\n\nขนาดและปริมาณ\n-ครีมทามือ ความยาวหลอดประมาณ 80–100มม. ปริมาณ 55กรัม\n-บอดี้ครีม สูงประมาณ 60มม. เส้นผ่านศูนย์กลางประมาณ 92มม. ปริมาณ 110 กรัม\n-ลิปบาล์ม ประมาณ 70มม.(ฝาซิลิโคนสูงประมาณ 25มม.) ปริมาณ 3.8กรัม\n-ขนาดกล่องประมาณ 300*210*80มม.",
-      "search_keywords": "Lip balm Body lotion Hand cream",
+      "search_keywords": "Lip balm Body lotion Hand cream Full set",
       "image": "https://drive.google.com/thumbnail?id=1hipadIYi1HZkP-JGEL1qBN2-l0RE7Sp6&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -28353,6 +28353,17 @@
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1mNHScrnVghpFA7QZYV5buvhLq-E0ltXU&sz=w2000",
           "sort_order": 2
+        },
+        {
+          "option_id": "OPT1790175712320_100",
+          "option_name": "แบบ",
+          "option_value": "Full set",
+          "additional_price": 0,
+          "price": 780,
+          "stock": 9999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1y752ZAYITIABI7Liz4HFRP_tKV33cdFL&sz=w2000",
+          "sort_order": 3
         }
       ]
     },
@@ -28802,14 +28813,14 @@
       "collection_id": "COL1790171157121",
       "name": "Love and Deepspace 9-2026 (แบบยังไม่รวมส่งกลับไทย)",
       "fandom": "Love and Deepspace",
-      "image": "https://drive.google.com/thumbnail?id=1TWWSqrLB8Nn_ZTLTyzK4qpbAg8nCL7kH&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1nh8IhYyEew-XaNCbDPHa8Z-lOyIKB74G&sz=w2000",
       "status": "active",
       "preorder_deadline": "2026-10-03T17:00:00.000Z",
       "featured": "yes",
       "created_at": "2026-09-23T13:46:03.448Z",
       "collection_type": "preorder",
       "description": "ราคายังไม่รวมส่งกลับไทย\n\nในไทยพิเศษเริ่มต้น EMS9฿ (พื้นที่พิเศษ+20฿)",
-      "banner_image": "https://drive.google.com/thumbnail?id=1CvwazQeaXIm4UrWUSO_gN3Ct0odQO5im&sz=w2000",
+      "banner_image": "https://drive.google.com/thumbnail?id=1kRw_vwJhPJb1zi2knv_bM4eWPh1e1O1C&sz=w2000",
       "product_count": 30
     }
   ],
@@ -28972,7 +28983,7 @@
       {
         "campaign_id": "CAM17901712126674451",
         "campaign_name": "ของแถม LnD 9-2026",
-        "collection_id": "COL1790171157120",
+        "collection_id": "COL1790171157121",
         "description": "",
         "banner_image": "",
         "eligibility_scope": "collection_only",
@@ -31392,15 +31403,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-24T07:31:13.422Z",
+  "generated_at": "2026-09-24T07:36:48.202Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2939,
-    "collections_ms": 1351,
-    "gifts_ms": 3655,
-    "banks_ms": 205,
-    "total_ms": 8150,
+    "products_ms": 1254,
+    "collections_ms": 668,
+    "gifts_ms": 1434,
+    "banks_ms": 214,
+    "total_ms": 3570,
     "product_count": 279,
     "collection_count": 5,
     "bank_count": 3
