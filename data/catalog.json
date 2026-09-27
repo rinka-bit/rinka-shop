@@ -28750,6 +28750,80 @@
           "sort_order": 4
         }
       ]
+    },
+    {
+      "product_id": "PROD1790495031358",
+      "name": "Wuthering Waves x FUNISM มินิฟิกเกอร์",
+      "price_mode": "option",
+      "price": 0,
+      "final_price": 0,
+      "base_price": 0,
+      "min_price": 0,
+      "max_price": 2500,
+      "has_price_range": true,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "ฟิกเกอร์",
+      "fandom": "Wuthering Waves",
+      "sub_category": "ฟิกเกอร์",
+      "round": "",
+      "description": "***ราคายังไม่รวมส่งกลับไทย\n\nขนาดฟิกเกอร์ ประมาณ 109-138มม.",
+      "search_keywords": "สุ่ม Box (ไม่แยกบ้าน) Box (แยกบ้าน, แจ้งที่อยู่ตอนของถึงไทย)",
+      "image": "https://drive.google.com/thumbnail?id=1ehFgR9jK4xl_8MAFHx135tyUO1sGXQ0g&sz=w2000",
+      "status": "active",
+      "stock": 9999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "preorder_deadline": "",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1Ze-9MgyOxSEc57kJPCyqhYddrk66Ip-E&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1DdSj-ha0fkzDNMtbnln03ljkvhouc3Q1&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1IGDPmRLtgdo1P8WjdRRyiNmlGbS9zaPD&sz=w2000",
+      "collection_id": "",
+      "created_at": "",
+      "options": [
+        {
+          "option_id": "OPT1790495110057_1",
+          "option_name": "แบบ",
+          "option_value": "สุ่ม",
+          "additional_price": 0,
+          "price": 420,
+          "stock": 9999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1790495110057_2",
+          "option_name": "แบบ",
+          "option_value": "Box (ไม่แยกบ้าน)",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 9999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1790495110057_3",
+          "option_name": "แบบ",
+          "option_value": "Box (แยกบ้าน, แจ้งที่อยู่ตอนของถึงไทย)",
+          "additional_price": 0,
+          "price": 2500,
+          "stock": 9999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        }
+      ]
     }
   ],
   "collections": [
@@ -31403,16 +31477,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-09-25T04:25:38.514Z",
+  "generated_at": "2026-09-27T07:46:13.779Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1955,
-    "collections_ms": 1320,
-    "gifts_ms": 2687,
-    "banks_ms": 925,
-    "total_ms": 6887,
-    "product_count": 279,
+    "products_ms": 2468,
+    "collections_ms": 1274,
+    "gifts_ms": 2439,
+    "banks_ms": 412,
+    "total_ms": 6593,
+    "product_count": 280,
     "collection_count": 5,
     "bank_count": 3
   }
