@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rinka Admin</title>
+<link rel="stylesheet" href="admin-theme.css?v=20261001-1">
 
 <style>
 body{
@@ -532,6 +533,19 @@ onclick="showAdminTab('customer_lookup')"
 </button>
 
 
+
+<div class="admin-theme-control">
+  <span>ธีม</span>
+  <button
+    id="rinkaThemeButton"
+    type="button"
+    class="admin-theme-button"
+    aria-label="เปลี่ยนธีม"
+  >
+    🖥️ System
+  </button>
+</div>
+
 <hr>
 
 <button
@@ -893,6 +907,8 @@ style="display:none;"
 </div>
 
 </div>
+
+<script src="theme.js?v=20261001-1"></script>
 
 <script src="./js/admin-utils.js?v=20260819-4"></script>
 
