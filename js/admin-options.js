@@ -2562,13 +2562,12 @@ async function saveProductOptionsBatchFromAdmin(){
     resetOptionBatchForm();
 
 
-   await loadAdminProductOptions();
+    await loadAdminProductOptions();
 
-await loadAdminProducts(
-  true
-);
-
-
+    /*
+    ProductOptions เปลี่ยน แต่ Products ไม่ได้เปลี่ยน
+    จึงไม่ต้อง force reload สินค้าทั้งชีตทุกครั้ง
+    */
     refreshOptionProductSelect();
 
 
