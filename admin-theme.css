@@ -1,0 +1,496 @@
+/*
+=========================================================
+RINKA SHOP — ADMIN DARK MODE
+FINAL: 2026-10-01
+
+Uses the same theme engine as the customer site:
+html[data-theme="light"] / html[data-theme="dark"]
+
+This file is intentionally CSS-only. It overrides Admin UI,
+including UI generated dynamically by Admin JavaScript, without
+changing order/product/gift/payment/business logic.
+=========================================================
+*/
+
+:root{
+  --rk-admin-accent:#7dcfff;
+  --rk-admin-danger:#ef4444;
+  --rk-admin-success:#10b981;
+  --rk-admin-purple:#8b5cf6;
+}
+
+html[data-theme="dark"]{
+  color-scheme:dark;
+
+  --rk-bg:#0b1220;
+  --rk-surface:#111c2d;
+  --rk-surface-2:#162337;
+  --rk-surface-3:#1c2c43;
+  --rk-text:#dce7f3;
+  --rk-heading:#f2f7fc;
+  --rk-muted:#91a4b8;
+  --rk-border:#294057;
+  --rk-input:#0f1a2a;
+  --rk-link:#86d2ff;
+  --rk-accent-dark:#69c5f7;
+  --rk-shadow-soft:0 10px 30px rgba(0,0,0,.24);
+}
+
+/* =====================================================
+   THEME CONTROL
+   ===================================================== */
+
+.admin-theme-control{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:16px 0;
+  padding:10px 0;
+  font-size:13px;
+  font-weight:700;
+}
+
+.admin-theme-button{
+  width:auto;
+  min-width:112px;
+  padding:8px 10px;
+  font-size:12px;
+}
+
+/* =====================================================
+   ADMIN BASE
+   ===================================================== */
+
+html[data-theme="dark"] body{
+  background:var(--rk-bg) !important;
+  color:var(--rk-text) !important;
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6,
+html[data-theme="dark"] strong,
+html[data-theme="dark"] label{
+  color:var(--rk-heading);
+}
+
+html[data-theme="dark"] a{
+  color:var(--rk-link);
+}
+
+html[data-theme="dark"] hr{
+  border:0;
+  border-top:1px solid var(--rk-border);
+}
+
+html[data-theme="dark"] #loginBox,
+html[data-theme="dark"] .sidebar,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .order-card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+  box-shadow:var(--rk-shadow-soft) !important;
+}
+
+html[data-theme="dark"] .sidebar{
+  border-right-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .nav-btn,
+html[data-theme="dark"] #nav_customer_lookup{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+}
+
+html[data-theme="dark"] .nav-btn:hover,
+html[data-theme="dark"] #nav_customer_lookup:hover{
+  background:var(--rk-surface-3) !important;
+}
+
+html[data-theme="dark"] .nav-btn.active,
+html[data-theme="dark"] #nav_customer_lookup.active{
+  background:var(--rk-admin-accent) !important;
+  color:#fff !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select{
+  background:var(--rk-input) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{
+  color:#71869b !important;
+}
+
+html[data-theme="dark"] option{
+  background:var(--rk-input);
+  color:var(--rk-text);
+}
+
+html[data-theme="dark"] input[type="file"]{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] input[type="file"]::file-selector-button{
+  background:var(--rk-surface-3);
+  color:var(--rk-text);
+  border:1px solid var(--rk-border);
+  border-radius:8px;
+  padding:7px 10px;
+}
+
+html[data-theme="dark"] button:disabled{
+  opacity:.55;
+}
+
+html[data-theme="dark"] .loading-text,
+html[data-theme="dark"] .gift-loading{
+  color:#7cc7ff !important;
+}
+
+/* =====================================================
+   SEMANTIC CARDS / STATES
+   ===================================================== */
+
+html[data-theme="dark"] .warning-card{
+  background:#3a2a17 !important;
+  border-color:#72502a !important;
+  color:#fed7aa !important;
+}
+
+html[data-theme="dark"] .gift-error{
+  background:#3a1822 !important;
+  border-color:#7f1d35 !important;
+  color:#fda4af !important;
+}
+
+html[data-theme="dark"] .gift-empty{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] .gift-status-active{
+  background:#15352b !important;
+  color:#a7f3d0 !important;
+}
+
+html[data-theme="dark"] .gift-status-inactive{
+  background:#3a1822 !important;
+  color:#fda4af !important;
+}
+
+/* Generic dynamic semantic backgrounds used by Admin JS */
+html[data-theme="dark"] [style*="background:#fef2f2"],
+html[data-theme="dark"] [style*="background: #fef2f2"],
+html[data-theme="dark"] [style*="background:#fff1f2"],
+html[data-theme="dark"] [style*="background: #fff1f2"],
+html[data-theme="dark"] [style*="background:#fff7f7"]{
+  background:#3a1822 !important;
+  border-color:#7f1d35 !important;
+  color:#fda4af !important;
+}
+
+html[data-theme="dark"] [style*="background:#fffbeb"],
+html[data-theme="dark"] [style*="background: #fffbeb"],
+html[data-theme="dark"] [style*="background:#fff7ed"]{
+  background:#3a2a17 !important;
+  border-color:#72502a !important;
+  color:#fed7aa !important;
+}
+
+html[data-theme="dark"] [style*="background:#f0fdf4"],
+html[data-theme="dark"] [style*="background: #f0fdf4"],
+html[data-theme="dark"] [style*="background:#dcfce7"]{
+  background:#15352b !important;
+  border-color:#28654f !important;
+  color:#a7f3d0 !important;
+}
+
+html[data-theme="dark"] [style*="background:#eff6ff"],
+html[data-theme="dark"] [style*="background: #eff6ff"],
+html[data-theme="dark"] [style*="background:#e0f2fe"],
+html[data-theme="dark"] [style*="background: #e0f2fe"],
+html[data-theme="dark"] [style*="background:#eaf7ff"]{
+  background:#18354a !important;
+  border-color:#285777 !important;
+  color:#a9ddff !important;
+}
+
+html[data-theme="dark"] [style*="background:#ede9fe"],
+html[data-theme="dark"] [style*="background: #ede9fe"],
+html[data-theme="dark"] [style*="background:#f5f3ff"],
+html[data-theme="dark"] [style*="background: #f5f3ff"]{
+  background:#2d2345 !important;
+  border-color:#57417f !important;
+  color:#c4b5fd !important;
+}
+
+/* Generic light surfaces emitted by JS */
+html[data-theme="dark"] [style*="background:#fff;"],
+html[data-theme="dark"] [style*="background: #fff;"],
+html[data-theme="dark"] [style*="background:#ffffff"],
+html[data-theme="dark"] [style*="background: #ffffff"],
+html[data-theme="dark"] [style*="background:#fbfdff"],
+html[data-theme="dark"] [style*="background:#f8fafc"],
+html[data-theme="dark"] [style*="background:#f8fbff"],
+html[data-theme="dark"] [style*="background:#f6fbff"]{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] [style*="color:#64748b"],
+html[data-theme="dark"] [style*="color: #64748b"],
+html[data-theme="dark"] [style*="color:#666"],
+html[data-theme="dark"] [style*="color: #666"],
+html[data-theme="dark"] [style*="color:#777"],
+html[data-theme="dark"] [style*="color: #777"],
+html[data-theme="dark"] [style*="color:#94a3b8"]{
+  color:var(--rk-muted) !important;
+}
+
+/* =====================================================
+   GIFT MANAGER
+   ===================================================== */
+
+html[data-theme="dark"] .gift-tree-node{
+  background:var(--rk-surface) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .gift-tree-header{
+  background:var(--rk-surface-2) !important;
+}
+
+html[data-theme="dark"] .gift-tree-children{
+  background:var(--rk-surface) !important;
+  border-top-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .gift-node-meta{
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] .gift-toggle-btn{
+  background:#18354a !important;
+  color:#a9ddff !important;
+}
+
+/* =====================================================
+   PRODUCTS / OPTIONS
+   ===================================================== */
+
+html[data-theme="dark"] #productManager #p_option_price_notice,
+html[data-theme="dark"] #editProductForm [style*="background:#f5f3ff"]{
+  background:#2d2345 !important;
+  color:#c4b5fd !important;
+}
+
+html[data-theme="dark"] #optionManager #optionProductInfo,
+html[data-theme="dark"] #optionManager #optionBatchEmpty{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-muted) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] #optionManager #optionGroupEditNotice{
+  background:#3a2a17 !important;
+  color:#fdba74 !important;
+  border-color:#72502a !important;
+}
+
+html[data-theme="dark"] #optionManager .card,
+html[data-theme="dark"] #productManager .card,
+html[data-theme="dark"] #collectionManager .card{
+  border-color:var(--rk-border) !important;
+}
+
+/* =====================================================
+   ORDERS / SHIPPED ORDERS
+   ===================================================== */
+
+html[data-theme="dark"] #orders .card,
+html[data-theme="dark"] #shippedOrders .card,
+html[data-theme="dark"] #orders .order-card,
+html[data-theme="dark"] #shippedOrders .order-card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] #orders table,
+html[data-theme="dark"] #shippedOrders table,
+html[data-theme="dark"] #legacyOrderManager table{
+  color:var(--rk-text);
+  border-color:var(--rk-border);
+}
+
+html[data-theme="dark"] #orders th,
+html[data-theme="dark"] #shippedOrders th,
+html[data-theme="dark"] #legacyOrderManager th{
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-heading) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] #orders td,
+html[data-theme="dark"] #shippedOrders td,
+html[data-theme="dark"] #legacyOrderManager td{
+  border-color:var(--rk-border) !important;
+}
+
+/* =====================================================
+   MANUAL ORDER / DM INVOICE
+   ===================================================== */
+
+html[data-theme="dark"] #manualOrderManager #dmInvoiceProductTotals,
+html[data-theme="dark"] #manualOrderManager #dmInvoiceShippingOnlyTotal{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] #manualOrderManager .card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+/* =====================================================
+   LEGACY ORDERS
+   ===================================================== */
+
+html[data-theme="dark"] #legacyOrderManager .legacy-card,
+html[data-theme="dark"] #legacyOrderManager .legacy-item{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] #legacyOrderManager .legacy-item{
+  background:var(--rk-surface-2) !important;
+}
+
+html[data-theme="dark"] #legacyOrderManager .legacy-secondary,
+html[data-theme="dark"] #legacyOrderManager .legacy-link-panel,
+html[data-theme="dark"] #legacyOrderManager .legacy-empty{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-muted) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] #legacyOrderManager .legacy-selected-customer,
+html[data-theme="dark"] #legacyOrderManager .legacy-message.success{
+  background:#15352b !important;
+  border-color:#28654f !important;
+  color:#a7f3d0 !important;
+}
+
+html[data-theme="dark"] #legacyOrderManager .legacy-message.error{
+  background:#3a1822 !important;
+  border-color:#7f1d35 !important;
+  color:#fda4af !important;
+}
+
+/* =====================================================
+   CUSTOMER ORDER LOOKUP
+   ===================================================== */
+
+html[data-theme="dark"] #adminCustomerOrderLookup,
+html[data-theme="dark"] #adminCustomerOrderSearchResult{
+  color:var(--rk-text);
+}
+
+html[data-theme="dark"] #adminCustomerOrderLookup .card,
+html[data-theme="dark"] #adminCustomerOrderSearchResult .card{
+  background:var(--rk-surface) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+/* =====================================================
+   MODALS
+   ===================================================== */
+
+html[data-theme="dark"] #editProductModal,
+html[data-theme="dark"] #editCollectionModal,
+html[data-theme="dark"] #giftModal{
+  background:rgba(3,8,16,.72) !important;
+}
+
+html[data-theme="dark"] #editProductModal > .card,
+html[data-theme="dark"] #editCollectionModal > .card,
+html[data-theme="dark"] #giftModal > .card{
+  background:var(--rk-surface) !important;
+  border-color:var(--rk-border) !important;
+  color:var(--rk-text) !important;
+}
+
+/* =====================================================
+   MAINTENANCE NOTICE
+   Works if maintenance-notice.js is enabled on Admin too.
+   ===================================================== */
+
+html[data-theme="dark"] #rinkaMaintenanceNotice{
+  background:rgba(3,8,16,.68) !important;
+}
+
+html[data-theme="dark"] .rinka-maintenance-card{
+  background:var(--rk-surface) !important;
+  border-color:var(--rk-border) !important;
+  color:var(--rk-text) !important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45) !important;
+}
+
+html[data-theme="dark"] .rinka-maintenance-card h2{
+  color:var(--rk-heading) !important;
+}
+
+html[data-theme="dark"] .rinka-maintenance-card p,
+html[data-theme="dark"] .rinka-maintenance-note{
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] .rinka-maintenance-icon{
+  background:#18354a !important;
+}
+
+html[data-theme="dark"] .rinka-maintenance-close{
+  background:var(--rk-surface-3) !important;
+  color:var(--rk-muted) !important;
+}
+
+html[data-theme="dark"] .rinka-maintenance-continue{
+  background:var(--rk-surface-2) !important;
+  color:var(--rk-text) !important;
+  border-color:var(--rk-border) !important;
+}
+
+html[data-theme="dark"] .rinka-maintenance-continue:hover{
+  background:var(--rk-surface-3) !important;
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media(max-width:900px){
+  html[data-theme="dark"] .sidebar{
+    box-shadow:12px 0 30px rgba(0,0,0,.35) !important;
+  }
+
+  html[data-theme="dark"] .admin-sidebar-overlay{
+    background:rgba(3,8,16,.68) !important;
+  }
+}
