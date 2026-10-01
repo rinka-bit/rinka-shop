@@ -170,35 +170,36 @@ async function loadGiftManagerData(){
 
   try{
 
-    /*
-    =========================================
-    PERFORMANCE PASS 1
+    const [
+      campaignResult,
+      ruleResult,
+      itemResult,
+      characterResult,
+      exclusionResult
+    ] =
+      await Promise.all([
 
-    เดิมเปิด Gift Manager ยิง Apps Script 5 request
-    ตอนนี้รวมเป็น request เดียว และ backend reuse
-    Gift sheet snapshot ภายใน request เดียวกัน
-    =========================================
-    */
+        fetchGiftAdminAction(
+          "getGiftCampaigns"
+        ),
 
-    const managerResult =
-      await fetchGiftAdminAction(
-        "adminGiftManagerData"
-      );
+        fetchGiftAdminAction(
+          "getGiftRules"
+        ),
 
-    const campaignResult =
-      managerResult;
+        fetchGiftAdminAction(
+          "getGiftItems"
+        ),
 
-    const ruleResult =
-      managerResult;
+        fetchGiftAdminAction(
+          "getGiftCharacters"
+        ),
 
-    const itemResult =
-      managerResult;
+        fetchGiftAdminAction(
+          "getGiftCampaignExclusions"
+        )
 
-    const characterResult =
-      managerResult;
-
-    const exclusionResult =
-      managerResult;
+      ]);
 
     adminGiftCampaigns =
       Array.isArray(
