@@ -32,88 +32,128 @@ const adminLoadedTabs = {
 
 const adminLoadingTabs = {};
 
-function login(){
+async function login(){
+
+  const passwordInput =
+    document.getElementById("adminPassword");
 
   const password =
-    document.getElementById(
-      "adminPassword"
-    ).value;
+    String(passwordInput.value || "");
 
+  if(!password){
+    alert("กรุณากรอกรหัสผ่าน");
+    return;
+  }
 
-  if(
-    password ===
-    "Rin@Saeh13579"
-  ){
+  try{
 
-    document
-      .getElementById(
-        "loginBox"
-      )
-      .style.display =
-      "none";
-
-
-    document
-      .getElementById(
-        "adminContent"
-      )
-      .style.display =
-      "block";
-
-
-    sessionStorage.setItem(
-      "adminLoggedIn",
-      "true"
+    const formData = new FormData();
+    formData.append("action", "adminLogin");
+    formData.append(
+      "payload",
+      JSON.stringify({password:password})
     );
 
-
-    showAdminTab(
-      "dashboard"
+    const response = await fetch(
+      API,
+      {
+        method:"POST",
+        body:formData
+      }
     );
 
+    const result = await response.json();
 
-  }else{
+    if(!result || result.success !== true || !result.admin_token){
+      throw new Error(
+        result && (result.error || result.message)
+          ? (result.error || result.message)
+          : "เข้าสู่ระบบไม่สำเร็จ"
+      );
+    }
 
-    alert(
-      "รหัสผ่านไม่ถูกต้อง"
-    );
+    setAdminSessionToken(result.admin_token);
+    sessionStorage.setItem("adminLoggedIn", "true");
+    passwordInput.value = "";
 
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminContent").style.display = "block";
+
+    showAdminTab("dashboard");
+
+  }catch(error){
+    clearAdminSession();
+    alert(error.message || "เข้าสู่ระบบไม่สำเร็จ");
   }
 
 }
 
-function logout(){
-  sessionStorage.removeItem("adminLoggedIn");
-  location.reload();
-}
+async function logout(){
 
-if(
-  sessionStorage.getItem(
-    "adminLoggedIn"
-  ) === "true"
-){
+  try{
+    const token = getAdminSessionToken();
 
-  document
-    .getElementById(
-      "loginBox"
-    )
-    .style.display =
-    "none";
+    if(token){
+      const formData = new FormData();
+      formData.append("action", "adminLogout");
+      formData.append(
+        "payload",
+        JSON.stringify({admin_token:token})
+      );
 
-
-  document
-    .getElementById(
-      "adminContent"
-    )
-    .style.display =
-    "block";
-
-
-  showAdminTab(
-    "dashboard"
-  );
+      await fetch(
+        API,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+    }
+  }catch(error){
+    console.warn("Admin logout request failed:", error);
+  }finally{
+    clearAdminSession();
+    location.reload();
+  }
 
 }
+
+async function restoreAdminSession(){
+
+  const token = getAdminSessionToken();
+
+  if(!token){
+    clearAdminSession();
+    return;
+  }
+
+  try{
+    const response = await fetch(
+      API + "?action=adminSession"
+    );
+
+    const result = await response.json();
+
+    if(!result || result.success !== true){
+      clearAdminSession();
+      return;
+    }
+
+    sessionStorage.setItem("adminLoggedIn", "true");
+
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminContent").style.display = "block";
+
+    showAdminTab("dashboard");
+
+  }catch(error){
+    console.error("restoreAdminSession error:", error);
+    clearAdminSession();
+  }
+
+}
+
+restoreAdminSession();
 
 function showAdminTab(
   tab
