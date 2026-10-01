@@ -2397,9 +2397,36 @@ if(
 
 closeEditProductModal();
 
-await loadAdminProducts(
-  true
-);
+const productIndex =
+  adminProducts.findIndex(
+    item =>
+      String(item.product_id) ===
+      String(result.product_id || payload.product_id)
+  );
+
+if(productIndex >= 0 && result.product){
+
+  const previousProduct =
+    adminProducts[productIndex];
+
+  adminProducts[productIndex] = {
+    ...previousProduct,
+    ...result.product,
+    options:
+      Array.isArray(previousProduct.options)
+        ? previousProduct.options
+        : [],
+    options_text:
+      previousProduct.options_text || ""
+  };
+
+}
+
+renderAdminProductList();
+
+if(typeof refreshOptionProductSelect === "function"){
+  refreshOptionProductSelect();
+}
 
   }catch(error){
 
