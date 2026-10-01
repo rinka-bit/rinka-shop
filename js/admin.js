@@ -120,12 +120,29 @@ async function logout(){
 
 async function restoreAdminSession(){
 
+  const loginBox =
+    document.getElementById("loginBox");
+
+  const adminContent =
+    document.getElementById("adminContent");
+
+  const loadingBox =
+    document.getElementById("adminSessionLoading");
+
   const token = getAdminSessionToken();
+
+  // เริ่มต้นโดยไม่แสดงหน้า Login กระพริบก่อนรู้ผล session
+  loginBox.style.display = "none";
+  adminContent.style.display = "none";
 
   if(!token){
     clearAdminSession();
+    loadingBox.style.display = "none";
+    loginBox.style.display = "block";
     return;
   }
+
+  loadingBox.style.display = "block";
 
   try{
     const response = await fetch(
@@ -136,19 +153,24 @@ async function restoreAdminSession(){
 
     if(!result || result.success !== true){
       clearAdminSession();
+      loadingBox.style.display = "none";
+      loginBox.style.display = "block";
       return;
     }
 
     sessionStorage.setItem("adminLoggedIn", "true");
 
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("adminContent").style.display = "block";
+    loadingBox.style.display = "none";
+    loginBox.style.display = "none";
+    adminContent.style.display = "block";
 
     showAdminTab("dashboard");
 
   }catch(error){
     console.error("restoreAdminSession error:", error);
     clearAdminSession();
+    loadingBox.style.display = "none";
+    loginBox.style.display = "block";
   }
 
 }
