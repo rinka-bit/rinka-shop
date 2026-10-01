@@ -1029,19 +1029,36 @@ async function saveProductFromAdmin(){
 
 
     /*
-    reset form
+    เพิ่มสินค้าที่ backend บันทึกจริง
+    เข้า frontend cache โดยไม่ reload
+    Products + ProductOptions ทั้งชุด
     */
 
-    renderProductManager();
+    if(result.product){
+
+      adminProducts.unshift({
+        ...result.product,
+        options:
+          Array.isArray(result.product.options)
+            ? result.product.options
+            : [],
+        options_text:
+          result.product.options_text || ""
+      });
+
+    }
 
 
     /*
-    โหลดรายการใหม่
+    reset form แล้ว render รายการจาก cache
     */
 
-    await loadAdminProducts(
-  true
-);
+    renderProductManager();
+    renderAdminProductList();
+
+    if(typeof refreshOptionProductSelect === "function"){
+      refreshOptionProductSelect();
+    }
 
 
   }catch(error){
