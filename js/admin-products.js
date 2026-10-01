@@ -1717,9 +1717,19 @@ if(
   result.success
 ){
 
-  await loadAdminProducts(
-    true
-  );
+  const product =
+    adminProducts.find(
+      item =>
+        String(item.product_id) ===
+        String(result.product_id || productId)
+    );
+
+  if(product){
+    product.status =
+      result.status || product.status;
+  }
+
+  renderAdminProductList();
 
 }
 
