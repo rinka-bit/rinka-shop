@@ -32581,7 +32581,7 @@
             "ตัวละคร": "OPT1790929326255_1"
           },
           "price": 333,
-          "stock": 8888,
+          "stock": 2,
           "status": "active",
           "sort_order": 0
         },
@@ -32597,7 +32597,7 @@
             "ตัวละคร": "OPT1790929350045_2"
           },
           "price": 333,
-          "stock": 8888,
+          "stock": 2,
           "status": "active",
           "sort_order": 1
         },
@@ -32613,7 +32613,7 @@
             "ตัวละคร": "OPT1790929326255_1"
           },
           "price": 333,
-          "stock": 8888,
+          "stock": 2,
           "status": "active",
           "sort_order": 2
         },
@@ -32629,7 +32629,7 @@
             "ตัวละคร": "OPT1790929350045_2"
           },
           "price": 333,
-          "stock": 8888,
+          "stock": 2,
           "status": "active",
           "sort_order": 3
         }
@@ -35628,15 +35628,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-02T09:15:57.570Z",
+  "generated_at": "2026-10-02T09:50:00.930Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3056,
-    "collections_ms": 1115,
-    "gifts_ms": 2963,
-    "banks_ms": 324,
-    "total_ms": 7458,
+    "products_ms": 6353,
+    "collections_ms": 1502,
+    "gifts_ms": 3480,
+    "banks_ms": 333,
+    "total_ms": 11668,
     "product_count": 317,
     "collection_count": 5,
     "bank_count": 3
