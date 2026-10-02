@@ -6,6 +6,11 @@ let editingOptionGroupName = "";
 
 let optionDraftRows = [];
 
+// Product Options V3 — Variant mode (Phase 1)
+let adminVariantMode = false;
+let adminVariantGroups = [];
+let adminProductVariants = [];
+
 
 /*
 =========================================================
@@ -414,6 +419,13 @@ id="optionBatchEditor"
 
 </div>
 
+
+<div class="card" id="productVariantManagerCard">
+  <div id="productVariantManager">
+    กรุณาเลือกสินค้าก่อน
+  </div>
+</div>
+
 `;
 
 
@@ -597,6 +609,9 @@ function handleOptionCollectionChange(){
 
 
   adminProductOptions = [];
+  adminVariantMode = false;
+  adminVariantGroups = [];
+  adminProductVariants = [];
 
 
   resetOptionBatchForm();
@@ -638,6 +653,9 @@ async function handleOptionProductChange(){
 
 
   adminProductOptions = [];
+  adminVariantMode = false;
+  adminVariantGroups = [];
+  adminProductVariants = [];
 
 
   resetOptionBatchForm();
@@ -663,6 +681,7 @@ async function handleOptionProductChange(){
 
     }
 
+    renderProductVariantManager();
 
     return;
 
@@ -864,8 +883,22 @@ async function loadAdminProductOptions(){
         ? result.options
         : [];
 
+    adminVariantMode =
+      result.variant_mode === true;
+
+    adminVariantGroups =
+      Array.isArray(result.variant_groups)
+        ? result.variant_groups.map(String)
+        : [];
+
+    adminProductVariants =
+      Array.isArray(result.variants)
+        ? result.variants
+        : [];
+
 
     renderAdminProductOptions();
+    renderProductVariantManager();
 
 
   }catch(error){
@@ -3036,4 +3069,245 @@ function getProductOptionCount(
 
   return 0;
 
+}
+
+/*
+=========================================================
+PRODUCT OPTIONS V3 — VARIANT MANAGER (PHASE 1)
+=========================================================
+*/
+
+function getVariantEligibleGroups(){
+  const grouped = {};
+  (adminProductOptions || []).forEach(option => {
+    const group = String(option.option_name || "").trim();
+    if(!group) return;
+    if(!grouped[group]) grouped[group] = [];
+    grouped[group].push(option);
+  });
+  return Object.entries(grouped)
+    .filter(([,options]) => options.length > 0)
+    .map(([name,options]) => ({name,options}));
+}
+
+function renderProductVariantManager(){
+  const box = document.getElementById("productVariantManager");
+  if(!box) return;
+  if(!selectedOptionProductId){
+    box.innerHTML = "กรุณาเลือกสินค้าก่อน";
+    return;
+  }
+
+  const groups = getVariantEligibleGroups();
+  const checked = new Set(adminVariantGroups || []);
+
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+      <div>
+        <h2 style="margin:0 0 6px;">🧩 Variant Combination</h2>
+        <div style="color:#64748b;font-size:13px;line-height:1.6;">
+          ใช้เมื่อ 1 ชิ้นต้องเลือกหลายกลุ่มต่อกัน เช่น แบบเสื้อ + Size<br>
+          รูปภาพยังเก็บอยู่ที่ Option เดิม ไม่ต้องอัปโหลดซ้ำใน Variant
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font-weight:700;">
+        <input id="variantModeEnabled" type="checkbox" ${adminVariantMode ? "checked" : ""} onchange="handleVariantModeToggle()">
+        เปิดโหมด Variant
+      </label>
+    </div>
+
+    <div id="variantModeBody" style="margin-top:18px;${adminVariantMode ? "" : "display:none;"}">
+      <div style="padding:12px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;">
+        <b>กลุ่มที่ใช้ประกอบ Variant</b>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;">
+          ${groups.length ? groups.map(group => `
+            <label style="display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" data-variant-group="${escapeHtml(group.name)}"
+                ${checked.has(group.name) ? "checked" : ""}>
+              ${escapeHtml(group.name)} (${group.options.length})
+            </label>
+          `).join("") : `<span style="color:#ef4444;">ยังไม่มีกลุ่มตัวเลือก</span>`}
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+          <button type="button" style="width:auto;" onclick="generateVariantMatrixFromGroups()">⚙️ สร้าง/อัปเดต Combination</button>
+          <button type="button" style="width:auto;background:#64748b;" onclick="renderProductVariantManager()">↻ คืนค่าที่บันทึก</button>
+        </div>
+      </div>
+
+      <div id="variantMatrix" style="margin-top:16px;"></div>
+
+      <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <button id="saveVariantsBtn" type="button" onclick="saveProductVariantsFromAdmin()">💾 บันทึก Variant</button>
+        <span id="saveVariantsLoading" style="display:none;color:#64748b;">⏳ กำลังบันทึก...</span>
+      </div>
+    </div>
+  `;
+
+  renderVariantMatrixRows(adminProductVariants || []);
+}
+
+function handleVariantModeToggle(){
+  const enabled = !!document.getElementById("variantModeEnabled")?.checked;
+  adminVariantMode = enabled;
+  const body = document.getElementById("variantModeBody");
+  if(body) body.style.display = enabled ? "block" : "none";
+}
+
+function getCheckedVariantGroups(){
+  return Array.from(document.querySelectorAll("[data-variant-group]:checked"))
+    .map(input => String(input.getAttribute("data-variant-group") || "").trim())
+    .filter(Boolean);
+}
+
+function buildVariantSignature(selections){
+  return Object.keys(selections).sort().map(group => `${group}=${selections[group]}`).join("||");
+}
+
+function generateVariantMatrixFromGroups(){
+  const groupNames = getCheckedVariantGroups();
+  if(groupNames.length < 2){
+    alert("กรุณาเลือกอย่างน้อย 2 กลุ่ม เช่น แบบเสื้อ + Size");
+    return;
+  }
+
+  const eligible = getVariantEligibleGroups();
+  const groupMap = Object.fromEntries(eligible.map(group => [group.name, group.options]));
+  let combinations = [{values:{}, option_ids:{}}];
+
+  groupNames.forEach(groupName => {
+    const options = groupMap[groupName] || [];
+    combinations = combinations.flatMap(base => options.map(option => ({
+      values:{...base.values,[groupName]:String(option.option_value || "")},
+      option_ids:{...base.option_ids,[groupName]:String(option.option_id || "")}
+    })));
+  });
+
+  const oldBySignature = new Map((adminProductVariants || []).map(v => [String(v.signature || buildVariantSignature(v.option_values || {})),v]));
+  adminVariantGroups = groupNames;
+  adminProductVariants = combinations.map((combo,index) => {
+    const signature = buildVariantSignature(combo.values);
+    const old = oldBySignature.get(signature) || {};
+    return {
+      variant_id:String(old.variant_id || ""),
+      signature,
+      option_values:combo.values,
+      option_ids:combo.option_ids,
+      price:old.price ?? "",
+      stock:Number(old.stock ?? 0),
+      status:String(old.status || "active"),
+      sort_order:index
+    };
+  });
+
+  renderVariantMatrixRows(adminProductVariants);
+}
+
+function renderVariantMatrixRows(variants){
+  const box = document.getElementById("variantMatrix");
+  if(!box) return;
+  if(!adminVariantMode){ box.innerHTML=""; return; }
+  if(!Array.isArray(variants) || !variants.length){
+    box.innerHTML = `<div style="padding:14px;border:1px dashed #cbd5e1;border-radius:12px;color:#64748b;">เลือกกลุ่มด้านบน แล้วกด “สร้าง/อัปเดต Combination”</div>`;
+    return;
+  }
+
+  box.innerHTML = `
+    <div style="overflow:auto;">
+      <table style="width:100%;border-collapse:collapse;min-width:650px;">
+        <thead><tr>
+          <th style="text-align:left;padding:9px;border-bottom:1px solid #e2e8f0;">Combination</th>
+          <th style="text-align:left;padding:9px;border-bottom:1px solid #e2e8f0;">ราคา</th>
+          <th style="text-align:left;padding:9px;border-bottom:1px solid #e2e8f0;">Stock</th>
+          <th style="text-align:left;padding:9px;border-bottom:1px solid #e2e8f0;">สถานะ</th>
+        </tr></thead>
+        <tbody>
+          ${variants.map((variant,index) => `
+            <tr data-variant-row="${index}">
+              <td style="padding:9px;border-bottom:1px solid #f1f5f9;font-weight:700;">
+                ${Object.entries(variant.option_values || {}).map(([g,v]) => `${escapeHtml(g)}: ${escapeHtml(v)}`).join(" / ")}
+              </td>
+              <td style="padding:9px;border-bottom:1px solid #f1f5f9;">
+                <input data-variant-price="${index}" type="number" min="0" step="0.01" value="${escapeHtml(variant.price ?? "")}" placeholder="ราคา" style="min-width:110px;">
+              </td>
+              <td style="padding:9px;border-bottom:1px solid #f1f5f9;">
+                <input data-variant-stock="${index}" type="number" min="0" step="1" value="${Number(variant.stock || 0)}" style="min-width:90px;">
+              </td>
+              <td style="padding:9px;border-bottom:1px solid #f1f5f9;">
+                <select data-variant-status="${index}">
+                  <option value="active" ${variant.status !== "inactive" ? "selected" : ""}>เปิดขาย</option>
+                  <option value="inactive" ${variant.status === "inactive" ? "selected" : ""}>ปิด</option>
+                </select>
+              </td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function syncVariantRowsFromDom(){
+  adminProductVariants = (adminProductVariants || []).map((variant,index) => ({
+    ...variant,
+    price:document.querySelector(`[data-variant-price="${index}"]`)?.value ?? variant.price,
+    stock:Number(document.querySelector(`[data-variant-stock="${index}"]`)?.value ?? variant.stock ?? 0),
+    status:String(document.querySelector(`[data-variant-status="${index}"]`)?.value || variant.status || "active"),
+    sort_order:index
+  }));
+}
+
+async function saveProductVariantsFromAdmin(){
+  if(!selectedOptionProductId){ alert("กรุณาเลือกสินค้า"); return; }
+  const enabled = !!document.getElementById("variantModeEnabled")?.checked;
+  const groupNames = getCheckedVariantGroups();
+  syncVariantRowsFromDom();
+
+  if(enabled && groupNames.length < 2){
+    alert("โหมด Variant ต้องเลือกอย่างน้อย 2 กลุ่ม");
+    return;
+  }
+  if(enabled && !adminProductVariants.length){
+    alert("กรุณาสร้าง Combination ก่อนบันทึก");
+    return;
+  }
+
+  for(const variant of adminProductVariants){
+    if(!Number.isFinite(Number(variant.price)) || Number(variant.price) < 0){ alert("กรุณากรอกราคา Variant ให้ถูกต้อง"); return; }
+    if(!Number.isInteger(Number(variant.stock)) || Number(variant.stock) < 0){ alert("Stock Variant ต้องเป็นจำนวนเต็มตั้งแต่ 0 ขึ้นไป"); return; }
+  }
+
+  const btn=document.getElementById("saveVariantsBtn");
+  const loading=document.getElementById("saveVariantsLoading");
+  if(btn) btn.disabled=true;
+  if(loading) loading.style.display="inline";
+
+  try{
+    const formData=new FormData();
+    formData.append("action","saveProductOptionsBatch");
+    formData.append("payload",JSON.stringify({
+      operation:"save_variants",
+      product_id:selectedOptionProductId,
+      variant_mode:enabled,
+      variant_groups:groupNames,
+      variants:adminProductVariants.map((variant,index)=>({
+        variant_id:variant.variant_id || "",
+        option_values:variant.option_values || {},
+        option_ids:variant.option_ids || {},
+        price:Number(variant.price),
+        stock:Number(variant.stock),
+        status:variant.status === "inactive" ? "inactive" : "active",
+        sort_order:index
+      }))
+    }));
+    const response=await fetch(API,{method:"POST",body:formData});
+    const result=await response.json();
+    if(!result || result.success !== true) throw new Error(result?.error || "บันทึก Variant ไม่สำเร็จ");
+    alert(`บันทึก Variant แล้ว ${Number(result.saved_count || 0)} Combination`);
+    await loadAdminProductOptions();
+  }catch(error){
+    console.error("saveProductVariantsFromAdmin:",error);
+    alert(error?.message || "บันทึก Variant ไม่สำเร็จ");
+  }finally{
+    if(btn) btn.disabled=false;
+    if(loading) loading.style.display="none";
+  }
 }
