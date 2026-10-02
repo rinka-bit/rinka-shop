@@ -1295,9 +1295,26 @@ function changeQty(
     return;
   }
 
-  const nextQty =
+  let nextQty =
     Number(item.qty || 1) +
     Number(change || 0);
+
+  if(item.variant_id && Array.isArray(item.variants)){
+    const variant = item.variants.find(row =>
+      String(row.variant_id || "").trim() === String(item.variant_id || "").trim()
+    );
+    if(variant){
+      const available = Math.max(0, Math.floor(Number(variant.stock || 0)));
+      if(available <= 0 && Number(change || 0) > 0){
+        showCartToast("ตัวเลือกนี้สินค้าหมดแล้ว", true);
+        return;
+      }
+      if(nextQty > available){
+        nextQty = available;
+        showCartToast(`เลือกได้สูงสุด ${available} ชิ้น`, true);
+      }
+    }
+  }
 
   if(nextQty <= 0){
 
