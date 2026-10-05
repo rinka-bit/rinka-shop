@@ -23125,105 +23125,6 @@
       ]
     },
     {
-      "product_id": "PROD1790171910260",
-      "name": "Photocard set",
-      "price_mode": "fixed",
-      "price": 110,
-      "final_price": 110,
-      "base_price": 110,
-      "min_price": 110,
-      "max_price": 110,
-      "has_price_range": false,
-      "old_price": null,
-      "on_sale": false,
-      "sale_price": 100,
-      "sale_start": "2026-09-21T17:00:00.000Z",
-      "sale_end": "2026-10-03T17:00:00.000Z",
-      "main_category": "การ์ด",
-      "fandom": "Love and Deepspace",
-      "sub_category": "การ์ด",
-      "round": "LnD 9-2026",
-      "description": "ในเซ็ตประกอบไปด้วย \n-Photocard*2 ขนาด 55*85มม.\n-สติกเกอร์*2",
-      "search_keywords": "Xavier Zayne Rafayel Sylus Caleb",
-      "image": "https://drive.google.com/thumbnail?id=1ohI0t99Szi3_YWDgx362j4DhnYcosxfy&sz=w2000",
-      "status": "active",
-      "stock": 9999,
-      "product_type": "preorder",
-      "crate_available": "",
-      "crate_fee": 0,
-      "shipping_fee": 0,
-      "preorder_deadline": "2026-10-02T17:00:00.000Z",
-      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
-      "image2": "",
-      "image3": "",
-      "featured": "",
-      "new_arrival": "",
-      "sort_order": 0,
-      "image4": "",
-      "collection_id": "COL1790171157120",
-      "created_at": "",
-      "variant_mode": false,
-      "variant_groups": [],
-      "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1790175712319_1",
-          "option_name": "ตัวละคร",
-          "option_value": "Xavier",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1U3fUbZ4IlRehRZxXGJ6Tp8ux9Wp7OOkj&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1790175712319_2",
-          "option_name": "ตัวละคร",
-          "option_value": "Zayne",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9994,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1Jk5HSBmzEHilXca9OoJqPa_H54CNTxmT&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1790175712319_3",
-          "option_name": "ตัวละคร",
-          "option_value": "Rafayel",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9998,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1R7iRG5FPCTirQkYRiucspyOSUeOkA6O_&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1790175712319_4",
-          "option_name": "ตัวละคร",
-          "option_value": "Sylus",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1E3--uS2D6tcQW-z5dU4NOSqhywP7qLr1&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1790175712319_5",
-          "option_name": "ตัวละคร",
-          "option_value": "Caleb",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1LVx9Tf0hhJmYrfulHtyCNJ5yo3plHaEG&sz=w2000",
-          "sort_order": 4
-        }
-      ]
-    },
-    {
       "product_id": "PROD1790172065045",
       "name": "เข็มกลัดวงรี",
       "price_mode": "fixed",
@@ -32744,9 +32645,9 @@
       "collection_id": "COL1790171157120",
       "name": "Love and Deepspace 9-2026 (แบบรวมส่งกลับไทยแล้ว)",
       "fandom": "Love and Deepspace",
-      "image": "https://drive.google.com/thumbnail?id=1TWWSqrLB8Nn_ZTLTyzK4qpbAg8nCL7kH&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1nh8IhYyEew-XaNCbDPHa8Z-lOyIKB74G&sz=w2000",
       "status": "active",
-      "preorder_deadline": "2026-10-03T17:00:00.000Z",
+      "preorder_deadline": "2026-10-19T17:00:00.000Z",
       "featured": "yes",
       "created_at": "2026-09-23T13:46:03.448Z",
       "collection_type": "preorder",
@@ -32760,7 +32661,7 @@
       "fandom": "Love and Deepspace",
       "image": "https://drive.google.com/thumbnail?id=1nh8IhYyEew-XaNCbDPHa8Z-lOyIKB74G&sz=w2000",
       "status": "active",
-      "preorder_deadline": "2026-10-03T17:00:00.000Z",
+      "preorder_deadline": "2026-10-19T17:00:00.000Z",
       "featured": "yes",
       "created_at": "2026-09-23T13:46:03.448Z",
       "collection_type": "preorder",
@@ -34580,18 +34481,6 @@
         "updated_at": "2026-09-19T11:21:22.176Z"
       },
       {
-        "gift_item_id": "GIFT17901716649904461",
-        "rule_id": "RULE17901712769541429",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 0,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
-      },
-      {
         "gift_item_id": "GIFT17901717056847194",
         "rule_id": "RULE17901712769541429",
         "gift_name": "เซ็ตสติกเกอร์",
@@ -34602,18 +34491,6 @@
         "sort_order": 1,
         "created_at": "2026-09-23T13:55:05.684Z",
         "updated_at": "2026-09-23T13:55:05.684Z"
-      },
-      {
-        "gift_item_id": "GIFT17901717056847195",
-        "rule_id": "RULE17901712769541430",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 2,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
       },
       {
         "gift_item_id": "GIFT17901717056847196",
@@ -34628,18 +34505,6 @@
         "updated_at": "2026-09-23T13:55:05.684Z"
       },
       {
-        "gift_item_id": "GIFT17901717056847197",
-        "rule_id": "RULE17901712769541431",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 4,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
-      },
-      {
         "gift_item_id": "GIFT17901717056847198",
         "rule_id": "RULE17901712769541431",
         "gift_name": "เซ็ตสติกเกอร์",
@@ -34650,18 +34515,6 @@
         "sort_order": 5,
         "created_at": "2026-09-23T13:55:05.684Z",
         "updated_at": "2026-09-23T13:55:05.684Z"
-      },
-      {
-        "gift_item_id": "GIFT17901717056847199",
-        "rule_id": "RULE17901712769541432",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 6,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
       },
       {
         "gift_item_id": "GIFT17901717056847200",
@@ -34676,18 +34529,6 @@
         "updated_at": "2026-09-23T13:55:05.684Z"
       },
       {
-        "gift_item_id": "GIFT17901717056847201",
-        "rule_id": "RULE17901712769541433",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 8,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
-      },
-      {
         "gift_item_id": "GIFT17901717056847202",
         "rule_id": "RULE17901712769541433",
         "gift_name": "เซ็ตสติกเกอร์",
@@ -34698,18 +34539,6 @@
         "sort_order": 9,
         "created_at": "2026-09-23T13:55:05.684Z",
         "updated_at": "2026-09-23T13:55:05.684Z"
-      },
-      {
-        "gift_item_id": "GIFT17901717056847203",
-        "rule_id": "RULE17901712769541434",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 0,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
       },
       {
         "gift_item_id": "GIFT17901717056847204",
@@ -34736,18 +34565,6 @@
         "updated_at": "2026-09-23T13:55:05.684Z"
       },
       {
-        "gift_item_id": "GIFT17901717056847207",
-        "rule_id": "RULE17901712769541436",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 4,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
-      },
-      {
         "gift_item_id": "GIFT17901717056847208",
         "rule_id": "RULE17901712769541436",
         "gift_name": "เซ็ตสติกเกอร์",
@@ -34760,18 +34577,6 @@
         "updated_at": "2026-09-23T13:55:05.684Z"
       },
       {
-        "gift_item_id": "GIFT17901717056847209",
-        "rule_id": "RULE17901712769541437",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 6,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
-      },
-      {
         "gift_item_id": "GIFT17901717056847210",
         "rule_id": "RULE17901712769541437",
         "gift_name": "เซ็ตสติกเกอร์",
@@ -34782,18 +34587,6 @@
         "sort_order": 7,
         "created_at": "2026-09-23T13:55:05.684Z",
         "updated_at": "2026-09-23T13:55:05.684Z"
-      },
-      {
-        "gift_item_id": "GIFT17901717056847211",
-        "rule_id": "RULE17901712769541438",
-        "gift_name": "เซ็ตการ์ด",
-        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_0455.JPG?raw=true",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 8,
-        "created_at": "2026-09-23T13:54:24.990Z",
-        "updated_at": "2026-09-23T13:54:24.990Z"
       },
       {
         "gift_item_id": "GIFT17901717056847212",
@@ -35616,16 +35409,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-05T02:37:56.659Z",
+  "generated_at": "2026-10-05T02:41:52.984Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2367,
-    "collections_ms": 1016,
-    "gifts_ms": 2609,
-    "banks_ms": 1730,
-    "total_ms": 7722,
-    "product_count": 317,
+    "products_ms": 2032,
+    "collections_ms": 574,
+    "gifts_ms": 1347,
+    "banks_ms": 147,
+    "total_ms": 4100,
+    "product_count": 316,
     "collection_count": 5,
     "bank_count": 3
   }
