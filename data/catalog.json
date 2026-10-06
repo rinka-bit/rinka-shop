@@ -28131,49 +28131,6 @@
           "sort_order": 3
         }
       ]
-    },
-    {
-      "product_id": "PROD1791273021121",
-      "name": "เทส",
-      "price_mode": "fixed",
-      "price": 2468,
-      "final_price": 2468,
-      "base_price": 13579,
-      "min_price": 13579,
-      "max_price": 13579,
-      "has_price_range": false,
-      "old_price": 13579,
-      "on_sale": true,
-      "sale_price": 2468,
-      "sale_start": "2026-10-05T17:00:00.000Z",
-      "sale_end": "2026-10-07T17:00:00.000Z",
-      "main_category": "อื่น ๆ",
-      "fandom": "Wuthering Waves",
-      "sub_category": "อื่น ๆ",
-      "round": "",
-      "description": "เทสเทสเทสเทสเทส",
-      "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1J2vGcw0lBvNY6_zI3xGVlOReJSW7L4wM&sz=w2000",
-      "status": "active",
-      "stock": 3,
-      "product_type": "preorder",
-      "crate_available": "",
-      "crate_fee": 0,
-      "shipping_fee": 0,
-      "preorder_deadline": "",
-      "estimated_arrival": "",
-      "image2": "",
-      "image3": "",
-      "featured": "",
-      "new_arrival": "",
-      "sort_order": 0,
-      "image4": "",
-      "collection_id": "",
-      "created_at": "",
-      "variant_mode": false,
-      "variant_groups": [],
-      "variants": [],
-      "options": []
     }
   ],
   "collections": [
@@ -30945,16 +30902,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-06T07:51:30.203Z",
+  "generated_at": "2026-10-06T08:50:28.748Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2610,
-    "collections_ms": 1002,
-    "gifts_ms": 2950,
-    "banks_ms": 277,
-    "total_ms": 6839,
-    "product_count": 267,
+    "products_ms": 2071,
+    "collections_ms": 1225,
+    "gifts_ms": 1311,
+    "banks_ms": 218,
+    "total_ms": 4826,
+    "product_count": 266,
     "collection_count": 4,
     "bank_count": 3
   }
