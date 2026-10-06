@@ -28434,27 +28434,27 @@
       ]
     },
     {
-      "product_id": "PROD1790925433366",
-      "name": "เทสจ้า",
+      "product_id": "PROD1790931533480",
+      "name": "เทส2.2",
       "price_mode": "fixed",
-      "price": 333.99,
-      "final_price": 333.99,
-      "base_price": 333.99,
-      "min_price": 333.99,
-      "max_price": 333.99,
+      "price": 555.55,
+      "final_price": 555.55,
+      "base_price": 555.55,
+      "min_price": 555.55,
+      "max_price": 555.55,
       "has_price_range": false,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
       "sale_start": "",
       "sale_end": "",
-      "main_category": "",
+      "main_category": "อื่น ๆ",
       "fandom": "Wuthering Waves",
       "sub_category": "อื่น ๆ",
       "round": "",
-      "description": "เทสจ้า",
-      "search_keywords": "A Luuk B Denia",
-      "image": "https://drive.google.com/thumbnail?id=1qXLuK1tziM92HGJzUUouWvNzTcuqmSv-&sz=w2000",
+      "description": "เทสอีกจ้า",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1NKlI8kZfmLkGLhmBrcukIFoWKrD04VK3&sz=w2000",
       "status": "active",
       "stock": 2,
       "product_type": "preorder",
@@ -28462,7 +28462,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "preorder_deadline": "",
-      "estimated_arrival": "พรีเซล",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
       "image2": "",
       "image3": "",
       "featured": "",
@@ -28471,123 +28471,10 @@
       "image4": "",
       "collection_id": "",
       "created_at": "",
-      "variant_mode": true,
-      "variant_groups": [
-        "แบบ",
-        "ตัวละคร"
-      ],
-      "variants": [
-        {
-          "variant_id": "VAR1790929406909_0_913c5b34",
-          "signature": "ตัวละคร=Luuk||แบบ=A",
-          "option_values": {
-            "แบบ": "A",
-            "ตัวละคร": "Luuk"
-          },
-          "option_ids": {
-            "แบบ": "OPT1790929278709_1",
-            "ตัวละคร": "OPT1790929326255_1"
-          },
-          "price": 333,
-          "stock": 2,
-          "status": "active",
-          "sort_order": 0
-        },
-        {
-          "variant_id": "VAR1790929406910_1_d5652f15",
-          "signature": "ตัวละคร=Denia||แบบ=A",
-          "option_values": {
-            "แบบ": "A",
-            "ตัวละคร": "Denia"
-          },
-          "option_ids": {
-            "แบบ": "OPT1790929278709_1",
-            "ตัวละคร": "OPT1790929350045_2"
-          },
-          "price": 333,
-          "stock": 2,
-          "status": "active",
-          "sort_order": 1
-        },
-        {
-          "variant_id": "VAR1790929406911_2_54a09e85",
-          "signature": "ตัวละคร=Luuk||แบบ=B",
-          "option_values": {
-            "แบบ": "B",
-            "ตัวละคร": "Luuk"
-          },
-          "option_ids": {
-            "แบบ": "OPT1790929278709_2",
-            "ตัวละคร": "OPT1790929326255_1"
-          },
-          "price": 333,
-          "stock": 2,
-          "status": "active",
-          "sort_order": 2
-        },
-        {
-          "variant_id": "VAR1790929406911_3_afa87ea1",
-          "signature": "ตัวละคร=Denia||แบบ=B",
-          "option_values": {
-            "แบบ": "B",
-            "ตัวละคร": "Denia"
-          },
-          "option_ids": {
-            "แบบ": "OPT1790929278709_2",
-            "ตัวละคร": "OPT1790929350045_2"
-          },
-          "price": 333,
-          "stock": 2,
-          "status": "active",
-          "sort_order": 3
-        }
-      ],
-      "options": [
-        {
-          "option_id": "OPT1790929278709_1",
-          "option_name": "แบบ",
-          "option_value": "A",
-          "additional_price": 0,
-          "price": null,
-          "stock": 2,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1OY8saArVAJNcynTZcXslE0z6T-epWZ6I&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1790929326255_1",
-          "option_name": "ตัวละคร",
-          "option_value": "Luuk",
-          "additional_price": 0,
-          "price": null,
-          "stock": 2,
-          "selection_type": "single",
-          "image": "",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1790929278709_2",
-          "option_name": "แบบ",
-          "option_value": "B",
-          "additional_price": 0,
-          "price": null,
-          "stock": 2,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1N-IXQojQ7Y3MSingdE3UPjL8NaI_ZBas&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1790929350045_2",
-          "option_name": "ตัวละคร",
-          "option_value": "Denia",
-          "additional_price": 0,
-          "price": null,
-          "stock": 2,
-          "selection_type": "single",
-          "image": "",
-          "sort_order": 1
-        }
-      ]
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     },
     {
       "product_id": "PROD1790931989230",
@@ -31445,15 +31332,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-06T06:39:04.303Z",
+  "generated_at": "2026-10-06T06:39:55.458Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3998,
-    "collections_ms": 3100,
-    "gifts_ms": 5506,
-    "banks_ms": 385,
-    "total_ms": 12990,
+    "products_ms": 2814,
+    "collections_ms": 1670,
+    "gifts_ms": 1948,
+    "banks_ms": 325,
+    "total_ms": 6757,
     "product_count": 276,
     "collection_count": 4,
     "bank_count": 3
