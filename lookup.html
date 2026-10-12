@@ -154,7 +154,7 @@ button{border:0;border-radius:13px;padding:12px 18px;background:#75bce6;color:wh
 <div id="result"></div>
 </main>
 <script>
-const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+const API="https://script.google.com/macros/s/AKfycbwpwT5sgetNYhEtGz9NMaaYcedgEgU_32udT0TjTIyKn99ZqmZFYggvGCBXiva-KeVx6Q/exec";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const money=v=>"฿"+Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:0,maximumFractionDigits:2});
 const norm=v=>String(v||"").trim().replace(/^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i,"").replace(/^@/,"").split(/[/?#]/)[0].trim();
