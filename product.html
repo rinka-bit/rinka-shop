@@ -254,22 +254,6 @@ button:disabled{
   background:#e0f2fe;
 }
 
-.sale-duration-notice{
-  margin:0 0 12px;
-  padding:11px 14px;
-  border-radius:12px;
-  background:#eaf7ff;
-  border:1px solid #b8e4ff;
-  color:#23658e;
-  font-size:13px;
-  font-weight:700;
-}
-.sale-duration-notice.closed{
-  background:#fff1f2;
-  border-color:#fecdd3;
-  color:#9f1239;
-}
-
 .product-title{
   margin:0;
   font-size:clamp(25px,3vw,38px);
@@ -1335,45 +1319,10 @@ function renderProductError(
 
 }
 
-
-/* Product Sale Duration V2 — storefront display guard */
-function getProductSaleDurationV2(product){
-  const type = String(product?.sale_duration_type ?? "").trim().toLowerCase() || "permanent";
-  if(type === "permanent") return {open:true, limited:false, deadline:""};
-  if(type !== "limited") return {open:false, limited:true, deadline:""};
-  const raw = String(product?.preorder_deadline ?? "").trim();
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
-  if(!match) return {open:false, limited:true, deadline:""};
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const parsed = new Date(Date.UTC(year, month-1, day));
-  if(parsed.getUTCFullYear() !== year || parsed.getUTCMonth()+1 !== month || parsed.getUTCDate() !== day){
-    return {open:false, limited:true, deadline:""};
-  }
-  const bangkok = new Intl.DateTimeFormat("en-GB", {
-    timeZone:"Asia/Bangkok", year:"numeric", month:"2-digit", day:"2-digit"
-  }).formatToParts(new Date());
-  const parts = Object.fromEntries(bangkok.map(part => [part.type, part.value]));
-  const today = `${parts.year}-${parts.month}-${parts.day}`;
-  return {open:today <= raw, limited:true, deadline:raw};
-}
-
-function formatProductDeadlineV2(date){
-  if(!date) return "ไม่ระบุวันปิดรับที่ถูกต้อง";
-  const [year, month, day] = date.split("-");
-  return `${day}/${month}/${year}`;
-}
-
 function renderProduct(product){
 
   window.currentProduct =
     product;
-
-  const saleDuration = getProductSaleDurationV2(product);
-  const saleDurationHtml = saleDuration.limited
-    ? `<div class="sale-duration-notice ${saleDuration.open ? "" : "closed"}" role="status">${saleDuration.open ? "ปิดรับออเดอร์วันที่ " : "ปิดรับออเดอร์แล้ว · กำหนดปิดรับ "}${escapeProductHtml(formatProductDeadlineV2(saleDuration.deadline))}</div>`
-    : "";
 
   window.optionQty = {};
   window.variantSelection = {};
@@ -1890,8 +1839,6 @@ aria-label="ดูรูปที่ ${index + 1}">
 
       ${badgeHtml}
 
-      ${saleDurationHtml}
-
       <h1 class="product-title">
         ${escapeProductHtml(
           product.name ||
@@ -2108,7 +2055,6 @@ color:#64748b;
         type="button"
         id="buyNowButton"
         class="buy-button"
-        ${saleDuration.open ? "" : "disabled"}
         onclick="buyNow()">
           ซื้อเลย
         </button>
@@ -2117,7 +2063,6 @@ color:#64748b;
         type="button"
         id="addCartButton"
         class="cart-button"
-        ${saleDuration.open ? "" : "disabled"}
         onclick="addToCart()">
           เพิ่มลงตะกร้า
         </button>
@@ -3450,9 +3395,6 @@ function buildProductCartItems(){
   const product =
     window.currentProduct;
 
-  if(!getProductSaleDurationV2(product).open){
-    throw new Error("สินค้าหมดระยะเวลารับออเดอร์แล้ว หรือข้อมูลวันปิดรับไม่ถูกต้อง");
-  }
 
   const options =
     Array.isArray(
