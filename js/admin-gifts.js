@@ -25,6 +25,10 @@ let adminGiftModalRecordId = "";
 
 let adminGiftModalParentId = "";
 
+// Guided creation: Campaign -> Rule. Existing edit flows remain unchanged.
+let adminGiftCreationWizard = false;
+
+
 /*
 =========================================
 RENDER MANAGER SHELL
@@ -62,7 +66,7 @@ margin:6px 0 0;
 color:#64748b;
 "
 >
-จัดการ Campaign → Rule → Gift Item → Character
+สร้างแคมเปญ 2 ขั้นตอน: Campaign → Rule แล้วจัดการ Gift Item / Character ต่อในรายการ
 </p>
 
 </div>
@@ -1701,6 +1705,9 @@ function openGiftModal(
   ){
 
     renderGiftCampaignForm();
+    if(adminGiftCreationWizard && adminGiftModalAction === "create"){
+      modalTitle.textContent = "🎁 ขั้นตอน 1/2 — ข้อมูล Campaign";
+    }
 
   }
   else if(
@@ -1814,6 +1821,8 @@ function closeGiftModal(){
       "";
 
   }
+
+  adminGiftCreationWizard = false;
 
   adminGiftModalMode = "";
 
@@ -3893,11 +3902,6 @@ function renderGiftCampaignForm(){
         )
       : false;
 
-  const giftEndDate =
-    campaign
-      ? String(campaign.gift_end_date || "").trim()
-      : "";
-
   const ruleMode =
     campaign &&
     String(
@@ -4221,27 +4225,6 @@ color:#64748b;
 <strong>Tier สูงสุด:</strong>
 เช่น 1,200 เลือกเข็มกลัด A/B/C ได้ 1 ชิ้น
 แต่เมื่อยอดถึง 2,400 จะแสดงและรับเฉพาะของแถม Tier 2,400 เท่านั้น
-</p>
-
-</div>
-
-
-<div class="full">
-
-<label for="giftCampaignEndDate">
-วันสิ้นสุดกิจกรรมของแถม (ไม่บังคับ)
-</label>
-
-<br><br>
-
-<input
-  type="date"
-  id="giftCampaignEndDate"
-  value="${escapeHtml(giftEndDate)}"
->
-
-<p style="font-size:13px;color:#64748b;">
-เว้นว่าง = ไม่หมดอายุ / วันที่เลือกยังรับของแถมได้ถึง 23:59 น. ตามเวลาไทย
 </p>
 
 </div>
@@ -5042,11 +5025,6 @@ async function submitGiftCampaign(){
       "giftCampaignRuleMode"
     );
 
-  const giftEndDateInput =
-    document.getElementById(
-      "giftCampaignEndDate"
-    );
-
   const bannerFileInput =
     document.getElementById(
       "giftCampaignBannerFile"
@@ -5101,11 +5079,6 @@ async function submitGiftCampaign(){
       ruleModeInput
         ? ruleModeInput.value
         : "independent",
-
-    gift_end_date:
-      giftEndDateInput
-        ? giftEndDateInput.value.trim()
-        : "",
 
     description:
       descriptionInput
@@ -5322,9 +5295,21 @@ async function submitGiftCampaign(){
         : "เพิ่ม Campaign เรียบร้อยแล้ว"
     );
 
+    const continueWizard =
+      adminGiftCreationWizard &&
+      !payload.campaign_id &&
+      !!savedCampaignId;
+
     closeGiftModal();
 
     await loadGiftCampaigns();
+
+    if(continueWizard){
+      adminGiftCreationWizard = false;
+      openCreateGiftRule(savedCampaignId);
+      const title = document.getElementById("giftModalTitle");
+      if(title){ title.textContent = "🎁 ขั้นตอน 2/2 — กำหนดเงื่อนไขของแถม"; }
+    }
 
   }catch(error){
 
@@ -5383,10 +5368,8 @@ CAMPAIGN ACTIONS
 
 function openCreateGiftCampaign(){
 
-  openGiftModal(
-    "campaign",
-    "create"
-  );
+  adminGiftCreationWizard = true;
+  openGiftModal("campaign", "create");
 
 }
 
