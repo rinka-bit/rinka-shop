@@ -607,6 +607,7 @@ button:disabled{
 </style>
 
 <link rel="stylesheet" href="theme.css?v=20260918-1">
+<link rel="stylesheet" href="rinka-blue.css?v=20261012-2">
 </head>
 
 <body>
@@ -1206,7 +1207,33 @@ function updateCartSummary(){
 
 }
 
-function goCheckout(){
+/* V2: verify limited-sale items against fresh public catalog before checkout.
+   Backend pricing/order validation remains authoritative. */
+async function validateCartSaleDurationV2(items){
+  const response = await fetch("./data/catalog.json", {cache:"no-store"});
+  if(!response.ok) throw new Error("ไม่สามารถตรวจสอบสถานะสินค้าได้ กรุณาลองอีกครั้ง");
+  const catalog = await response.json();
+  if(!catalog || !Array.isArray(catalog.products)) throw new Error("ข้อมูลสินค้าไม่ถูกต้อง กรุณาลองอีกครั้ง");
+  const products = new Map(catalog.products.map(p => [String(p.product_id || p.id || ""), p]));
+  const today = new Intl.DateTimeFormat("en-CA", {timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+  for(const item of items){
+    const id = String(item.product_id || item.id || "");
+    const product = products.get(id);
+    // Missing products must be checked by the backend; don't invent product availability.
+    if(!product) continue;
+    const type = String(product.sale_duration_type || "permanent").trim().toLowerCase();
+    if(type === "permanent") continue;
+    const deadline = String(product.preorder_deadline || "").trim();
+    const validDate = /^\d{4}-\d{2}-\d{2}$/.test(deadline) &&
+      !Number.isNaN(Date.parse(deadline + "T00:00:00Z")) &&
+      new Date(deadline + "T00:00:00Z").toISOString().slice(0,10) === deadline;
+    if(type !== "limited" || !validDate || deadline < today){
+      throw new Error("มีสินค้าที่หมดระยะเวลารับออเดอร์แล้ว กรุณาตรวจสอบตะกร้าอีกครั้ง");
+    }
+  }
+}
+
+async function goCheckout(){
 
   if(cartActionLoading){
     return;
@@ -1247,6 +1274,8 @@ function goCheckout(){
 
   try{
 
+    await validateCartSaleDurationV2(selectedItems);
+
     localStorage.setItem(
       "checkoutCart",
       JSON.stringify(
@@ -1272,7 +1301,7 @@ function goCheckout(){
     updateCartSummary();
 
     showCartToast(
-      "ไม่สามารถเตรียมข้อมูล Checkout ได้",
+      error && error.message ? error.message : "ไม่สามารถเตรียมข้อมูล Checkout ได้",
       true
     );
 
