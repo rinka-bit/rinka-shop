@@ -31,7 +31,7 @@ button,a{font:inherit}button{cursor:pointer}.topbar{position:sticky;top:0;z-inde
 </main>
 <button class="add-btn" type="button" onclick="goAddAddress()">+ เพิ่มที่อยู่ใหม่</button>
 <script>
-const API="https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+const API="https://script.google.com/macros/s/AKfycbwpwT5sgetNYhEtGz9NMaaYcedgEgU_32udT0TjTIyKn99ZqmZFYggvGCBXiva-KeVx6Q/exec";
 const customer=safeJson(localStorage.getItem("customer"),{});
 const sessionToken=String(customer.session_token||localStorage.getItem("session_token")||"").trim();
 const params=new URLSearchParams(location.search);
