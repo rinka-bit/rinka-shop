@@ -177,14 +177,20 @@ window.RinkaCatalog.load =
     }
 
 
-    if(cached){
+    // Do not silently show arbitrarily old product, price or sale dates.
+    // The live API remains the authority for accepting orders.
+    const cacheAge = cached && Number(cached.cached_at)
+      ? Date.now() - Number(cached.cached_at)
+      : Infinity;
+
+    if(cached && cacheAge >= 0 && cacheAge <= 5 * 60 * 1000){
 
       return {
 
         ...cached,
 
-        source:
-          "cache"
+        source:"cache",
+        cache_fallback:true
 
       };
 
