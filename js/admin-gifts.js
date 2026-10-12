@@ -3893,6 +3893,11 @@ function renderGiftCampaignForm(){
         )
       : false;
 
+  const giftEndDate =
+    campaign
+      ? String(campaign.gift_end_date || "").trim()
+      : "";
+
   const ruleMode =
     campaign &&
     String(
@@ -4216,6 +4221,27 @@ color:#64748b;
 <strong>Tier สูงสุด:</strong>
 เช่น 1,200 เลือกเข็มกลัด A/B/C ได้ 1 ชิ้น
 แต่เมื่อยอดถึง 2,400 จะแสดงและรับเฉพาะของแถม Tier 2,400 เท่านั้น
+</p>
+
+</div>
+
+
+<div class="full">
+
+<label for="giftCampaignEndDate">
+วันสิ้นสุดกิจกรรมของแถม (ไม่บังคับ)
+</label>
+
+<br><br>
+
+<input
+  type="date"
+  id="giftCampaignEndDate"
+  value="${escapeHtml(giftEndDate)}"
+>
+
+<p style="font-size:13px;color:#64748b;">
+เว้นว่าง = ไม่หมดอายุ / วันที่เลือกยังรับของแถมได้ถึง 23:59 น. ตามเวลาไทย
 </p>
 
 </div>
@@ -5016,6 +5042,11 @@ async function submitGiftCampaign(){
       "giftCampaignRuleMode"
     );
 
+  const giftEndDateInput =
+    document.getElementById(
+      "giftCampaignEndDate"
+    );
+
   const bannerFileInput =
     document.getElementById(
       "giftCampaignBannerFile"
@@ -5070,6 +5101,11 @@ async function submitGiftCampaign(){
       ruleModeInput
         ? ruleModeInput.value
         : "independent",
+
+    gift_end_date:
+      giftEndDateInput
+        ? giftEndDateInput.value.trim()
+        : "",
 
     description:
       descriptionInput
