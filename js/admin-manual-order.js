@@ -2712,15 +2712,13 @@ async function submitDMInvoice(){
       if(
         rawItems.some(
           item =>
-            !Number.isFinite(
-              Number(item.quantity)
-            ) ||
+            !Number.isSafeInteger(Number(item.quantity)) ||
             Number(item.quantity) <= 0
         )
       ){
 
         throw new Error(
-          "จำนวนสินค้าไม่ถูกต้อง"
+          "จำนวนสินค้าต้องเป็นจำนวนเต็มบวก"
         );
 
       }
@@ -2728,16 +2726,18 @@ async function submitDMInvoice(){
 
       if(
         rawItems.some(
-          item =>
-            !Number.isFinite(
-              Number(item.unit_price)
-            ) ||
-            Number(item.unit_price) < 0
+          item => {
+            const price = Number(item.unit_price);
+            return !Number.isFinite(price) ||
+              price < 0 ||
+              !Number.isSafeInteger(Math.round(price * 100)) ||
+              Math.abs(price * 100 - Math.round(price * 100)) > 1e-7;
+          }
         )
       ){
 
         throw new Error(
-          "ราคาสินค้าไม่ถูกต้อง"
+          "ราคาสินค้าต้องไม่ติดลบและมีทศนิยมไม่เกิน 2 ตำแหน่ง"
         );
 
       }
@@ -3519,7 +3519,7 @@ function showDMInvoiceSuccess(
 
     <button
       type="button"
-      onclick="window.open('${dmInvoiceEsc(link)}', '_blank')"
+      id="dmInvoiceOpenGeneratedLink"
       style="
         width:auto;
       "
@@ -3544,6 +3544,23 @@ function showDMInvoiceSuccess(
 </div>
 
 `;
+
+  // Bind a URL through the DOM, not through executable inline HTML.
+  const openLinkButton = document.getElementById("dmInvoiceOpenGeneratedLink");
+  if (openLinkButton) {
+    openLinkButton.addEventListener("click", () => {
+      // Reject unexpected schemes in a URL received from the API.
+      try {
+        const target = new URL(String(link || ""), window.location.href);
+        if (target.protocol !== "https:" && target.protocol !== "http:") {
+          throw new Error("Unsupported invoice URL scheme");
+        }
+        window.open(target.href, "_blank", "noopener,noreferrer");
+      } catch (error) {
+        alert("ลิงก์ Invoice ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งค่ะ");
+      }
+    });
+  }
 
 }
 
@@ -3571,9 +3588,12 @@ function buildDMInvoiceCustomerMessage(
     );
 
 
+  const isShipping =
+    String(result.invoice_type || DMInvoiceManager.type).toLowerCase() === "shipping";
+
   return `
 
-แจ้งยอดสำหรับรายการที่สั่งซื้อทาง DM ค่ะ🩵
+${isShipping ? "แจ้งยอดค่าส่งสำหรับออเดอร์ทาง DM ค่ะ🩵" : "แจ้งยอดสำหรับรายการที่สั่งซื้อทาง DM ค่ะ🩵"}
 
 เลขที่ใบสั่งซื้อ:
 ${invoiceId}
@@ -3581,8 +3601,8 @@ ${invoiceId}
 ยอดรวม:
 ${dmInvoiceMoney(total)} บาท
 
-สามารถตรวจสอบรายการสินค้า
-กรอกข้อมูลผู้รับ และชำระเงินได้ที่ลิงก์ด้านล่างค่ะ
+${isShipping ? "สามารถตรวจสอบรายละเอียดค่าส่ง" : "สามารถตรวจสอบรายการสินค้า"}
+กรอกข้อมูลผู้รับ และแจ้งชำระเงินได้ที่ลิงก์ด้านล่างค่ะ
 
 ${link}
 
