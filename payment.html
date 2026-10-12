@@ -742,6 +742,7 @@ button:disabled{
 </style>
 
 <link rel="stylesheet" href="theme.css?v=20260919-1">
+<link rel="stylesheet" href="rinka-blue.css?v=20261012-2">
 </head>
 
 <body>
@@ -1520,6 +1521,12 @@ function openPaymentQR(
 }
 
 async function submitOrder(){
+
+  // Prevent concurrent submissions (including programmatic/double clicks).
+  if(paymentSubmitting){
+    return;
+  }
+
 
   let cart =
     JSON.parse(
