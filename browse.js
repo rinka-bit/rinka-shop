@@ -1,5 +1,5 @@
 const BASE_API =
-  "https://script.google.com/macros/s/AKfycbxKjVvn8AXrK0wDvKqN-A9yS2Vk8R-w25ar1b9ftiIdUgUvFaShunLnFnAyIDuaTWj76w/exec";
+  "https://script.google.com/macros/s/AKfycbwpwT5sgetNYhEtGz9NMaaYcedgEgU_32udT0TjTIyKn99ZqmZFYggvGCBXiva-KeVx6Q/exec";
 
 let browseProducts = [];
 let searchTimer = null;
