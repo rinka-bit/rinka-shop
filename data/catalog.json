@@ -28927,7 +28927,7 @@
       "sub_category": "ชิกิชิ",
       "round": "Ink Charm Lake Excursion",
       "description": "ขนาด 140*210มม.",
-      "search_keywords": "",
+      "search_keywords": "Hsin Suoming",
       "image": "https://drive.google.com/thumbnail?id=19kLRyukekZOxvaCYjK3bMsKs5Jm0_ARX&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -28949,7 +28949,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1791986363334_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Hsin",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1V0cwQxhHQdNvDkeXPZLTfuIvkOSjd6j9&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1791986363334_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Suoming",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1XFunoQp__0w44rBfM1iz_KOQ4zzauo6K&sz=w2000",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1791985599960",
@@ -28971,7 +28994,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Ink Charm Lake Excursion",
       "description": "ขนาด 70*70มม.",
-      "search_keywords": "",
+      "search_keywords": "Hsin Suoming",
       "image": "https://drive.google.com/thumbnail?id=1i3uWU0VGn826cezj8ARnQ3YZbVwKZvx_&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -28993,7 +29016,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1791986406472_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Hsin",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1DvljX8O_c8IYAOAaQkD07MLHcReF8T7u&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1791986406472_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Suoming",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1BOgoP6oF2FBq-BPo8tBfzAfojxb5qs5a&sz=w2000",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1791985599961",
@@ -31943,15 +31989,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T13:56:31.229Z",
+  "generated_at": "2026-10-14T14:00:34.189Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3243,
-    "collections_ms": 1283,
-    "gifts_ms": 1776,
-    "banks_ms": 861,
-    "total_ms": 7163,
+    "products_ms": 2076,
+    "collections_ms": 1512,
+    "gifts_ms": 2017,
+    "banks_ms": 592,
+    "total_ms": 6197,
     "product_count": 280,
     "collection_count": 7,
     "bank_count": 3
