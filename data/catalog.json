@@ -28860,7 +28860,7 @@
       "sub_category": "สแตนดี้",
       "round": "Ink Charm Lake Excursion",
       "description": "ขนาดสินค้า\nHsin : 165มม.\nSuoming : 161มม.",
-      "search_keywords": "",
+      "search_keywords": "Hsin Suoming",
       "image": "https://drive.google.com/thumbnail?id=1l7N1NflRVMSfc0-AyATH_lWw6e9XXbsZ&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -28882,7 +28882,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1791986166606_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Hsin",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1shiOFJAP9lFE9c5FS7X_ODvh0q6YrCFA&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1791986166606_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Suoming",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1xtk-NX8fKJvaUf7ZQLKt7A1oqkIy8lfj&sz=w2000",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1791985599959",
@@ -31920,15 +31943,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T13:55:31.446Z",
+  "generated_at": "2026-10-14T13:56:31.229Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3933,
-    "collections_ms": 1184,
-    "gifts_ms": 1352,
-    "banks_ms": 400,
-    "total_ms": 6869,
+    "products_ms": 3243,
+    "collections_ms": 1283,
+    "gifts_ms": 1776,
+    "banks_ms": 861,
+    "total_ms": 7163,
     "product_count": 280,
     "collection_count": 7,
     "bank_count": 3
