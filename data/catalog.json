@@ -28749,6 +28749,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1791958695333",
+      "name": "STARCROWN 50ml.",
+      "price_mode": "fixed",
+      "price": 1520,
+      "final_price": 1520,
+      "base_price": 1730,
+      "min_price": 1730,
+      "max_price": 1730,
+      "has_price_range": false,
+      "old_price": 1730,
+      "on_sale": true,
+      "sale_price": 1520,
+      "sale_start": "2026-10-13T17:00:00.000Z",
+      "sale_end": "2026-10-24T17:00:00.000Z",
+      "main_category": "อื่น ๆ",
+      "fandom": "Love and Deepspace",
+      "sub_category": "อื่น ๆ",
+      "round": "Xavier BD 2026",
+      "description": "ราคายังไม่รวมส่งกลับไทย สามารถตีลังไม้เพิ่มได้\n\nในเซ็ตประกอบไปด้วย\n1.น้ำหอมขนาด 30มล.\n2.น้ำหอมขนาดทดลอง\n3.การ์ดน้ำหอม\n4.โฟโต้การ์ดตัวละคร\n5.จดหมายลายมือ",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1xo5ADKntQR6RB88lEZNTLd1R-IU_m0WQ&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-14",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1791958297935",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -28834,7 +28878,7 @@
       "collection_type": "preorder",
       "description": "ราคาส่วนลด สั่งได้ถึงวันที่ 25/10 21:00\nยังไม่รวมส่งกลับไทย ไม่สามารถรวมยอดรับของแถมได้\nตีลังไม้เริ่มต้น 150฿\nส่งฟรีในไทย",
       "banner_image": "",
-      "product_count": 1
+      "product_count": 2
     }
   ],
   "gifts": {
@@ -31530,16 +31574,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T06:18:27.631Z",
+  "generated_at": "2026-10-14T06:19:32.318Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1925,
-    "collections_ms": 545,
-    "gifts_ms": 1129,
-    "banks_ms": 940,
-    "total_ms": 4539,
-    "product_count": 274,
+    "products_ms": 4269,
+    "collections_ms": 1559,
+    "gifts_ms": 1955,
+    "banks_ms": 320,
+    "total_ms": 8103,
+    "product_count": 275,
     "collection_count": 6,
     "bank_count": 3
   }
