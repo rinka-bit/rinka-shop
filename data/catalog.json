@@ -29128,7 +29128,7 @@
       "sub_category": "การ์ด",
       "round": "Ink Charm Lake Excursion",
       "description": "ขนาดสินค้า\nตั๋ว 210*80มม.\nการ์ด 103*76มม.",
-      "search_keywords": "",
+      "search_keywords": "Hsin Suoming",
       "image": "https://drive.google.com/thumbnail?id=193Rnt-URNQ4e8j-fQsz24Czn7llYflLw&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -29150,7 +29150,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1791986505446_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Hsin",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1KIlDATSWTtJ0MEbuE99bkId1HeUCBKxa&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1791986505446_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Suoming",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1O-pWNaC3_NU8XLrgGlUdCxtoYP-ELrVR&sz=w2000",
+          "sort_order": 1
+        }
+      ]
     }
   ],
   "collections": [
@@ -32012,15 +32035,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T14:01:26.661Z",
+  "generated_at": "2026-10-14T14:02:32.596Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1901,
-    "collections_ms": 599,
-    "gifts_ms": 1033,
-    "banks_ms": 153,
-    "total_ms": 3686,
+    "products_ms": 3346,
+    "collections_ms": 1322,
+    "gifts_ms": 2066,
+    "banks_ms": 844,
+    "total_ms": 7578,
     "product_count": 280,
     "collection_count": 7,
     "bank_count": 3
