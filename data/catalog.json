@@ -29840,6 +29840,34 @@
         "sort_order": 0,
         "created_at": "2026-10-14T05:48:57.040Z",
         "updated_at": "2026-10-14T05:48:57.040Z"
+      },
+      {
+        "rule_id": "RULE17919850771244581",
+        "campaign_id": "CAM17919848992878542",
+        "rule_name": "ซื้อครบ 620",
+        "min_amount": 620,
+        "max_select": 1,
+        "allow_duplicate": "",
+        "reward_mode": "normal",
+        "reward_description": "",
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-14T13:37:57.124Z",
+        "updated_at": "2026-10-14T13:37:57.124Z"
+      },
+      {
+        "rule_id": "RULE17919851133421258",
+        "campaign_id": "CAM17919848992878542",
+        "rule_name": "ซื้อครบ 1,240฿",
+        "min_amount": 1240,
+        "max_select": 2,
+        "allow_duplicate": "",
+        "reward_mode": "normal",
+        "reward_description": "",
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-14T13:38:33.342Z",
+        "updated_at": "2026-10-14T13:38:33.342Z"
       }
     ],
     "items": [
@@ -31648,15 +31676,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T13:35:41.681Z",
+  "generated_at": "2026-10-14T13:41:36.304Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 9096,
-    "collections_ms": 1928,
-    "gifts_ms": 1759,
-    "banks_ms": 306,
-    "total_ms": 13089,
+    "products_ms": 113079,
+    "collections_ms": 45862,
+    "gifts_ms": 11315,
+    "banks_ms": 1696,
+    "total_ms": 171953,
     "product_count": 275,
     "collection_count": 7,
     "bank_count": 3
