@@ -28683,7 +28683,7 @@
       "round": "Xavier BD 2026",
       "description": "ขนาดเข็มกลัด 58มม.",
       "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1IAeHiEu_v4dXIOzLDFdBjxNrj8KX2NfB&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1c0NEVUNOgkhewwCUQSwE7fI7RRu5yh_W",
       "status": "active",
       "stock": 999,
       "product_type": "preorder",
@@ -31472,15 +31472,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T06:02:31.413Z",
+  "generated_at": "2026-10-14T06:09:27.414Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3484,
-    "collections_ms": 1175,
-    "gifts_ms": 1819,
-    "banks_ms": 350,
-    "total_ms": 6828,
+    "products_ms": 1922,
+    "collections_ms": 590,
+    "gifts_ms": 1213,
+    "banks_ms": 192,
+    "total_ms": 3917,
     "product_count": 273,
     "collection_count": 5,
     "bank_count": 3
