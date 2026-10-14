@@ -28777,6 +28777,20 @@
       "description": "ราคารวมส่งกลับไทยทุกรายการ ส่งฟรีEMS (พท.พิเศษ+20฿)",
       "banner_image": "https://drive.google.com/thumbnail?id=1vRIl0tiHlePpr18yK3SFcc_g8xLorAJL&sz=w2000",
       "product_count": 7
+    },
+    {
+      "collection_id": "COL1791958297935",
+      "name": "็Xavier BD 2026- STARCROWN",
+      "fandom": "Love and Deepspace",
+      "image": "https://drive.google.com/thumbnail?id=1qs5stTIex68MG_z7idvdDr4nnku1aORw&sz=w2000",
+      "status": "active",
+      "preorder_deadline": "2026-11-13T17:00:00.000Z",
+      "featured": "yes",
+      "created_at": "2026-10-14T06:11:40.405Z",
+      "collection_type": "preorder",
+      "description": "ราคาส่วนลด สั่งได้ถึงวันที่ 25/10 21:00\nยังไม่รวมส่งกลับไทย ไม่สามารถรวมยอดรับของแถมได้\nตีลังไม้เริ่มต้น 150฿\nส่งฟรีในไทย",
+      "banner_image": "",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -31472,17 +31486,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T06:09:27.414Z",
+  "generated_at": "2026-10-14T06:12:30.242Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1922,
-    "collections_ms": 590,
-    "gifts_ms": 1213,
-    "banks_ms": 192,
-    "total_ms": 3917,
+    "products_ms": 3239,
+    "collections_ms": 993,
+    "gifts_ms": 2256,
+    "banks_ms": 758,
+    "total_ms": 7246,
     "product_count": 273,
-    "collection_count": 5,
+    "collection_count": 6,
     "bank_count": 3
   }
 }
