@@ -28465,7 +28465,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1SLwFfrxcwP7DcdYlebFF1yv-CoY7Bmh5&sz=w2000",
       "status": "active",
-      "stock": 996,
+      "stock": 995,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -28553,7 +28553,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1PnDTwpPFnoj6CDqkI7T43gjPBh1aLTy0&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -28641,7 +28641,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1Fdk4VFK2cPolHwp0BKJmgKwLsZwD77Rs&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -28685,7 +28685,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1c0NEVUNOgkhewwCUQSwE7fI7RRu5yh_W",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -28925,6 +28925,20 @@
       "description": "ราคาส่วนลด สั่งได้ถึงวันที่ 25/10 21:00\nยังไม่รวมส่งกลับไทย ไม่สามารถรวมยอดรับของแถมได้\nตีลังไม้เริ่มต้น 150฿\nส่งฟรีในไทย",
       "banner_image": "",
       "product_count": 2
+    },
+    {
+      "collection_id": "COL1791984708055",
+      "name": "WuWa : Ink Charm Lake Excursion",
+      "fandom": "Wuthering Waves",
+      "image": "https://drive.google.com/thumbnail?id=1gtGBTuVzCAno_J8Y6Eah6O7aaRk0KZhD&sz=w2000",
+      "status": "active",
+      "preorder_deadline": "",
+      "featured": "",
+      "created_at": "2026-10-14T13:32:05.153Z",
+      "collection_type": "Preorder",
+      "description": "ราคารวมส่งกลับไทยทุกชิ้น ในไทยเริ่มต้น 55฿ (พท.พิเศษ+20฿)",
+      "banner_image": "https://drive.google.com/thumbnail?id=1FiYxod4eOEpxZer_nlI4FTfGD_8u-AUj&sz=w2000",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -31620,17 +31634,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T06:49:32.858Z",
+  "generated_at": "2026-10-14T13:32:28.575Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2984,
-    "collections_ms": 950,
-    "gifts_ms": 3787,
-    "banks_ms": 295,
-    "total_ms": 8016,
+    "products_ms": 1963,
+    "collections_ms": 1906,
+    "gifts_ms": 1357,
+    "banks_ms": 208,
+    "total_ms": 5434,
     "product_count": 275,
-    "collection_count": 6,
+    "collection_count": 7,
     "bank_count": 3
   }
 }
