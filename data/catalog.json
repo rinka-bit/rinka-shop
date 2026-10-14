@@ -28584,6 +28584,20 @@
         "sort_order": 0,
         "created_at": "2026-09-19T11:12:50.857Z",
         "updated_at": "2026-09-19T12:38:37.970Z"
+      },
+      {
+        "campaign_id": "CAM17919564967685601",
+        "campaign_name": "ของแถมXavier BD 2026",
+        "collection_id": "COL1791956402604",
+        "description": "",
+        "banner_image": "",
+        "eligibility_scope": "collection_only",
+        "require_campaign_item": "",
+        "rule_mode": "independent",
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-14T05:41:36.768Z",
+        "updated_at": "2026-10-14T05:41:36.768Z"
       }
     ],
     "rules": [
@@ -31098,15 +31112,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T05:41:28.708Z",
+  "generated_at": "2026-10-14T05:42:29.314Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2658,
-    "collections_ms": 617,
-    "gifts_ms": 1516,
-    "banks_ms": 188,
-    "total_ms": 4979,
+    "products_ms": 2724,
+    "collections_ms": 868,
+    "gifts_ms": 1770,
+    "banks_ms": 245,
+    "total_ms": 5607,
     "product_count": 266,
     "collection_count": 5,
     "bank_count": 3
