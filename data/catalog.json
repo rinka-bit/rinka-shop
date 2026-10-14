@@ -28889,7 +28889,7 @@
           "option_value": "Hsin",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1shiOFJAP9lFE9c5FS7X_ODvh0q6YrCFA&sz=w2000",
           "sort_order": 0
@@ -28900,7 +28900,7 @@
           "option_value": "Suoming",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1xtk-NX8fKJvaUf7ZQLKt7A1oqkIy8lfj&sz=w2000",
           "sort_order": 1
@@ -32035,15 +32035,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T14:02:32.596Z",
+  "generated_at": "2026-10-14T14:33:51.688Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3346,
-    "collections_ms": 1322,
-    "gifts_ms": 2066,
-    "banks_ms": 844,
-    "total_ms": 7578,
+    "products_ms": 17966,
+    "collections_ms": 2882,
+    "gifts_ms": 3910,
+    "banks_ms": 931,
+    "total_ms": 25690,
     "product_count": 280,
     "collection_count": 7,
     "bank_count": 3
