@@ -25165,7 +25165,7 @@
           "option_value": "Jingran",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9993,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=121XXp-di6voPZqvJlY1EeDGL4_We7r5l&sz=w2000",
           "sort_order": 1
@@ -31092,15 +31092,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-12T07:43:28.860Z",
+  "generated_at": "2026-10-14T05:37:41.823Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2107,
-    "collections_ms": 742,
-    "gifts_ms": 2461,
-    "banks_ms": 229,
-    "total_ms": 5539,
+    "products_ms": 12484,
+    "collections_ms": 1427,
+    "gifts_ms": 2231,
+    "banks_ms": 261,
+    "total_ms": 16406,
     "product_count": 266,
     "collection_count": 4,
     "bank_count": 3
