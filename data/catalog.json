@@ -30364,6 +30364,18 @@
         "sort_order": 0,
         "created_at": "2026-09-19T11:21:22.176Z",
         "updated_at": "2026-09-19T11:21:22.176Z"
+      },
+      {
+        "gift_item_id": "GIFT17919568913327233",
+        "rule_id": "RULE17919566973096071",
+        "gift_name": "เซ็ตSticker iD photo+frame",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_1364.PNG?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-14T05:48:11.332Z",
+        "updated_at": "2026-10-14T05:48:11.332Z"
       }
     ],
     "characters": [
@@ -31126,15 +31138,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T05:46:28.415Z",
+  "generated_at": "2026-10-14T05:48:29.804Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3268,
-    "collections_ms": 552,
-    "gifts_ms": 1026,
-    "banks_ms": 138,
-    "total_ms": 4984,
+    "products_ms": 2783,
+    "collections_ms": 1019,
+    "gifts_ms": 2476,
+    "banks_ms": 284,
+    "total_ms": 6562,
     "product_count": 266,
     "collection_count": 5,
     "bank_count": 3
