@@ -28593,11 +28593,11 @@
         "banner_image": "",
         "eligibility_scope": "collection_only",
         "require_campaign_item": "",
-        "rule_mode": "independent",
+        "rule_mode": "highest_tier",
         "active": "yes",
         "sort_order": 0,
         "created_at": "2026-10-14T05:41:36.768Z",
-        "updated_at": "2026-10-14T05:41:36.768Z"
+        "updated_at": "2026-10-14T05:45:35.529Z"
       }
     ],
     "rules": [
@@ -31126,15 +31126,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T05:45:31.288Z",
+  "generated_at": "2026-10-14T05:46:28.415Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2702,
-    "collections_ms": 2842,
-    "gifts_ms": 1756,
-    "banks_ms": 219,
-    "total_ms": 7519,
+    "products_ms": 3268,
+    "collections_ms": 552,
+    "gifts_ms": 1026,
+    "banks_ms": 138,
+    "total_ms": 4984,
     "product_count": 266,
     "collection_count": 5,
     "bank_count": 3
