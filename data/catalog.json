@@ -28793,7 +28793,7 @@
       "sub_category": "อื่น ๆ",
       "round": "Xavier BD 2026",
       "description": "ราคายังไม่รวมส่งกลับไทย สามารถตีลังไม้เพิ่มได้\n\nในเซ็ตประกอบไปด้วย\n1.น้ำหอมขนาด 30มล.\n2.น้ำหอมขนาดทดลอง\n3.การ์ดน้ำหอม\n4.โฟโต้การ์ดตัวละคร\n5.จดหมายลายมือ\n6.เข็มกลัดสี่เหลี่ยม\n7.Metal nameplate",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลัง ตีลังไม้ (เริ่มต้น150฿)",
       "image": "https://drive.google.com/thumbnail?id=1JapwsypleGtL0IhB0KHkMp_lpW1GDvU6&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -28815,7 +28815,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1791960140135_1",
+          "option_name": "แบบ",
+          "option_value": "ไม่ตีลัง",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1791960140135_2",
+          "option_name": "แบบ",
+          "option_value": "ตีลังไม้ (เริ่มต้น150฿)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     }
   ],
   "collections": [
@@ -31597,15 +31620,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T06:42:13.036Z",
+  "generated_at": "2026-10-14T06:42:29.090Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 38008,
-    "collections_ms": 1731,
-    "gifts_ms": 2763,
-    "banks_ms": 447,
-    "total_ms": 42949,
+    "products_ms": 2410,
+    "collections_ms": 521,
+    "gifts_ms": 1016,
+    "banks_ms": 146,
+    "total_ms": 4093,
     "product_count": 275,
     "collection_count": 6,
     "bank_count": 3
