@@ -28465,7 +28465,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1SLwFfrxcwP7DcdYlebFF1yv-CoY7Bmh5&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 996,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -31620,15 +31620,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T06:47:51.643Z",
+  "generated_at": "2026-10-14T06:49:32.858Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 16700,
-    "collections_ms": 2611,
-    "gifts_ms": 5037,
-    "banks_ms": 457,
-    "total_ms": 24806,
+    "products_ms": 2984,
+    "collections_ms": 950,
+    "gifts_ms": 3787,
+    "banks_ms": 295,
+    "total_ms": 8016,
     "product_count": 275,
     "collection_count": 6,
     "bank_count": 3
