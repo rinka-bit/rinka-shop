@@ -28455,6 +28455,20 @@
       "description": "ราคายังไม่รวมส่งกลับไทยนะคะ\n\nพิเศษค่าส่งในไทยเริ่มต้น9฿ (พื้นที่พิเศษ+20฿)",
       "banner_image": "https://drive.google.com/thumbnail?id=1D456oRnYP5X3-eQ2wohIpSoeMeMWeGZR&sz=w2000",
       "product_count": 22
+    },
+    {
+      "collection_id": "COL1791956402604",
+      "name": "Xavier BD 2026",
+      "fandom": "Love and Deepspace",
+      "image": "https://drive.google.com/thumbnail?id=1iunvgWHh33FYi0nrp0PrTGdXuKx6ap7a&sz=w2000",
+      "status": "active",
+      "preorder_deadline": "2026-10-23T17:00:00.000Z",
+      "featured": "yes",
+      "created_at": "2026-10-14T05:40:09.910Z",
+      "collection_type": "preorder",
+      "description": "ราคารวมส่งกลับไทยทุกรายการ ส่งฟรีEMS (พท.พิเศษ+20฿)",
+      "banner_image": "https://drive.google.com/thumbnail?id=1vRIl0tiHlePpr18yK3SFcc_g8xLorAJL&sz=w2000",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -31092,17 +31106,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T05:37:41.823Z",
+  "generated_at": "2026-10-14T05:40:28.536Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 12484,
-    "collections_ms": 1427,
-    "gifts_ms": 2231,
-    "banks_ms": 261,
-    "total_ms": 16406,
+    "products_ms": 3437,
+    "collections_ms": 639,
+    "gifts_ms": 1306,
+    "banks_ms": 207,
+    "total_ms": 5589,
     "product_count": 266,
-    "collection_count": 4,
+    "collection_count": 5,
     "bank_count": 3
   }
 }
