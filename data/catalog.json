@@ -28397,6 +28397,50 @@
           "sort_order": 3
         }
       ]
+    },
+    {
+      "product_id": "PROD1791957195345",
+      "name": "เข็มกลัดกลม A",
+      "price_mode": "fixed",
+      "price": 115,
+      "final_price": 115,
+      "base_price": 115,
+      "min_price": 115,
+      "max_price": 115,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "เข็มกลัด",
+      "fandom": "Love and Deepspace",
+      "sub_category": "เข็มกลัด",
+      "round": "Xavier BD 2026",
+      "description": "ขนาด 75มม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1IAeHiEu_v4dXIOzLDFdBjxNrj8KX2NfB&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-10-24",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1791956402604",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -28468,7 +28512,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยทุกรายการ ส่งฟรีEMS (พท.พิเศษ+20฿)",
       "banner_image": "https://drive.google.com/thumbnail?id=1vRIl0tiHlePpr18yK3SFcc_g8xLorAJL&sz=w2000",
-      "product_count": 0
+      "product_count": 1
     }
   ],
   "gifts": {
@@ -31164,16 +31208,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T05:50:29.501Z",
+  "generated_at": "2026-10-14T05:53:30.780Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3315,
-    "collections_ms": 466,
-    "gifts_ms": 1692,
-    "banks_ms": 245,
-    "total_ms": 5718,
-    "product_count": 266,
+    "products_ms": 3184,
+    "collections_ms": 1487,
+    "gifts_ms": 1669,
+    "banks_ms": 175,
+    "total_ms": 6515,
+    "product_count": 267,
     "collection_count": 5,
     "bank_count": 3
   }
