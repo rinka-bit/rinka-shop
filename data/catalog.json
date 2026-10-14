@@ -28444,7 +28444,7 @@
     },
     {
       "product_id": "PROD1791957195346",
-      "name": "เข็มกลัดกลม A",
+      "name": "สแตนดี้",
       "price_mode": "fixed",
       "price": 115,
       "final_price": 115,
@@ -28488,7 +28488,7 @@
     },
     {
       "product_id": "PROD1791957195347",
-      "name": "เข็มกลัดกลม A",
+      "name": "เข็มกลัดกลม B",
       "price_mode": "fixed",
       "price": 115,
       "final_price": 115,
@@ -28532,7 +28532,7 @@
     },
     {
       "product_id": "PROD1791957195348",
-      "name": "เข็มกลัดกลม A",
+      "name": "เซ็ตโฟโต้การ์ด",
       "price_mode": "fixed",
       "price": 115,
       "final_price": 115,
@@ -28576,7 +28576,7 @@
     },
     {
       "product_id": "PROD1791957195349",
-      "name": "เข็มกลัดกลม A",
+      "name": "เซ็ตโพลารอยด์",
       "price_mode": "fixed",
       "price": 115,
       "final_price": 115,
@@ -28620,7 +28620,7 @@
     },
     {
       "product_id": "PROD1791957195350",
-      "name": "เข็มกลัดกลม A",
+      "name": "Photo memorial book",
       "price_mode": "fixed",
       "price": 115,
       "final_price": 115,
@@ -31472,15 +31472,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T05:54:27.432Z",
+  "generated_at": "2026-10-14T05:55:26.206Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1587,
-    "collections_ms": 584,
-    "gifts_ms": 1375,
-    "banks_ms": 341,
-    "total_ms": 3887,
+    "products_ms": 1654,
+    "collections_ms": 487,
+    "gifts_ms": 1471,
+    "banks_ms": 314,
+    "total_ms": 3926,
     "product_count": 273,
     "collection_count": 5,
     "bank_count": 3
