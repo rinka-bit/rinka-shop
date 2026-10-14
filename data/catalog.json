@@ -30914,6 +30914,30 @@
         "sort_order": 0,
         "created_at": "2026-10-14T05:49:49.780Z",
         "updated_at": "2026-10-14T05:49:49.780Z"
+      },
+      {
+        "gift_item_id": "GIFT17919853557523996",
+        "rule_id": "RULE17919851133421258",
+        "gift_name": "เซ็ตสแตมป์(แบบสุ่ม)",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_1382.jpeg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-14T13:42:35.752Z",
+        "updated_at": "2026-10-14T13:42:35.752Z"
+      },
+      {
+        "gift_item_id": "GIFT17919854038063439",
+        "rule_id": "RULE17919850771244581",
+        "gift_name": "เซ็ตสแตมป์(แบบสุ่ม)",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/IMG_1382.jpeg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-14T13:43:23.806Z",
+        "updated_at": "2026-10-14T13:43:23.806Z"
       }
     ],
     "characters": [
@@ -31676,15 +31700,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T13:42:31.544Z",
+  "generated_at": "2026-10-14T13:43:30.776Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4263,
-    "collections_ms": 1000,
+    "products_ms": 2411,
+    "collections_ms": 1230,
     "gifts_ms": 2149,
-    "banks_ms": 331,
-    "total_ms": 7743,
+    "banks_ms": 292,
+    "total_ms": 6082,
     "product_count": 275,
     "collection_count": 7,
     "bank_count": 3
