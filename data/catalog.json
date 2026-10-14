@@ -29068,6 +29068,20 @@
         "sort_order": 0,
         "created_at": "2026-10-14T05:41:36.768Z",
         "updated_at": "2026-10-14T05:45:35.529Z"
+      },
+      {
+        "campaign_id": "CAM17919848992878542",
+        "campaign_name": "ของแถมรอบพรีWuWa : Ink Charm Lake Excursion",
+        "collection_id": "COL1791984708055",
+        "description": "",
+        "banner_image": "",
+        "eligibility_scope": "collection_only",
+        "require_campaign_item": "",
+        "rule_mode": "highest_tier",
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-14T13:34:59.287Z",
+        "updated_at": "2026-10-14T13:34:59.287Z"
       }
     ],
     "rules": [
@@ -31634,15 +31648,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T13:34:43.347Z",
+  "generated_at": "2026-10-14T13:35:41.681Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 11492,
-    "collections_ms": 1976,
-    "gifts_ms": 3547,
-    "banks_ms": 336,
-    "total_ms": 17351,
+    "products_ms": 9096,
+    "collections_ms": 1928,
+    "gifts_ms": 1759,
+    "banks_ms": 306,
+    "total_ms": 13089,
     "product_count": 275,
     "collection_count": 7,
     "bank_count": 3
