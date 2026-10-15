@@ -32035,15 +32035,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-15T06:39:33.275Z",
+  "generated_at": "2026-10-15T06:40:29.811Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4999,
-    "collections_ms": 1419,
-    "gifts_ms": 2337,
-    "banks_ms": 303,
-    "total_ms": 9058,
+    "products_ms": 4421,
+    "collections_ms": 736,
+    "gifts_ms": 1345,
+    "banks_ms": 229,
+    "total_ms": 6732,
     "product_count": 280,
     "collection_count": 7,
     "bank_count": 3
