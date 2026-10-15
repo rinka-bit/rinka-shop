@@ -24976,7 +24976,7 @@
           "option_value": "ไม่ตีลังไม้",
           "additional_price": 0,
           "price": null,
-          "stock": 9997,
+          "stock": 9996,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -25299,7 +25299,7 @@
           "option_value": "Jingran",
           "additional_price": 0,
           "price": null,
-          "stock": 9997,
+          "stock": 9996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=112NCzaUYw2suelRZDxxRlbCvoXYPZjGY&sz=w2000",
           "sort_order": 1
@@ -25622,7 +25622,7 @@
           "option_value": "Jingran",
           "additional_price": 0,
           "price": null,
-          "stock": 9996,
+          "stock": 9995,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1k-stqpmMp07ST3SMaXbm6J0tJ1TFOJ6W&sz=w2000",
           "sort_order": 6
@@ -25689,7 +25689,7 @@
           "option_value": "Jingran",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=11zZTf_FxzIesCjWrilwv1eOium4WAFKu&sz=w2000",
           "sort_order": 1
@@ -32035,15 +32035,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-14T14:33:51.688Z",
+  "generated_at": "2026-10-15T01:06:30.990Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 17966,
-    "collections_ms": 2882,
-    "gifts_ms": 3910,
-    "banks_ms": 931,
-    "total_ms": 25690,
+    "products_ms": 3214,
+    "collections_ms": 765,
+    "gifts_ms": 2112,
+    "banks_ms": 242,
+    "total_ms": 6333,
     "product_count": 280,
     "collection_count": 7,
     "bank_count": 3
