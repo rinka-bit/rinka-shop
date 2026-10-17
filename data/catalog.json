@@ -28889,7 +28889,7 @@
           "option_value": "Hsin",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1shiOFJAP9lFE9c5FS7X_ODvh0q6YrCFA&sz=w2000",
           "sort_order": 0
@@ -32035,15 +32035,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-15T06:41:37.153Z",
+  "generated_at": "2026-10-17T11:26:30.905Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 8337,
-    "collections_ms": 1296,
-    "gifts_ms": 2669,
-    "banks_ms": 423,
-    "total_ms": 12725,
+    "products_ms": 3794,
+    "collections_ms": 1011,
+    "gifts_ms": 2431,
+    "banks_ms": 359,
+    "total_ms": 7595,
     "product_count": 280,
     "collection_count": 7,
     "bank_count": 3
