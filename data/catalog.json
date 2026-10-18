@@ -33932,12 +33932,12 @@
       "product_id": "PROD1792335572149",
       "name": "Sparxie collections",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 95,
+      "final_price": 95,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 95,
+      "max_price": 300,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -33948,7 +33948,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "เข็มกลัด สแตนดี้ พวงกุญแจ การ์ด Laser Ticket",
       "image": "https://drive.google.com/thumbnail?id=1tCEAD4AV2kS1PUIAC854gN7tuwzX1dvC&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -33970,7 +33970,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792366432930_1",
+          "option_name": "ตัวเลือก",
+          "option_value": "เข็มกลัด",
+          "additional_price": 0,
+          "price": 95,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792366432930_2",
+          "option_name": "ตัวเลือก",
+          "option_value": "สแตนดี้",
+          "additional_price": 0,
+          "price": 300,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792366432930_3",
+          "option_name": "ตัวเลือก",
+          "option_value": "พวงกุญแจ",
+          "additional_price": 0,
+          "price": 240,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792366432930_4",
+          "option_name": "ตัวเลือก",
+          "option_value": "การ์ด",
+          "additional_price": 0,
+          "price": 120,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792366432930_5",
+          "option_name": "ตัวเลือก",
+          "option_value": "Laser Ticket",
+          "additional_price": 0,
+          "price": 95,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        }
+      ]
     }
   ],
   "collections": [
@@ -36846,15 +36902,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:23:30.153Z",
+  "generated_at": "2026-10-18T23:34:30.387Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2269,
-    "collections_ms": 964,
-    "gifts_ms": 2935,
-    "banks_ms": 237,
-    "total_ms": 6405,
+    "products_ms": 4157,
+    "collections_ms": 1151,
+    "gifts_ms": 1733,
+    "banks_ms": 190,
+    "total_ms": 7232,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
