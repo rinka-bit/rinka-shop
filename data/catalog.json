@@ -33630,15 +33630,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:20:29.492Z",
+  "generated_at": "2026-10-18T15:21:41.476Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3118,
-    "collections_ms": 937,
-    "gifts_ms": 2343,
-    "banks_ms": 281,
-    "total_ms": 6679,
+    "products_ms": 11350,
+    "collections_ms": 1930,
+    "gifts_ms": 2781,
+    "banks_ms": 469,
+    "total_ms": 16530,
     "product_count": 297,
     "collection_count": 8,
     "bank_count": 3
