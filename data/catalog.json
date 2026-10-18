@@ -30389,8 +30389,8 @@
       "created_at": "",
       "variant_mode": true,
       "variant_groups": [
-        "ไซส์เสื้อ",
-        "ตัวละคร"
+        "ตัวละคร",
+        "ไซส์เสื้อ"
       ],
       "variants": [
         {
@@ -36857,15 +36857,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:53:28.632Z",
+  "generated_at": "2026-10-18T16:54:27.904Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2974,
-    "collections_ms": 635,
-    "gifts_ms": 1510,
-    "banks_ms": 160,
-    "total_ms": 5279,
+    "products_ms": 2656,
+    "collections_ms": 567,
+    "gifts_ms": 1119,
+    "banks_ms": 188,
+    "total_ms": 4530,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
