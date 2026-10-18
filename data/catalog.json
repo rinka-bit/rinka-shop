@@ -30387,9 +30387,461 @@
       "image4": "",
       "collection_id": "COL1792309022460",
       "created_at": "",
-      "variant_mode": false,
-      "variant_groups": [],
-      "variants": [],
+      "variant_mode": true,
+      "variant_groups": [
+        "ไซส์เสื้อ",
+        "ตัวละคร"
+      ],
+      "variants": [
+        {
+          "variant_id": "VAR1792341947431_0_898326b4",
+          "signature": "ตัวละคร=Sundove||ไซส์เสื้อ=XS",
+          "option_values": {
+            "ไซส์เสื้อ": "XS",
+            "ตัวละคร": "Sundove"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_1",
+            "ตัวละคร": "OPT1792341769540_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 0
+        },
+        {
+          "variant_id": "VAR1792341947432_1_71f21f97",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์เสื้อ=XS",
+          "option_values": {
+            "ไซส์เสื้อ": "XS",
+            "ตัวละคร": "Woof Woof Dan"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_1",
+            "ตัวละคร": "OPT1792341769540_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "variant_id": "VAR1792341947433_2_6f681c80",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์เสื้อ=XS",
+          "option_values": {
+            "ไซส์เสื้อ": "XS",
+            "ตัวละคร": "Baseball Raccoon"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_1",
+            "ตัวละคร": "OPT1792341769540_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "variant_id": "VAR1792341947433_3_170ed0ea",
+          "signature": "ตัวละคร=March Bunny||ไซส์เสื้อ=XS",
+          "option_values": {
+            "ไซส์เสื้อ": "XS",
+            "ตัวละคร": "March Bunny"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_1",
+            "ตัวละคร": "OPT1792341769540_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "variant_id": "VAR1792341947434_4_47b043d8",
+          "signature": "ตัวละคร=Sundove||ไซส์เสื้อ=S",
+          "option_values": {
+            "ไซส์เสื้อ": "S",
+            "ตัวละคร": "Sundove"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_2",
+            "ตัวละคร": "OPT1792341769540_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "variant_id": "VAR1792341947435_5_32f52344",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์เสื้อ=S",
+          "option_values": {
+            "ไซส์เสื้อ": "S",
+            "ตัวละคร": "Woof Woof Dan"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_2",
+            "ตัวละคร": "OPT1792341769540_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 5
+        },
+        {
+          "variant_id": "VAR1792341947436_6_c2e9bc75",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์เสื้อ=S",
+          "option_values": {
+            "ไซส์เสื้อ": "S",
+            "ตัวละคร": "Baseball Raccoon"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_2",
+            "ตัวละคร": "OPT1792341769540_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 6
+        },
+        {
+          "variant_id": "VAR1792341947437_7_2cf2446b",
+          "signature": "ตัวละคร=March Bunny||ไซส์เสื้อ=S",
+          "option_values": {
+            "ไซส์เสื้อ": "S",
+            "ตัวละคร": "March Bunny"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_2",
+            "ตัวละคร": "OPT1792341769540_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 7
+        },
+        {
+          "variant_id": "VAR1792341947438_8_ffaabc4f",
+          "signature": "ตัวละคร=Sundove||ไซส์เสื้อ=M",
+          "option_values": {
+            "ไซส์เสื้อ": "M",
+            "ตัวละคร": "Sundove"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_3",
+            "ตัวละคร": "OPT1792341769540_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 8
+        },
+        {
+          "variant_id": "VAR1792341947438_9_664f7325",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์เสื้อ=M",
+          "option_values": {
+            "ไซส์เสื้อ": "M",
+            "ตัวละคร": "Woof Woof Dan"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_3",
+            "ตัวละคร": "OPT1792341769540_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 9
+        },
+        {
+          "variant_id": "VAR1792341947440_10_50fac7cf",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์เสื้อ=M",
+          "option_values": {
+            "ไซส์เสื้อ": "M",
+            "ตัวละคร": "Baseball Raccoon"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_3",
+            "ตัวละคร": "OPT1792341769540_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 10
+        },
+        {
+          "variant_id": "VAR1792341947441_11_f98c2165",
+          "signature": "ตัวละคร=March Bunny||ไซส์เสื้อ=M",
+          "option_values": {
+            "ไซส์เสื้อ": "M",
+            "ตัวละคร": "March Bunny"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_3",
+            "ตัวละคร": "OPT1792341769540_4"
+          },
+          "price": 0,
+          "stock": 888,
+          "status": "active",
+          "sort_order": 11
+        },
+        {
+          "variant_id": "VAR1792341947442_12_bde6aa2a",
+          "signature": "ตัวละคร=Sundove||ไซส์เสื้อ=L",
+          "option_values": {
+            "ไซส์เสื้อ": "L",
+            "ตัวละคร": "Sundove"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_4",
+            "ตัวละคร": "OPT1792341769540_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 12
+        },
+        {
+          "variant_id": "VAR1792341947443_13_3740dbe0",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์เสื้อ=L",
+          "option_values": {
+            "ไซส์เสื้อ": "L",
+            "ตัวละคร": "Woof Woof Dan"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_4",
+            "ตัวละคร": "OPT1792341769540_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 13
+        },
+        {
+          "variant_id": "VAR1792341947444_14_fe52c965",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์เสื้อ=L",
+          "option_values": {
+            "ไซส์เสื้อ": "L",
+            "ตัวละคร": "Baseball Raccoon"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_4",
+            "ตัวละคร": "OPT1792341769540_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 14
+        },
+        {
+          "variant_id": "VAR1792341947444_15_95852168",
+          "signature": "ตัวละคร=March Bunny||ไซส์เสื้อ=L",
+          "option_values": {
+            "ไซส์เสื้อ": "L",
+            "ตัวละคร": "March Bunny"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_4",
+            "ตัวละคร": "OPT1792341769540_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 15
+        },
+        {
+          "variant_id": "VAR1792341947446_16_2f683179",
+          "signature": "ตัวละคร=Sundove||ไซส์เสื้อ=XL",
+          "option_values": {
+            "ไซส์เสื้อ": "XL",
+            "ตัวละคร": "Sundove"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_5",
+            "ตัวละคร": "OPT1792341769540_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 16
+        },
+        {
+          "variant_id": "VAR1792341947447_17_be7f6087",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์เสื้อ=XL",
+          "option_values": {
+            "ไซส์เสื้อ": "XL",
+            "ตัวละคร": "Woof Woof Dan"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_5",
+            "ตัวละคร": "OPT1792341769540_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 17
+        },
+        {
+          "variant_id": "VAR1792341947448_18_13584788",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์เสื้อ=XL",
+          "option_values": {
+            "ไซส์เสื้อ": "XL",
+            "ตัวละคร": "Baseball Raccoon"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_5",
+            "ตัวละคร": "OPT1792341769540_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 18
+        },
+        {
+          "variant_id": "VAR1792341947449_19_5d7105bd",
+          "signature": "ตัวละคร=March Bunny||ไซส์เสื้อ=XL",
+          "option_values": {
+            "ไซส์เสื้อ": "XL",
+            "ตัวละคร": "March Bunny"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_5",
+            "ตัวละคร": "OPT1792341769540_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 19
+        },
+        {
+          "variant_id": "VAR1792341947450_20_ea1be56b",
+          "signature": "ตัวละคร=Sundove||ไซส์เสื้อ=XXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXL",
+            "ตัวละคร": "Sundove"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_6",
+            "ตัวละคร": "OPT1792341769540_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 20
+        },
+        {
+          "variant_id": "VAR1792341947450_21_605bd065",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์เสื้อ=XXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXL",
+            "ตัวละคร": "Woof Woof Dan"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_6",
+            "ตัวละคร": "OPT1792341769540_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 21
+        },
+        {
+          "variant_id": "VAR1792341947451_22_33560d2f",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์เสื้อ=XXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXL",
+            "ตัวละคร": "Baseball Raccoon"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_6",
+            "ตัวละคร": "OPT1792341769540_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 22
+        },
+        {
+          "variant_id": "VAR1792341947451_23_f16e18c1",
+          "signature": "ตัวละคร=March Bunny||ไซส์เสื้อ=XXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXL",
+            "ตัวละคร": "March Bunny"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_6",
+            "ตัวละคร": "OPT1792341769540_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 23
+        },
+        {
+          "variant_id": "VAR1792341947456_24_20f8ba40",
+          "signature": "ตัวละคร=Sundove||ไซส์เสื้อ=XXXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXXL",
+            "ตัวละคร": "Sundove"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_7",
+            "ตัวละคร": "OPT1792341769540_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 24
+        },
+        {
+          "variant_id": "VAR1792341947466_25_c9f404ef",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์เสื้อ=XXXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXXL",
+            "ตัวละคร": "Woof Woof Dan"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_7",
+            "ตัวละคร": "OPT1792341769540_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 25
+        },
+        {
+          "variant_id": "VAR1792341947467_26_a5c138bc",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์เสื้อ=XXXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXXL",
+            "ตัวละคร": "Baseball Raccoon"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_7",
+            "ตัวละคร": "OPT1792341769540_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 26
+        },
+        {
+          "variant_id": "VAR1792341947467_27_c566337f",
+          "signature": "ตัวละคร=March Bunny||ไซส์เสื้อ=XXXL",
+          "option_values": {
+            "ไซส์เสื้อ": "XXXL",
+            "ตัวละคร": "March Bunny"
+          },
+          "option_ids": {
+            "ไซส์เสื้อ": "OPT1792341823825_7",
+            "ตัวละคร": "OPT1792341769540_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 27
+        }
+      ],
       "options": [
         {
           "option_id": "OPT1792341823825_1",
@@ -36394,15 +36846,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:45:26.899Z",
+  "generated_at": "2026-10-18T16:46:28.117Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2076,
-    "collections_ms": 568,
-    "gifts_ms": 1235,
-    "banks_ms": 163,
-    "total_ms": 4042,
+    "products_ms": 2152,
+    "collections_ms": 813,
+    "gifts_ms": 1574,
+    "banks_ms": 253,
+    "total_ms": 4792,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
