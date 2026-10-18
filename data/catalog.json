@@ -30736,7 +30736,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 23
+      "product_count": 24
     }
   ],
   "gifts": {
@@ -33498,15 +33498,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:00:29.566Z",
+  "generated_at": "2026-10-18T15:02:32.943Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2429,
-    "collections_ms": 911,
-    "gifts_ms": 2275,
-    "banks_ms": 275,
-    "total_ms": 5890,
+    "products_ms": 5275,
+    "collections_ms": 1331,
+    "gifts_ms": 2267,
+    "banks_ms": 151,
+    "total_ms": 9024,
     "product_count": 294,
     "collection_count": 8,
     "bank_count": 3
