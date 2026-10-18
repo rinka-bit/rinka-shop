@@ -30350,7 +30350,7 @@
     },
     {
       "product_id": "PROD1792311606304",
-      "name": "Setเสื้อผ้า+กระเป๋า",
+      "name": "Setเสื้อผ้าแก๊งขนฟู",
       "price_mode": "option",
       "price": 0,
       "final_price": 0,
@@ -35741,15 +35741,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:22:34.638Z",
+  "generated_at": "2026-10-18T16:23:34.497Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6592,
-    "collections_ms": 1480,
-    "gifts_ms": 1506,
-    "banks_ms": 173,
-    "total_ms": 9752,
+    "products_ms": 6551,
+    "collections_ms": 1063,
+    "gifts_ms": 2017,
+    "banks_ms": 310,
+    "total_ms": 9942,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
