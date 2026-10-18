@@ -30861,12 +30861,12 @@
       "product_id": "PROD1792335572116",
       "name": "มินิฟิกเกอร์ POTEPOTTE",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 370,
+      "final_price": 370,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 370,
+      "max_price": 2540,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -30877,7 +30877,7 @@
       "sub_category": "ฟิกเกอร์",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "สุ่ม Box (ไม่แยกบ้าน) Box (แยกบ้าน แจ้งที่อยู่ทางDM)",
       "image": "https://drive.google.com/thumbnail?id=1O3QoWcHUM3l6bcyCFED6vtbt76rdiV0-&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30899,7 +30899,41 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792338872090_1",
+          "option_name": "แบบ",
+          "option_value": "สุ่ม",
+          "additional_price": 0,
+          "price": 370,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792338872090_2",
+          "option_name": "แบบ",
+          "option_value": "Box (ไม่แยกบ้าน)",
+          "additional_price": 0,
+          "price": 2540,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792338872090_3",
+          "option_name": "แบบ",
+          "option_value": "Box (แยกบ้าน แจ้งที่อยู่ทางDM)",
+          "additional_price": 0,
+          "price": 2540,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572117",
@@ -35183,15 +35217,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:53:31.690Z",
+  "generated_at": "2026-10-18T15:55:34.319Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4809,
-    "collections_ms": 630,
-    "gifts_ms": 1078,
-    "banks_ms": 214,
-    "total_ms": 6731,
+    "products_ms": 4127,
+    "collections_ms": 1492,
+    "gifts_ms": 2549,
+    "banks_ms": 1453,
+    "total_ms": 9621,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
