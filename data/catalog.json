@@ -34074,7 +34074,7 @@
     },
     {
       "collection_id": "COL1792309022460",
-      "name": "HSR 10-2026 (ส่วนใหญ่รวมส่งกลับไทย)",
+      "name": "HSR 10-2026",
       "fandom": "Honkai Star Rail",
       "image": "https://drive.google.com/thumbnail?id=1YAviuwyn22IKcQmUEU05SJzYkc3hy5kp&sz=w2000",
       "status": "active",
@@ -36846,15 +36846,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:55:27.040Z",
+  "generated_at": "2026-10-18T23:19:33.055Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1707,
-    "collections_ms": 1041,
-    "gifts_ms": 1234,
-    "banks_ms": 238,
-    "total_ms": 4220,
+    "products_ms": 5489,
+    "collections_ms": 867,
+    "gifts_ms": 2166,
+    "banks_ms": 407,
+    "total_ms": 8929,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
