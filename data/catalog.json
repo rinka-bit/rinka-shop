@@ -13962,7 +13962,7 @@
       "sub_category": "เข็มกลัด",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้(แนวตั้ง) เซียวอี้(แนวนอน) ลู่เฉิน(แนวตั้ง) ลู่เฉิน(แนวนอน) ฉีซือหลี่(แนวตั้ง) ฉีซือหลี่(แนวนอน) จาหลี่ซู(แนวตั้ง) จาหลี่ซู(แนวนอน) เซี่ยหมิงซิง(แนวตั้ง) เซี่ยหมิงซิง(แนวนอน)",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1L5aD5mFkbpcITHPiBUt8juZKsAoYnOzF&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -13984,118 +13984,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787385776720_1",
-          "option_name": "แบบ",
-          "option_value": "เซียวอี้(แนวตั้ง)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1U8iFJSWUTz5xSQDdP9MmohkFZmBhzcu2&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787385776720_2",
-          "option_name": "แบบ",
-          "option_value": "เซียวอี้(แนวนอน)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1rF73lwwQuetDpYigqXEU7RZCemoPNSjk&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787385776720_3",
-          "option_name": "แบบ",
-          "option_value": "ลู่เฉิน(แนวตั้ง)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1v45OAARilKfYB0QaeQWwAO0u83doNnRb&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787385776720_4",
-          "option_name": "แบบ",
-          "option_value": "ลู่เฉิน(แนวนอน)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1cAIe3rsP0IhKtpTvMyes3Cx8YlDzR0b9&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787385776720_5",
-          "option_name": "แบบ",
-          "option_value": "ฉีซือหลี่(แนวตั้ง)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1CEsUC8PeW9q_62KQXTzAtahtkI3nWicO&sz=w2000",
-          "sort_order": 4
-        },
-        {
-          "option_id": "OPT1787385776720_6",
-          "option_name": "แบบ",
-          "option_value": "ฉีซือหลี่(แนวนอน)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=13NlsOvmaCgEvMT_ewyPydBXa5ABvXreu&sz=w2000",
-          "sort_order": 5
-        },
-        {
-          "option_id": "OPT1787385776720_7",
-          "option_name": "แบบ",
-          "option_value": "จาหลี่ซู(แนวตั้ง)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1ZLDYT4Ps_w-AjAvmhhOAdZGobwzUM-vx&sz=w2000",
-          "sort_order": 6
-        },
-        {
-          "option_id": "OPT1787385776720_8",
-          "option_name": "แบบ",
-          "option_value": "จาหลี่ซู(แนวนอน)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1ojvMxzNqxom7r8ufyf3leVVXe0RxXXn4&sz=w2000",
-          "sort_order": 7
-        },
-        {
-          "option_id": "OPT1787385776720_9",
-          "option_name": "แบบ",
-          "option_value": "เซี่ยหมิงซิง(แนวตั้ง)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1_5Cn_kXrFFxph2f5ZIyJSukj4yINGKrb&sz=w2000",
-          "sort_order": 8
-        },
-        {
-          "option_id": "OPT1787385776720_10",
-          "option_name": "แบบ",
-          "option_value": "เซี่ยหมิงซิง(แนวนอน)",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1wwUz0JiDWg2L8mACrDnGweXLPRWq_uVS&sz=w2000",
-          "sort_order": 9
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036411",
@@ -14117,7 +14006,7 @@
       "sub_category": "สแตนดี้",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=19-L9QrKrUdYCvCFs6JZTA27KAVPNvH9p&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14139,63 +14028,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386204981_1",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1jtkMjo8o9ASXg58D4m0z7jCVegQw02ui&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386204981_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1vGtmBCsHm4VAxA1LgWSwdLHA9YRcEpjA&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386204981_3",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1P8gsITseVkdHGSx3u2qg5YNutePSozz1&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386204981_4",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1k79brTDtExcD0Pph6BRSOWvC9KQ0MnwZ&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386204981_5",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1kKmpz7h6MYD4ZOMXHV4YCj_LaMlTqn-b&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036412",
@@ -14217,7 +14050,7 @@
       "sub_category": "พวงกุญแจ",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1U0_QFCatD_fAOowYrMIWa9b6dnESG8h0&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14239,63 +14072,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386204982_1",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1jVjvcoWsFST_oQDafja4q4wP469aQFEn&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386204982_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1LVMubsuWH-a9zW3A2AH2XdPimOw6eB0X&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386204982_3",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1vzkeiSE9dfSvVyLMuVlkRRdnWhHEueWP&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386204982_4",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1mG9iu5D3-iIiflLRHRsJ2xO5dnse6DPy&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386204982_5",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1RSyceVFLm3O6081gZNveeic5x6Wfp__w&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036413",
@@ -14317,7 +14094,7 @@
       "sub_category": "อื่น ๆ",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1irncQs3GIbwahqxUv-4k1SedpMNeb-Ph&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14339,63 +14116,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386204982_1",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1le8zKuVtZNp61-HnCVOy2ExJwUIpoxtY&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386204982_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=16wsUhs3TD9Y4fmIyuJwc_wkd2Adw-Yv_&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386204982_3",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1D54tJQUQHGSQyGVYBby8BZZyWe0uhuqA&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386204982_4",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1N3GkthItWVJezjw4dxHcPeoleA1Nb1hB&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386204982_5",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1eihCLUh3B2TCDGFIIacbLXqXt0L68cSN&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036414",
@@ -14417,7 +14138,7 @@
       "sub_category": "สแตนดี้",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1ml6w5XT011SLJ5DsJZYPm3rwLimvTrOA&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14439,63 +14160,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386204984_1",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1QL4aO5Q5hjHWkvosVzXWe9Rp6OWxLMVx&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386204984_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1f6wLOUQkxjqlSs6VA-Q9bJrqqnTOPAQa&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386204984_3",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1ZDABD9uW2iekeVnN-efX1nPqsAwYySvh&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386204984_4",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1lxVBsdAr2J0nilucFMowHCyPHRklLvS5&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386204984_5",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1YhkcgkpVO7BxkMxtBhODDmKYVqzF4wXj&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036415",
@@ -14517,7 +14182,7 @@
       "sub_category": "การ์ด",
       "round": "LaN 8-2026",
       "description": "รายละเอียดทั้ง2แบบ\n-การ์ดใส ขนาดประมาณ 76*102มม.\nพิมพ์ออฟเซ็ต + ปั๊มฟอยล์ทอง\n\n-การ์ดโพลารอยด์ ขนาดประมาณ 63*89มม.\nปั๊มฟอยล์ทอง + UV",
-      "search_keywords": "เซียวอี้A เซียวอี้B ลู่เฉินB ฉีซือหลี่A ฉีซือหลี่B จาหลี่ซูA จาหลี่ซูB เซี่ยหมิงซิงA เซี่ยหมิงซิงB",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1IEATnXJoZOfaPX7YHXstp5cGfdTHNxds&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14539,107 +14204,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787385776721_1",
-          "option_name": "แบบ",
-          "option_value": "เซียวอี้A",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1iIvR06hNtTj9p1pjEUQQYKHCNnPFf07U&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787385776721_2",
-          "option_name": "แบบ",
-          "option_value": "เซียวอี้B",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1jZuVV5sxJyFD9vMulLI610_1V7ERribV&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787385776721_4",
-          "option_name": "แบบ",
-          "option_value": "ลู่เฉินB",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1fQpOk8Mdp5-6wlQBUwXZqa5aYoTOeuC6&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787385776721_5",
-          "option_name": "แบบ",
-          "option_value": "ฉีซือหลี่A",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1FX055rt5b9GbYYRYNcbam5x9iHam4_tQ&sz=w2000",
-          "sort_order": 4
-        },
-        {
-          "option_id": "OPT1787385776721_6",
-          "option_name": "แบบ",
-          "option_value": "ฉีซือหลี่B",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1kvA7WWkF7a9Qp-Q8N8fkYkPef27ZljD7&sz=w2000",
-          "sort_order": 5
-        },
-        {
-          "option_id": "OPT1787385776721_7",
-          "option_name": "แบบ",
-          "option_value": "จาหลี่ซูA",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1Pmf6TsinTZhHPHFT7NC9u0B9pM0Dmrov&sz=w2000",
-          "sort_order": 6
-        },
-        {
-          "option_id": "OPT1787385776721_8",
-          "option_name": "แบบ",
-          "option_value": "จาหลี่ซูB",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1zDYMFKr4v50CXcPtWIuqTF1hWvSk8ZAK&sz=w2000",
-          "sort_order": 7
-        },
-        {
-          "option_id": "OPT1787385776721_9",
-          "option_name": "แบบ",
-          "option_value": "เซี่ยหมิงซิงA",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=117Z7LOKimere91uvPXXUfsW_7qYzLRT9&sz=w2000",
-          "sort_order": 8
-        },
-        {
-          "option_id": "OPT1787385776721_10",
-          "option_name": "แบบ",
-          "option_value": "เซี่ยหมิงซิงB",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1L3ngXM3QlfU5bkcLkskPDZpn9VaveSNM&sz=w2000",
-          "sort_order": 9
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036416",
@@ -14661,7 +14226,7 @@
       "sub_category": "การ์ด",
       "round": "LaN 8-2026",
       "description": "รายละเอียด\n-ขนาดประมาณ 110*150มม.\n-พิมพ์เอฟเฟกต์โฮโล+พิมพ์UV+ทำสีแต่งขอบ",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1xwWxmy_kRii12duzPAiabDkIzL3qGtnV&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14683,63 +14248,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386204985",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1rSZ8zSlKTYH-ZtlvZ-nkN6eR3guLXe94&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386204986",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1ia0r0lzsUJol-noAI7texK0gwRHL452p&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386204987",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1dtuX3YenxtrAnJ5dYoqq2KrKo_am4j1x&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386204988",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1zlSeLPNYJpUBSQLsc3ImIyVdSGxtXsJT&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386204989",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1WDGmroBV7IluFJ4SvXISatiTIGn8pXcX&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036417",
@@ -14761,7 +14270,7 @@
       "sub_category": "ชิกิชิ",
       "round": "LaN 8-2026",
       "description": "วัสดุ : กระดาษชนิดพิเศษ\nขนาด : ประมาณ 146*220 mm\nเทคนิค: ปั๊มฟอยล์ทอง",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1Y9HLhxyQ89-JUNWuy7N_Zi_w3vZ4un04&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14783,63 +14292,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386204990",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1aQRvR3Cb3aGwh7wv9EQdja9kRii9b8u_&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386204991",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=11pj8rGJwH2Nuo0zuRnfzubC7yniaiQp-&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386204992",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1PS5HsuYLinxh9QPQ9prZF_pyuuARtoKS&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386204993",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1rSZdBz-xeX-P7T0O2L1329KjIN-NyODA&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386204994",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=19hiIagYFti4MxjSdWNdAmnmRKdBGJdRL&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036418",
@@ -14861,7 +14314,7 @@
       "sub_category": "ชิกิชิ",
       "round": "LaN 8-2026",
       "description": "วัสดุ : อะคริลิก\nขนาด : ประมาณ 146*220 mm\n เทคนิค : พิมพ์ออฟเซ็ต+ปั๊มฟอยล์ทอง",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1toyHYzjQaXAo2FOBCuXmk5aidekrDXuU&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14883,63 +14336,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386204995",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1nhh3UOR1lka13sDJLoep08OwdnUPJ7vq&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386204996",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=14h507Gy-qdkhF8hI7WUagwY3ONXnEgJH&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386204997",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1uGvL0P_uakoR1UUz7kZwBtYSG378Ej85&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386204998",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1bbXj0hz7tfBZO_mtusccqx-h_HOncNDl&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386204999",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1dCHXSHh7c2-ohJGVrN2jczq_JiTpWRjZ&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036419",
@@ -14961,7 +14358,7 @@
       "sub_category": "เข็มกลัด",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1stlOeiBEG6y2yxsK2i3jm2mNR_CAzaWW&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14983,63 +14380,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386205000",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1ddFl3JaeSMdCjzeawpjsAF6oCZGRUcwX&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386205001",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1V4CClyeZ2bTsDLuOoZe0_PAJuLM1rARB&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386205002",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1fbi4xJsbchz7_wdBF0EQK6ShoZCmy-ou&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386205003",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1UR8fQQwXcQTL7VMzkXAu2VxkFzwkKOLQ&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386205004",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1yy2EXWqwLjlKJyy7Zp71xy-W_cG7wTvZ&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036420",
@@ -15061,7 +14402,7 @@
       "sub_category": "สแตนดี้",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1KHFaOIt_yuo6TwcYk-q6UCplbsto2X14&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -15083,63 +14424,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386205005",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=15I3MDYQ1gecuNq4X6g3i2wbvh3gvnCo9&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386205006",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1JJpS8I7ydjC4y3xp8UUlw2UnZH74G9DE&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386205007",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1ggJiG-lsmSN4R6QX8PPOojS9CB3g8RqT&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386205008",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1avc1Nmp2XLxtVb9JVYivhdjOGZdkh-Wy&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386205009",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1pGXNEuYF8FJsKOEkd79DQA50eHhhlcRU&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036421",
@@ -15161,7 +14446,7 @@
       "sub_category": "สแตนดี้",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "เซียวอี้ ลู่เฉิน ฉีซือหลี่ จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=13beMA0jRd3hJxKoUvQgDN4n7IRbKvLcr&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -15183,63 +14468,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386205010",
-          "option_name": "ตัวละคร",
-          "option_value": "เซียวอี้",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1pc8Rc1gxSk1WsZT0VAsJKocuvXo687zY&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386205011",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1MRvmOKOBCW8rtmu9ha1DR3MURSXWTQ6e&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386205012",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1XbBYLRJH9EvVcguJQc8RrZ5Y0Zhohhwx&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386205013",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1B4ubdQepkHyb5zZwMXb1kxx0k_SwLnpX&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386205014",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1N81CAWghtieNqWLawoBFjz2Jmxcn_SJW&sz=w2000",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036422",
@@ -15261,7 +14490,7 @@
       "sub_category": "เข็มกลัด",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "ฉีซือหลี่ ลู่เฉิน",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=19E0IiZ8yuVNK3aAx78t7q3_vHUGu2HTP&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -15283,30 +14512,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787387810436_1",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1b1vTMwyYU-ohXQhw7QNWRxEWwcYXL-Yn&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787387810436_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1nSkvP_fBwU3t9nd7T5LX1gw6U69BdxH8&sz=w2000",
-          "sort_order": 1
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036423",
@@ -15328,7 +14534,7 @@
       "sub_category": "โปสการ์ด",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "ฉีซือหลี่ ลู่เฉิน",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=12BwOWkC5mGLGXUivPa8XIAAcDrde-VUi&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -15350,30 +14556,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787387810437_1",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1i7VDGeC5wTKHx3UGr19miILnSlv5VXx5&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787387810437_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1onkwQUl_SXpcU688eTAialaHfAVsWeNP&sz=w2000",
-          "sort_order": 1
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036424",
@@ -15395,7 +14578,7 @@
       "sub_category": "การ์ด",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "ฉีซือหลี่A ฉีซือหลี่B ลู่เฉินA ลู่เฉินB จาหลี่ซู เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1DCLJZw7effrtofYOIhp_o2Zr4UEiAfS-&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -15417,74 +14600,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787386205015",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่A",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1KE6qTP98LU4Jm9r8kFtr6ZTJq_sxlwgP&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787386205016",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่B",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=19CV66CTDVfdLehloAfgENEkV077zyPYF&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787386205017",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉินA",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1y0LKdDdhW9WzeDSUUwVsPfQX-tqajh-v&sz=w2000",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1787386205018",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉินB",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1wIQAUe1aQJ3oz62LZLdEUdWTsHN8mYDi&sz=w2000",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1787386205019",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1yPALrvuDBieYh_3rwTl0GqfgtvyT-pJn&sz=w2000",
-          "sort_order": 4
-        },
-        {
-          "option_id": "OPT1787386205020",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=17OXbramQAbMP6bGD3ZF6IG5JgQOLDg5B&sz=w2000",
-          "sort_order": 5
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1787384036425",
@@ -15506,7 +14622,7 @@
       "sub_category": "ชิกิชิ",
       "round": "LaN 8-2026",
       "description": "",
-      "search_keywords": "ฉีซือหลี่ ฉีซือหลี่A ลู่เฉินA จาหลี่ซู ลู่เฉิน ฉีซือหลี่B ลู่เฉินB เซี่ยหมิงซิง",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1LwmIhM-XTwB0rP0-nWrymhrYpeE5O8xH&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -15528,107 +14644,18 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1787387810438_1",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1_Se2daclPpyUbpzxs79XdmsKSPO7Zt0C&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787387810438_1",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่A",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1b1vTMwyYU-ohXQhw7QNWRxEWwcYXL-Yn&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787387810438_3",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉินA",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1_Se2daclPpyUbpzxs79XdmsKSPO7Zt0C&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787387810438_5",
-          "option_name": "ตัวละคร",
-          "option_value": "จาหลี่ซู",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1i7VDGeC5wTKHx3UGr19miILnSlv5VXx5&sz=w2000",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1787387810438_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉิน",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=11lHlWMTmnQypO68Jg46eT8KVdjnKozDu&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787387810438_2",
-          "option_name": "ตัวละคร",
-          "option_value": "ฉีซือหลี่B",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1nSkvP_fBwU3t9nd7T5LX1gw6U69BdxH8&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787387810438_4",
-          "option_name": "ตัวละคร",
-          "option_value": "ลู่เฉินB",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=11lHlWMTmnQypO68Jg46eT8KVdjnKozDu&sz=w2000",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787387810438_6",
-          "option_name": "ตัวละคร",
-          "option_value": "เซี่ยหมิงซิง",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1onkwQUl_SXpcU688eTAialaHfAVsWeNP&sz=w2000",
-          "sort_order": 1
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1788241931708",
       "name": "WuWa (ตี้หาร) ก้อนหัวโมจิ",
       "price_mode": "option",
-      "price": 150,
-      "final_price": 150,
+      "price": 0,
+      "final_price": 0,
       "base_price": 0,
-      "min_price": 150,
-      "max_price": 170,
-      "has_price_range": true,
+      "min_price": 0,
+      "max_price": 0,
+      "has_price_range": false,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -15639,7 +14666,7 @@
       "sub_category": "อื่น ๆ",
       "round": "",
       "description": "",
-      "search_keywords": "Phrolova Augusta Iuno Chisa Lynae Mornye Aemeath Luuk Herssen Sigrika Hiyuki Denia Aemeath(เด็ก)",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1ykirlIXAt3AXyhvgGHMdpNoXApc87MJc&sz=w2000",
       "status": "active",
       "stock": 24,
@@ -15661,140 +14688,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1788242172669_1",
-          "option_name": "ตัวละคร",
-          "option_value": "Phrolova",
-          "additional_price": 0,
-          "price": 170,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1788242172669_2",
-          "option_name": "ตัวละคร",
-          "option_value": "Augusta",
-          "additional_price": 0,
-          "price": 150,
-          "stock": 2,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1788242172669_3",
-          "option_name": "ตัวละคร",
-          "option_value": "Iuno",
-          "additional_price": 0,
-          "price": 150,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1788242172669_4",
-          "option_name": "ตัวละคร",
-          "option_value": "Chisa",
-          "additional_price": 0,
-          "price": 150,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1788242172669_5",
-          "option_name": "ตัวละคร",
-          "option_value": "Lynae",
-          "additional_price": 0,
-          "price": 150,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 4
-        },
-        {
-          "option_id": "OPT1788242172669_6",
-          "option_name": "ตัวละคร",
-          "option_value": "Mornye",
-          "additional_price": 0,
-          "price": 170,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 5
-        },
-        {
-          "option_id": "OPT1788242172669_7",
-          "option_name": "ตัวละคร",
-          "option_value": "Aemeath",
-          "additional_price": 0,
-          "price": 170,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 6
-        },
-        {
-          "option_id": "OPT1788242172669_8",
-          "option_name": "ตัวละคร",
-          "option_value": "Luuk Herssen",
-          "additional_price": 0,
-          "price": 170,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 7
-        },
-        {
-          "option_id": "OPT1788242172669_9",
-          "option_name": "ตัวละคร",
-          "option_value": "Sigrika",
-          "additional_price": 0,
-          "price": 170,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 8
-        },
-        {
-          "option_id": "OPT1788242172669_10",
-          "option_name": "ตัวละคร",
-          "option_value": "Hiyuki",
-          "additional_price": 0,
-          "price": 170,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 9
-        },
-        {
-          "option_id": "OPT1788242172669_11",
-          "option_name": "ตัวละคร",
-          "option_value": "Denia",
-          "additional_price": 0,
-          "price": 170,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 10
-        },
-        {
-          "option_id": "OPT1788242172669_12",
-          "option_name": "ตัวละคร",
-          "option_value": "Aemeath(เด็ก)",
-          "additional_price": 0,
-          "price": 150,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 11
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1788770108338",
@@ -20237,7 +19131,7 @@
       "round": "HSR 10-2026",
       "description": "ขนาด 93*65มม.",
       "search_keywords": "Aventurine-Waveflair Robin-Summeretto Himeko-Nova Blade Evanescia SilverWolf Lv.999 Ashveil Yao Guang Sparxie Pearl",
-      "image": "https://drive.google.com/thumbnail?id=1IUPYZkS3_uxO61ti7JUR8_5s-8L7aVyj&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1Pp_mOeO9mEDQqwZNFWRBh_Tedlji6gsJ&sz=w2000",
       "status": "active",
       "stock": 9999,
       "product_type": "preorder",
@@ -20245,9 +19139,9 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-09-28",
+      "preorder_deadline": "2026-09-27",
       "estimated_arrival": "พรีเซล",
-      "image2": "",
+      "image2": "https://drive.google.com/thumbnail?id=1kSZZ4ieIY3L2dXP6dZLnzVfHdA82itxe&sz=w2000",
       "image3": "",
       "featured": "",
       "new_arrival": "",
@@ -36914,15 +35808,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:45:26.943Z",
+  "generated_at": "2026-10-18T23:46:35.099Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1580,
-    "collections_ms": 508,
-    "gifts_ms": 1549,
-    "banks_ms": 163,
-    "total_ms": 3800,
+    "products_ms": 5867,
+    "collections_ms": 1609,
+    "gifts_ms": 2730,
+    "banks_ms": 369,
+    "total_ms": 10576,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
