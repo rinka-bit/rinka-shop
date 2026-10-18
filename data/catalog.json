@@ -32228,7 +32228,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Sparxie Ashveil ? Evanescia ?? Cyrene Hysilens Evernight Dan Heng Aglaea Castorice Mydei Anaxa Phainon Jingyuan Acheron Robin Feixiao Kafak Dr.Ratio",
       "image": "https://drive.google.com/thumbnail?id=1WQ0dvGeuzwj06atqToDZbb_AGcHF9ivk&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -32250,7 +32250,228 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792341505928_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparxie",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792341505928_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Ashveil",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792341505928_3",
+          "option_name": "ตัวละคร",
+          "option_value": "?",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792341505928_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanescia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792341505928_5",
+          "option_name": "ตัวละคร",
+          "option_value": "??",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792341505928_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Cyrene",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792341505928_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Hysilens",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1792341505928_8",
+          "option_name": "ตัวละคร",
+          "option_value": "Evernight",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        },
+        {
+          "option_id": "OPT1792341505928_9",
+          "option_name": "ตัวละคร",
+          "option_value": "Dan Heng",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 8
+        },
+        {
+          "option_id": "OPT1792341505928_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Aglaea",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 9
+        },
+        {
+          "option_id": "OPT1792341505928_11",
+          "option_name": "ตัวละคร",
+          "option_value": "Castorice",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 10
+        },
+        {
+          "option_id": "OPT1792341505928_12",
+          "option_name": "ตัวละคร",
+          "option_value": "Mydei",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 11
+        },
+        {
+          "option_id": "OPT1792341505928_13",
+          "option_name": "ตัวละคร",
+          "option_value": "Anaxa",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 12
+        },
+        {
+          "option_id": "OPT1792341505928_14",
+          "option_name": "ตัวละคร",
+          "option_value": "Phainon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 13
+        },
+        {
+          "option_id": "OPT1792341505928_15",
+          "option_name": "ตัวละคร",
+          "option_value": "Jingyuan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 14
+        },
+        {
+          "option_id": "OPT1792341505928_16",
+          "option_name": "ตัวละคร",
+          "option_value": "Acheron",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 15
+        },
+        {
+          "option_id": "OPT1792341505928_17",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 16
+        },
+        {
+          "option_id": "OPT1792341505928_18",
+          "option_name": "ตัวละคร",
+          "option_value": "Feixiao",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 17
+        },
+        {
+          "option_id": "OPT1792341505928_19",
+          "option_name": "ตัวละคร",
+          "option_value": "Kafak",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 18
+        },
+        {
+          "option_id": "OPT1792341505928_20",
+          "option_name": "ตัวละคร",
+          "option_value": "Dr.Ratio",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 19
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572130",
@@ -36006,15 +36227,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:30:27.724Z",
+  "generated_at": "2026-10-18T16:39:31.085Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1922,
-    "collections_ms": 660,
-    "gifts_ms": 1215,
-    "banks_ms": 169,
-    "total_ms": 3967,
+    "products_ms": 3128,
+    "collections_ms": 2602,
+    "gifts_ms": 1655,
+    "banks_ms": 270,
+    "total_ms": 7655,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
