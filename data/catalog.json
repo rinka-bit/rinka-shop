@@ -14517,7 +14517,7 @@
       "sub_category": "การ์ด",
       "round": "LaN 8-2026",
       "description": "รายละเอียดทั้ง2แบบ\n-การ์ดใส ขนาดประมาณ 76*102มม.\nพิมพ์ออฟเซ็ต + ปั๊มฟอยล์ทอง\n\n-การ์ดโพลารอยด์ ขนาดประมาณ 63*89มม.\nปั๊มฟอยล์ทอง + UV",
-      "search_keywords": "เซียวอี้A เซียวอี้B ลู่เฉินA ลู่เฉินB ฉีซือหลี่A ฉีซือหลี่B จาหลี่ซูA จาหลี่ซูB เซี่ยหมิงซิงA เซี่ยหมิงซิงB",
+      "search_keywords": "เซียวอี้A เซียวอี้B ลู่เฉินB ฉีซือหลี่A ฉีซือหลี่B จาหลี่ซูA จาหลี่ซูB เซี่ยหมิงซิงA เซี่ยหมิงซิงB",
       "image": "https://drive.google.com/thumbnail?id=1IEATnXJoZOfaPX7YHXstp5cGfdTHNxds&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -14561,17 +14561,6 @@
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1jZuVV5sxJyFD9vMulLI610_1V7ERribV&sz=w2000",
           "sort_order": 1
-        },
-        {
-          "option_id": "OPT1787385776721_3",
-          "option_name": "แบบ",
-          "option_value": "ลู่เฉินA",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1Nvz3-LdmGv_Rv307pVYbA4pBkcLsJgzj&sz=w2000",
-          "sort_order": 2
         },
         {
           "option_id": "OPT1787385776721_4",
@@ -32413,15 +32402,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:32:34.983Z",
+  "generated_at": "2026-10-18T08:35:45.807Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5054,
-    "collections_ms": 1267,
-    "gifts_ms": 2333,
-    "banks_ms": 195,
-    "total_ms": 8849,
+    "products_ms": 15083,
+    "collections_ms": 2429,
+    "gifts_ms": 2771,
+    "banks_ms": 279,
+    "total_ms": 20562,
     "product_count": 287,
     "collection_count": 8,
     "bank_count": 3
