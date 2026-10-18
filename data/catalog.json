@@ -29282,7 +29282,7 @@
       "fandom": "Honkai Star Rail",
       "sub_category": "สแตนดี้",
       "round": "HSR 10-2026",
-      "description": "ขนาดสินค้า\n\nSundove 170mm.\nWoof Woof Dan 160mm.\nMarch Bunny 120mm.\nMr. Yang 150mm.\nHimekat 140mm.",
+      "description": "ขนาดสินค้า\n\nSundove 63*76mm.\nWoof Woof Dan 66*71mm.\nMarch Bunny 44*43mm.\nMr. Yang 56*70mm.\nHimekat 56*70mm.",
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1HZ6hvRPHHdaNJwV-28dKM5pmb_lZEJ_p&sz=w2000",
       "status": "active",
@@ -32181,15 +32181,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:05:29.090Z",
+  "generated_at": "2026-10-18T08:06:27.664Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2729,
-    "collections_ms": 935,
-    "gifts_ms": 1857,
-    "banks_ms": 325,
-    "total_ms": 5846,
+    "products_ms": 1847,
+    "collections_ms": 1277,
+    "gifts_ms": 1434,
+    "banks_ms": 180,
+    "total_ms": 4738,
     "product_count": 283,
     "collection_count": 8,
     "bank_count": 3
