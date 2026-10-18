@@ -30468,6 +30468,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792315865404",
+      "name": "MOONDROP : Sparxie RT-Adaptive ANC Mini Hi-Fi TWS(ไม่รวมกลับไทย)",
+      "price_mode": "fixed",
+      "price": 2650,
+      "final_price": 2650,
+      "base_price": 2650,
+      "min_price": 2650,
+      "max_price": 2650,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "อื่น ๆ",
+      "round": "HSR 10-2026",
+      "description": "🔸จุดเด่นและสเปกหลัก (Hardware & Audio)\n-ออกแบบมาให้มีขนาดเล็ก น้ำหนักเบา สวมใส่สบาย แม้ผู้ที่มีรูหูขนาดเล็กก็ใส่ได้สบาย  \n -ชิปประมวลผลหลัก MOONDROP TWS-2:\n สถาปัตยกรรมระดับ 22nm ผลิตแบบคัสตอมพิเศษ ให้ประสิทธิภาพคำนวณสูงและประหยัดพลังงาน  \n -ไดนามิกไดรเวอร์ขนาด 10mm: ความเพี้ยนต่ำ ย่านความถี่กว้าง (Wideband Dynamic Driver)  \n -ไดอะแฟรมไม้ธรรมชาติ (Wood Dome Diaphragm): ให้เสียงหวาน นุ่มนวล ละเมียดละไม  \n - ค่าความเพี้ยนต่ำมาก (THD \\le 0.05%): ให้ความแม่นยำของเสียงสูง  \n \n🔸ระบบตัดเสียงรบกวนและการสนทนา\n-ระบบคำนวณตัดเสียงรบกวนแบบ Real-time ปรับระดับการตัดเสียงให้เข้ากับสภาพแวดล้อมและทรงการใส่โดยอัตโนมัติ\n-โหมดดึงเสียงภายนอกที่ให้ความรู้สึกเป็นธรรมชาติ  \n-AI + 2Mic ENC (Environmental Noise Cancellation): ช่วยแยกเสียงพูดออกจากเสียงรบกวนรอบข้าง ให้การสนทนาชัดเจน  \n \n🔸การเชื่อมต่อและ Codec เสียง\n-LHDC-V: รองรับโปรโตคอลส่งสัญญาณเสียง Hi-Fi ความละเอียดสูงแบบไร้สาย  \n-LE Audio (LC3 Standard): ค่าความดีเลย์ต่ำมาก (Low Latency) และถ่ายทอดสัญญาณเสียงคุณภาพสูง  \n-Bluetooth 6.0: การเชื่อมต่อไร้สายเวอร์ชันใหม่ล่าสุด เสถียรและประหยัดพลังงาน  \n-Dual-Device Connection: รองรับการเชื่อมต่อพร้อมกัน 2 อุปกรณ์  \n-Easy Pairing & Pop-up: กดปุ่มจับคู่ได้ง่าย และเปิดฝากล่องเชื่อมต่อทันที (Open and Connect)  \n \n🔸ฟังก์ชันแอปพลิเคชันและการปรับแต่ง (MOONDROP App)\n -ปรับแต่งแนวเสียงได้อย่างอิสระผ่านแอป  \n -อีควอไลเซอร์ปรับแต่งความถี่เสียงได้ละเอียดถึง 10 แบนด์  \n-สามารถบันทึก/สร้างโปรไฟล์ความชอบเสียงส่วนบุคคลเพื่อใช้งานกับหูฟัง MOONDROP รุ่นอื่นๆ ได้  \n-มีโหมดเกมลดความล่าช้าของเสียง (Low Latency Gaming Mode)  \n-สามารถปรับแต่งคำสั่งระบบสัมผัสที่ตัวหูฟังได้  \n \n ✨รองรับระบบ: ใช้ได้ทั้ง iOS และ Android  \n \n🔸แบตเตอรี่และการใช้งาน\nตัวหูฟังใช้งานได้สูงสุด 8 ชั่วโมง และรวมกล่องชาร์จใช้งานได้สูงสุดถึง 28 ชั่วโมง",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1xq4Gz-DCFc8SJ4SV_7gbbNnAHOkGWBZC&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 12/2026",
+      "image2": "https://drive.google.com/thumbnail?id=1wWHVjiwvrzCIBmgSnacmHdjroS_mhiOS&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1FROq4UgLlfTBBI-XUqj40BR1m4To9696&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1b00HWOuuLNhEw8CQNO6X3A74rtimJ0UP&sz=w2000",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -30581,7 +30625,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 11
+      "product_count": 12
     }
   ],
   "gifts": {
@@ -33343,16 +33387,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T09:17:38.213Z",
+  "generated_at": "2026-10-18T09:31:32.611Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6336,
-    "collections_ms": 1174,
-    "gifts_ms": 2907,
-    "banks_ms": 399,
-    "total_ms": 10816,
-    "product_count": 291,
+    "products_ms": 4195,
+    "collections_ms": 1879,
+    "gifts_ms": 2528,
+    "banks_ms": 309,
+    "total_ms": 8912,
+    "product_count": 292,
     "collection_count": 8,
     "bank_count": 3
   }
