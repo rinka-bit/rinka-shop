@@ -22695,7 +22695,7 @@
       "sub_category": "อื่น ๆ",
       "round": "LnD 9-2026",
       "description": "All in 5ชิ้น(คาร์เดียวกัน)\n-เซ็ตพัฟ*1\n-เซ็ตบำรุงผิว*1\n-กระจกแต่งหน้า*1\n-หมวกคลุมผม*1\n-กิ๊บติดผม*1",
-      "search_keywords": "Xavier Zayne Rafayel Sylus Caleb",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1P5Xgni_5uTgcE3a2390pOlc4BsE0vmVq&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -22717,63 +22717,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1790175712319_121",
-          "option_name": "ตัวละคร",
-          "option_value": "Xavier",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1790175712319_122",
-          "option_name": "ตัวละคร",
-          "option_value": "Zayne",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9998,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1790175712319_123",
-          "option_name": "ตัวละคร",
-          "option_value": "Rafayel",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1790175712319_124",
-          "option_name": "ตัวละคร",
-          "option_value": "Sylus",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1790175712319_125",
-          "option_name": "ตัวละคร",
-          "option_value": "Caleb",
-          "additional_price": 0,
-          "price": null,
-          "stock": 9999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1790230672634",
@@ -35808,15 +35752,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:46:35.099Z",
+  "generated_at": "2026-10-18T23:47:30.901Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5867,
-    "collections_ms": 1609,
-    "gifts_ms": 2730,
-    "banks_ms": 369,
-    "total_ms": 10576,
+    "products_ms": 3402,
+    "collections_ms": 1332,
+    "gifts_ms": 1891,
+    "banks_ms": 343,
+    "total_ms": 6968,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
