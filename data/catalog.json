@@ -32493,7 +32493,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Feixiao Jiaoqiu Moze Boothill",
       "image": "https://drive.google.com/thumbnail?id=1-hzpa3U1IMPhae6yaRWx9H_QM619w5OZ&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -32515,7 +32515,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792341574821_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Feixiao",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792341574821_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Jiaoqiu",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792341574821_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Moze",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792341574821_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Boothill",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572131",
@@ -36227,15 +36272,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:39:31.085Z",
+  "generated_at": "2026-10-18T16:40:28.386Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3128,
-    "collections_ms": 2602,
-    "gifts_ms": 1655,
-    "banks_ms": 270,
-    "total_ms": 7655,
+    "products_ms": 2201,
+    "collections_ms": 807,
+    "gifts_ms": 1634,
+    "banks_ms": 442,
+    "total_ms": 5084,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
