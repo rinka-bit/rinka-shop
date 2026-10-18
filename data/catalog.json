@@ -29328,7 +29328,7 @@
       "sub_category": "สแตนดี้",
       "round": "HSR 10-2026",
       "description": "ขนาดสินค้า\n\nSundove 63*76mm.\nWoof Woof Dan 66*71mm.\nMarch Bunny 44*43mm.\nMr. Yang 56*70mm.\nHimekat 56*70mm.",
-      "search_keywords": "",
+      "search_keywords": "Woof Woof Dan Sundove Himekat Mr. Yang March Bunny",
       "image": "https://drive.google.com/thumbnail?id=1HZ6hvRPHHdaNJwV-28dKM5pmb_lZEJ_p&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -29350,7 +29350,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792312622330_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Woof Woof Dan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1aScUhY8-ZKpgLX5NKxCHdeeNuiX8WoOH&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792312622330_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Sundove",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1n2U46AS_W2ls-imOhkYscdxNYoSLZJCG&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792312622330_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Himekat",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1_7IfjtqXKztsZIqW0KfyYc0EyxLjqa3H&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792312622330_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Mr. Yang",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1b2kz7YPo0uLR0tTgZPZwNhPQYVGcKpYu&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792312622330_5",
+          "option_name": "ตัวละคร",
+          "option_value": "March Bunny",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1CczXwDIYQGLjrGTTCabnC1USiuY0zhgK&sz=w2000",
+          "sort_order": 4
+        }
+      ]
     },
     {
       "product_id": "PROD1792310895068",
@@ -32402,15 +32458,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:35:45.807Z",
+  "generated_at": "2026-10-18T08:37:29.993Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 15083,
-    "collections_ms": 2429,
-    "gifts_ms": 2771,
-    "banks_ms": 279,
-    "total_ms": 20562,
+    "products_ms": 3457,
+    "collections_ms": 696,
+    "gifts_ms": 1724,
+    "banks_ms": 209,
+    "total_ms": 6086,
     "product_count": 287,
     "collection_count": 8,
     "bank_count": 3
