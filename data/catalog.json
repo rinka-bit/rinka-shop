@@ -31994,7 +31994,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "\n",
-      "search_keywords": "Dan Heng Terrae Phainon Evernight Cerydra Hysilens Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Lingsha Feixiao Yunli Jiaoqiu Firefly Jade Boothill Robin Stelle Caelus Dan Heng Himeko Welt Aventurine Acheron Sparkle Black Swan Dr.Ratio Ruan Mei Argenti Topaz Huohuo Jingliu Fu Xuan Dan Heng IL Blade Kafka Luocha",
+      "search_keywords": "Dan Heng Terrae Phainon Evernight Cerydra Hysilens Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Lingsha Feixiao Yunli Jiaoqiu Firefly Jade Boothill Robin Stelle Caelus Dan Heng Himeko Welt Aventurine Acheron Sparkle Black Swan Dr.Ratio Ruan Mei Argenti Topaz Huohuo Jingliu Fu Xuan Dan Heng IL Blade Kafka Luocha Silver Wolf Jing Yuan Selee",
       "image": "https://drive.google.com/thumbnail?id=165d1nL8sWY0Bq2dG8s01MimAGCd0wTJo&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -32500,6 +32500,39 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 43
+        },
+        {
+          "option_id": "OPT1792367104554_45",
+          "option_name": "ตัวละคร",
+          "option_value": "Silver Wolf",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 44
+        },
+        {
+          "option_id": "OPT1792367104554_46",
+          "option_name": "ตัวละคร",
+          "option_value": "Jing Yuan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 45
+        },
+        {
+          "option_id": "OPT1792367104554_47",
+          "option_name": "ตัวละคร",
+          "option_value": "Selee",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 46
         }
       ]
     },
@@ -36225,15 +36258,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:57:39.674Z",
+  "generated_at": "2026-10-18T23:58:28.656Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 10855,
-    "collections_ms": 1664,
-    "gifts_ms": 2542,
-    "banks_ms": 373,
-    "total_ms": 15434,
+    "products_ms": 2281,
+    "collections_ms": 1053,
+    "gifts_ms": 1843,
+    "banks_ms": 283,
+    "total_ms": 5460,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
