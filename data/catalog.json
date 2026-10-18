@@ -28822,7 +28822,7 @@
           "option_value": "ไม่ตีลัง",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -29274,6 +29274,20 @@
       "description": "ราคารวมส่งกลับไทยทุกชิ้น ในไทยเริ่มต้น 55฿ (พท.พิเศษ+20฿)",
       "banner_image": "https://drive.google.com/thumbnail?id=1FiYxod4eOEpxZer_nlI4FTfGD_8u-AUj&sz=w2000",
       "product_count": 5
+    },
+    {
+      "collection_id": "COL1792309022460",
+      "name": "HSR 10-2026 (ส่วนใหญ่รวมส่งกลับไทย)",
+      "fandom": "Honkai Star Rail",
+      "image": "https://drive.google.com/thumbnail?id=1HKQJcyXuKGHrEdU9b0kvBAC2OEqGDBCZ&sz=w2000",
+      "status": "active",
+      "preorder_deadline": "2026-10-30T17:00:00.000Z",
+      "featured": "",
+      "created_at": "2026-10-18T07:37:07.900Z",
+      "collection_type": "Preorder",
+      "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
+      "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -32035,17 +32049,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-17T11:34:36.343Z",
+  "generated_at": "2026-10-18T07:37:31.197Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6988,
-    "collections_ms": 1592,
-    "gifts_ms": 3049,
-    "banks_ms": 299,
-    "total_ms": 11928,
+    "products_ms": 4307,
+    "collections_ms": 1347,
+    "gifts_ms": 1975,
+    "banks_ms": 323,
+    "total_ms": 7952,
     "product_count": 280,
-    "collection_count": 7,
+    "collection_count": 8,
     "bank_count": 3
   }
 }
