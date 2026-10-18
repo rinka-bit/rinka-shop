@@ -30380,6 +30380,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792314673963",
+      "name": "Sparxie series : ปลั๊กพ่วง (ไม่รวมส่งกลับไทย)",
+      "price_mode": "fixed",
+      "price": 1390,
+      "final_price": 1390,
+      "base_price": 1390,
+      "min_price": 1390,
+      "max_price": 1390,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "อื่น ๆ",
+      "round": "HSR 10-2026",
+      "description": "ขนาดตัวเครื่อง ประมาณ 180*60.8*69.5มม.\nความยาวสายไฟ 170ซม.\nน้ำหนักประมาณ 520กรัม\nเต้ารับ AC : มาตรฐานจีนแบบผสม 3ช่อง\nกำลังไฟAC สูงสุด 2500W MAX 10A MAX 250V\nกำลังไฟโคมไฟ 1.2W\nช่องUSB-C Output : รองรับสูงสุด 36W MAX (5W=3A/ 9V=3A / 12V=3A / 15V=2.4A / 20V=1.5A)\nช่องUSB-A Output : รองรับสูงสุด 18W MAX (5V=3A / 9V=2A / 12V=1.5A)\n\nสามารถเปลี่ยนรูปในช่องโคมไฟได้",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1w7M-9QDZIXKFwpWMbevBunUZKO5bL0qD&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1vgzlep9-sr28cT3rz_UGzYo8UOJLthEz&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1JjNaFp8GAbb-ReQaMb6FCSPTbpsG9p0w&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1oM6bq9vLrDmzRhHXwY8yzwD9uB0YZoCx&sz=w2000",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -30493,7 +30537,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 9
+      "product_count": 10
     }
   ],
   "gifts": {
@@ -33255,16 +33299,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T09:05:30.193Z",
+  "generated_at": "2026-10-18T09:12:30.574Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3060,
-    "collections_ms": 1015,
-    "gifts_ms": 2106,
-    "banks_ms": 295,
-    "total_ms": 6476,
-    "product_count": 289,
+    "products_ms": 3724,
+    "collections_ms": 889,
+    "gifts_ms": 1643,
+    "banks_ms": 181,
+    "total_ms": 6438,
+    "product_count": 290,
     "collection_count": 8,
     "bank_count": 3
   }
