@@ -30352,10 +30352,10 @@
       "product_id": "PROD1792311606304",
       "name": "Setเสื้อผ้าแก๊งขนฟู",
       "price_mode": "option",
-      "price": 600,
-      "final_price": 600,
+      "price": 0,
+      "final_price": 0,
       "base_price": 0,
-      "min_price": 600,
+      "min_price": 0,
       "max_price": 2120,
       "has_price_range": true,
       "old_price": null,
@@ -30368,7 +30368,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Sundove Woof Woof Dan Baseball Raccoon March Bunny เพิ่มหมวก Woof Woof Dan",
+      "search_keywords": "Sundove XS Woof Woof Dan S Baseball Raccoon M March Bunny L เพิ่มหมวก Woof Woof Dan XL XXL XXXL",
       "image": "https://drive.google.com/thumbnail?id=1BaYj3dCAjQkSX-qcyhRI17_ryIJNIa6A&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30403,12 +30403,34 @@
           "sort_order": 0
         },
         {
+          "option_id": "OPT1792341823825_1",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "XS",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
           "option_id": "OPT1792341769540_2",
           "option_name": "ตัวละคร",
           "option_value": "Woof Woof Dan",
           "additional_price": 0,
           "price": 2120,
           "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792341823825_2",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "S",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -30425,12 +30447,34 @@
           "sort_order": 2
         },
         {
+          "option_id": "OPT1792341823825_3",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "M",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
           "option_id": "OPT1792341769540_4",
           "option_name": "ตัวละคร",
           "option_value": "March Bunny",
           "additional_price": 0,
           "price": 2120,
           "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792341823825_4",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "L",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 3
@@ -30445,6 +30489,39 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792341823825_5",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "XL",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792341823825_6",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "XXL",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792341823825_7",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "XXXL",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
         }
       ]
     },
@@ -36328,15 +36405,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:43:27.626Z",
+  "generated_at": "2026-10-18T16:44:27.232Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2184,
-    "collections_ms": 761,
-    "gifts_ms": 1521,
-    "banks_ms": 237,
-    "total_ms": 4704,
+    "products_ms": 1868,
+    "collections_ms": 787,
+    "gifts_ms": 1106,
+    "banks_ms": 206,
+    "total_ms": 3967,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
