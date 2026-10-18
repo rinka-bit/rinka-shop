@@ -20236,7 +20236,7 @@
       "sub_category": "พวงกุญแจ",
       "round": "HSR 10-2026",
       "description": "ขนาด 93*65มม.",
-      "search_keywords": "Aventurine-Waveflair Robin-Summeretto Himeko-Nova Blade Evanescia SilverWolf Lv.999 Ashveil Yao Guang Sparxie",
+      "search_keywords": "Aventurine-Waveflair Robin-Summeretto Himeko-Nova Blade Evanescia SilverWolf Lv.999 Ashveil Yao Guang Sparxie Pearl",
       "image": "https://drive.google.com/thumbnail?id=1IUPYZkS3_uxO61ti7JUR8_5s-8L7aVyj&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -20357,6 +20357,17 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 8
+        },
+        {
+          "option_id": "OPT1792338080028_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Pearl",
+          "additional_price": 0,
+          "price": null,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 9
         }
       ]
     },
@@ -35126,15 +35137,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:41:14.252Z",
+  "generated_at": "2026-10-18T15:41:29.111Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 20798,
-    "collections_ms": 3607,
-    "gifts_ms": 2495,
-    "banks_ms": 321,
-    "total_ms": 27221,
+    "products_ms": 3305,
+    "collections_ms": 769,
+    "gifts_ms": 1875,
+    "banks_ms": 245,
+    "total_ms": 6194,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
