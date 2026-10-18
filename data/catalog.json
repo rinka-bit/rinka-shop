@@ -30352,12 +30352,12 @@
       "product_id": "PROD1792311606304",
       "name": "Setเสื้อผ้าแก๊งขนฟู",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 600,
+      "final_price": 600,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 600,
+      "max_price": 2120,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -30368,7 +30368,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Sundove Woof Woof Dan Baseball Raccoon March Bunny เพิ่มหมวก Woof Woof Dan",
       "image": "https://drive.google.com/thumbnail?id=1BaYj3dCAjQkSX-qcyhRI17_ryIJNIa6A&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30390,7 +30390,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792341769540_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Sundove",
+          "additional_price": 0,
+          "price": 2120,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792341769540_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Woof Woof Dan",
+          "additional_price": 0,
+          "price": 2120,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792341769540_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Baseball Raccoon",
+          "additional_price": 0,
+          "price": 2120,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792341769540_4",
+          "option_name": "ตัวละคร",
+          "option_value": "March Bunny",
+          "additional_price": 0,
+          "price": 2120,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792341769540_5",
+          "option_name": "ตัวละคร",
+          "option_value": "เพิ่มหมวก Woof Woof Dan",
+          "additional_price": 0,
+          "price": 600,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        }
+      ]
     },
     {
       "product_id": "PROD1792314123332",
@@ -36272,15 +36328,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:40:28.386Z",
+  "generated_at": "2026-10-18T16:43:27.626Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2201,
-    "collections_ms": 807,
-    "gifts_ms": 1634,
-    "banks_ms": 442,
-    "total_ms": 5084,
+    "products_ms": 2184,
+    "collections_ms": 761,
+    "gifts_ms": 1521,
+    "banks_ms": 237,
+    "total_ms": 4704,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
