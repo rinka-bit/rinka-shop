@@ -30788,7 +30788,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Castorice Anaxa Evernight Dan Heng Terrae",
       "image": "https://drive.google.com/thumbnail?id=14cH229GxO1IF_varIYMUlKPAE4e3otV_&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30810,7 +30810,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792338797267_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Castorice",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792338797267_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Anaxa",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792338797267_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Evernight",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792338797267_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Dan Heng Terrae",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572116",
@@ -35138,15 +35183,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:52:27.577Z",
+  "generated_at": "2026-10-18T15:53:31.690Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2181,
-    "collections_ms": 589,
-    "gifts_ms": 1246,
-    "banks_ms": 165,
-    "total_ms": 4181,
+    "products_ms": 4809,
+    "collections_ms": 630,
+    "gifts_ms": 1078,
+    "banks_ms": 214,
+    "total_ms": 6731,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
