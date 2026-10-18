@@ -30368,7 +30368,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "XS Sundove เพิ่มหมวกWoof Woof Dan S Woof Woof Dan M Baseball Raccoon L March Bunny XL XXL XXXL",
+      "search_keywords": "Sundove เพิ่มหมวกWoof Woof Dan XS Woof Woof Dan S Baseball Raccoon M March Bunny L XL XXL XXXL",
       "image": "https://drive.google.com/thumbnail?id=1BaYj3dCAjQkSX-qcyhRI17_ryIJNIa6A&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30844,17 +30844,6 @@
       ],
       "options": [
         {
-          "option_id": "OPT1792341823825_1",
-          "option_name": "ไซส์เสื้อ",
-          "option_value": "XS",
-          "additional_price": 0,
-          "price": 0,
-          "stock": 0,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
-        },
-        {
           "option_id": "OPT1792341769540_1",
           "option_name": "ตัวละคร",
           "option_value": "Sundove",
@@ -30877,15 +30866,15 @@
           "sort_order": 0
         },
         {
-          "option_id": "OPT1792341823825_2",
+          "option_id": "OPT1792341823825_1",
           "option_name": "ไซส์เสื้อ",
-          "option_value": "S",
+          "option_value": "XS",
           "additional_price": 0,
           "price": 0,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 1
+          "sort_order": 0
         },
         {
           "option_id": "OPT1792341769540_2",
@@ -30899,15 +30888,15 @@
           "sort_order": 1
         },
         {
-          "option_id": "OPT1792341823825_3",
+          "option_id": "OPT1792341823825_2",
           "option_name": "ไซส์เสื้อ",
-          "option_value": "M",
+          "option_value": "S",
           "additional_price": 0,
           "price": 0,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 2
+          "sort_order": 1
         },
         {
           "option_id": "OPT1792341769540_3",
@@ -30921,15 +30910,15 @@
           "sort_order": 2
         },
         {
-          "option_id": "OPT1792341823825_4",
+          "option_id": "OPT1792341823825_3",
           "option_name": "ไซส์เสื้อ",
-          "option_value": "L",
+          "option_value": "M",
           "additional_price": 0,
           "price": 0,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 3
+          "sort_order": 2
         },
         {
           "option_id": "OPT1792341769540_4",
@@ -30943,12 +30932,23 @@
           "sort_order": 3
         },
         {
+          "option_id": "OPT1792341823825_4",
+          "option_name": "ไซส์เสื้อ",
+          "option_value": "L",
+          "additional_price": 0,
+          "price": 0,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
           "option_id": "OPT1792341823825_5",
           "option_name": "ไซส์เสื้อ",
           "option_value": "XL",
           "additional_price": 0,
           "price": 0,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -30959,7 +30959,7 @@
           "option_value": "XXL",
           "additional_price": 0,
           "price": 0,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 5
@@ -30970,7 +30970,7 @@
           "option_value": "XXXL",
           "additional_price": 0,
           "price": 0,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 6
@@ -36857,15 +36857,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:47:27.377Z",
+  "generated_at": "2026-10-18T16:48:28.472Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2232,
-    "collections_ms": 826,
-    "gifts_ms": 1210,
-    "banks_ms": 181,
-    "total_ms": 4449,
+    "products_ms": 2615,
+    "collections_ms": 764,
+    "gifts_ms": 1828,
+    "banks_ms": 225,
+    "total_ms": 5432,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
