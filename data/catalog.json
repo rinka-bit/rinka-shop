@@ -30336,6 +30336,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792314265614",
+      "name": "Sparxie series : Protective case",
+      "price_mode": "fixed",
+      "price": 390,
+      "final_price": 390,
+      "base_price": 390,
+      "min_price": 390,
+      "max_price": 390,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "อื่น ๆ",
+      "round": "HSR 10-2026",
+      "description": "ขนาดประมาณ 47.8*46*57.6มม.\nวัสดุ ซิลิโคนยาง+PVC",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1LlPz3OffXPx6RK0TgZBDLDGfLYGqf3Hd&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1F0jXJGWEZci6lOxYoPOeQpwZQQ8RaJf1&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1IkMyDSr8rfG8Dufpmdx5On8X-cMTuJfT&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -30449,7 +30493,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 8
+      "product_count": 9
     }
   ],
   "gifts": {
@@ -33211,16 +33255,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T09:02:28.911Z",
+  "generated_at": "2026-10-18T09:05:30.193Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2654,
-    "collections_ms": 969,
-    "gifts_ms": 1941,
-    "banks_ms": 307,
-    "total_ms": 5871,
-    "product_count": 288,
+    "products_ms": 3060,
+    "collections_ms": 1015,
+    "gifts_ms": 2106,
+    "banks_ms": 295,
+    "total_ms": 6476,
+    "product_count": 289,
     "collection_count": 8,
     "bank_count": 3
   }
