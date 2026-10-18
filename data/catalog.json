@@ -30338,6 +30338,50 @@
       ]
     },
     {
+      "product_id": "PROD1792311606304",
+      "name": "Full set 4ชิ้น",
+      "price_mode": "fixed",
+      "price": 2750,
+      "final_price": 2750,
+      "base_price": 2750,
+      "min_price": 2750,
+      "max_price": 2750,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "เสื้อผ้า",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "เสื้อผ้า",
+      "round": "HSR 10-2026",
+      "description": "",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1bE7XLePspV1Xc2JSrykjPDquBRFUAoRX&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-08",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 1/2027",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
+    },
+    {
       "product_id": "PROD1792314123332",
       "name": "Sparxie series : Data Cable",
       "price_mode": "fixed",
@@ -30780,7 +30824,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 64
+      "product_count": 65
     }
   ],
   "gifts": {
@@ -33542,16 +33586,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:08:33.550Z",
+  "generated_at": "2026-10-18T15:09:37.016Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5568,
-    "collections_ms": 2915,
-    "gifts_ms": 1678,
-    "banks_ms": 157,
-    "total_ms": 10319,
-    "product_count": 295,
+    "products_ms": 7332,
+    "collections_ms": 747,
+    "gifts_ms": 2239,
+    "banks_ms": 197,
+    "total_ms": 10515,
+    "product_count": 296,
     "collection_count": 8,
     "bank_count": 3
   }
