@@ -29262,6 +29262,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792310668958",
+      "name": "Fluffy Across the Blue - Acrylic colotto",
+      "price_mode": "fixed",
+      "price": 180,
+      "final_price": 180,
+      "base_price": 180,
+      "min_price": 180,
+      "max_price": 180,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "สแตนดี้",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "สแตนดี้",
+      "round": "HSR 10-2026",
+      "description": "ขนาดสินค้า\n\nSundove 170mm.\nWoof Woof Dan 160mm.\nMarch Bunny 120mm.\nMr. Yang 150mm.\nHimekat 140mm.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1HZ6hvRPHHdaNJwV-28dKM5pmb_lZEJ_p&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=15K7OlVCtRFzenNc7jFdNIB6NudBlnFzl&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=13oFsmtIWI4K9Mw9JH9BG22TcN8X_6on3&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -29375,7 +29419,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 2
+      "product_count": 3
     }
   ],
   "gifts": {
@@ -32137,16 +32181,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:01:28.595Z",
+  "generated_at": "2026-10-18T08:05:29.090Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2433,
-    "collections_ms": 1973,
-    "gifts_ms": 1033,
-    "banks_ms": 156,
-    "total_ms": 5595,
-    "product_count": 282,
+    "products_ms": 2729,
+    "collections_ms": 935,
+    "gifts_ms": 1857,
+    "banks_ms": 325,
+    "total_ms": 5846,
+    "product_count": 283,
     "collection_count": 8,
     "bank_count": 3
   }
