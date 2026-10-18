@@ -20190,7 +20190,7 @@
       "main_category": "พวงกุญแจ",
       "fandom": "Honkai Star Rail",
       "sub_category": "พวงกุญแจ",
-      "round": "HSR 9-2026",
+      "round": "HSR 10-2026",
       "description": "ขนาด 93*65มม.",
       "search_keywords": "Aventurine-Waveflair Robin-Summeretto Himeko-Nova Blade Evanescia SilverWolf Lv.999 Ashveil Yao Guang Sparxie",
       "image": "https://drive.google.com/thumbnail?id=1IUPYZkS3_uxO61ti7JUR8_5s-8L7aVyj&sz=w2000",
@@ -20201,7 +20201,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-09-29",
+      "preorder_deadline": "2026-09-28",
       "estimated_arrival": "พรีเซล",
       "image2": "",
       "image3": "",
@@ -20209,7 +20209,7 @@
       "new_arrival": "",
       "sort_order": 0,
       "image4": "",
-      "collection_id": "COL1789402151204",
+      "collection_id": "COL1792309022460",
       "created_at": "",
       "variant_mode": false,
       "variant_groups": [],
@@ -30692,7 +30692,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 21
+      "product_count": 22
     }
   ],
   "gifts": {
@@ -33454,15 +33454,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T14:46:29.048Z",
+  "generated_at": "2026-10-18T14:47:26.072Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2418,
-    "collections_ms": 809,
-    "gifts_ms": 2225,
-    "banks_ms": 420,
-    "total_ms": 5872,
+    "products_ms": 1871,
+    "collections_ms": 455,
+    "gifts_ms": 880,
+    "banks_ms": 141,
+    "total_ms": 3347,
     "product_count": 293,
     "collection_count": 8,
     "bank_count": 3
