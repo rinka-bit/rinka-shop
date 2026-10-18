@@ -30579,6 +30579,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792335572114",
+      "name": "Ruanmei's creation Vol.3",
+      "price_mode": "option",
+      "price": 0,
+      "final_price": 0,
+      "base_price": 0,
+      "min_price": 0,
+      "max_price": 0,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "ฟิกเกอร์",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "ฟิกเกอร์",
+      "round": "HSR 10-2026",
+      "description": "",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1R-JIq4JmBCarIGYSKJGqcBAH2Hwh5Ta5&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-08",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1v4cBHidmxCGYqWn-xFcrw0vQTIMdlxsv&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1NdYWgCoyaGQVRgwa5OhSgCsygVHIWpsU&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1dcvCCMpknuacP02Dfo-fzF_euCOs7SFI&sz=w2000",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -30692,7 +30736,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 22
+      "product_count": 23
     }
   ],
   "gifts": {
@@ -33454,16 +33498,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T14:47:26.072Z",
+  "generated_at": "2026-10-18T15:00:29.566Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1871,
-    "collections_ms": 455,
-    "gifts_ms": 880,
-    "banks_ms": 141,
-    "total_ms": 3347,
-    "product_count": 293,
+    "products_ms": 2429,
+    "collections_ms": 911,
+    "gifts_ms": 2275,
+    "banks_ms": 275,
+    "total_ms": 5890,
+    "product_count": 294,
     "collection_count": 8,
     "bank_count": 3
   }
