@@ -30489,7 +30489,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "🔸จุดเด่นและสเปกหลัก (Hardware & Audio)\n-ออกแบบมาให้มีขนาดเล็ก น้ำหนักเบา สวมใส่สบาย แม้ผู้ที่มีรูหูขนาดเล็กก็ใส่ได้สบาย  \n -ชิปประมวลผลหลัก MOONDROP TWS-2:\n สถาปัตยกรรมระดับ 22nm ผลิตแบบคัสตอมพิเศษ ให้ประสิทธิภาพคำนวณสูงและประหยัดพลังงาน  \n -ไดนามิกไดรเวอร์ขนาด 10mm: ความเพี้ยนต่ำ ย่านความถี่กว้าง (Wideband Dynamic Driver)  \n -ไดอะแฟรมไม้ธรรมชาติ (Wood Dome Diaphragm): ให้เสียงหวาน นุ่มนวล ละเมียดละไม  \n - ค่าความเพี้ยนต่ำมาก (THD \\le 0.05%): ให้ความแม่นยำของเสียงสูง  \n \n🔸ระบบตัดเสียงรบกวนและการสนทนา\n-ระบบคำนวณตัดเสียงรบกวนแบบ Real-time ปรับระดับการตัดเสียงให้เข้ากับสภาพแวดล้อมและทรงการใส่โดยอัตโนมัติ\n-โหมดดึงเสียงภายนอกที่ให้ความรู้สึกเป็นธรรมชาติ  \n-AI + 2Mic ENC (Environmental Noise Cancellation): ช่วยแยกเสียงพูดออกจากเสียงรบกวนรอบข้าง ให้การสนทนาชัดเจน  \n \n🔸การเชื่อมต่อและ Codec เสียง\n-LHDC-V: รองรับโปรโตคอลส่งสัญญาณเสียง Hi-Fi ความละเอียดสูงแบบไร้สาย  \n-LE Audio (LC3 Standard): ค่าความดีเลย์ต่ำมาก (Low Latency) และถ่ายทอดสัญญาณเสียงคุณภาพสูง  \n-Bluetooth 6.0: การเชื่อมต่อไร้สายเวอร์ชันใหม่ล่าสุด เสถียรและประหยัดพลังงาน  \n-Dual-Device Connection: รองรับการเชื่อมต่อพร้อมกัน 2 อุปกรณ์  \n-Easy Pairing & Pop-up: กดปุ่มจับคู่ได้ง่าย และเปิดฝากล่องเชื่อมต่อทันที (Open and Connect)  \n \n🔸ฟังก์ชันแอปพลิเคชันและการปรับแต่ง (MOONDROP App)\n -ปรับแต่งแนวเสียงได้อย่างอิสระผ่านแอป  \n -อีควอไลเซอร์ปรับแต่งความถี่เสียงได้ละเอียดถึง 10 แบนด์  \n-สามารถบันทึก/สร้างโปรไฟล์ความชอบเสียงส่วนบุคคลเพื่อใช้งานกับหูฟัง MOONDROP รุ่นอื่นๆ ได้  \n-มีโหมดเกมลดความล่าช้าของเสียง (Low Latency Gaming Mode)  \n-สามารถปรับแต่งคำสั่งระบบสัมผัสที่ตัวหูฟังได้  \n \n ✨รองรับระบบ: ใช้ได้ทั้ง iOS และ Android  \n \n🔸แบตเตอรี่และการใช้งาน\nตัวหูฟังใช้งานได้สูงสุด 8 ชั่วโมง และรวมกล่องชาร์จใช้งานได้สูงสุดถึง 28 ชั่วโมง",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลัง ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
       "image": "https://drive.google.com/thumbnail?id=1xq4Gz-DCFc8SJ4SV_7gbbNnAHOkGWBZC&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30511,7 +30511,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792316090371_1",
+          "option_name": "ตัวเลือก",
+          "option_value": "ไม่ตีลัง",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792316090371_2",
+          "option_name": "ตัวเลือก",
+          "option_value": "ตีลังไม้(เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1792316049577",
@@ -33431,15 +33454,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T09:34:26.884Z",
+  "generated_at": "2026-10-18T09:35:29.955Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1791,
-    "collections_ms": 644,
-    "gifts_ms": 1286,
-    "banks_ms": 250,
-    "total_ms": 3971,
+    "products_ms": 2612,
+    "collections_ms": 963,
+    "gifts_ms": 2618,
+    "banks_ms": 338,
+    "total_ms": 6531,
     "product_count": 293,
     "collection_count": 8,
     "bank_count": 3
