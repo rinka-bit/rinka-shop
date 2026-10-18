@@ -29650,7 +29650,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "HSR 10-2026",
       "description": "ขนาด 90มม.\nห้อยกระเป๋าได้",
-      "search_keywords": "",
+      "search_keywords": "Baseball Raccoon Woof Woof Dan Evanefox March Bunny",
       "image": "https://drive.google.com/thumbnail?id=17ZH89TJq9ghhvHYrAgRzr_rxpGuHzSx0&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -29672,7 +29672,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792313018174_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Baseball Raccoon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1aZQlxdxGZ6XmKf_931HKzUHtAReVuLmm&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792313018174_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Woof Woof Dan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1S7a7w0i3q_GK9W7a7EWD7v1d-YuIM6Kt&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792313018174_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanefox",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=15yTqH2hPU9B9bke-RAzm1VlxLZ_yOtsT&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792313018174_4",
+          "option_name": "ตัวละคร",
+          "option_value": "March Bunny",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1EFzoMAOUzUoMmKKp0PRpxGYfOMqx-Jfs&sz=w2000",
+          "sort_order": 3
+        }
+      ]
     }
   ],
   "collections": [
@@ -32548,15 +32593,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:42:30.054Z",
+  "generated_at": "2026-10-18T08:44:35.040Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2828,
-    "collections_ms": 1244,
-    "gifts_ms": 1674,
-    "banks_ms": 234,
-    "total_ms": 5980,
+    "products_ms": 6447,
+    "collections_ms": 1358,
+    "gifts_ms": 2420,
+    "banks_ms": 298,
+    "total_ms": 10524,
     "product_count": 287,
     "collection_count": 8,
     "bank_count": 3
