@@ -29517,7 +29517,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Baseball Raccoon Woof Woof Dan Sundove March Bunny",
+      "search_keywords": "Baseball Raccoon XS Woof Woof Dan S Sundove M March Bunny L XL XXL XXXL",
       "image": "https://drive.google.com/thumbnail?id=1Gu-046nbxLSXMyPfp-ZqStYDsZkmpKF5&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -29552,6 +29552,17 @@
           "sort_order": 0
         },
         {
+          "option_id": "OPT1792313400902_1",
+          "option_name": "ไซส์",
+          "option_value": "XS",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
           "option_id": "OPT1792313149401_2",
           "option_name": "ตัวเลือก",
           "option_value": "Woof Woof Dan",
@@ -29560,6 +29571,17 @@
           "stock": 999,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1-NlPbPRX6XicxgVy2QFPWsKhANPa5QcX&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792313400902_2",
+          "option_name": "ไซส์",
+          "option_value": "S",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
           "sort_order": 1
         },
         {
@@ -29574,6 +29596,17 @@
           "sort_order": 2
         },
         {
+          "option_id": "OPT1792313400902_3",
+          "option_name": "ไซส์",
+          "option_value": "M",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
           "option_id": "OPT1792313149401_4",
           "option_name": "ตัวเลือก",
           "option_value": "March Bunny",
@@ -29583,6 +29616,50 @@
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1S03G93d8cy8qDDeUwC_y8JB0I6dvALOF&sz=w2000",
           "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792313400902_4",
+          "option_name": "ไซส์",
+          "option_value": "L",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792313400902_5",
+          "option_name": "ไซส์",
+          "option_value": "XL",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792313400902_6",
+          "option_name": "ไซส์",
+          "option_value": "XXL",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792313400902_7",
+          "option_name": "ไซส์",
+          "option_value": "XXXL",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
         }
       ]
     },
@@ -32638,15 +32715,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:46:27.331Z",
+  "generated_at": "2026-10-18T08:50:36.867Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2078,
-    "collections_ms": 853,
-    "gifts_ms": 1022,
-    "banks_ms": 129,
-    "total_ms": 4082,
+    "products_ms": 6581,
+    "collections_ms": 1852,
+    "gifts_ms": 2757,
+    "banks_ms": 403,
+    "total_ms": 11594,
     "product_count": 287,
     "collection_count": 8,
     "bank_count": 3
