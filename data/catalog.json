@@ -30368,7 +30368,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Sundove XS Woof Woof Dan S Baseball Raccoon M March Bunny L เพิ่มหมวก Woof Woof Dan XL XXL XXXL",
+      "search_keywords": "XS Sundove S Woof Woof Dan M Baseball Raccoon L March Bunny XL XXL XXXL",
       "image": "https://drive.google.com/thumbnail?id=1BaYj3dCAjQkSX-qcyhRI17_ryIJNIa6A&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30392,17 +30392,6 @@
       "variants": [],
       "options": [
         {
-          "option_id": "OPT1792341769540_1",
-          "option_name": "ตัวละคร",
-          "option_value": "Sundove",
-          "additional_price": 0,
-          "price": 2120,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
-        },
-        {
           "option_id": "OPT1792341823825_1",
           "option_name": "ไซส์เสื้อ",
           "option_value": "XS",
@@ -30414,15 +30403,15 @@
           "sort_order": 0
         },
         {
-          "option_id": "OPT1792341769540_2",
+          "option_id": "OPT1792341769540_1",
           "option_name": "ตัวละคร",
-          "option_value": "Woof Woof Dan",
+          "option_value": "Sundove",
           "additional_price": 0,
           "price": 2120,
           "stock": 999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 1
+          "sort_order": 0
         },
         {
           "option_id": "OPT1792341823825_2",
@@ -30436,15 +30425,15 @@
           "sort_order": 1
         },
         {
-          "option_id": "OPT1792341769540_3",
+          "option_id": "OPT1792341769540_2",
           "option_name": "ตัวละคร",
-          "option_value": "Baseball Raccoon",
+          "option_value": "Woof Woof Dan",
           "additional_price": 0,
           "price": 2120,
           "stock": 999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 2
+          "sort_order": 1
         },
         {
           "option_id": "OPT1792341823825_3",
@@ -30458,15 +30447,15 @@
           "sort_order": 2
         },
         {
-          "option_id": "OPT1792341769540_4",
+          "option_id": "OPT1792341769540_3",
           "option_name": "ตัวละคร",
-          "option_value": "March Bunny",
+          "option_value": "Baseball Raccoon",
           "additional_price": 0,
           "price": 2120,
           "stock": 999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 3
+          "sort_order": 2
         },
         {
           "option_id": "OPT1792341823825_4",
@@ -30480,15 +30469,15 @@
           "sort_order": 3
         },
         {
-          "option_id": "OPT1792341769540_5",
+          "option_id": "OPT1792341769540_4",
           "option_name": "ตัวละคร",
-          "option_value": "เพิ่มหมวก Woof Woof Dan",
+          "option_value": "March Bunny",
           "additional_price": 0,
-          "price": 600,
+          "price": 2120,
           "stock": 999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 4
+          "sort_order": 3
         },
         {
           "option_id": "OPT1792341823825_5",
@@ -36405,15 +36394,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:44:27.232Z",
+  "generated_at": "2026-10-18T16:45:26.899Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1868,
-    "collections_ms": 787,
-    "gifts_ms": 1106,
-    "banks_ms": 206,
-    "total_ms": 3967,
+    "products_ms": 2076,
+    "collections_ms": 568,
+    "gifts_ms": 1235,
+    "banks_ms": 163,
+    "total_ms": 4042,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
