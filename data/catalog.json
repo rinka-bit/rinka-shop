@@ -19139,7 +19139,7 @@
       "main_category": "เข็มกลัด",
       "fandom": "Honkai Star Rail",
       "sub_category": "เข็มกลัด",
-      "round": "HSR 9-2026",
+      "round": "HSR 10-2026",
       "description": "ขนาด75มม.",
       "search_keywords": "Robin-Summeretto Cyrene Stelle-Remembrance Caelus-Remembrance Evernight Hyacine Castorice Aglaea Aventurine-Waveflair Stelle-Elation Caelus-Elation Evanescia SilverWolf Lv.999 Sparxie Yao Guang",
       "image": "https://drive.google.com/thumbnail?id=1SmLDwHSbSBGSIAnUdQpuczSQWcH8bTHk&sz=w2000",
@@ -19150,7 +19150,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-09-28",
+      "preorder_deadline": "2026-09-27",
       "estimated_arrival": "พรีเซล",
       "image2": "https://drive.google.com/thumbnail?id=1jAtwdmx-XV3AdD02rPTt6PYKQARe9AvG&sz=w2000",
       "image3": "",
@@ -19158,7 +19158,7 @@
       "new_arrival": "",
       "sort_order": 0,
       "image4": "",
-      "collection_id": "COL1789402151204",
+      "collection_id": "COL1792309022460",
       "created_at": "",
       "variant_mode": false,
       "variant_groups": [],
@@ -30692,7 +30692,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 16
+      "product_count": 17
     }
   ],
   "gifts": {
@@ -33454,15 +33454,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T14:43:27.121Z",
+  "generated_at": "2026-10-18T14:44:27.842Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1801,
-    "collections_ms": 430,
-    "gifts_ms": 2020,
-    "banks_ms": 139,
-    "total_ms": 4390,
+    "products_ms": 2169,
+    "collections_ms": 726,
+    "gifts_ms": 1492,
+    "banks_ms": 171,
+    "total_ms": 4558,
     "product_count": 293,
     "collection_count": 8,
     "bank_count": 3
