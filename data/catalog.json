@@ -30558,6 +30558,50 @@
       "options": []
     },
     {
+      "product_id": "PROD1792315009432",
+      "name": "Full set 4ชิ้ิ้น (ไม่รวมกลับไทย)",
+      "price_mode": "fixed",
+      "price": 2690,
+      "final_price": 2690,
+      "base_price": 2690,
+      "min_price": 2690,
+      "max_price": 2690,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "อื่น ๆ",
+      "round": "HSR 10-2026",
+      "description": "",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1GGn6y5XqBPvNSRcpKMp1m9SiUl7hulXd&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-08",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
+    },
+    {
       "product_id": "PROD1792315865404",
       "name": "MOONDROP : Sparxie RT-Adaptive ANC Mini Hi-Fi TWS(ไม่รวมกลับไทย)",
       "price_mode": "fixed",
@@ -30824,7 +30868,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 65
+      "product_count": 66
     }
   ],
   "gifts": {
@@ -33586,16 +33630,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:09:37.016Z",
+  "generated_at": "2026-10-18T15:10:43.967Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 7332,
-    "collections_ms": 747,
-    "gifts_ms": 2239,
-    "banks_ms": 197,
-    "total_ms": 10515,
-    "product_count": 296,
+    "products_ms": 12336,
+    "collections_ms": 1661,
+    "gifts_ms": 2688,
+    "banks_ms": 1138,
+    "total_ms": 17823,
+    "product_count": 297,
     "collection_count": 8,
     "bank_count": 3
   }
