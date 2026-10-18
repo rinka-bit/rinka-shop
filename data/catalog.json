@@ -29536,9 +29536,461 @@
       "image4": "https://drive.google.com/thumbnail?id=1bhzTLM0RmBFduR7pnCjk4kwYF-1LyWGP&sz=w2000",
       "collection_id": "COL1792309022460",
       "created_at": "",
-      "variant_mode": false,
-      "variant_groups": [],
-      "variants": [],
+      "variant_mode": true,
+      "variant_groups": [
+        "ตัวเลือก",
+        "ไซส์"
+      ],
+      "variants": [
+        {
+          "variant_id": "VAR1792313476047_0_e7487d00",
+          "signature": "ตัวเลือก=Baseball Raccoon||ไซส์=XS",
+          "option_values": {
+            "ตัวเลือก": "Baseball Raccoon",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_1",
+            "ไซส์": "OPT1792313400902_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 0
+        },
+        {
+          "variant_id": "VAR1792313476049_1_03758246",
+          "signature": "ตัวเลือก=Baseball Raccoon||ไซส์=S",
+          "option_values": {
+            "ตัวเลือก": "Baseball Raccoon",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_1",
+            "ไซส์": "OPT1792313400902_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "variant_id": "VAR1792313476049_2_73f44253",
+          "signature": "ตัวเลือก=Baseball Raccoon||ไซส์=M",
+          "option_values": {
+            "ตัวเลือก": "Baseball Raccoon",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_1",
+            "ไซส์": "OPT1792313400902_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "variant_id": "VAR1792313476049_3_70893456",
+          "signature": "ตัวเลือก=Baseball Raccoon||ไซส์=L",
+          "option_values": {
+            "ตัวเลือก": "Baseball Raccoon",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_1",
+            "ไซส์": "OPT1792313400902_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "variant_id": "VAR1792313476050_4_2c4502c5",
+          "signature": "ตัวเลือก=Baseball Raccoon||ไซส์=XL",
+          "option_values": {
+            "ตัวเลือก": "Baseball Raccoon",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_1",
+            "ไซส์": "OPT1792313400902_5"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "variant_id": "VAR1792313476050_5_f9e959c6",
+          "signature": "ตัวเลือก=Baseball Raccoon||ไซส์=XXL",
+          "option_values": {
+            "ตัวเลือก": "Baseball Raccoon",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_1",
+            "ไซส์": "OPT1792313400902_6"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 5
+        },
+        {
+          "variant_id": "VAR1792313476051_6_579e1bc2",
+          "signature": "ตัวเลือก=Baseball Raccoon||ไซส์=XXXL",
+          "option_values": {
+            "ตัวเลือก": "Baseball Raccoon",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_1",
+            "ไซส์": "OPT1792313400902_7"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 6
+        },
+        {
+          "variant_id": "VAR1792313476051_7_8384890f",
+          "signature": "ตัวเลือก=Woof Woof Dan||ไซส์=XS",
+          "option_values": {
+            "ตัวเลือก": "Woof Woof Dan",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_2",
+            "ไซส์": "OPT1792313400902_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 7
+        },
+        {
+          "variant_id": "VAR1792313476052_8_565c3deb",
+          "signature": "ตัวเลือก=Woof Woof Dan||ไซส์=S",
+          "option_values": {
+            "ตัวเลือก": "Woof Woof Dan",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_2",
+            "ไซส์": "OPT1792313400902_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 8
+        },
+        {
+          "variant_id": "VAR1792313476052_9_68609501",
+          "signature": "ตัวเลือก=Woof Woof Dan||ไซส์=M",
+          "option_values": {
+            "ตัวเลือก": "Woof Woof Dan",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_2",
+            "ไซส์": "OPT1792313400902_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 9
+        },
+        {
+          "variant_id": "VAR1792313476052_10_c3fe2680",
+          "signature": "ตัวเลือก=Woof Woof Dan||ไซส์=L",
+          "option_values": {
+            "ตัวเลือก": "Woof Woof Dan",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_2",
+            "ไซส์": "OPT1792313400902_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 10
+        },
+        {
+          "variant_id": "VAR1792313476053_11_79e09596",
+          "signature": "ตัวเลือก=Woof Woof Dan||ไซส์=XL",
+          "option_values": {
+            "ตัวเลือก": "Woof Woof Dan",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_2",
+            "ไซส์": "OPT1792313400902_5"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 11
+        },
+        {
+          "variant_id": "VAR1792313476053_12_ab250ada",
+          "signature": "ตัวเลือก=Woof Woof Dan||ไซส์=XXL",
+          "option_values": {
+            "ตัวเลือก": "Woof Woof Dan",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_2",
+            "ไซส์": "OPT1792313400902_6"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 12
+        },
+        {
+          "variant_id": "VAR1792313476053_13_d1e778bd",
+          "signature": "ตัวเลือก=Woof Woof Dan||ไซส์=XXXL",
+          "option_values": {
+            "ตัวเลือก": "Woof Woof Dan",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_2",
+            "ไซส์": "OPT1792313400902_7"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 13
+        },
+        {
+          "variant_id": "VAR1792313476054_14_34b1cb25",
+          "signature": "ตัวเลือก=Sundove||ไซส์=XS",
+          "option_values": {
+            "ตัวเลือก": "Sundove",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_3",
+            "ไซส์": "OPT1792313400902_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 14
+        },
+        {
+          "variant_id": "VAR1792313476054_15_1eac3558",
+          "signature": "ตัวเลือก=Sundove||ไซส์=S",
+          "option_values": {
+            "ตัวเลือก": "Sundove",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_3",
+            "ไซส์": "OPT1792313400902_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 15
+        },
+        {
+          "variant_id": "VAR1792313476054_16_92b4c5a4",
+          "signature": "ตัวเลือก=Sundove||ไซส์=M",
+          "option_values": {
+            "ตัวเลือก": "Sundove",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_3",
+            "ไซส์": "OPT1792313400902_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 16
+        },
+        {
+          "variant_id": "VAR1792313476055_17_e9e6030c",
+          "signature": "ตัวเลือก=Sundove||ไซส์=L",
+          "option_values": {
+            "ตัวเลือก": "Sundove",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_3",
+            "ไซส์": "OPT1792313400902_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 17
+        },
+        {
+          "variant_id": "VAR1792313476055_18_4bfe3367",
+          "signature": "ตัวเลือก=Sundove||ไซส์=XL",
+          "option_values": {
+            "ตัวเลือก": "Sundove",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_3",
+            "ไซส์": "OPT1792313400902_5"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 18
+        },
+        {
+          "variant_id": "VAR1792313476056_19_ca59b280",
+          "signature": "ตัวเลือก=Sundove||ไซส์=XXL",
+          "option_values": {
+            "ตัวเลือก": "Sundove",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_3",
+            "ไซส์": "OPT1792313400902_6"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 19
+        },
+        {
+          "variant_id": "VAR1792313476056_20_ee0f6019",
+          "signature": "ตัวเลือก=Sundove||ไซส์=XXXL",
+          "option_values": {
+            "ตัวเลือก": "Sundove",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_3",
+            "ไซส์": "OPT1792313400902_7"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 20
+        },
+        {
+          "variant_id": "VAR1792313476056_21_283994fa",
+          "signature": "ตัวเลือก=March Bunny||ไซส์=XS",
+          "option_values": {
+            "ตัวเลือก": "March Bunny",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_4",
+            "ไซส์": "OPT1792313400902_1"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 21
+        },
+        {
+          "variant_id": "VAR1792313476057_22_fa233c43",
+          "signature": "ตัวเลือก=March Bunny||ไซส์=S",
+          "option_values": {
+            "ตัวเลือก": "March Bunny",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_4",
+            "ไซส์": "OPT1792313400902_2"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 22
+        },
+        {
+          "variant_id": "VAR1792313476057_23_2dda76e8",
+          "signature": "ตัวเลือก=March Bunny||ไซส์=M",
+          "option_values": {
+            "ตัวเลือก": "March Bunny",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_4",
+            "ไซส์": "OPT1792313400902_3"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 23
+        },
+        {
+          "variant_id": "VAR1792313476058_24_3044617c",
+          "signature": "ตัวเลือก=March Bunny||ไซส์=L",
+          "option_values": {
+            "ตัวเลือก": "March Bunny",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_4",
+            "ไซส์": "OPT1792313400902_4"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 24
+        },
+        {
+          "variant_id": "VAR1792313476058_25_5ee0e4b9",
+          "signature": "ตัวเลือก=March Bunny||ไซส์=XL",
+          "option_values": {
+            "ตัวเลือก": "March Bunny",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_4",
+            "ไซส์": "OPT1792313400902_5"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 25
+        },
+        {
+          "variant_id": "VAR1792313476058_26_c280db02",
+          "signature": "ตัวเลือก=March Bunny||ไซส์=XXL",
+          "option_values": {
+            "ตัวเลือก": "March Bunny",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_4",
+            "ไซส์": "OPT1792313400902_6"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 26
+        },
+        {
+          "variant_id": "VAR1792313476058_27_2e4f008c",
+          "signature": "ตัวเลือก=March Bunny||ไซส์=XXXL",
+          "option_values": {
+            "ตัวเลือก": "March Bunny",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวเลือก": "OPT1792313149401_4",
+            "ไซส์": "OPT1792313400902_7"
+          },
+          "price": 0,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 27
+        }
+      ],
       "options": [
         {
           "option_id": "OPT1792313149401_1",
@@ -32715,15 +33167,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:50:36.867Z",
+  "generated_at": "2026-10-18T08:51:27.903Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6581,
-    "collections_ms": 1852,
-    "gifts_ms": 2757,
-    "banks_ms": 403,
-    "total_ms": 11594,
+    "products_ms": 2645,
+    "collections_ms": 836,
+    "gifts_ms": 1683,
+    "banks_ms": 282,
+    "total_ms": 5446,
     "product_count": 287,
     "collection_count": 8,
     "bank_count": 3
