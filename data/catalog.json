@@ -30729,7 +30729,7 @@
       "sale_end": "",
       "main_category": "ฟิกเกอร์",
       "fandom": "Honkai Star Rail",
-      "sub_category": "",
+      "sub_category": "ฟิกเกอร์",
       "round": "HSR 10-2026",
       "description": "",
       "search_keywords": "",
@@ -33630,15 +33630,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:19:26.772Z",
+  "generated_at": "2026-10-18T15:20:29.492Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1775,
-    "collections_ms": 676,
-    "gifts_ms": 1113,
-    "banks_ms": 185,
-    "total_ms": 3749,
+    "products_ms": 3118,
+    "collections_ms": 937,
+    "gifts_ms": 2343,
+    "banks_ms": 281,
+    "total_ms": 6679,
     "product_count": 297,
     "collection_count": 8,
     "bank_count": 3
