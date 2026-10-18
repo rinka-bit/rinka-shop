@@ -31553,7 +31553,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Sparkle Sparxie",
       "image": "https://drive.google.com/thumbnail?id=19AYqD3MhlAXBAMXoujzbUQuDIKH2jWPR&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -31575,7 +31575,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792339487693_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparkle",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792339487693_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparxie",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572126",
@@ -31818,7 +31841,7 @@
       "round": "HSR 10-2026",
       "description": "",
       "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1R-JIq4JmBCarIGYSKJGqcBAH2Hwh5Ta5&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1XCYxFq3Fr-EBo1AqTU2NyQt3kza-FWxv&sz=w2000",
       "status": "active",
       "stock": 999,
       "product_type": "preorder",
@@ -31826,7 +31849,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-08",
+      "preorder_deadline": "2026-11-07",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
       "image2": "",
       "image3": "",
@@ -31862,7 +31885,7 @@
       "round": "HSR 10-2026",
       "description": "",
       "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1R-JIq4JmBCarIGYSKJGqcBAH2Hwh5Ta5&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1ic_ZAQSuJkCw0oFIKL7IsnLEn1DZqELL&sz=w2000",
       "status": "active",
       "stock": 999,
       "product_type": "preorder",
@@ -31870,7 +31893,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-08",
+      "preorder_deadline": "2026-11-07",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
       "image2": "",
       "image3": "",
@@ -35463,15 +35486,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:04:26.365Z",
+  "generated_at": "2026-10-18T16:05:31.225Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1939,
-    "collections_ms": 458,
-    "gifts_ms": 1082,
-    "banks_ms": 121,
-    "total_ms": 3600,
+    "products_ms": 2228,
+    "collections_ms": 1230,
+    "gifts_ms": 1240,
+    "banks_ms": 207,
+    "total_ms": 4906,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
