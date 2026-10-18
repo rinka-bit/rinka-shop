@@ -31398,7 +31398,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Phainon Khaslana Sunday Robin Feixiao Jingyuan Stelle Caelus Sparkle Sparxie",
       "image": "https://drive.google.com/thumbnail?id=1XSSWbfD83SecFXkf8AVCy7BPkvZXP-fk&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -31420,7 +31420,118 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792339376645_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Phainon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792339376645_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Khaslana",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792339376645_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Sunday",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792339376645_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792339376645_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Feixiao",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792339376645_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Jingyuan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792339376645_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Stelle",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1792339376645_8",
+          "option_name": "ตัวละคร",
+          "option_value": "Caelus",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        },
+        {
+          "option_id": "OPT1792339376645_9",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparkle",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 8
+        },
+        {
+          "option_id": "OPT1792339376645_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparxie",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 9
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572125",
@@ -35352,15 +35463,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:00:57.438Z",
+  "generated_at": "2026-10-18T16:03:29.519Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 18770,
-    "collections_ms": 2828,
-    "gifts_ms": 5388,
-    "banks_ms": 580,
-    "total_ms": 27569,
+    "products_ms": 2647,
+    "collections_ms": 1207,
+    "gifts_ms": 2386,
+    "banks_ms": 301,
+    "total_ms": 6541,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
