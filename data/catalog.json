@@ -29218,6 +29218,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792310437124",
+      "name": "ตุ๊กตาแก๊งขนฟู",
+      "price_mode": "fixed",
+      "price": 590,
+      "final_price": 590,
+      "base_price": 590,
+      "min_price": 590,
+      "max_price": 590,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "ตุ๊กตา",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "ตุ๊กตา",
+      "round": "HSR 10-2026",
+      "description": "ขนาดสินค้า\n\nSundove 170mm.\nWoof Woof Dan 160mm.\nMarch Bunny 120mm.\nMr. Yang 150mm.\nHimekat 140mm.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1Eb3PhE5s4-HzpbyAkh8g_0tqF9ByRGjl&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1MSaJe-o1HssP3_r7HCiUrGOpBrV7byci&sz=w2000",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -29331,7 +29375,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 1
+      "product_count": 2
     }
   ],
   "gifts": {
@@ -32093,16 +32137,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T07:53:28.996Z",
+  "generated_at": "2026-10-18T08:01:28.595Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2324,
-    "collections_ms": 902,
-    "gifts_ms": 1682,
-    "banks_ms": 273,
-    "total_ms": 5182,
-    "product_count": 281,
+    "products_ms": 2433,
+    "collections_ms": 1973,
+    "gifts_ms": 1033,
+    "banks_ms": 156,
+    "total_ms": 5595,
+    "product_count": 282,
     "collection_count": 8,
     "bank_count": 3
   }
