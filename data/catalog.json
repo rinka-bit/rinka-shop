@@ -29509,50 +29509,6 @@
       ]
     },
     {
-      "product_id": "PROD1792310668959",
-      "name": "Comp. 3 ชิ้น",
-      "price_mode": "fixed",
-      "price": 850,
-      "final_price": 850,
-      "base_price": 850,
-      "min_price": 850,
-      "max_price": 850,
-      "has_price_range": false,
-      "old_price": null,
-      "on_sale": false,
-      "sale_price": 0,
-      "sale_start": "",
-      "sale_end": "",
-      "main_category": "ตุ๊กตา",
-      "fandom": "Honkai Star Rail",
-      "sub_category": "ตุ๊กตา",
-      "round": "HSR 10-2026",
-      "description": "ในเซ็ตประกอบไปด้วย\n1. ตุ๊กตาแก๊งขนฟู *1\n2. ตุ๊กตาขนฟูห้อยเป๋า *1\n3. อะคริลิคโคลอตโต *1",
-      "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=17FFWQqtoakhfSHxRak7w3fWH16z0k5tp&sz=w2000",
-      "status": "active",
-      "stock": 999,
-      "product_type": "preorder",
-      "crate_available": "",
-      "crate_fee": 0,
-      "shipping_fee": 0,
-      "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-07",
-      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
-      "image2": "https://drive.google.com/thumbnail?id=1-POa9jTwAf0RMR-ErTp44jC2vRC95izF&sz=w2000",
-      "image3": "https://drive.google.com/thumbnail?id=1vrlFVLLvaIIR0WMfdnxj_UIP-EePdk1w&sz=w2000",
-      "featured": "",
-      "new_arrival": "",
-      "sort_order": 0,
-      "image4": "",
-      "collection_id": "COL1792309022460",
-      "created_at": "",
-      "variant_mode": false,
-      "variant_groups": [],
-      "variants": [],
-      "options": []
-    },
-    {
       "product_id": "PROD1792309960958",
       "name": "หมวก Woof Woof Dan",
       "price_mode": "fixed",
@@ -32375,7 +32331,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1CRM4Ldas9yauQmIPn92KwA8yk0Wi4jLt&sz=w2000",
-      "product_count": 65
+      "product_count": 64
     }
   ],
   "gifts": {
@@ -35137,16 +35093,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:44:30.222Z",
+  "generated_at": "2026-10-18T15:46:27.561Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3212,
-    "collections_ms": 1637,
-    "gifts_ms": 1416,
-    "banks_ms": 212,
-    "total_ms": 6477,
-    "product_count": 330,
+    "products_ms": 1488,
+    "collections_ms": 434,
+    "gifts_ms": 1659,
+    "banks_ms": 182,
+    "total_ms": 3763,
+    "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
   }
