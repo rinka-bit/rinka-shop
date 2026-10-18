@@ -30368,7 +30368,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "XS Sundove S Woof Woof Dan M Baseball Raccoon L March Bunny XL XXL XXXL",
+      "search_keywords": "XS Sundove เพิ่มหมวกWoof Woof Dan S Woof Woof Dan M Baseball Raccoon L March Bunny XL XXL XXXL",
       "image": "https://drive.google.com/thumbnail?id=1BaYj3dCAjQkSX-qcyhRI17_ryIJNIa6A&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30860,6 +30860,17 @@
           "option_value": "Sundove",
           "additional_price": 0,
           "price": 2120,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792341992031_1",
+          "option_name": "เพิ่มหมวก",
+          "option_value": "เพิ่มหมวกWoof Woof Dan",
+          "additional_price": 0,
+          "price": 600,
           "stock": 999,
           "selection_type": "multiple",
           "image": "",
@@ -36846,15 +36857,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T16:46:28.117Z",
+  "generated_at": "2026-10-18T16:47:27.377Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2152,
-    "collections_ms": 813,
-    "gifts_ms": 1574,
-    "banks_ms": 253,
-    "total_ms": 4792,
+    "products_ms": 2232,
+    "collections_ms": 826,
+    "gifts_ms": 1210,
+    "banks_ms": 181,
+    "total_ms": 4449,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
