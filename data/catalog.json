@@ -31994,7 +31994,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "\n",
-      "search_keywords": "Dan Heng Terrae Phainon Evernight Cerydra Hysilens Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Lingsha Feixiao Yunli Jiaoqiu Firefly Jade Boothill Robin Stelle Caelus Dan Heng Himeko Welt",
+      "search_keywords": "Dan Heng Terrae Phainon Evernight Cerydra Hysilens Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Lingsha Feixiao Yunli Jiaoqiu Firefly Jade Boothill Robin Stelle Caelus Dan Heng Himeko Welt Aventurine Acheron Sparkle Black Swan Dr.Ratio Ruan Mei Argenti Topaz Huohuo Jingliu Fu Xuan Dan Heng IL Blade Kafka Luocha",
       "image": "https://drive.google.com/thumbnail?id=165d1nL8sWY0Bq2dG8s01MimAGCd0wTJo&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -32335,6 +32335,171 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 28
+        },
+        {
+          "option_id": "OPT1792367104554_30",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 29
+        },
+        {
+          "option_id": "OPT1792367104554_31",
+          "option_name": "ตัวละคร",
+          "option_value": "Acheron",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 30
+        },
+        {
+          "option_id": "OPT1792367104554_32",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparkle",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 31
+        },
+        {
+          "option_id": "OPT1792367104554_33",
+          "option_name": "ตัวละคร",
+          "option_value": "Black Swan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 32
+        },
+        {
+          "option_id": "OPT1792367104554_34",
+          "option_name": "ตัวละคร",
+          "option_value": "Dr.Ratio",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 33
+        },
+        {
+          "option_id": "OPT1792367104554_35",
+          "option_name": "ตัวละคร",
+          "option_value": "Ruan Mei",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 34
+        },
+        {
+          "option_id": "OPT1792367104554_36",
+          "option_name": "ตัวละคร",
+          "option_value": "Argenti",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 35
+        },
+        {
+          "option_id": "OPT1792367104554_37",
+          "option_name": "ตัวละคร",
+          "option_value": "Topaz",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 36
+        },
+        {
+          "option_id": "OPT1792367104554_38",
+          "option_name": "ตัวละคร",
+          "option_value": "Huohuo",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 37
+        },
+        {
+          "option_id": "OPT1792367104554_39",
+          "option_name": "ตัวละคร",
+          "option_value": "Jingliu",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 38
+        },
+        {
+          "option_id": "OPT1792367104554_40",
+          "option_name": "ตัวละคร",
+          "option_value": "Fu Xuan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 39
+        },
+        {
+          "option_id": "OPT1792367104554_41",
+          "option_name": "ตัวละคร",
+          "option_value": "Dan Heng IL",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 40
+        },
+        {
+          "option_id": "OPT1792367104554_42",
+          "option_name": "ตัวละคร",
+          "option_value": "Blade",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 41
+        },
+        {
+          "option_id": "OPT1792367104554_43",
+          "option_name": "ตัวละคร",
+          "option_value": "Kafka",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 42
+        },
+        {
+          "option_id": "OPT1792367104554_44",
+          "option_name": "ตัวละคร",
+          "option_value": "Luocha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 43
         }
       ]
     },
@@ -36060,15 +36225,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:56:35.115Z",
+  "generated_at": "2026-10-18T23:57:39.674Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2616,
-    "collections_ms": 951,
-    "gifts_ms": 7341,
-    "banks_ms": 282,
-    "total_ms": 11190,
+    "products_ms": 10855,
+    "collections_ms": 1664,
+    "gifts_ms": 2542,
+    "banks_ms": 373,
+    "total_ms": 15434,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
