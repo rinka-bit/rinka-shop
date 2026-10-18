@@ -19941,15 +19941,15 @@
       "old_price": 299,
       "on_sale": true,
       "sale_price": 295,
-      "sale_start": "2026-10-17T17:00:00.000Z",
-      "sale_end": "2026-11-07T17:00:00.000Z",
+      "sale_start": "2026-10-16T17:00:00.000Z",
+      "sale_end": "2026-11-06T17:00:00.000Z",
       "main_category": "ชิกิชิ",
       "fandom": "Honkai Star Rail",
       "sub_category": "ชิกิชิ",
       "round": "HSR 10-2026",
       "description": "ขนาด 145*215มม.",
       "search_keywords": "Aventurine-Waveflair Robin-Summeretto Himeko-Nova Blade Evanescia SilverWolf Lv.999 Ashveil Yao Guang Sparxie Pearl",
-      "image": "https://drive.google.com/thumbnail?id=16EMzbv-qwcT4k2Jn64dZMkkFpTP8EpPp&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1otBK9SoEbi811J97qHIs1RAO7MtuOcXi&sz=w2000",
       "status": "active",
       "stock": 9999,
       "product_type": "preorder",
@@ -19957,9 +19957,9 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-09-28",
+      "preorder_deadline": "2026-09-27",
       "estimated_arrival": "พรีเซล",
-      "image2": "",
+      "image2": "https://drive.google.com/thumbnail?id=1_SIy6z9n-9csrQ5mC7Oy7W56iLK70PNX&sz=w2000",
       "image3": "",
       "featured": "",
       "new_arrival": "",
@@ -33156,7 +33156,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Phainon",
       "image": "https://drive.google.com/thumbnail?id=1XCYxFq3Fr-EBo1AqTU2NyQt3kza-FWxv&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -33178,7 +33178,19 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792367104554_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Phainon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572132",
@@ -36902,15 +36914,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:44:28.884Z",
+  "generated_at": "2026-10-18T23:45:26.943Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2232,
-    "collections_ms": 1417,
-    "gifts_ms": 1229,
-    "banks_ms": 441,
-    "total_ms": 5319,
+    "products_ms": 1580,
+    "collections_ms": 508,
+    "gifts_ms": 1549,
+    "banks_ms": 163,
+    "total_ms": 3800,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
