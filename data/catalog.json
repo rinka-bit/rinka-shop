@@ -19362,7 +19362,7 @@
       "sub_category": "สแตนดี้",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Robin-Summeretto Cyrene Stelle-Remembrance Caelus-Remembrance Evernight Hyacine Castorice Aglaea Aventurine-Waveflair Stelle-Elation Caelus-Elation Evanescia SilverWolf Lv.999 Sparxie Yao Guang",
+      "search_keywords": "Robin-Summeretto Cyrene Stelle-Remembrance Caelus-Remembrance Evernight Hyacine Castorice Aglaea Aventurine-Waveflair Stelle-Elation Caelus-Elation Evanescia SilverWolf Lv.999 Sparxie Yao Guang Pearl",
       "image": "https://drive.google.com/thumbnail?id=1h20JWnwgYSimaOkaDAY8hM1Z8AwsVms9&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -19549,6 +19549,17 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 14
+        },
+        {
+          "option_id": "OPT1792337854734_16",
+          "option_name": "ตัวละคร",
+          "option_value": "Pearl",
+          "additional_price": 0,
+          "price": null,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 15
         }
       ]
     },
@@ -35093,15 +35104,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:37:30.696Z",
+  "generated_at": "2026-10-18T15:39:06.634Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2439,
-    "collections_ms": 824,
-    "gifts_ms": 3986,
-    "banks_ms": 255,
-    "total_ms": 7504,
+    "products_ms": 22698,
+    "collections_ms": 6821,
+    "gifts_ms": 2366,
+    "banks_ms": 327,
+    "total_ms": 32212,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
