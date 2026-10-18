@@ -30669,50 +30669,6 @@
       ]
     },
     {
-      "product_id": "PROD1792316049577",
-      "name": "Sparxie series Full set (ไม่รวมกลับไทย)",
-      "price_mode": "fixed",
-      "price": 2690,
-      "final_price": 2690,
-      "base_price": 2690,
-      "min_price": 2690,
-      "max_price": 2690,
-      "has_price_range": false,
-      "old_price": null,
-      "on_sale": false,
-      "sale_price": 0,
-      "sale_start": "",
-      "sale_end": "",
-      "main_category": "อื่น ๆ",
-      "fandom": "Honkai Star Rail",
-      "sub_category": "อื่น ๆ",
-      "round": "HSR 10-2026",
-      "description": "ในเซ็ตจะมี\n1.Fast Charger x 1\n2.ปลั๊กพ่วง x 1\n3.Data Cable x 1\n4. Protective case x 1",
-      "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1ZIDHkPPOfhVp8lBE_ZOZXUXKFOXmRAl0&sz=w2000",
-      "status": "active",
-      "stock": 999,
-      "product_type": "preorder",
-      "crate_available": "",
-      "crate_fee": 0,
-      "shipping_fee": 0,
-      "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-08",
-      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
-      "image2": "",
-      "image3": "",
-      "featured": "",
-      "new_arrival": "",
-      "sort_order": 0,
-      "image4": "",
-      "collection_id": "COL1792309022460",
-      "created_at": "",
-      "variant_mode": false,
-      "variant_groups": [],
-      "variants": [],
-      "options": []
-    },
-    {
       "product_id": "PROD1792335572114",
       "name": "Ruanmei's creation Vol.3",
       "price_mode": "option",
@@ -32364,7 +32320,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1CRM4Ldas9yauQmIPn92KwA8yk0Wi4jLt&sz=w2000",
-      "product_count": 66
+      "product_count": 65
     }
   ],
   "gifts": {
@@ -35126,16 +35082,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:33:27.514Z",
+  "generated_at": "2026-10-18T15:34:30.411Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2690,
-    "collections_ms": 1065,
-    "gifts_ms": 867,
-    "banks_ms": 135,
-    "total_ms": 4757,
-    "product_count": 331,
+    "products_ms": 3285,
+    "collections_ms": 698,
+    "gifts_ms": 1253,
+    "banks_ms": 142,
+    "total_ms": 5379,
+    "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
   }
