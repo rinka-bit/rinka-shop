@@ -33040,7 +33040,7 @@
           "option_value": "Dr.Ratio",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 19
@@ -36846,15 +36846,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:19:33.055Z",
+  "generated_at": "2026-10-18T23:23:30.153Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5489,
-    "collections_ms": 867,
-    "gifts_ms": 2166,
-    "banks_ms": 407,
-    "total_ms": 8929,
+    "products_ms": 2269,
+    "collections_ms": 964,
+    "gifts_ms": 2935,
+    "banks_ms": 237,
+    "total_ms": 6405,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
