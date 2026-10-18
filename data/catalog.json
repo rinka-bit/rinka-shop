@@ -29428,7 +29428,7 @@
       "sub_category": "กระเป๋า",
       "round": "HSR 10-2026",
       "description": "ขนาดกระเป๋าประมาณ 22*16*6ซม.",
-      "search_keywords": "",
+      "search_keywords": "Baseball Raccoon Woof Woof Dan Sundove March Bunny",
       "image": "https://drive.google.com/thumbnail?id=1Ika2bp2sHurebtnhlgJC36X-mmjT9Ong&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -29450,7 +29450,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792312741227_1",
+          "option_name": "ตัวเลือก",
+          "option_value": "Baseball Raccoon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1RjXJ7-QwZkG9t48bAprE3BYDmYqi8M_L&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792312741227_2",
+          "option_name": "ตัวเลือก",
+          "option_value": "Woof Woof Dan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1i0j4w6phnhcvu75Adh5e7KiAS5r0GvvO&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792312741227_3",
+          "option_name": "ตัวเลือก",
+          "option_value": "Sundove",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1FulCMiZ_BfIOE_iXnXE8Zp-6RcHePUMa&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792312741227_4",
+          "option_name": "ตัวเลือก",
+          "option_value": "March Bunny",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1D6A-qkoNorlJ7MhEnIHJzpPmqNdSjw3-&sz=w2000",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1792311486899",
@@ -32458,15 +32503,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:37:29.993Z",
+  "generated_at": "2026-10-18T08:39:37.835Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3457,
-    "collections_ms": 696,
-    "gifts_ms": 1724,
-    "banks_ms": 209,
-    "total_ms": 6086,
+    "products_ms": 9058,
+    "collections_ms": 1928,
+    "gifts_ms": 2885,
+    "banks_ms": 180,
+    "total_ms": 14052,
     "product_count": 287,
     "collection_count": 8,
     "bank_count": 3
