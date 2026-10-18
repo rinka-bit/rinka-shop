@@ -30683,12 +30683,12 @@
       "product_id": "PROD1792335572114",
       "name": "Ruanmei's creation Vol.3",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 390,
+      "final_price": 390,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 390,
+      "max_price": 4440,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -30699,7 +30699,7 @@
       "sub_category": "ฟิกเกอร์",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "สุ่ม Box (ไม่แยกบ้าน) Box (แยกบ้าน แจ้งที่อยู่ทางDM) โหลใส่เค้กแมว",
       "image": "https://drive.google.com/thumbnail?id=1R-JIq4JmBCarIGYSKJGqcBAH2Hwh5Ta5&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -30721,7 +30721,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792338710298_1",
+          "option_name": "แบบ",
+          "option_value": "สุ่ม",
+          "additional_price": 0,
+          "price": 410,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792338710298_2",
+          "option_name": "แบบ",
+          "option_value": "Box (ไม่แยกบ้าน)",
+          "additional_price": 0,
+          "price": 4440,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792338710298_3",
+          "option_name": "แบบ",
+          "option_value": "Box (แยกบ้าน แจ้งที่อยู่ทางDM)",
+          "additional_price": 0,
+          "price": 4440,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792338710298_4",
+          "option_name": "แบบ",
+          "option_value": "โหลใส่เค้กแมว",
+          "additional_price": 0,
+          "price": 390,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572115",
@@ -35093,15 +35138,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T15:49:28.094Z",
+  "generated_at": "2026-10-18T15:52:27.577Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2283,
-    "collections_ms": 801,
-    "gifts_ms": 1480,
-    "banks_ms": 197,
-    "total_ms": 4761,
+    "products_ms": 2181,
+    "collections_ms": 589,
+    "gifts_ms": 1246,
+    "banks_ms": 165,
+    "total_ms": 4181,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
