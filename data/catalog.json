@@ -29306,6 +29306,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792310895068",
+      "name": "Fluffy Across the Blue - กระเป๋าสะพาย",
+      "price_mode": "fixed",
+      "price": 590,
+      "final_price": 590,
+      "base_price": 590,
+      "min_price": 590,
+      "max_price": 590,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "กระเป๋า",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "กระเป๋า",
+      "round": "HSR 10-2026",
+      "description": "ขนาดกระเป๋าประมาณ 22*16*6ซม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1Ika2bp2sHurebtnhlgJC36X-mmjT9Ong&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 12/2026",
+      "image2": "https://drive.google.com/thumbnail?id=182q3YHx9YTN_PRrbbJBdRFp0UM7l8us1&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1iwDVAOCLclps6-IDVbaXRIY7HnxI9MUG&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1rO4-n1ZG-HvXasAC0xxvVZFM6-nDGNvy&sz=w2000",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -29419,7 +29463,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 3
+      "product_count": 4
     }
   ],
   "gifts": {
@@ -32181,16 +32225,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:06:27.664Z",
+  "generated_at": "2026-10-18T08:09:36.330Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1847,
-    "collections_ms": 1277,
-    "gifts_ms": 1434,
-    "banks_ms": 180,
-    "total_ms": 4738,
-    "product_count": 283,
+    "products_ms": 7454,
+    "collections_ms": 856,
+    "gifts_ms": 2634,
+    "banks_ms": 221,
+    "total_ms": 11165,
+    "product_count": 284,
     "collection_count": 8,
     "bank_count": 3
   }
