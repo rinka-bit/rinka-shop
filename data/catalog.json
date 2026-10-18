@@ -29394,6 +29394,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792311606303",
+      "name": "Fluffy Across the Blue - ผ้าพันคอ",
+      "price_mode": "fixed",
+      "price": 850,
+      "final_price": 850,
+      "base_price": 850,
+      "min_price": 850,
+      "max_price": 850,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "เสื้อผ้า",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "เสื้อผ้า",
+      "round": "HSR 10-2026",
+      "description": "",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1bE7XLePspV1Xc2JSrykjPDquBRFUAoRX&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 1/2027",
+      "image2": "https://drive.google.com/thumbnail?id=1U3SqwwNTAY58n3sacNA7JJXT__ZcBqrc&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1PNAePg7WXBdvEivmwznY5dsPcifdhytE&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1bYuV2ECBD9h1k8-eh4OEeWH6SmTOzAjU&sz=w2000",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -29507,7 +29551,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 4
+      "product_count": 5
     }
   ],
   "gifts": {
@@ -32269,16 +32313,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:18:29.724Z",
+  "generated_at": "2026-10-18T08:20:34.427Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2650,
-    "collections_ms": 1494,
-    "gifts_ms": 2344,
-    "banks_ms": 300,
-    "total_ms": 6788,
-    "product_count": 285,
+    "products_ms": 4029,
+    "collections_ms": 914,
+    "gifts_ms": 1784,
+    "banks_ms": 210,
+    "total_ms": 6937,
+    "product_count": 286,
     "collection_count": 8,
     "bank_count": 3
   }
