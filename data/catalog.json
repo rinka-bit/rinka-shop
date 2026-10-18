@@ -29438,6 +29438,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1792311894040",
+      "name": "Fluffy Across the Blue - ตุ๊กตาขนฟูห้อยเป๋า",
+      "price_mode": "fixed",
+      "price": 290,
+      "final_price": 290,
+      "base_price": 290,
+      "min_price": 290,
+      "max_price": 290,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "ตุ๊กตา",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "ตุ๊กตา",
+      "round": "HSR 10-2026",
+      "description": "ขนาด 90มม.\nห้อยกระเป๋าได้",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=17ZH89TJq9ghhvHYrAgRzr_rxpGuHzSx0&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1x5IO932vLr8roHU7d6Z8FEOFQrw0wX1m&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1ZRNe-2VdGUfQ9AjYFMvv__XizQyPqKoP&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1mgG6e8XSCrGX1LbPWySICviuwJ3VwNmm&sz=w2000",
+      "collection_id": "COL1792309022460",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -29551,7 +29595,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1zO9FRj3hohMvrBIqV52EQ0UkbEqDxPph&sz=w2000",
-      "product_count": 5
+      "product_count": 6
     }
   ],
   "gifts": {
@@ -32313,16 +32357,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T08:20:34.427Z",
+  "generated_at": "2026-10-18T08:25:36.825Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4029,
-    "collections_ms": 914,
-    "gifts_ms": 1784,
-    "banks_ms": 210,
-    "total_ms": 6937,
-    "product_count": 286,
+    "products_ms": 5938,
+    "collections_ms": 2602,
+    "gifts_ms": 3238,
+    "banks_ms": 457,
+    "total_ms": 12235,
+    "product_count": 287,
     "collection_count": 8,
     "bank_count": 3
   }
