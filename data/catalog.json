@@ -39165,61 +39165,61 @@
         "gift_item_id": "",
         "rule_id": "",
         "gift_name": "การ์ดSparxie",
-        "gift_image": "",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/sparxie.jpg?raw=true",
         "has_character": "",
-        "max_same_character": "",
-        "active": "",
-        "sort_order": "",
-        "created_at": "",
-        "updated_at": ""
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-20T01:00:07.000Z",
+        "updated_at": "2026-10-20T01:00:07.000Z"
       },
       {
         "gift_item_id": "",
         "rule_id": "",
         "gift_name": "เข็มกลัดBaseball Raccoon",
-        "gift_image": "",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/baseball%20raccoon.jpg?raw=true",
         "has_character": "",
-        "max_same_character": "",
-        "active": "",
-        "sort_order": "",
-        "created_at": "",
-        "updated_at": ""
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-21T01:00:07.000Z",
+        "updated_at": "2026-10-21T01:00:07.000Z"
       },
       {
         "gift_item_id": "",
         "rule_id": "",
         "gift_name": "เข็มกลัดMarch Bunny",
-        "gift_image": "",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/March%20bunny.jpg?raw=true",
         "has_character": "",
-        "max_same_character": "",
-        "active": "",
-        "sort_order": "",
-        "created_at": "",
-        "updated_at": ""
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-22T01:00:07.000Z",
+        "updated_at": "2026-10-22T01:00:07.000Z"
       },
       {
         "gift_item_id": "",
         "rule_id": "",
         "gift_name": "เข็มกลัดWoof Woof Dan",
-        "gift_image": "",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/woof%20woof%20dan.jpg?raw=true",
         "has_character": "",
-        "max_same_character": "",
-        "active": "",
-        "sort_order": "",
-        "created_at": "",
-        "updated_at": ""
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-23T01:00:07.000Z",
+        "updated_at": "2026-10-23T01:00:07.000Z"
       },
       {
         "gift_item_id": "",
         "rule_id": "",
         "gift_name": "เข็มกลัดSundove",
-        "gift_image": "",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/sundove.jpg?raw=true",
         "has_character": "",
-        "max_same_character": "",
-        "active": "",
-        "sort_order": "",
-        "created_at": "",
-        "updated_at": ""
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-24T01:00:07.000Z",
+        "updated_at": "2026-10-24T01:00:07.000Z"
       }
     ],
     "characters": [
@@ -39982,15 +39982,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T02:32:29.507Z",
+  "generated_at": "2026-10-19T02:33:54.563Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2813,
-    "collections_ms": 1035,
-    "gifts_ms": 2098,
-    "banks_ms": 315,
-    "total_ms": 6261,
+    "products_ms": 19328,
+    "collections_ms": 2316,
+    "gifts_ms": 7557,
+    "banks_ms": 577,
+    "total_ms": 29778,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
