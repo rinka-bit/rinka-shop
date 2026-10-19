@@ -36141,7 +36141,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Evanescia Silver Wolf Lv.999Ashveil Jade Yaoguang Sparxie Pearl The Dahlia Ashveil",
       "image": "https://drive.google.com/thumbnail?id=1nCl8ipr_sL5Obp0ZM-Bd-Kfb8ToFP1dJ&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36163,7 +36163,96 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_33",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanescia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792369841723_34",
+          "option_name": "ตัวละคร",
+          "option_value": "Silver Wolf Lv.999Ashveil",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792369841723_35",
+          "option_name": "ตัวละคร",
+          "option_value": "Jade",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792369841723_36",
+          "option_name": "ตัวละคร",
+          "option_value": "Yaoguang",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792369841723_37",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparxie",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792369841723_38",
+          "option_name": "ตัวละคร",
+          "option_value": "Pearl",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792369841723_39",
+          "option_name": "ตัวละคร",
+          "option_value": "The Dahlia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1792369841723_40",
+          "option_name": "ตัวละคร",
+          "option_value": "Ashveil",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572145",
@@ -36185,7 +36274,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Evanescia Silver Wolf Lv.999Ashveil Jade Yaoguang Sparxie Pearl The Dahlia Ashveil",
       "image": "https://drive.google.com/thumbnail?id=1dNMPaj-vwnPklWkwMam2hBmYSuAJgJDd&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36207,7 +36296,96 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_41",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanescia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792369841723_42",
+          "option_name": "ตัวละคร",
+          "option_value": "Silver Wolf Lv.999Ashveil",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792369841723_43",
+          "option_name": "ตัวละคร",
+          "option_value": "Jade",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792369841723_44",
+          "option_name": "ตัวละคร",
+          "option_value": "Yaoguang",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792369841723_45",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparxie",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792369841723_46",
+          "option_name": "ตัวละคร",
+          "option_value": "Pearl",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792369841723_47",
+          "option_name": "ตัวละคร",
+          "option_value": "The Dahlia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1792369841723_48",
+          "option_name": "ตัวละคร",
+          "option_value": "Ashveil",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572146",
@@ -36229,7 +36407,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Evanescia Silver Wolf Lv.999Ashveil Ashveil Sparxie",
       "image": "https://drive.google.com/thumbnail?id=1wkyIm-MTRZo75E2KVkItgUcBhOvt4PC9&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36251,7 +36429,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_49",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanescia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792369841723_50",
+          "option_name": "ตัวละคร",
+          "option_value": "Silver Wolf Lv.999Ashveil",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792369841723_51",
+          "option_name": "ตัวละคร",
+          "option_value": "Ashveil",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792369841723_52",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparxie",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572147",
@@ -36273,7 +36496,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Aventurine SP Robin SP Himeko Nova Blade SP Evanescia Silver Wolf Lv.999 Nihilux",
       "image": "https://drive.google.com/thumbnail?id=1VELZOXq2OX0_iSguSR2obm4E5J2UBi6N&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36295,7 +36518,85 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_53",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792369841723_54",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792369841723_55",
+          "option_name": "ตัวละคร",
+          "option_value": "Himeko Nova",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792369841723_56",
+          "option_name": "ตัวละคร",
+          "option_value": "Blade SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792369841723_57",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanescia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792369841723_58",
+          "option_name": "ตัวละคร",
+          "option_value": "Silver Wolf Lv.999",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792369841723_59",
+          "option_name": "ตัวละคร",
+          "option_value": "Nihilux",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572148",
@@ -36317,7 +36618,7 @@
       "sub_category": "สแตนดี้",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Aventurine SP Robin SP Himeko Nova Blade SP Evanescia Silver Wolf Lv.999 Nihilux",
       "image": "https://drive.google.com/thumbnail?id=1IXS8ilvSS4Z_LjlBFjdzAbw5M-JD9JaB&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36339,7 +36640,85 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_60",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792369841723_61",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792369841723_62",
+          "option_name": "ตัวละคร",
+          "option_value": "Himeko Nova",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792369841723_63",
+          "option_name": "ตัวละคร",
+          "option_value": "Blade SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792369841723_64",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanescia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792369841723_65",
+          "option_name": "ตัวละคร",
+          "option_value": "Silver Wolf Lv.999",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792369841723_66",
+          "option_name": "ตัวละคร",
+          "option_value": "Nihilux",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572149",
@@ -39315,15 +39694,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:48:29.338Z",
+  "generated_at": "2026-10-19T00:49:30.179Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2739,
-    "collections_ms": 709,
-    "gifts_ms": 1694,
-    "banks_ms": 255,
-    "total_ms": 5397,
+    "products_ms": 3407,
+    "collections_ms": 664,
+    "gifts_ms": 1561,
+    "banks_ms": 194,
+    "total_ms": 5826,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
