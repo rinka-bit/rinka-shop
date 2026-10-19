@@ -28338,7 +28338,7 @@
           "option_value": "Baseball Raccoon",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aZQlxdxGZ6XmKf_931HKzUHtAReVuLmm&sz=w2000",
           "sort_order": 0
@@ -28349,7 +28349,7 @@
           "option_value": "Woof Woof Dan",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1S7a7w0i3q_GK9W7a7EWD7v1d-YuIM6Kt&sz=w2000",
           "sort_order": 1
@@ -28360,7 +28360,7 @@
           "option_value": "Evanefox",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=15yTqH2hPU9B9bke-RAzm1VlxLZ_yOtsT&sz=w2000",
           "sort_order": 2
@@ -28371,7 +28371,7 @@
           "option_value": "March Bunny",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1EFzoMAOUzUoMmKKp0PRpxGYfOMqx-Jfs&sz=w2000",
           "sort_order": 3
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T09:46:29.430Z",
+  "generated_at": "2026-10-19T10:55:48.313Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2805,
-    "collections_ms": 727,
-    "gifts_ms": 1728,
-    "banks_ms": 213,
-    "total_ms": 5473,
+    "products_ms": 16179,
+    "collections_ms": 1042,
+    "gifts_ms": 3538,
+    "banks_ms": 461,
+    "total_ms": 21220,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
