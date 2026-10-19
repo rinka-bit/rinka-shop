@@ -35996,7 +35996,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Aventurine SP Aha Robin SP",
       "image": "https://drive.google.com/thumbnail?id=1N79Ak2VvTMbJjLtZgloROxc5CeGpe4YS&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36007,7 +36007,7 @@
       "sale_duration_type": "permanent",
       "preorder_deadline": "2026-11-06",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
-      "image2": "https://drive.google.com/thumbnail?id=1LRn5oVrTwH02i-OmIV_j6hbScQti4qhp&sz=w2000",
+      "image2": "",
       "image3": "",
       "featured": "",
       "new_arrival": "",
@@ -36018,7 +36018,41 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "",
+          "option_name": "ตัวละคร",
+          "option_value": "Aha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572143",
@@ -36051,7 +36085,7 @@
       "sale_duration_type": "permanent",
       "preorder_deadline": "2026-11-07",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
-      "image2": "https://drive.google.com/thumbnail?id=1Tt8rDo9723nIZL1AYZAJ5XadGutwjmqk&sz=w2000",
+      "image2": "",
       "image3": "",
       "featured": "",
       "new_arrival": "",
@@ -39258,15 +39292,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:35:30.296Z",
+  "generated_at": "2026-10-19T00:36:27.813Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3627,
-    "collections_ms": 889,
-    "gifts_ms": 1831,
-    "banks_ms": 276,
-    "total_ms": 6623,
+    "products_ms": 2295,
+    "collections_ms": 557,
+    "gifts_ms": 975,
+    "banks_ms": 160,
+    "total_ms": 3987,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
