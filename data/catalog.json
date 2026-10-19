@@ -39056,7 +39056,7 @@
       {
         "gift_item_id": "GIFT17923716067511927",
         "rule_id": "RULE17923712188474613",
-        "gift_name": "",
+        "gift_name": "พวงกุญแจ March Bunny",
         "gift_image": "",
         "has_character": "",
         "max_same_character": 0,
@@ -39068,7 +39068,7 @@
       {
         "gift_item_id": "GIFT17923716067511928",
         "rule_id": "RULE17923712188474613",
-        "gift_name": "",
+        "gift_name": "พวงกุญแจ Himekat",
         "gift_image": "",
         "has_character": "",
         "max_same_character": 0,
@@ -39080,7 +39080,7 @@
       {
         "gift_item_id": "GIFT17923716067511929",
         "rule_id": "RULE17923712188474613",
-        "gift_name": "",
+        "gift_name": "พวงกุญแจ Mr.Yang",
         "gift_image": "",
         "has_character": "",
         "max_same_character": 0,
@@ -39850,15 +39850,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T02:17:31.306Z",
+  "generated_at": "2026-10-19T02:18:30.106Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3065,
-    "collections_ms": 1918,
-    "gifts_ms": 1907,
-    "banks_ms": 296,
-    "total_ms": 7187,
+    "products_ms": 2661,
+    "collections_ms": 1051,
+    "gifts_ms": 2447,
+    "banks_ms": 764,
+    "total_ms": 6924,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
