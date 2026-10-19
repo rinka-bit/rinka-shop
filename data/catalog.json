@@ -31994,7 +31994,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "\n",
-      "search_keywords": "Dan Heng Terrae Dan Heng Terrae Phainon Phainon Evernight Evernight Cerydra Cerydra Hysilens Hysilens Cipher Cipher Hyacine Hyacine Anaxa Anaxa Castorice Castorice Mydei Mydei Tribbie Tribbie Aglaea Aglaea The Herta The Herta Fugue Fugue Sunday Sunday Rappa Rappa Lingsha Lingsha Feixiao Feixiao Yunli Yunli Jiaoqiu Jiaoqiu Firefly Firefly Jade Jade Boothill Boothill Robin Robin Stelle Stelle Caelus Caelus Dan Heng Dan Heng Himeko Himeko Welt Welt Aventurine Aventurine Acheron Acheron Sparkle Sparkle Black Swan Black Swan Dr.Ratio Dr.Ratio Ruan Mei Ruan Mei Argenti Argenti Topaz Topaz Huohuo Huohuo Jingliu Jingliu Fu Xuan Fu Xuan Dan Heng IL Dan Heng IL Blade Blade Kafka Kafka Luocha Luocha Silver Wolf Silver Wolf Jing Yuan Jing Yuan Selee Selee March 7th March 7th",
+      "search_keywords": "Dan Heng Terrae Phainon Evernight Cerydra Hysilens Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Lingsha Feixiao Yunli Jiaoqiu Firefly Jade Boothill Robin Stelle Caelus Dan Heng Himeko Welt Aventurine Acheron Sparkle Black Swan Dr.Ratio Ruan Mei Argenti Topaz Huohuo Jingliu Fu Xuan Dan Heng IL Blade Kafka Luocha Silver Wolf Jing Yuan Selee March 7th",
       "image": "https://drive.google.com/thumbnail?id=165d1nL8sWY0Bq2dG8s01MimAGCd0wTJo&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -32029,17 +32029,6 @@
           "sort_order": 0
         },
         {
-          "option_id": "OPT1792367104554_1",
-          "option_name": "ตัวละคร",
-          "option_value": "Dan Heng Terrae",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
-        },
-        {
           "option_id": "OPT1792367104554_2",
           "option_name": "ตัวละคร",
           "option_value": "Phainon",
@@ -32049,28 +32038,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
-        },
-        {
-          "option_id": "OPT1792367104554_2",
-          "option_name": "ตัวละคร",
-          "option_value": "Phainon",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1792367104554_3",
-          "option_name": "ตัวละคร",
-          "option_value": "Evernight",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 2
         },
         {
           "option_id": "OPT1792367104554_3",
@@ -32095,17 +32062,6 @@
           "sort_order": 3
         },
         {
-          "option_id": "OPT1792367104554_4",
-          "option_name": "ตัวละคร",
-          "option_value": "Cerydra",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 3
-        },
-        {
           "option_id": "OPT1792367104554_5",
           "option_name": "ตัวละคร",
           "option_value": "Hysilens",
@@ -32115,28 +32071,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
-        },
-        {
-          "option_id": "OPT1792367104554_5",
-          "option_name": "ตัวละคร",
-          "option_value": "Hysilens",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 4
-        },
-        {
-          "option_id": "OPT1792367104554_6",
-          "option_name": "ตัวละคร",
-          "option_value": "Cipher",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 5
         },
         {
           "option_id": "OPT1792367104554_6",
@@ -32161,17 +32095,6 @@
           "sort_order": 6
         },
         {
-          "option_id": "OPT1792367104554_7",
-          "option_name": "ตัวละคร",
-          "option_value": "Hyacine",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 6
-        },
-        {
           "option_id": "OPT1792367104554_8",
           "option_name": "ตัวละคร",
           "option_value": "Anaxa",
@@ -32181,28 +32104,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 7
-        },
-        {
-          "option_id": "OPT1792367104554_8",
-          "option_name": "ตัวละคร",
-          "option_value": "Anaxa",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 7
-        },
-        {
-          "option_id": "OPT1792367104554_9",
-          "option_name": "ตัวละคร",
-          "option_value": "Castorice",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 8
         },
         {
           "option_id": "OPT1792367104554_9",
@@ -32227,17 +32128,6 @@
           "sort_order": 9
         },
         {
-          "option_id": "OPT1792367104554_10",
-          "option_name": "ตัวละคร",
-          "option_value": "Mydei",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 9
-        },
-        {
           "option_id": "OPT1792367104554_11",
           "option_name": "ตัวละคร",
           "option_value": "Tribbie",
@@ -32247,28 +32137,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 10
-        },
-        {
-          "option_id": "OPT1792367104554_11",
-          "option_name": "ตัวละคร",
-          "option_value": "Tribbie",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 10
-        },
-        {
-          "option_id": "OPT1792367104554_12",
-          "option_name": "ตัวละคร",
-          "option_value": "Aglaea",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 11
         },
         {
           "option_id": "OPT1792367104554_12",
@@ -32293,17 +32161,6 @@
           "sort_order": 12
         },
         {
-          "option_id": "OPT1792367104554_13",
-          "option_name": "ตัวละคร",
-          "option_value": "The Herta",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 12
-        },
-        {
           "option_id": "OPT1792367104554_14",
           "option_name": "ตัวละคร",
           "option_value": "Fugue",
@@ -32313,28 +32170,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 13
-        },
-        {
-          "option_id": "OPT1792367104554_14",
-          "option_name": "ตัวละคร",
-          "option_value": "Fugue",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 13
-        },
-        {
-          "option_id": "OPT1792367104554_15",
-          "option_name": "ตัวละคร",
-          "option_value": "Sunday",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 14
         },
         {
           "option_id": "OPT1792367104554_15",
@@ -32359,17 +32194,6 @@
           "sort_order": 15
         },
         {
-          "option_id": "OPT1792367104554_16",
-          "option_name": "ตัวละคร",
-          "option_value": "Rappa",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 15
-        },
-        {
           "option_id": "OPT1792367104554_17",
           "option_name": "ตัวละคร",
           "option_value": "Lingsha",
@@ -32379,28 +32203,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 16
-        },
-        {
-          "option_id": "OPT1792367104554_17",
-          "option_name": "ตัวละคร",
-          "option_value": "Lingsha",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 16
-        },
-        {
-          "option_id": "OPT1792367104554_18",
-          "option_name": "ตัวละคร",
-          "option_value": "Feixiao",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 17
         },
         {
           "option_id": "OPT1792367104554_18",
@@ -32425,17 +32227,6 @@
           "sort_order": 18
         },
         {
-          "option_id": "OPT1792367104554_19",
-          "option_name": "ตัวละคร",
-          "option_value": "Yunli",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 18
-        },
-        {
           "option_id": "OPT1792367104554_20",
           "option_name": "ตัวละคร",
           "option_value": "Jiaoqiu",
@@ -32445,28 +32236,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 19
-        },
-        {
-          "option_id": "OPT1792367104554_20",
-          "option_name": "ตัวละคร",
-          "option_value": "Jiaoqiu",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 19
-        },
-        {
-          "option_id": "OPT1792367104554_21",
-          "option_name": "ตัวละคร",
-          "option_value": "Firefly",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 20
         },
         {
           "option_id": "OPT1792367104554_21",
@@ -32491,17 +32260,6 @@
           "sort_order": 21
         },
         {
-          "option_id": "OPT1792367104554_22",
-          "option_name": "ตัวละคร",
-          "option_value": "Jade",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 21
-        },
-        {
           "option_id": "OPT1792367104554_23",
           "option_name": "ตัวละคร",
           "option_value": "Boothill",
@@ -32511,28 +32269,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 22
-        },
-        {
-          "option_id": "OPT1792367104554_23",
-          "option_name": "ตัวละคร",
-          "option_value": "Boothill",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 22
-        },
-        {
-          "option_id": "OPT1792367104554_24",
-          "option_name": "ตัวละคร",
-          "option_value": "Robin",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 23
         },
         {
           "option_id": "OPT1792367104554_24",
@@ -32557,17 +32293,6 @@
           "sort_order": 24
         },
         {
-          "option_id": "OPT1792367104554_25",
-          "option_name": "ตัวละคร",
-          "option_value": "Stelle",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 24
-        },
-        {
           "option_id": "OPT1792367104554_26",
           "option_name": "ตัวละคร",
           "option_value": "Caelus",
@@ -32577,28 +32302,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 25
-        },
-        {
-          "option_id": "OPT1792367104554_26",
-          "option_name": "ตัวละคร",
-          "option_value": "Caelus",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 25
-        },
-        {
-          "option_id": "OPT1792367104554_27",
-          "option_name": "ตัวละคร",
-          "option_value": "Dan Heng",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 26
         },
         {
           "option_id": "OPT1792367104554_27",
@@ -32623,17 +32326,6 @@
           "sort_order": 27
         },
         {
-          "option_id": "OPT1792367104554_28",
-          "option_name": "ตัวละคร",
-          "option_value": "Himeko",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 27
-        },
-        {
           "option_id": "OPT1792367104554_29",
           "option_name": "ตัวละคร",
           "option_value": "Welt",
@@ -32643,28 +32335,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 28
-        },
-        {
-          "option_id": "OPT1792367104554_29",
-          "option_name": "ตัวละคร",
-          "option_value": "Welt",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 28
-        },
-        {
-          "option_id": "OPT1792367104554_30",
-          "option_name": "ตัวละคร",
-          "option_value": "Aventurine",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 29
         },
         {
           "option_id": "OPT1792367104554_30",
@@ -32689,17 +32359,6 @@
           "sort_order": 30
         },
         {
-          "option_id": "OPT1792367104554_31",
-          "option_name": "ตัวละคร",
-          "option_value": "Acheron",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 30
-        },
-        {
           "option_id": "OPT1792367104554_32",
           "option_name": "ตัวละคร",
           "option_value": "Sparkle",
@@ -32709,28 +32368,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 31
-        },
-        {
-          "option_id": "OPT1792367104554_32",
-          "option_name": "ตัวละคร",
-          "option_value": "Sparkle",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 31
-        },
-        {
-          "option_id": "OPT1792367104554_33",
-          "option_name": "ตัวละคร",
-          "option_value": "Black Swan",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 32
         },
         {
           "option_id": "OPT1792367104554_33",
@@ -32755,17 +32392,6 @@
           "sort_order": 33
         },
         {
-          "option_id": "OPT1792367104554_34",
-          "option_name": "ตัวละคร",
-          "option_value": "Dr.Ratio",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 33
-        },
-        {
           "option_id": "OPT1792367104554_35",
           "option_name": "ตัวละคร",
           "option_value": "Ruan Mei",
@@ -32775,28 +32401,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 34
-        },
-        {
-          "option_id": "OPT1792367104554_35",
-          "option_name": "ตัวละคร",
-          "option_value": "Ruan Mei",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 34
-        },
-        {
-          "option_id": "OPT1792367104554_36",
-          "option_name": "ตัวละคร",
-          "option_value": "Argenti",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 35
         },
         {
           "option_id": "OPT1792367104554_36",
@@ -32821,17 +32425,6 @@
           "sort_order": 36
         },
         {
-          "option_id": "OPT1792367104554_37",
-          "option_name": "ตัวละคร",
-          "option_value": "Topaz",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 36
-        },
-        {
           "option_id": "OPT1792367104554_38",
           "option_name": "ตัวละคร",
           "option_value": "Huohuo",
@@ -32841,28 +32434,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 37
-        },
-        {
-          "option_id": "OPT1792367104554_38",
-          "option_name": "ตัวละคร",
-          "option_value": "Huohuo",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 37
-        },
-        {
-          "option_id": "OPT1792367104554_39",
-          "option_name": "ตัวละคร",
-          "option_value": "Jingliu",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 38
         },
         {
           "option_id": "OPT1792367104554_39",
@@ -32887,17 +32458,6 @@
           "sort_order": 39
         },
         {
-          "option_id": "OPT1792367104554_40",
-          "option_name": "ตัวละคร",
-          "option_value": "Fu Xuan",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 39
-        },
-        {
           "option_id": "OPT1792367104554_41",
           "option_name": "ตัวละคร",
           "option_value": "Dan Heng IL",
@@ -32907,28 +32467,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 40
-        },
-        {
-          "option_id": "OPT1792367104554_41",
-          "option_name": "ตัวละคร",
-          "option_value": "Dan Heng IL",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 40
-        },
-        {
-          "option_id": "OPT1792367104554_42",
-          "option_name": "ตัวละคร",
-          "option_value": "Blade",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 41
         },
         {
           "option_id": "OPT1792367104554_42",
@@ -32953,17 +32491,6 @@
           "sort_order": 42
         },
         {
-          "option_id": "OPT1792367104554_43",
-          "option_name": "ตัวละคร",
-          "option_value": "Kafka",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 42
-        },
-        {
           "option_id": "OPT1792367104554_44",
           "option_name": "ตัวละคร",
           "option_value": "Luocha",
@@ -32973,28 +32500,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 43
-        },
-        {
-          "option_id": "OPT1792367104554_44",
-          "option_name": "ตัวละคร",
-          "option_value": "Luocha",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 43
-        },
-        {
-          "option_id": "OPT1792367104554_45",
-          "option_name": "ตัวละคร",
-          "option_value": "Silver Wolf",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 44
         },
         {
           "option_id": "OPT1792367104554_45",
@@ -33019,17 +32524,6 @@
           "sort_order": 45
         },
         {
-          "option_id": "OPT1792367104554_46",
-          "option_name": "ตัวละคร",
-          "option_value": "Jing Yuan",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 45
-        },
-        {
           "option_id": "OPT1792367104554_47",
           "option_name": "ตัวละคร",
           "option_value": "Selee",
@@ -33039,28 +32533,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 46
-        },
-        {
-          "option_id": "OPT1792367104554_47",
-          "option_name": "ตัวละคร",
-          "option_value": "Selee",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 46
-        },
-        {
-          "option_id": "OPT1792367104554_48",
-          "option_name": "ตัวละคร",
-          "option_value": "March 7th",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 47
         },
         {
           "option_id": "OPT1792367104554_48",
@@ -33184,7 +32656,7 @@
       "round": "HSR 10-2026",
       "description": "",
       "search_keywords": "",
-      "image": "https://drive.google.com/thumbnail?id=1mKOI3lx1-J8JyhlQm6EvpDkD0xy3_xuX&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1UGe_LepqfdRRgzyTX_LvnIUqontpOTPM&sz=w2000",
       "status": "active",
       "stock": 999,
       "product_type": "preorder",
@@ -33192,9 +32664,9 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-07",
+      "preorder_deadline": "2026-11-06",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
-      "image2": "",
+      "image2": "https://drive.google.com/thumbnail?id=1YHP2I_Ihrq-T1PqJ-xucFC1LU4qF0ND_&sz=w2000",
       "image3": "",
       "featured": "",
       "new_arrival": "",
@@ -36797,15 +36269,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-18T23:59:29.823Z",
+  "generated_at": "2026-10-19T00:00:40.755Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2954,
-    "collections_ms": 1051,
-    "gifts_ms": 2019,
-    "banks_ms": 367,
-    "total_ms": 6391,
+    "products_ms": 8631,
+    "collections_ms": 2165,
+    "gifts_ms": 3443,
+    "banks_ms": 460,
+    "total_ms": 14699,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
