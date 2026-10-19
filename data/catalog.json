@@ -39032,7 +39032,7 @@
       {
         "gift_item_id": "GIFT17923716067511925",
         "rule_id": "RULE17923712188474613",
-        "gift_name": "",
+        "gift_name": "ตั๋วEvanescia",
         "gift_image": "",
         "has_character": "",
         "max_same_character": 0,
@@ -39044,7 +39044,7 @@
       {
         "gift_item_id": "GIFT17923716067511926",
         "rule_id": "RULE17923712188474613",
-        "gift_name": "",
+        "gift_name": "ตั๋วBlade SP",
         "gift_image": "",
         "has_character": "",
         "max_same_character": 0,
@@ -39850,15 +39850,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T02:15:27.357Z",
+  "generated_at": "2026-10-19T02:17:31.306Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2374,
-    "collections_ms": 717,
-    "gifts_ms": 1279,
-    "banks_ms": 190,
-    "total_ms": 4560,
+    "products_ms": 3065,
+    "collections_ms": 1918,
+    "gifts_ms": 1907,
+    "banks_ms": 296,
+    "total_ms": 7187,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
