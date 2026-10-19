@@ -36141,7 +36141,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Evanescia Silver Wolf Lv.999Ashveil Jade Yaoguang Sparxie",
+      "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1nCl8ipr_sL5Obp0ZM-Bd-Kfb8ToFP1dJ&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36163,63 +36163,7 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": [
-        {
-          "option_id": "OPT1792369841723_33",
-          "option_name": "ตัวละคร",
-          "option_value": "Evanescia",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
-        },
-        {
-          "option_id": "OPT1792369841723_34",
-          "option_name": "ตัวละคร",
-          "option_value": "Silver Wolf Lv.999Ashveil",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 1
-        },
-        {
-          "option_id": "OPT1792369841723_35",
-          "option_name": "ตัวละคร",
-          "option_value": "Jade",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 2
-        },
-        {
-          "option_id": "OPT1792369841723_36",
-          "option_name": "ตัวละคร",
-          "option_value": "Yaoguang",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 3
-        },
-        {
-          "option_id": "OPT1792369841723_37",
-          "option_name": "ตัวละคร",
-          "option_value": "Sparxie",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 4
-        }
-      ]
+      "options": []
     },
     {
       "product_id": "PROD1792335572145",
@@ -39371,15 +39315,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:46:30.839Z",
+  "generated_at": "2026-10-19T00:47:27.831Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4139,
-    "collections_ms": 652,
-    "gifts_ms": 2501,
-    "banks_ms": 243,
-    "total_ms": 7536,
+    "products_ms": 2156,
+    "collections_ms": 686,
+    "gifts_ms": 1916,
+    "banks_ms": 193,
+    "total_ms": 4951,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
