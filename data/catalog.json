@@ -30342,7 +30342,7 @@
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
       "preorder_deadline": "2026-11-07",
-      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "estimated_arrival": "สินค้าถึงคลังช่วงด.4/2027",
       "image2": "",
       "image3": "",
       "featured": "",
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T06:28:23.589Z",
+  "generated_at": "2026-10-19T06:28:36.904Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 20450,
-    "collections_ms": 3294,
-    "gifts_ms": 4389,
-    "banks_ms": 454,
-    "total_ms": 28587,
+    "products_ms": 4670,
+    "collections_ms": 1378,
+    "gifts_ms": 2594,
+    "banks_ms": 397,
+    "total_ms": 9040,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
