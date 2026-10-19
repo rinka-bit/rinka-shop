@@ -39184,6 +39184,42 @@
         "sort_order": "",
         "created_at": "",
         "updated_at": ""
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "เข็มกลัดMarch Bunny",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": "",
+        "active": "",
+        "sort_order": "",
+        "created_at": "",
+        "updated_at": ""
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "เข็มกลัดWoof Woof Dan",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": "",
+        "active": "",
+        "sort_order": "",
+        "created_at": "",
+        "updated_at": ""
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "เข็มกลัดSundove",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": "",
+        "active": "",
+        "sort_order": "",
+        "created_at": "",
+        "updated_at": ""
       }
     ],
     "characters": [
@@ -39946,15 +39982,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T02:31:43.085Z",
+  "generated_at": "2026-10-19T02:32:29.507Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 12324,
-    "collections_ms": 1892,
-    "gifts_ms": 4517,
-    "banks_ms": 419,
-    "total_ms": 19153,
+    "products_ms": 2813,
+    "collections_ms": 1035,
+    "gifts_ms": 2098,
+    "banks_ms": 315,
+    "total_ms": 6261,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
