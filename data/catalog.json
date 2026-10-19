@@ -29289,7 +29289,7 @@
           "option_value": "Woof Woof Dan",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1KjD_yATcHB957B8IssnSD8sj8LAcq9GO&sz=w2000",
           "sort_order": 1
@@ -30253,7 +30253,7 @@
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
       "preorder_deadline": "2026-11-08",
-      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "estimated_arrival": "สินค้าถึงคลังช่วงด.11/2026",
       "image2": "https://drive.google.com/thumbnail?id=1v4cBHidmxCGYqWn-xFcrw0vQTIMdlxsv&sz=w2000",
       "image3": "https://drive.google.com/thumbnail?id=1NdYWgCoyaGQVRgwa5OhSgCsygVHIWpsU&sz=w2000",
       "featured": "",
@@ -30294,7 +30294,7 @@
           "option_value": "Box (แยกบ้าน แจ้งที่อยู่ทางDM)",
           "additional_price": 0,
           "price": 4440,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1SEUXDkkUe9ZpFzwdcYfhoaW6q4SD70BK&sz=w2000",
           "sort_order": 2
@@ -32047,7 +32047,7 @@
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
       "preorder_deadline": "2026-11-06",
-      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "estimated_arrival": "สินค้าถึงคลังช่วงด.7/2027",
       "image2": "",
       "image3": "",
       "featured": "",
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T02:41:31.151Z",
+  "generated_at": "2026-10-19T06:28:23.589Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3027,
-    "collections_ms": 1111,
-    "gifts_ms": 2859,
-    "banks_ms": 300,
-    "total_ms": 7297,
+    "products_ms": 20450,
+    "collections_ms": 3294,
+    "gifts_ms": 4389,
+    "banks_ms": 454,
+    "total_ms": 28587,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
