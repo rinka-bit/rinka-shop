@@ -31463,7 +31463,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Pearl Cerydra March 7th Evernight Dan Heng Terrae The Herta Tribbie Mydei Hyacine Cipher Fugue Sunday Robin Acheron Feixiao Lingsha Moze Rappa Dr.Ratio Ruan Mei Yaoguang Sparxie Jiaoqiu Ashveil(?)",
+      "search_keywords": "Hysilens Cerydra March 7th Evernight Dan Heng Terrae The Herta Tribbie Mydei Hyacine Cipher Fugue Sunday Robin Acheron Feixiao Lingsha Moze Rappa Dr.Ratio Ruan Mei Yaoguang Sparxie Jiaoqiu Blade SP",
       "image": "https://drive.google.com/thumbnail?id=1RnVzUvCEEoVrAVVECtus672n35OvLxuf&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -31489,7 +31489,7 @@
         {
           "option_id": "OPT1792340902268_1",
           "option_name": "ตัวละคร",
-          "option_value": "Pearl",
+          "option_value": "Hysilens",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -31742,10 +31742,10 @@
         {
           "option_id": "OPT1792340902268_24",
           "option_name": "ตัวละคร",
-          "option_value": "Ashveil(?)",
+          "option_value": "Blade SP",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 23
@@ -40481,15 +40481,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T13:47:47.124Z",
+  "generated_at": "2026-10-19T13:49:04.854Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 9962,
-    "collections_ms": 4655,
-    "gifts_ms": 4687,
-    "banks_ms": 494,
-    "total_ms": 19798,
+    "products_ms": 28376,
+    "collections_ms": 4134,
+    "gifts_ms": 4345,
+    "banks_ms": 1331,
+    "total_ms": 38186,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
