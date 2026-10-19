@@ -30863,7 +30863,7 @@
       "fandom": "Honkai Star Rail",
       "sub_category": "ฟิกเกอร์",
       "round": "HSR 10-2026",
-      "description": "ส่วนที่เหลือประมาณ 1,500-1,600 ด.10/2027\nรอบ3 ค่านำเข้าและค่าส่งในไทย",
+      "description": "ส่วนที่เหลือ แบบเดี่ยว 1,400-1500/ แบบคู่ 2,790-2,890 ด.9/2027\nรอบ3 ค่านำเข้าและค่าส่งในไทย",
       "search_keywords": "Kafka The Herta Kafka+The Herta",
       "image": "https://drive.google.com/thumbnail?id=1fk_-0HRvkdEh0gs9N3W_t67s8NZFuSWS&sz=w2000",
       "status": "active",
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T06:33:31.035Z",
+  "generated_at": "2026-10-19T06:34:32.551Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3213,
-    "collections_ms": 1267,
-    "gifts_ms": 2168,
-    "banks_ms": 306,
-    "total_ms": 6954,
+    "products_ms": 3148,
+    "collections_ms": 1974,
+    "gifts_ms": 2226,
+    "banks_ms": 798,
+    "total_ms": 8146,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
