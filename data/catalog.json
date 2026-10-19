@@ -39088,6 +39088,102 @@
         "sort_order": 0,
         "created_at": "2026-10-19T01:00:06.751Z",
         "updated_at": "2026-10-19T01:00:06.751Z"
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "เซ็ตการ์ด Pearl",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/pearl.jpg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T01:00:06.751Z",
+        "updated_at": "2026-10-19T01:00:06.751Z"
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "ตั๋วEvanescia",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/evanescia.jpg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T01:00:06.751Z",
+        "updated_at": "2026-10-19T01:00:06.751Z"
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "ตั๋วBlade SP",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/blade%20sp.jpg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T01:00:06.751Z",
+        "updated_at": "2026-10-19T01:00:06.751Z"
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "พวงกุญแจ March Bunny",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/march%20bunny-keychain.jpg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T01:00:06.751Z",
+        "updated_at": "2026-10-19T01:00:06.751Z"
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "พวงกุญแจ Himekat",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/himekat.jpg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T01:00:06.751Z",
+        "updated_at": "2026-10-19T01:00:06.751Z"
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "พวงกุญแจ Mr.Yang",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/mr.yang.jpg?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T01:00:06.751Z",
+        "updated_at": "2026-10-19T01:00:06.751Z"
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "การ์ดSparxie",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": "",
+        "active": "",
+        "sort_order": "",
+        "created_at": "",
+        "updated_at": ""
+      },
+      {
+        "gift_item_id": "",
+        "rule_id": "",
+        "gift_name": "เข็มกลัดBaseball Raccoon",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": "",
+        "active": "",
+        "sort_order": "",
+        "created_at": "",
+        "updated_at": ""
       }
     ],
     "characters": [
@@ -39850,15 +39946,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T02:30:36.103Z",
+  "generated_at": "2026-10-19T02:31:43.085Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5534,
-    "collections_ms": 2190,
-    "gifts_ms": 3301,
-    "banks_ms": 803,
-    "total_ms": 11828,
+    "products_ms": 12324,
+    "collections_ms": 1892,
+    "gifts_ms": 4517,
+    "banks_ms": 419,
+    "total_ms": 19153,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
