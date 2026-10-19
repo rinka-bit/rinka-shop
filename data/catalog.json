@@ -37076,6 +37076,20 @@
         "sort_order": 0,
         "created_at": "2026-10-14T13:34:59.287Z",
         "updated_at": "2026-10-14T13:34:59.287Z"
+      },
+      {
+        "campaign_id": "CAM17923711558618650",
+        "campaign_name": "ของแถม HSR 10-2026",
+        "collection_id": "COL1792309022460",
+        "description": "",
+        "banner_image": "",
+        "eligibility_scope": "fandom_all",
+        "require_campaign_item": "",
+        "rule_mode": "independent",
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T00:52:35.861Z",
+        "updated_at": "2026-10-19T00:52:35.861Z"
       }
     ],
     "rules": [
@@ -39694,15 +39708,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:49:30.179Z",
+  "generated_at": "2026-10-19T00:53:30.114Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3407,
-    "collections_ms": 664,
-    "gifts_ms": 1561,
-    "banks_ms": 194,
-    "total_ms": 5826,
+    "products_ms": 3573,
+    "collections_ms": 953,
+    "gifts_ms": 2007,
+    "banks_ms": 309,
+    "total_ms": 6842,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
