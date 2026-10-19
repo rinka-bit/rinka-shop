@@ -2199,6 +2199,23 @@ const TEMP_GIFT_CAMPAIGN_ID =
 
 const NEW_STAR_RAIL_CAMPAIGN_ID = "CAM17923711558618650";
 const NEW_STAR_RAIL_ITEM_IDS = new Set();
+const NEW_STAR_RAIL_ITEM_NAMES = new Map();
+function newStarRailGroup(name){
+  const n = String(name || "").trim().toLowerCase().replace(/\s+/g, " ");
+  if(n.includes("sparxie") || n.includes("เข็มกลัดbaseball") || n.includes("เข็มกลัดmarch") || n.includes("เข็มกลัดwoof") || n.includes("เข็มกลัดsundove")) return "exclusive";
+  if(n.includes("little cat")) return "cat_set";
+  return "standard";
+}
+function newStarRailSelectedGroupCount(group, excludingId){
+  let count=0;
+  Object.values(checkoutGiftState.selections || {}).forEach(sel=>{
+    Object.entries(sel || {}).forEach(([id,data])=>{
+      if(normalizeGiftId(id) === normalizeGiftId(excludingId)) return;
+      if(newStarRailGroup(NEW_STAR_RAIL_ITEM_NAMES.get(normalizeGiftId(id))) === group && NEW_STAR_RAIL_ITEM_IDS.has(normalizeGiftId(id))) count += Number(data?.qty || 0);
+    });
+  });
+  return count;
+}
 
 function isNewStarRailGiftItem(id){
   return NEW_STAR_RAIL_ITEM_IDS.has(normalizeGiftId(id));
@@ -2515,10 +2532,14 @@ function prepareTemporaryGiftRules(){
     if(isNewRound){
       originalRules.forEach(rule => (rule.items || []).forEach(item => {
         const id = normalizeGiftId(item.gift_item_id);
-        if(id) NEW_STAR_RAIL_ITEM_IDS.add(id);
+        if(id){
+          NEW_STAR_RAIL_ITEM_IDS.add(id);
+          NEW_STAR_RAIL_ITEM_NAMES.set(id, String(item.gift_name || ""));
+        }
       }));
     }
     const byId = new Map();
+    const seenNames = new Set();
    originalRules.forEach(rule=>{
 
   (rule.items || []).forEach(item=>{
@@ -2533,8 +2554,10 @@ function prepareTemporaryGiftRules(){
       (isNewRound
         ? Number(campaign.eligible_total || 0) >= Number(rule.min_amount || 0)
         : isTempGiftAllowed(id, entitlement)) &&
-      !byId.has(id)
+      !byId.has(id) &&
+      (!isNewRound || !seenNames.has(String(item.gift_name || "").trim().toLowerCase()))
     ){
+      if(isNewRound) seenNames.add(String(item.gift_name || "").trim().toLowerCase());
 
       /*
       =========================================
@@ -4511,6 +4534,21 @@ function changeCheckoutGiftQty(
           )
     );
     return;
+  }
+
+  if(isNewStarRailGiftItem(giftItemId) && nextQty > 0){
+    const group = newStarRailGroup(NEW_STAR_RAIL_ITEM_NAMES.get(normalizeGiftId(giftItemId)));
+    if((group === "exclusive" || group === "cat_set") && newStarRailSelectedGroupCount(group, giftItemId) + nextQty > 1){
+      alert(group === "exclusive" ? "การ์ด Sparxie และเข็มกลัดกลม เลือกได้รวมกันเพียง 1 ชิ้น" : "เซ็ตเข็มแมวเลือกได้เพียง 1 เซ็ตต่อออเดอร์");
+      return;
+    }
+  }
+
+  if(isNewStarRailGiftItem(normalizedGiftItemId) && normalizedQty > 0){
+    const group = newStarRailGroup(NEW_STAR_RAIL_ITEM_NAMES.get(normalizedGiftItemId));
+    if(group === "exclusive" || group === "cat_set"){
+      normalizedQty = Math.min(normalizedQty, Math.max(0, 1 - newStarRailSelectedGroupCount(group, normalizedGiftItemId)));
+    }
   }
 
   // Stande​e Robin / Aventurine / Acrylic Check-in
