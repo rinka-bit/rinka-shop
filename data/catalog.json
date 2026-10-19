@@ -35564,7 +35564,7 @@
       "sub_category": "เข็มกลัด",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Scott Aha Sparxie Nihilux Pearl Aventurine SP Robin SP Himeko Nova",
       "image": "https://drive.google.com/thumbnail?id=1KRD2vSjIPFPqqBGuimWVPH60RXl9s3Nc&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35586,7 +35586,96 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Scott",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792369841723_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Aha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792369841723_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Sparxie",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792369841723_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Nihilux",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792369841723_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Pearl",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792369841723_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792369841723_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1792369841723_8",
+          "option_name": "ตัวละคร",
+          "option_value": "Himeko Nova",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572140",
@@ -38958,15 +39047,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:29:29.345Z",
+  "generated_at": "2026-10-19T00:31:32.809Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3053,
-    "collections_ms": 909,
-    "gifts_ms": 1793,
-    "banks_ms": 288,
-    "total_ms": 6043,
+    "products_ms": 5807,
+    "collections_ms": 1079,
+    "gifts_ms": 2056,
+    "banks_ms": 316,
+    "total_ms": 9259,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
