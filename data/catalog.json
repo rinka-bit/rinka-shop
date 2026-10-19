@@ -35797,7 +35797,7 @@
       "sub_category": "สแตนดี้",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Scott Aha",
       "image": "https://drive.google.com/thumbnail?id=1RQf-K990ib8U6Ml-TYSFJlZyuEzt0lQR&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35819,7 +35819,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_14",
+          "option_name": "ตัวละคร",
+          "option_value": "Scott",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792369841723_15",
+          "option_name": "ตัวละคร",
+          "option_value": "Aha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572142",
@@ -39103,15 +39126,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:32:31.232Z",
+  "generated_at": "2026-10-19T00:34:11.038Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2687,
-    "collections_ms": 1186,
-    "gifts_ms": 2195,
-    "banks_ms": 289,
-    "total_ms": 6357,
+    "products_ms": 34478,
+    "collections_ms": 2504,
+    "gifts_ms": 3540,
+    "banks_ms": 438,
+    "total_ms": 40962,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
