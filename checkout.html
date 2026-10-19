@@ -2197,6 +2197,13 @@ const checkoutGiftState = {
 const TEMP_GIFT_CAMPAIGN_ID =
   "CAMP17894038008669540";
 
+const NEW_STAR_RAIL_CAMPAIGN_ID = "CAM1792371558618650";
+const NEW_STAR_RAIL_ITEM_IDS = new Set();
+
+function isNewStarRailGiftItem(id){
+  return NEW_STAR_RAIL_ITEM_IDS.has(normalizeGiftId(id));
+}
+
 const TEMP_GIFT_CONFIG = {
   cardIds: [
     "GIFT17894040781551931",
@@ -2232,8 +2239,8 @@ function isTemporaryStarRailCampaign(
     );
 
   if(
-    campaignId ===
-    TEMP_GIFT_CAMPAIGN_ID
+    campaignId === TEMP_GIFT_CAMPAIGN_ID ||
+    campaignId === NEW_STAR_RAIL_CAMPAIGN_ID
   ){
     return true;
   }
@@ -2277,7 +2284,8 @@ function getTempGiftEntitlement(total){
 }
 
 function isTempGiftCard(giftItemId){
-  return TEMP_GIFT_CONFIG.cardIds.includes(normalizeGiftId(giftItemId));
+  return isNewStarRailGiftItem(giftItemId) ||
+    TEMP_GIFT_CONFIG.cardIds.includes(normalizeGiftId(giftItemId));
 }
 
 function isTempGiftSingle(giftItemId){
@@ -2291,6 +2299,7 @@ function isTempGiftAllowed(giftItemId, entitlement){
 }
 
 function getTempGiftItemMax(giftItemId){
+  if(isNewStarRailGiftItem(giftItemId)) return 1;
   if(isTempGiftCard(giftItemId)) return TEMP_GIFT_CONFIG.cardMaxPerItem;
   if(isTempGiftSingle(giftItemId)) return TEMP_GIFT_CONFIG.singleMax;
   return 0;
@@ -2502,6 +2511,13 @@ function prepareTemporaryGiftRules(){
       );
     }
 
+    const isNewRound = normalizeGiftId(campaign.campaign_id) === NEW_STAR_RAIL_CAMPAIGN_ID;
+    if(isNewRound){
+      originalRules.forEach(rule => (rule.items || []).forEach(item => {
+        const id = normalizeGiftId(item.gift_item_id);
+        if(id) NEW_STAR_RAIL_ITEM_IDS.add(id);
+      }));
+    }
     const byId = new Map();
    originalRules.forEach(rule=>{
 
@@ -2514,10 +2530,9 @@ function prepareTemporaryGiftRules(){
 
     if(
       id &&
-      isTempGiftAllowed(
-        id,
-        entitlement
-      ) &&
+      (isNewRound
+        ? Number(campaign.eligible_total || 0) >= Number(rule.min_amount || 0)
+        : isTempGiftAllowed(id, entitlement)) &&
       !byId.has(id)
     ){
 
@@ -2553,7 +2568,8 @@ function prepareTemporaryGiftRules(){
 
 });
 
-    const order = [...TEMP_GIFT_CONFIG.cardIds, ...TEMP_GIFT_CONFIG.singleIds];
+    const order = isNewRound ? [...byId.keys()] :
+      [...TEMP_GIFT_CONFIG.cardIds, ...TEMP_GIFT_CONFIG.singleIds];
     const allItems = [...byId.values()].sort((a,b)=>{
       const ai = order.indexOf(normalizeGiftId(a.gift_item_id));
       const bi = order.indexOf(normalizeGiftId(b.gift_item_id));
@@ -2565,7 +2581,7 @@ function prepareTemporaryGiftRules(){
       rule_name: "เลือกของแถม",
       min_amount: 600,
       max_select: entitlement,
-      allow_duplicate: true,
+      allow_duplicate: !isNewRound,
       items: allItems
     }] : [];
   });
