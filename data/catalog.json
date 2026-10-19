@@ -35797,7 +35797,7 @@
       "sub_category": "สแตนดี้",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Scott Aha Aglaea Tribbie Mydei Castorice Anaxa Hyacine Cipher Phainon Hysilens Cerydra Evernight",
+      "search_keywords": "Scott Aha Aglaea Tribbie Mydei Castorice Anaxa Hyacine Cipher Phainon Hysilens Cerydra Evernight Dan Heng Terrae",
       "image": "https://drive.google.com/thumbnail?id=1RQf-K990ib8U6Ml-TYSFJlZyuEzt0lQR&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35962,6 +35962,17 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 12
+        },
+        {
+          "option_id": "OPT1792369841723_27",
+          "option_name": "ตัวละคร",
+          "option_value": "Dan Heng Terrae",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 13
         }
       ]
     },
@@ -39247,15 +39258,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:34:28.839Z",
+  "generated_at": "2026-10-19T00:35:30.296Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1958,
-    "collections_ms": 800,
-    "gifts_ms": 2286,
-    "banks_ms": 638,
-    "total_ms": 5682,
+    "products_ms": 3627,
+    "collections_ms": 889,
+    "gifts_ms": 1831,
+    "banks_ms": 276,
+    "total_ms": 6623,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
