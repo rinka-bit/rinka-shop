@@ -31128,7 +31128,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1ESrWlNS2gz7eQ60daOffEiVRBIOOkDdB&sz=w2000",
           "sort_order": 0
         },
         {
@@ -31139,7 +31139,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1SdFgFgWcBA4EZM5ma47cmltGuhTdO2eE&sz=w2000",
           "sort_order": 1
         }
       ]
@@ -38958,15 +38958,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:27:31.314Z",
+  "generated_at": "2026-10-19T00:28:27.882Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3664,
-    "collections_ms": 1131,
-    "gifts_ms": 1809,
-    "banks_ms": 280,
-    "total_ms": 6886,
+    "products_ms": 2351,
+    "collections_ms": 705,
+    "gifts_ms": 1413,
+    "banks_ms": 232,
+    "total_ms": 4701,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
