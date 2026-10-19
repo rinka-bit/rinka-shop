@@ -36840,7 +36840,7 @@
       "sub_category": "ฟิกเกอร์",
       "round": "HSR 10-2026",
       "description": "ราคายังไม่รวมส่งมาไทย",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลังไม้ ตีลังไม้ (เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
       "image": "https://drive.google.com/thumbnail?id=1iKxfYt7CbfLSuN3ks6LNw5-edGMm7DvA&sz=w2000",
       "status": "active",
       "stock": 1,
@@ -36862,7 +36862,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792416118595_1",
+          "option_name": "ตัวเลือก",
+          "option_value": "ไม่ตีลังไม้",
+          "additional_price": 0,
+          "price": null,
+          "stock": 1,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792416118595_2",
+          "option_name": "ตัวเลือก",
+          "option_value": "ตีลังไม้ (เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 1,
+          "selection_type": "single",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     }
   ],
   "collections": [
@@ -40458,15 +40481,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T13:21:34.526Z",
+  "generated_at": "2026-10-19T13:22:57.138Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6060,
-    "collections_ms": 1076,
-    "gifts_ms": 1788,
-    "banks_ms": 327,
-    "total_ms": 9252,
+    "products_ms": 19432,
+    "collections_ms": 3288,
+    "gifts_ms": 6877,
+    "banks_ms": 801,
+    "total_ms": 30398,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
