@@ -35697,7 +35697,7 @@
       "sub_category": "พวงกุญแจ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Aha Pearl Aventurine SP Robin SP Himeko Nova",
       "image": "https://drive.google.com/thumbnail?id=1UDTfLTG8sBlJlj60s76Or6XlInxy7Lo3&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35719,7 +35719,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792369841723_9",
+          "option_name": "ตัวละคร",
+          "option_value": "Aha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792369841723_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Pearl",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792369841723_11",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1792369841723_12",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1792369841723_13",
+          "option_name": "ตัวละคร",
+          "option_value": "Himeko Nova",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        }
+      ]
     },
     {
       "product_id": "PROD1792335572141",
@@ -39047,15 +39103,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:31:32.809Z",
+  "generated_at": "2026-10-19T00:32:31.232Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5807,
-    "collections_ms": 1079,
-    "gifts_ms": 2056,
-    "banks_ms": 316,
-    "total_ms": 9259,
+    "products_ms": 2687,
+    "collections_ms": 1186,
+    "gifts_ms": 2195,
+    "banks_ms": 289,
+    "total_ms": 6357,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
