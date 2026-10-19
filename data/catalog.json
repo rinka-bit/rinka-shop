@@ -31772,7 +31772,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Sparxie Ashveil ? Evanescia ?? Cyrene Hysilens Evernight Dan Heng Aglaea Castorice Mydei Anaxa Phainon Jingyuan Acheron Robin Feixiao Kafak Dr.Ratio",
+      "search_keywords": "Sparxie Ashveil Silver Wolf Lv.999 Evanescia Blade SP Cyrene Hysilens Evernight Dan Heng Aglaea Castorice Mydei Anaxa Phainon Jingyuan Acheron Robin Feixiao Kafak Dr.Ratio",
       "image": "https://drive.google.com/thumbnail?id=1vpQArbDPfbTUrYSpBVblpH70FvRYfykW&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -31820,7 +31820,7 @@
         {
           "option_id": "OPT1792341505928_3",
           "option_name": "ตัวละคร",
-          "option_value": "?",
+          "option_value": "Silver Wolf Lv.999",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -31842,7 +31842,7 @@
         {
           "option_id": "OPT1792341505928_5",
           "option_name": "ตัวละคร",
-          "option_value": "??",
+          "option_value": "Blade SP",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40481,15 +40481,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T13:49:04.854Z",
+  "generated_at": "2026-10-19T13:50:59.110Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 28376,
-    "collections_ms": 4134,
-    "gifts_ms": 4345,
-    "banks_ms": 1331,
-    "total_ms": 38186,
+    "products_ms": 21795,
+    "collections_ms": 2045,
+    "gifts_ms": 6092,
+    "banks_ms": 570,
+    "total_ms": 30502,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
