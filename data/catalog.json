@@ -18361,7 +18361,7 @@
           "option_value": "Pearl",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 15
@@ -38958,15 +38958,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:22:41.082Z",
+  "generated_at": "2026-10-19T00:23:27.667Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 13203,
-    "collections_ms": 1038,
-    "gifts_ms": 1610,
-    "banks_ms": 360,
-    "total_ms": 16211,
+    "products_ms": 2299,
+    "collections_ms": 759,
+    "gifts_ms": 1394,
+    "banks_ms": 234,
+    "total_ms": 4686,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
