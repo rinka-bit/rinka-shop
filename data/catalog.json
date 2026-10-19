@@ -36256,7 +36256,7 @@
     },
     {
       "product_id": "PROD1792335572145",
-      "name": "ตั๋วหนีบอะคริลิคจิบิ",
+      "name": "ตัวหนีบอะคริลิคจิบิ",
       "price_mode": "fixed",
       "price": 150,
       "final_price": 150,
@@ -36275,7 +36275,7 @@
       "round": "HSR 10-2026",
       "description": "",
       "search_keywords": "Evanescia Silver Wolf Lv.999Ashveil Jade Yaoguang Sparxie Pearl The Dahlia Ashveil",
-      "image": "https://drive.google.com/thumbnail?id=1dNMPaj-vwnPklWkwMam2hBmYSuAJgJDd&sz=w2000",
+      "image": "https://drive.google.com/thumbnail?id=1bmWMymbmz5Np2YPScyDlXslqHovYYhIj&sz=w2000",
       "status": "active",
       "stock": 999,
       "product_type": "preorder",
@@ -36283,7 +36283,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-07",
+      "preorder_deadline": "2026-11-06",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
       "image2": "",
       "image3": "",
@@ -40481,15 +40481,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T14:04:00.101Z",
+  "generated_at": "2026-10-19T14:04:52.890Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 8302,
-    "collections_ms": 1620,
-    "gifts_ms": 2274,
-    "banks_ms": 510,
-    "total_ms": 12706,
+    "products_ms": 17623,
+    "collections_ms": 1557,
+    "gifts_ms": 3964,
+    "banks_ms": 701,
+    "total_ms": 23846,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
