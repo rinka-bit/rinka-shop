@@ -5107,8 +5107,8 @@
       "old_price": null,
       "on_sale": false,
       "sale_price": 80,
-      "sale_start": "2026-08-02T17:00:00.000Z",
-      "sale_end": "2026-08-16T17:00:00.000Z",
+      "sale_start": "2026-08-01T17:00:00.000Z",
+      "sale_end": "2026-08-15T17:00:00.000Z",
       "main_category": "เข็มกลัด",
       "fandom": "Honkai Star Rail",
       "sub_category": "เข็มกลัด",
@@ -5123,7 +5123,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-08",
+      "preorder_deadline": "2026-11-07",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
       "image2": "https://drive.google.com/thumbnail?id=10nKry9q5nnpvepDRm6239B35d9ZCvD5O&sz=w2000",
       "image3": "https://drive.google.com/thumbnail?id=1VbEteHt6Fr0mMTUWWaUkkrx4MCUFELRT&sz=w2000",
@@ -5588,7 +5588,7 @@
       "sub_category": "สแตนดี้",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Ashveil Sparxie Yaoguang The Dahlia Cyrene Dan Heng Terrae Evernight Cerydra Hysilens Phainon (Khaslana) Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Moze Yunli March 7th จินตภาพ Jade Firefly Boothill Robin Aventurine Aecheron Sparkle Black Swan",
+      "search_keywords": "Ashveil Sparxie Yaoguang The Dahlia Cyrene Dan Heng Terrae Evernight Cerydra Hysilens Phainon (Khaslana) Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Moze Yunli March 7th จินตภาพ Jade Firefly Boothill Robin Aventurine Aecheron Sparkle Black Swan Aventurine SP Himeko Nova Blade SP Silver Wolf Lv.999 Robin SP Evanescia",
       "image": "https://drive.google.com/thumbnail?id=1SnezMv7I-PZj1ifolA2qgtx7GsrvJQWk&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -5631,7 +5631,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 1
         },
         {
           "option_id": "OPT1785820072386",
@@ -5642,7 +5642,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 2
         },
         {
           "option_id": "OPT1785820072387",
@@ -5653,7 +5653,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 3
         },
         {
           "option_id": "OPT1785820072388",
@@ -5664,7 +5664,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 4
         },
         {
           "option_id": "OPT1785820072389",
@@ -5675,7 +5675,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 5
         },
         {
           "option_id": "OPT1785820072390",
@@ -5686,7 +5686,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 6
         },
         {
           "option_id": "OPT1785820072391",
@@ -5697,7 +5697,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 7
         },
         {
           "option_id": "OPT1785820072392",
@@ -5708,7 +5708,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 8
         },
         {
           "option_id": "OPT1785820072393",
@@ -5719,7 +5719,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 9
         },
         {
           "option_id": "OPT1785820072394",
@@ -5730,7 +5730,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 10
         },
         {
           "option_id": "OPT1785820072395",
@@ -5741,7 +5741,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 11
         },
         {
           "option_id": "OPT1785820072396",
@@ -5752,7 +5752,7 @@
           "stock": 0,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 12
         },
         {
           "option_id": "OPT1785820072397",
@@ -5763,7 +5763,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 13
         },
         {
           "option_id": "OPT1785820072398",
@@ -5774,7 +5774,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 14
         },
         {
           "option_id": "OPT1785820072399",
@@ -5785,7 +5785,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 15
         },
         {
           "option_id": "OPT1785820072400",
@@ -5796,7 +5796,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 16
         },
         {
           "option_id": "OPT1785820072401",
@@ -5807,7 +5807,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 17
         },
         {
           "option_id": "OPT1785820072402",
@@ -5818,7 +5818,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 18
         },
         {
           "option_id": "OPT1785820072403",
@@ -5829,7 +5829,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 19
         },
         {
           "option_id": "OPT1785820072404",
@@ -5840,7 +5840,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 20
         },
         {
           "option_id": "OPT1785820072405",
@@ -5851,7 +5851,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 21
         },
         {
           "option_id": "OPT1785820072406",
@@ -5862,7 +5862,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 22
         },
         {
           "option_id": "OPT1785820072407",
@@ -5873,7 +5873,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 23
         },
         {
           "option_id": "OPT1785820072408",
@@ -5884,7 +5884,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 24
         },
         {
           "option_id": "OPT1785820072409",
@@ -5895,7 +5895,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 25
         },
         {
           "option_id": "OPT1785820072410",
@@ -5906,7 +5906,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 26
         },
         {
           "option_id": "OPT1785820072411",
@@ -5917,7 +5917,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 27
         },
         {
           "option_id": "OPT1785820072412",
@@ -5928,7 +5928,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 28
         },
         {
           "option_id": "OPT1785820072413",
@@ -5939,7 +5939,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 29
         },
         {
           "option_id": "OPT1785820072414",
@@ -5950,7 +5950,7 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 30
         },
         {
           "option_id": "OPT1785820072415",
@@ -5961,7 +5961,73 @@
           "stock": 9999,
           "selection_type": "multiple",
           "image": "",
-          "sort_order": 0
+          "sort_order": 31
+        },
+        {
+          "option_id": "OPT1792368855662_33",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 32
+        },
+        {
+          "option_id": "OPT1792368855662_34",
+          "option_name": "ตัวละคร",
+          "option_value": "Himeko Nova",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 33
+        },
+        {
+          "option_id": "OPT1792368855662_35",
+          "option_name": "ตัวละคร",
+          "option_value": "Blade SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 34
+        },
+        {
+          "option_id": "OPT1792368855662_36",
+          "option_name": "ตัวละคร",
+          "option_value": "Silver Wolf Lv.999",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 35
+        },
+        {
+          "option_id": "OPT1792368855662_37",
+          "option_name": "ตัวละคร",
+          "option_value": "Robin SP",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 36
+        },
+        {
+          "option_id": "OPT1792368855662_38",
+          "option_name": "ตัวละคร",
+          "option_value": "Evanescia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 37
         }
       ]
     },
@@ -38892,15 +38958,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:13:03.198Z",
+  "generated_at": "2026-10-19T00:14:29.573Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 26981,
-    "collections_ms": 3250,
-    "gifts_ms": 4034,
-    "banks_ms": 385,
-    "total_ms": 34651,
+    "products_ms": 2711,
+    "collections_ms": 965,
+    "gifts_ms": 1958,
+    "banks_ms": 296,
+    "total_ms": 5930,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
