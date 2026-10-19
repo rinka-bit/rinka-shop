@@ -5107,12 +5107,12 @@
       "old_price": null,
       "on_sale": false,
       "sale_price": 80,
-      "sale_start": "2026-08-03T17:00:00.000Z",
-      "sale_end": "2026-08-17T17:00:00.000Z",
+      "sale_start": "2026-08-02T17:00:00.000Z",
+      "sale_end": "2026-08-16T17:00:00.000Z",
       "main_category": "เข็มกลัด",
       "fandom": "Honkai Star Rail",
       "sub_category": "เข็มกลัด",
-      "round": "Honkaio Star Rail August-2026",
+      "round": "HSR 10-2026",
       "description": "",
       "search_keywords": "Ashveil Sparxie Yaoguang The Dahlia Cyrene Dan Heng Terrae Evernight Cerydra Hysilens Phainon (Khaslana) Cipher Hyacine Anaxa Castorice Mydei Tribbie Aglaea The Herta Fugue Sunday Rappa Feixiao Moze Yunli March 7th จินตภาพ Jade Firefly Boothill Robin Aventurine Aecheron Sparkle Black Swan",
       "image": "https://drive.google.com/thumbnail?id=1T_apyfmhlkIupY_i2h24m1BU_6fyHF2G&sz=w2000",
@@ -5123,7 +5123,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-08-18",
+      "preorder_deadline": "2026-11-08",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
       "image2": "https://drive.google.com/thumbnail?id=10nKry9q5nnpvepDRm6239B35d9ZCvD5O&sz=w2000",
       "image3": "https://drive.google.com/thumbnail?id=1VbEteHt6Fr0mMTUWWaUkkrx4MCUFELRT&sz=w2000",
@@ -5131,7 +5131,7 @@
       "new_arrival": "",
       "sort_order": 0,
       "image4": "https://drive.google.com/thumbnail?id=1RHE1wtWH4x-je6LZPpPsy4OLnmszST0X&sz=w2000",
-      "collection_id": "COL1785774567580",
+      "collection_id": "COL1792309022460",
       "created_at": "",
       "variant_mode": false,
       "variant_groups": [],
@@ -36152,7 +36152,7 @@
       "collection_type": "Preorder",
       "description": "ส่วนใหญ่ราคารวมส่งกลับไทยเกือบทุกรายการ\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "https://drive.google.com/thumbnail?id=1CRM4Ldas9yauQmIPn92KwA8yk0Wi4jLt&sz=w2000",
-      "product_count": 64
+      "product_count": 65
     }
   ],
   "gifts": {
@@ -38914,15 +38914,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:04:29.744Z",
+  "generated_at": "2026-10-19T00:08:32.512Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3434,
-    "collections_ms": 798,
-    "gifts_ms": 1676,
-    "banks_ms": 228,
-    "total_ms": 6136,
+    "products_ms": 5387,
+    "collections_ms": 716,
+    "gifts_ms": 1456,
+    "banks_ms": 268,
+    "total_ms": 7828,
     "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
