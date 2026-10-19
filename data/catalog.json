@@ -39016,6 +39016,18 @@
         "sort_order": 0,
         "created_at": "2026-10-14T13:43:23.806Z",
         "updated_at": "2026-10-14T13:43:23.806Z"
+      },
+      {
+        "gift_item_id": "GIFT17923716067511924",
+        "rule_id": "RULE17923712188474613",
+        "gift_name": "เซ็ตการ์ด Pearl",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-19T01:00:06.751Z",
+        "updated_at": "2026-10-19T01:00:06.751Z"
       }
     ],
     "characters": [
@@ -39778,15 +39790,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-19T00:58:30.459Z",
+  "generated_at": "2026-10-19T01:00:30.674Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2619,
-    "collections_ms": 941,
-    "gifts_ms": 2557,
-    "banks_ms": 179,
-    "total_ms": 6296,
+    "products_ms": 3181,
+    "collections_ms": 1249,
+    "gifts_ms": 2450,
+    "banks_ms": 374,
+    "total_ms": 7254,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
