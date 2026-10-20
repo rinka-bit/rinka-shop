@@ -30646,7 +30646,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1fI4GwXDbjM5vEc6AKbqAkxxfUm_adcei&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -36025,7 +36025,7 @@
           "option_value": "Aventurine SP",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T02:22:36.478Z",
+  "generated_at": "2026-10-20T05:44:30.240Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6866,
-    "collections_ms": 1591,
-    "gifts_ms": 3740,
-    "banks_ms": 707,
-    "total_ms": 12904,
+    "products_ms": 2679,
+    "collections_ms": 1147,
+    "gifts_ms": 2066,
+    "banks_ms": 365,
+    "total_ms": 6257,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
