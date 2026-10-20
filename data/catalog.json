@@ -28360,7 +28360,7 @@
           "option_value": "Evanefox",
           "additional_price": 0,
           "price": null,
-          "stock": 997,
+          "stock": 996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=15yTqH2hPU9B9bke-RAzm1VlxLZ_yOtsT&sz=w2000",
           "sort_order": 2
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T12:21:29.317Z",
+  "generated_at": "2026-10-20T12:26:32.522Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2767,
-    "collections_ms": 888,
-    "gifts_ms": 1824,
-    "banks_ms": 329,
-    "total_ms": 5808,
+    "products_ms": 4008,
+    "collections_ms": 1617,
+    "gifts_ms": 3743,
+    "banks_ms": 377,
+    "total_ms": 9745,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
