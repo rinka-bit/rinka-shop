@@ -28747,10 +28747,10 @@
     {
       "product_id": "PROD1792311606304",
       "name": "Setเสื้อผ้าแก๊งขนฟู",
-      "price_mode": "option",
+      "price_mode": "fixed",
       "price": 2120,
       "final_price": 2120,
-      "base_price": 0,
+      "base_price": 2120,
       "min_price": 2120,
       "max_price": 2120,
       "has_price_range": false,
@@ -39840,15 +39840,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T16:31:47.933Z",
+  "generated_at": "2026-10-20T16:32:35.400Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5898,
-    "collections_ms": 1577,
-    "gifts_ms": 6428,
-    "banks_ms": 406,
-    "total_ms": 14309,
+    "products_ms": 5391,
+    "collections_ms": 1238,
+    "gifts_ms": 2638,
+    "banks_ms": 371,
+    "total_ms": 9638,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
