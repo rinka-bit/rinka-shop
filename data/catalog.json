@@ -28650,9 +28650,461 @@
       "image4": "https://drive.google.com/thumbnail?id=1bhzTLM0RmBFduR7pnCjk4kwYF-1LyWGP&sz=w2000",
       "collection_id": "COL1792309022460",
       "created_at": "",
-      "variant_mode": false,
-      "variant_groups": [],
-      "variants": [],
+      "variant_mode": true,
+      "variant_groups": [
+        "ตัวละคร",
+        "ไซส์"
+      ],
+      "variants": [
+        {
+          "variant_id": "VAR1792514583096_0_3f4fb10f",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์=XS",
+          "option_values": {
+            "ตัวละคร": "Baseball Raccoon",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_1",
+            "ไซส์": "OPT1792514358226_1"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 0
+        },
+        {
+          "variant_id": "VAR1792514583097_1_2b303966",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์=S",
+          "option_values": {
+            "ตัวละคร": "Baseball Raccoon",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_1",
+            "ไซส์": "OPT1792514358226_2"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "variant_id": "VAR1792514583098_2_ee5b51a1",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์=M",
+          "option_values": {
+            "ตัวละคร": "Baseball Raccoon",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_1",
+            "ไซส์": "OPT1792514358226_3"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "variant_id": "VAR1792514583098_3_62ea389e",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์=L",
+          "option_values": {
+            "ตัวละคร": "Baseball Raccoon",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_1",
+            "ไซส์": "OPT1792514358226_4"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "variant_id": "VAR1792514583099_4_20bd4d97",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์=XL",
+          "option_values": {
+            "ตัวละคร": "Baseball Raccoon",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_1",
+            "ไซส์": "OPT1792514358226_5"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "variant_id": "VAR1792514583101_5_2dd2a94d",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์=XXL",
+          "option_values": {
+            "ตัวละคร": "Baseball Raccoon",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_1",
+            "ไซส์": "OPT1792514358226_6"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 5
+        },
+        {
+          "variant_id": "VAR1792514583102_6_c5d06dd5",
+          "signature": "ตัวละคร=Baseball Raccoon||ไซส์=XXXL",
+          "option_values": {
+            "ตัวละคร": "Baseball Raccoon",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_1",
+            "ไซส์": "OPT1792514358226_7"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 6
+        },
+        {
+          "variant_id": "VAR1792514583103_7_a989dabe",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์=XS",
+          "option_values": {
+            "ตัวละคร": "Woof Woof Dan",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_2",
+            "ไซส์": "OPT1792514358226_1"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 7
+        },
+        {
+          "variant_id": "VAR1792514583104_8_2017560a",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์=S",
+          "option_values": {
+            "ตัวละคร": "Woof Woof Dan",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_2",
+            "ไซส์": "OPT1792514358226_2"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 8
+        },
+        {
+          "variant_id": "VAR1792514583104_9_c3a1c383",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์=M",
+          "option_values": {
+            "ตัวละคร": "Woof Woof Dan",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_2",
+            "ไซส์": "OPT1792514358226_3"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 9
+        },
+        {
+          "variant_id": "VAR1792514583105_10_b7df148b",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์=L",
+          "option_values": {
+            "ตัวละคร": "Woof Woof Dan",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_2",
+            "ไซส์": "OPT1792514358226_4"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 10
+        },
+        {
+          "variant_id": "VAR1792514583106_11_4e49d051",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์=XL",
+          "option_values": {
+            "ตัวละคร": "Woof Woof Dan",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_2",
+            "ไซส์": "OPT1792514358226_5"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 11
+        },
+        {
+          "variant_id": "VAR1792514583107_12_80a69491",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์=XXL",
+          "option_values": {
+            "ตัวละคร": "Woof Woof Dan",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_2",
+            "ไซส์": "OPT1792514358226_6"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 12
+        },
+        {
+          "variant_id": "VAR1792514583108_13_7f174a1c",
+          "signature": "ตัวละคร=Woof Woof Dan||ไซส์=XXXL",
+          "option_values": {
+            "ตัวละคร": "Woof Woof Dan",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_2",
+            "ไซส์": "OPT1792514358226_7"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 13
+        },
+        {
+          "variant_id": "VAR1792514583110_14_beec7788",
+          "signature": "ตัวละคร=March Bunny||ไซส์=XS",
+          "option_values": {
+            "ตัวละคร": "March Bunny",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_3",
+            "ไซส์": "OPT1792514358226_1"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 14
+        },
+        {
+          "variant_id": "VAR1792514583111_15_85a8d1c4",
+          "signature": "ตัวละคร=March Bunny||ไซส์=S",
+          "option_values": {
+            "ตัวละคร": "March Bunny",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_3",
+            "ไซส์": "OPT1792514358226_2"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 15
+        },
+        {
+          "variant_id": "VAR1792514583121_16_dd3d76b7",
+          "signature": "ตัวละคร=March Bunny||ไซส์=M",
+          "option_values": {
+            "ตัวละคร": "March Bunny",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_3",
+            "ไซส์": "OPT1792514358226_3"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 16
+        },
+        {
+          "variant_id": "VAR1792514583123_17_12121b1a",
+          "signature": "ตัวละคร=March Bunny||ไซส์=L",
+          "option_values": {
+            "ตัวละคร": "March Bunny",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_3",
+            "ไซส์": "OPT1792514358226_4"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 17
+        },
+        {
+          "variant_id": "VAR1792514583124_18_3aa68c57",
+          "signature": "ตัวละคร=March Bunny||ไซส์=XL",
+          "option_values": {
+            "ตัวละคร": "March Bunny",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_3",
+            "ไซส์": "OPT1792514358226_5"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 18
+        },
+        {
+          "variant_id": "VAR1792514583125_19_0ff62b69",
+          "signature": "ตัวละคร=March Bunny||ไซส์=XXL",
+          "option_values": {
+            "ตัวละคร": "March Bunny",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_3",
+            "ไซส์": "OPT1792514358226_6"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 19
+        },
+        {
+          "variant_id": "VAR1792514583126_20_3ed1441e",
+          "signature": "ตัวละคร=March Bunny||ไซส์=XXXL",
+          "option_values": {
+            "ตัวละคร": "March Bunny",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_3",
+            "ไซส์": "OPT1792514358226_7"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 20
+        },
+        {
+          "variant_id": "VAR1792514583127_21_45eb1355",
+          "signature": "ตัวละคร=Sundove||ไซส์=XS",
+          "option_values": {
+            "ตัวละคร": "Sundove",
+            "ไซส์": "XS"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_4",
+            "ไซส์": "OPT1792514358226_1"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 21
+        },
+        {
+          "variant_id": "VAR1792514583129_22_ee94bc10",
+          "signature": "ตัวละคร=Sundove||ไซส์=S",
+          "option_values": {
+            "ตัวละคร": "Sundove",
+            "ไซส์": "S"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_4",
+            "ไซส์": "OPT1792514358226_2"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 22
+        },
+        {
+          "variant_id": "VAR1792514583130_23_bdb19653",
+          "signature": "ตัวละคร=Sundove||ไซส์=M",
+          "option_values": {
+            "ตัวละคร": "Sundove",
+            "ไซส์": "M"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_4",
+            "ไซส์": "OPT1792514358226_3"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 23
+        },
+        {
+          "variant_id": "VAR1792514583131_24_8be30689",
+          "signature": "ตัวละคร=Sundove||ไซส์=L",
+          "option_values": {
+            "ตัวละคร": "Sundove",
+            "ไซส์": "L"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_4",
+            "ไซส์": "OPT1792514358226_4"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 24
+        },
+        {
+          "variant_id": "VAR1792514583133_25_3c869f1b",
+          "signature": "ตัวละคร=Sundove||ไซส์=XL",
+          "option_values": {
+            "ตัวละคร": "Sundove",
+            "ไซส์": "XL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_4",
+            "ไซส์": "OPT1792514358226_5"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 25
+        },
+        {
+          "variant_id": "VAR1792514583134_26_569926e9",
+          "signature": "ตัวละคร=Sundove||ไซส์=XXL",
+          "option_values": {
+            "ตัวละคร": "Sundove",
+            "ไซส์": "XXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_4",
+            "ไซส์": "OPT1792514358226_6"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 26
+        },
+        {
+          "variant_id": "VAR1792514583134_27_4aedc981",
+          "signature": "ตัวละคร=Sundove||ไซส์=XXXL",
+          "option_values": {
+            "ตัวละคร": "Sundove",
+            "ไซส์": "XXXL"
+          },
+          "option_ids": {
+            "ตัวละคร": "OPT1792514239832_4",
+            "ไซส์": "OPT1792514358226_7"
+          },
+          "price": 1100,
+          "stock": 999,
+          "status": "active",
+          "sort_order": 27
+        }
+      ],
       "options": [
         {
           "option_id": "OPT1792514239832_1",
@@ -39962,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T16:39:53.919Z",
+  "generated_at": "2026-10-20T16:43:32.660Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 19447,
-    "collections_ms": 2600,
-    "gifts_ms": 3211,
-    "banks_ms": 445,
-    "total_ms": 25703,
+    "products_ms": 4352,
+    "collections_ms": 1398,
+    "gifts_ms": 2212,
+    "banks_ms": 307,
+    "total_ms": 8269,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
