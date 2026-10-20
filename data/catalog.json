@@ -28763,7 +28763,7 @@
       "fandom": "Honkai Star Rail",
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
-      "description": "",
+      "description": "ได้รับเสื้อ+กระเป๋า+ผ้าพันคอนะคะ",
       "search_keywords": "Sundove XS Woof Woof Dan S Baseball Raccoon M March Bunny L XL XXL XXXL",
       "image": "https://drive.google.com/thumbnail?id=1BaYj3dCAjQkSX-qcyhRI17_ryIJNIa6A&sz=w2000",
       "status": "active",
@@ -39840,15 +39840,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T16:30:39.559Z",
+  "generated_at": "2026-10-20T16:31:47.933Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6697,
-    "collections_ms": 4023,
-    "gifts_ms": 3602,
-    "banks_ms": 370,
-    "total_ms": 14692,
+    "products_ms": 5898,
+    "collections_ms": 1577,
+    "gifts_ms": 6428,
+    "banks_ms": 406,
+    "total_ms": 14309,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
