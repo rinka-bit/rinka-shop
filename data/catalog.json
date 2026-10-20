@@ -28338,7 +28338,7 @@
           "option_value": "Baseball Raccoon",
           "additional_price": 0,
           "price": null,
-          "stock": 997,
+          "stock": 996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aZQlxdxGZ6XmKf_931HKzUHtAReVuLmm&sz=w2000",
           "sort_order": 0
@@ -28349,7 +28349,7 @@
           "option_value": "Woof Woof Dan",
           "additional_price": 0,
           "price": null,
-          "stock": 996,
+          "stock": 995,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1S7a7w0i3q_GK9W7a7EWD7v1d-YuIM6Kt&sz=w2000",
           "sort_order": 1
@@ -30550,7 +30550,7 @@
           "option_value": "Mydei",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1JsPJ5T1HzJ02M1Wqtz-T1t99JKKP9ASt&sz=w2000",
           "sort_order": 2
@@ -30572,7 +30572,7 @@
           "option_value": "Phainon",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=17p3FfDP48wMifjockiUWqvc8sUpQMIwP&sz=w2000",
           "sort_order": 4
@@ -32166,7 +32166,7 @@
           "option_value": "Phainon",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 1
@@ -32254,7 +32254,7 @@
           "option_value": "Mydei",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 9
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T13:05:32.128Z",
+  "generated_at": "2026-10-20T14:37:42.319Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3843,
-    "collections_ms": 1354,
-    "gifts_ms": 2397,
-    "banks_ms": 381,
-    "total_ms": 7975,
+    "products_ms": 9729,
+    "collections_ms": 2899,
+    "gifts_ms": 3338,
+    "banks_ms": 653,
+    "total_ms": 16619,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
