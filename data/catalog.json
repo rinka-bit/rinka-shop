@@ -28631,7 +28631,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "Baseball Raccoon XS Woof Woof Dan S March Bunny M Sundove L XL XXL XXXL",
+      "search_keywords": "XS Baseball Raccoon S Woof Woof Dan M March Bunny L Sundove XL XXL XXXL",
       "image": "https://drive.google.com/thumbnail?id=1Gu-046nbxLSXMyPfp-ZqStYDsZkmpKF5&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -29107,17 +29107,6 @@
       ],
       "options": [
         {
-          "option_id": "OPT1792514239832_1",
-          "option_name": "ตัวละคร",
-          "option_value": "Baseball Raccoon",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1VKRFO-XMSFK0TRLZ1qM5_40f_pxTMCtK&sz=w2000",
-          "sort_order": 0
-        },
-        {
           "option_id": "OPT1792514358226_1",
           "option_name": "ไซส์",
           "option_value": "XS",
@@ -29129,15 +29118,15 @@
           "sort_order": 0
         },
         {
-          "option_id": "OPT1792514239832_2",
+          "option_id": "OPT1792514239832_1",
           "option_name": "ตัวละคร",
-          "option_value": "Woof Woof Dan",
+          "option_value": "Baseball Raccoon",
           "additional_price": 0,
           "price": null,
           "stock": 999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=19kCrOx_T8cV9UIQrMi4_LMgCUfbIEvqX&sz=w2000",
-          "sort_order": 1
+          "selection_type": "single",
+          "image": "https://drive.google.com/thumbnail?id=1VKRFO-XMSFK0TRLZ1qM5_40f_pxTMCtK&sz=w2000",
+          "sort_order": 0
         },
         {
           "option_id": "OPT1792514358226_2",
@@ -29151,15 +29140,15 @@
           "sort_order": 1
         },
         {
-          "option_id": "OPT1792514239832_3",
+          "option_id": "OPT1792514239832_2",
           "option_name": "ตัวละคร",
-          "option_value": "March Bunny",
+          "option_value": "Woof Woof Dan",
           "additional_price": 0,
           "price": null,
           "stock": 999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1F81aCBmWzzFtGm3jzUxkcRqbCum4OAmc&sz=w2000",
-          "sort_order": 2
+          "selection_type": "single",
+          "image": "https://drive.google.com/thumbnail?id=19kCrOx_T8cV9UIQrMi4_LMgCUfbIEvqX&sz=w2000",
+          "sort_order": 1
         },
         {
           "option_id": "OPT1792514358226_3",
@@ -29173,15 +29162,15 @@
           "sort_order": 2
         },
         {
-          "option_id": "OPT1792514239832_4",
+          "option_id": "OPT1792514239832_3",
           "option_name": "ตัวละคร",
-          "option_value": "Sundove",
+          "option_value": "March Bunny",
           "additional_price": 0,
           "price": null,
           "stock": 999,
-          "selection_type": "multiple",
-          "image": "https://drive.google.com/thumbnail?id=1xa1ygniumaBB3wwNGVVFZ3QXvfMAB_bL&sz=w2000",
-          "sort_order": 3
+          "selection_type": "single",
+          "image": "https://drive.google.com/thumbnail?id=1F81aCBmWzzFtGm3jzUxkcRqbCum4OAmc&sz=w2000",
+          "sort_order": 2
         },
         {
           "option_id": "OPT1792514358226_4",
@@ -29192,6 +29181,17 @@
           "stock": 999,
           "selection_type": "multiple",
           "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792514239832_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Sundove",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "single",
+          "image": "https://drive.google.com/thumbnail?id=1xa1ygniumaBB3wwNGVVFZ3QXvfMAB_bL&sz=w2000",
           "sort_order": 3
         },
         {
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T16:43:32.660Z",
+  "generated_at": "2026-10-20T16:45:31.118Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4352,
-    "collections_ms": 1398,
-    "gifts_ms": 2212,
-    "banks_ms": 307,
-    "total_ms": 8269,
+    "products_ms": 3557,
+    "collections_ms": 943,
+    "gifts_ms": 2259,
+    "banks_ms": 368,
+    "total_ms": 7127,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
