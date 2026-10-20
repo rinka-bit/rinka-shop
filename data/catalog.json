@@ -28631,7 +28631,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Baseball Raccoon Woof Woof Dan March Bunny Sundove",
       "image": "https://drive.google.com/thumbnail?id=1Gu-046nbxLSXMyPfp-ZqStYDsZkmpKF5&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -28653,7 +28653,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792514239832_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Baseball Raccoon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1VKRFO-XMSFK0TRLZ1qM5_40f_pxTMCtK&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792514239832_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Woof Woof Dan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=19kCrOx_T8cV9UIQrMi4_LMgCUfbIEvqX&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792514239832_3",
+          "option_name": "ตัวละคร",
+          "option_value": "March Bunny",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1F81aCBmWzzFtGm3jzUxkcRqbCum4OAmc&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792514239832_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Sundove",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1xa1ygniumaBB3wwNGVVFZ3QXvfMAB_bL&sz=w2000",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1792311606303",
@@ -39840,15 +39885,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T16:32:35.400Z",
+  "generated_at": "2026-10-20T16:39:02.033Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5391,
-    "collections_ms": 1238,
-    "gifts_ms": 2638,
-    "banks_ms": 371,
-    "total_ms": 9638,
+    "products_ms": 19768,
+    "collections_ms": 2272,
+    "gifts_ms": 4949,
+    "banks_ms": 608,
+    "total_ms": 27598,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
