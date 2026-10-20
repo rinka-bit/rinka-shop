@@ -28360,7 +28360,7 @@
           "option_value": "Evanefox",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=15yTqH2hPU9B9bke-RAzm1VlxLZ_yOtsT&sz=w2000",
           "sort_order": 2
@@ -30372,7 +30372,7 @@
           "option_value": "Anaxa",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1lx0Kw3FEP-74It4J1qLCw5VbugVs3_UH&sz=w2000",
           "sort_order": 1
@@ -30550,7 +30550,7 @@
           "option_value": "Mydei",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1JsPJ5T1HzJ02M1Wqtz-T1t99JKKP9ASt&sz=w2000",
           "sort_order": 2
@@ -30572,7 +30572,7 @@
           "option_value": "Phainon",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=17p3FfDP48wMifjockiUWqvc8sUpQMIwP&sz=w2000",
           "sort_order": 4
@@ -40414,15 +40414,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-20T09:35:30.913Z",
+  "generated_at": "2026-10-20T12:21:29.317Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2752,
-    "collections_ms": 1093,
-    "gifts_ms": 2921,
-    "banks_ms": 522,
-    "total_ms": 7288,
+    "products_ms": 2767,
+    "collections_ms": 888,
+    "gifts_ms": 1824,
+    "banks_ms": 329,
+    "total_ms": 5808,
     "product_count": 328,
     "collection_count": 8,
     "bank_count": 3
