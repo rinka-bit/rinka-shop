@@ -36840,7 +36840,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "HSR 10-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Caelus Stelle Jing Yuan Dan Heng IL Feixiao Jiaoqiu",
       "image": "https://drive.google.com/thumbnail?id=1qTV3HfsWPxi3bA0u3CODYPdsldrX8tEA&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36862,7 +36862,74 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1792573972145_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Caelus",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1Ihq80JI_E_MuB3qp-PimRn0PL-9m7Jxl&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1792573972145_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Stelle",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1dSzxFRQAJq_CYLPAajkLih0jeRsIaNga&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1792573972145_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Jing Yuan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1AfezK4f04xsraO5kjAafDuMMPq_xPRfm&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1792573972145_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Dan Heng IL",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1ARaIS6DLQrFl_mAths3mGp99lvuzciGU&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1792573972145_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Feixiao",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=111Ufd6D8LXjQ32_4ZGLCKgiD9o4hwtqn&sz=w2000",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1792573972145_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Jiaoqiu",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1xpihw4tvZizkvNBlWH2knDtg4jUqGva9&sz=w2000",
+          "sort_order": 5
+        }
+      ]
     }
   ],
   "collections": [
@@ -40458,15 +40525,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-21T09:11:30.409Z",
+  "generated_at": "2026-10-21T09:13:35.425Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3567,
-    "collections_ms": 870,
-    "gifts_ms": 1709,
-    "banks_ms": 219,
-    "total_ms": 6365,
+    "products_ms": 7102,
+    "collections_ms": 1120,
+    "gifts_ms": 2040,
+    "banks_ms": 786,
+    "total_ms": 11048,
     "product_count": 329,
     "collection_count": 8,
     "bank_count": 3
