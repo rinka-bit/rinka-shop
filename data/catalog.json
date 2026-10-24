@@ -38363,15 +38363,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-24T05:39:39.988Z",
+  "generated_at": "2026-10-24T05:40:39.770Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 9867,
-    "collections_ms": 1667,
-    "gifts_ms": 3507,
-    "banks_ms": 788,
-    "total_ms": 15829,
+    "products_ms": 8498,
+    "collections_ms": 2321,
+    "gifts_ms": 3191,
+    "banks_ms": 450,
+    "total_ms": 14460,
     "product_count": 306,
     "collection_count": 6,
     "bank_count": 3
