@@ -36934,34 +36934,6 @@
   ],
   "collections": [
     {
-      "collection_id": "COL1790171157120",
-      "name": "Love and Deepspace × AMORTALS (แบบรวมส่งกลับไทยแล้ว)",
-      "fandom": "Love and Deepspace",
-      "image": "https://drive.google.com/thumbnail?id=1nh8IhYyEew-XaNCbDPHa8Z-lOyIKB74G&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-10-22T17:00:00.000Z",
-      "featured": "yes",
-      "created_at": "2026-09-23T13:46:03.448Z",
-      "collection_type": "preorder",
-      "description": "ราคารวมส่งกลับไทยแล้วทุกรายการ\n\nในไทยพิเศษเริ่มต้น EMS9฿ (พื้นที่พิเศษ+20฿)",
-      "banner_image": "https://drive.google.com/thumbnail?id=1kRw_vwJhPJb1zi2knv_bM4eWPh1e1O1C&sz=w2000",
-      "product_count": 10
-    },
-    {
-      "collection_id": "COL1790171157121",
-      "name": "Love and Deepspace × AMORTALS (แบบยังไม่รวมส่งกลับไทย)",
-      "fandom": "Love and Deepspace",
-      "image": "https://drive.google.com/thumbnail?id=1nh8IhYyEew-XaNCbDPHa8Z-lOyIKB74G&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-10-22T17:00:00.000Z",
-      "featured": "yes",
-      "created_at": "2026-09-23T13:46:03.448Z",
-      "collection_type": "preorder",
-      "description": "ราคายังไม่รวมส่งกลับไทย\n\nในไทยพิเศษเริ่มต้น EMS9฿ (พื้นที่พิเศษ+20฿)",
-      "banner_image": "https://drive.google.com/thumbnail?id=1kRw_vwJhPJb1zi2knv_bM4eWPh1e1O1C&sz=w2000",
-      "product_count": 10
-    },
-    {
       "collection_id": "COL1790603662056",
       "name": "WuWa 3.6(แบบรวมส่งกลับไทยเกือบทุกรายการ)",
       "fandom": "Wuthering Waves",
@@ -40525,17 +40497,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-24T03:47:42.864Z",
+  "generated_at": "2026-10-24T05:33:55.248Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 10063,
-    "collections_ms": 2563,
-    "gifts_ms": 3582,
-    "banks_ms": 546,
-    "total_ms": 16754,
+    "products_ms": 18296,
+    "collections_ms": 1919,
+    "gifts_ms": 4392,
+    "banks_ms": 499,
+    "total_ms": 25106,
     "product_count": 329,
-    "collection_count": 8,
+    "collection_count": 6,
     "bank_count": 3
   }
 }
