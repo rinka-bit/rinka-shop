@@ -1177,6 +1177,9 @@ function loadCheckout(){
 let checkoutBootstrapPromise =
   null;
 
+let checkoutGiftsReady = false;
+let checkoutGiftsError = false;
+
 
 /*
 PERFORMANCE PASS #8
@@ -1263,7 +1266,10 @@ async function loadCheckoutBootstrap(){
         giftResponse
       ] =
         await Promise.all([
-          addressPromise,
+          addressPromise.catch(error => {
+            console.warn("โหลดที่อยู่เดิมไม่สำเร็จ", error);
+            return null;
+          }),
           giftPromise
         ]);
 
@@ -2850,6 +2856,10 @@ async function fetchCheckoutGiftActionFallback(
 
 async function loadGifts(){
 
+  checkoutGiftsReady = false;
+  checkoutGiftsError = false;
+  updateCheckoutPaymentState();
+
   const giftSection =
     document.getElementById(
       "giftSection"
@@ -2862,6 +2872,8 @@ async function loadGifts(){
   if(!cart.length){
 
     giftSection.innerHTML = "";
+    checkoutGiftsReady = true;
+    updateCheckoutPaymentState();
 
     return;
 
@@ -3112,9 +3124,15 @@ async function loadGifts(){
     applyGiftCampaignRuleModes();
     prepareTemporaryGiftRules();
     renderCheckoutGiftEngine();
-
+    checkoutGiftsReady = true;
+    checkoutGiftsError = false;
+    updateCheckoutPaymentState();
 
   }catch(error){
+
+    checkoutGiftsReady = false;
+    checkoutGiftsError = true;
+    updateCheckoutPaymentState();
 
     console.error(
       "loadGifts error:",
@@ -5552,6 +5570,11 @@ function goPayment(){
     return;
   }
 
+  if(!checkoutGiftsReady || checkoutGiftsError){
+    showCheckoutMessage("กรุณารอให้ตรวจสอบสิทธิ์ของแถมสำเร็จก่อน", true);
+    return;
+  }
+
   const addressData =
     window.checkoutAddress;
 
@@ -5695,6 +5718,8 @@ function updateCheckoutPaymentState(){
 
   const canContinue =
     cart.length > 0 &&
+    checkoutGiftsReady &&
+    !checkoutGiftsError &&
     Boolean(
       window.checkoutAddress
     );
