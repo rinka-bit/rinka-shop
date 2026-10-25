@@ -38349,15 +38349,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-25T13:24:29.777Z",
+  "generated_at": "2026-10-25T14:53:31.956Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3494,
-    "collections_ms": 861,
-    "gifts_ms": 2093,
-    "banks_ms": 315,
-    "total_ms": 6763,
+    "products_ms": 4782,
+    "collections_ms": 1058,
+    "gifts_ms": 2021,
+    "banks_ms": 311,
+    "total_ms": 8172,
     "product_count": 306,
     "collection_count": 5,
     "bank_count": 3
