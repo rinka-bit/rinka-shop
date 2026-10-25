@@ -1579,6 +1579,11 @@ async function submitOrder(){
       "loadingOverlay"
     );
 
+  if(localStorage.getItem("rinka_checkout_response_uncertain") === "1"){
+    showPaymentToast("มีรายการที่ยังรอตรวจสอบ กรุณาติดต่อร้านก่อนส่งซ้ำ", true);
+    return;
+  }
+
   if(btn.disabled){
 
     return;
@@ -2475,61 +2480,12 @@ try{
   );
 
  }catch(error){
-
-  console.warn(
-    "Checkout transaction response uncertain:",
-    error
-  );
-
-
-  /*
-  =========================================
-  RESPONSE พัง
-  แต่ Browser รู้ Order ID อยู่แล้ว
-
-  จากอาการระบบปัจจุบัน Backend มักทำงาน
-  สำเร็จก่อน echo 404
-  =========================================
-  */
-
-  localStorage.setItem(
-    "rinka_checkout_response_uncertain",
-    "1"
-  );
-
-
-  localStorage.setItem(
-    "rinka_pending_checkout_order_id",
-    clientOrderId
-  );
-
-
-  showPaymentToast(
-    "ได้รับคำสั่งซื้อแล้ว กำลังเปิดหน้าคำสั่งซื้อ...",
-    false
-  );
-
-
-  /*
-  อย่ารอ Apps Script response ต่อ
-  */
-
-  setTimeout(
-    ()=>{
-
-      window.location.href =
-        "order.html?id=" +
-        encodeURIComponent(
-          clientOrderId
-        );
-
-    },
-    800
-  );
-
-
-  return;
-
+  console.warn("Checkout response uncertain; no automatic replay", error);
+  localStorage.setItem("rinka_checkout_response_uncertain", "1");
+  localStorage.setItem("rinka_pending_checkout_order_id", clientOrderId);
+  // An uncertain response must not be represented as confirmed payment.
+  // Keep the original request ID and cart for safe reconciliation.
+  throw new Error("ยังยืนยันผลการชำระเงินไม่ได้ กรุณาติดต่อร้านพร้อมเลขออเดอร์ " + clientOrderId + " และอย่ากดยืนยันซ้ำ");
 }
 
 
@@ -2664,167 +2620,10 @@ if(
     };
 
 
-  }else if(
-    recoveryResult &&
-    recoveryResult.success === true
-  ){
-
-    /*
-    RELIABILITY PASS #14
-
-    Recovery ยืนยันแล้วว่า payment ยังไม่สำเร็จจริง
-    จึง retry transaction เดิมได้ 1 ครั้งอย่างมีเงื่อนไข
-
-    - ใช้ request_id เดิม
-    - backend idempotency เดิม
-    - ไม่ retry ถ้า recovery endpoint เองตรวจสอบไม่ได้
-    - ไม่มี loop / ไม่มี retry ครั้งที่ 3
-    */
-
-    console.warn(
-      "PAID CHECKOUT VERIFIED RETRY",
-      {
-        order_exists:
-          recoveryResult.order_exists === true,
-        order_id:
-          recoveryResult.order_id || "",
-        payment_status:
-          recoveryResult.payment_status || ""
-      }
-    );
-
-
-    showPaymentToast(
-      recoveryResult.order_exists === true
-        ? "พบออเดอร์แล้ว กำลังบันทึกการชำระเงินต่อ..."
-        : "กำลังลองส่งออเดอร์อีกครั้ง...",
-      false
-    );
-
-
-    const retryForm =
-      new FormData();
-
-
-    retryForm.append(
-      "action",
-      "createPaidCheckout"
-    );
-
-
-    retryForm.append(
-      "payload",
-      JSON.stringify({
-
-        request_id:
-          requestId,
-
-        order:
-          payload,
-
-        payment:{
-
-          slip_base64:
-            base64
-
-        }
-
-      })
-    );
-
-
-    const retryStartedAt =
-      performance.now();
-
-
-    const retryResponse =
-      await paymentFetch(
-        API,
-        {
-          method:"POST",
-          body:retryForm
-        }
-      );
-
-
-    if(!retryResponse.ok){
-
-      throw new Error(
-        originalTransactionError
-      );
-
-    }
-
-
-    const retryResult =
-      await retryResponse.json();
-
-
-    console.log(
-      "PAID CHECKOUT VERIFIED RETRY RESULT",
-      [
-        "browser_ms=" +
-          Math.round(
-            performance.now() -
-            retryStartedAt
-          ),
-        "success=" +
-          String(
-            retryResult?.success === true
-          ),
-        "failure_stage=" +
-          String(
-            retryResult?.failure_stage ||
-            ""
-          ),
-        "backend_ms=" +
-          String(
-            retryResult?.performance?.total_ms ??
-            "n/a"
-          ),
-        "create_order_ms=" +
-          String(
-            retryResult?.performance?.create_order_ms ??
-            "n/a"
-          ),
-        "save_payment_ms=" +
-          String(
-            retryResult?.performance?.save_payment_ms ??
-            "n/a"
-          )
-      ].join(
-        " | "
-      )
-    );
-
-
-    if(
-      !retryResult ||
-      retryResult.success !== true
-    ){
-
-      throw new Error(
-        retryResult?.error ||
-        originalTransactionError
-      );
-
-    }
-
-
-    transactionResult =
-      retryResult;
-
-
   }else{
-
-    /*
-    Recovery เองไม่สามารถยืนยันสถานะได้
-    ห้าม retry แบบเดา
-    */
-    throw new Error(
-      originalTransactionError
-    );
-
+    // No automatic transaction replay, even if the read-only recovery says unpaid:
+    // the original POST may still be in flight or its outcome may be uncertain.
+    throw new Error("ยังไม่สามารถยืนยันการชำระเงินได้ กรุณาติดต่อร้านพร้อมเลขออเดอร์ " + clientOrderId + " และอย่ากดยืนยันซ้ำ");
   }
 
 }
@@ -3980,6 +3779,7 @@ function updatePaymentButtonState(){
 
   button.disabled =
     paymentSubmitting ||
+    localStorage.getItem("rinka_checkout_response_uncertain") === "1" ||
     !selectedBankId ||
     !file ||
     !cart.length;
