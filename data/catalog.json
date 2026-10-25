@@ -30913,7 +30913,7 @@
           "option_value": "Aventurine",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 29
@@ -30957,7 +30957,7 @@
           "option_value": "Dr.Ratio",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 33
@@ -38349,15 +38349,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-25T01:58:26.998Z",
+  "generated_at": "2026-10-25T13:24:29.777Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2032,
-    "collections_ms": 617,
-    "gifts_ms": 1588,
-    "banks_ms": 196,
-    "total_ms": 4433,
+    "products_ms": 3494,
+    "collections_ms": 861,
+    "gifts_ms": 2093,
+    "banks_ms": 315,
+    "total_ms": 6763,
     "product_count": 306,
     "collection_count": 5,
     "bank_count": 3
