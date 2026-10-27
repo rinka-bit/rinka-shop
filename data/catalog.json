@@ -35171,7 +35171,7 @@
       "sub_category": "อื่น ๆ",
       "round": "Genshin 10-2026",
       "description": "ขนาด 55มม.",
-      "search_keywords": "",
+      "search_keywords": "Flins Scaramouche Sandrone Arlecchino Nicole Citlali",
       "image": "https://drive.google.com/thumbnail?id=1SqHcNeSKyrP_saGY8MVS7VP_ayXhJs04&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35193,7 +35193,74 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793080515797_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Flins",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1TuI_QD4ZmUP2AAJGw_uyo-QzJCQbVvss&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793080515797_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Scaramouche",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1GDH_YFXe9ITj72wpCc8jAFdKBfmd6Whh&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793080515797_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Sandrone",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=15PhHDnlwZbiuu-GbDNBF8rwEcaADrMGn&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793080515797_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Arlecchino",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1pWs8hcCH2Y8GAFb1XdCyCpPN_MFQIQq6&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793080515797_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Nicole",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1muY4XgV6FgZU8kIMPKikVIcT_qHFW5nL&sz=w2000",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1793080515797_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Citlali",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1QjjRRntpJoJkvki-qplN45HHpUW7fCAT&sz=w2000",
+          "sort_order": 5
+        }
+      ]
     },
     {
       "product_id": "PROD1793079987439",
@@ -38849,15 +38916,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:54:30.467Z",
+  "generated_at": "2026-10-27T05:56:30.708Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2516,
-    "collections_ms": 918,
-    "gifts_ms": 2638,
-    "banks_ms": 326,
-    "total_ms": 6399,
+    "products_ms": 2948,
+    "collections_ms": 1903,
+    "gifts_ms": 2449,
+    "banks_ms": 254,
+    "total_ms": 7564,
     "product_count": 314,
     "collection_count": 6,
     "bank_count": 3
