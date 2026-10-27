@@ -35060,6 +35060,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793079987439",
+      "name": "Aurora Party Series : Jibbitz",
+      "price_mode": "fixed",
+      "price": 390,
+      "final_price": 390,
+      "base_price": 390,
+      "min_price": 390,
+      "max_price": 390,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Genshin Impact",
+      "sub_category": "อื่น ๆ",
+      "round": "Genshin 10-2026",
+      "description": "เฉพาะ Jibbitz ไม่รวมรองเท้านะคะ\n 1เซ็ต มี 4ชิ้น",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1r1gAafI4CwV-g2_ZWhIeKNUh6zyHzjWH&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-15",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 3-2027",
+      "image2": "https://drive.google.com/thumbnail?id=1_6L8WubX9N-jHXjgJyRSq8R0NGz4ILlo&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=11qbzJmrd-KNuCYWbCq60zxrXHoFFkljV&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1lU2a8d4nr_HDbtd-h4Bfi9AgB5eGbXjY&sz=w2000",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -35145,7 +35189,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 6
+      "product_count": 7
     }
   ],
   "gifts": {
@@ -38627,16 +38671,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:44:30.155Z",
+  "generated_at": "2026-10-27T05:47:28.503Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3052,
-    "collections_ms": 827,
-    "gifts_ms": 1816,
-    "banks_ms": 268,
-    "total_ms": 5963,
-    "product_count": 312,
+    "products_ms": 2492,
+    "collections_ms": 1039,
+    "gifts_ms": 1749,
+    "banks_ms": 243,
+    "total_ms": 5524,
+    "product_count": 313,
     "collection_count": 6,
     "bank_count": 3
   }
