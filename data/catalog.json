@@ -34796,6 +34796,50 @@
           "sort_order": 5
         }
       ]
+    },
+    {
+      "product_id": "PROD1793078565543",
+      "name": "Yae Miko Moonlit Banquet 1/8 (มัดจำ)",
+      "price_mode": "fixed",
+      "price": 350,
+      "final_price": 350,
+      "base_price": 350,
+      "min_price": 350,
+      "max_price": 350,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "ฟิกเกอร์",
+      "fandom": "Genshin Impact",
+      "sub_category": "ฟิกเกอร์",
+      "round": "Genshin 10-2026",
+      "description": "แบ่งชำระทั้งหมด 3 รอบ\nรอบแรก : ยอดมัดจำ\nรอบสอง : ส่วนที่เหลือประมาณ 1,450-1,550 เดือน8/2027\nรอบสาม : ค่านำเข้าและค่าส่งในไทย",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=155aLYvmeDUVvwhTr2cvl2jt9btAbenWb&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-12-31",
+      "estimated_arrival": "เริ่มชำระรอบ2 ช่วงเดือน8/2027",
+      "image2": "https://drive.google.com/thumbnail?id=1crV6fIky6fj7J9YbTGdGGDfLACpSMU4r&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1wQMCL2qeFfiTfNinyS2BhGF4NtwFMJ6p&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=14PKQ2-MvAATRoX1fnGJhI2FbhdpA5btx&sz=w2000",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -34881,7 +34925,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 0
+      "product_count": 1
     }
   ],
   "gifts": {
@@ -38363,16 +38407,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:19:27.537Z",
+  "generated_at": "2026-10-27T05:23:30.948Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1632,
-    "collections_ms": 1157,
-    "gifts_ms": 1549,
-    "banks_ms": 149,
-    "total_ms": 4488,
-    "product_count": 306,
+    "products_ms": 3461,
+    "collections_ms": 893,
+    "gifts_ms": 3255,
+    "banks_ms": 285,
+    "total_ms": 7894,
+    "product_count": 307,
     "collection_count": 6,
     "bank_count": 3
   }
