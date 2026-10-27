@@ -35282,7 +35282,7 @@
       "sub_category": "อื่น ๆ",
       "round": "Genshin 10-2026",
       "description": "เฉพาะ Jibbitz ไม่รวมรองเท้านะคะ\n 1เซ็ต มี 4ชิ้น",
-      "search_keywords": "",
+      "search_keywords": "Flins Scaramouche Sandrone Arlecchino Nicole Citlali",
       "image": "https://drive.google.com/thumbnail?id=1r1gAafI4CwV-g2_ZWhIeKNUh6zyHzjWH&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35304,7 +35304,74 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793080515798_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Flins",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793080515798_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Scaramouche",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793080515798_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Sandrone",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793080515798_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Arlecchino",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793080515798_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Nicole",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1793080515798_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Citlali",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        }
+      ]
     },
     {
       "product_id": "PROD1793080116747",
@@ -35326,7 +35393,7 @@
       "sub_category": "อื่น ๆ",
       "round": "Genshin 10-2026",
       "description": "ในเซ็ตประกอบไปด้วย\n-ตุ๊กตา x1\n-Griptok x1\n-Phone Straps x1\n-Jibbitz x1",
-      "search_keywords": "",
+      "search_keywords": "Flins Scaramouche Sandrone Arlecchino Nicole Citlali",
       "image": "https://drive.google.com/thumbnail?id=1fXcphrNPro3KOI9utU9P2C0wpbRQluiH&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35348,7 +35415,74 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793080515799_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Flins",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793080515799_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Scaramouche",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793080515799_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Sandrone",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793080515799_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Arlecchino",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793080515799_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Nicole",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1793080515799_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Citlali",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        }
+      ]
     }
   ],
   "collections": [
@@ -38916,15 +39050,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:57:29.782Z",
+  "generated_at": "2026-10-27T05:58:28.276Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3417,
-    "collections_ms": 864,
-    "gifts_ms": 2051,
-    "banks_ms": 254,
-    "total_ms": 6587,
+    "products_ms": 2502,
+    "collections_ms": 597,
+    "gifts_ms": 1911,
+    "banks_ms": 190,
+    "total_ms": 5200,
     "product_count": 314,
     "collection_count": 6,
     "bank_count": 3
