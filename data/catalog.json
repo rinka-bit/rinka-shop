@@ -35313,7 +35313,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1wSYO18e_1U-nXH4UogBlDivkm5Sm0SG4&sz=w2000",
           "sort_order": 0
         },
         {
@@ -35324,7 +35324,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1_HQrRqryJzHDJ2j9GIVdrL2cMFrVomI7&sz=w2000",
           "sort_order": 1
         },
         {
@@ -35335,7 +35335,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1rXbYRIpljjwBs8nnrB8fLsoyQLWv0ae_&sz=w2000",
           "sort_order": 2
         },
         {
@@ -35346,7 +35346,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1AxCVzGgw3sohMBm4A6eOtnMWocQ9eW-S&sz=w2000",
           "sort_order": 3
         },
         {
@@ -35357,7 +35357,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=11y9jc-hkbJiZfnaoDgEqHgWxmkHjecbv&sz=w2000",
           "sort_order": 4
         },
         {
@@ -35368,7 +35368,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1wivL3W8IJ39EFLLR6GRvSNGLF_mLjMPb&sz=w2000",
           "sort_order": 5
         }
       ]
@@ -39050,15 +39050,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:58:28.276Z",
+  "generated_at": "2026-10-27T05:59:28.985Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2502,
-    "collections_ms": 597,
-    "gifts_ms": 1911,
-    "banks_ms": 190,
-    "total_ms": 5200,
+    "products_ms": 3102,
+    "collections_ms": 725,
+    "gifts_ms": 1842,
+    "banks_ms": 216,
+    "total_ms": 5887,
     "product_count": 314,
     "collection_count": 6,
     "bank_count": 3
