@@ -35104,6 +35104,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793080116747",
+      "name": "Aurora Party Series All in",
+      "price_mode": "fixed",
+      "price": 1490,
+      "final_price": 1490,
+      "base_price": 1490,
+      "min_price": 1490,
+      "max_price": 1490,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Genshin Impact",
+      "sub_category": "อื่น ๆ",
+      "round": "Genshin 10-2026",
+      "description": "ในเซ็ตประกอบไปด้วย\n-ตุ๊กตา x1\n-Griptok x1\n-Phone Straps x1\n-Jibbitz x1",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1fXcphrNPro3KOI9utU9P2C0wpbRQluiH&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 3-2027",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -35189,7 +35233,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 7
+      "product_count": 8
     }
   ],
   "gifts": {
@@ -38671,16 +38715,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:47:28.503Z",
+  "generated_at": "2026-10-27T05:49:27.743Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2492,
-    "collections_ms": 1039,
-    "gifts_ms": 1749,
-    "banks_ms": 243,
-    "total_ms": 5524,
-    "product_count": 313,
+    "products_ms": 2148,
+    "collections_ms": 590,
+    "gifts_ms": 1684,
+    "banks_ms": 156,
+    "total_ms": 4579,
+    "product_count": 314,
     "collection_count": 6,
     "bank_count": 3
   }
