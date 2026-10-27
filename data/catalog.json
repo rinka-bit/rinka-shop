@@ -34972,6 +34972,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793079678096",
+      "name": "Aurora Party Series : Plush Phone Straps",
+      "price_mode": "fixed",
+      "price": 390,
+      "final_price": 390,
+      "base_price": 390,
+      "min_price": 390,
+      "max_price": 390,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Genshin Impact",
+      "sub_category": "อื่น ๆ",
+      "round": "Genshin 10-2026",
+      "description": "ขนาดหัวตุ๊กตา\n-Flins 7.5ซม.\n-Scaramouche 8ซม.\n-Nicole 7.5ซม.\n-Sandrone 7.5ซม.\n-Arlecchino 8.5ซม.\n-Citlali 7ซม.\n-ความยาวสายสะพาย 75ซม. ความยาวปมเชือกชิ้นล่าง 5.5ซม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1AM7Kh8mZlaOW7umAv2k2SOXwNev2jrtJ&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-15",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 3-2027",
+      "image2": "https://drive.google.com/thumbnail?id=1NkxlD_oveTbJ49HR9QnnIep6YinY6uqK&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1bKXLoc0F09gecEIYCbbrZdlI5UUD13If&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=14c9GJP0KYm3NX8jBWgNfsymm2YqsKnJ3&sz=w2000",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -35057,7 +35101,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 4
+      "product_count": 5
     }
   ],
   "gifts": {
@@ -38539,16 +38583,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:37:29.355Z",
+  "generated_at": "2026-10-27T05:42:32.499Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3461,
-    "collections_ms": 680,
-    "gifts_ms": 1625,
-    "banks_ms": 243,
-    "total_ms": 6009,
-    "product_count": 310,
+    "products_ms": 4684,
+    "collections_ms": 889,
+    "gifts_ms": 2473,
+    "banks_ms": 290,
+    "total_ms": 8336,
+    "product_count": 311,
     "collection_count": 6,
     "bank_count": 3
   }
