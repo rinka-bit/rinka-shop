@@ -34840,6 +34840,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793078685440",
+      "name": "Sandrone Ver. 1/8  Figure มัดจำ",
+      "price_mode": "fixed",
+      "price": 350,
+      "final_price": 350,
+      "base_price": 350,
+      "min_price": 350,
+      "max_price": 350,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "ฟิกเกอร์",
+      "fandom": "Genshin Impact",
+      "sub_category": "ฟิกเกอร์",
+      "round": "Genshin 10-2026",
+      "description": "แบ่งชำระทั้งหมด 3 รอบ\nรอบแรก : ยอดมัดจำ\nรอบสอง : ส่วนที่เหลือประมาณ 1,450-1,550 เดือน7/2027\nรอบสาม : ค่านำเข้าและค่าส่งในไทย",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=17gQ8MXnKjZAjjua9u4_8erhOxqs8BKkp&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-12-31",
+      "estimated_arrival": "เริ่มชำระรอบ2 ช่วงเดือน7/2027",
+      "image2": "https://drive.google.com/thumbnail?id=1y5NfjOvfGzhIUSso5kWiybLkpVbbnrUg&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1GN2E6RWMDgYR8Kbne1wSHQsMc-mxDcsT&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1rB_0YWwWs9g5vlZnfvquzOcQ_4XD7hOz&sz=w2000",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -34925,7 +34969,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 1
+      "product_count": 2
     }
   ],
   "gifts": {
@@ -38407,16 +38451,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:23:30.948Z",
+  "generated_at": "2026-10-27T05:25:34.638Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3461,
-    "collections_ms": 893,
-    "gifts_ms": 3255,
-    "banks_ms": 285,
-    "total_ms": 7894,
-    "product_count": 307,
+    "products_ms": 7036,
+    "collections_ms": 955,
+    "gifts_ms": 2040,
+    "banks_ms": 593,
+    "total_ms": 10624,
+    "product_count": 308,
     "collection_count": 6,
     "bank_count": 3
   }
