@@ -35504,7 +35504,7 @@
       "sub_category": "Keyboard",
       "round": "Genshin 10-2026",
       "description": "อุปกรณ์ภายในกล่อง\n1. คีย์บอร์ดแม่เหล็ก ×1\n2. สายเชื่อมต่อข้อมูล ×1\n3. ที่ดึงสวิตช์/คีย์แคป ×1\n4. โฟมซับเสียง Spacebar ×1\n5. Keycap ลายพิเศษเพิ่มเติม ×10\n6. สวิตช์สำรอง ×4\n7. คู่มือการใช้งาน ×1\n8. การ์ดรับรองคุณภาพ ×1\n\nราคายังไม่รวมส่งกลับไทยนะคะ",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลัง ตีลังไม้ (เริ่มต้น150฿)",
       "image": "https://drive.google.com/thumbnail?id=1AWwuojJZAE430KA4QBt9LneJPo9TvCUj&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35526,7 +35526,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793178471588_1",
+          "option_name": "แบบ",
+          "option_value": "ไม่ตีลัง",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793178471588_2",
+          "option_name": "แบบ",
+          "option_value": "ตีลังไม้ (เริ่มต้น150฿)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     }
   ],
   "collections": [
@@ -39094,15 +39117,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-28T09:07:26.808Z",
+  "generated_at": "2026-10-28T09:08:30.525Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2043,
-    "collections_ms": 710,
-    "gifts_ms": 1300,
-    "banks_ms": 189,
-    "total_ms": 4242,
+    "products_ms": 3057,
+    "collections_ms": 848,
+    "gifts_ms": 2120,
+    "banks_ms": 238,
+    "total_ms": 6263,
     "product_count": 315,
     "collection_count": 6,
     "bank_count": 3
