@@ -18039,7 +18039,7 @@
           "option_value": "Sparxie",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 9998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 13
@@ -28925,7 +28925,7 @@
           "option_value": "Sparkle",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 8
@@ -28936,7 +28936,7 @@
           "option_value": "Sparxie",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 9
@@ -39050,15 +39050,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-27T05:59:28.985Z",
+  "generated_at": "2026-10-28T01:09:28.189Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3102,
-    "collections_ms": 725,
-    "gifts_ms": 1842,
-    "banks_ms": 216,
-    "total_ms": 5887,
+    "products_ms": 2367,
+    "collections_ms": 715,
+    "gifts_ms": 1477,
+    "banks_ms": 264,
+    "total_ms": 4823,
     "product_count": 314,
     "collection_count": 6,
     "bank_count": 3
