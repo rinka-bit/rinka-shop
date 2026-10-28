@@ -35483,6 +35483,50 @@
           "sort_order": 5
         }
       ]
+    },
+    {
+      "product_id": "PROD1793178402483",
+      "name": "Phantom Lantern Shadows Magnetic Switch Keyboard (ไม่รวมนำเข้า)",
+      "price_mode": "fixed",
+      "price": 3850,
+      "final_price": 3850,
+      "base_price": 3850,
+      "min_price": 3850,
+      "max_price": 3850,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "Keyboard",
+      "fandom": "Genshin Impact",
+      "sub_category": "Keyboard",
+      "round": "Genshin 10-2026",
+      "description": "อุปกรณ์ภายในกล่อง\n1. คีย์บอร์ดแม่เหล็ก ×1\n2. สายเชื่อมต่อข้อมูล ×1\n3. ที่ดึงสวิตช์/คีย์แคป ×1\n4. โฟมซับเสียง Spacebar ×1\n5. Keycap ลายพิเศษเพิ่มเติม ×10\n6. สวิตช์สำรอง ×4\n7. คู่มือการใช้งาน ×1\n8. การ์ดรับรองคุณภาพ ×1\n\nราคายังไม่รวมส่งกลับไทยนะคะ",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1AWwuojJZAE430KA4QBt9LneJPo9TvCUj&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-15",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 3-2027",
+      "image2": "https://drive.google.com/thumbnail?id=15FWoxj-2-O2UWGa6wzmGSGoH9l0c6SqT&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1XvcI4QLLIWCBaaQVHPJdI7T4YF1XUQxU&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1qxXpItdcUU5EgU0CYQauNwi25NPKMkOt&sz=w2000",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -35568,7 +35612,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 8
+      "product_count": 9
     }
   ],
   "gifts": {
@@ -39050,16 +39094,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-28T08:56:51.323Z",
+  "generated_at": "2026-10-28T09:07:26.808Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 21770,
-    "collections_ms": 1643,
-    "gifts_ms": 2583,
-    "banks_ms": 608,
-    "total_ms": 26606,
-    "product_count": 314,
+    "products_ms": 2043,
+    "collections_ms": 710,
+    "gifts_ms": 1300,
+    "banks_ms": 189,
+    "total_ms": 4242,
+    "product_count": 315,
     "collection_count": 6,
     "bank_count": 3
   }
