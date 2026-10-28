@@ -35558,7 +35558,7 @@
     },
     {
       "collection_id": "COL1793078335851",
-      "name": "Genshin 10-2026 (รวมกลับไทยแล้ว)",
+      "name": "Genshin 10-2026 (รวมกลับไทยเกือบทุกรายการ)",
       "fandom": "Genshin Impact",
       "image": "https://drive.google.com/thumbnail?id=1Pp6G8QqM_EUX94MkA524m8-edNayYl6g&sz=w2000",
       "status": "active",
@@ -39050,15 +39050,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-28T05:30:28.054Z",
+  "generated_at": "2026-10-28T08:56:51.323Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2483,
-    "collections_ms": 772,
-    "gifts_ms": 1799,
-    "banks_ms": 277,
-    "total_ms": 5331,
+    "products_ms": 21770,
+    "collections_ms": 1643,
+    "gifts_ms": 2583,
+    "banks_ms": 608,
+    "total_ms": 26606,
     "product_count": 314,
     "collection_count": 6,
     "bank_count": 3
