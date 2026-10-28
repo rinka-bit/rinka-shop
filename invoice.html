@@ -734,6 +734,20 @@
 
     }
 
+
+    /* Invoice bank selection and theme-aware notices */
+    .bank-card{position:relative;display:block;outline-offset:3px}
+    .bank-card:focus-visible{outline:3px solid #4ca9dc}
+    .bank-card-heading{display:flex;align-items:center;gap:10px}
+    .bank-choice{width:20px;height:20px;flex:none;accent-color:#2586b8;pointer-events:none}
+    .bank-card.selected{border-width:2px;padding:13px}
+    .bank-choice-label{font-size:12px;font-weight:700;color:#2586b8;margin-left:auto}
+    .invoice-toast{position:fixed;z-index:99999;left:50%;bottom:24px;transform:translateX(-50%);width:min(92vw,460px);padding:14px 18px;border-radius:12px;background:#fff;color:#243746;border:1px solid #93c5fd;box-shadow:0 8px 30px rgba(0,0,0,.2);font-size:14px;text-align:center}
+    html[data-theme="dark"] .invoice-toast,body.dark .invoice-toast,body.dark-mode .invoice-toast,html.dark .invoice-toast,[data-theme="dark"] .invoice-toast{background:#1e293b;color:#f1f5f9;border-color:#475569}
+    html[data-theme="dark"] .bank-card,body.dark .bank-card,body.dark-mode .bank-card,html.dark .bank-card,[data-theme="dark"] .bank-card{color:inherit}
+    html[data-theme="dark"] .bank-card.selected,body.dark .bank-card.selected,body.dark-mode .bank-card.selected,html.dark .bank-card.selected,[data-theme="dark"] .bank-card.selected{background:#17324a;border-color:#7dcfff}
+    html[data-theme="dark"] .bank-choice-label,body.dark .bank-choice-label,body.dark-mode .bank-choice-label,html.dark .bank-choice-label,[data-theme="dark"] .bank-choice-label{color:#93d9ff}
+
   </style>
 
 <link rel="stylesheet" href="theme.css?v=20260918-2">
@@ -1122,6 +1136,7 @@ function renderBanks(){
   if(
     !CURRENT_BANKS.length
   ){
+    SELECTED_BANK = null;
 
     container.innerHTML = `
 
@@ -1137,6 +1152,10 @@ function renderBanks(){
 
   }
 
+
+  // Preserve a valid selection on refresh, otherwise preselect the first account.
+  const previousIndex = CURRENT_BANKS.indexOf(SELECTED_BANK);
+  const initialIndex = previousIndex >= 0 ? previousIndex : 0;
 
   container.innerHTML =
     CURRENT_BANKS
@@ -1184,10 +1203,18 @@ function renderBanks(){
           return `
 
 <div
-  class="bank-card"
+  class="bank-card${index === initialIndex ? ' selected' : ''}"
   data-bank-index="${index}"
+  role="radio"
+  aria-checked="${index === initialIndex ? 'true' : 'false'}"
+  tabindex="0"
   onclick="selectBank(${index})"
+  onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectBank(${index});}"
 >
+  <div class="bank-card-heading">
+    <input class="bank-choice" type="radio" name="invoiceBankChoice" tabindex="-1" aria-hidden="true" ${index === initialIndex ? 'checked' : ''}>
+    <span class="bank-choice-label">${index === initialIndex ? '✓ เลือกแล้ว' : 'แตะเพื่อเลือก'}</span>
+  </div>
 
   <div class="bank-name">
 
@@ -1290,6 +1317,8 @@ ${
       )
       .join("");
 
+  selectBank(initialIndex);
+
 }
 
 
@@ -1316,9 +1345,13 @@ function selectBank(
     .forEach(
       card => {
 
-        card.classList.remove(
-          "selected"
-        );
+        const active = Number(card.dataset.bankIndex) === index;
+        card.classList.toggle("selected", active);
+        card.setAttribute("aria-checked", String(active));
+        const radio = card.querySelector(".bank-choice");
+        if(radio) radio.checked = active;
+        const label = card.querySelector(".bank-choice-label");
+        if(label) label.textContent = active ? "✓ เลือกแล้ว" : "แตะเพื่อเลือก";
 
       }
     );
@@ -2215,9 +2248,7 @@ function previewSlip(
     )
   ){
 
-    alert(
-      "กรุณาเลือกไฟล์รูปภาพ"
-    );
+    showInvoiceNotice("กรุณาเลือกไฟล์รูปภาพ");
 
     input.value = "";
 
@@ -3537,9 +3568,7 @@ async function copyBankAccount(
 
     }catch(fallbackError){
 
-      alert(
-        "ไม่สามารถคัดลอกเลขบัญชีได้ กรุณาคัดลอกด้วยตนเองค่ะ"
-      );
+      showInvoiceNotice("ไม่สามารถคัดลอกเลขบัญชีได้ กรุณาคัดลอกด้วยตนเองค่ะ");
 
     }
 
@@ -3583,6 +3612,23 @@ function escapeHtml(
 
 }
 
+
+
+let INVOICE_NOTICE_TIMEOUT = null;
+function showInvoiceNotice(text){
+  let notice = document.getElementById("invoiceToast");
+  if(!notice){
+    notice = document.createElement("div");
+    notice.id = "invoiceToast";
+    notice.className = "invoice-toast";
+    notice.setAttribute("role", "alert");
+    document.body.appendChild(notice);
+  }
+  notice.textContent = String(text || "");
+  notice.hidden = false;
+  if(INVOICE_NOTICE_TIMEOUT) clearTimeout(INVOICE_NOTICE_TIMEOUT);
+  INVOICE_NOTICE_TIMEOUT = setTimeout(() => { notice.hidden = true; }, 4500);
+}
 
 loadInvoice();
 
