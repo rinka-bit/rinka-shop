@@ -35638,7 +35638,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "",
+      "search_keywords": "Venti",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35660,7 +35660,19 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793281018288_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Venti",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=13XN4h2gn5_Lw0wppineCafjKbL488Cz8&sz=w2000",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728849",
@@ -39580,15 +39592,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:36:36.455Z",
+  "generated_at": "2026-10-29T13:37:32.225Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 7611,
-    "collections_ms": 1687,
-    "gifts_ms": 2198,
-    "banks_ms": 400,
-    "total_ms": 11896,
+    "products_ms": 3749,
+    "collections_ms": 937,
+    "gifts_ms": 2211,
+    "banks_ms": 266,
+    "total_ms": 7163,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
