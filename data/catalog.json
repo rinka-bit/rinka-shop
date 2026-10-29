@@ -8353,14 +8353,14 @@
       "product_id": "PROD1786621595660",
       "name": "ตุ๊กตาหัวโมจิแบบฐานแม่เหล็ก",
       "price_mode": "fixed",
-      "price": 530,
-      "final_price": 530,
+      "price": 595,
+      "final_price": 595,
       "base_price": 595,
       "min_price": 595,
       "max_price": 595,
       "has_price_range": false,
-      "old_price": 595,
-      "on_sale": true,
+      "old_price": null,
+      "on_sale": false,
       "sale_price": 530,
       "sale_start": "2026-08-10T17:00:00.000Z",
       "sale_end": "2026-10-28T17:00:00.000Z",
@@ -34864,7 +34864,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=17gQ8MXnKjZAjjua9u4_8erhOxqs8BKkp&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -34978,7 +34978,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1l1T5v7KAV7s2AS1eNzsdbN1CY_4kc1m4&sz=w2000",
           "sort_order": 0
@@ -34989,7 +34989,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aptoNIS2eUD9G_QlPxKd_JEGksL-mIYO&sz=w2000",
           "sort_order": 1
@@ -35000,7 +35000,7 @@
           "option_value": "Sandrone",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1cOS0SqBVsW8lTwfNteP365zAvnG99JeQ&sz=w2000",
           "sort_order": 2
@@ -35089,7 +35089,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=16KAEUsZzM7spTsxMTOJASLLbX-GHYGDR&sz=w2000",
           "sort_order": 0
@@ -35200,7 +35200,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1TuI_QD4ZmUP2AAJGw_uyo-QzJCQbVvss&sz=w2000",
           "sort_order": 0
@@ -35466,7 +35466,7 @@
           "option_value": "Nicole",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -35667,7 +35667,7 @@
           "option_value": "Venti",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=13XN4h2gn5_Lw0wppineCafjKbL488Cz8&sz=w2000",
           "sort_order": 0
@@ -35943,7 +35943,7 @@
           "option_value": "Tartaglia",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1WkNH-2pwHBzNkBSh4ZAlJzK38jT2oJXM&sz=w2000",
           "sort_order": 1
@@ -36219,7 +36219,7 @@
           "option_value": "Ayato",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1hYM6XnGo7LBTRp8tFdT2Af5qIbsmHpxK&sz=w2000",
           "sort_order": 3
@@ -36517,7 +36517,7 @@
           "option_value": "Tighnari",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1lgKigOENoeh9righkxN5kFcvnZ09-cNw&sz=w2000",
           "sort_order": 12
@@ -37060,7 +37060,7 @@
           "option_value": "เซ็ตโปสการ์ด B",
           "additional_price": 0,
           "price": 180,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1S67sXu5VxXFKpIlfiGmDVo0yK7H5KzNt&sz=w2000",
           "sort_order": 6
@@ -37149,7 +37149,7 @@
           "option_value": "เข็มกลัด Vodyanitsa A",
           "additional_price": 0,
           "price": 90,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1Y1WruDAsnw87N7XYB6sf9tE3I8jhIaQS&sz=w2000",
           "sort_order": 2
@@ -37160,7 +37160,7 @@
           "option_value": "เข็มกลัด Vodyanitsa B",
           "additional_price": 0,
           "price": 90,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1tbvR7qZBbPvFshVZXQEht6-ltelJ5T8V&sz=w2000",
           "sort_order": 3
@@ -40975,15 +40975,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T16:04:44.403Z",
+  "generated_at": "2026-10-29T23:12:31.671Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 11104,
-    "collections_ms": 1677,
-    "gifts_ms": 2150,
-    "banks_ms": 280,
-    "total_ms": 15212,
+    "products_ms": 3646,
+    "collections_ms": 1323,
+    "gifts_ms": 2551,
+    "banks_ms": 566,
+    "total_ms": 8086,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
