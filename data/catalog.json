@@ -35266,15 +35266,15 @@
       "product_id": "PROD1793079987439",
       "name": "Aurora Party Series : Jibbitz",
       "price_mode": "fixed",
-      "price": 350,
-      "final_price": 350,
-      "base_price": 270,
-      "min_price": 270,
-      "max_price": 270,
+      "price": 270,
+      "final_price": 270,
+      "base_price": 350,
+      "min_price": 350,
+      "max_price": 350,
       "has_price_range": false,
-      "old_price": 270,
+      "old_price": 350,
       "on_sale": true,
-      "sale_price": 350,
+      "sale_price": 270,
       "sale_start": "2026-10-27T17:00:00.000Z",
       "sale_end": "2026-10-30T17:00:00.000Z",
       "main_category": "อื่น ๆ",
@@ -35377,15 +35377,15 @@
       "product_id": "PROD1793080116747",
       "name": "Aurora Party Series All in",
       "price_mode": "fixed",
-      "price": 1270,
-      "final_price": 1270,
-      "base_price": 1170,
-      "min_price": 1170,
-      "max_price": 1170,
+      "price": 1170,
+      "final_price": 1170,
+      "base_price": 1270,
+      "min_price": 1270,
+      "max_price": 1270,
       "has_price_range": false,
-      "old_price": 1170,
+      "old_price": 1270,
       "on_sale": true,
-      "sale_price": 1270,
+      "sale_price": 1170,
       "sale_start": "2026-10-27T17:00:00.000Z",
       "sale_end": "2026-10-30T17:00:00.000Z",
       "main_category": "อื่น ๆ",
@@ -35934,7 +35934,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1OKFsqVInA6Yy_dutirrk811yZv2SaGWf&sz=w2000",
           "sort_order": 0
         },
         {
@@ -35945,8 +35945,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1WkNH-2pwHBzNkBSh4ZAlJzK38jT2oJXM&sz=w2000",
+          "sort_order": 1
         },
         {
           "option_id": "OPT1793281018288_23",
@@ -35956,8 +35956,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1gbgUHpuQu0wtUZmAE6Yq_M_2gS_UboVN&sz=w2000",
+          "sort_order": 2
         },
         {
           "option_id": "OPT1793281018288_24",
@@ -35967,8 +35967,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1hUuK2kg6Lxd4zvN1FdrBwunL82owM2VV&sz=w2000",
+          "sort_order": 3
         },
         {
           "option_id": "OPT1793281018288_25",
@@ -35978,8 +35978,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=19ZMjrby5loClCVFpLwz91Y-QBc0PcOAO&sz=w2000",
+          "sort_order": 4
         },
         {
           "option_id": "OPT1793281018288_26",
@@ -35989,8 +35989,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1Rl9zfx4ITAld1T5sNWgXsRclpnI1bO-k&sz=w2000",
+          "sort_order": 5
         },
         {
           "option_id": "OPT1793281018288_27",
@@ -36000,8 +36000,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1aVwVnJ4hZpL824_Gu36mGY2vpo5BUKlr&sz=w2000",
+          "sort_order": 6
         },
         {
           "option_id": "OPT1793281018288_28",
@@ -36011,8 +36011,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=16ggZgbder6Ws8Ce4k_7LNA-wWXGRGVLQ&sz=w2000",
+          "sort_order": 7
         },
         {
           "option_id": "OPT1793281018288_29",
@@ -36022,8 +36022,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1HcBgx6T0MykfZfGmAPG8giDCkvEnrp88&sz=w2000",
+          "sort_order": 8
         },
         {
           "option_id": "OPT1793281018288_30",
@@ -36033,8 +36033,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1ym8lBpFpJC2uAg-zQbhqcaQxtXcmBQNt&sz=w2000",
+          "sort_order": 9
         },
         {
           "option_id": "OPT1793281018288_31",
@@ -36044,8 +36044,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1VkiD_i9ix6ZhrPwgRHVLQCSlk2r93E0-&sz=w2000",
+          "sort_order": 10
         },
         {
           "option_id": "OPT1793281018288_32",
@@ -36055,8 +36055,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1k4gdWd0lskRI_cJegfuZyMil8Do0_odr&sz=w2000",
+          "sort_order": 11
         },
         {
           "option_id": "OPT1793281018288_33",
@@ -36066,8 +36066,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1VZ0BLJuAhjMuTJBT2Z8O2vUcu4JZYz7N&sz=w2000",
+          "sort_order": 12
         },
         {
           "option_id": "OPT1793281018288_34",
@@ -36077,8 +36077,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1xhuJ8-x_xX2ydWAsy7Vr-dDk8FdgjhXS&sz=w2000",
+          "sort_order": 13
         },
         {
           "option_id": "OPT1793281018288_35",
@@ -36088,8 +36088,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1hd4hYxmbJs4mhJuQqY3L6lHAzzK8phGd&sz=w2000",
+          "sort_order": 14
         },
         {
           "option_id": "OPT1793281018288_36",
@@ -36099,8 +36099,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1VneQp3DA8kyES9KloIHVOKsYHyfHxbGb&sz=w2000",
+          "sort_order": 15
         },
         {
           "option_id": "OPT1793281018288_37",
@@ -36110,8 +36110,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1OJQFXaCbzAYwxbkiqO2-ere6MfSUQ1tQ&sz=w2000",
+          "sort_order": 16
         },
         {
           "option_id": "OPT1793281018288_38",
@@ -36121,8 +36121,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1Jt15gThGdGbEyOP0i9XWtGxyytlhdfXP&sz=w2000",
+          "sort_order": 17
         },
         {
           "option_id": "OPT1793281018288_39",
@@ -36132,8 +36132,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1ttsiuy6SVz9D3GT-GDYDdazoS1FoalQY&sz=w2000",
+          "sort_order": 18
         }
       ]
     },
@@ -40466,15 +40466,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T14:09:31.594Z",
+  "generated_at": "2026-10-29T14:16:35.818Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3842,
-    "collections_ms": 1629,
-    "gifts_ms": 1878,
-    "banks_ms": 278,
-    "total_ms": 7628,
+    "products_ms": 5738,
+    "collections_ms": 1717,
+    "gifts_ms": 3310,
+    "banks_ms": 343,
+    "total_ms": 11108,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
