@@ -40081,6 +40081,66 @@
         "sort_order": 0,
         "created_at": "2026-10-29T14:58:59.457Z",
         "updated_at": "2026-10-29T14:58:59.457Z"
+      },
+      {
+        "gift_item_id": "GIFT17932859394574382",
+        "rule_id": "RULE17932858166381909",
+        "gift_name": "เข็มกลัด Aurora Party - Flins",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/flins.png?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-29T14:58:59.457Z",
+        "updated_at": "2026-10-29T14:58:59.457Z"
+      },
+      {
+        "gift_item_id": "GIFT17932859394574383",
+        "rule_id": "RULE17932858166381909",
+        "gift_name": "เข็มกลัด Aurora Party - Wanderer",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/mou.png?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-29T14:58:59.457Z",
+        "updated_at": "2026-10-29T14:58:59.457Z"
+      },
+      {
+        "gift_item_id": "GIFT17932859394574384",
+        "rule_id": "RULE17932858166381909",
+        "gift_name": "เข็มกลัด Aurora Party - Nicole",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/ni.png",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-29T14:58:59.457Z",
+        "updated_at": "2026-10-29T14:58:59.457Z"
+      },
+      {
+        "gift_item_id": "GIFT17932859394574385",
+        "rule_id": "RULE17932858166381909",
+        "gift_name": "เข็มกลัด Aurora Party - Arlecchino",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-29T14:58:59.457Z",
+        "updated_at": "2026-10-29T14:58:59.457Z"
+      },
+      {
+        "gift_item_id": "GIFT17932859394574386",
+        "rule_id": "RULE17932858166381909",
+        "gift_name": "เข็มกลัด Aurora Party - Arlecchino",
+        "gift_image": "",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-29T14:58:59.457Z",
+        "updated_at": "2026-10-29T14:58:59.457Z"
       }
     ],
     "characters": [
@@ -40843,15 +40903,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T14:59:29.262Z",
+  "generated_at": "2026-10-29T15:01:09.263Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2507,
-    "collections_ms": 822,
-    "gifts_ms": 2373,
-    "banks_ms": 206,
-    "total_ms": 5908,
+    "products_ms": 29694,
+    "collections_ms": 3597,
+    "gifts_ms": 5575,
+    "banks_ms": 667,
+    "total_ms": 39533,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
