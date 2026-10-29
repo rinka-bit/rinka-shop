@@ -35597,7 +35597,7 @@
     },
     {
       "product_id": "PROD1793279728848",
-      "name": "Day of Destiny Badge - Monstadt",
+      "name": "Day of Destiny Badge - Monstad",
       "price_mode": "fixed",
       "price": 90,
       "final_price": 90,
@@ -39557,15 +39557,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:28:42.269Z",
+  "generated_at": "2026-10-29T13:29:35.209Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 8163,
-    "collections_ms": 4899,
-    "gifts_ms": 3392,
-    "banks_ms": 353,
-    "total_ms": 16807,
+    "products_ms": 5318,
+    "collections_ms": 1634,
+    "gifts_ms": 3289,
+    "banks_ms": 308,
+    "total_ms": 10549,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
