@@ -40157,20 +40157,8 @@
       {
         "gift_item_id": "GIFT17932861803852603",
         "rule_id": "RULE17932858438891786",
-        "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Arlecchino",
-        "gift_image": "",
-        "has_character": "",
-        "max_same_character": 0,
-        "active": "yes",
-        "sort_order": 0,
-        "created_at": "2026-10-29T15:03:00.385Z",
-        "updated_at": "2026-10-29T15:03:00.385Z"
-      },
-      {
-        "gift_item_id": "GIFT17932861803852604",
-        "rule_id": "RULE17932858438891786",
         "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Flins",
-        "gift_image": "",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/double%20flins.png?raw=true",
         "has_character": "",
         "max_same_character": 1,
         "active": "yes",
@@ -40179,7 +40167,7 @@
         "updated_at": "2026-10-29T15:03:00.385Z"
       },
       {
-        "gift_item_id": "GIFT17932861803852605",
+        "gift_item_id": "GIFT17932861803852604",
         "rule_id": "RULE17932858438891786",
         "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Wanderer",
         "gift_image": "",
@@ -40191,7 +40179,7 @@
         "updated_at": "2026-10-29T15:03:00.385Z"
       },
       {
-        "gift_item_id": "GIFT17932861803852606",
+        "gift_item_id": "GIFT17932861803852605",
         "rule_id": "RULE17932858438891786",
         "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Nicole",
         "gift_image": "",
@@ -40203,7 +40191,7 @@
         "updated_at": "2026-10-29T15:03:00.385Z"
       },
       {
-        "gift_item_id": "GIFT17932861803852607",
+        "gift_item_id": "GIFT17932861803852606",
         "rule_id": "RULE17932858438891786",
         "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Sandrone",
         "gift_image": "",
@@ -40215,10 +40203,10 @@
         "updated_at": "2026-10-29T15:03:00.385Z"
       },
       {
-        "gift_item_id": "GIFT17932861803852608",
+        "gift_item_id": "GIFT17932861803852607",
         "rule_id": "RULE17932858438891786",
-        "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Arlecchino",
-        "gift_image": "",
+        "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Citlali",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/double%20cit.png?raw=true",
         "has_character": "",
         "max_same_character": 5,
         "active": "yes",
@@ -40987,15 +40975,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T15:04:53.051Z",
+  "generated_at": "2026-10-29T15:05:47.213Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 20816,
-    "collections_ms": 1357,
-    "gifts_ms": 2938,
-    "banks_ms": 687,
-    "total_ms": 25798,
+    "products_ms": 10615,
+    "collections_ms": 2020,
+    "gifts_ms": 4706,
+    "banks_ms": 1119,
+    "total_ms": 18460,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
