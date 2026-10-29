@@ -40133,8 +40133,8 @@
       {
         "gift_item_id": "GIFT17932859394574386",
         "rule_id": "RULE17932858166381909",
-        "gift_name": "เข็มกลัด Aurora Party - Arlecchino",
-        "gift_image": "",
+        "gift_name": "เข็มกลัด Aurora Party - Citlali",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/scit.png?raw=true",
         "has_character": "",
         "max_same_character": 0,
         "active": "yes",
@@ -40903,15 +40903,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T15:01:45.234Z",
+  "generated_at": "2026-10-29T15:02:53.495Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 7297,
-    "collections_ms": 1287,
-    "gifts_ms": 2798,
-    "banks_ms": 343,
-    "total_ms": 11725,
+    "products_ms": 18190,
+    "collections_ms": 2051,
+    "gifts_ms": 4556,
+    "banks_ms": 505,
+    "total_ms": 25303,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
