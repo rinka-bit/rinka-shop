@@ -40069,6 +40069,18 @@
         "sort_order": 0,
         "created_at": "2026-10-24T01:00:07.000Z",
         "updated_at": "2026-10-24T01:00:07.000Z"
+      },
+      {
+        "gift_item_id": "GIFT17932859394574381",
+        "rule_id": "RULE17932858166381909",
+        "gift_name": "เข็มกลัด Aurora Party - Arlecchino",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/ar.png?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-10-29T14:58:59.457Z",
+        "updated_at": "2026-10-29T14:58:59.457Z"
       }
     ],
     "characters": [
@@ -40831,15 +40843,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T14:58:36.186Z",
+  "generated_at": "2026-10-29T14:59:29.262Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5552,
-    "collections_ms": 1326,
-    "gifts_ms": 4220,
-    "banks_ms": 911,
-    "total_ms": 12009,
+    "products_ms": 2507,
+    "collections_ms": 822,
+    "gifts_ms": 2373,
+    "banks_ms": 206,
+    "total_ms": 5908,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
