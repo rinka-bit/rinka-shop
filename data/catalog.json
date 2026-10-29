@@ -35629,7 +35629,7 @@
       "fandom": "Genshin Impact",
       "image": "https://drive.google.com/thumbnail?id=1Pp6G8QqM_EUX94MkA524m8-edNayYl6g&sz=w2000",
       "status": "active",
-      "preorder_deadline": "2026-11-09T17:00:00.000Z",
+      "preorder_deadline": "2026-11-04T17:00:00.000Z",
       "featured": "",
       "created_at": "2026-10-27T05:19:03.770Z",
       "collection_type": "preorder",
@@ -39117,15 +39117,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T07:09:31.224Z",
+  "generated_at": "2026-10-29T12:45:38.750Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3297,
-    "collections_ms": 1325,
-    "gifts_ms": 2181,
-    "banks_ms": 299,
-    "total_ms": 7102,
+    "products_ms": 8449,
+    "collections_ms": 2310,
+    "gifts_ms": 2104,
+    "banks_ms": 441,
+    "total_ms": 13304,
     "product_count": 315,
     "collection_count": 6,
     "bank_count": 3
