@@ -35571,7 +35571,7 @@
       "sub_category": "ปฏิทิน",
       "round": "Genshin 10-2026",
       "description": "***ราคายังไม่รวมส่งกลับไทย\n\nขนาดกล่อง 250*154*51มม.\nขนาดเมื่อกางออก 140*456มม.",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลังไม้ ตีลังไม้ (เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
       "image": "https://drive.google.com/thumbnail?id=1mJZuG1kTuzeLTx1Vg4CFi1-cb4A7yDNK&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35593,7 +35593,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793280939261_1",
+          "option_name": "แบบ",
+          "option_value": "ไม่ตีลังไม้",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793280939261_2",
+          "option_name": "แบบ",
+          "option_value": "ตีลังไม้ (เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728848",
@@ -39557,15 +39580,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:35:34.853Z",
+  "generated_at": "2026-10-29T13:36:36.455Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6658,
-    "collections_ms": 1108,
-    "gifts_ms": 2562,
-    "banks_ms": 294,
-    "total_ms": 10622,
+    "products_ms": 7611,
+    "collections_ms": 1687,
+    "gifts_ms": 2198,
+    "banks_ms": 400,
+    "total_ms": 11896,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
