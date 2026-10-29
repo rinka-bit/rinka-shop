@@ -36356,7 +36356,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Wanderer Nahida Alhaitham Kaveh Dehya Candace Collei Cyno Faruzan Nilou Layla Dori",
+      "search_keywords": "Wanderer Nahida Alhaitham Kaveh Dehya Candace Collei Cyno Faruzan Nilou Layla Dori Tighnari",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36387,7 +36387,7 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
+          "image": "https://drive.google.com/thumbnail?id=1qBET_HmOU2rK9vUFeoxpMebxVi5xBfDF&sz=w2000",
           "sort_order": 0
         },
         {
@@ -36398,8 +36398,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=13XBOOkQrV2dDJF1MvLirxgimTA-8I87A&sz=w2000",
+          "sort_order": 1
         },
         {
           "option_id": "OPT1793281018288_56",
@@ -36409,8 +36409,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=164g9TP5NIFSnBVvb6t0FGpsHTDqQOwWl&sz=w2000",
+          "sort_order": 2
         },
         {
           "option_id": "OPT1793281018288_57",
@@ -36420,8 +36420,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1bI5gGySVTC5Bjoh13Uf-onOZiv1G2fmP&sz=w2000",
+          "sort_order": 3
         },
         {
           "option_id": "OPT1793281018288_58",
@@ -36431,8 +36431,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1PfXRual2DpUMMgQDYYt-0bXLBv5TLtEO&sz=w2000",
+          "sort_order": 4
         },
         {
           "option_id": "OPT1793281018288_59",
@@ -36442,8 +36442,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1nwjTLxVKkAiCB0J2hW6vd7iIQRKPd_lA&sz=w2000",
+          "sort_order": 5
         },
         {
           "option_id": "OPT1793281018288_60",
@@ -36453,8 +36453,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1aUkmL3ribFNW93oihy0GlxPixWA0XZlj&sz=w2000",
+          "sort_order": 6
         },
         {
           "option_id": "OPT1793281018288_61",
@@ -36464,8 +36464,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1_Tnm65HM0hA9LZ0LPHWHF6OlLpUJTuhp&sz=w2000",
+          "sort_order": 7
         },
         {
           "option_id": "OPT1793281018288_62",
@@ -36475,8 +36475,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=128aebp53Mi5CcOL-vGpfOAqlKihTxthB&sz=w2000",
+          "sort_order": 8
         },
         {
           "option_id": "OPT1793281018288_63",
@@ -36486,8 +36486,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1y0QkyLaUS_-cNMoeBfv0wNkQAXLyrWqA&sz=w2000",
+          "sort_order": 9
         },
         {
           "option_id": "OPT1793281018288_64",
@@ -36497,8 +36497,8 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=1LSwpIW5ph-kWNCO1ETj6bucfD87Z1-Ma&sz=w2000",
+          "sort_order": 10
         },
         {
           "option_id": "OPT1793281018288_65",
@@ -36508,8 +36508,19 @@
           "price": null,
           "stock": 999,
           "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
+          "image": "https://drive.google.com/thumbnail?id=14aVIMOooOV1p84GCdDqX22bYbtrLawpe&sz=w2000",
+          "sort_order": 11
+        },
+        {
+          "option_id": "OPT1793285255058_13",
+          "option_name": "ตัวละคร",
+          "option_value": "Tighnari",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1lgKigOENoeh9righkxN5kFcvnZ09-cNw&sz=w2000",
+          "sort_order": 12
         }
       ]
     },
@@ -40777,15 +40788,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T14:46:30.580Z",
+  "generated_at": "2026-10-29T14:49:29.332Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3542,
-    "collections_ms": 1311,
-    "gifts_ms": 1895,
-    "banks_ms": 284,
-    "total_ms": 7032,
+    "products_ms": 3267,
+    "collections_ms": 891,
+    "gifts_ms": 1645,
+    "banks_ms": 231,
+    "total_ms": 6034,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
