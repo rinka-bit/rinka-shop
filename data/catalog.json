@@ -36356,7 +36356,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "",
+      "search_keywords": "Wanderer Nahida Alhaitham Kaveh Dehya Candace",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36378,7 +36378,74 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793281018288_54",
+          "option_name": "ตัวละคร",
+          "option_value": "Wanderer",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_55",
+          "option_name": "ตัวละคร",
+          "option_value": "Nahida",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_56",
+          "option_name": "ตัวละคร",
+          "option_value": "Alhaitham",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_57",
+          "option_name": "ตัวละคร",
+          "option_value": "Kaveh",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_58",
+          "option_name": "ตัวละคร",
+          "option_value": "Dehya",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_59",
+          "option_name": "ตัวละคร",
+          "option_value": "Candace",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728852",
@@ -40166,15 +40233,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:52:36.105Z",
+  "generated_at": "2026-10-29T13:54:28.927Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 7981,
-    "collections_ms": 1479,
-    "gifts_ms": 2096,
-    "banks_ms": 179,
-    "total_ms": 11735,
+    "products_ms": 3445,
+    "collections_ms": 662,
+    "gifts_ms": 1666,
+    "banks_ms": 253,
+    "total_ms": 6026,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
