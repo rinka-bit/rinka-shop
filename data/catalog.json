@@ -35638,7 +35638,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Venti Klee Paimon Diona Rosalyn Bennett Jean Noelle Diluc Mika Amber Lisa Barbara Fischl Mona Razor Albedo Eula Sucrose Kaeya",
+      "search_keywords": "Venti Klee Paimon Diona Rosaria Bennett Jean Noelle Diluc Mika Amber Lisa Barbara Fischl Mona Razor Albedo Eula Sucrose Kaeya",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35708,7 +35708,7 @@
         {
           "option_id": "OPT1793281018288_5",
           "option_name": "ตัวละคร",
-          "option_value": "Rosalyn",
+          "option_value": "Rosaria",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -35903,7 +35903,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Xiao Tartaglia Zhongli Keqing Ganyu Shenhe Hutao Chongyun Beidou Qiqi Yaoyao Yelan",
+      "search_keywords": "Xiao Tartaglia Zhongli Keqing Ganyu Shenhe Hu Tao Chongyun Beidou Qiqi Yaoyao Yelan",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35995,7 +35995,7 @@
         {
           "option_id": "OPT1793281018288_27",
           "option_name": "ตัวละคร",
-          "option_value": "Hutao",
+          "option_value": "Hu Tao",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -39934,15 +39934,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:47:30.108Z",
+  "generated_at": "2026-10-29T13:48:32.761Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2897,
-    "collections_ms": 891,
-    "gifts_ms": 1780,
-    "banks_ms": 288,
-    "total_ms": 5856,
+    "products_ms": 5225,
+    "collections_ms": 970,
+    "gifts_ms": 2052,
+    "banks_ms": 201,
+    "total_ms": 8448,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
