@@ -35638,7 +35638,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Venti",
+      "search_keywords": "Venti Klee Paimon Diona Rosalyn Bennette",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35670,6 +35670,61 @@
           "stock": 999,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=13XN4h2gn5_Lw0wppineCafjKbL488Cz8&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Klee",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Paimon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Diona",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Rosalyn",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Bennette",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
           "sort_order": 0
         }
       ]
@@ -39592,15 +39647,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:39:49.650Z",
+  "generated_at": "2026-10-29T13:40:33.615Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 17450,
-    "collections_ms": 1698,
-    "gifts_ms": 3037,
-    "banks_ms": 398,
-    "total_ms": 22583,
+    "products_ms": 3140,
+    "collections_ms": 917,
+    "gifts_ms": 2841,
+    "banks_ms": 273,
+    "total_ms": 7171,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
