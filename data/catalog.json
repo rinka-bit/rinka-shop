@@ -35773,7 +35773,7 @@
     },
     {
       "product_id": "PROD1793279728852",
-      "name": "Day of Destiny -",
+      "name": "Day of Destiny - Fontaine, Natlan, Flins, Skirk",
       "price_mode": "fixed",
       "price": 0,
       "final_price": 0,
@@ -35817,7 +35817,7 @@
     },
     {
       "product_id": "PROD1793279728853",
-      "name": "Day of Destiny -",
+      "name": "Day of Destiny - Card set",
       "price_mode": "fixed",
       "price": 0,
       "final_price": 0,
@@ -35861,7 +35861,7 @@
     },
     {
       "product_id": "PROD1793279728854",
-      "name": "",
+      "name": "Journey Across the Sea of Stars series",
       "price_mode": "fixed",
       "price": 0,
       "final_price": 0,
@@ -35905,7 +35905,7 @@
     },
     {
       "product_id": "PROD1793279728855",
-      "name": "",
+      "name": "What is Reflected in the Mirrorwater series",
       "price_mode": "fixed",
       "price": 0,
       "final_price": 0,
@@ -39557,15 +39557,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:18:36.936Z",
+  "generated_at": "2026-10-29T13:19:29.186Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6312,
-    "collections_ms": 1997,
-    "gifts_ms": 2280,
-    "banks_ms": 289,
-    "total_ms": 10878,
+    "products_ms": 3589,
+    "collections_ms": 902,
+    "gifts_ms": 1657,
+    "banks_ms": 248,
+    "total_ms": 6396,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
