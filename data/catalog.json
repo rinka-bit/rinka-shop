@@ -35620,7 +35620,7 @@
     },
     {
       "product_id": "PROD1793279728848",
-      "name": "Day of Destiny Badge - Monstadt",
+      "name": "Day of Destiny Badge - Mondstadt",
       "price_mode": "fixed",
       "price": 90,
       "final_price": 90,
@@ -35638,7 +35638,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Venti Klee Paimon Diona Rosalyn Bennette Jean Noelle Diluc Mika Amber Lisa Barbara Fischl Mona Razor Albedo Eula Sucrose Kaeya",
+      "search_keywords": "Venti Klee Paimon Diona Rosalyn Bennett Jean Noelle Diluc Mika Amber Lisa Barbara Fischl Mona Razor Albedo Eula Sucrose Kaeya",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35719,7 +35719,7 @@
         {
           "option_id": "OPT1793281018288_6",
           "option_name": "ตัวละคร",
-          "option_value": "Bennette",
+          "option_value": "Bennett",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -39934,15 +39934,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:45:30.108Z",
+  "generated_at": "2026-10-29T13:47:30.108Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3983,
-    "collections_ms": 996,
-    "gifts_ms": 1795,
-    "banks_ms": 289,
-    "total_ms": 7063,
+    "products_ms": 2897,
+    "collections_ms": 891,
+    "gifts_ms": 1780,
+    "banks_ms": 288,
+    "total_ms": 5856,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
