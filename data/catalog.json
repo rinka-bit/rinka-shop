@@ -34816,7 +34816,7 @@
       "fandom": "Genshin Impact",
       "sub_category": "ฟิกเกอร์",
       "round": "Genshin 10-2026",
-      "description": "แบ่งชำระทั้งหมด 3 รอบ\nรอบแรก : ยอดมัดจำ\nรอบสอง : ส่วนที่เหลือประมาณ 1,450-1,550 เดือน8/2027\nรอบสาม : ค่านำเข้าและค่าส่งในไทย",
+      "description": "แบ่งชำระทั้งหมด 3 รอบ\nรอบแรก : ยอดมัดจำ\nรอบสอง : ส่วนที่เหลือประมาณ 1,450-1,550 เดือน8/2027\nรอบสาม : ค่านำเข้า",
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=155aLYvmeDUVvwhTr2cvl2jt9btAbenWb&sz=w2000",
       "status": "active",
@@ -34860,7 +34860,7 @@
       "fandom": "Genshin Impact",
       "sub_category": "ฟิกเกอร์",
       "round": "Genshin 10-2026",
-      "description": "แบ่งชำระทั้งหมด 3 รอบ\nรอบแรก : ยอดมัดจำ\nรอบสอง : ส่วนที่เหลือประมาณ 1,450-1,550 เดือน7/2027\nรอบสาม : ค่านำเข้าและค่าส่งในไทย",
+      "description": "แบ่งชำระทั้งหมด 3 รอบ\nรอบแรก : ยอดมัดจำ\nรอบสอง : ส่วนที่เหลือประมาณ 1,450-1,550 เดือน7/2027\nรอบสาม : ค่านำเข้า",
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=17gQ8MXnKjZAjjua9u4_8erhOxqs8BKkp&sz=w2000",
       "status": "active",
@@ -35422,7 +35422,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -35600,7 +35600,7 @@
           "option_value": "ไม่ตีลังไม้",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -36650,7 +36650,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1UeRJEYDiKx29SwsJ4_dgiFg_s4D3isQI&sz=w2000",
           "sort_order": 7
@@ -36916,7 +36916,7 @@
           "option_value": "Heaven and Earth - Lumine (สแตนดี้+เข็มกลัด)",
           "additional_price": 0,
           "price": 370,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1UO6hdWjyzUfE4YE7jRFM0OwHEikHcGVy&sz=w2000",
           "sort_order": 9
@@ -36938,7 +36938,7 @@
           "option_value": "Night Hunt in Snow - Lumine (สแตนดี้+เข็มกลัด)",
           "additional_price": 0,
           "price": 370,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1TRfWC9iJjDS_GsmP3P9qkOfjZtUxy3Rn&sz=w2000",
           "sort_order": 11
@@ -40975,15 +40975,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T15:07:32.675Z",
+  "generated_at": "2026-10-29T16:04:44.403Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4162,
-    "collections_ms": 907,
-    "gifts_ms": 1864,
-    "banks_ms": 357,
-    "total_ms": 7290,
+    "products_ms": 11104,
+    "collections_ms": 1677,
+    "gifts_ms": 2150,
+    "banks_ms": 280,
+    "total_ms": 15212,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
