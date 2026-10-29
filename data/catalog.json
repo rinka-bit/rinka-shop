@@ -28192,7 +28192,7 @@
       "on_sale": true,
       "sale_price": 1550,
       "sale_start": "2026-10-16T17:00:00.000Z",
-      "sale_end": "2026-10-31T17:00:00.000Z",
+      "sale_end": "2026-11-21T17:00:00.000Z",
       "main_category": "ตุ๊กตา",
       "fandom": "Honkai Star Rail",
       "sub_category": "ตุ๊กตา",
@@ -39117,15 +39117,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-28T09:08:30.525Z",
+  "generated_at": "2026-10-29T06:54:42.928Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3057,
-    "collections_ms": 848,
-    "gifts_ms": 2120,
-    "banks_ms": 238,
-    "total_ms": 6263,
+    "products_ms": 9019,
+    "collections_ms": 966,
+    "gifts_ms": 1761,
+    "banks_ms": 225,
+    "total_ms": 11971,
     "product_count": 315,
     "collection_count": 6,
     "bank_count": 3
