@@ -36356,7 +36356,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Wanderer Nahida Alhaitham Kaveh Dehya Candace Collei Cyno Faruzan Nilou Layla Dori Tighnari",
+      "search_keywords": "Wanderer Nahida Alhaitham Kaveh Dehya Candace Collei Cyno Faruzan Nilou Layla Dori",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36510,17 +36510,6 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
-        },
-        {
-          "option_id": "OPT1793281018288_66",
-          "option_name": "ตัวละคร",
-          "option_value": "Tighnari",
-          "additional_price": 0,
-          "price": null,
-          "stock": 999,
-          "selection_type": "multiple",
-          "image": "",
-          "sort_order": 0
         }
       ]
     },
@@ -36544,7 +36533,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "***ราคายังไม่รวมส่งกลับไทย\n\nขนาดกล่อง 250*154*51มม.\nขนาดเมื่อกางออก 140*456มม.",
-      "search_keywords": "",
+      "search_keywords": "Tighnari Neuvilette Wriothesley Freminet",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36566,7 +36555,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793281018288_66",
+          "option_name": "ตัวละคร",
+          "option_value": "Tighnari",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_67",
+          "option_name": "ตัวละคร",
+          "option_value": "Neuvilette",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_68",
+          "option_name": "ตัวละคร",
+          "option_value": "Wriothesley",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_69",
+          "option_name": "ตัวละคร",
+          "option_value": "Freminet",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728853",
@@ -40310,15 +40344,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:55:40.948Z",
+  "generated_at": "2026-10-29T13:56:55.121Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 8115,
-    "collections_ms": 1966,
-    "gifts_ms": 3574,
-    "banks_ms": 913,
-    "total_ms": 14568,
+    "products_ms": 21800,
+    "collections_ms": 2601,
+    "gifts_ms": 3901,
+    "banks_ms": 1535,
+    "total_ms": 29837,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
