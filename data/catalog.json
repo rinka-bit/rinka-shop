@@ -36949,12 +36949,12 @@
       "product_id": "PROD1793279728855",
       "name": "What is Reflected in the Mirrorwater series",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 90,
+      "final_price": 90,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 90,
+      "max_price": 790,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -36965,7 +36965,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัด ขนาด 65มม.\nโปสการ์ด ขนาดประมาณ 150*100มม.",
-      "search_keywords": "",
+      "search_keywords": "เข็มกลัด A เข็มกลัด B เข็มกลัด C เข็มกลัด D เข็มกลัด E เซ็ตโปสการ์ด A เซ็ตโปสการ์ด B All in 7ชิ้น",
       "image": "https://drive.google.com/thumbnail?id=1fWtQZK9_6K7k2jwxMk6Oa7dHJbLBBiIT&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36987,7 +36987,96 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793284341492_1",
+          "option_name": "แบบ",
+          "option_value": "เข็มกลัด A",
+          "additional_price": 0,
+          "price": 90,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1eWN_DSuWBM6AISPIQRoMoKSCxLQsWvqn&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793284341492_2",
+          "option_name": "แบบ",
+          "option_value": "เข็มกลัด B",
+          "additional_price": 0,
+          "price": 90,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1_Xw4aZLTpV5pn2NThgcgZYA3DRybSD4A&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793284341492_3",
+          "option_name": "แบบ",
+          "option_value": "เข็มกลัด C",
+          "additional_price": 0,
+          "price": 90,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=14S1Egrjpt41_yVC7-ZYv1DYMff9MgwoG&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793284341492_4",
+          "option_name": "แบบ",
+          "option_value": "เข็มกลัด D",
+          "additional_price": 0,
+          "price": 90,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1hjzHr2FX375xTDcmJPfRQpHS2Hr6MXoS&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793284341492_5",
+          "option_name": "แบบ",
+          "option_value": "เข็มกลัด E",
+          "additional_price": 0,
+          "price": 90,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=13Sjp2is668rXN4oRS2g9Ui1RhTGlKdS6&sz=w2000",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1793284341492_6",
+          "option_name": "แบบ",
+          "option_value": "เซ็ตโปสการ์ด A",
+          "additional_price": 0,
+          "price": 180,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1fGu6Hxikv7B0H9QRJLpBpMAObukE5HHN&sz=w2000",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1793284341492_7",
+          "option_name": "แบบ",
+          "option_value": "เซ็ตโปสการ์ด B",
+          "additional_price": 0,
+          "price": 180,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1S67sXu5VxXFKpIlfiGmDVo0yK7H5KzNt&sz=w2000",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1793284341492_8",
+          "option_name": "แบบ",
+          "option_value": "All in 7ชิ้น",
+          "additional_price": 0,
+          "price": 790,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728856",
@@ -40599,15 +40688,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T14:29:44.846Z",
+  "generated_at": "2026-10-29T14:33:30.918Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 12699,
-    "collections_ms": 1983,
-    "gifts_ms": 3028,
-    "banks_ms": 352,
-    "total_ms": 18062,
+    "products_ms": 3120,
+    "collections_ms": 1008,
+    "gifts_ms": 2287,
+    "banks_ms": 342,
+    "total_ms": 6757,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
