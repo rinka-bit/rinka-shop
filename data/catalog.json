@@ -36688,7 +36688,7 @@
       "sub_category": "การ์ด",
       "round": "Genshin 10-2026",
       "description": "*ขนาด 12*12ซม.",
-      "search_keywords": "",
+      "search_keywords": "เซ็ต A เซ็ต B เซ็ต C เซ็ต D เซ็ต E",
       "image": "https://drive.google.com/thumbnail?id=1T37B_MEtbaqIA7z3kCD7ykGi5rb9yy4P&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36710,7 +36710,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793282652305_1",
+          "option_name": "แบบ",
+          "option_value": "เซ็ต A",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1p3vdGVzX1NH0LAw9XpuxTIvfJswcSfq1&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793282652305_2",
+          "option_name": "แบบ",
+          "option_value": "เซ็ต B",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=16bLAlk1LeSKitPArRhZr346-MWBx5-FG&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793282652305_3",
+          "option_name": "แบบ",
+          "option_value": "เซ็ต C",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1QXoJfp8eBhQv5JRMRl2mN9taB9cDguGh&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793282652305_4",
+          "option_name": "แบบ",
+          "option_value": "เซ็ต D",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=10EQBcytTxywhqwqTD0atFwWCFCUyFwD_&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793282652305_5",
+          "option_name": "แบบ",
+          "option_value": "เซ็ต E",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1FzUzqGD30RIgub1jAmUt1dM9nCurv8DX&sz=w2000",
+          "sort_order": 4
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728854",
@@ -40410,15 +40466,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T14:02:33.801Z",
+  "generated_at": "2026-10-29T14:05:52.054Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3972,
-    "collections_ms": 1404,
-    "gifts_ms": 3246,
-    "banks_ms": 462,
-    "total_ms": 9084,
+    "products_ms": 16201,
+    "collections_ms": 1471,
+    "gifts_ms": 2372,
+    "banks_ms": 275,
+    "total_ms": 20320,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
