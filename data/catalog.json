@@ -35620,7 +35620,7 @@
     },
     {
       "product_id": "PROD1793279728848",
-      "name": "Day of Destiny Badge - Monstad",
+      "name": "Day of Destiny Badge - Monstadt",
       "price_mode": "fixed",
       "price": 90,
       "final_price": 90,
@@ -35903,7 +35903,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Xiao Tartaglia Zhongli Keqing Ganyu Shenhe Hutao Chongyun Beidou Qiqi Yaoyao",
+      "search_keywords": "Xiao Tartaglia Zhongli Keqing Ganyu Shenhe Hutao Chongyun Beidou Qiqi Yaoyao Yelan",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36040,6 +36040,17 @@
           "option_id": "OPT1793281018288_31",
           "option_name": "ตัวละคร",
           "option_value": "Yaoyao",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_32",
+          "option_name": "ตัวละคร",
+          "option_value": "Yelan",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -39923,15 +39934,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:44:28.887Z",
+  "generated_at": "2026-10-29T13:45:30.108Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3364,
-    "collections_ms": 609,
-    "gifts_ms": 1217,
-    "banks_ms": 179,
-    "total_ms": 5369,
+    "products_ms": 3983,
+    "collections_ms": 996,
+    "gifts_ms": 1795,
+    "banks_ms": 289,
+    "total_ms": 7063,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
