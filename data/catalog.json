@@ -36157,7 +36157,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "",
+      "search_keywords": "Kazuha Raiden Ayaka Ayato Yoimiya Yae Miko",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36179,7 +36179,74 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793281018288_40",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_41",
+          "option_name": "ตัวละคร",
+          "option_value": "Raiden",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_42",
+          "option_name": "ตัวละคร",
+          "option_value": "Ayaka",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_43",
+          "option_name": "ตัวละคร",
+          "option_value": "Ayato",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_44",
+          "option_name": "ตัวละคร",
+          "option_value": "Yoimiya",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_45",
+          "option_name": "ตัวละคร",
+          "option_value": "Yae Miko",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728851",
@@ -40011,15 +40078,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:50:28.738Z",
+  "generated_at": "2026-10-29T13:52:00.085Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2519,
-    "collections_ms": 945,
-    "gifts_ms": 1987,
-    "banks_ms": 250,
-    "total_ms": 5701,
+    "products_ms": 21610,
+    "collections_ms": 3207,
+    "gifts_ms": 5889,
+    "banks_ms": 689,
+    "total_ms": 31395,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
