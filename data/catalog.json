@@ -35903,7 +35903,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Xiao Tartaglia Zhongli Keqing Ganyu Shenhe Hu Tao Chongyun Beidou Qiqi Yaoyao Yelan Yanfei Ningguang Xingqiu Xiangling Gaming",
+      "search_keywords": "Xiao Tartaglia Zhongli Keqing Ganyu Shenhe Hu Tao Chongyun Beidou Qiqi Yaoyao Yelan Yanfei Ningguang Xingqiu Xinyan Xiangling Gaming Yun Jin",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -36092,6 +36092,17 @@
           "sort_order": 0
         },
         {
+          "option_id": "OPT1793281018288_36",
+          "option_name": "ตัวละคร",
+          "option_value": "Xinyan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
           "option_id": "OPT1793281018288_37",
           "option_name": "ตัวละคร",
           "option_value": "Xiangling",
@@ -36106,6 +36117,17 @@
           "option_id": "OPT1793281018288_38",
           "option_name": "ตัวละคร",
           "option_value": "Gaming",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_39",
+          "option_name": "ตัวละคร",
+          "option_value": "Yun Jin",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -39989,15 +40011,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:49:37.759Z",
+  "generated_at": "2026-10-29T13:50:28.738Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5557,
-    "collections_ms": 1213,
-    "gifts_ms": 2091,
-    "banks_ms": 553,
-    "total_ms": 9414,
+    "products_ms": 2519,
+    "collections_ms": 945,
+    "gifts_ms": 1987,
+    "banks_ms": 250,
+    "total_ms": 5701,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
