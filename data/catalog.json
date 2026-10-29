@@ -35550,6 +35550,50 @@
           "sort_order": 1
         }
       ]
+    },
+    {
+      "product_id": "PROD1793279728847",
+      "name": "2027 Desk Calendar",
+      "price_mode": "fixed",
+      "price": 680,
+      "final_price": 680,
+      "base_price": 790,
+      "min_price": 790,
+      "max_price": 790,
+      "has_price_range": false,
+      "old_price": 790,
+      "on_sale": true,
+      "sale_price": 680,
+      "sale_start": "2026-10-27T17:00:00.000Z",
+      "sale_end": "2026-11-04T17:00:00.000Z",
+      "main_category": "ปฏิทิน",
+      "fandom": "Genshin Impact",
+      "sub_category": "ปฏิทิน",
+      "round": "Genshin 10-2026",
+      "description": "***ราคายังไม่รวมส่งกลับไทย\n\nขนาดกล่อง 250*154*51มม.\nขนาดเมื่อกางออก 140*456มม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1mJZuG1kTuzeLTx1Vg4CFi1-cb4A7yDNK&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-05",
+      "estimated_arrival": "สินค้าถึงคลังจีนช่วงเดือน 12/2026",
+      "image2": "https://drive.google.com/thumbnail?id=1XL90kSBu2g24pCPIbVZqLH0IyLf7zKRf&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1YV7TM_P5hsZAIUmyLzYSJqGSh4SaIbN6&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1qsx4OKR5IwEZa7OicdsQsICSYu4jpYK3&sz=w2000",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -35635,7 +35679,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 9
+      "product_count": 10
     }
   ],
   "gifts": {
@@ -39117,16 +39161,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:04:30.409Z",
+  "generated_at": "2026-10-29T13:16:34.670Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3970,
-    "collections_ms": 784,
-    "gifts_ms": 1681,
-    "banks_ms": 231,
-    "total_ms": 6666,
-    "product_count": 315,
+    "products_ms": 3090,
+    "collections_ms": 3344,
+    "gifts_ms": 2853,
+    "banks_ms": 665,
+    "total_ms": 9952,
+    "product_count": 316,
     "collection_count": 6,
     "bank_count": 3
   }
