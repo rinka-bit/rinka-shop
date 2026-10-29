@@ -35638,7 +35638,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "Venti Klee Paimon Diona Rosalyn Bennette Jean Noelle Diluc Mika Amber Lisa Barbara Fischl Mona Razor Albedo",
+      "search_keywords": "Venti Klee Paimon Diona Rosalyn Bennette Jean Noelle Diluc Mika Amber Lisa Barbara Fischl Mona Razor Albedo Eula Sucrose Kaeya",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35847,6 +35847,39 @@
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_18",
+          "option_name": "ตัวละคร",
+          "option_value": "Eula",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_19",
+          "option_name": "ตัวละคร",
+          "option_value": "Sucrose",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_20",
+          "option_name": "ตัวละคร",
+          "option_value": "Kaeya",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
         }
       ]
     },
@@ -35870,7 +35903,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 10-2026",
       "description": "เข็มกลัดขนาด 75มม.",
-      "search_keywords": "",
+      "search_keywords": "Xiao Tartaglia Zhongli Keqing",
       "image": "https://drive.google.com/thumbnail?id=1IdPqLnLAYXgWtpyg631lPbCyyy1jVpSh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -35892,7 +35925,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793281018288_21",
+          "option_name": "ตัวละคร",
+          "option_value": "Xiao",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_22",
+          "option_name": "ตัวละคร",
+          "option_value": "Tartaglia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_23",
+          "option_name": "ตัวละคร",
+          "option_value": "Zhongli",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793281018288_24",
+          "option_name": "ตัวละคร",
+          "option_value": "Keqing",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1793279728850",
@@ -39768,15 +39846,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T13:41:29.791Z",
+  "generated_at": "2026-10-29T13:42:29.011Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3473,
-    "collections_ms": 1216,
-    "gifts_ms": 1777,
-    "banks_ms": 426,
-    "total_ms": 6892,
+    "products_ms": 2529,
+    "collections_ms": 829,
+    "gifts_ms": 2087,
+    "banks_ms": 223,
+    "total_ms": 5668,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
