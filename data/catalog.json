@@ -40170,7 +40170,7 @@
         "gift_item_id": "GIFT17932861803852604",
         "rule_id": "RULE17932858438891786",
         "gift_name": "เซ็ตเข็มกลัด+สแตนดี้ Aurora Party Wanderer",
-        "gift_image": "",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%96%E0%B8%A1/mouche.png?raw=true",
         "has_character": "",
         "max_same_character": 2,
         "active": "yes",
@@ -40975,15 +40975,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T15:06:32.048Z",
+  "generated_at": "2026-10-29T15:07:32.675Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4283,
-    "collections_ms": 937,
-    "gifts_ms": 2085,
-    "banks_ms": 238,
-    "total_ms": 7543,
+    "products_ms": 4162,
+    "collections_ms": 907,
+    "gifts_ms": 1864,
+    "banks_ms": 357,
+    "total_ms": 7290,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
