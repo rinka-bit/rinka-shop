@@ -34978,7 +34978,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1l1T5v7KAV7s2AS1eNzsdbN1CY_4kc1m4&sz=w2000",
           "sort_order": 0
@@ -37296,6 +37296,20 @@
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
       "product_count": 19
+    },
+    {
+      "collection_id": "COL1793336900109",
+      "name": "รวมKeycap",
+      "fandom": "Keycap",
+      "image": "https://drive.google.com/thumbnail?id=1vIvu1wuRKcc9EqnhilU43D8f72At0jl8&sz=w2000",
+      "status": "active",
+      "preorder_deadline": "2027-12-30T17:00:00.000Z",
+      "featured": "",
+      "created_at": "2026-10-30T05:08:24.231Z",
+      "collection_type": "preorder",
+      "description": "ราคายังไม่รวมส่งกลับไทยนะคะ ค่านำเข้าหารกันตามออเดอร์ในแต่ละรอบกด\n\n**กล่องอาจจะบุบจากการขนส่งนะคะเพราะไม่ได้ส่งกลับไทยแบบตีลังไม้\n\nค่าส่งในไทยเริ่มต้นEMS 55฿ (พื้นที่พิเศษ+20฿)",
+      "banner_image": "",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -40975,17 +40989,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-30T01:42:30.406Z",
+  "generated_at": "2026-10-30T05:08:42.024Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4150,
-    "collections_ms": 632,
-    "gifts_ms": 1230,
-    "banks_ms": 667,
-    "total_ms": 6679,
+    "products_ms": 11691,
+    "collections_ms": 1475,
+    "gifts_ms": 2738,
+    "banks_ms": 291,
+    "total_ms": 16195,
     "product_count": 325,
-    "collection_count": 6,
+    "collection_count": 7,
     "bank_count": 3
   }
 }
