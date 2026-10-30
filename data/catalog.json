@@ -37299,6 +37299,50 @@
           "sort_order": 3
         }
       ]
+    },
+    {
+      "product_id": "PROD1793351887710",
+      "name": "Spring Blossom Tales : Plush doll",
+      "price_mode": "fixed",
+      "price": 750,
+      "final_price": 750,
+      "base_price": 890,
+      "min_price": 890,
+      "max_price": 890,
+      "has_price_range": false,
+      "old_price": 890,
+      "on_sale": true,
+      "sale_price": 750,
+      "sale_start": "2026-10-28T17:00:00.000Z",
+      "sale_end": "2026-11-04T17:00:00.000Z",
+      "main_category": "ตุ๊กตา",
+      "fandom": "Genshin Impact",
+      "sub_category": "ตุ๊กตา",
+      "round": "Genshin 10-2026",
+      "description": "ขนาด ประมาณ 20-23ซม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1kugpvjOSTChZmQIfNhlYZRoT48IeSHOO&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-05",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1zjbfX_1VWT0otV7CCJuluwRwMSzalPo0&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1HbPdOCCuZbxxwUzPhEIe9WoTDwQ-6_0q&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1D70mGwF-ZVBLMhDI7y54N6J_Gjjr2llW&sz=w2000",
+      "collection_id": "COL1793078335851",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -37384,7 +37428,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
       "banner_image": "",
-      "product_count": 22
+      "product_count": 23
     },
     {
       "collection_id": "COL1793336900109",
@@ -41078,16 +41122,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-30T09:16:35.038Z",
+  "generated_at": "2026-10-30T09:19:29.436Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4435,
-    "collections_ms": 1165,
-    "gifts_ms": 2476,
-    "banks_ms": 317,
-    "total_ms": 8393,
-    "product_count": 326,
+    "products_ms": 3179,
+    "collections_ms": 966,
+    "gifts_ms": 1817,
+    "banks_ms": 273,
+    "total_ms": 6235,
+    "product_count": 327,
     "collection_count": 7,
     "bank_count": 3
   }
