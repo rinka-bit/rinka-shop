@@ -34908,7 +34908,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=11nmRuw0QkcKDM0EhfxM_n1O-Bh-bM8gf&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 997,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -34989,7 +34989,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 996,
+          "stock": 995,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aptoNIS2eUD9G_QlPxKd_JEGksL-mIYO&sz=w2000",
           "sort_order": 1
@@ -35100,7 +35100,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aFCRSLdJ_Ldnfa7-YJ2zhMJvUj4Qr6CQ&sz=w2000",
           "sort_order": 1
@@ -36839,7 +36839,7 @@
           "option_value": "สแตนดี้ Heaven and Earth - Aether",
           "additional_price": 0,
           "price": 290,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=16ThHuKYLGPAUUG7iWhTD7UCKJ4wLIIvZ&sz=w2000",
           "sort_order": 2
@@ -36883,7 +36883,7 @@
           "option_value": "สแตนดี้ Night Hunt in Snow - Aether",
           "additional_price": 0,
           "price": 290,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1uopEWG9Rqv4gLAeBnV629AIpaT5t69fd&sz=w2000",
           "sort_order": 6
@@ -41267,15 +41267,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-30T09:44:31.548Z",
+  "generated_at": "2026-10-30T12:44:28.582Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4871,
-    "collections_ms": 991,
-    "gifts_ms": 1908,
-    "banks_ms": 320,
-    "total_ms": 8090,
+    "products_ms": 2296,
+    "collections_ms": 954,
+    "gifts_ms": 1415,
+    "banks_ms": 257,
+    "total_ms": 4922,
     "product_count": 328,
     "collection_count": 7,
     "bank_count": 3
