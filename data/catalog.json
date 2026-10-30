@@ -37409,7 +37409,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "Genshin 10-2026",
       "description": "ขนาด 18ซม.",
-      "search_keywords": "",
+      "search_keywords": "Alhaitham Kaveh Wanderer Tighnari Cyno",
       "image": "https://drive.google.com/thumbnail?id=12K0J9_IvtiWNi89EBmBBZ-QsakdLNoVN&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -37431,7 +37431,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793352778479_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Alhaitham",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1m-WTaq_Rv6T3JwlDYsNbCaoMW_UWctlR&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793352778479_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Kaveh",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=16uotX3rS0yST_fKCU0pXgxTM4Da6frG7&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793352778479_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Wanderer",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1S1ITId7v513MIht_cst366sNkQSzREe6&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793352778479_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Tighnari",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1jPKkCYhf8b5nT9-6WyXuYQWFkWh05C4e&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793352778479_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Cyno",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1cAkX5rEKas94v-UvZczT51BMaG5ONI1f&sz=w2000",
+          "sort_order": 4
+        }
+      ]
     }
   ],
   "collections": [
@@ -41211,15 +41267,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-30T09:31:30.212Z",
+  "generated_at": "2026-10-30T09:33:29.200Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3423,
-    "collections_ms": 796,
-    "gifts_ms": 2099,
-    "banks_ms": 197,
-    "total_ms": 6515,
+    "products_ms": 2750,
+    "collections_ms": 982,
+    "gifts_ms": 1953,
+    "banks_ms": 348,
+    "total_ms": 6033,
     "product_count": 328,
     "collection_count": 7,
     "bank_count": 3
