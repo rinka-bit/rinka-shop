@@ -34989,7 +34989,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 997,
+          "stock": 996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aptoNIS2eUD9G_QlPxKd_JEGksL-mIYO&sz=w2000",
           "sort_order": 1
@@ -35000,7 +35000,7 @@
           "option_value": "Sandrone",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1cOS0SqBVsW8lTwfNteP365zAvnG99JeQ&sz=w2000",
           "sort_order": 2
@@ -35503,7 +35503,7 @@
       "fandom": "Genshin Impact",
       "sub_category": "Keyboard",
       "round": "Genshin 10-2026",
-      "description": "อุปกรณ์ภายในกล่อง\n1. คีย์บอร์ดแม่เหล็ก ×1\n2. สายเชื่อมต่อข้อมูล ×1\n3. ที่ดึงสวิตช์/คีย์แคป ×1\n4. โฟมซับเสียง Spacebar ×1\n5. Keycap ลายพิเศษเพิ่มเติม ×10\n6. สวิตช์สำรอง ×4\n7. คู่มือการใช้งาน ×1\n8. การ์ดรับรองคุณภาพ ×1\n\nราคายังไม่รวมส่งกลับไทยนะคะ",
+      "description": "อุปกรณ์ภายในกล่อง\n1. คีย์บอร์ด ×1\n2. สายเชื่อมต่อข้อมูล ×1\n3. ที่ดึงสวิตช์/คีย์แคป ×1\n4. โฟมซับเสียง Spacebar ×1\n5. Keycap ลายพิเศษเพิ่มเติม ×10\n6. สวิตช์สำรอง ×4\n7. คู่มือการใช้งาน ×1\n8. การ์ดรับรองคุณภาพ ×1\n\nราคายังไม่รวมส่งกลับไทยนะคะ",
       "search_keywords": "ไม่ตีลัง ตีลังไม้ (เริ่มต้น150฿)",
       "image": "https://drive.google.com/thumbnail?id=1AWwuojJZAE430KA4QBt9LneJPo9TvCUj&sz=w2000",
       "status": "active",
@@ -36186,7 +36186,7 @@
           "option_value": "Kazuha",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1mnTBfVZvC-FVa5A6EcUD0Gefpnq-kK41&sz=w2000",
           "sort_order": 0
@@ -36385,7 +36385,7 @@
           "option_value": "Wanderer",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1qBET_HmOU2rK9vUFeoxpMebxVi5xBfDF&sz=w2000",
           "sort_order": 0
@@ -36573,7 +36573,7 @@
           "option_value": "Neuvillette",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1CSeXi5oN25oeisv3OxDI04Wubw0iIyY6&sz=w2000",
           "sort_order": 0
@@ -36584,7 +36584,7 @@
           "option_value": "Wriothesley",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1ZSGHJsFD4He8cNdHdcCmLRncicIvFMwv&sz=w2000",
           "sort_order": 1
@@ -40975,15 +40975,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-29T23:43:37.349Z",
+  "generated_at": "2026-10-30T01:42:30.406Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6727,
-    "collections_ms": 1503,
-    "gifts_ms": 3179,
-    "banks_ms": 207,
-    "total_ms": 11616,
+    "products_ms": 4150,
+    "collections_ms": 632,
+    "gifts_ms": 1230,
+    "banks_ms": 667,
+    "total_ms": 6679,
     "product_count": 325,
     "collection_count": 6,
     "bank_count": 3
