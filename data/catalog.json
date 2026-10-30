@@ -37231,7 +37231,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "Genshin 10-2026",
       "description": "ขนาดประมาณ 11ซม.ไม่รวมห่วงคล้อง\n\nสามารถแกะแยกออกจากกันได้",
-      "search_keywords": "",
+      "search_keywords": "Flins Xiao Venti Lyney",
       "image": "https://drive.google.com/thumbnail?id=1M6XW4oYExQHL-GsYT6zKYGQ_oZMuauzV&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -37253,7 +37253,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793351747870_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Flins",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1SbiBFgoonHIGNwFiAo1lCjimxH1cC_fx&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793351747870_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Xiao",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1oz7_UJGDlaXuwH13aefD2OP2Iz3OexEx&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793351747870_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Venti",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1uzd86BYr_3G40Eq6tVasTq1yovTXZ5Mx&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793351747870_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Lyney",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1seTjVTVj9gYNbhrpxojX8prxV8k2XHTF&sz=w2000",
+          "sort_order": 3
+        }
+      ]
     }
   ],
   "collections": [
@@ -41033,15 +41078,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-30T09:14:29.846Z",
+  "generated_at": "2026-10-30T09:16:35.038Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2143,
-    "collections_ms": 816,
-    "gifts_ms": 1971,
-    "banks_ms": 973,
-    "total_ms": 5903,
+    "products_ms": 4435,
+    "collections_ms": 1165,
+    "gifts_ms": 2476,
+    "banks_ms": 317,
+    "total_ms": 8393,
     "product_count": 326,
     "collection_count": 7,
     "bank_count": 3
