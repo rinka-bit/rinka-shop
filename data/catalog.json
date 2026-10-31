@@ -34989,7 +34989,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 992,
+          "stock": 991,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aptoNIS2eUD9G_QlPxKd_JEGksL-mIYO&sz=w2000",
           "sort_order": 1
@@ -35455,7 +35455,7 @@
           "option_value": "Arlecchino",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 3
@@ -36274,7 +36274,7 @@
           "option_value": "Shinobu",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1A11wL28z-lrRHlk9exBeeYHrhZFIsZp7&sz=w2000",
           "sort_order": 8
@@ -41267,15 +41267,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-10-31T11:29:34.986Z",
+  "generated_at": "2026-10-31T13:55:30.712Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 5989,
-    "collections_ms": 1234,
-    "gifts_ms": 2674,
-    "banks_ms": 385,
-    "total_ms": 10283,
+    "products_ms": 4003,
+    "collections_ms": 918,
+    "gifts_ms": 2152,
+    "banks_ms": 227,
+    "total_ms": 7301,
     "product_count": 328,
     "collection_count": 7,
     "bank_count": 3
