@@ -34908,7 +34908,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=11nmRuw0QkcKDM0EhfxM_n1O-Bh-bM8gf&sz=w2000",
       "status": "active",
-      "stock": 997,
+      "stock": 996,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -34989,7 +34989,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 991,
+          "stock": 990,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aptoNIS2eUD9G_QlPxKd_JEGksL-mIYO&sz=w2000",
           "sort_order": 1
@@ -35089,7 +35089,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 994,
+          "stock": 993,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=16KAEUsZzM7spTsxMTOJASLLbX-GHYGDR&sz=w2000",
           "sort_order": 0
@@ -41267,15 +41267,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-01T15:42:32.170Z",
+  "generated_at": "2026-11-01T16:19:28.063Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3969,
-    "collections_ms": 1039,
-    "gifts_ms": 1975,
-    "banks_ms": 284,
-    "total_ms": 7267,
+    "products_ms": 2534,
+    "collections_ms": 784,
+    "gifts_ms": 1486,
+    "banks_ms": 210,
+    "total_ms": 5014,
     "product_count": 328,
     "collection_count": 7,
     "bank_count": 3
