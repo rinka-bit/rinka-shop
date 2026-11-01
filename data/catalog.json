@@ -35089,7 +35089,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 995,
+          "stock": 994,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=16KAEUsZzM7spTsxMTOJASLLbX-GHYGDR&sz=w2000",
           "sort_order": 0
@@ -35133,7 +35133,7 @@
           "option_value": "Nicole",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1cYt_fs93rS9V_lJOMvn9Cb158SZHtXPn&sz=w2000",
           "sort_order": 4
@@ -36894,7 +36894,7 @@
           "option_value": "สแตนดี้ Night Hunt in Snow - Lumine",
           "additional_price": 0,
           "price": 290,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1TH2p_EcQbfuRcCL7rPwAvz2Q-z-0azNm&sz=w2000",
           "sort_order": 7
@@ -41267,15 +41267,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-01T07:20:31.092Z",
+  "generated_at": "2026-11-01T08:05:30.693Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3384,
-    "collections_ms": 860,
-    "gifts_ms": 2245,
-    "banks_ms": 229,
-    "total_ms": 6719,
+    "products_ms": 3259,
+    "collections_ms": 879,
+    "gifts_ms": 1794,
+    "banks_ms": 354,
+    "total_ms": 6286,
     "product_count": 328,
     "collection_count": 7,
     "bank_count": 3
