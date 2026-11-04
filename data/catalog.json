@@ -37587,7 +37587,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 11-2026",
       "description": "ขนาด 18*10ซม.",
-      "search_keywords": "",
+      "search_keywords": "Dan Heng Jing Yuan Sunday Blade",
       "image": "https://drive.google.com/thumbnail?id=1sUP1EPsBfSE8dOWA0VPgwmVcoI3W5_PE&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -37609,7 +37609,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793774683233_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Dan Heng",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1TnT4t3FruTLSLgMIUroN9_jA34k2O4mE&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793774683233_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Jing Yuan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1dnsQTxegBIiNlUATmvnqsKxTacP1e6Wz&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793774683233_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Sunday",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1OMM77q0Cr9NvkWhSZxD-awgu6osxwcHY&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793774683233_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Blade",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1-ZLGekr30hK5vB5v9Yhcz08iwQBuHRMz&sz=w2000",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1793773947042",
@@ -41579,15 +41624,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T06:44:29.405Z",
+  "generated_at": "2026-11-04T06:45:29.603Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2206,
-    "collections_ms": 1138,
-    "gifts_ms": 1745,
-    "banks_ms": 482,
-    "total_ms": 5572,
+    "products_ms": 3070,
+    "collections_ms": 859,
+    "gifts_ms": 1588,
+    "banks_ms": 727,
+    "total_ms": 6244,
     "product_count": 334,
     "collection_count": 8,
     "bank_count": 3
