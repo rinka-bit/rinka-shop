@@ -37765,7 +37765,7 @@
       "sub_category": "สแตนดี้",
       "round": "HSR 11-2026",
       "description": "",
-      "search_keywords": "",
+      "search_keywords": "Mydei Anaxa Phainon Screwlum Boothill Argenti Dr.Ratio Aventurine Dan Heng Jing Yuan Sunday Blade",
       "image": "https://drive.google.com/thumbnail?id=1OmnN2WQr4G6f7EqhurM1uQTJHRivzTVk&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -37787,7 +37787,140 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793774948483_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Mydei",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793774948483_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Anaxa",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793774948483_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Phainon",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793774948483_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Screwlum",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793774948483_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Boothill",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1793774948483_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Argenti",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1793774948483_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Dr.Ratio",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1793774948483_8",
+          "option_name": "ตัวละคร",
+          "option_value": "Aventurine",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        },
+        {
+          "option_id": "OPT1793774948483_9",
+          "option_name": "ตัวละคร",
+          "option_value": "Dan Heng",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 8
+        },
+        {
+          "option_id": "OPT1793774948483_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Jing Yuan",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 9
+        },
+        {
+          "option_id": "OPT1793774948483_11",
+          "option_name": "ตัวละคร",
+          "option_value": "Sunday",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 10
+        },
+        {
+          "option_id": "OPT1793774948483_12",
+          "option_name": "ตัวละคร",
+          "option_value": "Blade",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 11
+        }
+      ]
     },
     {
       "product_id": "PROD1793773947044",
@@ -41669,15 +41802,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T06:48:18.360Z",
+  "generated_at": "2026-11-04T06:49:27.827Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 35914,
-    "collections_ms": 3622,
-    "gifts_ms": 6745,
-    "banks_ms": 697,
-    "total_ms": 46978,
+    "products_ms": 1703,
+    "collections_ms": 583,
+    "gifts_ms": 2313,
+    "banks_ms": 161,
+    "total_ms": 4760,
     "product_count": 334,
     "collection_count": 8,
     "bank_count": 3
