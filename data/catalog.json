@@ -37588,6 +37588,20 @@
       "description": "ราคายังไม่รวมส่งกลับไทยนะคะ ค่านำเข้าหารกันตามออเดอร์ในแต่ละรอบกด\n\n**กล่องอาจจะบุบจากการขนส่งนะคะเพราะไม่ได้ส่งกลับไทยแบบตีลังไม้\n\nค่าส่งในไทยเริ่มต้นEMS 55฿ (พื้นที่พิเศษ+20฿)",
       "banner_image": "",
       "product_count": 0
+    },
+    {
+      "collection_id": "COL1793773304745",
+      "name": "HSR 11-2026",
+      "fandom": "Honkai Star Rail",
+      "image": "",
+      "status": "active",
+      "preorder_deadline": "2026-11-29T17:00:00.000Z",
+      "featured": "",
+      "created_at": "2026-11-04T06:21:44.745Z",
+      "collection_type": "preorder",
+      "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
+      "banner_image": "",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -41267,17 +41281,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-02T15:09:28.478Z",
+  "generated_at": "2026-11-04T06:22:32.423Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2064,
-    "collections_ms": 792,
-    "gifts_ms": 1809,
-    "banks_ms": 233,
-    "total_ms": 4898,
+    "products_ms": 3965,
+    "collections_ms": 844,
+    "gifts_ms": 2478,
+    "banks_ms": 288,
+    "total_ms": 7575,
     "product_count": 328,
-    "collection_count": 7,
+    "collection_count": 8,
     "bank_count": 3
   }
 }
