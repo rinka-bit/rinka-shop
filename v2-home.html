@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rinka Shop V2 — Home DEV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="home.css"><link rel="stylesheet" href="rinka-blue.css">
+<style>
+:root{color-scheme:light}body{font-family:Kodchasan,sans-serif;background:#f5faff;color:#183c63;margin:0}*{box-sizing:border-box}
+.v2bar{background:#d9ecff;padding:15px max(18px,calc((100vw - 1100px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.v2bar strong{font-size:21px}.v2bar a,.v2link{color:#135b9c;text-decoration:none}.v2tag{font-size:12px;background:#fff;border:1px solid #a8cef3;border-radius:20px;padding:5px 10px}
+.v2wrap{max-width:1100px;margin:auto;padding:20px 16px 60px}.v2hero{background:linear-gradient(115deg,#d6eaff,#edf6ff);padding:32px 25px;border-radius:22px;border:1px solid #b9d9fa}.v2hero h1{font-size:clamp(23px,4vw,34px);margin:0 0 12px}.v2hero p{line-height:1.8;margin:0}.v2notice{font-size:13px;margin:16px 0;color:#41688d}
+.v2section{margin:30px 0}.v2section h2{font-size:21px;margin:0 0 15px}.v2grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}.v2card{display:block;background:white;border:1px solid #d2e4f8;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .15s}.v2card:hover{transform:translateY(-3px)}.v2image{height:180px;background:#e8f2ff;display:grid;place-items:center;color:#779bbd;font-size:13px}.v2image img{width:100%;height:100%;object-fit:cover}.v2body{padding:14px}.v2body h3{font-size:15px;margin:0 0 8px}.v2price{font-size:17px;font-weight:700;color:#1466a6}.v2muted{font-size:12px;color:#6383a3;margin-top:6px}.v2pill{display:inline-block;background:#fff;border:1px solid #bed9f3;border-radius:30px;padding:9px 14px;margin:0 8px 8px 0;color:#245d91;text-decoration:none;font-size:13px}.v2empty{background:white;border:1px dashed #bdd8ef;border-radius:12px;padding:18px;color:#6785a1}.v2error{color:#a52727;background:#fff0f0;padding:15px;border-radius:12px}.v2actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px}.v2btn{background:#237bbd;color:white;border:0;border-radius:10px;padding:10px 17px;font-family:inherit;cursor:pointer}.v2hidden{display:none}
+</style>
+</head>
+<body>
+<header class="v2bar"><strong>☁️ Rinka Shop V2</strong><span class="v2tag">DEV Preview · ไม่รับคำสั่งซื้อ</span><a href="v2-preview.html">Catalog Test →</a></header>
+<main class="v2wrap">
+<section class="v2hero"><h1>Welcome to Rinka Shop ☁️</h1><p>Pre-order Game Merchandise — สำรวจสินค้าจากหลากหลายแฟนด้อมในหน้า Home เวอร์ชันทดสอบ</p><div class="v2actions"><a class="v2link" href="#all-products">ดูสินค้าทั้งหมด ↓</a><button class="v2btn" id="refresh" type="button">โหลดข้อมูลใหม่</button></div></section>
+<p class="v2notice">หน้านี้อ่านข้อมูลจาก Supabase DEV ผ่าน Cloudflare Worker เท่านั้น · ไม่มีระบบตะกร้าหรือชำระเงิน · ไม่เชื่อม Production</p>
+<div id="status" role="status">กำลังโหลดข้อมูล Catalog…</div>
+<section class="v2section"><h2>🎮 Fandom</h2><div id="fandoms"></div></section>
+<section class="v2section"><h2>🔥 รอบพรีออเดอร์</h2><div id="collections" class="v2grid"></div></section>
+<section class="v2section"><h2>⏰ พรีออเดอร์จำกัดเวลา</h2><div id="limited" class="v2grid"></div></section>
+<section class="v2section"><h2>⭐ สินค้าใหม่ล่าสุด</h2><div id="new" class="v2grid"></div></section>
+<section class="v2section" id="all-products"><h2>🛍️ สินค้าทั้งหมด (DEV)</h2><div id="products" class="v2grid"></div></section>
+</main>
+<script src="rinka-v2-api.js"></script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const empty=(message)=>`<div class="v2empty">${escapeHTML(message)}</div>`;
+const dateActive=s=>s&&Number.isFinite(Date.parse(s))&&Date.parse(s)>=Date.now();
+function priceOf(v){const now=Date.now();return v.sale_price_thb!=null&&(!v.sale_start||Date.parse(v.sale_start)<=now)&&(!v.sale_end||Date.parse(v.sale_end)>=now)?Number(v.sale_price_thb):Number(v.price_thb)}
+function productCard(p,fandoms){const vs=(p.product_variants||[]).filter(v=>v.is_active);const prices=vs.map(priceOf).filter(Number.isFinite);const low=prices.length?Math.min(...prices):null;const high=prices.length?Math.max(...prices):null;const img=(p.product_images||[])[0]?.image_url;const name=fandoms.get(p.fandom_id)||'';const price=low===null?'ยังไม่มีราคา':`฿${low.toLocaleString('th-TH')}${high!==low?' – ฿'+high.toLocaleString('th-TH'):''}`;return `<a class="v2card" href="v2-preview.html" title="เปิด Catalog Preview เพื่อดูตัวเลือกสินค้า"><div class="v2image">${img?`<img src="${escapeHTML(img)}" alt="${escapeHTML(p.name)}" loading="lazy">`:'ยังไม่มีรูปสินค้า'}</div><div class="v2body"><h3>${escapeHTML(p.name)}</h3><div class="v2price">${price}</div><div class="v2muted">${escapeHTML(name)} · ${p.product_type==='preorder'?'พรีออเดอร์':'พร้อมส่ง'}</div><div class="v2muted">กดเพื่อเปิด Catalog Preview</div></div></a>`}
+function collectionCard(c){return `<article class="v2card"><div class="v2image">${c.banner_url?`<img src="${escapeHTML(c.banner_url)}" alt="${escapeHTML(c.name)}">`:'ยังไม่มีรูป Collection'}</div><div class="v2body"><h3>${escapeHTML(c.name)}</h3><div class="v2muted">${escapeHTML(c.description||'รอบพรีออเดอร์')}</div></div></article>`}
+async function load(){ $('status').textContent='กำลังโหลดข้อมูล Catalog…';try{if(!window.RinkaV2API)throw new Error('ไม่พบไฟล์ rinka-v2-api.js');const [products,collections,fandoms,categories]=await Promise.all([RinkaV2API.products(),RinkaV2API.collections(),RinkaV2API.fandoms(),RinkaV2API.categories()]);const fandomMap=new Map(fandoms.map(f=>[f.id,f.name]));$('status').textContent=`เชื่อมต่อ API สำเร็จ · Products ${products.length} · Collections ${collections.length} · Fandoms ${fandoms.length} · Categories ${categories.length}`;$('fandoms').innerHTML=fandoms.length?fandoms.map(f=>`<span class="v2pill">${escapeHTML(f.name)}</span>`).join(''):empty('ยังไม่มี Fandom');$('collections').innerHTML=collections.length?collections.map(collectionCard).join(''):empty('ยังไม่มี Collection');const limited=products.filter(p=>p.availability_mode==='limited'&&dateActive(p.preorder_deadline));$('limited').innerHTML=limited.length?limited.map(p=>productCard(p,fandomMap)).join(''):empty('ยังไม่มีสินค้าพรีออเดอร์จำกัดเวลา');const newer=products.filter(p=>p.new_arrival);$('new').innerHTML=newer.length?newer.map(p=>productCard(p,fandomMap)).join(''):empty('ยังไม่มีสินค้าที่ติดป้าย New');$('products').innerHTML=products.length?products.map(p=>productCard(p,fandomMap)).join(''):empty('ยังไม่มีสินค้าที่เผยแพร่');}catch(e){console.error('V2 Home:',e);$('status').innerHTML=`<div class="v2error">โหลดข้อมูลไม่สำเร็จ: ${escapeHTML(e.message)}</div>`;}}
+$('refresh').addEventListener('click',load);load();
+</script>
+</body></html>
