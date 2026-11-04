@@ -37491,7 +37491,7 @@
     },
     {
       "product_id": "PROD1793773634661",
-      "name": "Boys & Girls Domitory Blind Box",
+      "name": "Boys & Girls' Domitory Blind Box",
       "price_mode": "option",
       "price": 0,
       "final_price": 0,
@@ -41413,15 +41413,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T06:33:29.373Z",
+  "generated_at": "2026-11-04T06:36:27.898Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2536,
-    "collections_ms": 807,
-    "gifts_ms": 2015,
-    "banks_ms": 318,
-    "total_ms": 5676,
+    "products_ms": 2356,
+    "collections_ms": 618,
+    "gifts_ms": 1277,
+    "banks_ms": 258,
+    "total_ms": 4509,
     "product_count": 331,
     "collection_count": 8,
     "bank_count": 3
