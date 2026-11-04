@@ -20172,7 +20172,7 @@
           "option_value": "Lohen",
           "additional_price": 0,
           "price": null,
-          "stock": 9994,
+          "stock": 9993,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1eFPnPUJe54gNyK709G5zMYnWoZT_aHIt&sz=w2000",
           "sort_order": 3
@@ -42068,15 +42068,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T06:51:28.374Z",
+  "generated_at": "2026-11-04T15:40:40.724Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1863,
-    "collections_ms": 540,
-    "gifts_ms": 2033,
-    "banks_ms": 189,
-    "total_ms": 4625,
+    "products_ms": 9601,
+    "collections_ms": 1687,
+    "gifts_ms": 4120,
+    "banks_ms": 903,
+    "total_ms": 16311,
     "product_count": 334,
     "collection_count": 8,
     "bank_count": 3
