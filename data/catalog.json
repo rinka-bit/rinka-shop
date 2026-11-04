@@ -37576,6 +37576,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793773947042",
+      "name": "Boys Dormitory : Cotton Doll Outfits",
+      "price_mode": "fixed",
+      "price": 550,
+      "final_price": 550,
+      "base_price": 550,
+      "min_price": 550,
+      "max_price": 550,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "อื่น ๆ",
+      "round": "HSR 11-2026",
+      "description": "สำหรับตุ๊กตาขนาด 20ซม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1uFnqEJdpEVuukB387XlTLn1gOwBdzxGD&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-30",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1793773304745",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -37689,7 +37733,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
-      "product_count": 2
+      "product_count": 3
     }
   ],
   "gifts": {
@@ -41369,16 +41413,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T06:31:28.128Z",
+  "generated_at": "2026-11-04T06:33:29.373Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2468,
-    "collections_ms": 821,
-    "gifts_ms": 1553,
-    "banks_ms": 276,
-    "total_ms": 5118,
-    "product_count": 330,
+    "products_ms": 2536,
+    "collections_ms": 807,
+    "gifts_ms": 2015,
+    "banks_ms": 318,
+    "total_ms": 5676,
+    "product_count": 331,
     "collection_count": 8,
     "bank_count": 3
   }
