@@ -37493,12 +37493,12 @@
       "product_id": "PROD1793773634661",
       "name": "Boys & Girls' Domitory Blind Box",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 410,
+      "final_price": 410,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 410,
+      "max_price": 2920,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -37509,7 +37509,7 @@
       "sub_category": "ฟิกเกอร์",
       "round": "HSR 11-2026",
       "description": "1กล่องมี 8 คาร์นะคะ ซีเคร็ตอัตราส่วน1:96\n*ซีเคร็ตอาจจะออกมาแทนตัวธรรมดาตัวไหนก็ได้นะคะ",
-      "search_keywords": "",
+      "search_keywords": "สุ่ม Box(ไม่แยกบ้าน/ไม่รวมกลับไทย) Box(แยกบ้าน/ไม่รวมกลับไทย)",
       "image": "https://drive.google.com/thumbnail?id=1iBcwTmJdo7RIXL_ziQ1RjgNbkge6Gh5n&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -37531,7 +37531,41 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793774620114_1",
+          "option_name": "แบบ",
+          "option_value": "สุ่ม",
+          "additional_price": 0,
+          "price": 410,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793774620114_2",
+          "option_name": "แบบ",
+          "option_value": "Box(ไม่แยกบ้าน/ไม่รวมกลับไทย)",
+          "additional_price": 0,
+          "price": 2920,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793774620114_3",
+          "option_name": "แบบ",
+          "option_value": "Box(แยกบ้าน/ไม่รวมกลับไทย)",
+          "additional_price": 0,
+          "price": 2920,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        }
+      ]
     },
     {
       "product_id": "PROD1793773818232",
@@ -41545,15 +41579,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T06:41:33.311Z",
+  "generated_at": "2026-11-04T06:44:29.405Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3937,
-    "collections_ms": 1619,
-    "gifts_ms": 3208,
-    "banks_ms": 289,
-    "total_ms": 9053,
+    "products_ms": 2206,
+    "collections_ms": 1138,
+    "gifts_ms": 1745,
+    "banks_ms": 482,
+    "total_ms": 5572,
     "product_count": 334,
     "collection_count": 8,
     "bank_count": 3
