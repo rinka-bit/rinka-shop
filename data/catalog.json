@@ -37532,6 +37532,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793773818232",
+      "name": "Boys Domitory : Sleep mask",
+      "price_mode": "fixed",
+      "price": 320,
+      "final_price": 320,
+      "base_price": 320,
+      "min_price": 320,
+      "max_price": 320,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "อื่น ๆ",
+      "round": "HSR 11-2026",
+      "description": "ขนาด 18*10ซม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1sUP1EPsBfSE8dOWA0VPgwmVcoI3W5_PE&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-30",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1GyvIFCwfoQpsJqL9mRuZCbz3n6pbofSj&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1SmVucye-c2TvthLSW7YCFrZ4RR3as6jN&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1793773304745",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -37645,7 +37689,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
-      "product_count": 1
+      "product_count": 2
     }
   ],
   "gifts": {
@@ -41325,16 +41369,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T06:28:28.181Z",
+  "generated_at": "2026-11-04T06:31:28.128Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1883,
-    "collections_ms": 1296,
-    "gifts_ms": 1734,
-    "banks_ms": 252,
-    "total_ms": 5165,
-    "product_count": 329,
+    "products_ms": 2468,
+    "collections_ms": 821,
+    "gifts_ms": 1553,
+    "banks_ms": 276,
+    "total_ms": 5118,
+    "product_count": 330,
     "collection_count": 8,
     "bank_count": 3
   }
