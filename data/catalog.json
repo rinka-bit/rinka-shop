@@ -15147,7 +15147,7 @@
           "option_value": "Sunday",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1L5AOcrTRjzaem3mqdJppR-OuIOZ1o6Ws&sz=w2000",
           "sort_order": 0
@@ -26304,7 +26304,7 @@
           "option_value": "Sundove",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1n2U46AS_W2ls-imOhkYscdxNYoSLZJCG&sz=w2000",
           "sort_order": 1
@@ -34989,7 +34989,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 988,
+          "stock": 985,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aptoNIS2eUD9G_QlPxKd_JEGksL-mIYO&sz=w2000",
           "sort_order": 1
@@ -38305,34 +38305,6 @@
       "description": "ราคาส่วนลด สั่งได้ถึงวันที่ 25/10 21:00\nยังไม่รวมส่งกลับไทย ไม่สามารถรวมยอดรับของแถมได้\nตีลังไม้เริ่มต้น 150฿\nส่งฟรีในไทย",
       "banner_image": "",
       "product_count": 2
-    },
-    {
-      "collection_id": "COL1790603662056",
-      "name": "WuWa 3.6(แบบรวมส่งกลับไทยเกือบทุกรายการ)",
-      "fandom": "Wuthering Waves",
-      "image": "https://drive.google.com/thumbnail?id=1s9y38I2Otv3WOgKfBbPB_Bj1_cCWIoBv&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-10-30T17:00:00.000Z",
-      "featured": "yes",
-      "created_at": "2026-09-28T13:54:27.718Z",
-      "collection_type": "preorder",
-      "description": "ราคารวมส่งกลับไทยเกือบทุกรายการนะคะ\n\nพิเศษค่าส่งในไทยเริ่มต้น9฿ (พื้นที่พิเศษ+20฿)",
-      "banner_image": "https://drive.google.com/thumbnail?id=1D456oRnYP5X3-eQ2wohIpSoeMeMWeGZR&sz=w2000",
-      "product_count": 22
-    },
-    {
-      "collection_id": "COL1790603662057",
-      "name": "WuWa 3.6(แบบไม่รวมส่งกลับไทย)",
-      "fandom": "Wuthering Waves",
-      "image": "https://drive.google.com/thumbnail?id=1s9y38I2Otv3WOgKfBbPB_Bj1_cCWIoBv&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-10-30T17:00:00.000Z",
-      "featured": "yes",
-      "created_at": "2026-09-28T13:54:27.718Z",
-      "collection_type": "preorder",
-      "description": "ราคายังไม่รวมส่งกลับไทยนะคะ\n\nพิเศษค่าส่งในไทยเริ่มต้น9฿ (พื้นที่พิเศษ+20฿)",
-      "banner_image": "https://drive.google.com/thumbnail?id=1D456oRnYP5X3-eQ2wohIpSoeMeMWeGZR&sz=w2000",
-      "product_count": 22
     },
     {
       "collection_id": "COL1791984708055",
@@ -42068,17 +42040,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-05T11:33:31.173Z",
+  "generated_at": "2026-11-05T14:04:32.022Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2712,
-    "collections_ms": 1495,
-    "gifts_ms": 1458,
-    "banks_ms": 154,
-    "total_ms": 5819,
+    "products_ms": 3995,
+    "collections_ms": 1176,
+    "gifts_ms": 1850,
+    "banks_ms": 305,
+    "total_ms": 7326,
     "product_count": 334,
-    "collection_count": 8,
+    "collection_count": 6,
     "bank_count": 3
   }
 }
