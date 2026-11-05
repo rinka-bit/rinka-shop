@@ -38307,34 +38307,6 @@
       "product_count": 2
     },
     {
-      "collection_id": "COL1791984708055",
-      "name": "WuWa : Ink Charm Lake Excursion",
-      "fandom": "Wuthering Waves",
-      "image": "https://drive.google.com/thumbnail?id=1gtGBTuVzCAno_J8Y6Eah6O7aaRk0KZhD&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "",
-      "featured": "",
-      "created_at": "2026-10-14T13:32:05.153Z",
-      "collection_type": "Preorder",
-      "description": "ราคารวมส่งกลับไทยทุกชิ้น ในไทยเริ่มต้น 55฿ (พท.พิเศษ+20฿)",
-      "banner_image": "https://drive.google.com/thumbnail?id=1FiYxod4eOEpxZer_nlI4FTfGD_8u-AUj&sz=w2000",
-      "product_count": 5
-    },
-    {
-      "collection_id": "COL1793078335851",
-      "name": "Genshin 10-2026 (รวมกลับไทยเกือบทุกรายการ)",
-      "fandom": "Genshin Impact",
-      "image": "https://drive.google.com/thumbnail?id=1Pp6G8QqM_EUX94MkA524m8-edNayYl6g&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-11-04T17:00:00.000Z",
-      "featured": "",
-      "created_at": "2026-10-27T05:19:03.770Z",
-      "collection_type": "preorder",
-      "description": "ราคารวมส่งกลับไทยเกือบทุกชิ้น\n\nพิเศษ ส่งฟรีEMSในไทย",
-      "banner_image": "",
-      "product_count": 25
-    },
-    {
       "collection_id": "COL1793336900109",
       "name": "รวมKeycap",
       "fandom": "Keycap",
@@ -42040,17 +42012,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-05T14:04:32.022Z",
+  "generated_at": "2026-11-05T14:05:32.080Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3995,
-    "collections_ms": 1176,
-    "gifts_ms": 1850,
-    "banks_ms": 305,
-    "total_ms": 7326,
+    "products_ms": 3395,
+    "collections_ms": 742,
+    "gifts_ms": 4047,
+    "banks_ms": 260,
+    "total_ms": 8444,
     "product_count": 334,
-    "collection_count": 6,
+    "collection_count": 4,
     "bank_count": 3
   }
 }
