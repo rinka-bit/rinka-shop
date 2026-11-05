@@ -20150,7 +20150,7 @@
           "option_value": "Kazuha",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1ZNFvC7QZuNubXqsr-jpFuFKwks-GmadF&sz=w2000",
           "sort_order": 1
@@ -20161,7 +20161,7 @@
           "option_value": "Durin",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1fn-BBzzk4fxiV_ZCwiGisg6As9F4zkrM&sz=w2000",
           "sort_order": 2
@@ -20172,7 +20172,7 @@
           "option_value": "Lohen",
           "additional_price": 0,
           "price": null,
-          "stock": 9993,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1eFPnPUJe54gNyK709G5zMYnWoZT_aHIt&sz=w2000",
           "sort_order": 3
@@ -34989,7 +34989,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 990,
+          "stock": 988,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aptoNIS2eUD9G_QlPxKd_JEGksL-mIYO&sz=w2000",
           "sort_order": 1
@@ -35100,7 +35100,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 996,
+          "stock": 995,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1aFCRSLdJ_Ldnfa7-YJ2zhMJvUj4Qr6CQ&sz=w2000",
           "sort_order": 1
@@ -35211,7 +35211,7 @@
           "option_value": "Scaramouche",
           "additional_price": 0,
           "price": null,
-          "stock": 997,
+          "stock": 996,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1GDH_YFXe9ITj72wpCc8jAFdKBfmd6Whh&sz=w2000",
           "sort_order": 1
@@ -42068,15 +42068,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-04T15:40:40.724Z",
+  "generated_at": "2026-11-05T11:33:31.173Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 9601,
-    "collections_ms": 1687,
-    "gifts_ms": 4120,
-    "banks_ms": 903,
-    "total_ms": 16311,
+    "products_ms": 2712,
+    "collections_ms": 1495,
+    "gifts_ms": 1458,
+    "banks_ms": 154,
+    "total_ms": 5819,
     "product_count": 334,
     "collection_count": 8,
     "bank_count": 3
