@@ -38407,6 +38407,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793960511365",
+      "name": "กล่องใส่ฟิกเกอร์ Aventurine (ไม่รวมนำเข้า)",
+      "price_mode": "option",
+      "price": 0,
+      "final_price": 0,
+      "base_price": 0,
+      "min_price": 0,
+      "max_price": 0,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "กล่องใส่ฟิกเกอร์",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "กล่องใส่ฟิกเกอร์",
+      "round": "HSR 11-2026",
+      "description": "ขนาดกล่อง\n\n• แบบไม่มีไฟ\nภายนอก 23.2*17.5*36.5ซม.\nภายใน 22.2*16.5*34ซม.\n***ไม่มีฉากกลางคืนนะคะ\n\n• แบบมีไฟ\nภายนอก 23.2*17.5*39ซม.\nภายใน 22.2*16.5*34ซม.\n**มีฉากพิเศษเป็นฉากกลางคืนนะคะ",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1XqsSVQoExJv3XRnrySMV8yMcGRO_DgJZ&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 4/2027",
+      "image2": "https://drive.google.com/thumbnail?id=1h4XLUG7B6Ldih8iVkWjS9c_u7aluMRzy&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=122QidHXHyV-dsaV-QOfcWh69anPdsRN6&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=17y378Oy2337-PhiolcUhm7jqNS28guZB&sz=w2000",
+      "collection_id": "COL1793773304745",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -38464,7 +38508,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
-      "product_count": 9
+      "product_count": 10
     },
     {
       "collection_id": "COL1793959147112",
@@ -42158,16 +42202,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:19:28.909Z",
+  "generated_at": "2026-11-06T10:22:31.749Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3058,
-    "collections_ms": 933,
-    "gifts_ms": 1262,
-    "banks_ms": 177,
-    "total_ms": 5430,
-    "product_count": 337,
+    "products_ms": 3826,
+    "collections_ms": 1429,
+    "gifts_ms": 2869,
+    "banks_ms": 298,
+    "total_ms": 8422,
+    "product_count": 338,
     "collection_count": 5,
     "bank_count": 3
   }
