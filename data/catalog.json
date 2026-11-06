@@ -38635,12 +38635,12 @@
       "product_id": "PROD1793961920270",
       "name": "Cookie Mini Figure Magnet",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 230,
+      "final_price": 230,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 230,
+      "max_price": 1890,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -38651,7 +38651,7 @@
       "sub_category": "ฟิกเกอร์",
       "round": "Genshin 11-2026",
       "description": "ขนาดประมาณ 4.5-5ซม.",
-      "search_keywords": "",
+      "search_keywords": "สุ่ม Box(ไม่แยกบ้าน) Box(แยกบ้าน แจ้งทางDM)",
       "image": "https://drive.google.com/thumbnail?id=1suEx3p3x_pcAPbySW4BtWVJ_In0cfvkH&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -38673,7 +38673,41 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793962954739_1",
+          "option_name": "แบบ",
+          "option_value": "สุ่ม",
+          "additional_price": 0,
+          "price": 230,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793962954739_2",
+          "option_name": "แบบ",
+          "option_value": "Box(ไม่แยกบ้าน)",
+          "additional_price": 0,
+          "price": 1890,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793962954739_3",
+          "option_name": "แบบ",
+          "option_value": "Box(แยกบ้าน แจ้งทางDM)",
+          "additional_price": 0,
+          "price": 1890,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        }
+      ]
     },
     {
       "product_id": "PROD1793962230293",
@@ -42513,15 +42547,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:58:30.994Z",
+  "generated_at": "2026-11-06T11:03:28.612Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3612,
-    "collections_ms": 1190,
-    "gifts_ms": 1989,
-    "banks_ms": 287,
-    "total_ms": 7078,
+    "products_ms": 2350,
+    "collections_ms": 737,
+    "gifts_ms": 1850,
+    "banks_ms": 219,
+    "total_ms": 5156,
     "product_count": 342,
     "collection_count": 5,
     "bank_count": 3
