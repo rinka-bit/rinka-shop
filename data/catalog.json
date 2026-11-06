@@ -38562,7 +38562,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 11-2026",
       "description": "ขนาดกล่อง ประมาณ 21.1*21.1*6.4ซม.\nขนาดเข็มกลัดเส้นผ่านศูนย์กลาง 5ซม.\n กล่องเป็นแบบปั๊มนูน",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลัง/ไม่แยกบ้าน ไม่ตีลัง/แยกบ้าน ตีลังไม้/ไม่แยกบ้าน ตีลังไม้/แยกบ้าน",
       "image": "https://drive.google.com/thumbnail?id=1eiT3x99tFnAuPKjJ9VUw2nXZrX8wmmFu&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -38584,7 +38584,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793962680335_1",
+          "option_name": "แบบ",
+          "option_value": "ไม่ตีลัง/ไม่แยกบ้าน",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793962680335_2",
+          "option_name": "แบบ",
+          "option_value": "ไม่ตีลัง/แยกบ้าน",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793962680335_3",
+          "option_name": "แบบ",
+          "option_value": "ตีลังไม้/ไม่แยกบ้าน",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793962680335_4",
+          "option_name": "แบบ",
+          "option_value": "ตีลังไม้/แยกบ้าน",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1793961920270",
@@ -42468,15 +42513,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:57:32.769Z",
+  "generated_at": "2026-11-06T10:58:30.994Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3827,
-    "collections_ms": 1000,
-    "gifts_ms": 2001,
-    "banks_ms": 328,
-    "total_ms": 7156,
+    "products_ms": 3612,
+    "collections_ms": 1190,
+    "gifts_ms": 1989,
+    "banks_ms": 287,
+    "total_ms": 7078,
     "product_count": 342,
     "collection_count": 5,
     "bank_count": 3
