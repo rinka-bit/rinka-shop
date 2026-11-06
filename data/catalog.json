@@ -38421,6 +38421,20 @@
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
       "product_count": 8
+    },
+    {
+      "collection_id": "COL1793959147112",
+      "name": "Genshin Impact 11-2026",
+      "fandom": "Genshin Impact",
+      "image": "https://drive.google.com/thumbnail?id=1CAFcVvNuBC3ia_t488hptF46yicjM1jV&sz=w2000",
+      "status": "active",
+      "preorder_deadline": "2026-11-29T17:00:00.000Z",
+      "featured": "",
+      "created_at": "2026-11-06T09:59:11.429Z",
+      "collection_type": "Preorder",
+      "description": "รวมส่งกลับไทยเกือบทุกรายการ",
+      "banner_image": "",
+      "product_count": 0
     }
   ],
   "gifts": {
@@ -42100,17 +42114,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T09:58:28.626Z",
+  "generated_at": "2026-11-06T09:59:28.618Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2206,
-    "collections_ms": 954,
-    "gifts_ms": 1388,
-    "banks_ms": 261,
-    "total_ms": 4809,
+    "products_ms": 2557,
+    "collections_ms": 836,
+    "gifts_ms": 1532,
+    "banks_ms": 408,
+    "total_ms": 5334,
     "product_count": 336,
-    "collection_count": 4,
+    "collection_count": 5,
     "bank_count": 3
   }
 }
