@@ -37471,7 +37471,7 @@
           "option_value": "Tighnari",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1jPKkCYhf8b5nT9-6WyXuYQWFkWh05C4e&sz=w2000",
           "sort_order": 3
@@ -42468,15 +42468,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:56:39.055Z",
+  "generated_at": "2026-11-06T10:57:32.769Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3649,
-    "collections_ms": 3312,
-    "gifts_ms": 5603,
-    "banks_ms": 474,
-    "total_ms": 13038,
+    "products_ms": 3827,
+    "collections_ms": 1000,
+    "gifts_ms": 2001,
+    "banks_ms": 328,
+    "total_ms": 7156,
     "product_count": 342,
     "collection_count": 5,
     "bank_count": 3
