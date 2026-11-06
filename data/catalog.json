@@ -38807,7 +38807,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "Genshin 11-2026",
       "description": "ขนาด 12-15 ซม.",
-      "search_keywords": "",
+      "search_keywords": "Flins Durin Albedo Kinich Diluc Lyney Arlecchino Xiangling Yae Miko Nahida Navia Klee Raiden Shogun",
       "image": "https://drive.google.com/thumbnail?id=1ouu_Cax4RBt_6ikt4okmjWL0jF76F1V1&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -38829,7 +38829,151 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793963378393_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Flins",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1JAHg3l52gosi8V3bL5UToJvscL_tmOGj&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793963378393_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Durin",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=11dXVwu1dc6WYjtuFBlLR_gZG7wv7j8p-&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793963378393_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Albedo",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1Svzhf60rY5uGRgr8hFp4Gi3OP8ZRudGV&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793963378393_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Kinich",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1tS_0xGoN-6CyH6VpmjdHDFSzit4AO1xU&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1793963378393_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Diluc",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1-w2wf5pNZ5by-7TgiHox378EJ252SjnG&sz=w2000",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1793963378393_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Lyney",
+          "additional_price": 0,
+          "price": null,
+          "stock": 0,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1GMoXysPtLxK8LbtUASOsDhoFvOEuaw6G&sz=w2000",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1793963378393_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Arlecchino",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1fix-qYuHmXkZT0q2xY7UJBQuAGzsst86&sz=w2000",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1793963378393_8",
+          "option_name": "ตัวละคร",
+          "option_value": "Xiangling",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=17M0dOBQVq6AXG87eAjk8ilf2AYj8bghR&sz=w2000",
+          "sort_order": 7
+        },
+        {
+          "option_id": "OPT1793963378393_9",
+          "option_name": "ตัวละคร",
+          "option_value": "Yae Miko",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1YmQ6B979UlBy2TQsTTnH1wTUYsikFg6T&sz=w2000",
+          "sort_order": 8
+        },
+        {
+          "option_id": "OPT1793963378393_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Nahida",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1IenEjJj7g8E4JPMlkjdn2V6NWOqh1sPU&sz=w2000",
+          "sort_order": 9
+        },
+        {
+          "option_id": "OPT1793963378393_11",
+          "option_name": "ตัวละคร",
+          "option_value": "Navia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1CtIo5t4BJtUXerxFG4dgBnu8o9LjkTuX&sz=w2000",
+          "sort_order": 10
+        },
+        {
+          "option_id": "OPT1793963378393_12",
+          "option_name": "ตัวละคร",
+          "option_value": "Klee",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1Mxolqex2tPKGfsCyS6GuZEGDJLDdftUk&sz=w2000",
+          "sort_order": 11
+        },
+        {
+          "option_id": "OPT1793963378393_13",
+          "option_name": "ตัวละคร",
+          "option_value": "Raiden Shogun",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1fwz7cNtqovwi4Ksb44eUyjfHs5EfBgwA&sz=w2000",
+          "sort_order": 12
+        }
+      ]
     }
   ],
   "collections": [
@@ -42581,15 +42725,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T11:05:29.855Z",
+  "generated_at": "2026-11-06T11:10:28.496Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3721,
-    "collections_ms": 776,
-    "gifts_ms": 1613,
-    "banks_ms": 247,
-    "total_ms": 6358,
+    "products_ms": 2344,
+    "collections_ms": 827,
+    "gifts_ms": 1617,
+    "banks_ms": 248,
+    "total_ms": 5036,
     "product_count": 342,
     "collection_count": 5,
     "bank_count": 3
