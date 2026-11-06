@@ -38585,6 +38585,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1793961920270",
+      "name": "Cookie Mini Figure Magnet",
+      "price_mode": "option",
+      "price": 0,
+      "final_price": 0,
+      "base_price": 0,
+      "min_price": 0,
+      "max_price": 0,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "ฟิกเกอร์",
+      "fandom": "Genshin Impact",
+      "sub_category": "ฟิกเกอร์",
+      "round": "Genshin 11-2026",
+      "description": "ขนาดประมาณ 4.5-5ซม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1suEx3p3x_pcAPbySW4BtWVJ_In0cfvkH&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 12/2026",
+      "image2": "https://drive.google.com/thumbnail?id=1JUdQJOJMwpW8iKPg43of-QhwQ3phUC5p&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1jFh3tTQ9_cbhHBwZspMGDb427l-7ASCX&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1VN2ixZzzlrnRxgC5MhmsmjieWBwiH_kj&sz=w2000",
+      "collection_id": "COL1793959147112",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -38656,7 +38700,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 1
+      "product_count": 2
     }
   ],
   "gifts": {
@@ -42336,16 +42380,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:43:36.426Z",
+  "generated_at": "2026-11-06T10:46:28.934Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6227,
-    "collections_ms": 2287,
-    "gifts_ms": 2486,
-    "banks_ms": 399,
-    "total_ms": 11399,
-    "product_count": 339,
+    "products_ms": 2314,
+    "collections_ms": 1275,
+    "gifts_ms": 1700,
+    "banks_ms": 175,
+    "total_ms": 5464,
+    "product_count": 340,
     "collection_count": 5,
     "bank_count": 3
   }
