@@ -38541,6 +38541,50 @@
           "sort_order": 3
         }
       ]
+    },
+    {
+      "product_id": "PROD1793961744071",
+      "name": "Cookie-Theme Tin box set (ไม่รวมกลับไทย)",
+      "price_mode": "fixed",
+      "price": 690,
+      "final_price": 690,
+      "base_price": 690,
+      "min_price": 690,
+      "max_price": 690,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "เข็มกลัด",
+      "fandom": "Genshin Impact",
+      "sub_category": "เข็มกลัด",
+      "round": "Genshin 11-2026",
+      "description": "ขนาดกล่อง ประมาณ 21.1*21.1*6.4ซม.\nขนาดเข็มกลัดเส้นผ่านศูนย์กลาง 5ซม.\n กล่องเป็นแบบปั๊มนูน",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1eiT3x99tFnAuPKjJ9VUw2nXZrX8wmmFu&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังช่วงเดือน 12/2026",
+      "image2": "https://drive.google.com/thumbnail?id=1AiD8jPTjTz6BMe7CXi8fzkmhlaIWIcN9&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1_PfpmMQxEicplZKzZlNCvt89wcLKZqTC&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=17Abi58pFAmfLuB6gEAcJoUb2GgVFOJvZ&sz=w2000",
+      "collection_id": "COL1793959147112",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -38612,7 +38656,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 0
+      "product_count": 1
     }
   ],
   "gifts": {
@@ -42292,16 +42336,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:33:46.693Z",
+  "generated_at": "2026-11-06T10:43:36.426Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 14016,
-    "collections_ms": 1330,
-    "gifts_ms": 3848,
-    "banks_ms": 999,
-    "total_ms": 20194,
-    "product_count": 338,
+    "products_ms": 6227,
+    "collections_ms": 2287,
+    "gifts_ms": 2486,
+    "banks_ms": 399,
+    "total_ms": 11399,
+    "product_count": 339,
     "collection_count": 5,
     "bank_count": 3
   }
