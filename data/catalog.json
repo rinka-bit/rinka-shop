@@ -38633,7 +38633,7 @@
     },
     {
       "product_id": "PROD1793961920270",
-      "name": "Cookie Mini Figure Magnet",
+      "name": "Cookie Mini Figure Magnet Blind Boxes",
       "price_mode": "option",
       "price": 230,
       "final_price": 230,
@@ -38650,7 +38650,7 @@
       "fandom": "Genshin Impact",
       "sub_category": "ฟิกเกอร์",
       "round": "Genshin 11-2026",
-      "description": "ขนาดประมาณ 4.5-5ซม.",
+      "description": "ขนาดประมาณ 4.5-5ซม.\n\nแบบBox ยังไม่รวมส่งกลับไทยนะคะ",
       "search_keywords": "สุ่ม Box(ไม่แยกบ้าน) Box(แยกบ้าน แจ้งทางDM)",
       "image": "https://drive.google.com/thumbnail?id=1suEx3p3x_pcAPbySW4BtWVJ_In0cfvkH&sz=w2000",
       "status": "active",
@@ -38711,7 +38711,7 @@
     },
     {
       "product_id": "PROD1793962230293",
-      "name": "Snowy Night Bakery Series : Plush Badge",
+      "name": "Snowy Night Bakery Series : Plush Badge Blind Boxes",
       "price_mode": "option",
       "price": 350,
       "final_price": 350,
@@ -38728,7 +38728,7 @@
       "fandom": "Genshin Impact",
       "sub_category": "ตุ๊กตา",
       "round": "Genshin 11-2026",
-      "description": "ขนาดประมาณ 7-8ซม.",
+      "description": "ขนาดประมาณ 7-8ซม.\n\nแบบ Boxยังไม่รวมส่งกลับไทยนะคะ",
       "search_keywords": "สุ่ม Box(ไม่แยกบ้าน) Box(แยกบ้าน แจ้งทางDM)",
       "image": "https://drive.google.com/thumbnail?id=14bPWFZq6JmtKi0ze85z2kz_oBr1qrvZE&sz=w2000",
       "status": "active",
@@ -42581,15 +42581,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T11:04:29.788Z",
+  "generated_at": "2026-11-06T11:05:29.855Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3088,
-    "collections_ms": 820,
-    "gifts_ms": 1855,
-    "banks_ms": 278,
-    "total_ms": 6041,
+    "products_ms": 3721,
+    "collections_ms": 776,
+    "gifts_ms": 1613,
+    "banks_ms": 247,
+    "total_ms": 6358,
     "product_count": 342,
     "collection_count": 5,
     "bank_count": 3
