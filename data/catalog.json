@@ -38713,12 +38713,12 @@
       "product_id": "PROD1793962230293",
       "name": "Snowy Night Bakery Series : Plush Badge",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 350,
+      "final_price": 350,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 350,
+      "max_price": 3150,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -38729,7 +38729,7 @@
       "sub_category": "ตุ๊กตา",
       "round": "Genshin 11-2026",
       "description": "ขนาดประมาณ 7-8ซม.",
-      "search_keywords": "",
+      "search_keywords": "สุ่ม Box(ไม่แยกบ้าน) Box(แยกบ้าน แจ้งทางDM)",
       "image": "https://drive.google.com/thumbnail?id=14bPWFZq6JmtKi0ze85z2kz_oBr1qrvZE&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -38751,7 +38751,41 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793963031360_1",
+          "option_name": "แบบ",
+          "option_value": "สุ่ม",
+          "additional_price": 0,
+          "price": 350,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793963031360_2",
+          "option_name": "แบบ",
+          "option_value": "Box(ไม่แยกบ้าน)",
+          "additional_price": 0,
+          "price": 3150,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793963031360_3",
+          "option_name": "แบบ",
+          "option_value": "Box(แยกบ้าน แจ้งทางDM)",
+          "additional_price": 0,
+          "price": 3150,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        }
+      ]
     },
     {
       "product_id": "PROD1793962350423",
@@ -42547,15 +42581,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T11:03:28.612Z",
+  "generated_at": "2026-11-06T11:04:29.788Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2350,
-    "collections_ms": 737,
-    "gifts_ms": 1850,
-    "banks_ms": 219,
-    "total_ms": 5156,
+    "products_ms": 3088,
+    "collections_ms": 820,
+    "gifts_ms": 1855,
+    "banks_ms": 278,
+    "total_ms": 6041,
     "product_count": 342,
     "collection_count": 5,
     "bank_count": 3
