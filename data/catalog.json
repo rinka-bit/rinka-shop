@@ -38368,12 +38368,12 @@
       "product_id": "PROD1793960303517",
       "name": "กล่องใส่ฟิกเกอร์Dan Heng (ไม่รวมนำเข้า)",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 790,
+      "final_price": 790,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 790,
+      "max_price": 1060,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -38384,7 +38384,7 @@
       "sub_category": "กล่องใส่ฟิกเกอร์",
       "round": "HSR 11-2026",
       "description": "ขนาดกล่อง\n\n• แบบไม่มีไฟ\nภายนอก 19.4*17*29.5ซม.\nภายใน 18.4*16*27ซม.\n\n• แบบมีไฟ\nภายนอก 19.4*17*32ซม.\nภายใน 18.4*16*27ซม.",
-      "search_keywords": "",
+      "search_keywords": "ไม่มีไฟ(ไม่ตีลัง) ไม่มีไฟ(ตีลัง เริ่มต้น 150฿) มีไฟ(ไม่ตีลัง) มีไฟ(ตีลัง เริ่มต้น 150฿)",
       "image": "https://drive.google.com/thumbnail?id=1v5Mm5ed2CYzdCo8HYmcCKpLwVapdVPWN&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -38406,7 +38406,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793960804899_1",
+          "option_name": "แบบ",
+          "option_value": "ไม่มีไฟ(ไม่ตีลัง)",
+          "additional_price": 0,
+          "price": 790,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1Nz6rTkkUB4yXfmUhgFK3atz7biT2O4l2&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793960804899_2",
+          "option_name": "แบบ",
+          "option_value": "ไม่มีไฟ(ตีลัง เริ่มต้น 150฿)",
+          "additional_price": 0,
+          "price": 790,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1qLjuylCwsLbKUMJrs_UwW0o6Typspwo5&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793960804899_3",
+          "option_name": "แบบ",
+          "option_value": "มีไฟ(ไม่ตีลัง)",
+          "additional_price": 0,
+          "price": 1060,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=17WXAjGT23rEvQbrhr4Oc1RhegYNX3Pk-&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793960804899_4",
+          "option_name": "แบบ",
+          "option_value": "มีไฟ(ตีลัง เริ่มต้น 150฿)",
+          "additional_price": 0,
+          "price": 1060,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1jdEa4uXi6M3mcJSMnFp_g8b-rb0rSBdy&sz=w2000",
+          "sort_order": 3
+        }
+      ]
     },
     {
       "product_id": "PROD1793960511365",
@@ -42202,15 +42247,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:22:31.749Z",
+  "generated_at": "2026-11-06T10:27:30.605Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3826,
-    "collections_ms": 1429,
-    "gifts_ms": 2869,
-    "banks_ms": 298,
-    "total_ms": 8422,
+    "products_ms": 3286,
+    "collections_ms": 1013,
+    "gifts_ms": 2196,
+    "banks_ms": 471,
+    "total_ms": 6966,
     "product_count": 338,
     "collection_count": 5,
     "bank_count": 3
