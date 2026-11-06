@@ -37282,7 +37282,7 @@
           "option_value": "Venti",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1uzd86BYr_3G40Eq6tVasTq1yovTXZ5Mx&sz=w2000",
           "sort_order": 2
@@ -37371,7 +37371,7 @@
           "option_value": "Venti",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=17Ad9-WyMRaXh9vPBLm9XZhjxnQE_MfZ1&sz=w2000",
           "sort_order": 2
@@ -42468,15 +42468,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:53:28.358Z",
+  "generated_at": "2026-11-06T10:55:31.141Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2377,
-    "collections_ms": 743,
-    "gifts_ms": 1473,
-    "banks_ms": 181,
-    "total_ms": 4774,
+    "products_ms": 3393,
+    "collections_ms": 857,
+    "gifts_ms": 1469,
+    "banks_ms": 411,
+    "total_ms": 6130,
     "product_count": 342,
     "collection_count": 5,
     "bank_count": 3
