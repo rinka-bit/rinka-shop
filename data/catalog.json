@@ -38457,12 +38457,12 @@
       "product_id": "PROD1793960511365",
       "name": "กล่องใส่ฟิกเกอร์ Aventurine (ไม่รวมนำเข้า)",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 900,
+      "final_price": 900,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 900,
+      "max_price": 1420,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -38473,7 +38473,7 @@
       "sub_category": "กล่องใส่ฟิกเกอร์",
       "round": "HSR 11-2026",
       "description": "ขนาดกล่อง\n\n• แบบไม่มีไฟ\nภายนอก 23.2*17.5*36.5ซม.\nภายใน 22.2*16.5*34ซม.\n***ไม่มีฉากกลางคืนนะคะ\n\n• แบบมีไฟ\nภายนอก 23.2*17.5*39ซม.\nภายใน 22.2*16.5*34ซม.\n**มีฉากพิเศษเป็นฉากกลางคืนนะคะ",
-      "search_keywords": "",
+      "search_keywords": "ไม่มีไฟ(ไม่ตีลัง) ไม่มีไฟ(ตีลัง เริ่มต้น 150฿) มีไฟ(ไม่ตีลัง) มีไฟ(ตีลัง เริ่มต้น 150฿)",
       "image": "https://drive.google.com/thumbnail?id=1XqsSVQoExJv3XRnrySMV8yMcGRO_DgJZ&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -38495,7 +38495,52 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1793960946600_1",
+          "option_name": "แบบ",
+          "option_value": "ไม่มีไฟ(ไม่ตีลัง)",
+          "additional_price": 0,
+          "price": 900,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1WqS9AVYn8K4mSASbnDpoIT3q25XDuG3r&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1793960946600_2",
+          "option_name": "แบบ",
+          "option_value": "ไม่มีไฟ(ตีลัง เริ่มต้น 150฿)",
+          "additional_price": 0,
+          "price": 900,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1R8APTZZe7f89SJzc3tU3rUZODkaK8gQK&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1793960946600_3",
+          "option_name": "แบบ",
+          "option_value": "มีไฟ(ไม่ตีลัง)",
+          "additional_price": 0,
+          "price": 1420,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=15_EGkJ48gpPOOaQvvaQTeeVxjXKsaLDo&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1793960946600_4",
+          "option_name": "แบบ",
+          "option_value": "มีไฟ(ตีลัง เริ่มต้น 150฿)",
+          "additional_price": 0,
+          "price": 1420,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1cLUOMeP7wgfZLjdNaHqsoKSbMRN0VdUI&sz=w2000",
+          "sort_order": 3
+        }
+      ]
     }
   ],
   "collections": [
@@ -42247,15 +42292,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-06T10:27:30.605Z",
+  "generated_at": "2026-11-06T10:29:28.744Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3286,
-    "collections_ms": 1013,
-    "gifts_ms": 2196,
-    "banks_ms": 471,
-    "total_ms": 6966,
+    "products_ms": 3424,
+    "collections_ms": 623,
+    "gifts_ms": 1787,
+    "banks_ms": 160,
+    "total_ms": 5994,
     "product_count": 338,
     "collection_count": 5,
     "bank_count": 3
