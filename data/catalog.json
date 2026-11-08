@@ -39550,6 +39550,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1794139129820",
+      "name": "Phainon Impression series : Reed Diffuser",
+      "price_mode": "fixed",
+      "price": 950,
+      "final_price": 950,
+      "base_price": 950,
+      "min_price": 950,
+      "max_price": 950,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "อื่น ๆ",
+      "round": "HSR 11-2026",
+      "description": "***ราคาไม่รวมส่งกลับไทยนะคะ\n\nรายละเอียดกลิ่น\n\nTop Notes : มะเดื่อ (Fig), เลมอน\nMiddle Notes : ลิลลี่ออฟเดอะวัลเลย์\nBase Notes : แอมเบอร์กริส, มัสก์, แซนดัลวูด\nหัวน้ำหอม\tFirmenich\nปริมาณ : ประมาณ 100 มล.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1CIn3_DGLLkK8KX3foRW9i2n1_oimZgIm&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-30",
+      "estimated_arrival": "สินค้าถึงคลังจีนช่วงเดือน2/2027",
+      "image2": "https://drive.google.com/thumbnail?id=1IShE36uQ2OS4Bf3_WgtKz0UZVIA124v_&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1ZQ7seHbh7gGmYqgysJUHjImQwSt6vq_B&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1Ak5IMpkK0Qizuh9va4sfDOEyhNy5q9ES&sz=w2000",
+      "collection_id": "COL1793959147112",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -39593,7 +39637,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 33
+      "product_count": 34
     }
   ],
   "gifts": {
@@ -43273,16 +43317,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T11:55:27.457Z",
+  "generated_at": "2026-11-08T11:59:30.349Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2056,
-    "collections_ms": 834,
-    "gifts_ms": 1112,
-    "banks_ms": 187,
-    "total_ms": 4189,
-    "product_count": 350,
+    "products_ms": 3011,
+    "collections_ms": 1088,
+    "gifts_ms": 2418,
+    "banks_ms": 346,
+    "total_ms": 6863,
+    "product_count": 351,
     "collection_count": 3,
     "bank_count": 3
   }
