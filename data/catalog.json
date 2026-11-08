@@ -39948,6 +39948,50 @@
           "sort_order": 9
         }
       ]
+    },
+    {
+      "product_id": "PROD1794143017866",
+      "name": "Phainon Impression series : กางเกง",
+      "price_mode": "fixed",
+      "price": 1750,
+      "final_price": 1750,
+      "base_price": 1750,
+      "min_price": 1750,
+      "max_price": 1750,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "เสื้อผ้า",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "เสื้อผ้า",
+      "round": "HSR 11-2026",
+      "description": "***ราคายังไม่รวมกลับไทย\n\nได้รับสแตนดี้แถมนะคะ",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=19EkVj7loilbUxSyWcxgo4SsmqNfSlQPK&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-30",
+      "estimated_arrival": "สินค้าถึงคลังจีนช่วงเดือน1/2027",
+      "image2": "https://drive.google.com/thumbnail?id=1h-EZIYmmwAFqYdrfNstAZMFdi-o_QIwK&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1jripySlXkY149FhMvt9C2RE3tU8H07Qv&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1QYsghB42Php843SflMheiV8ZVcF1JB1j&sz=w2000",
+      "collection_id": "COL1793773304745",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -39977,7 +40021,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
-      "product_count": 16
+      "product_count": 17
     },
     {
       "collection_id": "COL1793959147112",
@@ -43671,16 +43715,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T13:01:31.485Z",
+  "generated_at": "2026-11-08T13:04:28.697Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4689,
-    "collections_ms": 852,
-    "gifts_ms": 1915,
-    "banks_ms": 270,
-    "total_ms": 7726,
-    "product_count": 355,
+    "products_ms": 2509,
+    "collections_ms": 724,
+    "gifts_ms": 1591,
+    "banks_ms": 155,
+    "total_ms": 4979,
+    "product_count": 356,
     "collection_count": 3,
     "bank_count": 3
   }
