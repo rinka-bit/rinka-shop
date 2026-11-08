@@ -39703,7 +39703,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 11-2026",
       "description": "***ราคาไม่รวมส่งกลับไทยนะคะ\n\nได้รับสแตนดี้แถม\n\nวัสดุภายนอก : หนัง PU\nวัสดุพื้นรองเท้า : ยาง",
-      "search_keywords": "",
+      "search_keywords": "35 36 37 38 39 40",
       "image": "https://drive.google.com/thumbnail?id=1WszCsL04Kx9d0V2SGidvClWKd6_04SWk&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -39725,7 +39725,74 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794140435435_1",
+          "option_name": "ไซส์",
+          "option_value": "35",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794140435435_2",
+          "option_name": "ไซส์",
+          "option_value": "36",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1794140435435_3",
+          "option_name": "ไซส์",
+          "option_value": "37",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1794140435435_4",
+          "option_name": "ไซส์",
+          "option_value": "38",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1794140435435_5",
+          "option_name": "ไซส์",
+          "option_value": "39",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1794140435435_6",
+          "option_name": "ไซส์",
+          "option_value": "40",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        }
+      ]
     }
   ],
   "collections": [
@@ -43449,15 +43516,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T12:20:30.752Z",
+  "generated_at": "2026-11-08T12:21:30.278Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4168,
-    "collections_ms": 893,
-    "gifts_ms": 1788,
-    "banks_ms": 159,
-    "total_ms": 7008,
+    "products_ms": 3277,
+    "collections_ms": 1644,
+    "gifts_ms": 1516,
+    "banks_ms": 246,
+    "total_ms": 6683,
     "product_count": 354,
     "collection_count": 3,
     "bank_count": 3
