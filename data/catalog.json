@@ -40347,7 +40347,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 11-2026",
       "description": "***ราคาไม่รวมส่งกลับไทย\n\nได้รับสแตนดี้แถมนะคะ",
-      "search_keywords": "",
+      "search_keywords": "S M",
       "image": "https://drive.google.com/thumbnail?id=1Eq4N1AekvHXlcrgwNv7zbrXXaj2_BLX8&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40369,7 +40369,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794143806802_1",
+          "option_name": "แบบ",
+          "option_value": "S",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794143806802_2",
+          "option_name": "แบบ",
+          "option_value": "M",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     }
   ],
   "collections": [
@@ -44093,15 +44116,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T13:14:54.200Z",
+  "generated_at": "2026-11-08T13:17:36.314Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 21038,
-    "collections_ms": 1889,
-    "gifts_ms": 3156,
-    "banks_ms": 662,
-    "total_ms": 26746,
+    "products_ms": 7803,
+    "collections_ms": 1102,
+    "gifts_ms": 2320,
+    "banks_ms": 371,
+    "total_ms": 11596,
     "product_count": 359,
     "collection_count": 3,
     "bank_count": 3
