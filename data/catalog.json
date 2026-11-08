@@ -40092,7 +40092,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 11-2026",
       "description": "***ราคายังไม่รวมกลับไทย\n\nได้รับสแตนดี้แถมนะคะ",
-      "search_keywords": "",
+      "search_keywords": "XS/ขาว S/ขาว M/ขาว L/ขาว XL/ขาว XS/ดำ S/ดำ M/ดำ L/ดำ XL/ดำ",
       "image": "https://drive.google.com/thumbnail?id=1qLcDYzXWnHp94fUfGq-Lb68l-tzjygwU&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40114,7 +40114,118 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794143349452_1",
+          "option_name": "ไซส์/สี",
+          "option_value": "XS/ขาว",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794143349452_2",
+          "option_name": "ไซส์/สี",
+          "option_value": "S/ขาว",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1794143349452_3",
+          "option_name": "ไซส์/สี",
+          "option_value": "M/ขาว",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1794143349452_4",
+          "option_name": "ไซส์/สี",
+          "option_value": "L/ขาว",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1794143349452_5",
+          "option_name": "ไซส์/สี",
+          "option_value": "XL/ขาว",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1794143349452_6",
+          "option_name": "ไซส์/สี",
+          "option_value": "XS/ดำ",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1794143349452_7",
+          "option_name": "ไซส์/สี",
+          "option_value": "S/ดำ",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1794143349452_8",
+          "option_name": "ไซส์/สี",
+          "option_value": "M/ดำ",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 7
+        },
+        {
+          "option_id": "OPT1794143349452_9",
+          "option_name": "ไซส์/สี",
+          "option_value": "L/ดำ",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 8
+        },
+        {
+          "option_id": "OPT1794143349452_10",
+          "option_name": "ไซส์/สี",
+          "option_value": "XL/ดำ",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 9
+        }
+      ]
     }
   ],
   "collections": [
@@ -43838,15 +43949,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T13:07:27.634Z",
+  "generated_at": "2026-11-08T13:09:30.892Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2113,
-    "collections_ms": 548,
-    "gifts_ms": 1355,
-    "banks_ms": 158,
-    "total_ms": 4174,
+    "products_ms": 3482,
+    "collections_ms": 870,
+    "gifts_ms": 2539,
+    "banks_ms": 390,
+    "total_ms": 7282,
     "product_count": 357,
     "collection_count": 3,
     "bank_count": 3
