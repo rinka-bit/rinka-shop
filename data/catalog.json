@@ -39526,7 +39526,7 @@
       "fandom": "Honkai Star Rail",
       "sub_category": "เครื่องประดับ",
       "round": "HSR 11-2026",
-      "description": "***ราคาไม่รวมส่งกลับไทย\n\nรายละเอียดสินค้า\nตัวเรือน : สเตนเลส 304 กลไก Quartz (ระบบควอตซ์)\nกระจกหน้าปัด : กระจกมิเนอรัลชุบแข็ง\nสาย : หนังสังเคราะห์ไมโครไฟเบอร์\nความยาวสายรวมตัวเรือน : ประมาณ 234 มม.\nความกว้างสาย : ประมาณ 20 มม.\nเส้นผ่านศูนย์กลางตัวเรือน : ประมาณ 36 มม.\nเส้นผ่านศูนย์กลางหน้าปัด : ประมาณ 32 มม.\nความหนาหน้าปัด : ประมาณ 9 มม.\nน้ำหนักสุทธิ : ประมาณ 60 กรัม (รวมสายสำรอง)\n\nสายสำรองที่แถม : สายโลหะผสมแบบเปลี่ยนได้ ความยาวประมาณ 148 มม. กว้างประมาณ 15 มม. ไม่รวมตัวเรือน\n\n- อายุการใช้งานประมาณ 2 ปี\n- รุ่นแบตเตอรี่ SR626SW\n- ความถี่ 32,768 Hz\n- ความคลาดเคลื่อนของเวลาในอุณหภูมิปกติ ไม่เกิน ±30 วินาทีต่อเดือน",
+      "description": "***ราคาไม่รวมส่งกลับไทย\n\nได้รับสแตนดี้แถมนะคะ\n\nรายละเอียดสินค้า\nตัวเรือน : สเตนเลส 304 กลไก Quartz (ระบบควอตซ์)\nกระจกหน้าปัด : กระจกมิเนอรัลชุบแข็ง\nสาย : หนังสังเคราะห์ไมโครไฟเบอร์\nความยาวสายรวมตัวเรือน : ประมาณ 234 มม.\nความกว้างสาย : ประมาณ 20 มม.\nเส้นผ่านศูนย์กลางตัวเรือน : ประมาณ 36 มม.\nเส้นผ่านศูนย์กลางหน้าปัด : ประมาณ 32 มม.\nความหนาหน้าปัด : ประมาณ 9 มม.\nน้ำหนักสุทธิ : ประมาณ 60 กรัม (รวมสายสำรอง)\n\nสายสำรองที่แถม : สายโลหะผสมแบบเปลี่ยนได้ ความยาวประมาณ 148 มม. กว้างประมาณ 15 มม. ไม่รวมตัวเรือน\n\n- อายุการใช้งานประมาณ 2 ปี\n- รุ่นแบตเตอรี่ SR626SW\n- ความถี่ 32,768 Hz\n- ความคลาดเคลื่อนของเวลาในอุณหภูมิปกติ ไม่เกิน ±30 วินาทีต่อเดือน",
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1h5C8Sq5xUCdJNOX5c0aVHiKmUrhMJeDr&sz=w2000",
       "status": "active",
@@ -39536,7 +39536,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-30",
+      "preorder_deadline": "2026-11-29",
       "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
       "image2": "https://drive.google.com/thumbnail?id=1Ie6iaFbQ7k8O3I5_N8nvgV1I042F2tPR&sz=w2000",
       "image3": "https://drive.google.com/thumbnail?id=1zH1cvgfDXHf_3taSxDQslqXO_6w5Og9l&sz=w2000",
@@ -39588,7 +39588,7 @@
       "new_arrival": "",
       "sort_order": 0,
       "image4": "https://drive.google.com/thumbnail?id=1Ak5IMpkK0Qizuh9va4sfDOEyhNy5q9ES&sz=w2000",
-      "collection_id": "COL1793959147112",
+      "collection_id": "COL1793773304746",
       "created_at": "",
       "variant_mode": false,
       "variant_groups": [],
@@ -39637,7 +39637,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 34
+      "product_count": 33
     }
   ],
   "gifts": {
@@ -43317,15 +43317,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T11:59:30.349Z",
+  "generated_at": "2026-11-08T12:03:26.335Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3011,
-    "collections_ms": 1088,
-    "gifts_ms": 2418,
-    "banks_ms": 346,
-    "total_ms": 6863,
+    "products_ms": 1530,
+    "collections_ms": 514,
+    "gifts_ms": 1256,
+    "banks_ms": 144,
+    "total_ms": 3445,
     "product_count": 351,
     "collection_count": 3,
     "bank_count": 3
