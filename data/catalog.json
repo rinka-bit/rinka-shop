@@ -39571,7 +39571,7 @@
       "sub_category": "อื่น ๆ",
       "round": "HSR 11-2026",
       "description": "***ราคาไม่รวมส่งกลับไทยนะคะ\n\nไม่ได้รับสแตนดี้แถมค่ะ\n\nรายละเอียดกลิ่น\n\nTop Notes : มะเดื่อ (Fig), เลมอน\nMiddle Notes : ลิลลี่ออฟเดอะวัลเลย์\nBase Notes : แอมเบอร์กริส, มัสก์, แซนดัลวูด\nหัวน้ำหอม\tFirmenich\nปริมาณ : ประมาณ 100 มล.",
-      "search_keywords": "",
+      "search_keywords": "ไม่ตีลังไม้ ตีลังไม้ (เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
       "image": "https://drive.google.com/thumbnail?id=1CIn3_DGLLkK8KX3foRW9i2n1_oimZgIm&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -39593,7 +39593,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794143225977_1",
+          "option_name": "แบบ",
+          "option_value": "ไม่ตีลังไม้",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794143225977_2",
+          "option_name": "แบบ",
+          "option_value": "ตีลังไม้ (เริ่มต้น150฿ ชำระพร้อมค่านำเข้าตอนสินค้าถึงไทย)",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1794139656664",
@@ -39969,7 +39992,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 11-2026",
       "description": "***ราคายังไม่รวมกลับไทย\n\nได้รับสแตนดี้แถมนะคะ",
-      "search_keywords": "",
+      "search_keywords": "XS S M L XL",
       "image": "https://drive.google.com/thumbnail?id=19EkVj7loilbUxSyWcxgo4SsmqNfSlQPK&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -39991,7 +40014,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794143197476_1",
+          "option_name": "ไซส์",
+          "option_value": "XS",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794143197476_2",
+          "option_name": "ไซส์",
+          "option_value": "S",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1794143197476_3",
+          "option_name": "ไซส์",
+          "option_value": "M",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1794143197476_4",
+          "option_name": "ไซส์",
+          "option_value": "L",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1794143197476_5",
+          "option_name": "ไซส์",
+          "option_value": "XL",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        }
+      ]
     },
     {
       "product_id": "PROD1794143130684",
@@ -43759,15 +43838,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T13:06:33.159Z",
+  "generated_at": "2026-11-08T13:07:27.634Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4705,
-    "collections_ms": 1445,
-    "gifts_ms": 2180,
-    "banks_ms": 342,
-    "total_ms": 8672,
+    "products_ms": 2113,
+    "collections_ms": 548,
+    "gifts_ms": 1355,
+    "banks_ms": 158,
+    "total_ms": 4174,
     "product_count": 357,
     "collection_count": 3,
     "bank_count": 3
