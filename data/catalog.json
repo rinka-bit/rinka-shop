@@ -40247,7 +40247,7 @@
       "sub_category": "เสื้อผ้า",
       "round": "HSR 11-2026",
       "description": "***ราคายังไม่รวมกลับไทย\n\nได้รับสแตนดี้แถมนะคะ",
-      "search_keywords": "",
+      "search_keywords": "XS S M L XL",
       "image": "https://drive.google.com/thumbnail?id=1blQdcLNXUtLamh2E9Kwz8pdqTpldgXie&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40269,7 +40269,63 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794143507740_1",
+          "option_name": "ไซส์",
+          "option_value": "XS",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794143507740_2",
+          "option_name": "ไซส์",
+          "option_value": "S",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1794143507740_3",
+          "option_name": "ไซส์",
+          "option_value": "M",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1794143507740_4",
+          "option_name": "ไซส์",
+          "option_value": "L",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1794143507740_5",
+          "option_name": "ไซส์",
+          "option_value": "XL",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 4
+        }
+      ]
     }
   ],
   "collections": [
@@ -43993,15 +44049,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T13:11:42.265Z",
+  "generated_at": "2026-11-08T13:12:30.324Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 11743,
-    "collections_ms": 1750,
-    "gifts_ms": 3180,
-    "banks_ms": 356,
-    "total_ms": 17030,
+    "products_ms": 2816,
+    "collections_ms": 1099,
+    "gifts_ms": 2049,
+    "banks_ms": 379,
+    "total_ms": 6343,
     "product_count": 358,
     "collection_count": 3,
     "bank_count": 3
