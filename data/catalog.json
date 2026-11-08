@@ -39506,6 +39506,50 @@
           "sort_order": 4
         }
       ]
+    },
+    {
+      "product_id": "PROD1794138910877",
+      "name": "Phainon Impression series : นาฬิกา",
+      "price_mode": "fixed",
+      "price": 2150,
+      "final_price": 2150,
+      "base_price": 2150,
+      "min_price": 2150,
+      "max_price": 2150,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "เครื่องประดับ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "เครื่องประดับ",
+      "round": "HSR 11-2026",
+      "description": "***ราคาไม่รวมส่งกลับไทย\n\nรายละเอียดสินค้า\nตัวเรือน : สเตนเลส 304 กลไก Quartz (ระบบควอตซ์)\nกระจกหน้าปัด : กระจกมิเนอรัลชุบแข็ง\nสาย : หนังสังเคราะห์ไมโครไฟเบอร์\nความยาวสายรวมตัวเรือน : ประมาณ 234 มม.\nความกว้างสาย : ประมาณ 20 มม.\nเส้นผ่านศูนย์กลางตัวเรือน : ประมาณ 36 มม.\nเส้นผ่านศูนย์กลางหน้าปัด : ประมาณ 32 มม.\nความหนาหน้าปัด : ประมาณ 9 มม.\nน้ำหนักสุทธิ : ประมาณ 60 กรัม (รวมสายสำรอง)\n\nสายสำรองที่แถม : สายโลหะผสมแบบเปลี่ยนได้ ความยาวประมาณ 148 มม. กว้างประมาณ 15 มม. ไม่รวมตัวเรือน\n\n- อายุการใช้งานประมาณ 2 ปี\n- รุ่นแบตเตอรี่ SR626SW\n- ความถี่ 32,768 Hz\n- ความคลาดเคลื่อนของเวลาในอุณหภูมิปกติ ไม่เกิน ±30 วินาทีต่อเดือน",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1h5C8Sq5xUCdJNOX5c0aVHiKmUrhMJeDr&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-30",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1Ie6iaFbQ7k8O3I5_N8nvgV1I042F2tPR&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1zH1cvgfDXHf_3taSxDQslqXO_6w5Og9l&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1793773304745",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -39535,7 +39579,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
-      "product_count": 10
+      "product_count": 11
     },
     {
       "collection_id": "COL1793959147112",
@@ -43229,16 +43273,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T09:53:31.377Z",
+  "generated_at": "2026-11-08T11:55:27.457Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3705,
-    "collections_ms": 1211,
-    "gifts_ms": 2467,
-    "banks_ms": 378,
-    "total_ms": 7762,
-    "product_count": 349,
+    "products_ms": 2056,
+    "collections_ms": 834,
+    "gifts_ms": 1112,
+    "banks_ms": 187,
+    "total_ms": 4189,
+    "product_count": 350,
     "collection_count": 3,
     "bank_count": 3
   }
