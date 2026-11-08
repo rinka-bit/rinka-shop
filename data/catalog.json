@@ -39570,7 +39570,7 @@
       "fandom": "Honkai Star Rail",
       "sub_category": "อื่น ๆ",
       "round": "HSR 11-2026",
-      "description": "***ราคาไม่รวมส่งกลับไทยนะคะ\n\nรายละเอียดกลิ่น\n\nTop Notes : มะเดื่อ (Fig), เลมอน\nMiddle Notes : ลิลลี่ออฟเดอะวัลเลย์\nBase Notes : แอมเบอร์กริส, มัสก์, แซนดัลวูด\nหัวน้ำหอม\tFirmenich\nปริมาณ : ประมาณ 100 มล.",
+      "description": "***ราคาไม่รวมส่งกลับไทยนะคะ\n\nไม่ได้รับสแตนดี้แถมค่ะ\n\nรายละเอียดกลิ่น\n\nTop Notes : มะเดื่อ (Fig), เลมอน\nMiddle Notes : ลิลลี่ออฟเดอะวัลเลย์\nBase Notes : แอมเบอร์กริส, มัสก์, แซนดัลวูด\nหัวน้ำหอม\tFirmenich\nปริมาณ : ประมาณ 100 มล.",
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1CIn3_DGLLkK8KX3foRW9i2n1_oimZgIm&sz=w2000",
       "status": "active",
@@ -39580,7 +39580,7 @@
       "crate_fee": 0,
       "shipping_fee": 0,
       "sale_duration_type": "permanent",
-      "preorder_deadline": "2026-11-30",
+      "preorder_deadline": "2026-11-29",
       "estimated_arrival": "สินค้าถึงคลังจีนช่วงเดือน2/2027",
       "image2": "https://drive.google.com/thumbnail?id=1IShE36uQ2OS4Bf3_WgtKz0UZVIA124v_&sz=w2000",
       "image3": "https://drive.google.com/thumbnail?id=1ZQ7seHbh7gGmYqgysJUHjImQwSt6vq_B&sz=w2000",
@@ -39588,7 +39588,7 @@
       "new_arrival": "",
       "sort_order": 0,
       "image4": "https://drive.google.com/thumbnail?id=1Ak5IMpkK0Qizuh9va4sfDOEyhNy5q9ES&sz=w2000",
-      "collection_id": "COL1793773304746",
+      "collection_id": "COL1793773304745",
       "created_at": "",
       "variant_mode": false,
       "variant_groups": [],
@@ -39623,7 +39623,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
-      "product_count": 11
+      "product_count": 12
     },
     {
       "collection_id": "COL1793959147112",
@@ -43317,15 +43317,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T12:03:26.335Z",
+  "generated_at": "2026-11-08T12:04:29.474Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1530,
-    "collections_ms": 514,
-    "gifts_ms": 1256,
-    "banks_ms": 144,
-    "total_ms": 3445,
+    "products_ms": 2356,
+    "collections_ms": 905,
+    "gifts_ms": 2166,
+    "banks_ms": 760,
+    "total_ms": 6187,
     "product_count": 351,
     "collection_count": 3,
     "bank_count": 3
