@@ -39594,6 +39594,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1794139656664",
+      "name": "Phainon Impression series : Ring set",
+      "price_mode": "fixed",
+      "price": 720,
+      "final_price": 720,
+      "base_price": 720,
+      "min_price": 720,
+      "max_price": 720,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "เครื่องประดับ",
+      "fandom": "Honkai Star Rail",
+      "sub_category": "เครื่องประดับ",
+      "round": "HSR 11-2026",
+      "description": "***ไม่รวมส่งมาไทยนะคะ\n\nไม่ได้รับสแตนดี้แถมค่ะ\n\nรายละเอียดสินค้า\nแหวนหลัก : ทองเหลือง + คิวบิกเซอร์โคเนียสังเคราะห์\nแหวนรอง : ทองเหลือง + เพชรสังเคราะห์\nเทคนิคการผลิต : เคลือบสีหยดและชุบไฟฟ้าด้วยทองคำแท้\nขนาด\t: เส้นรอบวงขั้นต่ำประมาณ 53 มม. สามารถปรับขนาดได้",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1hqNU4XFq1xC-SLJ4qhHga8Rwe58yoCDv&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-30",
+      "estimated_arrival": "พรีเซล จัดส่งภายใน200วัน",
+      "image2": "https://drive.google.com/thumbnail?id=1-0j5FUmrJ1rpjS-5y8lz1ylGR3KL0Rqa&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1W2IW1e-AP0CvobM9SCSkG--5X912DDNN&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1OYXZ7kOE1x_fpiefdyph8U3vggO2toOH&sz=w2000",
+      "collection_id": "COL1793773304745",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -39623,7 +39667,7 @@
       "collection_type": "preorder",
       "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
       "banner_image": "",
-      "product_count": 12
+      "product_count": 13
     },
     {
       "collection_id": "COL1793959147112",
@@ -43317,16 +43361,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T12:04:29.474Z",
+  "generated_at": "2026-11-08T12:08:32.452Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2356,
-    "collections_ms": 905,
-    "gifts_ms": 2166,
-    "banks_ms": 760,
-    "total_ms": 6187,
-    "product_count": 351,
+    "products_ms": 4478,
+    "collections_ms": 875,
+    "gifts_ms": 2453,
+    "banks_ms": 673,
+    "total_ms": 8479,
+    "product_count": 352,
     "collection_count": 3,
     "bank_count": 3
   }
