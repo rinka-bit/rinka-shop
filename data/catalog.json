@@ -44116,15 +44116,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-08T13:31:27.710Z",
+  "generated_at": "2026-11-08T13:32:36.241Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2069,
-    "collections_ms": 691,
-    "gifts_ms": 1966,
-    "banks_ms": 205,
-    "total_ms": 4931,
+    "products_ms": 7010,
+    "collections_ms": 1376,
+    "gifts_ms": 2689,
+    "banks_ms": 324,
+    "total_ms": 11400,
     "product_count": 359,
     "collection_count": 3,
     "bank_count": 3
