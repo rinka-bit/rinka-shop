@@ -40502,7 +40502,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 11-2026",
       "description": "ขนาด 58มม.",
-      "search_keywords": "Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha",
+      "search_keywords": "Kazuha Columbina Hu Tao Lohen Neuvillette Nilou Ororon Sandrone Illuga Albedo Arlecchino Flins Wriothesley Mavuika Nahida Ayato Venti Xiao",
       "image": "https://drive.google.com/thumbnail?id=1_KftsvEHwZmZuZDUT0hVaAcJqVIbhY8E&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40539,7 +40539,7 @@
         {
           "option_id": "OPT1794231645861_2",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Columbina",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40550,7 +40550,7 @@
         {
           "option_id": "OPT1794231645861_3",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Hu Tao",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40561,7 +40561,7 @@
         {
           "option_id": "OPT1794231645861_4",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Lohen",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40572,7 +40572,7 @@
         {
           "option_id": "OPT1794231645861_5",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Neuvillette",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40583,7 +40583,7 @@
         {
           "option_id": "OPT1794231645861_6",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Nilou",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40594,7 +40594,7 @@
         {
           "option_id": "OPT1794231645861_7",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Ororon",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40605,7 +40605,7 @@
         {
           "option_id": "OPT1794231645861_8",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Sandrone",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40616,7 +40616,7 @@
         {
           "option_id": "OPT1794231645861_9",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Illuga",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40627,7 +40627,7 @@
         {
           "option_id": "OPT1794231645861_10",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Albedo",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40638,7 +40638,7 @@
         {
           "option_id": "OPT1794231645861_11",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Arlecchino",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40649,7 +40649,7 @@
         {
           "option_id": "OPT1794231645861_12",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Flins",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40660,7 +40660,7 @@
         {
           "option_id": "OPT1794231645861_13",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Wriothesley",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40671,7 +40671,7 @@
         {
           "option_id": "OPT1794231645861_14",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Mavuika",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -40682,7 +40682,40 @@
         {
           "option_id": "OPT1794231645861_15",
           "option_name": "ตัวละคร",
-          "option_value": "Kazuha",
+          "option_value": "Nahida",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_16",
+          "option_name": "ตัวละคร",
+          "option_value": "Ayato",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_17",
+          "option_name": "ตัวละคร",
+          "option_value": "Venti",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_18",
+          "option_name": "ตัวละคร",
+          "option_value": "Xiao",
           "additional_price": 0,
           "price": null,
           "stock": 999,
@@ -44658,15 +44691,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:42:22.333Z",
+  "generated_at": "2026-11-09T13:43:39.922Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 24717,
-    "collections_ms": 5112,
-    "gifts_ms": 14801,
-    "banks_ms": 766,
-    "total_ms": 45396,
+    "products_ms": 6278,
+    "collections_ms": 1755,
+    "gifts_ms": 3763,
+    "banks_ms": 440,
+    "total_ms": 12236,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
