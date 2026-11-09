@@ -41400,14 +41400,14 @@
       "collection_id": "COL1793959147112",
       "name": "Genshin Impact 11-2026",
       "fandom": "Genshin Impact",
-      "image": "",
+      "image": "https://drive.google.com/thumbnail?id=1PlpCD1PUhWkNCmwcS35_jYNKx5QlQkk-&sz=w2000",
       "status": "active",
-      "preorder_deadline": "2026-11-17T17:00:00.000Z",
+      "preorder_deadline": "2026-11-16T17:00:00.000Z",
       "featured": "yes",
       "created_at": "2026-11-06T09:59:11.429Z",
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ\n\nในไทยเริ่มต้น EMS 55฿ (พื้นที่พิเศษ+20฿)",
-      "banner_image": "",
+      "banner_image": "https://drive.google.com/thumbnail?id=1cboYY_NmqSwLSdEratFyZYNcvh-keqwD&sz=w2000",
       "product_count": 40
     }
   ],
@@ -44999,15 +44999,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T14:09:32.147Z",
+  "generated_at": "2026-11-09T14:10:58.200Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3877,
-    "collections_ms": 1550,
-    "gifts_ms": 2105,
-    "banks_ms": 355,
-    "total_ms": 7888,
+    "products_ms": 15524,
+    "collections_ms": 2534,
+    "gifts_ms": 4276,
+    "banks_ms": 799,
+    "total_ms": 23133,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
