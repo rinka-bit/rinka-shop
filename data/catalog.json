@@ -40844,7 +40844,7 @@
       "sub_category": "อื่น ๆ",
       "round": "Genshin 11-2026",
       "description": "ในเซ็ตประกอบไปด้วย\n-บัตรอะคริลิค\n-รูปติดบัตร\n-โพลารอยด์\n-ใบข้อมูลตัวละคร",
-      "search_keywords": "",
+      "search_keywords": "Kazuha",
       "image": "https://drive.google.com/thumbnail?id=1mqT1l8V1-S5EbmETJ3PiOaboYkBICWZh&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40866,7 +40866,19 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794231881038_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1794231201479",
@@ -44790,15 +44802,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:44:35.831Z",
+  "generated_at": "2026-11-09T13:45:34.826Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4873,
-    "collections_ms": 2081,
-    "gifts_ms": 3879,
-    "banks_ms": 614,
-    "total_ms": 11447,
+    "products_ms": 5702,
+    "collections_ms": 1691,
+    "gifts_ms": 2592,
+    "banks_ms": 368,
+    "total_ms": 10353,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
