@@ -40437,6 +40437,50 @@
           "sort_order": 1
         }
       ]
+    },
+    {
+      "product_id": "PROD1794230767658",
+      "name": "Metal Charm",
+      "price_mode": "fixed",
+      "price": 250,
+      "final_price": 250,
+      "base_price": 290,
+      "min_price": 290,
+      "max_price": 290,
+      "has_price_range": false,
+      "old_price": 290,
+      "on_sale": true,
+      "sale_price": 250,
+      "sale_start": "2026-11-08T17:00:00.000Z",
+      "sale_end": "2026-11-17T17:00:00.000Z",
+      "main_category": "พวงกุญแจ",
+      "fandom": "Genshin Impact",
+      "sub_category": "พวงกุญแจ",
+      "round": "Genshin 11-2026",
+      "description": "ขนาด 68*122มม.",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1Y7epVqyVzF56qta_vdJKx1Y0eyUdxI5P&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-18",
+      "estimated_arrival": "สินค้าถึงคลังจีนช่วงเดือน3/2027",
+      "image2": "",
+      "image3": "",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "",
+      "collection_id": "COL1793959147112",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -40480,7 +40524,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 35
+      "product_count": 36
     }
   ],
   "gifts": {
@@ -44160,16 +44204,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:25:39.173Z",
+  "generated_at": "2026-11-09T13:26:47.909Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 10309,
-    "collections_ms": 1583,
-    "gifts_ms": 1994,
-    "banks_ms": 285,
-    "total_ms": 14171,
-    "product_count": 359,
+    "products_ms": 16286,
+    "collections_ms": 3157,
+    "gifts_ms": 3669,
+    "banks_ms": 487,
+    "total_ms": 23599,
+    "product_count": 360,
     "collection_count": 3,
     "bank_count": 3
   }
