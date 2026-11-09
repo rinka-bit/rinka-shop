@@ -40613,6 +40613,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1794231346698",
+      "name": "TCG Vol.5 Booster pack",
+      "price_mode": "option",
+      "price": 0,
+      "final_price": 0,
+      "base_price": 0,
+      "min_price": 0,
+      "max_price": 0,
+      "has_price_range": false,
+      "old_price": null,
+      "on_sale": false,
+      "sale_price": 0,
+      "sale_start": "",
+      "sale_end": "",
+      "main_category": "อื่น ๆ",
+      "fandom": "Genshin Impact",
+      "sub_category": "อื่น ๆ",
+      "round": "Genshin 11-2026",
+      "description": "ขนาดการ์ด 88*63มม.\nจำนวน 6ใบต่อซอง 18ซองต่อกล่อง(108ใบ) มีทั้งหมด303แบบ",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=12uR0AuFO4sdji6U5JOZSlAvoHorlsilX&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "",
+      "estimated_arrival": "สินค้าถึงคลังจีนช่วงเดือน12/2026",
+      "image2": "https://drive.google.com/thumbnail?id=1Z_RIBfmjDbq1hrDZxT3P6R4IsNwDPSYP&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1NtsVLVA-ZJ_9pRgmwo1ZC00-r8JoRYZe&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1EO1jt4n-4OorTKR8TN-U4PYEOSpSTKDe&sz=w2000",
+      "collection_id": "COL1793959147112",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -40656,7 +40700,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 39
+      "product_count": 40
     }
   ],
   "gifts": {
@@ -44336,16 +44380,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:35:01.947Z",
+  "generated_at": "2026-11-09T13:36:32.021Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 27011,
-    "collections_ms": 3079,
-    "gifts_ms": 4451,
-    "banks_ms": 476,
-    "total_ms": 35017,
-    "product_count": 363,
+    "products_ms": 3215,
+    "collections_ms": 1300,
+    "gifts_ms": 2898,
+    "banks_ms": 946,
+    "total_ms": 8359,
+    "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
   }
