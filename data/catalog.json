@@ -40590,7 +40590,7 @@
       "sub_category": "อื่น ๆ",
       "round": "Genshin 11-2026",
       "description": "ขนาดการ์ด 88*63มม.",
-      "search_keywords": "",
+      "search_keywords": "Furina Klee Navia Wriothesley Neuvillette Lynette Alhaitham Shinobu",
       "image": "https://drive.google.com/thumbnail?id=1v-4FeuEIHQxuh89GB6JuA75rCoHcF5jg&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40612,7 +40612,96 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794231559824_1",
+          "option_name": "แบบ",
+          "option_value": "Furina",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1uKWzKBrbyoVm0_bd7QfRYwb7SFuyjngZ&sz=w2000",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231559824_2",
+          "option_name": "แบบ",
+          "option_value": "Klee",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1xJHwQ7Jnx-LCxx2irXgkKVFhYfI3Vf6k&sz=w2000",
+          "sort_order": 1
+        },
+        {
+          "option_id": "OPT1794231559824_3",
+          "option_name": "แบบ",
+          "option_value": "Navia",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1X8tgL0TltFLRlMmZyv4jXSm5eN_3lpBh&sz=w2000",
+          "sort_order": 2
+        },
+        {
+          "option_id": "OPT1794231559824_4",
+          "option_name": "แบบ",
+          "option_value": "Wriothesley",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1F6Kbt_4DTfQQO3tkC4VU_lD83JawA0LU&sz=w2000",
+          "sort_order": 3
+        },
+        {
+          "option_id": "OPT1794231559824_5",
+          "option_name": "แบบ",
+          "option_value": "Neuvillette",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1h9lVtYEx48DQIH-WkplZVTyRn6wRCtTx&sz=w2000",
+          "sort_order": 4
+        },
+        {
+          "option_id": "OPT1794231559824_6",
+          "option_name": "แบบ",
+          "option_value": "Lynette",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=103BCB0uYm5goe-lySGPiW8J-2_brOQDR&sz=w2000",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1794231559824_7",
+          "option_name": "แบบ",
+          "option_value": "Alhaitham",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1S1WxJx90aQ1-7IpQrMED26HL5JLUoMRn&sz=w2000",
+          "sort_order": 6
+        },
+        {
+          "option_id": "OPT1794231559824_8",
+          "option_name": "แบบ",
+          "option_value": "Shinobu",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1gFFeo36Z7o9B7Nnr_XodsGjnSFfaKxcf&sz=w2000",
+          "sort_order": 7
+        }
+      ]
     },
     {
       "product_id": "PROD1794231346698",
@@ -44403,15 +44492,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:37:31.803Z",
+  "generated_at": "2026-11-09T13:40:26.867Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3606,
-    "collections_ms": 1035,
-    "gifts_ms": 2010,
-    "banks_ms": 926,
-    "total_ms": 7577,
+    "products_ms": 1914,
+    "collections_ms": 495,
+    "gifts_ms": 1464,
+    "banks_ms": 183,
+    "total_ms": 4056,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
