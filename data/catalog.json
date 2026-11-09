@@ -10065,7 +10065,7 @@
       "sub_category": "สแตนดี้",
       "round": "Genshin 11-2026",
       "description": "",
-      "search_keywords": "Alyosha Odette Sandrone Vesna Vodyanitsa",
+      "search_keywords": "Alyosha Odette Sandrone Vesna Vodyanitsa Valeriy Mitya",
       "image": "https://drive.google.com/thumbnail?id=1tYQidUKcG_FATgNKuiEdG74dw66W2OTm&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -10094,7 +10094,7 @@
           "option_value": "Alyosha",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1StpordmccHWmVOm14l74ESDg8hupVwHm&sz=w2000",
           "sort_order": 0
@@ -10105,7 +10105,7 @@
           "option_value": "Odette",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1M3omrvmo1bMit6jhlWrjm4J0EmGR_PK8&sz=w2000",
           "sort_order": 1
@@ -10116,7 +10116,7 @@
           "option_value": "Sandrone",
           "additional_price": 0,
           "price": null,
-          "stock": 0,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1XPOSgccD0prkNzrGZ-MzVFW47_cyXne5&sz=w2000",
           "sort_order": 2
@@ -10127,7 +10127,7 @@
           "option_value": "Vesna",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1wQIsuQsmPNcuPVdKvmtS9H2gGn0bWnFn&sz=w2000",
           "sort_order": 3
@@ -10138,10 +10138,32 @@
           "option_value": "Vodyanitsa",
           "additional_price": 0,
           "price": null,
-          "stock": 9999,
+          "stock": 999,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=10lwvO8wFWkSqMrqidVt73jRe_MPaQc4B&sz=w2000",
           "sort_order": 4
+        },
+        {
+          "option_id": "OPT1794230565111_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Valeriy",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=13AmTqCKH3dZJVjht0eH1uPC7bo5BnB8a&sz=w2000",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1794230565111_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Mitya",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1iGLkgrqE-wiBP3XZ3zFAXLJ2J0ZtYlrk&sz=w2000",
+          "sort_order": 6
         }
       ]
     },
@@ -44138,15 +44160,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:22:31.097Z",
+  "generated_at": "2026-11-09T13:23:30.731Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3432,
-    "collections_ms": 1108,
-    "gifts_ms": 2773,
-    "banks_ms": 281,
-    "total_ms": 7594,
+    "products_ms": 3363,
+    "collections_ms": 1248,
+    "gifts_ms": 2016,
+    "banks_ms": 241,
+    "total_ms": 6869,
     "product_count": 359,
     "collection_count": 3,
     "bank_count": 3
