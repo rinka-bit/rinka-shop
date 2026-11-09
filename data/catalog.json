@@ -40502,7 +40502,7 @@
       "sub_category": "เข็มกลัด",
       "round": "Genshin 11-2026",
       "description": "ขนาด 58มม.",
-      "search_keywords": "",
+      "search_keywords": "Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha Kazuha",
       "image": "https://drive.google.com/thumbnail?id=1_KftsvEHwZmZuZDUT0hVaAcJqVIbhY8E&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40524,7 +40524,173 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794231645861_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_3",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_4",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_5",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_8",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_9",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_10",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_11",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_12",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_13",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_14",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231645861_15",
+          "option_name": "ตัวละคร",
+          "option_value": "Kazuha",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        }
+      ]
     },
     {
       "product_id": "PROD1794231052420",
@@ -44492,15 +44658,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:40:26.867Z",
+  "generated_at": "2026-11-09T13:42:22.333Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 1914,
-    "collections_ms": 495,
-    "gifts_ms": 1464,
-    "banks_ms": 183,
-    "total_ms": 4056,
+    "products_ms": 24717,
+    "collections_ms": 5112,
+    "gifts_ms": 14801,
+    "banks_ms": 766,
+    "total_ms": 45396,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
