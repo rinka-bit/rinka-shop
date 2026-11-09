@@ -38554,7 +38554,7 @@
       "has_price_range": false,
       "old_price": null,
       "on_sale": false,
-      "sale_price": 0,
+      "sale_price": 590,
       "sale_start": "",
       "sale_end": "",
       "main_category": "เข็มกลัด",
@@ -44116,15 +44116,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T09:32:34.445Z",
+  "generated_at": "2026-11-09T12:50:41.408Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6022,
-    "collections_ms": 1139,
-    "gifts_ms": 2596,
-    "banks_ms": 309,
-    "total_ms": 10067,
+    "products_ms": 9934,
+    "collections_ms": 1255,
+    "gifts_ms": 4793,
+    "banks_ms": 209,
+    "total_ms": 16191,
     "product_count": 359,
     "collection_count": 3,
     "bank_count": 3
