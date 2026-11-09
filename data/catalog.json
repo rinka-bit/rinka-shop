@@ -9960,7 +9960,7 @@
       "new_arrival": "",
       "sort_order": 0,
       "image4": "",
-      "collection_id": "COL1789811785447",
+      "collection_id": "COL1793959147112",
       "created_at": "",
       "variant_mode": false,
       "variant_groups": [],
@@ -10060,7 +10060,7 @@
       "new_arrival": "",
       "sort_order": 0,
       "image4": "",
-      "collection_id": "COL1789811785447",
+      "collection_id": "COL1793959147112",
       "created_at": "",
       "variant_mode": false,
       "variant_groups": [],
@@ -40436,7 +40436,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 33
+      "product_count": 35
     }
   ],
   "gifts": {
@@ -44116,15 +44116,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T12:57:58.906Z",
+  "generated_at": "2026-11-09T13:04:30.156Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 23391,
-    "collections_ms": 2807,
-    "gifts_ms": 5693,
-    "banks_ms": 597,
-    "total_ms": 32488,
+    "products_ms": 1993,
+    "collections_ms": 1046,
+    "gifts_ms": 2662,
+    "banks_ms": 142,
+    "total_ms": 5843,
     "product_count": 359,
     "collection_count": 3,
     "bank_count": 3
