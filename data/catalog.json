@@ -9943,7 +9943,7 @@
       "sub_category": "badge",
       "round": "Genshin 11-2026",
       "description": "",
-      "search_keywords": "Alyosha Odette Sandrone Vesna Vodyanitsa",
+      "search_keywords": "Alyosha Odette Sandrone Vesna Vodyanitsa Valeriy Mitya",
       "image": "https://drive.google.com/thumbnail?id=1os3VjfvYE1M0nuiRHkb-MtmlGlGQ_vIz&sz=w2000",
       "status": "active",
       "stock": 9999,
@@ -10020,6 +10020,28 @@
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1_axr6CKd48nXY4wvLZvzkXQ5jRIMQ-uS&sz=w2000",
           "sort_order": 4
+        },
+        {
+          "option_id": "OPT1794230418626_6",
+          "option_name": "ตัวละคร",
+          "option_value": "Valeriy",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=1MWM11laGwTPBa-GGTJF9lrLq6j4lLz_n&sz=w2000",
+          "sort_order": 5
+        },
+        {
+          "option_id": "OPT1794230418626_7",
+          "option_name": "ตัวละคร",
+          "option_value": "Mitya",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "https://drive.google.com/thumbnail?id=15zyGFbdAIc_WdyAj-dAdZor7gFV6xbo0&sz=w2000",
+          "sort_order": 6
         }
       ]
     },
@@ -44116,15 +44138,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:19:29.378Z",
+  "generated_at": "2026-11-09T13:21:29.716Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3098,
-    "collections_ms": 856,
-    "gifts_ms": 1499,
-    "banks_ms": 239,
-    "total_ms": 5692,
+    "products_ms": 3093,
+    "collections_ms": 1453,
+    "gifts_ms": 2183,
+    "banks_ms": 353,
+    "total_ms": 7082,
     "product_count": 359,
     "collection_count": 3,
     "bank_count": 3
