@@ -10027,7 +10027,7 @@
           "option_value": "Valeriy (สินค้าถึงคลังช่วงเดือน3/2027)",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1MWM11laGwTPBa-GGTJF9lrLq6j4lLz_n&sz=w2000",
           "sort_order": 5
@@ -10038,7 +10038,7 @@
           "option_value": "Mitya (สินค้าถึงคลังช่วงเดือน3/2027)",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=15zyGFbdAIc_WdyAj-dAdZor7gFV6xbo0&sz=w2000",
           "sort_order": 6
@@ -10149,7 +10149,7 @@
           "option_value": "Valeriy (สินค้าถึงคลังช่วงเดือน4/2027)",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=13AmTqCKH3dZJVjht0eH1uPC7bo5BnB8a&sz=w2000",
           "sort_order": 5
@@ -10160,7 +10160,7 @@
           "option_value": "Mitya (สินค้าถึงคลังช่วงเดือน4/2027)",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1iGLkgrqE-wiBP3XZ3zFAXLJ2J0ZtYlrk&sz=w2000",
           "sort_order": 6
@@ -37482,7 +37482,7 @@
           "option_value": "Alhaitham",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1m-WTaq_Rv6T3JwlDYsNbCaoMW_UWctlR&sz=w2000",
           "sort_order": 0
@@ -38880,7 +38880,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1JAHg3l52gosi8V3bL5UToJvscL_tmOGj&sz=w2000",
           "sort_order": 0
@@ -39244,7 +39244,7 @@
           "option_value": "XL",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -40906,7 +40906,7 @@
           "option_value": "Lohen",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -40961,7 +40961,7 @@
           "option_value": "Illuga",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 0
@@ -44999,15 +44999,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T14:03:33.542Z",
+  "generated_at": "2026-11-09T14:04:30.201Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4922,
-    "collections_ms": 652,
-    "gifts_ms": 3390,
-    "banks_ms": 354,
-    "total_ms": 9318,
+    "products_ms": 2773,
+    "collections_ms": 2039,
+    "gifts_ms": 2111,
+    "banks_ms": 327,
+    "total_ms": 7250,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
