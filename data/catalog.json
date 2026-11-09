@@ -37393,7 +37393,7 @@
           "option_value": "Flins",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 0,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1Ub8XUtQtxKMbA4ryCQ0YS7Gdrnk0b_cQ&sz=w2000",
           "sort_order": 0
@@ -44160,15 +44160,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:23:30.731Z",
+  "generated_at": "2026-11-09T13:25:39.173Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3363,
-    "collections_ms": 1248,
-    "gifts_ms": 2016,
-    "banks_ms": 241,
-    "total_ms": 6869,
+    "products_ms": 10309,
+    "collections_ms": 1583,
+    "gifts_ms": 1994,
+    "banks_ms": 285,
+    "total_ms": 14171,
     "product_count": 359,
     "collection_count": 3,
     "bank_count": 3
