@@ -40525,6 +40525,50 @@
       "variant_groups": [],
       "variants": [],
       "options": []
+    },
+    {
+      "product_id": "PROD1794231052420",
+      "name": "Shiguang Yingxia series : File collection set",
+      "price_mode": "fixed",
+      "price": 295,
+      "final_price": 295,
+      "base_price": 350,
+      "min_price": 350,
+      "max_price": 350,
+      "has_price_range": false,
+      "old_price": 350,
+      "on_sale": true,
+      "sale_price": 295,
+      "sale_start": "2026-11-08T17:00:00.000Z",
+      "sale_end": "2026-11-17T17:00:00.000Z",
+      "main_category": "อื่น ๆ",
+      "fandom": "Genshin Impact",
+      "sub_category": "อื่น ๆ",
+      "round": "Genshin 11-2026",
+      "description": "ในเซ็ตประกอบไปด้วย\n-บัตรอะคริลิค\n-รูปติดบัตร\n-โพลารอยด์\n-ใบข้อมูลตัวละคร",
+      "search_keywords": "",
+      "image": "https://drive.google.com/thumbnail?id=1mqT1l8V1-S5EbmETJ3PiOaboYkBICWZh&sz=w2000",
+      "status": "active",
+      "stock": 999,
+      "product_type": "preorder",
+      "crate_available": "",
+      "crate_fee": 0,
+      "shipping_fee": 0,
+      "sale_duration_type": "permanent",
+      "preorder_deadline": "2026-11-18",
+      "estimated_arrival": "สินค้าถึงคลังจีนช่วงเดือน4/2027",
+      "image2": "https://drive.google.com/thumbnail?id=1ko_C_PhvPsXjVGlXgT1KDVVfL5v9wwm3&sz=w2000",
+      "image3": "https://drive.google.com/thumbnail?id=1Cpsot9XbzGwItM92op8_QXSAb70IFm88&sz=w2000",
+      "featured": "",
+      "new_arrival": "",
+      "sort_order": 0,
+      "image4": "https://drive.google.com/thumbnail?id=1uXstBu8DsgaIh0pSz8gRfSW3s6IFXWvK&sz=w2000",
+      "collection_id": "COL1793959147112",
+      "created_at": "",
+      "variant_mode": false,
+      "variant_groups": [],
+      "variants": [],
+      "options": []
     }
   ],
   "collections": [
@@ -40568,7 +40612,7 @@
       "collection_type": "Preorder",
       "description": "รวมส่งกลับไทยเกือบทุกรายการ",
       "banner_image": "",
-      "product_count": 37
+      "product_count": 38
     }
   ],
   "gifts": {
@@ -44248,16 +44292,16 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:29:32.124Z",
+  "generated_at": "2026-11-09T13:31:28.181Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3965,
-    "collections_ms": 1661,
-    "gifts_ms": 2223,
-    "banks_ms": 341,
-    "total_ms": 8190,
-    "product_count": 361,
+    "products_ms": 2526,
+    "collections_ms": 907,
+    "gifts_ms": 1059,
+    "banks_ms": 301,
+    "total_ms": 4793,
+    "product_count": 362,
     "collection_count": 3,
     "bank_count": 3
   }
