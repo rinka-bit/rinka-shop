@@ -40618,12 +40618,12 @@
       "product_id": "PROD1794231346698",
       "name": "TCG Vol.5 Booster pack",
       "price_mode": "option",
-      "price": 0,
-      "final_price": 0,
+      "price": 80,
+      "final_price": 80,
       "base_price": 0,
-      "min_price": 0,
-      "max_price": 0,
-      "has_price_range": false,
+      "min_price": 80,
+      "max_price": 990,
+      "has_price_range": true,
       "old_price": null,
       "on_sale": false,
       "sale_price": 0,
@@ -40634,7 +40634,7 @@
       "sub_category": "อื่น ๆ",
       "round": "Genshin 11-2026",
       "description": "ขนาดการ์ด 88*63มม.\nจำนวน 6ใบต่อซอง 18ซองต่อกล่อง(108ใบ) มีทั้งหมด303แบบ",
-      "search_keywords": "",
+      "search_keywords": "สุ่ม1ซอง Box",
       "image": "https://drive.google.com/thumbnail?id=12uR0AuFO4sdji6U5JOZSlAvoHorlsilX&sz=w2000",
       "status": "active",
       "stock": 999,
@@ -40656,7 +40656,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794231422547_1",
+          "option_name": "แบบ",
+          "option_value": "สุ่ม1ซอง",
+          "additional_price": 0,
+          "price": 80,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794231422547_2",
+          "option_name": "แบบ",
+          "option_value": "Box",
+          "additional_price": 0,
+          "price": 990,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     }
   ],
   "collections": [
@@ -44380,15 +44403,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:36:32.021Z",
+  "generated_at": "2026-11-09T13:37:31.803Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3215,
-    "collections_ms": 1300,
-    "gifts_ms": 2898,
-    "banks_ms": 946,
-    "total_ms": 8359,
+    "products_ms": 3606,
+    "collections_ms": 1035,
+    "gifts_ms": 2010,
+    "banks_ms": 926,
+    "total_ms": 7577,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
