@@ -44369,6 +44369,18 @@
         "sort_order": 0,
         "created_at": "2026-10-29T15:03:00.385Z",
         "updated_at": "2026-10-29T15:03:00.385Z"
+      },
+      {
+        "gift_item_id": "GIFT17942323331999922",
+        "rule_id": "RULE17942319654951993",
+        "gift_name": "โปสการ์ดOdette",
+        "gift_image": "https://github.com/rinka-bit/rinka-shop/blob/main/odette.png?raw=true",
+        "has_character": "",
+        "max_same_character": 0,
+        "active": "yes",
+        "sort_order": 0,
+        "created_at": "2026-11-09T13:52:13.199Z",
+        "updated_at": "2026-11-09T13:52:13.199Z"
       }
     ],
     "characters": [
@@ -45131,15 +45143,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T13:47:29.161Z",
+  "generated_at": "2026-11-09T13:52:29.166Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2954,
-    "collections_ms": 1008,
-    "gifts_ms": 1985,
-    "banks_ms": 272,
-    "total_ms": 6219,
+    "products_ms": 2685,
+    "collections_ms": 1275,
+    "gifts_ms": 1977,
+    "banks_ms": 233,
+    "total_ms": 6170,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
