@@ -40458,7 +40458,7 @@
       "sub_category": "พวงกุญแจ",
       "round": "Genshin 11-2026",
       "description": "ขนาด 68*122มม.",
-      "search_keywords": "",
+      "search_keywords": "Odette Vodyanitsa",
       "image": "https://drive.google.com/thumbnail?id=1Y7epVqyVzF56qta_vdJKx1Y0eyUdxI5P&sz=w2000",
       "status": "active",
       "stock": 998,
@@ -40480,7 +40480,30 @@
       "variant_mode": false,
       "variant_groups": [],
       "variants": [],
-      "options": []
+      "options": [
+        {
+          "option_id": "OPT1794304144997_1",
+          "option_name": "ตัวละคร",
+          "option_value": "Odette",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 0
+        },
+        {
+          "option_id": "OPT1794304144997_2",
+          "option_name": "ตัวละคร",
+          "option_value": "Vodyanitsa",
+          "additional_price": 0,
+          "price": null,
+          "stock": 999,
+          "selection_type": "multiple",
+          "image": "",
+          "sort_order": 1
+        }
+      ]
     },
     {
       "product_id": "PROD1794230940943",
@@ -44999,15 +45022,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-10T09:45:16.406Z",
+  "generated_at": "2026-11-10T09:49:28.081Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 37278,
-    "collections_ms": 3484,
-    "gifts_ms": 4382,
-    "banks_ms": 881,
-    "total_ms": 46025,
+    "products_ms": 2446,
+    "collections_ms": 757,
+    "gifts_ms": 1443,
+    "banks_ms": 208,
+    "total_ms": 4855,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
