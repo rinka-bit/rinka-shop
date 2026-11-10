@@ -10160,7 +10160,7 @@
           "option_value": "Mitya (สินค้าถึงคลังช่วงเดือน4/2027)",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1iGLkgrqE-wiBP3XZ3zFAXLJ2J0ZtYlrk&sz=w2000",
           "sort_order": 6
@@ -39086,7 +39086,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1_c3hNlTv6l7in9fwfXHGUTsqk7gHs1fl&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -39130,7 +39130,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=1ctwYR8evbA4ekouCFz4EniW5lGzCteL4&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -39244,7 +39244,7 @@
           "option_value": "XL",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 997,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 4
@@ -39333,7 +39333,7 @@
           "option_value": "L",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 3
@@ -39422,7 +39422,7 @@
           "option_value": "M",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 2
@@ -39533,7 +39533,7 @@
           "option_value": "L",
           "additional_price": 0,
           "price": null,
-          "stock": 999,
+          "stock": 998,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 3
@@ -44999,15 +44999,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-09T16:27:37.740Z",
+  "generated_at": "2026-11-10T08:15:49.656Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 7277,
-    "collections_ms": 1106,
-    "gifts_ms": 2104,
-    "banks_ms": 238,
-    "total_ms": 10725,
+    "products_ms": 18808,
+    "collections_ms": 1284,
+    "gifts_ms": 3437,
+    "banks_ms": 221,
+    "total_ms": 23750,
     "product_count": 364,
     "collection_count": 3,
     "bank_count": 3
