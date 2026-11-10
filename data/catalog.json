@@ -39729,7 +39729,7 @@
       "search_keywords": "",
       "image": "https://drive.google.com/thumbnail?id=16h2icNM_7mOwVKqTJLJUvp3gd7afW6JB&sz=w2000",
       "status": "active",
-      "stock": 999,
+      "stock": 998,
       "product_type": "preorder",
       "crate_available": "",
       "crate_fee": 0,
@@ -41404,20 +41404,6 @@
       "description": "ราคาส่วนลด สั่งได้ถึงวันที่ 25/10 21:00\nยังไม่รวมส่งกลับไทย ไม่สามารถรวมยอดรับของแถมได้\nตีลังไม้เริ่มต้น 150฿\nส่งฟรีในไทย",
       "banner_image": "",
       "product_count": 2
-    },
-    {
-      "collection_id": "COL1793773304745",
-      "name": "HSR 11-2026",
-      "fandom": "Honkai Star Rail",
-      "image": "https://drive.google.com/thumbnail?id=194DyXBfD9Lq7RidiU80I1tt2YKU_bvFb&sz=w2000",
-      "status": "active",
-      "preorder_deadline": "2026-11-28T17:00:00.000Z",
-      "featured": "",
-      "created_at": "2026-11-04T06:21:44.745Z",
-      "collection_type": "preorder",
-      "description": "ราคารวมส่งกลับไทยเกือบทุกรายการแล้ว",
-      "banner_image": "",
-      "product_count": 20
     },
     {
       "collection_id": "COL1793959147112",
@@ -45022,17 +45008,17 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-10T13:50:28.784Z",
+  "generated_at": "2026-11-10T14:33:32.983Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2735,
-    "collections_ms": 685,
-    "gifts_ms": 1273,
-    "banks_ms": 600,
-    "total_ms": 5293,
+    "products_ms": 5342,
+    "collections_ms": 1030,
+    "gifts_ms": 2369,
+    "banks_ms": 366,
+    "total_ms": 9107,
     "product_count": 364,
-    "collection_count": 3,
+    "collection_count": 2,
     "bank_count": 3
   }
 }
