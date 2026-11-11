@@ -45008,15 +45008,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-11T12:13:33.497Z",
+  "generated_at": "2026-11-11T12:14:31.758Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 4785,
-    "collections_ms": 691,
-    "gifts_ms": 1594,
-    "banks_ms": 173,
-    "total_ms": 7243,
+    "products_ms": 3482,
+    "collections_ms": 954,
+    "gifts_ms": 2337,
+    "banks_ms": 438,
+    "total_ms": 7212,
     "product_count": 364,
     "collection_count": 2,
     "bank_count": 3
