@@ -10027,7 +10027,7 @@
           "option_value": "Valeriy (สินค้าถึงคลังช่วงเดือน3/2027)",
           "additional_price": 0,
           "price": null,
-          "stock": 998,
+          "stock": 994,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=1MWM11laGwTPBa-GGTJF9lrLq6j4lLz_n&sz=w2000",
           "sort_order": 5
@@ -10149,7 +10149,7 @@
           "option_value": "Valeriy (สินค้าถึงคลังช่วงเดือน4/2027)",
           "additional_price": 0,
           "price": null,
-          "stock": 997,
+          "stock": 995,
           "selection_type": "multiple",
           "image": "https://drive.google.com/thumbnail?id=13AmTqCKH3dZJVjht0eH1uPC7bo5BnB8a&sz=w2000",
           "sort_order": 5
@@ -44860,15 +44860,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-14T14:07:09.039Z",
+  "generated_at": "2026-11-15T08:39:31.768Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 34979,
-    "collections_ms": 2977,
-    "gifts_ms": 3019,
-    "banks_ms": 944,
-    "total_ms": 41919,
+    "products_ms": 3561,
+    "collections_ms": 1285,
+    "gifts_ms": 2022,
+    "banks_ms": 333,
+    "total_ms": 7201,
     "product_count": 362,
     "collection_count": 1,
     "bank_count": 3
