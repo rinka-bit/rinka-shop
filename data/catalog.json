@@ -41258,23 +41258,7 @@
   ],
   "collections": [],
   "gifts": {
-    "campaigns": [
-      {
-        "campaign_id": "CAM17942319407603020",
-        "campaign_name": "ของแถม Genshin 11-2026",
-        "collection_id": "COL1793959147112",
-        "description": "",
-        "banner_image": "",
-        "eligibility_scope": "collection_only",
-        "require_campaign_item": "",
-        "rule_mode": "highest_tier",
-        "gift_end_date": "",
-        "active": "yes",
-        "sort_order": 0,
-        "created_at": "2026-11-09T13:45:40.760Z",
-        "updated_at": "2026-11-09T13:45:40.760Z"
-      }
-    ],
+    "campaigns": [],
     "rules": [
       {
         "rule_id": "RULE17858262484491636",
@@ -44845,15 +44829,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-18T13:21:36.790Z",
+  "generated_at": "2026-11-18T13:22:35.891Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 6352,
-    "collections_ms": 4955,
-    "gifts_ms": 1309,
-    "banks_ms": 238,
-    "total_ms": 12854,
+    "products_ms": 7861,
+    "collections_ms": 927,
+    "gifts_ms": 2422,
+    "banks_ms": 541,
+    "total_ms": 11752,
     "product_count": 362,
     "collection_count": 0,
     "bank_count": 3
