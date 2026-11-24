@@ -16987,7 +16987,7 @@
           "option_value": "Mydei",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 12
@@ -17020,7 +17020,7 @@
           "option_value": "Phainon",
           "additional_price": 0,
           "price": null,
-          "stock": 9998,
+          "stock": 9997,
           "selection_type": "multiple",
           "image": "",
           "sort_order": 15
@@ -44829,15 +44829,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-20T03:21:30.683Z",
+  "generated_at": "2026-11-24T12:03:44.129Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 3689,
-    "collections_ms": 889,
-    "gifts_ms": 2052,
-    "banks_ms": 541,
-    "total_ms": 7171,
+    "products_ms": 11743,
+    "collections_ms": 1217,
+    "gifts_ms": 1878,
+    "banks_ms": 376,
+    "total_ms": 15214,
     "product_count": 362,
     "collection_count": 0,
     "bank_count": 3
