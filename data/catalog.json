@@ -44829,15 +44829,15 @@
       "display_order": 3
     }
   ],
-  "generated_at": "2026-11-26T09:48:28.575Z",
+  "generated_at": "2026-11-27T14:09:08.784Z",
   "warnings": [],
   "partial": false,
   "performance": {
-    "products_ms": 2510,
-    "collections_ms": 821,
-    "gifts_ms": 1539,
-    "banks_ms": 635,
-    "total_ms": 5505,
+    "products_ms": 17866,
+    "collections_ms": 1074,
+    "gifts_ms": 2465,
+    "banks_ms": 458,
+    "total_ms": 21864,
     "product_count": 362,
     "collection_count": 0,
     "bank_count": 3
